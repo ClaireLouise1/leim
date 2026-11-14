@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verb Sprint: Spanish present tense game | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: pick the right present-tense verb form against the clock. Regular -ar, -er, -ir verbs and the key irregulars.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:clamp(26px,6vw,38px);font-weight:800;letter-spacing:-.02em}
+.prompt .verb{font-size:18px;color:var(--ink-2);margin-top:6px}
+.prompt .verb em{color:var(--muted)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:20px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:17px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="verb-sprint.html" aria-current="page">Verb Sprint</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Verb Sprint</h1>
+        <p>60 seconds. Pick the right present-tense form. How many can you get in a row?</p>
+      </div>
+
+      <div class="panel" id="start">
+        <h2 style="font-size:22px">Choose your sprint</h2>
+        <div class="modes">
+          <button class="mode" data-mode="regular"><div><b>Regular verbs</b><span>-ar, -er and -ir verbs like hablar, comer, vivir</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="irregular"><div><b>Irregular verbs</b><span>ser, estar, tener, ir, hacer and more</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Spec link: Language awareness · using verbs correctly in the present tense</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="verb" id="verb"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another sprint</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var PRON=["yo","tú","él / ella / usted","nosotros/as","vosotros/as","ellos / ellas / ustedes"];
+  var END={ar:["o","as","a","amos","áis","an"],er:["o","es","e","emos","éis","en"],ir:["o","es","e","imos","ís","en"]};
+  var REG=[["hablar","to speak"],["estudiar","to study"],["escuchar","to listen"],["trabajar","to work"],["comprar","to buy"],["bailar","to dance"],["cantar","to sing"],["nadar","to swim"],["cocinar","to cook"],["viajar","to travel"],["llegar","to arrive"],["tomar","to take / have"],["comer","to eat"],["beber","to drink"],["leer","to read"],["aprender","to learn"],["correr","to run"],["vender","to sell"],["comprender","to understand"],["vivir","to live"],["escribir","to write"],["abrir","to open"],["recibir","to receive"],["subir","to go up"],["compartir","to share"]];
+  var IRR={
+    ser:["to be",["soy","eres","es","somos","sois","son"]],
+    estar:["to be",["estoy","estás","está","estamos","estáis","están"]],
+    tener:["to have",["tengo","tienes","tiene","tenemos","tenéis","tienen"]],
+    ir:["to go",["voy","vas","va","vamos","vais","van"]],
+    hacer:["to do / make",["hago","haces","hace","hacemos","hacéis","hacen"]],
+    ver:["to see / watch",["veo","ves","ve","vemos","veis","ven"]],
+    salir:["to go out",["salgo","sales","sale","salimos","salís","salen"]],
+    poder:["to be able to",["puedo","puedes","puede","podemos","podéis","pueden"]],
+    querer:["to want",["quiero","quieres","quiere","queremos","queréis","quieren"]],
+    jugar:["to play",["juego","juegas","juega","jugamos","jugáis","juegan"]],
+    dormir:["to sleep",["duermo","duermes","duerme","dormimos","dormís","duermen"]],
+    venir:["to come",["vengo","vienes","viene","venimos","venís","vienen"]],
+    decir:["to say",["digo","dices","dice","decimos","decís","dicen"]],
+    poner:["to put",["pongo","pones","pone","ponemos","ponéis","ponen"]]
+  };
+  function regForms(v){var s=v.slice(0,-2),t=v.slice(-2);return END[t].map(function(e){return s+e;});}
+  var POOL={regular:REG.map(function(r){return {inf:r[0],en:r[1],forms:regForms(r[0])};}),
+            irregular:Object.keys(IRR).map(function(k){return {inf:k,en:IRR[k][0],forms:IRR[k][1]};})};
+  POOL.mixed=POOL.regular.concat(POOL.irregular,POOL.irregular);
+
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="";
+  var LEN=60;
+
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+  function start(m){
+    mode=m;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--; $("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+
+  function next(){
+    locked=false;
+    var v,p,key;
+    do{v=POOL[mode][Math.floor(Math.random()*POOL[mode].length)];p=Math.floor(Math.random()*6);key=v.inf+p;}while(key===last);
+    last=key;
+    var answer=v.forms[p];
+    var others=shuffle(v.forms.filter(function(f){return f!==answer;})).slice(0,3);
+    current={v:v,p:p,answer:answer};
+    $("who").textContent=PRON[p];
+    $("verb").innerHTML="<b>"+v.inf+"</b> <em>("+v.en+")</em>";
+    var box=$("choices");box.innerHTML="";
+    shuffle([answer].concat(others)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({who:PRON[current.p],inf:current.v.inf,said:f,ans:current.answer});
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:1100);
+  }
+
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=25?"¡Increíble! That's exam-ready speed.":score>=15?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep sprinting and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){var k=m.inf+m.who;if(seen[k])return;seen[k]=1;
+        html+="<li>"+m.who+" + <b>"+m.inf+"</b> → <span class='fix'>"+m.ans+"</span> <span style='color:var(--muted)'>(not "+m.said+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
