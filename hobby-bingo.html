@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free time, hobbies &amp; sport: play Hobby Bingo | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: free time, hobbies and sport. jugar a, hacer, ir a, tocar, how often, and opinions, with a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 6px}
+.sq{font:inherit;position:relative;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 4px;cursor:pointer;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:14px;font-weight:700;color:var(--ink);line-height:1.15}
+.sq:hover{border-color:var(--green)}
+.sq .e{font-size:30px;line-height:1}
+.sq .n{position:absolute;top:4px;left:7px;font-size:11px;color:var(--muted);font-weight:600}
+.sq.stamp{background:var(--green-soft);border-color:var(--green)}
+.sq.stamp::after{content:"✓";position:absolute;top:2px;right:8px;color:var(--green);font-size:18px;font-weight:800}
+.sq.wrong{background:#FBE9E8;border-color:#D9534F}
+.sq.show{background:var(--cream);border-color:var(--sun)}
+.callout{text-align:center;font-weight:800;font-size:22px;color:var(--green);min-height:30px;margin-bottom:6px}
+.bingoTitle{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-weight:800;letter-spacing:.12em;color:var(--muted);font-size:13px;margin-bottom:6px}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.sq{min-height:78px;font-size:12px}.sq .e{font-size:26px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Hobby Bingo</h1>
+        <p>Free time, hobbies and sport in Spanish: <b>juego al fútbol</b>, <b>hago natación</b>, <b>voy al cine</b>, <b>toco la guitarra</b>. Read or hear the sentence, stamp the right square and get a line. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="bingo"><div><b>Hobby Bingo</b><span>Read the Spanish, stamp the hobby. A line is +2, a full card is +5!</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="verbs"><div><b>Jugar, hacer, ir or tocar?</b><span>juego al tenis, hago yoga, voy a la playa, me gusta nadar, how often</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening bingo 🔊</b><span id="listenNote">Hear a teenager talk about free time, stamp or pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4, or 1–9 on the bingo card).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.13, 1.19, 1.20 (2017 spec, exams 2027–2028) · 1.11, 1.12, 1.15 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div id="boardBox"></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Free time, hobbies &amp; sport</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li><b>Juego al</b> fútbol. <span style="color:var(--muted)">(I play football.)</span></li>
+          <li><b>Toco la</b> guitarra. <span style="color:var(--muted)">(I play the guitar.)</span></li>
+          <li><b>Hago</b> natación. <span style="color:var(--muted)">(I go swimming.)</span></li>
+          <li><b>Voy al</b> cine. <span style="color:var(--muted)">(I go to the cinema.)</span></li>
+        </ul>
+        <p>English says <b>play</b> for football and for the guitar. Spanish uses two different verbs. Why? And where does the <b>al</b> come from? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>jugar a</b> = play a sport or a game. <b>tocar</b> = play an instrument. <b>hacer</b> = do (lots of sports that aren't team ball games: <em>hago natación, hago yoga, hago atletismo</em>). <b>ir a</b> = go to a place. And <b>a + el = al</b>: <em>juego <b>al</b> tenis, voy <b>al</b> parque</em>, but <em>voy <b>a la</b> playa</em>, <em>juego <b>a los</b> videojuegos</em>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four key verbs</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>jugar a (play)</th><th>hacer (do)</th><th>ir a (go to)</th><th>tocar (play music)</th></tr></thead>
+          <tbody>
+            <tr><td>juego al fútbol</td><td>hago natación</td><td>voy al cine</td><td>toco la guitarra</td></tr>
+            <tr><td>juego al baloncesto</td><td>hago equitación (horse riding)</td><td>voy a la playa</td><td>toco el piano</td></tr>
+            <tr><td>juego al tenis / al rugby</td><td>hago ciclismo / atletismo</td><td>voy al parque / al gimnasio</td><td>toco la batería (drums)</td></tr>
+            <tr><td>juego a los videojuegos</td><td>hago yoga / surf / deporte</td><td>voy de compras (shopping)</td><td></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">More hobbies: <b>escucho</b> música · <b>leo</b> libros · <b>veo</b> la tele · <b>bailo</b> · <b>nado</b> · <b>salgo</b> con mis amigos.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Who does it? The verb changes</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>jugar</th><th>hacer</th><th>ir</th><th>salir</th></tr></thead>
+          <tbody>
+            <tr><td>yo (I)</td><td>j<b>ue</b>go</td><td>ha<b>go</b></td><td><b>voy</b></td><td>sal<b>go</b></td></tr>
+            <tr><td>tú (you)</td><td>j<b>ue</b>gas</td><td>haces</td><td><b>vas</b></td><td>sales</td></tr>
+            <tr><td>él / ella / mi hermano</td><td>j<b>ue</b>ga</td><td>hace</td><td><b>va</b></td><td>sale</td></tr>
+            <tr><td>nosotros (we)</td><td>jugamos</td><td>hacemos</td><td><b>vamos</b></td><td>salimos</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:12px"><b>Watch out:</b> jugar is a "boot" verb (u → ue), but not in <em>jugamos</em>. And <em>my friends and I</em> = <b>mis amigos y yo</b> + the <b>we</b> form: <em>Mis amigos y yo jugamos al baloncesto.</em></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">How often?</h3>
+        <p><b>todos los días</b> (every day) · <b>los fines de semana</b> (at the weekend) · <b>los sábados</b> (on Saturdays) · <b>dos veces a la semana</b> (twice a week) · <b>una vez al mes</b> (once a month) · <b>a menudo</b> (often) · <b>a veces</b> (sometimes) · <b>nunca</b> (never) · <b>después del colegio</b> (after school)</p>
+        <p style="margin-top:8px"><em><b>Nunca</b> juego al rugby.</em> or <em><b>No</b> juego <b>nunca</b> al rugby.</em> Both mean I never play rugby.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Opinions</h3>
+        <p><b>Me gusta</b> + a verb in the infinitive: <em>Me gusta <b>jugar</b> al tenis. Me encanta <b>nadar</b>. Prefiero <b>leer</b>.</em> (Never <em>me gusta juego</em>.)</p>
+        <p style="margin-top:8px"><b>Me gusta</b> + one thing, <b>me gustan</b> + more than one: <em>Me gusta el fútbol. Me gustan los deportes.</em></p>
+        <p style="margin-top:8px">Give a reason: <em>porque es</em> divertido (fun) · emocionante (exciting) · relajante (relaxing) · sano (healthy) · aburrido (boring) · peligroso (dangerous) · caro (expensive). Make it agree: <em>la natación es san<b>a</b></em>, <em>los videojuegos son divertid<b>os</b></em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Sport in Spain and in Ireland</h3>
+        <p>Football is the big sport in Spain, but <b>el pádel</b> (a mix of tennis and squash, played in pairs) is hugely popular too. In Ireland you can say: <em>Juego al fútbol gaélico</em> (Gaelic football) or <em>Juego al hurling / al camogie</em>. Spanish teenagers often <em>quedan con sus amigos</em> (meet up with friends) in the evening, because the day finishes later in Spain.</p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> free time is one of the most common themes in the whole paper. In <b>Listening</b>, the marks are often in the details: <b>who</b> (yo or mi hermano?), <b>how often</b> (dos veces a la semana, nunca) and <b>with whom</b> (con mi padre). In <b>Writing</b>, a strong answer has an activity, how often, who with, and an opinion with a reason: <em>Los sábados juego al fútbol con mi equipo. Me encanta porque es emocionante, pero nunca voy al gimnasio porque es aburrido.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/free-time-hobbies-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/Leim" target="_blank" rel="noopener">Free Time &amp; Hobbies Teacher Pack (€5)</a>: Human Bingo speaking game, Hobby Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function pickN(a,n,not){var c=shuffle(a.filter(function(x){return (not||[]).indexOf(x)<0;}));return c.slice(0,n);}
+
+  /* ---------- Verbs: yo, tú, él/ella, nosotros ---------- */
+  var V={
+    jugar:["juego","juegas","juega","jugamos"],hacer:["hago","haces","hace","hacemos"],ir:["voy","vas","va","vamos"],
+    tocar:["toco","tocas","toca","tocamos"],escuchar:["escucho","escuchas","escucha","escuchamos"],leer:["leo","lees","lee","leemos"],
+    ver:["veo","ves","ve","vemos"],bailar:["bailo","bailas","baila","bailamos"],salir:["salgo","sales","sale","salimos"]
+  };
+  /* ---------- Activities: verb, rest, English (base), board label, emoji, noun for opinions [noun, gender, plural] ---------- */
+  var A=[
+    ["jugar","al fútbol","play football","football","⚽",["el fútbol","m",0]],
+    ["jugar","al baloncesto","play basketball","basketball","🏀",["el baloncesto","m",0]],
+    ["jugar","al tenis","play tennis","tennis","🎾",["el tenis","m",0]],
+    ["jugar","al rugby","play rugby","rugby","🏉",["el rugby","m",0]],
+    ["jugar","a los videojuegos","play video games","video games","🎮",["los videojuegos","m",1]],
+    ["jugar","al ajedrez","play chess","chess","♟️",["el ajedrez","m",0]],
+    ["hacer","natación","go swimming","swimming","🏊",["la natación","f",0]],
+    ["hacer","equitación","go horse riding","horse riding","🏇",["la equitación","f",0]],
+    ["hacer","ciclismo","go cycling","cycling","🚴",["el ciclismo","m",0]],
+    ["hacer","yoga","do yoga","yoga","🧘",["el yoga","m",0]],
+    ["hacer","surf","go surfing","surfing","🏄",["el surf","m",0]],
+    ["hacer","atletismo","do athletics","athletics","🏃",["el atletismo","m",0]],
+    ["ir","al cine","go to the cinema","cinema","🎬",null],
+    ["ir","a la playa","go to the beach","beach","🏖️",null],
+    ["ir","al parque","go to the park","park","🌳",null],
+    ["ir","al gimnasio","go to the gym","gym","🏋️",["el gimnasio","m",0]],
+    ["ir","de compras","go shopping","shopping","🛍️",null],
+    ["tocar","la guitarra","play the guitar","guitar","🎸",null],
+    ["tocar","el piano","play the piano","piano","🎹",null],
+    ["escuchar","música","listen to music","music","🎧",null],
+    ["leer","libros","read books","reading","📖",null],
+    ["ver","la tele","watch TV","TV","📺",null],
+    ["bailar","","dance","dancing","💃",null],
+    ["salir","con mis amigos","go out with my friends","going out","👫",null]
+  ].map(function(x,i){return {id:i,v:x[0],rest:x[1],en:x[2],lab:x[3],e:x[4],noun:x[5]};});
+  var ACTV={};A.forEach(function(a){(ACTV[a.v]=ACTV[a.v]||[]).push(a);});
+
+  /* people: index into verb forms, Spanish subject, English subject, possessive for "con … amigos" */
+  var P=[
+    {n:0,es:"",en:"I",pos:"mis",epos:"my"},{n:0,es:"",en:"I",pos:"mis",epos:"my"},
+    {n:2,es:"Mi hermano",en:"My brother",pos:"sus",epos:"his"},{n:2,es:"Mi hermana",en:"My sister",pos:"sus",epos:"her"},
+    {n:2,es:"Mi amigo Pablo",en:"My friend Pablo",pos:"sus",epos:"his"},{n:2,es:"Mi amiga Lucía",en:"My friend Lucía",pos:"sus",epos:"her"},
+    {n:3,es:"Mis amigos y yo",en:"My friends and I",pos:"nuestros",epos:"our"}
+  ];
+  var F=[["todos los días","every day","end"],["los fines de semana","at the weekend","end"],["los sábados","on Saturdays","end"],["los domingos","on Sundays","end"],
+    ["dos veces a la semana","twice a week","end"],["una vez al mes","once a month","end"],["después del colegio","after school","end"],
+    ["a menudo","often","mid"],["a veces","sometimes","mid"],["nunca","never","mid"]];
+
+  function pickP(a){return rnd(P.filter(function(x){return !(a.v==="salir"&&x.n===3);}));}
+  function rest(a,p){return a.v==="salir"?"con "+p.pos+" amigos":a.rest;}
+  function esSent(a,p,f){
+    var verb=V[a.v][p.n],r=rest(a,p),tail=r?" "+r:"";
+    if(f&&f[0]==="nunca"){return (p.es?p.es+" nunca ":"Nunca ")+verb+tail+".";}
+    if(f&&Math.random()<.4&&f[2]==="end"&&!p.es)return cap(f[0])+" "+verb+tail+".";
+    var s=(p.es?p.es+" ":"")+verb+tail+(f?" "+f[0]:"")+".";return cap(s);
+  }
+  function en3(phrase){var w=phrase.split(" "),v=w[0];w[0]=v==="go"?"goes":v==="do"?"does":v==="watch"?"watches":v+"s";return w.join(" ");}
+  function enSent(a,p,f){
+    var ph=a.en.replace(" my friends"," "+p.epos+" friends");var third=p.n===2;
+    var vp=third?en3(ph):ph;
+    if(f&&f[2]==="mid")return p.en+" "+f[1]+" "+vp+".";
+    return p.en+" "+vp+(f?" "+f[1]:"")+".";
+  }
+
+  /* ---------- Bingo board ---------- */
+  var BOARD=null;
+  function newBoard(){var b=pickN(A,9);BOARD={cells:b,stamped:[0,0,0,0,0,0,0,0,0],lines:{}};}
+  var LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  function drawBoard(){
+    var h="<div class='bingoTitle'><span>B I N</span><span>G O</span><span>¡LÍNEA!</span></div><div class='board'>";
+    BOARD.cells.forEach(function(a,i){h+="<button class='sq"+(BOARD.stamped[i]?" stamp":"")+"' data-i='"+i+"' aria-label='Square "+(i+1)+": "+a.lab+"'><span class='n'>"+(i+1)+"</span><span class='e'>"+a.e+"</span>"+a.lab+"</button>";});
+    return h+"</div>";
+  }
+  function bingoQ(spoken){
+    if(!BOARD||BOARD.stamped.indexOf(0)<0)newBoard();
+    var free=[];BOARD.stamped.forEach(function(s,i){if(!s)free.push(i);});
+    var i=rnd(free),a=BOARD.cells[i],p=pickP(a),f=Math.random()<.75?rnd(F):null;
+    var es=esSent(a,p,f);
+    return {board:1,cell:i,listen:spoken?1:0,speak:es,en:spoken?"Listen. Stamp the hobby you hear.":"Stamp the hobby in this sentence.",frame:spoken?"":es,answer:a.lab,wrong:[0,0,0],review:es+" = "+enSent(a,p,f)};
+  }
+  function gBingo(){return bingoQ(false);}
+  function lBingo(){return bingoQ(true);}
+
+  /* ---------- Mode 2: verbs, prepositions, frequency, opinions ---------- */
+  var BIG4=["jugar","hacer","ir","tocar"];
+  function qVerb(){
+    var a=rnd(A.filter(function(x){return BIG4.indexOf(x.v)>=0;}));
+    var ans=cap(V[a.v][0]);var wrong=BIG4.filter(function(v){return v!==a.v;}).map(function(v){return cap(V[v][0]);});
+    var frame="___ "+a.rest+".";
+    return {who:a.e,en:"I "+a.en+".",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function qPrep(){
+    var a=rnd(A.filter(function(x){return /^(al|a la|a los) /.test(x.rest);}));
+    var m=a.rest.match(/^(al|a la|a los) (.*)$/),ans=m[1],noun=m[2];
+    var wrong=ans==="al"?(a.v==="ir"?["a el","a","en"]:["a","el","a la"]):ans==="a la"?["al","a","en la"]:["al","a las","los"];
+    var frame=cap(V[a.v][0])+" ___ "+noun+".";
+    return {who:a.e,en:"I "+a.en+".",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function qConj(){
+    var verbs=["jugar","hacer","ir","salir","jugar","hacer","ir"],v=rnd(verbs),a=rnd(ACTV[v]),k=Math.random();
+    var p,frame,en;
+    if(k<.2){p={n:1,pos:"tus"};frame="¿___ "+rest(a,p)+" "+rnd(["los fines de semana","a menudo","después del colegio"])+"?";frame=frame.replace(" ?","?");en="Asking a friend (tú).";}
+    else{p=rnd(P.filter(function(x){return x.es&&!(v==="salir"&&x.n===3);}));frame=p.es+" ___ "+rest(a,p)+".";en=p.en+" ("+(p.n===3?"we":"he / she")+")";}
+    var ans=V[v][p.n];var wrong=V[v].filter(function(f,i){return i!==p.n;});
+    if(p.n===1)ans=cap(ans),wrong=wrong.map(cap);
+    return {who:a.e,en:en,frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function qFreq(){
+    var f=rnd(F);var wrong=pickN(F,3,[f]).map(function(x){return x[0];});
+    return {who:"🗓️",en:"How often? Say it in Spanish: "+f[1],frame:"",answer:f[0],wrong:wrong,review:f[1]+" = "+f[0]};
+  }
+  function qGusta(){
+    var k=Math.random(),a;
+    if(k<.35){a=rnd(A.filter(function(x){return x.v!=="salir";}));var inf=a.v+(a.rest?" "+a.rest:"");
+      var frame="Me ___ "+inf+".";return {who:a.e,en:"I like to "+a.en+".",frame:frame,answer:"gusta",wrong:["gustan","gusto","gustas"],review:frame.replace("___","gusta")+" (gusta + infinitive)"};}
+    if(k<.7){a=rnd(A.filter(function(x){return BIG4.indexOf(x.v)>=0;}));
+      var lead=rnd([["Me encanta","I love"],["Me gusta","I like"],["Prefiero","I prefer"],["Odio","I hate"]]);
+      var frame2=lead[0]+" ___ "+a.rest+".";var ans=a.v;
+      return {who:a.e,en:lead[1]+" "+(lead[1]==="I prefer"||lead[1]==="I hate"?a.en.replace(/^(\w+)/,function(w){return w==="go"?"going":w==="do"?"doing":w==="play"?"playing":w+"ing";}):"to "+a.en)+".",frame:frame2,answer:ans,wrong:[V[a.v][0],V[a.v][2],ans==="ir"?"yendo":/ar$/.test(a.v)?a.v.replace(/ar$/,"ando"):a.v.replace(/(er|ir)$/,"iendo")],review:frame2.replace("___",ans)+" (infinitive after "+lead[0].toLowerCase()+")"};}
+    a=rnd(A.filter(function(x){return x.noun;}));var pl=a.noun[2];var ans3=pl?"gustan":"gusta";
+    var frame3="Me ___ "+a.noun[0]+".";
+    return {who:a.e,en:"I like "+a.lab+".",frame:frame3,answer:ans3,wrong:[pl?"gusta":"gustan","gusto","gustas"],review:frame3.replace("___",ans3)};
+  }
+  var ADJ=[["divertido","fun"],["emocionante","exciting"],["relajante","relaxing"],["sano","healthy"],["aburrido","boring"],["peligroso","dangerous",["rugby","surfing","horse riding","cycling"]],["caro","expensive",["horse riding","surfing","gym","tennis"]]];
+  function agree(a,g,pl){if(/o$/.test(a))return a.slice(0,-1)+(g==="f"?"a":"o")+(pl?"s":"");return a+(pl?"s":"");}
+  function qReason(){
+    var a=rnd(A.filter(function(x){return x.noun;})),j=rnd(ADJ.filter(function(x){return /o$/.test(x[0])&&(!x[2]||x[2].indexOf(a.lab)>=0);})),g=a.noun[1],pl=a.noun[2];
+    var ans=agree(j[0],g,pl),forms=[];
+    [["m",0],["f",0],["m",1],["f",1]].forEach(function(x){var f=agree(j[0],x[0],x[1]);if(f!==ans&&forms.indexOf(f)<0)forms.push(f);});
+    var frame=cap(a.noun[0])+" "+(pl?"son":"es")+" ___.";
+    return {who:a.e,en:cap(a.lab)+(pl?" are ":" is ")+j[1]+".",frame:frame,answer:ans,wrong:forms.slice(0,3),review:frame.replace("___",ans)};
+  }
+  function qPic(){
+    var a=rnd(A),p=pickP(a),f=Math.random()<.6?rnd(F):null,es=esSent(a,p,f);
+    var w=pickN(A,3,[a]);
+    return {who:"",en:"What does it mean?",frame:es,answer:a.e+" "+a.lab,wrong:w.map(function(x){return x.e+" "+x.lab;}),review:es+" = "+enSent(a,p,f)};
+  }
+
+  /* ---------- Mode 3: Listening ---------- */
+  function lSent(){
+    var a=rnd(A),p=pickP(a),f=rnd(F),es=esSent(a,p,f),ans=enSent(a,p,f);
+    var oa=rnd(A.filter(function(x){return x!==a&&x.v===a.v;}).concat(A.filter(function(x){return x!==a;})).slice(0,4));
+    var of=rnd(F.filter(function(x){return x!==f;}));
+    var op=p.n===0?rnd(P.filter(function(x){return x.n===2;})):P[0];
+    var w=[enSent(oa,p,f),enSent(a,p,of),enSent(a,op,f)];
+    return {listen:1,speak:es,answer:ans,wrong:w,review:es+" = "+ans};
+  }
+  var LFIX=[
+    ["Juego al fútbol dos veces a la semana con mi equipo.","I play football twice a week with my team.",["I play football twice a month with my team.","I play football three times a week with my team.","I play football twice a week with my brother."]],
+    ["No me gusta nada el rugby porque es peligroso.","I don't like rugby at all because it's dangerous.",["I really like rugby because it's exciting.","I don't like rugby because it's boring.","I don't like tennis at all because it's dangerous."]],
+    ["Los domingos voy a la piscina con mi madre.","On Sundays I go to the swimming pool with my mum.",["On Saturdays I go to the swimming pool with my mum.","On Sundays I go to the swimming pool with my dad.","On Sundays I go to the beach with my mum."]],
+    ["Prefiero leer porque es relajante.","I prefer reading because it's relaxing.",["I prefer dancing because it's relaxing.","I hate reading because it's boring.","I prefer reading because it's interesting."]],
+    ["Mi hermano toca la guitarra en un grupo.","My brother plays the guitar in a band.",["My brother plays the piano in a band.","My sister plays the guitar in a band.","My brother plays football on a team."]],
+    ["En mi tiempo libre veo series en mi móvil.","In my free time I watch series on my phone.",["In my free time I watch series on the TV.","In my free time I play games on my phone.","In my free time I read books on my phone."]],
+    ["Hago equitación una vez al mes porque es cara.","I go horse riding once a month because it's expensive.",["I go horse riding once a week because it's expensive.","I go horse riding once a month because it's exciting.","I go cycling once a month because it's expensive."]],
+    ["Este fin de semana voy a jugar al tenis con mis amigos.","This weekend I'm going to play tennis with my friends.",["Every weekend I play tennis with my friends.","This weekend I'm going to play tennis with my cousins.","This weekend I'm going to play basketball with my friends."]],
+    ["En España el pádel es muy popular.","In Spain padel is very popular.",["In Spain padel isn't popular.","In Ireland padel is very popular.","In Spain hurling is very popular."]],
+    ["Nunca hago deporte después del colegio.","I never do sport after school.",["I always do sport after school.","I never do sport before school.","I never do homework after school."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={bingo:[gBingo],verbs:[qVerb,qVerb,qPrep,qConj,qConj,qFreq,qGusta,qGusta,qReason],listen:[lBingo,lBingo,lSent,lSent,lFix,lFix],mixed:[gBingo,gBingo,qPic,qVerb,qPrep,qConj,qFreq,qGusta,qReason]};
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear a teenager talk about free time, stamp or pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,lines,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="bingo"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;lines=0;cards=0;BOARD=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.board&&(q.review===last||q.wrong.length<3||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<3)&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.listen?"":(q.who||"");
+    $("en").textContent=q.listen&&!q.board?"Listen. What did they say?":q.en;
+    $("frame").innerHTML=q.listen?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.listen){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    if(q.board){
+      $("boardBox").innerHTML="<div class='callout' id='callout'></div>"+drawBoard();
+      [].forEach.call(document.querySelectorAll(".sq"),function(s){s.onclick=function(){pickSq(s,+s.dataset.i);};});
+      return;
+    }
+    $("boardBox").innerHTML="";
+    var opts=[q.answer].concat(q.wrong);
+    var longish=q.listen||opts.some(function(x){return x.length>18;});
+    box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");
+    shuffle(opts).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.listen)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pickSq(btn,i){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=i===current.cell,co=$("callout"),wait;
+    if(ok){
+      score++;streak++;if(streak>best)best=streak;BOARD.stamped[i]=1;btn.classList.add("stamp");
+      var got=0;LINES.forEach(function(L,k){if(!BOARD.lines[k]&&L.every(function(x){return BOARD.stamped[x];})){BOARD.lines[k]=1;got++;}});
+      if(BOARD.stamped.indexOf(0)<0){score+=5;cards++;lines+=got;co.textContent="¡BINGO! +5";wait=1300;}
+      else if(got){score+=2*got;lines+=got;co.textContent="¡Línea! +"+(2*got);wait=900;}
+      else wait=current.listen?900:450;
+    } else {
+      streak=0;btn.classList.add("wrong");
+      var r=document.querySelector(".sq[data-i='"+current.cell+"']");if(r)r.classList.add("show");
+      mistakes.push({review:current.review,said:BOARD.cells[i].lab,listen:1});
+      wait=2200;
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f,listen:current.listen||/ = /.test(current.review)&&!current.frame.match(/___/)});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.listen?900:350):(current.listen?2200:1500);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=30?"¡Increíble! That's exam-ready speed.":score>=18?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    var extra=(mode==="bingo"||mode==="listen"||mode==="mixed")&&(lines||cards)?" Lines: "+lines+(cards?" · Full cards: "+cards:"")+".":"";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)"+extra;
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(current&&current.board){if(n>=1&&n<=9){var s=document.querySelector(".sq[data-i='"+(n-1)+"']");if(s)s.click();}return;}
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,esSent:esSent,enSent:enSent,A:A,P:P,F:F};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
