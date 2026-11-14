@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where I live: house &amp; town: play Room Raider | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: where I live, house and town. Find things with encima de, debajo de, entre; rooms, hay or está, places in town, al or a la, signs in Spain. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.scene{position:relative;width:100%;max-width:320px;height:200px;margin:4px auto 0;background:var(--cream);border:1px solid var(--cream-line);border-radius:14px;overflow:hidden;font-size:24px}
+.scene i{position:absolute;font-style:normal;line-height:1;transform:translate(-50%,-50%);font-size:4em}
+.scene i.two{font-size:3.2em}
+.scene i.o{font-size:2em;z-index:2}
+.choices.scenes .choice{padding:6px}
+.choices.scenes .scene{height:120px;font-size:13px;max-width:none;margin:0}
+.sign{display:inline-block;font-weight:800;letter-spacing:.06em;padding:12px 22px;border-radius:10px;border:4px solid #fff;outline:3px solid var(--night);background:#1F5FA8;color:#fff;margin-top:8px}
+.sign.red{background:#C0392B}.sign.green{background:var(--green)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.scene{height:170px;font-size:20px}.choices.scenes .scene{height:90px;font-size:11px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Room Raider</h1>
+        <p>Where I live: house and town. Something's gone missing! Find it with <b>encima de</b>, <b>debajo de</b>, <b>entre</b>… Then rooms, <b>hay</b> or <b>está</b>, places in town, <b>al</b> or <b>a la</b>, and the signs you'll meet in Spain. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="raid"><div><b>Room Raider</b><span>Where is it? Find it! Prepositions, rooms, del and hay or está</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="town"><div><b>My house &amp; town</b><span>Places in town, al or a la, where you live, signs in Spain</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening raider 🔊</b><span id="listenNote">Hear where it is and find it; houses and towns described</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.5, 1.10, 1.19, 3.1 (2017 spec, exams 2027–2028) · 1.12, 1.16, 3.1 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Where I live: house &amp; town</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: hay or está?</h3>
+        <ul>
+          <li>En mi dormitorio <b>hay</b> una cama y un armario. <span style="color:var(--muted)">(In my bedroom there is a bed and a wardrobe.)</span></li>
+          <li><b>Hay</b> dos supermercados en mi barrio. <span style="color:var(--muted)">(There are two supermarkets in my area.)</span></li>
+          <li><b>La</b> cama <b>está</b> al lado de la ventana. <span style="color:var(--muted)">(The bed is next to the window.)</span></li>
+          <li><b>Las</b> llaves <b>están</b> encima de la mesa. <span style="color:var(--muted)">(The keys are on the table.)</span></li>
+        </ul>
+        <p>Look at the word straight after <b>hay</b>, and the word before <b>está / están</b>. What do you notice? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Hay</b> = there is / there are. It never changes, and it goes with <b>un, una, unos, unas</b>, numbers or no article: <em>hay un parque, hay tres dormitorios, hay flores</em>. Never <em>hay el parque</em>. <b>Está / están</b> = is / are (somewhere). Use it to say <b>where</b> a particular thing is: <b>el, la, los, las</b>, mi… or a name + <b>está / están</b>: <em>el parque está cerca, mis libros están en la mesa</em>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Where is it? Prepositions</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>en</td><td>in / on</td><td>El móvil está <b>en</b> la mochila.</td></tr>
+            <tr><td>encima de</td><td>on (top of)</td><td>El gato está <b>encima de</b> la cama.</td></tr>
+            <tr><td>debajo de</td><td>under</td><td>La pelota está <b>debajo de</b> la silla.</td></tr>
+            <tr><td>delante de · detrás de</td><td>in front of · behind</td><td>El perro está <b>detrás del</b> sofá.</td></tr>
+            <tr><td>al lado de</td><td>next to</td><td>La biblioteca está <b>al lado del</b> parque.</td></tr>
+            <tr><td>a la izquierda de · a la derecha de</td><td>to the left of · to the right of</td><td>La silla está <b>a la izquierda de</b> la cama.</td></tr>
+            <tr><td>entre… y…</td><td>between… and…</td><td>El osito está <b>entre</b> la cama <b>y</b> la silla.</td></tr>
+            <tr><td>enfrente de</td><td>opposite</td><td>La farmacia está <b>enfrente del</b> banco.</td></tr>
+            <tr><td>cerca de · lejos de</td><td>near · far from</td><td>Vivo <b>cerca del</b> colegio, pero <b>lejos de</b> la playa.</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:12px"><b>Watch out:</b> <b>de + el = del</b> and <b>a + el = al</b>. <em>encima <b>del</b> sofá</em> (not <em>de el</em>), <em>voy <b>al</b> cine</em> (not <em>a el</em>). With <b>la, los, las</b> nothing changes: <em>debajo de la cama, voy a la piscina</em>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">My house</h3>
+        <p>Vivo en <b>una casa</b> (a house) · <b>un piso</b> (an apartment) · <b>una casa adosada</b> (a terraced house) · <b>una granja</b> (a farm). It's in <b>el centro</b> (the centre) · <b>las afueras</b> (the outskirts) · <b>el campo</b> (the countryside) · <b>la costa</b> (the coast) · <b>un pueblo</b> (a town / village) · <b>una ciudad</b> (a city).</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Room</th><th>What's in it</th></tr></thead>
+          <tbody>
+            <tr><td>la cocina (kitchen)</td><td>la nevera (fridge), el horno (oven), el microondas</td></tr>
+            <tr><td>el salón (living room)</td><td>el sofá, la televisión, la alfombra (rug), la chimenea (fireplace)</td></tr>
+            <tr><td>el comedor (dining room)</td><td>la mesa, las sillas</td></tr>
+            <tr><td>el dormitorio (bedroom)</td><td>la cama, el armario (wardrobe), el escritorio (desk), la estantería (shelves)</td></tr>
+            <tr><td>el cuarto de baño (bathroom)</td><td>la ducha (shower), la bañera (bath), el lavabo (sink)</td></tr>
+            <tr><td>el jardín · el garaje</td><td>flores, árboles, el césped (lawn) · el coche, las bicis</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>la planta baja</b> (ground floor) · <b>el primer piso</b> (first floor) · <b>arriba</b> (upstairs) · <b>abajo</b> (downstairs). Comparto mi dormitorio <b>con</b> mi hermano. · Tengo mi propio dormitorio (my own bedroom).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">My town</h3>
+        <p>el cine · la piscina · el polideportivo (sports centre) · la biblioteca · el supermercado · la iglesia · el parque · la playa · el museo · el estadio · la estación de tren · el centro comercial · el hospital · la farmacia (chemist's) · el banco · la panadería (bakery) · el castillo · la plaza · el puerto (harbour)</p>
+        <p style="margin-top:8px"><b>Voy al</b> cine · <b>Voy a la</b> piscina. <b>Para</b> nadar, voy a la piscina (<b>para</b> + verb = in order to). En mi pueblo <b>hay</b> un castillo, pero <b>no hay</b> cine. <b>No hay mucho que hacer</b> para los jóvenes (there isn't much to do for young people). Mi barrio es <b>tranquilo</b> (quiet) · <b>ruidoso</b> (noisy) · <b>animado</b> (lively) · <b>bonito</b>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Signs you'll see in Spain</h3>
+        <p><b>SALIDA</b> exit · <b>ENTRADA</b> entrance · <b>ABIERTO / CERRADO</b> open / closed · <b>EMPUJAR / TIRAR</b> push / pull · <b>ASEOS</b> toilets · <b>PROHIBIDO FUMAR</b> no smoking · <b>PROHIBIDO EL PASO</b> no entry · <b>PELIGRO</b> danger · <b>SE VENDE / SE ALQUILA</b> for sale / for rent · <b>REBAJAS</b> sales · <b>NO TOCAR</b> do not touch.</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> most people in Spanish towns and cities live in a <b>piso</b> in a block of apartments, often with a balcony, rather than a house with a garden. Most towns have a <b>plaza mayor</b> (main square) where people meet, and on summer evenings families go out for <b>el paseo</b>, a stroll around town. Floors work like in Ireland: <b>la planta baja</b> is the ground floor, then <b>el primer piso</b>. Compare: do most people you know live in a house or an apartment?</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Reading</b>, signs, flat adverts (<em>se alquila piso: 3 dormitorios, 2 baños, cerca de la playa</em>) and descriptions of towns come up: count the rooms and note what is <b>near</b> or <b>far</b>. In <b>Listening</b>, catch the details: how many rooms, which floor, what there is and what there <b>isn't</b> (<em>no hay</em>). In <b>Writing</b>, describe your home and town with <b>hay</b>, <b>está</b>, an opinion and a reason: <em>Vivo en una casa adosada en las afueras de Cork. Hay tres dormitorios y un jardín pequeño. Mi dormitorio está en el primer piso. Me encanta mi barrio porque es tranquilo, pero no hay mucho que hacer para los jóvenes.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/house-and-town-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/BFirH" target="_blank" rel="noopener">House &amp; Town Teacher Pack (€5)</a>: Spot the Difference bedrooms, House &amp; Town Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+
+  /* ---------- Room Raider scenes: furniture, objects, positions ---------- */
+  var F=[["la","cama","bed","🛏️"],["el","sofá","sofa","🛋️"],["la","silla","chair","🪑"],["la","televisión","TV","📺"],["el","ordenador","computer","🖥️"]]
+    .map(function(x){return {def:x[0],es:x[1],en:x[2],e:x[3]};});
+  var O=[["el","gato","cat","🐱"],["el","perro","dog","🐶"],["la","pelota","ball","⚽"],["el","móvil","phone","📱"],["las","llaves","keys","🔑",1],["la","mochila","schoolbag","🎒"],["los","libros","books","📚",1],["la","guitarra","guitar","🎸"],["el","osito","teddy bear","🧸"]]
+    .map(function(x){return {def:x[0],es:x[1],en:x[2],e:x[3],pl:!!x[4]};});
+  var POS={encima:["encima de","on"],debajo:["debajo de","under"],izq:["a la izquierda de","to the left of"],der:["a la derecha de","to the right of"],entre:["entre","between"]};
+  var PK=["encima","debajo","izq","der","entre"];
+  var XY={encima:[50,19],debajo:[50,83],izq:[13,50],der:[87,50]};
+  function the(f){return f.def+" "+f.es;}
+  function deThe(f){return f.def==="el"?"del "+f.es:"de "+the(f);}
+  function where(p,f,f2){return p==="entre"?"entre "+the(F[f])+" y "+the(F[f2]):POS[p][0].replace(/ de$/,"")+" "+deThe(F[f]);}
+  function sceneKey(o,f,p,f2){return "S|"+o+"|"+f+"|"+p+"|"+(p==="entre"?f2:"");}
+  function sceneEN(k){var s=k.split("|"),o=O[+s[1]],f=F[+s[2]],p=s[3];
+    return "the "+o.en+" "+POS[p][1]+" the "+f.en+(p==="entre"?" and the "+F[+s[4]].en:"");}
+  function sceneHTML(k){var s=k.split("|"),o=O[+s[1]],f=F[+s[2]],p=s[3],h="<div class='scene' aria-hidden='true'>";
+    function it(e,x,y,c){return "<i class='"+c+"' style='left:"+x+"%;top:"+y+"%'>"+e+"</i>";}
+    if(p==="entre")h+=it(f.e,19,46,"two")+it(F[+s[4]].e,81,46,"two")+it(o.e,50,54,"o");
+    else h+=it(f.e,50,41,"")+it(o.e,XY[p][0],XY[p][1],"o");
+    return h+"</div>";}
+  function pickScene(){var o=Math.floor(Math.random()*O.length),f=Math.floor(Math.random()*F.length),p=rnd(PK),f2=null;
+    if(p==="entre"){do{f2=Math.floor(Math.random()*F.length);}while(f2===f);}
+    return {o:o,f:f,p:p,f2:f2};}
+  function sent(s){var o=O[s.o];return cap(the(o))+" "+(o.pl?"están":"está")+" "+where(s.p,s.f,s.f2)+".";}
+  function wrongScenes(s){
+    var ps=shuffle(PK.filter(function(p){return p!==s.p&&p!=="entre";})),out=[];
+    if(s.p!=="entre"&&Math.random()<.4){var g;do{g=Math.floor(Math.random()*F.length);}while(g===s.f);out.push({o:s.o,f:s.f,p:"entre",f2:g});ps=ps.slice(0,2);}
+    ps.slice(0,3-out.length).forEach(function(p){out.push({o:s.o,f:s.f,p:p,f2:null});});
+    return out;}
+  /* look at the picture, say where it is */
+  function qWhere(){var s=pickScene(),o=O[s.o],k=sceneKey(s.o,s.f,s.p,s.f2);
+    var ans=(o.pl?"Están ":"Está ")+where(s.p,s.f,s.f2)+".";
+    return {scene:k,en:"¿Dónde "+(o.pl?"están ":"está ")+the(o)+"? ("+o.en+")",frame:"",answer:ans,
+      wrong:wrongScenes(s).map(function(w){return (o.pl?"Están ":"Está ")+where(w.p,w.f,w.f2)+".";}),review:sent(s)+" = "+cap(sceneEN(k))};}
+  /* read where it is, find the picture */
+  function qFind(spoken){var s=pickScene(),k=sceneKey(s.o,s.f,s.p,s.f2),t=sent(s);
+    return {kind:"scenes",en:spoken?"Listen. Find it!":"Find it! Which picture?",frame:spoken?"":t,speak:spoken?t:"",listen:spoken?1:0,
+      answer:k,wrong:wrongScenes(s).map(function(w){return sceneKey(w.o,w.f,w.p,w.f2);}),review:t+" = "+cap(sceneEN(k))};}
+  function gFind(){return qFind(false);}
+  function lFind(){return qFind(true);}
+  /* del / de la / de los / de las */
+  var GF=[["el","sofá","sofa"],["el","armario","wardrobe"],["el","escritorio","desk"],["la","mesa","table"],["la","cama","bed"],["la","ventana","window"],["los","libros","books"],["las","sillas","chairs"],["el","ordenador","computer"],["la","estantería","shelves"]];
+  function qDel(){var g=rnd(GF),o=rnd(O),p=rnd(["encima","debajo","delante","detrás","al lado"]),ans=g[0]==="el"?"del":"de "+g[0];
+    var en={encima:"on",debajo:"under",delante:"in front of","detrás":"behind","al lado":"next to"}[p];
+    return {who:o.e,en:cap(o.en)+" "+(o.pl?"are ":"is ")+en+" the "+g[2]+".",frame:cap(the(o))+" "+(o.pl?"están":"está")+" "+p+" ___ "+g[1]+".",
+      answer:ans,wrong:["del","de la","de los","de las"].filter(function(x){return x!==ans;}),
+      review:cap(the(o))+" "+(o.pl?"están":"está")+" "+p+" "+ans+" "+g[1]+"."+(ans==="del"?" (de + el = del)":"")};}
+  /* rooms */
+  var ROOMS=[["la cocina","kitchen","🍳",["una nevera","un horno","un microondas","un fregadero"]],
+    ["el salón","living room","🛋️",["un sofá","una televisión","una alfombra","una chimenea"]],
+    ["el dormitorio","bedroom","🛏️",["una cama","un armario","un escritorio","una mesilla"]],
+    ["el cuarto de baño","bathroom","🛁",["una ducha","una bañera","un lavabo","un inodoro"]],
+    ["el comedor","dining room","🍽️",["una mesa grande","ocho sillas"]],
+    ["el jardín","garden","🌷",["flores","árboles","césped","un columpio"]],
+    ["el garaje","garage","🚗",["un coche","dos bicis","herramientas"]]];
+  function qRoom(){var r=rnd(ROOMS),it=shuffle(r[3].slice()).slice(0,2);
+    if(Math.random()<.5)return {who:"🏠",en:"Which room is it?",frame:"Hay "+it[0]+" y "+it[1]+". ¿Qué habitación es?",answer:r[0],wrong:others(ROOMS,r,3).map(function(x){return x[0];}),review:"Hay "+it[0]+" y "+it[1]+" → "+r[0]+" ("+r[1]+")"};
+    var w=others(ROOMS,r,3);
+    if(Math.random()<.5)return {who:r[2],en:"How do you say it in Spanish?",frame:"the "+r[1],answer:r[0],wrong:w.map(function(x){return x[0];}),review:"the "+r[1]+" = "+r[0]};
+    return {who:"",en:"What is it in English?",frame:cap(r[0]),answer:"the "+r[1],wrong:w.map(function(x){return "the "+x[1];}),review:cap(r[0])+" = the "+r[1]};}
+  /* gap-fills: house, hay/está, prepositions */
+  var FIXH=[
+    ["En mi casa ___ tres dormitorios.","In my house there are three bedrooms.","hay",["están","son","es"]],
+    ["Mi dormitorio ___ en el primer piso.","My bedroom is on the first floor.","está",["hay","son","están"]],
+    ["¿Dónde ___ las llaves? —En la mesa.","Where are the keys? —On the table.","están",["hay","son","está"]],
+    ["___ dos supermercados en mi barrio.","There are two supermarkets in my area.","Hay",["Son","Están","Está"]],
+    ["En mi pueblo hay ___ parque muy bonito.","In my town there is a very nice park.","un",["una","el","unos"]],
+    ["La cocina está en la planta ___.","The kitchen is on the ground floor.","baja",["bajo","alta","primera"]],
+    ["Comparto mi dormitorio ___ mi hermano.","I share my bedroom with my brother.","con",["de","en","a"]],
+    ["Tengo mi ___ dormitorio.","I have my own bedroom.","propio",["propia","solo","mismo"]],
+    ["El gato está debajo ___ la cama.","The cat is under the bed.","de",["en","a","del"]],
+    ["Mi móvil está encima ___ sofá.","My phone is on the sofa.","del",["de el","de la","al"]],
+    ["En la cocina hay una ___ y un horno.","In the kitchen there is a fridge and an oven.","nevera",["cama","ducha","bañera"]],
+    ["En el cuarto de baño hay una ___ pero no hay bañera.","In the bathroom there is a shower but there's no bath.","ducha",["nevera","cama","mesa"]],
+    ["Me gusta mi dormitorio porque es muy ___.","I like my bedroom because it's very bright.","luminoso",["oscuro","pequeño","feo"]],
+    ["El perro está ___ del sofá.","The dog is behind the sofa.","detrás",["delante","encima","debajo"]],
+    ["La silla está ___ de la mesa.","The chair is in front of the table.","delante",["detrás","debajo","encima"]],
+    ["Mi casa está ___ del colegio: está a cinco minutos.","My house is near the school: it's five minutes away.","cerca",["lejos","encima","debajo"]],
+    ["El osito está ___ la cama y la silla.","The teddy is between the bed and the chair.","entre",["encima","debajo","detrás"]]
+  ];
+  var FIXT=[
+    ["Vivo en un ___ en el centro de la ciudad.","I live in an apartment in the city centre.","piso",["campo","jardín","barrio"]],
+    ["Vivo en el ___, cerca de una granja.","I live in the countryside, near a farm.","campo",["centro","piso","barrio"]],
+    ["Vivo en la ___, cerca de la playa.","I live on the coast, near the beach.","costa",["calle","plaza","granja"]],
+    ["Mi casa está en las ___ de Cork.","My house is on the outskirts of Cork.","afueras",["fueras","afuera","fuera"]],
+    ["Vivo en una casa ___ en un pueblo pequeño.","I live in a terraced house in a small town.","adosada",["adosado","grande","piso"]],
+    ["Mi barrio es muy ___: no hay mucho ruido.","My area is very quiet: there isn't much noise.","tranquilo",["ruidoso","sucio","animado"]],
+    ["En mi pueblo no hay ___ que hacer para los jóvenes.","In my town there isn't much to do for young people.","mucho",["mucha","muy","muchos"]],
+    ["Los sábados voy ___ cine con mis amigos.","On Saturdays I go to the cinema with my friends.","al",["a el","a la","a los"]],
+    ["Los domingos voy ___ piscina.","On Sundays I go to the swimming pool.","a la",["al","a el","a las"]],
+    ["Para nadar, voy a la ___.","To swim, I go to the swimming pool.","piscina",["biblioteca","panadería","farmacia"]],
+    ["Para comprar pan, voy a la ___.","To buy bread, I go to the bakery.","panadería",["biblioteca","piscina","iglesia"]],
+    ["Para leer y estudiar, voy a la ___.","To read and study, I go to the library.","biblioteca",["panadería","piscina","farmacia"]],
+    ["Hay un castillo ___ antiguo.","There is a very old castle.","muy",["mucho","muchos","mucha"]],
+    ["El aeropuerto está ___ de mi pueblo: está a una hora.","The airport is far from my town: it's an hour away.","lejos",["cerca","delante","encima"]],
+    ["La farmacia está ___ del banco.","The chemist's is opposite the bank.","enfrente",["encima","debajo","entre"]],
+    ["La biblioteca está al ___ del parque.","The library is next to the park.","lado",["cerca","lejos","izquierda"]],
+    ["En mi pueblo hay una piscina, pero no ___ cine.","In my town there's a swimming pool, but there's no cinema.","hay",["está","es","son"]]
+  ];
+  function fixQ(x){return {who:"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};}
+  function qFixH(){return fixQ(rnd(FIXH));}
+  function qFixT(){return fixQ(rnd(FIXT));}
+  /* places in town */
+  var P=[["el","cine","cinema","🎬"],["la","piscina","swimming pool","🏊"],["el","estadio","stadium","🏟️"],["la","biblioteca","library","📚"],["el","supermercado","supermarket","🛒"],["la","iglesia","church","⛪"],["el","parque","park","🌳"],["la","playa","beach","🏖️"],["el","museo","museum","🏛️"],["la","estación de tren","train station","🚉"],["el","centro comercial","shopping centre","🛍️"],["el","hospital","hospital","🏥"],["la","farmacia","chemist's","💊"],["el","banco","bank","🏦"],["la","panadería","bakery","🥖"],["el","castillo","castle","🏰"],["el","colegio","school","🏫"],["el","hotel","hotel","🏨"],["el","puerto","harbour","⚓"],["la","plaza","square","⛲"]]
+    .map(function(x){return {def:x[0],es:x[1],en:x[2],e:x[3]};});
+  function toThe(p){return p.def==="el"?"al "+p.es:"a la "+p.es;}
+  function qPlace(){var p=rnd(P),w=others(P,p,3);
+    var r=Math.random();
+    if(r<.35)return {who:p.e,en:"the "+p.en,frame:"How do you say it in Spanish?",answer:p.def+" "+p.es,wrong:w.map(function(x){return x.def+" "+x.es;}),review:"the "+p.en+" = "+p.def+" "+p.es};
+    if(r<.65)return {who:"",en:"What is it in English?",frame:cap(p.def+" "+p.es),answer:p.e+" "+p.en,wrong:w.map(function(x){return x.e+" "+x.en;}),review:cap(p.def+" "+p.es)+" = the "+p.en};
+    var ans=p.def==="el"?"al":"a la";
+    return {who:p.e,en:"I'm going to the "+p.en+".",frame:"Voy ___ "+p.es+".",answer:ans,wrong:["al","a la","a el","a los"].filter(function(x){return x!==ans;}).slice(0,3),review:"Voy "+toThe(p)+"."+(ans==="al"?" (a + el = al)":"")};}
+  /* signs */
+  var SIGNS=[["SALIDA","exit","green"],["ENTRADA","entrance","green"],["ABIERTO","open","green"],["CERRADO","closed","red"],["PROHIBIDO FUMAR","no smoking","red"],["ASEOS","toilets",""],["EMPUJAR","push",""],["TIRAR","pull",""],["PELIGRO","danger","red"],["SE VENDE","for sale",""],["SE ALQUILA","for rent",""],["PROHIBIDO EL PASO","no entry","red"],["NO TOCAR","do not touch","red"],["REBAJAS","sales",""],["PRIVADO","private","red"]];
+  function qSign(){var s=rnd(SIGNS);return {sign:s,en:"You see this sign in Spain. What does it mean?",frame:"",answer:s[1],wrong:others(SIGNS,s,3).map(function(x){return x[1];}),review:s[0]+" = "+s[1]};}
+  /* meanings */
+  var MEAN=[["Vivo en un piso.","I live in an apartment."],["Vivo en las afueras.","I live on the outskirts."],["Vivo en el campo.","I live in the countryside."],["Vivo en la costa.","I live on the coast."],
+    ["Mi casa es bastante grande.","My house is quite big."],["Tengo mi propio dormitorio.","I have my own bedroom."],["Comparto mi dormitorio.","I share my bedroom."],
+    ["No hay mucho que hacer.","There isn't much to do."],["Mi barrio es muy ruidoso.","My area is very noisy."],["Mi barrio es tranquilo.","My area is quiet."],
+    ["Está a diez minutos a pie.","It's ten minutes away on foot."],["Está cerca del centro.","It's near the centre."],["Hay mucho tráfico.","There's a lot of traffic."],
+    ["Mi dormitorio está arriba.","My bedroom is upstairs."],["La cocina está abajo.","The kitchen is downstairs."],["Me gustaría vivir en una ciudad.","I'd like to live in a city."]];
+  function qMean(){var x=rnd(MEAN);return {who:"",en:"What does it mean?",frame:x[0],answer:x[1],wrong:others(MEAN,x,3).map(function(y){return y[1];}),review:x[0]+" = "+x[1],listen:1};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["En mi casa hay cuatro dormitorios y un jardín grande.","In my house there are four bedrooms and a big garden.",["In my house there are three bedrooms and a big garden.","In my house there are four bedrooms and a small garden.","In my house there are four bathrooms and a big garden."]],
+    ["Vivo en un piso en el centro de la ciudad.","I live in an apartment in the city centre.",["I live in a house in the city centre.","I live in an apartment on the outskirts.","I live in an apartment near the beach."]],
+    ["Mi dormitorio está en el segundo piso.","My bedroom is on the second floor.",["My bedroom is on the first floor.","My bathroom is on the second floor.","My bedroom is on the ground floor."]],
+    ["Comparto mi dormitorio con mi hermana.","I share my bedroom with my sister.",["I share my bedroom with my brother.","I have my own bedroom.","I share the bathroom with my sister."]],
+    ["En mi pueblo hay una piscina, pero no hay cine.","In my town there's a swimming pool, but there's no cinema.",["In my town there's a cinema, but there's no swimming pool.","In my town there's a swimming pool and a cinema.","In my town there's a beach, but there's no cinema."]],
+    ["La biblioteca está al lado del parque.","The library is next to the park.",["The library is opposite the park.","The bookshop is next to the park.","The library is behind the park."]],
+    ["El supermercado está enfrente de la iglesia.","The supermarket is opposite the church.",["The supermarket is next to the church.","The supermarket is behind the church.","The chemist's is opposite the church."]],
+    ["Me encanta mi barrio porque es muy tranquilo.","I love my area because it's very quiet.",["I hate my area because it's very noisy.","I love my area because it's very lively.","I love my house because it's very quiet."]],
+    ["No me gusta vivir en el campo: no hay nada que hacer.","I don't like living in the countryside: there's nothing to do.",["I love living in the countryside: there's lots to do.","I don't like living in the city: there's nothing to do.","I don't like living on the coast: there's nothing to do."]],
+    ["La cocina es pequeña, pero el salón es muy grande.","The kitchen is small, but the living room is very big.",["The kitchen is big, but the living room is very small.","The bathroom is small, but the living room is very big.","The kitchen is small, but the dining room is very big."]],
+    ["Vivo en una casa adosada en las afueras.","I live in a terraced house on the outskirts.",["I live in a big house on the outskirts.","I live in a terraced house in the city centre.","I live in an apartment on the outskirts."]],
+    ["El colegio está a diez minutos a pie.","The school is ten minutes away on foot.",["The school is ten minutes away by car.","The school is two minutes away on foot.","The station is ten minutes away on foot."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  function lPlace(){var p=rnd(P),w=others(P,p,3),sp=rnd(["Voy ","Mañana voy ","Los sábados voy "])+toThe(p)+".";
+    return {listen:1,speak:sp,en:"Listen. Where are they going?",answer:p.e+" "+p.en,wrong:w.map(function(x){return x.e+" "+x.en;}),review:sp+" = the "+p.en};}
+
+  var MAKERS={
+    raid:[qWhere,qWhere,gFind,gFind,qDel,qRoom,qFixH],
+    town:[qPlace,qPlace,qFixT,qFixT,qSign,qSign,qMean],
+    listen:[lFind,lFind,lFind,lFix,lFix,lPlace],
+    mixed:[qWhere,gFind,qDel,qRoom,qFixH,qPlace,qFixT,qSign,qMean]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear where it is and find it; houses and towns described (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function label(f){return f.indexOf("S|")===0?sceneEN(f):f;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    if(q.scene)$("who").innerHTML=sceneHTML(q.scene);else $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    $("frame").innerHTML=q.sign?"<span class='sign "+q.sign[2]+"'>"+esc(q.sign[0])+"</span>":fr;
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=shuffle([q.answer].concat(q.wrong));
+    if(q.kind==="scenes")box.className="choices scenes";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.kind==="scenes")b.innerHTML=sceneHTML(f);
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+label(f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:label(f),listen:!!(current.listen||current.kind==="scenes"||!!current.scene)});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:400):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Champion Room Raider.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,O:O,F:F,P:P,sceneEN:sceneEN};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
