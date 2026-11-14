@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The past tense (preterite): play Time Machine | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: the past tense (preterite). Regular endings, fui, hice, tuve, estuve, vi, and past, present or future? With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.cue{color:var(--green);font-size:.7em;font-weight:700}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.dial{display:flex;justify-content:center;gap:6px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Time Machine</h1>
+        <p>The past tense (the preterite): <b>hablé</b>, <b>comí</b>, <b>fui</b>, <b>hice</b>, <b>tuve</b>. Build the past, then jump in the time machine: is it past, present or future? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="regular"><div><b>Past tense sprint</b><span>Regular verbs: hablé, comí, salimos, jugué, empecé</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="irregular"><div><b>The big irregulars</b><span>fui, hice, tuve, estuve, vi, and "fue genial"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="machine"><div><b>Time Machine</b><span>Past, present or future? Read the sentence and jump to the right time</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening time machine 🔊</b><span id="listenNote">Hear a teenager talk about last weekend, pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4, or 1–3 in the time machine).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.20, 2.1 (2017 spec, exams 2027–2028) · 1.15, 2.1 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The past tense (the preterite)</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Todos los días <b>hablo</b> con mi abuela. <span style="color:var(--muted)">(Every day I talk to my gran.)</span></li>
+          <li>Ayer <b>hablé</b> con mi abuela. <span style="color:var(--muted)">(Yesterday I talked to my gran.)</span></li>
+          <li>Ayer mi madre <b>habló</b> con mi abuela. <span style="color:var(--muted)">(Yesterday my mum talked to my gran.)</span></li>
+          <li>Ayer <b>comí</b> paella. <span style="color:var(--muted)">(Yesterday I ate paella.)</span></li>
+        </ul>
+        <p>Look at <b>hablo</b>, <b>hablé</b> and <b>habló</b>. What changes? Where is the accent, and what does it do to the meaning? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Take off <b>-ar</b>, <b>-er</b> or <b>-ir</b> and add the past ending. For "I": <b>-é</b> (-ar verbs) or <b>-í</b> (-er and -ir verbs). The accent matters: <b>hablo</b> = I talk (now), but <b>habló</b> = he / she talked (in the past). One little line changes the person <em>and</em> the time.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Regular endings</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>hablar (talk)</th><th>comer (eat)</th><th>salir (go out)</th></tr></thead>
+          <tbody>
+            <tr><td>yo (I)</td><td>habl<b>é</b></td><td>com<b>í</b></td><td>sal<b>í</b></td></tr>
+            <tr><td>tú (you)</td><td>habl<b>aste</b></td><td>com<b>iste</b></td><td>sal<b>iste</b></td></tr>
+            <tr><td>él / ella / mi madre</td><td>habl<b>ó</b></td><td>com<b>ió</b></td><td>sal<b>ió</b></td></tr>
+            <tr><td>nosotros (we)</td><td>habl<b>amos</b></td><td>com<b>imos</b></td><td>sal<b>imos</b></td></tr>
+            <tr><td>ellos / ellas / mis padres</td><td>habl<b>aron</b></td><td>com<b>ieron</b></td><td>sal<b>ieron</b></td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:12px"><b>Watch out:</b> -er and -ir verbs share the same endings. And <em>hablamos</em> / <em>salimos</em> look the same in the present and the past, so a time phrase (<em>ayer</em>, <em>normalmente</em>) tells you which one it is.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Spelling changes (only for "I")</h3>
+        <p>To keep the sound the same, a few verbs change their spelling in the <b>yo</b> form only:</p>
+        <p><b>-gar → -gué</b>: jugar → <b>jugué</b>, llegar → <b>llegué</b> · <b>-car → -qué</b>: tocar → <b>toqué</b>, sacar → <b>saqué</b>, practicar → <b>practiqué</b> · <b>-zar → -cé</b>: empezar → <b>empecé</b></p>
+        <p style="margin-top:8px">The others are normal: <em>jugaste, jugó, jugamos, jugaron</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The big irregulars (learn these first)</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>ir / ser</th><th>hacer</th><th>tener</th><th>estar</th><th>ver</th></tr></thead>
+          <tbody>
+            <tr><td>yo</td><td><b>fui</b></td><td><b>hice</b></td><td><b>tuve</b></td><td><b>estuve</b></td><td><b>vi</b></td></tr>
+            <tr><td>tú</td><td>fuiste</td><td>hiciste</td><td>tuviste</td><td>estuviste</td><td>viste</td></tr>
+            <tr><td>él / ella</td><td><b>fue</b></td><td><b>hizo</b></td><td>tuvo</td><td>estuvo</td><td>vio</td></tr>
+            <tr><td>nosotros</td><td>fuimos</td><td>hicimos</td><td>tuvimos</td><td>estuvimos</td><td>vimos</td></tr>
+            <tr><td>ellos / ellas</td><td>fueron</td><td>hicieron</td><td>tuvieron</td><td>estuvieron</td><td>vieron</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">No accents on these! <b>ir</b> and <b>ser</b> share the same past: <em>Fui a la playa</em> (I went to the beach) · <em>Fue genial</em> (It was great). Same pattern as <em>tuve</em>: poder → <b>pude</b>, querer → <b>quise</b>, venir → <b>vine</b>, poner → <b>puse</b>, decir → <b>dije</b>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Time phrases: when did it happen?</h3>
+        <p><b>Past:</b> ayer (yesterday) · anoche (last night) · el fin de semana pasado (last weekend) · el sábado pasado (last Saturday) · la semana pasada (last week) · el verano pasado (last summer) · el año pasado (last year) · hace dos días (two days ago)</p>
+        <p style="margin-top:8px"><b>Present:</b> normalmente · todos los días · los sábados · a menudo &nbsp;·&nbsp; <b>Future:</b> mañana · el fin de semana que viene · el próximo verano + <b>voy a</b> + infinitive</p>
+        <div class="note" style="margin-top:12px"><b>Trap:</b> <em>Va <b>a la</b> playa</em> = he goes to the beach (present). <em>Va <b>a ir</b> a la playa</em> = he is going to go to the beach (future). Future needs <b>ir a + a verb</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Say how it was</h3>
+        <p><b>Fue</b> genial / divertido / increíble / un desastre (It was great / fun / amazing / a disaster) · <b>Lo pasé bomba</b> (I had a brilliant time) · <b>Lo pasé fatal</b> (I had an awful time) · Weather: <b>hizo</b> sol / calor / frío (it was sunny / hot / cold) · <b>llovió</b> (it rained)</p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> Writing tasks very often ask about something you did: last weekend, a holiday, a party. Use the past with a time phrase, say how it was, and add a future plan to show range: <em>El sábado pasado fui al cine con mis amigos. Vimos una película de miedo. Fue genial. El fin de semana que viene voy a jugar al fútbol.</em> In <b>Reading</b> and <b>Listening</b>, the time phrase and the verb ending tell you <b>when</b> and <b>who</b>: <em>fui</em> (I went) or <em>fue</em> (he went)?</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/past-tense-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/HDBhZ" target="_blank" rel="noopener">Past Tense Teacher Pack (€5)</a>: Weekend Detectives speaking game, Past Tense Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function uniq(a){var o=[];a.forEach(function(x){if(x&&o.indexOf(x)<0)o.push(x);});return o;}
+
+  /* ---------- Verbs. Person index: 0 yo, 1 tú, 2 él/ella, 3 nosotros, 4 ellos ---------- */
+  var IRR={
+    ir:["fui","fuiste","fue","fuimos","fueron"],ser:["fui","fuiste","fue","fuimos","fueron"],
+    hacer:["hice","hiciste","hizo","hicimos","hicieron"],tener:["tuve","tuviste","tuvo","tuvimos","tuvieron"],
+    estar:["estuve","estuviste","estuvo","estuvimos","estuvieron"],ver:["vi","viste","vio","vimos","vieron"],
+    dar:["di","diste","dio","dimos","dieron"]
+  };
+  var SPELL={jugar:"jugué",tocar:"toqué",llegar:"llegué",sacar:"saqué",practicar:"practiqué",empezar:"empecé"};
+  var PRES_IRR={
+    ir:["voy","vas","va","vamos","van"],hacer:["hago","haces","hace","hacemos","hacen"],tener:["tengo","tienes","tiene","tenemos","tienen"],
+    estar:["estoy","estás","está","estamos","están"],ver:["veo","ves","ve","vemos","ven"],dar:["doy","das","da","damos","dan"],
+    salir:["salgo","sales","sale","salimos","salen"],jugar:["juego","juegas","juega","jugamos","juegan"],
+    volver:["vuelvo","vuelves","vuelve","volvemos","vuelven"],empezar:["empiezo","empiezas","empieza","empezamos","empiezan"]
+  };
+  function past(v,n){
+    if(IRR[v])return IRR[v][n];
+    if(n===0&&SPELL[v])return SPELL[v];
+    var st=v.slice(0,-2),e=v.slice(-2);
+    return st+(e==="ar"?["é","aste","ó","amos","aron"]:["í","iste","ió","imos","ieron"])[n];
+  }
+  function pres(v,n){
+    if(PRES_IRR[v])return PRES_IRR[v][n];
+    var st=v.slice(0,-2),e=v.slice(-2);
+    return st+(e==="ar"?["o","as","a","amos","an"]:e==="er"?["o","es","e","emos","en"]:["o","es","e","imos","en"])[n];
+  }
+
+  /* ---------- Activities: verb, Spanish rest, English past phrase ({be} = was/were), emoji, irregular? ---------- */
+  var A=[
+    ["hablar","con mi abuela por teléfono","talked to my gran on the phone","📞"],
+    ["comprar","una camiseta nueva","bought a new T-shirt","👕"],
+    ["visitar","a mis abuelos","visited my grandparents","👵"],
+    ["bailar","en la fiesta","danced at the party","💃"],
+    ["nadar","en el mar","swam in the sea","🏊"],
+    ["escuchar","música","listened to music","🎧"],
+    ["cenar","en un restaurante","had dinner in a restaurant","🍽️"],
+    ["viajar","a Madrid","travelled to Madrid","🚆"],
+    ["estudiar","para un examen","studied for a test","📚"],
+    ["comer","paella","ate paella","🥘"],
+    ["beber","un zumo de naranja","drank an orange juice","🧃"],
+    ["salir","con unos amigos","went out with some friends","👫"],
+    ["escribir","un correo","wrote an email","✉️"],
+    ["volver","a casa tarde","came home late","🏠"],
+    ["aprender","a hacer surf","learned to surf","🏄"],
+    ["recibir","muchos regalos","got lots of presents","🎁"],
+    ["jugar","al fútbol","played football","⚽"],
+    ["jugar","a los videojuegos","played video games","🎮"],
+    ["tocar","la guitarra","played the guitar","🎸"],
+    ["llegar","tarde al colegio","arrived late for school","⏰"],
+    ["sacar","una buena nota","got a good mark","💯"],
+    ["empezar","un libro nuevo","started a new book","📖"],
+    ["practicar","el baloncesto","practised basketball","🏀"],
+    ["ir","a la playa","went to the beach","🏖️",1],
+    ["ir","al cine","went to the cinema","🎬",1],
+    ["ir","de compras","went shopping","🛍️",1],
+    ["ir","a un concierto","went to a concert","🎤",1],
+    ["hacer","una barbacoa","had a barbecue","🍖",1],
+    ["hacer","camping","went camping","⛺",1],
+    ["hacer","surf","went surfing","🌊",1],
+    ["tener","un examen de matemáticas","had a maths test","📝",1],
+    ["estar","en casa todo el día","{be} at home all day","🛋️",1],
+    ["ver","una película","watched a film","🍿",1],
+    ["ver","el partido","watched the match","📺",1],
+    ["dar","un paseo","went for a walk","🚶",1]
+  ].map(function(x,i){return {id:i,v:x[0],rest:x[1],en:x[2],e:x[3],irr:!!x[4]};});
+  var REG=A.filter(function(a){return !a.irr;}),IRA=A.filter(function(a){return a.irr;});
+
+  var P=[
+    {n:0,es:"",en:"I"},{n:0,es:"",en:"I"},{n:0,es:"",en:"I"},
+    {n:2,es:"mi hermano",en:"my brother"},{n:2,es:"mi hermana",en:"my sister"},{n:2,es:"mi amigo Pablo",en:"my friend Pablo"},{n:2,es:"mi madre",en:"my mum"},
+    {n:3,es:"mis amigos y yo",en:"my friends and I"},{n:3,es:"mi familia y yo",en:"my family and I"},
+    {n:4,es:"mis padres",en:"my parents"},{n:4,es:"mis primos",en:"my cousins"}
+  ];
+  var TP=[["ayer","yesterday"],["anoche","last night"],["el fin de semana pasado","last weekend"],["el sábado pasado","last Saturday"],["la semana pasada","last week"],["el verano pasado","last summer"],["el año pasado","last year"]];
+  var TN=[["normalmente","normally"],["todos los días","every day"],["los sábados","on Saturdays"],["a menudo","often"]];
+  var TF=[["mañana","tomorrow"],["el fin de semana que viene","next weekend"],["el próximo verano","next summer"],["esta tarde","this afternoon"]];
+  function pickP(a){return rnd(P.filter(function(p){return !(a.v==="visitar"&&p.n===4);}));}
+  function enPh(a,p){return a.en.replace("{be}",p.n===0||p.n===2?"was":"were");}
+  function esSent(t,p,verb,a){return cap((t?t[0]+" ":"")+(p.es?p.es+" ":"")+verb+" "+a.rest)+".";}
+  function enPast(t,p,a){return (t?cap(t[1])+" "+p.en:cap(p.en))+" "+enPh(a,p)+".";}
+
+  /* ---------- Modes 1 and 2: build the past ---------- */
+  function conjQ(pool){
+    var a=rnd(pool),tu=Math.random()<.15,p=tu?{n:1}:pickP(a),t=rnd(TP),ans=past(a.v,p.n);
+    var wrong=uniq([pres(a.v,p.n),past(a.v,p.n===0?2:0),past(a.v,1),past(a.v,3),past(a.v,4),past(a.v,2)].filter(function(x){return x!==ans;}));
+    var w=[wrong[0]].concat(shuffle(wrong.slice(1)).slice(0,2));
+    var frame,en,cue=" ("+a.v+")";
+    if(tu){frame="¿___"+cue+" "+a.rest+" "+t[0]+"?";en="Asking a friend (tú)";ans=cap(ans);w=w.map(cap);}
+    else{frame=cap(t[0]+" "+(p.es?p.es+" ":"")+"___"+cue+" "+a.rest)+".";en=enPast(t,p,a);}
+    return {who:a.e,en:en,frame:frame,answer:ans,wrong:w,review:frame.replace("___"+cue,ans)+(tu?"":" = "+en),listen:!tu};
+  }
+  function qReg(){return conjQ(REG);}
+  function qSpell(){
+    var v=rnd(Object.keys(SPELL)),a=rnd(A.filter(function(x){return x.v===v;})),t=rnd(TP),ans=SPELL[v];
+    var st=v.slice(0,-2),bad=st+"é";
+    var w=uniq([bad,pres(v,0),past(v,2)]);
+    var frame=cap(t[0])+" ___ ("+v+") "+a.rest+".";
+    return {who:a.e,en:enPast(t,{n:0,en:"I"},a)+" (yo)",frame:frame,answer:ans,wrong:w,review:frame.replace("___ ("+v+")",ans)+" (spelling change: "+v+" → "+ans+")"};
+  }
+  function qIrr(){return conjQ(IRA);}
+  var FUE=[
+    ["Ayer vi una película. ___ genial.","Yesterday I watched a film. It was great.","Fue",["Es","Fui","Va"]],
+    ["El sábado fui a un concierto. ___ increíble.","On Saturday I went to a concert. It was amazing.","Fue",["Es","Fui","Fueron"]],
+    ["El verano pasado ___ a Málaga con mi familia.","Last summer I went to Málaga with my family.","fui",["fue","voy","fuimos"]],
+    ["El viaje ___ un desastre.","The trip was a disaster.","fue",["es","fui","hizo"]],
+    ["Ayer ___ sol y calor.","Yesterday it was sunny and hot.","hizo",["hace","hice","fue"]],
+    ["El fin de semana pasado ___ mucho.","Last weekend it rained a lot.","llovió",["llueve","va a llover","lluvia"]],
+    ["Lo ___ bomba en la fiesta.","I had a brilliant time at the party.","pasé",["paso","pasó","pasaste"]],
+    ["¿Qué ___ el fin de semana pasado?","What did you do last weekend? (tú)","hiciste",["haces","hice","hizo"]],
+    ["¿Adónde ___ de vacaciones?","Where did you go on holiday? (tú)","fuiste",["fui","fue","vas"]],
+    ["Anoche mi hermano ___ los deberes.","Last night my brother did his homework.","hizo",["hice","hace","hició"]],
+    ["Ayer no ___ (poder) salir.","Yesterday I couldn't go out.","pude",["podí","puede","pudo"]],
+    ["Mis primos ___ (venir) a mi casa.","My cousins came to my house.","vinieron",["venieron","vienen","vino"]]
+  ];
+  function qFue(){var x=rnd(FUE);return {who:"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace(/___( \(\w+\))?/,x[2])+" = "+x[1],listen:1};}
+
+  /* ---------- Mode 3: Time Machine (past / present / future) ---------- */
+  var TM=["⏪ Past","▶ Present","⏩ Future"],TMS=["pasado","presente","futuro"];
+  function tmSentence(){
+    var a=rnd(A),p=pickP(a),k=Math.floor(Math.random()*3),useT=Math.random()<.5,verb,t=null,note;
+    if(a.v==="visitar")p=rnd(P.filter(function(x){return x.n!==4;}));
+    if(k===0){verb=past(a.v,p.n);if(useT)t=rnd(TP);note=verb+" = past of "+a.v;}
+    else if(k===1){verb=pres(a.v,p.n);if(useT)t=rnd(TN);note=verb+" = present of "+a.v+(a.v==="ir"&&/^a /.test(a.rest)?" (ir a + a place = goes, not future)":"");}
+    else{verb=pres("ir",p.n)+" a "+a.v;if(useT)t=rnd(TF);note=pres("ir",p.n)+" a "+a.v+" = ir a + infinitive (future)";}
+    /* -ar/-ir "nosotros" is the same in present and past: always add a time phrase */
+    if(!t&&k<2&&p.n===3&&past(a.v,3)===pres(a.v,3))t=rnd(k===0?TP:TN);
+    return {es:esSent(t,p,verb,a),k:k,note:note,a:a};
+  }
+  function qMachine(spoken){
+    var s=tmSentence();
+    return {fixed:1,listen:spoken?1:0,speak:s.es,who:spoken?"":s.a.e,en:spoken?"Listen. Past, present or future?":"Past, present or future?",frame:spoken?"":s.es,answer:TM[s.k],wrong:TM.filter(function(x,i){return i!==s.k;}),opts:TM,review:s.es+" = "+TM[s.k].slice(2)+" ("+s.note+")",tm:1};
+  }
+  function gMachine(){return qMachine(false);}
+  function lMachine(){return qMachine(true);}
+  function qMarker(){
+    var a=rnd(A),p=pickP(a),k=Math.random()<.65?0:1;
+    var verb=k===0?past(a.v,p.n):pres(a.v,p.n);
+    if(p.n===3&&past(a.v,3)===pres(a.v,3))return qMarker();
+    var right=k===0?rnd(TP):rnd(TN),others=k===0?TN.concat(TF):TP.slice();
+    var w=shuffle(others.slice()).slice(0,3).map(function(x){return cap(x[0]);});
+    var frame="___, "+(p.es?p.es+" ":"")+verb+" "+a.rest+".";
+    return {who:a.e,en:"When? Pick the time phrase that fits the verb.",frame:frame,answer:cap(right[0]),wrong:w,review:cap(right[0])+", "+(p.es?p.es+" ":"")+verb+" "+a.rest+". ("+(k===0?"past":"present")+" verb: "+verb+")"};
+  }
+  function qMeaning(){
+    var a=rnd(A),p=pickP(a),t=rnd(TP),es=esSent(t,p,past(a.v,p.n),a),ans=enPast(t,p,a);
+    var others=A.filter(function(x){return x!==a;});var w=uniq(shuffle(others).slice(0,3).map(function(x){return enPast(t,p,x);}));
+    return {who:"",en:"What does it mean?",frame:es,answer:ans,wrong:w,review:es+" = "+ans,listen:1};
+  }
+
+  /* ---------- Mode 4: Listening ---------- */
+  function lSent(){
+    var a=rnd(A),p=pickP(a),t=rnd(TP),es=esSent(t,p,past(a.v,p.n),a),ans=enPast(t,p,a);
+    var oa=rnd(A.filter(function(x){return x!==a&&x.v===a.v;}).concat(A.filter(function(x){return x!==a;})).slice(0,4));
+    var ot=rnd(TP.filter(function(x){return x!==t;}));
+    var op=p.n===0?rnd(P.filter(function(x){return x.n===2;})):P[0];
+    if(oa.v==="visitar"&&p.n===4)oa=rnd(A.filter(function(x){return x!==a&&x.v!=="visitar";}));
+    return {listen:1,speak:es,answer:ans,wrong:[enPast(t,p,oa),enPast(ot,p,a),enPast(t,op,a)],review:es+" = "+ans};
+  }
+  var LFIX=[
+    ["El verano pasado fui a España con mi familia.","Last summer I went to Spain with my family.",["Next summer I'm going to Spain with my family.","Last summer I went to France with my family.","Every summer I go to Spain with my family."]],
+    ["Ayer jugué al baloncesto y ganamos.","Yesterday I played basketball and we won.",["Yesterday I played basketball and we lost.","Yesterday I played football and we won.","Tomorrow I'm going to play basketball."]],
+    ["Anoche vi una película de miedo. Fue genial.","Last night I watched a horror film. It was great.",["Last night I watched a horror film. It was boring.","Last night I watched a comedy. It was great.","Tonight I'm going to watch a horror film."]],
+    ["Mis padres comieron paella en un restaurante.","My parents ate paella in a restaurant.",["My parents eat paella in a restaurant.","My cousins ate paella in a restaurant.","My parents ate pizza in a restaurant."]],
+    ["Hace dos años viajé a Madrid en tren.","Two years ago I travelled to Madrid by train.",["Two years ago I travelled to Madrid by plane.","Two days ago I travelled to Madrid by train.","In two years I'm going to travel to Madrid by train."]],
+    ["El sábado pasado hice los deberes y luego salí con mis amigos.","Last Saturday I did my homework and then I went out with my friends.",["Last Saturday I did my homework and then I stayed at home.","Last Sunday I did my homework and then I went out with my friends.","Next Saturday I'm going to do my homework and go out."]],
+    ["Mi hermana tuvo un examen de inglés el lunes.","My sister had an English test on Monday.",["My sister has an English test on Monday.","My sister had a Spanish test on Monday.","My brother had an English test on Monday."]],
+    ["Fuimos a la playa pero llovió mucho.","We went to the beach but it rained a lot.",["We went to the beach and it was very sunny.","They went to the beach but it rained a lot.","We went to the park but it rained a lot."]],
+    ["¿Qué hiciste el fin de semana pasado?","What did you do last weekend?",["What are you doing this weekend?","What did you do yesterday?","Where did you go last weekend?"]],
+    ["Lo pasé bomba en la fiesta de cumpleaños de mi prima.","I had a brilliant time at my cousin's birthday party.",["I had an awful time at my cousin's birthday party.","I had a brilliant time at my sister's birthday party.","I'm going to have a brilliant time at my cousin's party."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    regular:[qReg,qReg,qReg,qSpell],
+    irregular:[qIrr,qIrr,qIrr,qFue,qFue],
+    machine:[gMachine,gMachine,gMachine,qMarker],
+    listen:[lSent,lSent,lFix,lFix,lMachine],
+    mixed:[qReg,qSpell,qIrr,qIrr,qFue,gMachine,qMarker,qMeaning]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear a teenager talk about last weekend, pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.tm?2:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.listen&&q.speak?"":(q.who||"");
+    $("en").textContent=q.speak&&!q.tm?"Listen. What did they say?":q.en;
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace(/___( \([a-z]+\))?/,function(m,c){return "<span class='gap'>&nbsp;?&nbsp;</span>"+(c?" <span class='cue'>"+esc(c.trim())+"</span>":"");});
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm){box.className="choices three";}
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm){b.innerHTML=esc(f)+"<small>"+TMS[i]+"</small>";}else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.slice(2):f,listen:!!current.listen});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:350):(current.speak?2400:1700);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=30?"¡Increíble! That's exam-ready speed.":score>=18?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,past:past,pres:pres,A:A,P:P};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
