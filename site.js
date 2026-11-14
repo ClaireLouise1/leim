@@ -15,7 +15,7 @@ document.querySelectorAll('form.waitlist').forEach(function (form) {
     }
     err.textContent = '';
     if (!form.checkValidity()) {
-      err.textContent = 'Please add your first name and email, and tick the box.';
+      err.textContent = 'Please add your first name and email.';
       return;
     }
     var btn = form.querySelector('button[type=submit]');
