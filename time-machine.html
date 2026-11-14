@@ -335,7 +335,7 @@
   }
   function qMachine(spoken){
     var s=tmSentence();
-    return {fixed:1,listen:spoken?1:0,speak:s.es,who:spoken?"":s.a.e,en:spoken?"Listen. Past, present or future?":"Past, present or future?",frame:spoken?"":s.es,answer:TM[s.k],wrong:TM.filter(function(x,i){return i!==s.k;}),opts:TM,review:s.es+" = "+TM[s.k].slice(2)+" ("+s.note+")",tm:1};
+    return {fixed:1,listen:spoken?1:0,speak:spoken?s.es:"",who:spoken?"":s.a.e,en:spoken?"Listen. Past, present or future?":"Past, present or future?",frame:spoken?"":s.es,answer:TM[s.k],wrong:TM.filter(function(x,i){return i!==s.k;}),opts:TM,review:s.es+" = "+TM[s.k].slice(2)+" ("+s.note+")",tm:1};
   }
   function gMachine(){return qMachine(false);}
   function lMachine(){return qMachine(true);}
