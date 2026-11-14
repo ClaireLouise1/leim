@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Describing people: play Agreement Snap | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: describe people in Spanish and make the adjectives agree (alto, alta, altos, altas), ser or tener for looks, with a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+.end4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin:12px 0}
+.end4 div{background:var(--mist);border-radius:10px;padding:10px 4px;font-weight:700}
+.end4 small{display:block;color:var(--muted);font-weight:600;font-size:12px}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.end4{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Agreement Snap</h1>
+        <p>Describe people in Spanish and snap the right ending: <b>alto</b>, <b>alta</b>, <b>altos</b> or <b>altas</b>? <b>Es</b> or <b>tiene</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="snap"><div><b>Snap the ending</b><span>Who are we describing? Boy or girl, one or more?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="looks"><div><b>Looks: ser or tener?</b><span>Es alto, tiene el pelo corto, tiene los ojos azules</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening snap 🔊</b><span id="listenNote">Hear someone describe a person, pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.10, 1.19, 2.1 (2017 spec, exams 2027–2028) · 1.12, 2.1 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Describing people: adjectives that agree</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Mi hermano es <b>alto</b>. <span style="color:var(--muted)">(My brother is tall.)</span></li>
+          <li>Mi hermana es <b>alta</b>. <span style="color:var(--muted)">(My sister is tall.)</span></li>
+          <li>Mis hermanos son <b>altos</b>. <span style="color:var(--muted)">(My brothers are tall.)</span></li>
+          <li>Mis hermanas son <b>altas</b>. <span style="color:var(--muted)">(My sisters are tall.)</span></li>
+        </ul>
+        <p>What changes at the end of <b>alto</b>, and why? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">In Spanish the adjective <b>agrees</b> with the person: <b>-o</b> for a boy or man, <b>-a</b> for a girl or woman, and add <b>-s</b> for more than one. The verb changes too: <b>es</b> for one person, <b>son</b> for more than one. A mixed group (boys and girls) uses the masculine: <em>Mis abuelos son simpátic<b>os</b>.</em></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The four endings</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Adjective ends in…</th><th>one boy</th><th>one girl</th><th>boys</th><th>girls</th></tr></thead>
+          <tbody>
+            <tr><td><b>-o</b></td><td>simpátic<b>o</b></td><td>simpátic<b>a</b></td><td>simpátic<b>os</b></td><td>simpátic<b>as</b></td></tr>
+            <tr><td><b>-e</b></td><td>inteligent<b>e</b></td><td>inteligent<b>e</b></td><td>inteligent<b>es</b></td><td>inteligent<b>es</b></td></tr>
+            <tr><td><b>-or</b></td><td>trabajador</td><td>trabajador<b>a</b></td><td>trabajador<b>es</b></td><td>trabajador<b>as</b></td></tr>
+            <tr><td><b>-ista</b></td><td>deportista</td><td>deportista</td><td>deportista<b>s</b></td><td>deportista<b>s</b></td></tr>
+            <tr><td>other consonant</td><td>joven</td><td>joven</td><td>jóven<b>es</b></td><td>jóven<b>es</b></td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> <b>-e</b> and <b>-ista</b> adjectives don't change for boys and girls, only for more than one. But <b>-or</b> adjectives do: <em>mi hermana es trabajador<b>a</b></em>, <em>mi amiga es hablador<b>a</b></em>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Looks: ser or tener?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Use <b>ser</b> (es / son)</th><th>Use <b>tener</b> (tiene / tienen)</th></tr></thead>
+          <tbody>
+            <tr><td>Mi padre <b>es</b> alto y guapo.</td><td>Mi padre <b>tiene</b> el pelo corto y negro.</td></tr>
+            <tr><td>Mi prima <b>es</b> pelirroja.</td><td>Mi prima <b>tiene</b> los ojos verdes.</td></tr>
+            <tr><td>Mis abuelos <b>son</b> bajos.</td><td>Mi abuelo <b>tiene</b> barba.</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">Hair and eyes agree with <b>el pelo</b> and <b>los ojos</b>, not with the person. <b>El pelo</b> is masculine and singular, so it's always <em>pelo larg<b>o</b></em>, even for a girl: <em>Mi madre tiene el pelo larg<b>o</b> y rubi<b>o</b>.</em> <b>Los ojos</b> is plural, so: <em>los ojos azul<b>es</b>, verd<b>es</b>, marron<b>es</b>.</em></p>
+        <p style="margin-top:10px">Hair: largo (long), corto (short), rizado (curly), liso (straight), rubio (blond), castaño (brown), negro (black). Eyes: azules, verdes, marrones, grises.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Personality words to learn</h3>
+        <p>simpático (nice), antipático (unfriendly), divertido (fun), gracioso (funny), aburrido (boring), tímido (shy), serio (serious), generoso (generous), perezoso (lazy), cariñoso (affectionate), inteligente, amable (kind), paciente, alegre (cheerful), trabajador (hard-working), hablador (chatty), deportista (sporty), egoísta (selfish).</p>
+        <p style="margin-top:10px">Make it sound natural with <b>muy</b> (very), <b>bastante</b> (quite), <b>un poco</b> (a bit, for negative things: <em>un poco perezoso</em>) and <b>pero</b>: <em>Es simpático pero un poco serio.</em></p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> in the Writing section, describing your best friend or a family member is a classic. Give looks + personality + a reason: <em>Mi mejor amiga se llama Aoife. Es alta y tiene el pelo largo y rizado. Es muy divertida y generosa, <b>pero</b> a veces es un poco habladora.</em> Before you finish, check every adjective: <b>who</b> is it describing, <b>boy or girl</b>, <b>one or more</b>? In Listening, opposites are the trap: <b>alto/bajo</b>, <b>largo/corto</b>, <b>simpático/antipático</b>.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/describing-people-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/YysZW" target="_blank" rel="noopener">Describing People Teacher Pack (€5)</a>: Guess Who? speaking game, Adjective Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+  /* ---------- Agreement ---------- */
+  var PLURAL={joven:"jóvenes",azul:"azules",gris:"grises","marrón":"marrones",leal:"leales"};
+  function agree(adj,g,pl){
+    if(/o$/.test(adj))return adj.slice(0,-1)+(g==="f"?"a":"o")+(pl?"s":"");
+    if(/or$/.test(adj))return adj+(g==="f"?(pl?"as":"a"):(pl?"es":""));
+    if(/[ae]$/.test(adj))return adj+(pl?"s":"");
+    return pl?(PLURAL[adj]||adj+"es"):adj;
+  }
+
+  /* ---------- People: es, en, gender, plural, emoji ---------- */
+  var P=[
+    ["Mi hermano","My brother","m",0,"👦"],["Mi hermana","My sister","f",0,"👧"],
+    ["Mi padre","My dad","m",0,"👨"],["Mi madre","My mum","f",0,"👩"],
+    ["Mi amigo Pablo","My friend Pablo","m",0,"🧑"],["Mi amiga Sara","My friend Sara","f",0,"👱‍♀️"],
+    ["Mi abuelo","My grandad","m",0,"👴"],["Mi abuela","My granny","f",0,"👵"],
+    ["Mi profesora de inglés","My English teacher (Ms Ruiz)","f",0,"👩‍🏫"],["Mi profesor de música","My music teacher (Mr Gil)","m",0,"👨‍🏫"],
+    ["Mis hermanos","My brothers","m",1,"👦👦"],["Mis hermanas","My sisters","f",1,"👧👧"],
+    ["Mis abuelos","My grandparents","m",1,"👴👵"],["Mis amigas","My friends (all girls)","f",1,"👧👧"],
+    ["Mis primos","My cousins (boys and girls)","m",1,"👦👧"],["Mis primas","My cousins (all girls)","f",1,"👧👧"]
+  ].map(function(x){return {es:x[0],en:x[1],g:x[2],pl:!!x[3],e:x[4]};});
+  var ME=[{es:"Lucía:",en:"Lucía says: \"I'm",g:"f",e:"👧",me:1},{es:"Pablo:",en:"Pablo says: \"I'm",g:"m",e:"👦",me:1}];
+
+  /* ---------- Adjectives: Spanish (masc. sing.), English, negative? ---------- */
+  var A={simpático:"nice",antipático:"unfriendly",divertido:"fun",gracioso:"funny",aburrido:"boring","tímido":"shy",serio:"serious",generoso:"generous",perezoso:"lazy","cariñoso":"affectionate",alto:"tall",bajo:"short",guapo:"good-looking",
+    inteligente:"intelligent",amable:"kind",paciente:"patient",impaciente:"impatient",alegre:"cheerful",trabajador:"hard-working",hablador:"chatty",deportista:"sporty","egoísta":"selfish"};
+  var O_ADJ=["simpático","antipático","divertido","gracioso","aburrido","tímido","serio","generoso","perezoso","cariñoso","alto","bajo","guapo"];
+  var OTHER=["inteligente","amable","paciente","impaciente","alegre","trabajador","hablador","deportista","egoísta","simpático","divertido","alto"];
+  var NEG=["antipático","aburrido","perezoso","impaciente","egoísta","serio","tímido"];
+
+  function rankForms(build,ans){
+    var out=[];build.forEach(function(x){if(x.f!==ans&&!out.some(function(o){return o.f===x.f;}))out.push(x);});
+    out.forEach(function(x){x.r=x.err+Math.random()*.9;});
+    out.sort(function(a,b){return a.r-b.r;});
+    return out.slice(0,3).map(function(x){return x.f;});
+  }
+
+  /* ---------- Mode 1: Snap the ending ---------- */
+  function qSnap(){
+    var useMe=Math.random()<.15,p=useMe?rnd(ME):rnd(P),pl=!!p.pl;
+    var a1=rnd(O_ADJ),two=Math.random()<.55,a2=null;
+    if(two){do{a2=rnd(OTHER);}while(a2===a1);}
+    var neg=NEG.indexOf(a1)>=0&&(!a2||NEG.indexOf(a2)>=0);
+    var intens=rnd(neg?["muy","un poco",""]:["muy","bastante",""]);
+    var enInt={"muy":"very ","bastante":"quite ","un poco":"a bit ","":""}[intens];
+    var verb=p.me?"Soy":(pl?"son":"es");
+    var ans=agree(a1,p.g,pl)+(two?" y "+agree(a2,p.g,pl):"");
+    var forms=[];
+    ["m","f"].forEach(function(g1){[false,true].forEach(function(pl1){
+      if(!two){forms.push({f:agree(a1,g1,pl1),err:(g1!==p.g?1:0)+(pl1!==pl?1:0)});return;}
+      ["m","f"].forEach(function(g2){[false,true].forEach(function(pl2){
+        forms.push({f:agree(a1,g1,pl1)+" y "+agree(a2,g2,pl2),err:(g1!==p.g?1:0)+(pl1!==pl?1:0)+(g2!==p.g?1:0)+(pl2!==pl?1:0)+((g1!==g2||pl1!==pl2)?-.5:0)});
+      });});
+    });});
+    var wrong=rankForms(forms,ans);
+    var enAdj=A[a1]+(two?" and "+A[a2]:"");
+    var en=p.me?p.en+" "+enInt+enAdj+".\"":p.en+(pl?" are ":" is ")+enInt+enAdj+".";
+    var frame=(p.me?"«"+verb:p.es+" "+verb)+" "+(intens?intens+" ":"")+"___."+(p.me?"»":"");
+    if(p.me)frame=p.es+" "+frame;
+    return {who:p.e,en:en,frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+
+  /* ---------- Mode 2: Looks, ser or tener ---------- */
+  var HAIR=[["largo","long"],["corto","short"],["rizado","curly"],["liso","straight"],["rubio","blond"],["castaño","brown"],["negro","black"]];
+  var EYES=[["azul","blue"],["verde","green"],["marrón","brown"],["gris","grey"]];
+  var LOOKS=[["alto","tall"],["bajo","short"],["guapo","good-looking"],["pelirrojo","red-haired"]];
+  function verbs(p){return p.pl?["son","tienen","es","tiene"]:["es","tiene","son","tienen"];}
+  function lVerb(){
+    var p=rnd(P),t=Math.random(),rest,en,useTener;
+    if(t<.35){var h1=rnd(HAIR.slice(0,4)),h2=rnd(HAIR.slice(4));rest="el pelo "+h1[0]+" y "+h2[0];en="has "+h1[1]+", "+h2[1]+" hair";useTener=1;}
+    else if(t<.6){var e=rnd(EYES);rest="los ojos "+agree(e[0],"m",true);en="has "+e[1]+" eyes";useTener=1;}
+    else if(t<.68&&p.g==="m"&&!p.pl){rest="barba";en="has a beard";useTener=1;}
+    else{var l=rnd(LOOKS);rest=agree(l[0],p.g,p.pl);en="is "+l[1];useTener=0;}
+    if(p.pl)en=en.replace(/^has /,"have ").replace(/^is /,"are ");
+    var v=verbs(p),ans=useTener?v[1]:v[0];
+    var wrong=v.filter(function(x){return x!==ans;});
+    var frame=p.es+" ___ "+rest+".";
+    return {who:p.e,en:p.en+" "+en+".",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function lHair(){
+    var p=rnd(P.filter(function(x){return !x.pl;})),h1=rnd(HAIR.slice(0,4)),h2=rnd(HAIR.slice(4));
+    var ans=h1[0]+" y "+h2[0];
+    var other1=rnd(HAIR.slice(0,4).filter(function(x){return x!==h1;}));
+    var wrong=[agree(h1[0],"f",false)+" y "+agree(h2[0],"f",false),agree(h1[0],"m",true)+" y "+agree(h2[0],"m",true),other1[0]+" y "+h2[0]];
+    if(p.g==="m"){var oc=rnd(HAIR.slice(4).filter(function(x){return x!==h2;}));wrong[0]=h1[0]+" y "+oc[0];}
+    var frame=p.es+" tiene el pelo ___.";
+    return {who:p.e,en:p.en+" has "+h1[1]+", "+h2[1]+" hair.",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function lEyes(){
+    var p=rnd(P),e=rnd(EYES),ans=agree(e[0],"m",true);
+    var others=shuffle(EYES.filter(function(x){return x!==e;}));
+    var wrong=[e[0],agree(others[0][0],"m",true),agree(others[1][0],"m",true)];
+    var frame=p.es+" "+(p.pl?"tienen":"tiene")+" los ojos ___.";
+    return {who:p.e,en:p.en+(p.pl?" have ":" has ")+e[1]+" eyes.",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+
+  /* ---------- Mode 3: Listening snap ---------- */
+  var SWAPP={"My brother":"My sister","My sister":"My brother","My dad":"My mum","My mum":"My dad","My grandad":"My granny","My granny":"My grandad","My friend Pablo":"My friend Sara","My friend Sara":"My friend Pablo","My English teacher (Ms Ruiz)":"My music teacher (Mr Gil)","My music teacher (Mr Gil)":"My English teacher (Ms Ruiz)"};
+  var OPP={alto:"bajo",bajo:"alto",simpático:"antipático",antipático:"simpático",trabajador:"perezoso",perezoso:"trabajador",divertido:"aburrido",aburrido:"divertido","tímido":"hablador",hablador:"tímido",generoso:"egoísta",paciente:"impaciente",serio:"gracioso",gracioso:"serio"};
+  var HOPP={largo:"corto",corto:"largo",rizado:"liso",liso:"rizado",rubio:"castaño",castaño:"negro",negro:"rubio"};
+  var HEN={};HAIR.forEach(function(h){HEN[h[0]]=h[1];});
+  A.pelirrojo="red-haired";
+  function lListen(){
+    var p=rnd(P.filter(function(x){return !x.pl;})),adjs=Object.keys(OPP),a=rnd(adjs);
+    var h1=rnd(["largo","corto","rizado","liso"]),h2=rnd(["rubio","castaño","negro"]);
+    var hairFirst=Math.random()<.5;
+    var hairEs=hairFirst?h1:h2,hairEn=HEN[hairEs];
+    var intens=NEG.indexOf(a)>=0?"un poco ":"muy ",enI=intens==="muy "?"very ":"a bit ";
+    var s=p.es+" es "+intens+agree(a,p.g,false)+" y tiene el pelo "+hairEs+".";
+    var E=function(who,adj,hair){return who+" is "+enI+A[adj]+" and has "+HEN[hair]+" hair.";};
+    var ans=E(p.en,a,hairEs);
+    var wrong=[E(SWAPP[p.en],a,hairEs),E(p.en,OPP[a],hairEs),E(p.en,a,HOPP[hairEs])];
+    return {listen:1,speak:s,answer:ans,wrong:wrong,review:s+" = "+ans};
+  }
+  function lListenPl(){
+    var p=rnd(P.filter(function(x){return x.pl;})),a=rnd(["simpático","divertido","alto","bajo","trabajador","hablador","generoso","gracioso","serio","tímido"]);
+    var e=rnd(EYES),e2=rnd(EYES.filter(function(x){return x!==e;}));
+    var s=p.es+" son "+agree(a,p.g,true)+" y tienen los ojos "+agree(e[0],"m",true)+".";
+    var E=function(who,adj,eye){return who+" are "+A[adj]+" and have "+eye+" eyes.";};
+    var ans=E(p.en,a,e[1]);
+    var swapPl={"My brothers":"My sisters","My sisters":"My brothers","My grandparents":"My parents","My friends (all girls)":"My cousins (all girls)","My cousins (boys and girls)":"My grandparents","My cousins (all girls)":"My friends (all girls)"};
+    return {listen:1,speak:s,answer:ans,wrong:[E(swapPl[p.en],a,e[1]),E(p.en,OPP[a],e[1]),E(p.en,a,e2[1])],review:s+" = "+ans};
+  }
+  var LFIX=[
+    ["Mi mejor amiga es muy habladora.","My best friend (a girl) is very chatty.",["My best friend (a boy) is very chatty.","My best friend is very shy.","My best friend is very hard-working."]],
+    ["Mi hermano no es nada deportista.","My brother isn't sporty at all.",["My brother is very sporty.","My sister isn't sporty at all.","My brother is quite sporty."]],
+    ["Mi padre es alto pero mi madre es baja.","My dad is tall but my mum is short.",["My dad is short but my mum is tall.","My dad and my mum are tall.","My mum is tall but my dad is short."]],
+    ["Mi abuela es muy cariñosa y generosa.","My granny is very affectionate and generous.",["My grandad is very affectionate and generous.","My granny is very serious and generous.","My granny is very affectionate but selfish."]],
+    ["¿Cómo es tu mejor amigo?","What's your best friend like?",["What's your best friend called?","How old is your best friend?","Where does your best friend live?"]],
+    ["Mi prima es pelirroja y tiene los ojos verdes.","My cousin has red hair and green eyes.",["My cousin has red hair and blue eyes.","My cousin has brown hair and green eyes.","My aunt has red hair and green eyes."]],
+    ["Mis padres son bastante estrictos.","My parents are quite strict.",["My parents are very strict.","My parents aren't strict at all.","My grandparents are quite strict."]],
+    ["Mi profesor de música lleva gafas y tiene barba.","My music teacher wears glasses and has a beard.",["My music teacher has a beard but no glasses.","My maths teacher wears glasses and has a beard.","My music teacher wears glasses and has long hair."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={snap:[qSnap],looks:[lVerb,lVerb,lHair,lEyes],listen:[lListen,lListen,lListenPl,lFix,lFix],mixed:[qSnap,qSnap,lVerb,lHair,lEyes]};
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear someone describe a person, pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3||q.wrong.indexOf(q.answer)>=0)&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.listen?"":(q.who||"");
+    $("en").textContent=q.listen?"Listen. What did they say?":q.en;
+    $("frame").innerHTML=q.listen?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.listen){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var longish=q.listen||[q.answer].concat(q.wrong).some(function(x){return x.length>18;});
+    box.className="choices"+(longish?" long":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f,listen:current.listen});
+    }
+    if(current.listen)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.listen?900:350):(current.listen?2200:1500);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=22?"¡Increíble! That's exam-ready speed.":score>=14?"¡Muy bien! Great work.":score>=7?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={qSnap:qSnap,lVerb:lVerb,lHair:lHair,lEyes:lEyes,lListen:lListen,lListenPl:lListenPl,lFix:lFix,agree:agree};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
