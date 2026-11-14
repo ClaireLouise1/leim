@@ -56,7 +56,7 @@
 .sq.wrong{background:#FBE9E8;border-color:#D9534F}
 .sq.show{background:var(--cream);border-color:var(--sun)}
 .callout{text-align:center;font-weight:800;font-size:22px;color:var(--green);min-height:30px;margin-bottom:6px}
-.bingoTitle{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-weight:800;letter-spacing:.12em;color:var(--muted);font-size:13px;margin-bottom:6px}
+.bingoTitle{text-align:center;font-weight:800;letter-spacing:.2em;color:var(--green);font-size:15px;margin-bottom:6px}
 @media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.sq{min-height:78px;font-size:12px}.sq .e{font-size:26px}}
 </style>
 </head>
@@ -275,7 +275,7 @@
   function newBoard(){var b=pickN(A,9);BOARD={cells:b,stamped:[0,0,0,0,0,0,0,0,0],lines:{}};}
   var LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   function drawBoard(){
-    var h="<div class='bingoTitle'><span>B I N</span><span>G O</span><span>¡LÍNEA!</span></div><div class='board'>";
+    var h="<div class='bingoTitle'>B &nbsp;I &nbsp;N &nbsp;G &nbsp;O</div><div class='board'>";
     BOARD.cells.forEach(function(a,i){h+="<button class='sq"+(BOARD.stamped[i]?" stamp":"")+"' data-i='"+i+"' aria-label='Square "+(i+1)+": "+a.lab+"'><span class='n'>"+(i+1)+"</span><span class='e'>"+a.e+"</span>"+a.lab+"</button>";});
     return h+"</div>";
   }
