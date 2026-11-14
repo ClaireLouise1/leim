@@ -66,6 +66,8 @@ p{margin:0}
 .check{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:400 !important;color:var(--ink-2)}
 .check input{width:20px;height:20px;margin-top:2px;flex:0 0 auto;accent-color:var(--green)}
 .form-msg{display:none;background:var(--green-soft);color:var(--ink);padding:14px 16px;border-radius:8px;font-weight:500}
+.form-msg p{margin-bottom:12px}
+.form-msg .btn{width:100%;margin-top:0}
 .form-err{color:#B42318}
 
 /* Sections */
