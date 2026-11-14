@@ -1,0 +1,27 @@
+/* Léim printables: shared print styles. Build: google-chrome --headless=new --no-sandbox --no-pdf-header-footer --print-to-pdf=out.pdf in.html */
+@page{size:A4;margin:16mm 16mm 18mm;
+  @bottom-left{content:var(--foot-left, "Léim · leim.ie");font:600 8pt Inter,sans-serif;color:#5B6470}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:600 8pt Inter,sans-serif;color:#5B6470}}
+:root{--ink:#1B2430;--muted:#5B6470;--line:#E5E7EB;--green:#2E7D57;--green-soft:#E4F2EA;--sun:#F6CF5A;--cream:#FFF7DC;--cream-line:#F3E3A8;--night:#1B2430;--mist:#F3F4F6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,sans-serif;color:var(--ink);font-size:10.5pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.1}
+h1{font-size:22pt}h2{font-size:14pt;margin:14px 0 6px}h3{font-size:11.5pt;margin:10px 0 4px}
+p{margin:4px 0}
+.page{page-break-after:always}.page:last-child{page-break-after:auto}
+.band{background:var(--night);color:#fff;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.band .k{font-size:8pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sun)}
+.band h1{color:#fff;margin-top:4px}
+.logo{display:flex;align-items:center;gap:6px;font-weight:700;font-size:13pt}
+.lo{font-size:7.5pt;color:var(--muted);margin:2px 0 8px}
+table{width:100%;border-collapse:collapse;margin:6px 0}
+th{background:var(--green);color:#fff;text-align:left;font-weight:700;padding:5px 8px;font-size:9.5pt}
+td{border-bottom:1px solid var(--line);padding:5px 8px;vertical-align:top}
+.note{background:var(--cream);border:1px solid var(--cream-line);border-radius:8px;padding:8px 12px;margin:8px 0}
+.tip{background:var(--green-soft);border-radius:8px;padding:8px 12px;margin:8px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ol.q{padding-left:22px;margin:4px 0}ol.q li{margin:5px 0}
+.line{display:inline-block;border-bottom:1px solid #9AA3AE;min-width:120px}
+.long{display:block;border-bottom:1px solid #9AA3AE;height:22px}
+.ans li{margin:2px 0}
+.small{font-size:8.5pt;color:var(--muted)}

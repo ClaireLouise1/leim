@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Likes, dislikes and opinions: play Opinion Dash | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: gusta or gustan, the opinion ladder and giving reasons with porque es / porque son. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:17px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Opinion Dash</h1>
+        <p>60 seconds. Say what people like, how much, and why. <b>Gusta</b> or <b>gustan</b>? <b>Es</b> or <b>son</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your dash</h2>
+        <div class="modes">
+          <button class="mode" data-mode="who"><div><b>Gusta or gustan?</b><span>Who likes it, and is it one thing or more?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="scale"><div><b>How much?</b><span>Love it, like it, not really, hate it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="why"><div><b>Give a reason</b><span>porque es… / porque son… with the right ending</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.13, 1.18, 1.19, 2.1 (2017 spec, exams 2027–2028) · 1.11, 1.12, 1.14, 1.18, 2.1 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another dash</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Likes, dislikes and opinions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these three sentences:</p>
+        <ul>
+          <li><b>Me gusta</b> el fútbol. <span style="color:var(--muted)">(I like football.)</span></li>
+          <li><b>Me gusta</b> nadar. <span style="color:var(--muted)">(I like swimming.)</span></li>
+          <li><b>Me gustan</b> los deportes. <span style="color:var(--muted)">(I like sports.)</span></li>
+        </ul>
+        <p>So when do you say <b>gustan</b>? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Use <b>gustan</b> when the thing you like is <b>plural</b> (los deportes, las películas). Use <b>gusta</b> for one thing or for an activity (a verb like nadar, leer, jugar). <b>Gustar</b> really means "to please", so <em>Me gustan los deportes</em> = "Sports please me". The verb matches the <b>thing</b>, not the person.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Who likes it? Change the little word in front</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Who</th><th>One thing / an activity</th><th>More than one thing</th></tr></thead>
+          <tbody>
+            <tr><td>(a mí) I</td><td><b>me</b> gusta el chocolate</td><td><b>me</b> gustan los gatos</td></tr>
+            <tr><td>(a ti) you</td><td><b>te</b> gusta leer</td><td><b>te</b> gustan las ciencias</td></tr>
+            <tr><td>(a él / a ella) he / she</td><td><b>le</b> gusta la música</td><td><b>le</b> gustan los perros</td></tr>
+            <tr><td>(a nosotros) we</td><td><b>nos</b> gusta ir al cine</td><td><b>nos</b> gustan los videojuegos</td></tr>
+            <tr><td>(a vosotros) you all</td><td><b>os</b> gusta el inglés</td><td><b>os</b> gustan las verduras</td></tr>
+            <tr><td>(a ellos / a ellas) they</td><td><b>les</b> gusta la pizza</td><td><b>les</b> gustan los lunes</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> there is no "me gusto" for "I like". And with a person's name, add <b>a</b>: <em><b>A</b> mi madre <b>le</b> gusta</em> la historia. <em><b>A</b> mis amigos <b>les</b> gustan</em> los deportes.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">How much? The opinion ladder</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td style="font-size:22px">😍</td><td><b>Me encanta(n)</b></td><td>I love</td></tr>
+            <tr><td style="font-size:22px">🙂</td><td><b>Me gusta(n) mucho</b> / <b>Me gusta(n)</b></td><td>I really like / I like</td></tr>
+            <tr><td style="font-size:22px">😐</td><td><b>No me gusta(n) mucho</b></td><td>I don't really like</td></tr>
+            <tr><td style="font-size:22px">😖</td><td><b>No me gusta(n) nada</b> / <b>Odio</b></td><td>I don't like at all / I hate</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px"><b>Encantar</b> works exactly like gustar: <em>me encanta</em> el fútbol, <em>me encantan</em> los perros. But <b>odio</b> (I hate) and <b>prefiero</b> (I prefer) are normal verbs, so no "me": <em>Odio las verduras. Prefiero el inglés.</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Why? Give a reason</h3>
+        <p>Add <b>porque es</b> (one thing) or <b>porque son</b> (more than one), then make the adjective match:</p>
+        <div class="table-wrap" style="margin-top:10px"><table>
+          <thead><tr><th></th><th>one thing</th><th>more than one</th></tr></thead>
+          <tbody>
+            <tr><td>masculine (el / los)</td><td>el inglés es divertid<b>o</b></td><td>los deportes son divertid<b>os</b></td></tr>
+            <tr><td>feminine (la / las)</td><td>la historia es divertid<b>a</b></td><td>las ciencias son divertid<b>as</b></td></tr>
+            <tr><td>ends in -e</td><td>es interesant<b>e</b></td><td>son interesant<b>es</b></td></tr>
+            <tr><td>ends in a consonant</td><td>es fácil</td><td>son fácil<b>es</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">Useful adjectives: divertido (fun), aburrido (boring), interesante, fácil (easy), difícil (hard), útil (useful), emocionante (exciting), relajante (relaxing), rico (tasty), sano (healthy), asqueroso (disgusting).</p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> in the Writing section, an opinion + a reason + a contrast shows off your Spanish: <em>Me encanta el inglés porque es interesante, <b>pero</b> no me gustan nada las matemáticas porque son difíciles.</em> In Listening and Reading, watch for <b>no … nada</b> and <b>pero</b>: they flip the meaning.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/likes-and-opinions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/eq4ET" target="_blank" rel="noopener">Likes &amp; Opinions Teacher Pack (€5)</a>: class survey, Opinion Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // People: Spanish frame start, pronoun, English subject, 3rd-person singular?
+  var PEOPLE=[
+    {a:"",p:"me",en:"I",s3:false},
+    {a:"",p:"te",en:"You",s3:false},
+    {a:"A él",p:"le",en:"He",s3:true},
+    {a:"A ella",p:"le",en:"She",s3:true},
+    {a:"",p:"nos",en:"We",s3:false},
+    {a:"",p:"os",en:"You all",s3:false},
+    {a:"A ellos",p:"les",en:"They",s3:false},
+    {a:"A mi madre",p:"le",en:"My mum",s3:true},
+    {a:"A mis amigos",p:"les",en:"My friends",s3:false}
+  ];
+  var PRONS=["me","te","le","nos","os","les"];
+  // Things: Spanish, English, plural?, gender (m/f, "" for activities), adjectives that make sense
+  var SUBJ=["divertido","aburrido","interesante","fácil","difícil","útil"];
+  var HOBBY=["divertido","aburrido","emocionante","relajante","interesante"];
+  var FOOD=["rico","sano","asqueroso"];
+  var THINGS=[
+    ["el fútbol","football",0,"m",HOBBY],["la música","music",0,"f",HOBBY],["el chocolate","chocolate",0,"m",FOOD],
+    ["la historia","history",0,"f",SUBJ],["el inglés","English",0,"m",SUBJ],["la pizza","pizza",0,"f",FOOD],
+    ["el dibujo","art",0,"m",SUBJ],["la educación física","PE",0,"f",SUBJ],
+    ["nadar","swimming",0,""],["leer","reading",0,""],["ir al cine","going to the cinema",0,""],["jugar a los videojuegos","playing video games",0,""],["bailar","dancing",0,""],
+    ["los perros","dogs",1,"m"],["las matemáticas","maths",1,"f",SUBJ],["los deportes","sports",1,"m",HOBBY],
+    ["las películas de terror","horror films",1,"f",HOBBY],["los videojuegos","video games",1,"m",HOBBY],["las ciencias","science",1,"f",SUBJ],
+    ["los gatos","cats",1,"m"],["las verduras","vegetables",1,"f",FOOD],["los lunes","Mondays",1,"m",["aburrido"]]
+  ].map(function(t){return {es:t[0],en:t[1],pl:!!t[2],g:t[3],adj:t[4]||null};});
+  var ADJ={divertido:"fun",aburrido:"boring",interesante:"interesting","fácil":"easy","difícil":"hard","útil":"useful",emocionante:"exciting",relajante:"relaxing",rico:"tasty",sano:"healthy",asqueroso:"disgusting"};
+  var NEG=["aburrido","difícil","asqueroso"];
+  var LEVELS=[
+    {e:"😍",en:function(x){return "I love "+x;},es:function(pl){return "me encanta"+(pl?"n":"");}},
+    {e:"🙂",en:function(x){return "I like "+x;},es:function(pl){return "me gusta"+(pl?"n":"");}},
+    {e:"😐",en:function(x){return "I don't really like "+x;},es:function(pl){return "no me gusta"+(pl?"n":"")+" mucho";}},
+    {e:"😖",en:function(x){return "I don't like "+x+" at all";},es:function(pl){return "no me gusta"+(pl?"n":"")+" nada";}}
+  ];
+
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function agree(adj,g,pl){
+    var l=adj.slice(-1);
+    if(l==="o")return adj.slice(0,-1)+(g==="f"?"a":"o")+(pl?"s":"");
+    if(l==="e")return adj+(pl?"s":"");
+    if(!pl)return adj;
+    return {"fácil":"fáciles","difícil":"difíciles","útil":"útiles"}[adj]||adj+"es";
+  }
+  function pick3(correct,cands){
+    var seen={};seen[correct]=1;var out=[];
+    shuffle(cands).forEach(function(c){if(!seen[c]&&out.length<3){seen[c]=1;out.push(c);}});
+    return out;
+  }
+
+  // Question makers: return {en, frame (with ___), answer, wrong[]}
+  function qWho(){
+    var who=rnd(PEOPLE),t=rnd(THINGS),v="gusta"+(t.pl?"n":""),vw="gusta"+(t.pl?"":"n");
+    var ans=who.p+" "+v;
+    var others=PRONS.filter(function(p){return p!==who.p;});
+    var c=[who.p+" "+vw, rnd(others)+" "+v, rnd(others)+" "+vw, rnd(others)+" "+v];
+    if(who.p==="me")c.push("me gusto");
+    var w=pick3(ans,c);
+    if(!who.a){ans=cap(ans);w=w.map(cap);}
+    return {en:who.en+" "+(who.s3?"likes":"like")+" "+t.en+".",frame:(who.a?who.a+" ___ ":"___ ")+t.es+".",answer:ans,wrong:w};
+  }
+  function qScale(){
+    var t=rnd(THINGS),li=Math.floor(Math.random()*4),L=LEVELS[li];
+    var ans=L.es(t.pl);
+    var near=L.es(!t.pl),rest=[];
+    LEVELS.forEach(function(o,i){if(i!==li){rest.push(o.es(t.pl));rest.push(o.es(!t.pl));}});
+    var wrong=[near].concat(pick3(near,rest).slice(0,2));
+    return {en:L.e+"  "+L.en(t.en)+".",frame:"___ "+t.es+".",answer:cap(ans),wrong:wrong.map(cap),big:true};
+  }
+  function qWhy(){
+    var pool=THINGS.filter(function(t){return t.adj;}),t=rnd(pool),adj=rnd(t.adj);
+    var neg=NEG.indexOf(adj)>=0, r=Math.random(), v=t.pl?"gustan":"gusta";
+    var open=neg?"No me "+v:(r<.45?"Me encanta"+(t.pl?"n":""):"Me "+v);
+    var enOpen=neg?"I don't like ":(r<.45?"I love ":"I like ");
+    var ans=(t.pl?"son ":"es ")+agree(adj,t.g,t.pl);
+    var c=[];
+    ["es","son"].forEach(function(verb){["m","f"].forEach(function(g){[false,true].forEach(function(pl){
+      var f=verb+" "+agree(adj,g,pl);
+      var err=((verb==="son")!==t.pl?1:0)+(pl!==t.pl?1:0)+(g!==t.g&&adj.slice(-1)==="o"?1:0);
+      c.push({f:f,err:err+Math.random()*.9});});});});
+    c.sort(function(x,y){return x.err-y.err;});
+    var w=[];c.forEach(function(x){if(x.f!==ans&&w.indexOf(x.f)<0&&w.length<3)w.push(x.f);});
+    var isPl=t.pl&&["maths","science"].indexOf(t.en)<0;
+    return {en:enOpen+t.en+" because "+(isPl?"they are ":"it is ")+ADJ[adj]+".",frame:open+" "+t.es+" porque ___.",answer:ans,wrong:w};
+  }
+  var MAKERS={who:[qWho],scale:[qScale],why:[qWhy],mixed:[qWho,qScale,qWhy]};
+
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="";
+  var LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+
+  function start(m){
+    mode=m;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(q.frame===last&&tries<10);
+    last=q.frame;current=q;
+    $("en").textContent=q.en;
+    $("frame").innerHTML=esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var box=$("choices");box.innerHTML="";
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({frame:current.frame,ans:current.answer,said:f});
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:1300);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"¡Increíble! That's exam-ready speed.":score>=14?"¡Muy bien! Great work.":score>=7?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.frame])return;seen[m.frame]=1;
+        var a=m.ans,full=m.frame.replace("___",a);
+        html+="<li>"+esc(full).replace(esc(a),"<span class='fix'>"+esc(a)+"</span>")+" <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
