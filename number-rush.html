@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numbers, age, dates and time: play Number Rush | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: numbers 0–100 and beyond, age with tener, birthdays and dates, telling the time, plus a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Number Rush</h1>
+        <p>60 seconds. Numbers, ages, birthdays and the time: the details that win easy marks in the Listening paper. <b>Sesenta</b> or <b>setenta</b>? <b>Y</b> or <b>menos</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your rush</h2>
+        <div class="modes">
+          <button class="mode" data-mode="num"><div><b>Numbers</b><span>Read the Spanish, pick the number, and back again</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="date"><div><b>Age, birthdays &amp; dates</b><span>Tengo… años, el tres de mayo, nací en…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="time"><div><b>Clock match</b><span>¿Qué hora es? y cuarto, y media, menos cuarto</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening rush 🔊</b><span id="listenNote">Hear it, pick it: numbers, dates and times, like the Listening paper</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. Press 🔊 to hear the Spanish.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.3, 1.14, 3.10 (2017 spec, exams 2027–2028) · 1.4, 2.6 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another rush</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Numbers, age, dates and time</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at how these numbers are built:</p>
+        <ul>
+          <li>16 <b>dieciséis</b> · 17 <b>diecisiete</b> · 18 <b>dieciocho</b></li>
+          <li>22 <b>veintidós</b> · 25 <b>veinticinco</b> · 29 <b>veintinueve</b></li>
+          <li>35 <b>treinta y cinco</b> · 47 <b>cuarenta y siete</b> · 99 <b>noventa y nueve</b></li>
+        </ul>
+        <p>What changes after 29? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Up to 29, the number is <b>one word</b>: <em>diez y seis</em> became <b>dieciséis</b>, <em>veinte y dos</em> became <b>veintidós</b>. From 31 on, you write the tens, then <b>y</b>, then the unit, as <b>three words</b>: treinta <b>y</b> uno, ochenta <b>y</b> ocho. Watch the accents on <b>dieciséis, veintidós, veintitrés, veintiséis</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The numbers you need</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>1–15</th><th>Tens</th><th>Hundreds</th></tr></thead>
+          <tbody>
+            <tr><td>1 uno · 2 dos · 3 tres</td><td>10 diez · 20 veinte</td><td>100 <b>cien</b> · 101 <b>ciento</b> uno</td></tr>
+            <tr><td>4 cuatro · 5 cinco · 6 seis</td><td>30 treinta · 40 cuarenta</td><td>200 doscientos · 300 trescientos</td></tr>
+            <tr><td>7 siete · 8 ocho · 9 nueve</td><td>50 cincuenta · <b>60 sesenta</b></td><td>400 cuatrocientos · <b>500 quinientos</b></td></tr>
+            <tr><td>10 diez · 11 once · 12 doce</td><td><b>70 setenta</b> · 80 ochenta</td><td><b>700 setecientos</b> · <b>900 novecientos</b></td></tr>
+            <tr><td>13 trece · 14 catorce · 15 quince</td><td>90 noventa</td><td>1000 mil · 2026 dos mil veintiséis</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> <b>sesenta</b> (60, s like <em>seis</em>) and <b>setenta</b> (70, t like <em>siete</em>). <b>Quince</b> (15) and <b>cincuenta</b> (50). <b>Catorce</b> (14) and <b>cuarenta</b> (40). Say <b>cien</b> for exactly 100 (<em>cien euros</em>) and <b>ciento</b> for 101–199.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Age: use tener, not ser</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><b>¿Cuántos años tienes?</b></td><td>How old are you?</td></tr>
+            <tr><td><b>Tengo</b> catorce <b>años</b>.</td><td>I'm 14. (literally "I have 14 years")</td></tr>
+            <tr><td>Mi hermana <b>tiene</b> diez años.</td><td>My sister is 10.</td></tr>
+            <tr><td>Mi padre tiene cuarenta y <b>un</b> años.</td><td>My dad is 41. (uno → <b>un</b> before años: veinti<b>ún</b>, treinta y <b>un</b>)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">English says "I <em>am</em> 14", so it is tempting to write <em>Soy catorce años</em>. Don't! Spanish always uses <b>tener</b>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Dates and birthdays</h3>
+        <p>Pattern: <b>el</b> + number + <b>de</b> + month. Months have <b>no capital letter</b>.</p>
+        <div class="table-wrap" style="margin-top:10px"><table>
+          <tbody>
+            <tr><td>enero · febrero · marzo · abril</td><td>mayo · junio · julio · agosto</td><td>septiembre · octubre · noviembre · diciembre</td></tr>
+          </tbody></table></div>
+        <ul style="margin-top:10px">
+          <li><b>¿Cuándo es tu cumpleaños?</b> When is your birthday?</li>
+          <li>Mi cumpleaños es <b>el tres de mayo</b>. My birthday is on 3 May. (No word for "on"!)</li>
+          <li>The 1st: <b>el uno</b> de enero (Spain) or <b>el primero</b> de enero (Latin America).</li>
+          <li><b>Nací en</b> dos mil trece. I was born in 2013.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> <b>junio</b> (June) / <b>julio</b> (July), and <b>marzo</b> (March) / <b>mayo</b> (May).</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Telling the time</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Time</th><th>Spanish</th></tr></thead>
+          <tbody>
+            <tr><td>1:00</td><td><b>Es la una</b> (one o'clock is singular)</td></tr>
+            <tr><td>3:00</td><td><b>Son las tres</b> (en punto)</td></tr>
+            <tr><td>3:05 · 3:15 · 3:30</td><td>Son las tres <b>y cinco</b> · <b>y cuarto</b> · <b>y media</b></td></tr>
+            <tr><td>3:40 · 3:45 · 3:55</td><td>Son las <b>cuatro</b> <b>menos veinte</b> · <b>menos cuarto</b> · <b>menos cinco</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">After half past, go to the <b>next</b> hour and take minutes away with <b>menos</b>: 3:45 = "four minus a quarter". To say <b>at</b> a time, use <b>a las</b> (or <b>a la una</b>): <em>El partido empieza <b>a las</b> ocho y media.</em> Add <b>de la mañana / de la tarde / de la noche</b> for a.m. and p.m.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Spain and Ireland: same numbers, different habits</h3>
+        <ul>
+          <li>Dates go day then month, like in Ireland: 03/05 = <b>el tres de mayo</b>.</li>
+          <li>Prices use a <b>comma</b>: 2,50 € = <b>dos euros cincuenta</b>. A thousand is written with a point: 1.000.</li>
+          <li>Timetables, trains and TV use the <b>24-hour clock</b>: 20:30 = <b>las veinte treinta</b>.</li>
+          <li>Meals are later: lunch around 14:00 (<b>las dos</b>), dinner around 21:00 (<b>las nueve de la noche</b>).</li>
+        </ul>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> numbers, times, dates and prices are the classic details in the Listening section. Read the question first so you know which number you are waiting for, write it down <b>in digits</b> the moment you hear it, and listen out for <b>menos</b>, <b>sesenta / setenta</b> and <b>quince / cincuenta</b>. On the second listening, check it.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/numbers-dates-time-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="packLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/Leim" target="_blank" rel="noopener" id="packLink">Numbers, Dates &amp; Time Teacher Pack (€5)</a>: Birthday Line-up, Time Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- Spanish numbers ---------- */
+  var U=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
+  var T={3:"treinta",4:"cuarenta",5:"cincuenta",6:"sesenta",7:"setenta",8:"ochenta",9:"noventa"};
+  var H={1:"ciento",2:"doscientos",3:"trescientos",4:"cuatrocientos",5:"quinientos",6:"seiscientos",7:"setecientos",8:"ochocientos",9:"novecientos"};
+  function es(n){
+    if(n<30)return U[n];
+    if(n<100){var t=Math.floor(n/10),u=n%10;return T[t]+(u?" y "+U[u]:"");}
+    if(n===100)return "cien";
+    if(n<1000){var r=n%100;return H[Math.floor(n/100)]+(r?" "+es(r):"");}
+    var th=Math.floor(n/1000),rr=n%1000;
+    return (th===1?"mil":es(th)+" mil")+(rr?" "+es(rr):"");
+  }
+  // Common misspellings students write
+  function misspell(n){
+    if(n>=16&&n<=19)return "diez y "+U[n-10];
+    if(n>=21&&n<=29)return "veinte y "+U[n-20];
+    if(n===500)return "cincocientos";
+    if(n===700)return "sietecientos";
+    if(n===900)return "nuevecientos";
+    if(n===100)return "ciento";
+    if(n===60)return "seisenta";
+    if(n===70)return "sietenta";
+    return null;
+  }
+  var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var MONTHS_EN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var MCONF={0:[1],1:[0],2:[4],4:[2],5:[6],6:[5],3:[7],7:[3,9],8:[11,10],9:[7],10:[8,11],11:[8,10]};
+
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function uniq3(correct,cands){
+    var seen={},out=[];seen[correct]=1;
+    cands.forEach(function(c){if(c!=null&&c!==""&&!seen[c]&&out.length<3){seen[c]=1;out.push(c);}});
+    return out;
+  }
+
+  /* Numbers that trip students up */
+  var TRICKY=[11,12,13,14,15,16,17,18,19,21,22,23,26,30,40,50,60,70,66,67,76,77,15,50,14,40,13,30,16,60,17,70,99,100,55,44,88,33];
+  function pickNum(){return Math.random()<.55?rnd(TRICKY):ri(0,100);}
+  function numNear(n){
+    var c=[],t=Math.floor(n/10),u=n%10;
+    if(n>=10&&n<100&&u&&u!==t)c.push(u*10+t);           // 47 -> 74
+    if(t===6)c.push(70+u); if(t===7)c.push(60+u);         // sesenta / setenta
+    var pairs={15:50,50:15,13:30,30:13,14:40,40:14,12:20,20:12,2:12,16:60,60:16,17:70,70:17,100:1000,6:16,7:17};
+    if(pairs[n]!=null)c.push(pairs[n]);
+    c.push(n+10,n-10,n+1,n-1,n+11,n-9);
+    return c.filter(function(x){return x>=0&&x<=100&&x!==n;});
+  }
+
+  /* ---------- Time ---------- */
+  function hourWord(h){return h===1?"una":es(h);}
+  function timeES(h,m){
+    var hh=h,menos=false,mm=m;
+    if(m>30){hh=h%12+1;menos=true;mm=60-m;}
+    var s=(hh===1?"Es la una":"Son las "+hourWord(hh));
+    if(m===0)return s+" en punto";
+    if(!menos)return s+(mm===15?" y cuarto":mm===30?" y media":" y "+es(mm));
+    return s+" menos "+(mm===15?"cuarto":es(mm));
+  }
+  function atES(h,m){return timeES(h,m).replace("Es la","a la").replace("Son las","a las").replace(" en punto","");}
+  function dig(h,m){return h+":"+(m<10?"0":"")+m;}
+  function norm(h,m){while(m<0){m+=60;h--;}while(m>=60){m-=60;h++;}h=((h-1)%12+12)%12+1;return [h,m];}
+  function timeNear(h,m){
+    var c=[];
+    function add(hh,mm){var x=norm(hh,mm);c.push(x);}
+    if(m>30){add(h+1,m);add(h,60-m);add(h+1,60-m);}
+    else if(m>0&&m<30){add(h-1,60-m);add(h,60-m);add(h+1,m);}
+    else if(m===30){add(h,0);add(h+1,30);add(h-1,30);add(h,15);}
+    else{add(h+1,0);add(h-1,0);add(h,30);}
+    if(h===2)c.push([12,m]); if(h===12)c.push([2,m]);
+    add(h,m+15);add(h-1,m);
+    return c.filter(function(x){return !(x[0]===h&&x[1]===m);});
+  }
+  function pickTime(){
+    var h=ri(1,12),r=Math.random(),m;
+    if(r<.55)m=rnd([0,15,30,45]);else m=rnd([5,10,20,25,35,40,50,55]);
+    return [h,m];
+  }
+  function clockSVG(h,m){
+    var a=m*6,b=(h%12)*30+m*.5,s='<svg width="150" height="150" viewBox="0 0 120 120" role="img" aria-label="A clock"><circle cx="60" cy="60" r="56" fill="#fff" stroke="#1B2430" stroke-width="4"/>';
+    for(var i=0;i<12;i++){var g=i*30*Math.PI/180,x1=60+46*Math.sin(g),y1=60-46*Math.cos(g),x2=60+52*Math.sin(g),y2=60-52*Math.cos(g);s+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#1B2430" stroke-width="'+(i%3===0?4:2)+'" stroke-linecap="round"/>';}
+    function hand(ang,len,w,col){var g=ang*Math.PI/180;return '<line x1="60" y1="60" x2="'+(60+len*Math.sin(g)).toFixed(1)+'" y2="'+(60-len*Math.cos(g)).toFixed(1)+'" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round"/>';}
+    s+=hand(b,28,6,"#1B2430")+hand(a,42,4,"#2E7D57")+'<circle cx="60" cy="60" r="4" fill="#1B2430"/></svg>';
+    return s;
+  }
+
+  /* ---------- Question makers: {en, frame, html?, answer, wrong[], review, speak?} ---------- */
+  function qNumRead(){
+    var n=Math.random()<.15?rnd([120,150,200,250,365,500,700,900,1000]):pickNum(),w=es(n);
+    var near=n>100?[n+100,n-100,n+50,n*2,n+10].filter(function(x){return x>0;}):numNear(n);
+    return {en:"Which number is this?",frame:w,answer:String(n),wrong:uniq3(String(n),shuffle(near.slice(0,4)).concat(near).map(String)),review:w+" = "+n,speak:w};
+  }
+  function qNumWrite(){
+    var n=Math.random()<.12?rnd([100,500,700,900]):pickNum(),w=es(n);
+    var c=[];var ms=misspell(n);if(ms)c.push(ms);
+    numNear(n).slice(0,5).forEach(function(x){c.push(es(x));});
+    if(n>100)c.push(es(n+100),es(n-100));
+    return {en:"How do you write this in Spanish?",frame:String(n),answer:w,wrong:uniq3(w,shuffle(c.slice(0,3)).concat(c)),review:n+" = "+w,speak:w};
+  }
+  var PEOPLE_AGE=[
+    {en:"I'm",es:"Tengo",wrongV:"Soy",wrongP:"Tiene"},
+    {en:"My sister is",es:"Mi hermana tiene",wrongV:"Mi hermana es",wrongP:"Mi hermana tengo"},
+    {en:"My brother is",es:"Mi hermano tiene",wrongV:"Mi hermano es",wrongP:"Mi hermano tienes"},
+    {en:"She's",es:"Tiene",wrongV:"Es",wrongP:"Tengo"},
+    {en:"Are you",es:"¿Tienes",wrongV:"¿Eres",wrongP:"¿Tengo"}
+  ];
+  function ageNum(){var n;do{n=Math.random()<.6?ri(10,17):ri(22,59);}while(n%10===1);return n;}
+  function qAge(){
+    var p=rnd(PEOPLE_AGE),n=ageNum(),q=p.en==="Are you";
+    var end=q?" años?":" años.";
+    var ans=p.es+" "+es(n)+end;
+    var nb=numNear(n).filter(function(x){return x%10!==1&&x>1;});
+    var w=[p.wrongV+" "+es(n)+end,p.es+" "+es(nb[0])+end,p.wrongP+" "+es(n)+end];
+    return {en:p.en+" "+n+(q?"?":"."),frame:"___",answer:ans,wrong:w,review:p.en+" "+n+" = "+ans,speak:ans};
+  }
+  function day(){return Math.random()<.5?ri(1,31):rnd([2,12,13,15,16,20,30,14,24,26]);}
+  function validDay(d,mo){var max=[31,29,31,30,31,30,31,31,30,31,30,31][mo];return Math.min(d,max);}
+  function dateES(d,mo){return "el "+(d===1?"uno":es(d))+" de "+MONTHS[mo];}
+  function dateEN(d,mo){return d+" "+MONTHS_EN[mo];}
+  function dayNear(d){var c=numNear(d).filter(function(x){return x>=1&&x<=31;});if(d===2)c.unshift(12);if(d===12)c.unshift(2);return c;}
+  function qDateRead(){
+    var mo=ri(0,11),d=validDay(day(),mo),s="Mi cumpleaños es "+dateES(d,mo)+".";
+    var mc=rnd(MCONF[mo]),dn=dayNear(d);
+    var w=[dateEN(d,mc),dateEN(dn[0],mo),dateEN(dn[1]||dn[0]+1,mc)];
+    return {en:"When is the birthday?",frame:s,answer:dateEN(d,mo),wrong:uniq3(dateEN(d,mo),w.concat([dateEN(dn[2]||1,mo)])),review:s+" = "+dateEN(d,mo),speak:s};
+  }
+  function qDateWrite(){
+    var mo=ri(0,11),d=validDay(day(),mo),ans=dateES(d,mo),dn=dayNear(d);
+    var w=[ans.replace(MONTHS[mo],cap(MONTHS[mo])),dateES(d,rnd(MCONF[mo])),dateES(dn[0],mo),ans.replace(" de "," ")];
+    return {en:"My birthday is on "+dateEN(d,mo)+".",frame:"Mi cumpleaños es ___.",answer:ans,wrong:uniq3(ans,shuffle(w)),review:"My birthday is on "+dateEN(d,mo)+" = Mi cumpleaños es "+ans+".",speak:"Mi cumpleaños es "+ans+"."};
+  }
+  function qYear(){
+    var y=ri(2008,2014),s="Nací en "+es(y)+".";
+    var w=[String(y-10),String(y+1),String(y-1),String(y+10)].filter(function(x){return +x!==y;});
+    if(y%10===2)w.unshift(String(y+10));
+    return {en:"What year was this person born?",frame:s,answer:String(y),wrong:uniq3(String(y),w),review:s+" = "+y,speak:s};
+  }
+  function qMonth(){
+    var mo=ri(0,11),c=MCONF[mo].map(function(x){return MONTHS_EN[x];}).concat(shuffle(MONTHS_EN.slice()));
+    return {en:"Which month?",frame:MONTHS[mo],answer:MONTHS_EN[mo],wrong:uniq3(MONTHS_EN[mo],c),review:MONTHS[mo]+" = "+MONTHS_EN[mo],speak:MONTHS[mo]};
+  }
+  function qClock(){
+    var t=pickTime(),ans=timeES(t[0],t[1]);
+    var w=timeNear(t[0],t[1]).map(function(x){return timeES(x[0],x[1]);});
+    if(ans.indexOf("Es la una")===0)w.unshift("Son las una"+ans.slice(9));
+    return {en:"¿Qué hora es?",frame:"",html:clockSVG(t[0],t[1]),answer:ans,wrong:uniq3(ans,w),review:dig(t[0],t[1])+" = "+ans,speak:ans};
+  }
+  function qTimeRead(){
+    var t=pickTime(),s=timeES(t[0],t[1]);
+    var w=timeNear(t[0],t[1]).map(function(x){return dig(x[0],x[1]);});
+    return {en:"What time is it?",frame:s,answer:dig(t[0],t[1]),wrong:uniq3(dig(t[0],t[1]),w),review:s+" = "+dig(t[0],t[1]),speak:s};
+  }
+  var EVENTS=[["The match starts","El partido empieza"],["The film starts","La película empieza"],["Class starts","La clase empieza"],["The bus leaves","El autobús sale"],["The shop opens","La tienda abre"]];
+  function qAt(){
+    var e=rnd(EVENTS),t=pickTime(),ans=atES(t[0],t[1]),base=ans.replace(/^a las? /,"");
+    var one=ans.indexOf("a la ")===0;
+    var w=[(one?"es la ":"son las ")+base,(one?"a las ":"a la ")+base,"en las "+base,atES(timeNear(t[0],t[1])[0][0],timeNear(t[0],t[1])[0][1])];
+    return {en:e[0]+" at "+dig(t[0],t[1])+".",frame:e[1]+" ___.",answer:ans,wrong:uniq3(ans,w),review:e[0]+" at "+dig(t[0],t[1])+" = "+e[1]+" "+ans+".",speak:e[1]+" "+ans+"."};
+  }
+  /* Listening versions: Spanish is spoken, not shown */
+  function hear(q){q.listen=true;q.en="🔊 Listen and pick what you hear";q.frame="";q.html="";return q;}
+  function lNum(){return hear(qNumRead());}
+  function lTime(){return hear(qTimeRead());}
+  function lDate(){var q=qDateRead();return hear(q);}
+  function lAge(){var n=ageNum(),p=rnd([["Tengo","I am"],["Mi madre tiene","My mum is"],["Mi hermano tiene","My brother is"]]),s=p[0]+" "+es(n)+" años.";
+    return hear({answer:String(n),wrong:uniq3(String(n),numNear(n).filter(function(x){return x>1;}).map(String)),review:s+" = "+n,speak:s});}
+
+  var MAKERS={
+    num:[qNumRead,qNumRead,qNumWrite],
+    date:[qAge,qAge,qDateRead,qDateWrite,qYear,qMonth],
+    time:[qClock,qClock,qTimeRead,qTimeRead,qAt],
+    listen:[lNum,lNum,lTime,lTime,lDate,lAge],
+    mixed:[qNumRead,qNumWrite,qAge,qDateRead,qDateWrite,qClock,qTimeRead,qAt,qYear]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    if(!synth)return;
+    var v=synth.getVoices()||[];
+    voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;
+    var b=document.getElementById("listenMode");
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear it, pick it: numbers, dates and times, like the Listening paper";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){
+    if(!synth||!voice)return;
+    synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);
+  }
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="listen")?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"").replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak&&voice&&(q.listen||!q.frame||q.frame.indexOf("___")<0)){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent=q.listen?"🔊 Play again":"🔊 Hear it";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+    }
+    if(q.listen)setTimeout(function(){speak(q.speak);},150);
+    var box=$("choices");box.innerHTML="";
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f});
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:(current.listen?1800:1300));
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=24?"¡Increíble! That's exam-ready speed.":score>=15?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        var parts=m.review.split(" = ");
+        html+="<li>"+esc(parts[0])+" = <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={es:es,timeES:timeES,atES:atES,MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
