@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Food, drink &amp; eating out: play Café Order Rush | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: food, drink and eating out. Read the order and serve the right tray, prices in euro, quisiera, la cuenta, de primero, meal times in Spain. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.bubble{display:inline-block;background:var(--cream);border:1px solid var(--cream-line);border-radius:16px;padding:10px 16px;margin-top:10px}
+.choices.tray .choice{font-size:16px;font-weight:600;line-height:1.35;text-align:left;padding:12px 14px}
+.choices.tray .choice .em{font-size:26px;letter-spacing:4px;display:block;margin-bottom:2px}
+.choices.price .choice{font-size:22px;font-weight:800}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Café Order Rush</h1>
+        <p>Food, drink and eating out. You're the waiter: read the order and serve the right tray, fast. Then prices in euro, <b>quisiera</b>, <b>la cuenta</b>, <b>de primero</b> and meal times in Spain. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="order"><div><b>Café Order Rush</b><span>Read the customer's order and serve the right tray, plus prices</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="restaurant"><div><b>At the restaurant</b><span>quisiera, de primero, la cuenta, tengo hambre, meal times</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening café 🔊</b><span id="listenNote">Hear the order or the price, serve the right one</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.11, 1.12, 1.14, 3.4, 3.9 (2017 spec, exams 2027–2028) · 1.10, 3.4, 3.9 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Food, drink &amp; eating out</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li><b>Quiero</b> un bocadillo. <span style="color:var(--muted)">(I want a roll.)</span></li>
+          <li><b>Quisiera</b> un bocadillo, por favor. <span style="color:var(--muted)">(I'd like a roll, please.)</span></li>
+          <li><b>¿Me pone</b> un bocadillo, por favor? <span style="color:var(--muted)">(Can I have a roll, please?)</span></li>
+          <li><b>Para mí,</b> un bocadillo. <span style="color:var(--muted)">(For me, a roll.)</span></li>
+        </ul>
+        <p>All four get you the same roll. Which one would you say to a waiter you don't know? Which one sounds a bit blunt? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Quiero</b> is fine with <i>por favor</i>, but on its own it can sound blunt, like "I want". <b>Quisiera</b> (I'd like) is the polite one, and the safest in the exam. <b>¿Me pone…?</b> is what people really say at a bar or café in Spain. <b>Para mí</b> is handy when you're ordering in a group. Always add <b>por favor</b> and <b>gracias</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">At the café or restaurant</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>The waiter says</th><th>You say</th></tr></thead>
+          <tbody>
+            <tr><td>¿Qué va a tomar? <span style="color:var(--muted)">(What will you have?)</span></td><td>Quisiera un café con leche, por favor.</td></tr>
+            <tr><td>¿Y para beber? <span style="color:var(--muted)">(And to drink?)</span></td><td>Para beber, un agua.</td></tr>
+            <tr><td>¿Algo más? <span style="color:var(--muted)">(Anything else?)</span></td><td>Nada más, gracias.</td></tr>
+            <tr><td>Aquí tiene. <span style="color:var(--muted)">(Here you are.)</span></td><td>¡Está muy rico! <span style="color:var(--muted)">(It's delicious!)</span></td></tr>
+            <tr><td>¿Cuántos son? <span style="color:var(--muted)">(How many of you?)</span></td><td>Una mesa para cuatro, por favor.</td></tr>
+            <tr><td>Son ocho euros con cincuenta.</td><td>La cuenta, por favor. · ¿Cuánto es?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">Three courses: <b>de primero</b> (starter) · <b>de segundo</b> (main course) · <b>de postre</b> (dessert). <em>De primero, la sopa; de segundo, el pollo; de postre, un flan.</em> Other handy lines: <b>la carta</b> (the menu) · <b>¿Qué hay de postre?</b> (What is there for dessert?) · <b>Tengo hambre</b> (I'm hungry) · <b>Tengo sed</b> (I'm thirsty) · <b>Soy vegetariano / vegetariana</b> · <b>No como carne</b> (I don't eat meat) · <b>Soy alérgico / alérgica a…</b></p>
+        <div class="note" style="margin-top:12px"><b>Watch out:</b> <b>la cuenta</b> = the bill, but <b>la carta</b> = the menu. And the waiter speaks to you as <b>usted</b> (polite "you"): <em>¿Qué <b>va</b> a tomar? ¿Qué <b>quiere</b>?</em> not <em>vas / quieres</em>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Prices: ¿Cuánto cuesta? ¿Cuánto cuestan?</h3>
+        <p><b>¿Cuánto cuesta</b> el bocadillo? — <b>Cuesta</b> tres euros con cincuenta (€3.50). &nbsp;·&nbsp; <b>¿Cuánto cuestan</b> las patatas fritas? — <b>Cuestan</b> dos euros con cincuenta. One thing = <b>cuesta</b>, more than one = <b>cuestan</b> (just like <em>gusta / gustan</em>).</p>
+        <p style="margin-top:8px"><b>un euro</b> (€1) · <b>un euro con veinte</b> (€1.20) · <b>cuatro euros con cincuenta</b> (€4.50) · <b>doce euros</b> (€12). In Spain prices are written with a comma: <b>3,50 €</b>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Meals and when Spain eats them</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Meal</th><th>Verb (I…)</th><th>When in Spain</th></tr></thead>
+          <tbody>
+            <tr><td>el desayuno (breakfast)</td><td>desayuno</td><td>7:30–9:00, often light: tostadas, café</td></tr>
+            <tr><td>la comida (lunch, the big meal)</td><td>como</td><td>about 2:00–3:30 pm</td></tr>
+            <tr><td>la merienda (afternoon snack)</td><td>meriendo</td><td>about 5:30–6:30 pm</td></tr>
+            <tr><td>la cena (dinner)</td><td>ceno</td><td>about 9:00–10:00 pm</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> lunch is the main meal in Spain, and many restaurants offer a <b>menú del día</b> on weekdays: a fixed price for a starter, a main course, a dessert (or coffee), bread and a drink. <b>Tapas</b> are small plates to share with friends, for example <i>croquetas</i>, <i>tortilla</i> or <i>patatas bravas</i>. Compare with Ireland: what time do you have dinner?</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b>, orders and prices are classic details: listen for <b>what</b> (bocadillo de jamón or de queso?), <b>how many</b> and <b>how much</b> (cuatro euros con cincuenta or catorce?). In <b>Reading</b>, menus and café signs come up: learn <em>primero, segundo, postre, bebidas, la cuenta</em>. In <b>Writing</b>, say what you eat and when, with an opinion: <em>Normalmente desayuno a las ocho. Me encanta la tortilla española porque es muy rica, pero no me gusta el pescado.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/food-and-eating-out-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/PAYHIPCODE" target="_blank" rel="noopener">Food &amp; Eating Out Teacher Pack (€5)</a>: café role-play with menus, Food Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function uniq(a){var o=[];a.forEach(function(x){if(x&&o.indexOf(x)<0)o.push(x);});return o;}
+
+  /* ---------- Menu: indefinite, definite, noun, English, emoji, price, category (f food, d drink, p dessert), plural ---------- */
+  var M=[
+    ["un","el","bocadillo de jamón","ham roll","🥖",3.5,"f"],
+    ["un","el","bocadillo de queso","cheese roll","🧀",3,"f"],
+    ["una","la","tortilla española","Spanish omelette","🍳",4,"f"],
+    ["una","la","ensalada mixta","mixed salad","🥗",5,"f"],
+    ["una","la","hamburguesa","burger","🍔",6,"f"],
+    ["unas","las","patatas fritas","chips","🍟",2.5,"f",1],
+    ["unas","las","croquetas","croquettes","🥟",4.5,"f",1],
+    ["una","la","paella","paella","🥘",9,"f"],
+    ["una","la","pizza","pizza","🍕",7.5,"f"],
+    ["un","el","pollo con patatas","chicken and chips","🍗",8.5,"f"],
+    ["una","la","sopa de verduras","vegetable soup","🍲",4.5,"f"],
+    ["un","el","cruasán","croissant","🥐",2,"f"],
+    ["unas","las","tostadas","toast","🍞",2.2,"f",1],
+    ["un","el","café con leche","white coffee","☕",1.8,"d"],
+    ["un","el","té","tea","🍵",1.5,"d"],
+    ["un","el","zumo de naranja","orange juice","🧃",2.5,"d"],
+    ["un","el","agua","water","💧",1.5,"d"],
+    ["una","la","limonada","lemonade","🍋",2.2,"d"],
+    ["un","el","batido de fresa","strawberry milkshake","🍓",3,"d"],
+    ["un","el","chocolate caliente","hot chocolate","🍫",2.8,"d"],
+    ["un","el","refresco","soft drink","🥤",2,"d"],
+    ["un","el","helado de chocolate","chocolate ice cream","🍨",3,"p"],
+    ["un","el","flan","crème caramel","🍮",3.5,"p"],
+    ["una","la","tarta de manzana","apple tart","🥧",4,"p"],
+    ["una","la","tarta de chocolate","chocolate cake","🍰",4,"p"]
+  ].map(function(x,i){return {id:i,ind:x[0],def:x[1],es:x[2],en:x[3],e:x[4],p:x[5],c:x[6],pl:!!x[7]};});
+  function cat(c){return M.filter(function(m){return m.c===c;});}
+  var CUST=["🧑","👩","👨","👧","👦","👵","👴","👩‍🦰","🧔"];
+
+  /* ---------- Numbers and prices ---------- */
+  var U=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
+  var T={3:"treinta",4:"cuarenta",5:"cincuenta",6:"sesenta",7:"setenta",8:"ochenta",9:"noventa"};
+  function num(n){if(n<30)return U[n];var t=Math.floor(n/10),u=n%10;return T[t]+(u?" y "+U[u]:"");}
+  function split(p){var e=Math.floor(p+1e-9),c=Math.round((p-e)*100);return [e,c];}
+  function priceES(p){var s=split(p),e=s[0],c=s[1];
+    var eu=e===1?"un euro":num(e).replace(/uno$/,"ún")+" euros";
+    return c?eu+" con "+num(c):eu;}
+  function priceEN(p){return "€"+p.toFixed(2);}
+  function pricePool(p){
+    var s=split(p),e=s[0],c=s[1],o=[];
+    o.push([e+1,c]);if(e>1)o.push([e-1,c]);if(e<10)o.push([e+10,c]);
+    o.push([e,(c+50)%100]);o.push([e,c>=20?c-20:c+20]);
+    if(c%10===0&&c>0&&c<100&&e<10&&e>0)o.push([c/10,e*10]);
+    if(e>=12&&e<20)o.push([e-10,c]);
+    return uniq(shuffle(o).filter(function(x){return x[0]>=1&&x[0]<30&&x[1]<100;}).map(function(x){return priceEN(x[0]+x[1]/100);}).filter(function(x){return x!==priceEN(p);})).slice(0,3);
+  }
+
+  /* ---------- Orders ---------- */
+  function list(es){return es.length===2?es[0]+" y "+es[1]:es.slice(0,-1).join(", ")+" y "+es[es.length-1];}
+  function orderItems(){
+    var f=rnd(cat("f")),d=rnd(cat("d")),items=[f,d];
+    var r=Math.random();
+    if(r<.25)items=[f,d,rnd(cat("p"))];
+    else if(r<.35)items=[f,rnd(cat("f").filter(function(x){return x!==f;})),d];
+    return items;
+  }
+  function orderSentence(items){
+    var ph=items.map(function(m){return m.ind+" "+m.es;}),L=list(ph);
+    var k=Math.floor(Math.random()*5);
+    if(k===0)return "Quisiera "+L+", por favor.";
+    if(k===1)return "¿Me pone "+L+", por favor?";
+    if(k===2)return "Para mí, "+L+", por favor.";
+    if(k===3)return "Quiero "+L+", por favor.";
+    return "Me gustaría "+L+", por favor.";
+  }
+  function tray(items){return items.map(function(m){return m.e;}).join(" ")+"|"+items.map(function(m){return m.en;}).join(" + ");}
+  function similar(m){
+    var same=cat(m.c).filter(function(x){return x!==m;});
+    var head=m.es.split(" ")[0],close=same.filter(function(x){return x.es.split(" ")[0]===head||x.es.split(" ").pop()===m.es.split(" ").pop();});
+    return Math.random()<.6&&close.length?rnd(close):rnd(same);
+  }
+  function wrongTrays(items){
+    var out=[],ans=tray(items),n=0;
+    while(out.length<3&&n<40){n++;
+      var w=items.slice(),i=Math.floor(Math.random()*w.length);w[i]=similar(w[i]);
+      if(Math.random()<.25&&w.length>1){var j=(i+1)%w.length;w[j]=similar(w[j]);}
+      if(Math.random()<.15&&w.length===3)w=w.slice(0,2);
+      if(new Set(w).size<w.length)continue;var t=tray(w);if(t!==ans&&out.indexOf(t)<0)out.push(t);}
+    return out;
+  }
+  function trayReview(items){return items.map(function(m){return m.en;}).join(" + ");}
+  function qOrder(spoken){
+    var items=orderItems(),s=orderSentence(items);
+    return {kind:"tray",who:spoken?"":rnd(CUST),en:spoken?"Listen. Serve the right order!":"Serve the right order!",frame:spoken?"":s,bubble:!spoken,speak:spoken?s:"",listen:spoken?1:0,
+      answer:tray(items),wrong:wrongTrays(items),review:s+" = "+trayReview(items)};
+  }
+  function gOrder(){return qOrder(false);}
+  function lOrder(){return qOrder(true);}
+
+  function qPrice(spoken){
+    var m=rnd(M),v=m.pl?"cuestan":"cuesta",ans=priceEN(m.p);
+    var es="—¿Cuánto "+v+" "+m.def+" "+m.es+"? —"+cap(v)+" "+priceES(m.p)+".";
+    if(spoken){var sp=cap(m.def+" "+m.es)+": "+priceES(m.p)+".";
+      return {kind:"price",listen:1,speak:sp,en:"Listen. How much is it?",answer:ans,wrong:pricePool(m.p),review:sp+" = "+m.en+" "+ans};}
+    return {kind:"price",who:m.e,en:"How much is the "+m.en+"?",frame:es,answer:ans,wrong:pricePool(m.p),review:es+" = "+ans};
+  }
+  function gPrice(){return qPrice(false);}
+  function lPrice(){
+    if(Math.random()<.5)return qPrice(true);
+    var p=rnd([1.2,1.5,2.3,3.4,4.5,5.6,6.2,7.8,8.5,9.9,12.5,13.4,14.6,15.3,16.8,18.4,19.5,11.2]);
+    var sp="Son "+priceES(p)+".";
+    return {kind:"price",listen:1,speak:sp,en:"Listen. ¿Cuánto es? How much is the bill?",answer:priceEN(p),wrong:pricePool(p),review:sp+" = "+priceEN(p)};
+  }
+  function qWord(){
+    var m=rnd(M),others=shuffle(cat(m.c).filter(function(x){return x!==m;})).slice(0,3);
+    if(Math.random()<.5)return {who:"",en:"What is it in English?",frame:cap(m.ind+" "+m.es),answer:m.e+" "+m.en,wrong:others.map(function(x){return x.e+" "+x.en;}),review:cap(m.ind+" "+m.es)+" = "+m.en};
+    return {who:m.e,en:m.en,frame:"How do you say it in Spanish?",answer:m.ind+" "+m.es,wrong:others.map(function(x){return x.ind+" "+x.es;}),review:m.en+" = "+m.ind+" "+m.es};
+  }
+  function qArticle(){
+    var m=rnd(M),opts=["un","una","unos","unas"],w=opts.filter(function(x){return x!==m.ind;});
+    return {who:m.e,en:"un, una, unos or unas?",frame:"___ "+m.es,answer:m.ind,wrong:w,review:m.ind+" "+m.es+" ("+m.en+")"};
+  }
+  function qGusta(){
+    var m=rnd(M.filter(function(x){return x.c!=="d"||Math.random()<.4;})),pre=rnd([["Me","I like"],["Me encanta","I love"],["No me","I don't like"]]);
+    var ans,w;
+    if(pre[0]==="Me encanta"){ans=m.pl?"encantan":"encanta";w=m.pl?["encanta","encanto","encantas"]:["encantan","encanto","encantas"];
+      return {who:m.e,en:"I love the "+m.en+".",frame:"Me ___ "+m.def+" "+m.es+".",answer:ans,wrong:w,review:"Me "+ans+" "+m.def+" "+m.es+". ("+(m.pl?"plural: encantan":"one thing: encanta")+")"};}
+    ans=m.pl?"gustan":"gusta";w=m.pl?["gusta","gusto","gustas"]:["gustan","gusto","gustas"];
+    return {who:m.e,en:pre[1]+" the "+m.en+".",frame:pre[0]+" ___ "+m.def+" "+m.es+".",answer:ans,wrong:w,review:pre[0]+" "+ans+" "+m.def+" "+m.es+". ("+(m.pl?"plural: gustan":"one thing: gusta")+")"};
+  }
+
+  /* ---------- Restaurant phrases and meals ---------- */
+  var FIX=[
+    ["¿Qué va a ___? (waiter)","What will you have?","tomar",["toma","tomé","comida"]],
+    ["___ un café con leche, por favor.","I'd like a white coffee, please. (polite)","Quisiera",["Quise","Quiere","Gusta"]],
+    ["Tengo ___. ¿Me pone un agua?","I'm thirsty. Can I have a water?","sed",["hambre","frío","sueño"]],
+    ["Tengo mucha ___. Quiero un bocadillo.","I'm very hungry. I want a roll.","hambre",["sed","calor","comida"]],
+    ["De ___, quiero la sopa.","For the starter, I want the soup.","primero",["postre","segundo","bebida"]],
+    ["De ___, pollo con patatas.","For the main course, chicken and chips.","segundo",["primero","postre","cena"]],
+    ["De ___, un flan.","For dessert, a crème caramel.","postre",["primero","segundo","desayuno"]],
+    ["La ___, por favor. ¿Cuánto es?","The bill, please. How much is it?","cuenta",["carta","cuesta","mesa"]],
+    ["¿Me trae la ___, por favor? Quiero ver los platos.","Can you bring me the menu, please? I want to see the dishes.","carta",["cuenta","mesa","cuchara"]],
+    ["Una ___ para cuatro, por favor.","A table for four, please.","mesa",["silla","carta","cuenta"]],
+    ["¿Cuánto ___ el bocadillo?","How much is the roll?","cuesta",["cuestan","cuenta","cuestas"]],
+    ["¿Cuánto ___ las patatas fritas?","How much are the chips?","cuestan",["cuesta","cuento","cuestas"]],
+    ["La paella está muy ___.","The paella is delicious.","rica",["rico","ricos","ricas"]],
+    ["Los churros están muy ___.","The churros are delicious.","ricos",["rico","rica","ricas"]],
+    ["Soy vegetariana: no ___ carne.","I'm a vegetarian: I don't eat meat.","como",["come","comí","comida"]],
+    ["¿Algo ___? (waiter)","Anything else?","más",["menos","mucho","bien"]],
+    ["Nada más, ___.","Nothing else, thanks.","gracias",["por favor","de nada","perdón"]],
+    ["Aquí ___. (waiter)","Here you are.","tiene",["tengo","está","hay"]],
+    ["___ a las nueve y media.","I have dinner at half past nine.","Ceno",["Como","Desayuno","Meriendo"]],
+    ["___ a las ocho: tostadas y un café.","I have breakfast at eight: toast and a coffee.","Desayuno",["Ceno","Como","Meriendo"]],
+    ["En España, la ___ es a las dos o a las tres.","In Spain, lunch is at two or three.","comida",["cena","merienda","desayuno"]],
+    ["A las seis ___ un bocadillo.","At six I have a roll as an afternoon snack.","meriendo",["ceno","desayuno","bebo"]],
+    ["Para ___, un zumo de naranja.","To drink, an orange juice.","beber",["comer","bebida","bebo"]],
+    ["¿Qué ___ de postre?","What is there for dessert?","hay",["es","está","son"]],
+    ["¿Qué ___ usted? (waiter)","What would you like? (polite)","quiere",["quieres","quiero","quieren"]],
+    ["Soy ___ a los frutos secos.","I'm allergic to nuts.","alérgico",["alergia","alérgicos","alergias"]],
+    ["El menú del ___ cuesta doce euros.","The set menu costs twelve euros.","día",["mesa","noche","dinero"]]
+  ];
+  function qFix(){var x=rnd(FIX);return {who:"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace(/ \((waiter)\)/,"").replace("___",x[2])+" = "+x[1]};}
+  var MEAN=[
+    ["¿Qué va a tomar?","What will you have?"],["La cuenta, por favor.","The bill, please."],["¿Algo más?","Anything else?"],
+    ["Nada más, gracias.","Nothing else, thanks."],["Está muy rico.","It's delicious."],["Una mesa para dos, por favor.","A table for two, please."],
+    ["¿Me trae la carta?","Can you bring me the menu?"],["Tengo sed.","I'm thirsty."],["Tengo hambre.","I'm hungry."],
+    ["Soy alérgico a los frutos secos.","I'm allergic to nuts."],["¿Qué hay de postre?","What is there for dessert?"],
+    ["¿Y para beber?","And to drink?"],["Aquí tiene.","Here you are."],["¿Cuánto es?","How much is it?"],
+    ["Para llevar, por favor.","To take away, please."],["No como carne.","I don't eat meat."],
+    ["Ceno a las nueve.","I have dinner at nine."],["Desayuno cereales.","I have cereal for breakfast."]
+  ];
+  function qMean(){var x=rnd(MEAN),w=shuffle(MEAN.filter(function(y){return y!==x;})).slice(0,3).map(function(y){return y[1];});
+    return {who:"",en:"What does it mean?",frame:x[0],answer:x[1],wrong:w,review:x[0]+" = "+x[1],listen:1};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Quisiera una mesa para tres, por favor.","I'd like a table for three, please.",["I'd like a table for two, please.","I'd like the bill, please.","I'd like a table for three at nine."]],
+    ["Para mí, la sopa de primero y el pollo de segundo.","For me, the soup as a starter and the chicken as a main.",["For me, the chicken as a starter and the soup as a main.","For me, the salad as a starter and the chicken as a main.","For me, the soup and an ice cream for dessert."]],
+    ["Tengo mucha sed. ¿Me pone un agua, por favor?","I'm very thirsty. Can I have a water, please?",["I'm very hungry. Can I have a roll, please?","I'm very thirsty. Can I have an orange juice, please?","I'm cold. Can I have a hot chocolate, please?"]],
+    ["En mi casa cenamos a las nueve y media.","At home we have dinner at half past nine.",["At home we have lunch at half past nine.","At home we have dinner at half past eight.","At home we have breakfast at half past nine."]],
+    ["La cuenta, por favor. ¿Cuánto es?","The bill, please. How much is it?",["The menu, please. How much is it?","The bill, please. Is service included?","A table, please. How many are you?"]],
+    ["No como carne porque soy vegetariano.","I don't eat meat because I'm a vegetarian.",["I don't eat fish because I'm a vegetarian.","I eat a lot of meat.","I don't eat meat because I don't like it."]],
+    ["El menú del día cuesta doce euros con cincuenta.","The set menu costs €12.50.",["The set menu costs €2.50.","The set menu costs €12.15.","The dessert costs €12.50."]],
+    ["De postre quiero un helado de chocolate.","For dessert I want a chocolate ice cream.",["For dessert I want a chocolate cake.","For a starter I want a chocolate ice cream.","For dessert I want a strawberry milkshake."]],
+    ["Me encanta la tortilla española, pero odio el pescado.","I love Spanish omelette, but I hate fish.",["I love fish, but I hate Spanish omelette.","I like Spanish omelette and fish.","I hate Spanish omelette, but I love fish."]],
+    ["Para desayunar tomo tostadas y un café con leche.","For breakfast I have toast and a white coffee.",["For breakfast I have cereal and a white coffee.","For lunch I have toast and a white coffee.","For breakfast I have toast and an orange juice."]],
+    ["¿Qué va a tomar? —Un bocadillo de queso, por favor.","What will you have? —A cheese roll, please.",["What will you have? —A ham roll, please.","What will you drink? —A cheese roll, please.","Anything else? —A cheese roll, please."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    order:[gOrder,gOrder,gOrder,gPrice,qWord],
+    restaurant:[qFix,qFix,qFix,qMean,qMean,qGusta,qArticle],
+    listen:[lOrder,lOrder,lOrder,lPrice,lPrice,lFix,lFix],
+    mixed:[gOrder,gOrder,gPrice,qWord,qFix,qFix,qMean,qGusta,qArticle]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the order or the price, serve the right one (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function label(f){return f.indexOf("|")>0?f.split("|")[1]:f;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    $("frame").innerHTML=q.bubble?"<span class='bubble'>"+fr+"</span>":fr;
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=shuffle([q.answer].concat(q.wrong));
+    if(q.kind==="tray")box.className="choices tray"+(opts.some(function(x){return label(x).length>34;})?" one":"");
+    else if(q.kind==="price")box.className="choices price";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.kind==="tray"){var pr=f.split("|");b.innerHTML="<span class='em'>"+esc(pr[0])+"</span>"+esc(pr[1]);}
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+label(f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:label(f),listen:!!(current.listen||current.kind==="tray")});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:400):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Best waiter in Spain.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,M:M,priceES:priceES,pricePool:pricePool};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
