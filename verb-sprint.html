@@ -68,13 +68,43 @@
       <div class="sec-head" style="text-align:center">
         <span class="pill">Junior Cycle Spanish · Free game</span>
         <h1 style="margin-top:12px">Verb Sprint</h1>
-        <p><b>Step 1:</b> revise the present tense (5 minutes). <b>Step 2:</b> play. 60 seconds, pick the right form, beat your score.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#revise">Revise first</a><a class="btn ghost" href="#game" style="color:var(--ink);border-color:var(--line)">Skip to the game</a></div>
+        <p>60 seconds. Pick the right present-tense form. How many can you get in a row? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
       </div>
 
 
-      <div class="panel" id="revise" style="margin-bottom:24px">
-        <span class="pill">Step 1 · Revise</span>
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your sprint</h2>
+        <div class="modes">
+          <button class="mode" data-mode="regular"><div><b>Regular verbs</b><span>-ar, -er and -ir verbs like hablar, comer, vivir</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="irregular"><div><b>Irregular verbs</b><span>ser, estar, tener, ir, hacer and more</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Spec link: Language awareness · using verbs correctly in the present tense</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="verb" id="verb"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another sprint</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
         <h2 style="font-size:26px;margin:12px 0 10px">The present tense in Spanish</h2>
         <p>You use the present tense to say what you do <em>usually</em> or what is happening <em>now</em>: <b>Vivo en Cork</b> (I live in Cork), <b>Juego al fútbol los sábados</b> (I play football on Saturdays).</p>
 
@@ -120,39 +150,9 @@
         <p style="margin-top:12px"><b>4. Watch out for ver</b>: veo, ves, ve, vemos, veis, ven (no accents!).</p>
 
         <div class="note" style="margin-top:18px"><b>Exam tip:</b> in the Writing section, examiners reward accurate verbs. Before you hand up, check every verb: <em>who</em> is doing it, and does the ending match? <b>Yo</b> → -o is the quickest mark to win (or lose).</div>
-        <div class="actions"><a class="btn" href="#game">Ready? Play Verb Sprint ↓</a></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a></div>
       </div>
 
-      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
-        <span class="pill">Step 2 · Play</span>
-        <h2 style="font-size:22px;margin-top:12px">Choose your sprint</h2>
-        <div class="modes">
-          <button class="mode" data-mode="regular"><div><b>Regular verbs</b><span>-ar, -er and -ir verbs like hablar, comer, vivir</span></div><span class="go">→</span></button>
-          <button class="mode" data-mode="irregular"><div><b>Irregular verbs</b><span>ser, estar, tener, ir, hacer and more</span></div><span class="go">→</span></button>
-          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
-        </div>
-        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
-        <span class="lo">Spec link: Language awareness · using verbs correctly in the present tense</span>
-      </div>
-
-      <div class="panel" id="play" hidden>
-        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
-        <div class="timer"><i id="bar"></i></div>
-        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="verb" id="verb"></div></div>
-        <div class="choices" id="choices"></div>
-      </div>
-
-      <div class="panel" id="end" hidden>
-        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
-        <div class="big" id="final">0</div>
-        <p style="text-align:center" id="summary"></p>
-        <div class="review" id="review"></div>
-        <div class="actions">
-          <button class="btn" id="again">Play again</button>
-          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another sprint</button>
-          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise again</a>
-        </div>
-      </div>
     </div>
   </div>
 </section>
