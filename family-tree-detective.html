@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Me and my family: play Family Tree Detective | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: family words, mi/mis and su/sus, tener for ages and pets. Read the clues, crack the family tree. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.tree{display:block;width:100%;max-width:520px;margin:4px auto 10px}
+.tree rect{fill:#fff;stroke:#C9D1DA;stroke-width:1.5}
+.tree .me rect{fill:#FFF3C4;stroke:#E2B93B}
+.tree .hl rect{stroke:#2E7D57;stroke-width:4;fill:#E4F2EA}
+.tree .ok rect{stroke:#2E7D57;stroke-width:4;fill:#E4F2EA}
+.tree text{font-family:Inter,sans-serif;text-anchor:middle;fill:#1B2430}
+.tree .nm{font-size:15.5px;font-weight:800}
+.tree .em{font-size:16px;font-weight:700}
+.tree path{stroke:#9AA3AE;stroke-width:2;fill:none}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Family Tree Detective</h1>
+        <p>Read the clues and crack the family tree. Who is <b>la tía</b>? <b>Mi</b> or <b>mis</b>? <b>Tengo</b> or <b>tiene</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your case</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tree"><div><b>Tree detective 🔍</b><span>Read the family tree: who is who? (90 seconds)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="gram"><div><b>Mi, mis, su &amp; tener</b><span>My or his/her? One or more? Tengo, tiene or tienen?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening detective 🔊</b><span id="listenNote">Hear someone talk about their family, pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.10, 1.13, 1.19 (2017 spec, exams 2027–2028) · 1.9, 1.12 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div id="treeBox"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another case</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Me and my family</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these words:</p>
+        <ul>
+          <li><b>el hermano</b> (brother) · <b>la hermana</b> (sister) · <b>los hermanos</b> (?)</li>
+          <li><b>el padre</b> (dad) · <b>la madre</b> (mum) · <b>los padres</b> (?)</li>
+          <li><b>el tío</b> (uncle) · <b>la tía</b> (aunt) · <b>los tíos</b> (?)</li>
+        </ul>
+        <p>What do the plural words mean? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The masculine plural covers a <b>mixed group</b>. <b>Los hermanos</b> = brothers and sisters, <b>los padres</b> = parents, <b>los tíos</b> = aunts and uncles, <b>los abuelos</b> = grandparents. So <em>¿Tienes hermanos?</em> means "Do you have any brothers or sisters?"</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Family words</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Male</th><th>Female</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>el padre / papá</td><td>la madre / mamá</td><td>dad / mum</td></tr>
+            <tr><td>el hermano</td><td>la hermana</td><td>brother / sister</td></tr>
+            <tr><td>el abuelo</td><td>la abuela</td><td>grandad / granny</td></tr>
+            <tr><td>el tío</td><td>la tía</td><td>uncle / aunt</td></tr>
+            <tr><td>el primo</td><td>la prima</td><td>cousin</td></tr>
+            <tr><td>el hijo</td><td>la hija</td><td>son / daughter</td></tr>
+            <tr><td>el marido</td><td>la mujer</td><td>husband / wife</td></tr>
+            <tr><td>el padrastro</td><td>la madrastra</td><td>stepdad / stepmum</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px"><b>Soy hijo único</b> (boy) / <b>Soy hija única</b> (girl) = I'm an only child. <b>Mis padres están separados / divorciados.</b> = My parents are separated / divorced.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">My, your, his/her: one thing or more?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>one person</th><th>more than one</th></tr></thead>
+          <tbody>
+            <tr><td>my</td><td><b>mi</b> hermano</td><td><b>mis</b> hermanos</td></tr>
+            <tr><td>your</td><td><b>tu</b> madre</td><td><b>tus</b> padres</td></tr>
+            <tr><td>his / her / their</td><td><b>su</b> tía</td><td><b>sus</b> primos</td></tr>
+            <tr><td>our</td><td><b>nuestro</b> perro / <b>nuestra</b> abuela</td><td><b>nuestros</b> tíos / <b>nuestras</b> primas</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> <b>mi</b> or <b>mis</b> depends on the person you're talking <b>about</b>, not on you. <em>Mis abuelos</em> (more than one grandparent). And <b>tu</b> (your) has no accent; <b>tú</b> (you) does. For a name, use <b>de</b>: <em>la hermana <b>de</b> Pablo</em> (Pablo's sister). There's no 's in Spanish.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Tener: ages, brothers and sisters, pets</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>(yo) <b>tengo</b></td><td>(nosotros) <b>tenemos</b></td></tr>
+            <tr><td>(tú) <b>tienes</b></td><td>(vosotros) <b>tenéis</b></td></tr>
+            <tr><td>(él / ella) <b>tiene</b></td><td>(ellos / ellas) <b>tienen</b></td></tr>
+          </tbody></table></div>
+        <ul style="margin-top:10px">
+          <li><b>Tengo</b> dos hermanos y una hermana.</li>
+          <li>Mi abuela <b>tiene</b> setenta años. <span style="color:var(--muted)">(age uses tener, never ser)</span></li>
+          <li><b>Tenemos</b> un perro y dos gatos. <b>No tengo</b> mascotas.</li>
+          <li>Mi hermano <b>se llama</b> Diego. Mis primos <b>se llaman</b> Ana y Hugo.</li>
+        </ul>
+        <p>Pets: un perro, un gato, un conejo (rabbit), un pájaro (bird), un hámster, una tortuga, un pez → <b>dos peces</b> (fish).</p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> in the Writing section, don't just list people. Add an age, a description and an opinion: <em>Tengo una hermana. Se llama Lucía y tiene diez años. Es muy divertida y <b>me llevo bien con ella</b>, pero mi hermano es un poco pesado.</em> In Listening, watch for <b>tío/tía</b>, <b>primo/prima</b>, and ages like <b>catorce/cuarenta</b> and <b>quince/cincuenta</b>.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/me-and-my-family-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/eMyxw" target="_blank" rel="noopener">Me &amp; My Family Teacher Pack (€5)</a>: Family Tree info gap, Family Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function uniq3(ans,c){var seen={},out=[];seen[ans]=1;shuffle(c.slice()).forEach(function(x){if(!seen[x]&&out.length<3){seen[x]=1;out.push(x);}});return out;}
+
+  /* ---------- Numbers (ages) ---------- */
+  var U=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
+  var T={30:"treinta",40:"cuarenta",50:"cincuenta",60:"sesenta",70:"setenta",80:"ochenta",90:"noventa"};
+  function es(n){if(n<30)return U[n];var t=Math.floor(n/10)*10,u=n%10;return T[t]+(u?" y "+U[u]:"");}
+  var TRAP={13:30,14:40,15:50,40:14,50:15,66:76,76:66,60:70,70:60,16:60,12:2};
+  function trap(n){return TRAP[n]||(n+(Math.random()<.5?1:-1)*(n>20?10:2));}
+
+  /* ---------- People ---------- */
+  var MN=["Pablo","Javier","Antonio","Luis","Diego","Carlos","Miguel","Sergio","Manuel","Jorge","Álvaro","Hugo","Daniel","Rafael","Andrés","Pedro"];
+  var FN=["Lucía","Elena","Carmen","Rosa","Sofía","Marta","Ana","Isabel","Paula","Laura","Pilar","Teresa","Alba","Claudia","Inés","Julia"];
+  // Relations seen from "yo": Spanish word, gender, English
+  var R={abuelo:["abuelo","m","grandad"],abuela:["abuela","f","granny"],padre:["padre","m","dad"],madre:["madre","f","mum"],
+    tio:["tío","m","uncle"],tia:["tía","f","aunt"],primo:["primo","m","cousin"],prima:["prima","f","cousin"],
+    hermano:["hermano","m","brother"],hermana:["hermana","f","sister"]};
+  function art(k){return (R[k][1]==="m"?"el ":"la ")+R[k][0];}
+
+  // Tree slots: key, relation, x-centre, row, emoji
+  function makeFamily(){
+    var m=shuffle(MN.slice()),f=shuffle(FN.slice());
+    var yoM=Math.random()<.5,sibM=Math.random()<.5;
+    var S=[
+      {k:"gfP",rel:"abuelo",x:50,r:0,e:"👴"},{k:"gmP",rel:"abuela",x:150,r:0,e:"👵"},
+      {k:"gfM",rel:"abuelo",x:250,r:0,e:"👴"},{k:"gmM",rel:"abuela",x:350,r:0,e:"👵"},
+      {k:"tia",rel:"tia",x:50,r:1,e:"👩"},{k:"padre",rel:"padre",x:150,r:1,e:"👨"},
+      {k:"madre",rel:"madre",x:250,r:1,e:"👩"},{k:"tio",rel:"tio",x:350,r:1,e:"👨"},
+      {k:"primo",rel:"primo",x:50,r:2,e:"👦"},{k:"yo",rel:"yo",x:150,r:2,e:yoM?"👦":"👧"},
+      {k:"sib",rel:sibM?"hermano":"hermana",x:250,r:2,e:sibM?"👦":"👧"},{k:"prima",rel:"prima",x:350,r:2,e:"👧"}
+    ];
+    S.forEach(function(s){var male=s.rel==="yo"?yoM:R[s.rel][1]==="m";s.name=male?m.pop():f.pop();});
+    var by={};S.forEach(function(s){by[s.k]=s;});
+    return {S:S,by:by,yoM:yoM};
+  }
+  var Y=[10,125,240],BW=92,BH=52;
+  function treeSVG(fam,hl,ok){
+    var h='<svg class="tree" viewBox="0 0 400 300" role="img" aria-label="Family tree">';
+    var top=function(r){return Y[r];},mid=function(r){return Y[r]+BH/2;},bot=function(r){return Y[r]+BH;};
+    var p="";
+    // marriages
+    p+="M96 "+mid(0)+"H104M296 "+mid(0)+"H304M196 "+mid(1)+"H204";
+    // grandparents to children
+    p+="M100 "+mid(0)+"V108M50 108H150M50 108V"+top(1)+"M150 108V"+top(1);
+    p+="M300 "+mid(0)+"V108M250 108H350M250 108V"+top(1)+"M350 108V"+top(1);
+    // parents to children
+    p+="M200 "+mid(1)+"V222M150 222H250M150 222V"+top(2)+"M250 222V"+top(2);
+    p+="M50 "+bot(1)+"V"+top(2)+"M350 "+bot(1)+"V"+top(2);
+    h+='<path d="'+p+'"/>';
+    fam.S.forEach(function(s){
+      var cls=s.k==="yo"?"me":"";if(s.k===hl)cls="hl";if(s.k===ok)cls="ok";
+      var y=Y[s.r];
+      h+='<g class="'+cls+'"><rect x="'+(s.x-BW/2)+'" y="'+y+'" width="'+BW+'" height="'+BH+'" rx="10"/>'+
+        '<text class="em" x="'+s.x+'" y="'+(y+21)+'">'+s.e+(s.k==="yo"?" yo":"")+'</text>'+
+        '<text class="nm" x="'+s.x+'" y="'+(y+42)+'">'+s.name+'</text></g>';
+    });
+    return h+"</svg>";
+  }
+
+  /* ---------- Mode 1: Tree detective ---------- */
+  // A: "Rosa es ___ de Pablo."
+  function qWhoIs(){
+    var fam=makeFamily(),yo=fam.by.yo,pool=fam.S.filter(function(s){return s.k!=="yo";}),t=rnd(pool);
+    var ans=art(t.rel),g=R[t.rel][1];
+    var PAIR={abuelo:"abuela",abuela:"abuelo",padre:"madre",madre:"padre",tio:"tia",tia:"tio",primo:"prima",prima:"primo",hermano:"hermana",hermana:"hermano"};
+    var same=shuffle(Object.keys(R).filter(function(k){return R[k][1]===g&&k!==t.rel;})).slice(0,2).map(art);
+    var wrong=same.concat([art(PAIR[t.rel])]);
+    var full=t.name+" es "+ans+" de "+yo.name+".";
+    return {fam:fam,hl:t.k,en:"Look at the green box. Who is "+t.name+" to "+yo.name+"?",frame:t.name+" es ___ de "+yo.name+".",answer:ans,wrong:wrong,review:full+" = "+ans};
+  }
+  // B: clue from "yo": "La madre de mi padre se llama ___."
+  var CLUES=[["La madre de mi padre","gmP"],["El padre de mi padre","gfP"],["La madre de mi madre","gmM"],["El padre de mi madre","gfM"],
+    ["La hermana de mi padre","tia"],["El hermano de mi madre","tio"],["El hijo de mi tía","primo"],["La hija de mi tío","prima"],
+    ["El marido de mi madre","padre"],["La mujer de mi padre","madre"],["Mi tía","tia"],["Mi tío","tio"],["Mi primo","primo"],["Mi prima","prima"],
+    ["Mi abuela, la madre de mi madre,","gmM"],["Mi abuelo, el padre de mi padre,","gfP"]];
+  function qClue(){
+    var fam=makeFamily(),yo=fam.by.yo,c=rnd(CLUES);
+    if(Math.random()<.25){ // sibling clue
+      var sib=fam.by.sib;c=[(sib.rel==="hermano"?"Mi hermano":"Mi hermana"),"sib"];
+    }
+    var t=fam.by[c[1]],male=t.e==="👴"||t.e==="👨"||t.e==="👦";
+    var others=fam.S.filter(function(s){return s.k!=="yo"&&s.k!==t.k;});
+    var same=others.filter(function(s){return (s.e==="👴"||s.e==="👨"||s.e==="👦")===male;}).map(function(s){return s.name;});
+    var wrong=uniq3(t.name,same.concat(others.map(function(s){return s.name;})));
+    if(same.length>=3)wrong=uniq3(t.name,same);
+    var full=c[0]+" se llama "+t.name+".";
+    return {fam:fam,ok:t.k,en:yo.name+" says:",frame:c[0]+" se llama ___.",answer:t.name,wrong:wrong,review:full+" = "+t.name};
+  }
+
+  /* ---------- Mode 2: mi/mis, su/sus, tener ---------- */
+  var ONE=[["hermano","brother","m"],["hermana","sister","f"],["madre","mum","f"],["padre","dad","m"],["abuela","granny","f"],["abuelo","grandad","m"],["tío","uncle","m"],["tía","aunt","f"],["primo","cousin","m"],["perro","dog","p"],["gato","cat","p"]];
+  var MANY=[["hermanos","brothers and sisters","x"],["hermanas","sisters","f"],["padres","parents","x"],["abuelos","grandparents","x"],["primos","cousins","x"],["tíos","aunts and uncles","x"],["perros","dogs","p"],["gatos","cats","p"]];
+  var PETN=["Toby","Luna","Coco","Max","Nala","Rocky","Kira","Bruno"];
+  function nm(){return Math.random()<.5?rnd(MN):rnd(FN);}
+  function nameFor(w){var g=w[2];if(g==="m")return rnd(MN);if(g==="f")return rnd(FN);if(g==="p")return rnd(PETN);return nm();}
+  function namesFor(w){var g=w[2],a,b;
+    if(g==="p"){var q=shuffle(PETN.slice());a=q[0];b=q[1];}
+    else if(g==="f"){var r=shuffle(FN.slice());a=r[0];b=r[1];}
+    else{a=rnd(MN);b=rnd(FN);}
+    return [a,b];}
+  function gMy(){
+    var pl=Math.random()<.45,w=rnd(pl?MANY:ONE),nn=pl?namesFor(w):[nameFor(w)],n=nn.join(" y "),ne=nn.join(" and ");
+    var ans=pl?"Mis":"Mi";
+    return {en:"My "+w[1]+(pl?" are":" is")+" called "+ne+".",frame:"___ "+w[0]+" se llama"+(pl?"n ":" ")+n+".",answer:ans,wrong:pl?["Mi","Sus","Tus"]:["Mis","Su","Tu"],
+      review:ans+" "+w[0]+" se llama"+(pl?"n ":" ")+n+". = "+ans};
+  }
+  function gHis(){
+    var pl=Math.random()<.45,w=rnd(pl?MANY:ONE),who=nm(),nn=pl?namesFor(w):[nameFor(w)],n=nn.join(" y "),ne=nn.join(" and ");
+    var ans=pl?"Sus":"Su";
+    return {en:who+"'s "+w[1]+(pl?" are":" is")+" called "+ne+".",frame:"___ "+w[0]+" se llama"+(pl?"n ":" ")+n+".",answer:ans,wrong:pl?["Su","Mis","Tus"]:["Sus","Mi","Tu"],
+      review:ans+" "+w[0]+" se llama"+(pl?"n ":" ")+n+" ("+who+"'s) = "+ans};
+  }
+  function gYour(){
+    var pl=Math.random()<.5,w=rnd(pl?MANY:ONE),ans=pl?"tus":"tu";
+    return {en:"What "+(pl?"are":"is")+" your "+w[1]+" called?",frame:"¿Cómo se llama"+(pl?"n":"")+" ___ "+w[0]+"?",answer:ans,wrong:pl?["tu","tús","sus"]:["tus","tú","su"],
+      review:"¿Cómo se llama"+(pl?"n ":" ")+ans+" "+w[0]+"? = "+ans};
+  }
+  var AGES={teen:[10,11,12,13,14,15,16,17,18],adult:[35,38,40,42,45,47,50],old:[66,68,70,73,76,78,80]};
+  var AGE_REL=[["Mi hermano","My brother","teen"],["Mi hermana","My sister","teen"],["Mi prima","My cousin","teen"],["Mi madre","My mum","adult"],["Mi padre","My dad","adult"],["Mi tía","My aunt","adult"],["Mi abuelo","My grandad","old"],["Mi abuela","My granny","old"]];
+  function gAge(){
+    var r=Math.random();
+    if(r<.3){var n=rnd(AGES.teen);return {en:"I'm "+n+".",frame:"___ "+es(n)+" años.",answer:"Tengo",wrong:["Soy","Tiene","Estoy"],review:"Tengo "+es(n)+" años. = Tengo"};}
+    if(r<.4){var n2=rnd(AGES.teen);return {en:"How old is your sister? She's "+n2+".",frame:"Mi hermana ___ "+es(n2)+" años.",answer:"tiene",wrong:["es","tengo","tienes"],review:"Mi hermana tiene "+es(n2)+" años. = tiene"};}
+    var p=rnd(AGE_REL),n3=rnd(AGES[p[2]]);
+    return {en:p[1]+" is "+n3+".",frame:p[0]+" ___ "+es(n3)+" años.",answer:"tiene",wrong:["es","tengo","está"],review:p[0]+" tiene "+es(n3)+" años. = tiene"};
+  }
+  var PETS=[["un perro","dos perros","dogs","perro"],["un gato","tres gatos","cats","gato"],["un conejo","dos conejos","rabbits","conejo"],["una tortuga","dos tortugas","tortoises","tortuga"],["un pez","dos peces","fish","pez"],["un pájaro","dos pájaros","birds","pájaro"]];
+  function gTener(){
+    var r=Math.random(),p=rnd(PETS);
+    if(r<.35){ // verb form
+      var V=[["We have two "+p[2]+".","___ "+p[1]+".","Tenemos",["Tengo","Tienen","Tiene"]],
+        ["My cousins have two "+p[2]+".","Mis primos ___ "+p[1]+".","tienen",["tiene","tenemos","tengo"]],
+        ["Do you have any "+p[2]+"?","¿___ "+p[1].split(" ")[1]+"?","Tienes",["Tengo","Tenemos","Tienen"]],
+        ["I have "+(p[2]==="fish"?"a fish":"a "+p[2].replace(/s$/,""))+".","___ "+p[0]+".","Tengo",["Tiene","Tienes","Soy"]],
+        ["My aunt has "+(p[2]==="fish"?"a fish":"a "+p[2].replace(/s$/,""))+".","Mi tía ___ "+p[0]+".","tiene",["tienes","tengo","es"]]];
+      var v=rnd(V);
+      if(p[1].indexOf("tres")===0)v[0]=v[0].replace("two","three");
+      return {en:v[0],frame:v[1],answer:v[2],wrong:v[3],review:v[1].replace("___",v[2])+" = "+v[2]};
+    }
+    if(r<.7){ // plural noun
+      var num=p[1].split(" ")[0],sg=p[3],pl=p[1].split(" ")[1];
+      var a1=p[0].split(" ")[0],a2=a1==="un"?"una":"un";
+      var bad=sg==="pez"?["dos pez","dos pezes","un peces"]:[num+" "+sg,a1+" "+pl,a2+" "+sg];
+      return {en:"I have "+(num==="tres"?"three ":"two ")+p[2]+".",frame:"Tengo ___.",answer:p[1],wrong:uniq3(p[1],bad),review:"Tengo "+p[1]+". = "+p[1]};
+    }
+    if(r<.85){ // se llama / se llaman
+      var pl2=Math.random()<.5,w=rnd(pl2?MANY:ONE),nn=pl2?namesFor(w):[nameFor(w)],n=nn.join(" y "),ans2=pl2?"se llaman":"se llama";
+      return {en:"My "+w[1]+(pl2?" are":" is")+" called "+nn.join(" and ")+".",frame:"Mi"+(pl2?"s ":" ")+w[0]+" ___ "+n+".",answer:ans2,wrong:pl2?["se llama","me llamo","llaman"]:["se llaman","me llamo","llama"],
+        review:"Mi"+(pl2?"s ":" ")+w[0]+" "+ans2+" "+n+". = "+ans2};
+    }
+    var boy=Math.random()<.5,a=boy?"hijo único":"hija única";
+    return {en:(boy?"Diego":"Lucía")+" says: \"I'm an only child.\"",frame:"Soy ___.",answer:a,wrong:boy?["hija única","hijo única","único hijo"]:["hijo único","hija único","única hija"],review:"Soy "+a+". = "+a};
+  }
+
+  /* ---------- Mode 3: Listening detective ---------- */
+  var LREL=[["mi hermano","my brother","teen"],["mi hermana","my sister","teen"],["mi primo","my cousin","teen"],["mi tío","my uncle","adult"],["mi tía","my aunt","adult"],["mi madre","my mum","adult"],["mi padre","my dad","adult"],["mi abuelo","my grandad","old"],["mi abuela","my granny","old"]];
+  var SWAP={"my uncle":"my aunt","my aunt":"my uncle","my brother":"my cousin","my sister":"my aunt","my cousin":"my brother","my mum":"my aunt","my dad":"my uncle","my grandad":"my granny","my granny":"my grandad"};
+  var LAGE={teen:[12,13,14,15,16],adult:[40,50,66,70],old:[66,70,76]};
+  function lAge(){
+    var p=rnd(LREL),n=rnd(LAGE[p[2]]),name=/o$|padre$/.test(p[0])?rnd(MN):rnd(FN);
+    var s=cap(p[0])+" se llama "+name+" y tiene "+es(n)+" años.";
+    var E=function(rel,age){return cap(rel)+" is "+age+".";};
+    var ans=E(p[1],n),tn=trap(n);
+    return {listen:1,speak:s,answer:ans,wrong:[E(p[1],tn),E(SWAP[p[1]],n),E(SWAP[p[1]],tn)],review:s+" = "+ans};
+  }
+  function lPets(){
+    var p=rnd(PETS),q=rnd(PETS.filter(function(x){return x!==p;}));
+    var pl=Math.random()<.5,s=(pl?"Tengo "+p[1]:"Tengo "+p[0])+".";
+    var one=function(x){return x[2]==="fish"?"a fish":"a "+x[2].replace(/s$/,"").replace("tortoise","tortoise");};
+    var num=p[1].indexOf("tres")===0?"three ":"two ";
+    var ans=pl?"I have "+num+p[2]+".":"I have "+one(p)+".";
+    var wrong=pl?["I have "+num+q[2]+".","I have "+one(p)+".","I don't have any "+p[2]+"."]:["I have "+one(q)+".","I have "+num+p[2]+".","I don't have any pets."];
+    return {listen:1,speak:s,answer:ans,wrong:wrong,review:s+" = "+ans};
+  }
+  var LFIX=[
+    ["No tengo hermanos. Soy hijo único.","I don't have any brothers or sisters.",["I have one brother.","I don't have any cousins.","My brother is an only child."]],
+    ["Tengo dos hermanos y una hermana.","I have two brothers and a sister.",["I have two sisters and a brother.","I have a brother and a sister.","I have two cousins and a sister."]],
+    ["Mis padres están divorciados.","My parents are divorced.",["My grandparents are divorced.","My parents are married.","My aunt and uncle are divorced."]],
+    ["Vivo con mi madre y mi padrastro.","I live with my mum and my stepdad.",["I live with my mum and my dad.","I live with my dad and my stepmum.","I live with my granny and my grandad."]],
+    ["Me llevo bien con mi hermana.","I get on well with my sister.",["I don't get on with my sister.","I get on well with my brother.","My sister is very tall."]],
+    ["Mis abuelos viven en Galicia.","My grandparents live in Galicia.",["My parents live in Galicia.","My cousins live in Galicia.","My grandparents work in Galicia."]],
+    ["Mi prima tiene un perro muy grande.","My cousin has a very big dog.",["My cousin has a very big cat.","My aunt has a very big dog.","My cousin has a very small dog."]],
+    ["¿Cuántas personas hay en tu familia?","How many people are there in your family?",["How old are the people in your family?","Where does your family live?","What are your parents called?"]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={tree:[qWhoIs,qClue],gram:[gMy,gHis,gYour,gAge,gTener,gTener],listen:[lAge,lAge,lPets,lFix,lFix],mixed:[qWhoIs,qClue,gMy,gHis,gAge,gTener,gYour]};
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear someone talk about their family, pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="listen"||m==="tree")?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;
+    $("treeBox").innerHTML=q.fam?treeSVG(q.fam,q.hl):"";
+    $("en").textContent=q.listen?"Listen. What did they say?":q.en;
+    $("frame").innerHTML=q.listen?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.listen){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";box.className="choices"+(q.listen?" long":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f});
+    }
+    if(current.fam&&current.ok)$("treeBox").innerHTML=treeSVG(current.fam,null,current.ok);
+    if(current.listen)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.listen||current.ok?900:350):(current.listen?2200:1500);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=22?"¡Increíble! Case closed at exam-ready speed.":score>=14?"¡Muy bien! Great detective work.":score>=7?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        var parts=m.review.split(" = ");
+        html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
