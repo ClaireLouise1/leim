@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>School &amp; timetable: play Timetable Scramble | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: school subjects, days, times and the timetable, opinions of subjects and teachers, with a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+.end4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin:12px 0}
+.end4 div{background:var(--mist);border-radius:10px;padding:10px 4px;font-weight:700}
+.end4 small{display:block;color:var(--muted);font-weight:600;font-size:12px}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.end4{grid-template-columns:1fr 1fr}}
+.tt{display:grid;grid-template-columns:44px repeat(5,1fr);gap:3px;margin:0 0 16px;font-size:12px;font-weight:600}
+.tt .th,.tt .tm{background:var(--night);color:#fff;border-radius:6px;padding:5px 2px;text-align:center;font-weight:700}
+.tt .tm{font-size:11px;display:flex;align-items:center;justify-content:center}
+.tt .hi{background:var(--sun);color:var(--ink)}
+.tt .cell{background:var(--mist);border-radius:6px;padding:4px 2px;text-align:center;line-height:1.15;overflow:hidden}
+.tt .cell span{display:block;font-size:17px}
+.choices.one{grid-template-columns:1fr}
+@media (max-width:420px){.tt{font-size:10px;grid-template-columns:36px repeat(5,1fr)}.tt .cell span{font-size:14px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Timetable Scramble</h1>
+        <p>School in Spanish: read the timetable, find the day and the time, name the subject and say what you think of it. <b>¿Qué tienes el lunes a las nueve?</b> Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="grid"><div><b>Timetable scramble</b><span>Read the timetable: which subject, which day, what time?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="opin"><div><b>Subjects &amp; opinions</b><span>la historia, me gustan las ciencias, es fácil, mi profesora de francés</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening timetable 🔊</b><span id="listenNote">Hear a student talk about school, pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.13, 1.19, 3.7 (2017 spec, exams 2027–2028) · 1.11, 1.12, 3.7 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div id="ttBox"></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">School: subjects, timetable &amp; teachers</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Me gusta <b>la</b> historia. <span style="color:var(--muted)">(I like history.)</span></li>
+          <li>Me gusta <b>el</b> inglés. <span style="color:var(--muted)">(I like English.)</span></li>
+          <li>Me gusta<b>n</b> <b>las</b> matemáticas. <span style="color:var(--muted)">(I like maths.)</span></li>
+          <li>Me gusta<b>n</b> <b>las</b> ciencias. <span style="color:var(--muted)">(I like science.)</span></li>
+        </ul>
+        <p>Why is it <b>gusta</b> for history but <b>gustan</b> for maths? And why is there a <b>la</b> or <b>el</b> when English has nothing? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Las matemáticas</b> and <b>las ciencias</b> are plural in Spanish, so they take <b>gustan</b>, <b>son</b> and plural adjectives: <em>Las matemáticas son difícil<b>es</b>.</em> And in Spanish you keep the article when you talk about a subject in general: <em>Me encanta <b>la</b> música. <b>El</b> dibujo es aburrido.</em> But after <b>tengo</b> and <b>de</b> you drop it: <em>Tengo música a las diez. Mi profesor de música.</em></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Subjects to learn</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>el … (masculine)</th><th>la … (feminine)</th><th>las … (plural)</th></tr></thead>
+          <tbody>
+            <tr><td>el inglés (English)</td><td>la historia (history)</td><td>las matemáticas (maths)</td></tr>
+            <tr><td>el irlandés (Irish)</td><td>la geografía (geography)</td><td>las ciencias (science)</td></tr>
+            <tr><td>el español (Spanish)</td><td>la música (music)</td><td></td></tr>
+            <tr><td>el francés (French)</td><td>la educación física (PE)</td><td></td></tr>
+            <tr><td>el alemán (German)</td><td>la informática (computers)</td><td></td></tr>
+            <tr><td>el dibujo (art)</td><td>la religión (religion)</td><td></td></tr>
+            <tr><td></td><td>la tecnología (technology)</td><td></td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> days, months, languages and subjects take a <b>small letter</b> in Spanish: <em>el lunes</em>, <em>el inglés</em>, <em>la historia</em>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Days and times</h3>
+        <p><b>el lunes</b> (on Monday) · <b>los lunes</b> (on Mondays, every Monday). Days: lunes, martes, miércoles, jueves, viernes, sábado, domingo.</p>
+        <p style="margin-top:8px"><b>a las nueve</b> (at nine) · <b>a las diez y cuarto</b> (at quarter past ten) · <b>a las once y media</b> (at half eleven) · <b>a las doce menos cuarto</b> (at quarter to twelve) · but <b>a la una</b> (at one: only one o'clock is singular).</p>
+        <div class="table-wrap" style="margin-top:10px"><table>
+          <tbody>
+            <tr><td><em>¿Qué tienes el martes a las diez?</em></td><td><em>Tengo historia.</em></td></tr>
+            <tr><td><em>¿A qué hora empiezan las clases?</em></td><td><em>Empiezan a las nueve menos diez.</em></td></tr>
+            <tr><td><em>¿A qué hora terminan?</em></td><td><em>Terminan a las cuatro menos veinte.</em></td></tr>
+            <tr><td><em>¿Cuántas asignaturas estudias?</em></td><td><em>Estudio diez asignaturas.</em></td></tr>
+            <tr><td><em>¿Cuál es tu asignatura favorita?</em></td><td><em>Mi asignatura favorita es el dibujo.</em></td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Opinions and teachers</h3>
+        <p><em>Me encanta el español <b>porque es</b> útil.</em> · <em>No me gustan las ciencias <b>porque son</b> difíciles.</em> · <em>Odio la geografía porque es aburrida.</em></p>
+        <p style="margin-top:8px">Useful adjectives: fácil (easy) / difícil (hard), interesante / aburrido (boring), útil (useful), divertido (fun), práctico. The adjective agrees with the subject: <em>la música es divertid<b>a</b></em>, <em>el dibujo es divertid<b>o</b></em>, <em>las ciencias son interesante<b>s</b></em>.</p>
+        <p style="margin-top:8px">Teachers: <b>el profesor</b> (man) / <b>la profesora</b> (woman) + <b>de</b> + subject, no article: <em>Mi profesora de francés es muy simpática. Mi profesor de historia es bastante estricto.</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">School in Spain and in Ireland</h3>
+        <p>In Spain, secondary school for 12 to 16 year olds is called <b>la ESO</b>. In many Spanish state schools students <b>don't wear a uniform</b> (<em>no llevamos uniforme</em>), and the school day often starts early and finishes in the early afternoon. Marks usually go from 0 to 10, and 5 is a pass. The break is <b>el recreo</b>. Compare: <em>En mi colegio llevamos uniforme, pero en España muchos alumnos no llevan uniforme.</em></p>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> school is one of the most common themes in all three parts of the paper. In <b>Listening</b>, the details are days, times and subjects, so jot them down as numbers and short words (<em>mar 10:15 hist</em>). Watch for <b>y cuarto</b> / <b>menos cuarto</b> and for <b>no</b>: <em>no me gusta</em>. In <b>Writing</b>, a strong answer gives a subject, an opinion and a reason, plus a teacher: <em>Mi asignatura favorita es la historia porque es muy interesante y mi profesora es simpática, pero no me gustan las matemáticas porque son difíciles.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/school-timetable-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">School &amp; Timetable Teacher Pack (€5)</a>: timetable info gap, School Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function pickN(a,n,not){var c=shuffle(a.filter(function(x){return (not||[]).indexOf(x)<0;}));return c.slice(0,n);}
+
+  /* ---------- Subjects: key, Spanish (no article), article, English, emoji, short English ---------- */
+  var S=[
+    ["matemáticas","las","maths","➗","Maths"],["inglés","el","English","📖","English"],["irlandés","el","Irish","☘️","Irish"],
+    ["español","el","Spanish","💃","Spanish"],["francés","el","French","🥐","French"],["alemán","el","German","🥨","German"],
+    ["historia","la","history","🏛️","History"],["geografía","la","geography","🌍","Geog."],["ciencias","las","science","🔬","Science"],
+    ["música","la","music","🎵","Music"],["educación física","la","PE","⚽","PE"],["dibujo","el","art","🎨","Art"],
+    ["informática","la","computers","💻","Comp."],["religión","la","religion","🕊️","Religion"],["tecnología","la","technology","🔧","Tech."]
+  ].map(function(x){return {es:x[0],art:x[1],en:x[2],e:x[3],sh:x[4],pl:x[1]==="las",g:x[1]==="el"?"m":"f"};});
+  function full(s){return s.art+" "+s.es;}
+
+  var DAYS=[["lunes","Monday","Mon"],["martes","Tuesday","Tue"],["miércoles","Wednesday","Wed"],["jueves","Thursday","Thu"],["viernes","Friday","Fri"]];
+  var TIMES=[["a las nueve","9:00"],["a las diez","10:00"],["a las once y cuarto","11:15"],["a las doce y cuarto","12:15"],["a la una y media","13:30"]];
+  var TIME_TRAPS=["a la nueve","a las once menos cuarto","a las doce menos cuarto","a las una y media","a las dos y media","a las diez y media"];
+
+  /* ---------- Timetable: 5 days x 5 periods, no subject twice in a day or twice at the same time ---------- */
+  var TT=null,ttUses=0;
+  function makeTT(){
+    for(var tries=0;tries<200;tries++){
+      var g=[],ok=true;
+      for(var d=0;d<5&&ok;d++){g[d]=[];for(var t=0;t<5;t++){
+        var cand=S.filter(function(s){if(g[d].indexOf(s)>=0)return false;for(var dd=0;dd<d;dd++)if(g[dd][t]===s)return false;return true;});
+        if(!cand.length){ok=false;break;}g[d][t]=rnd(cand);}}
+      if(ok)return g;
+    }
+    return null;
+  }
+  function freshTT(){TT=makeTT();ttUses=0;}
+  function drawTT(hiD,hiT){
+    var h="<div class='tt' role='table' aria-label='Timetable'><div class='th'></div>";
+    DAYS.forEach(function(d,i){h+="<div class='th"+(i===hiD?" hi":"")+"'>"+d[2]+"</div>";});
+    for(var t=0;t<5;t++){
+      h+="<div class='tm"+(t===hiT?" hi":"")+"'>"+TIMES[t][1]+"</div>";
+      for(var d=0;d<5;d++){var s=TT[d][t];h+="<div class='cell'><span>"+s.e+"</span>"+s.sh+"</div>";}
+    }
+    return h+"</div>";
+  }
+
+  /* ---------- Mode 1: Timetable scramble ---------- */
+  function gWhat(){
+    var d=Math.floor(Math.random()*5),t=Math.floor(Math.random()*5),s=TT[d][t];
+    var others=[];
+    [[d,(t+1)%5],[d,(t+4)%5],[(d+1)%5,t],[(d+4)%5,t]].forEach(function(p){var o=TT[p[0]][p[1]];if(o!==s&&others.indexOf(o)<0)others.push(o);});
+    others=shuffle(others);
+    for(var dd=0;dd<5&&others.length<3;dd++)for(var tt2=0;tt2<5&&others.length<3;tt2++){var o2=TT[dd][tt2];if(o2!==s&&others.indexOf(o2)<0)others.push(o2);}
+    others=others.slice(0,3);
+    var q="¿Qué tienes el "+DAYS[d][0]+" "+TIMES[t][0]+"?";
+    return {tt:1,en:"Read the timetable. Answer in Spanish.",frame:q,answer:"Tengo "+s.es+".",wrong:others.map(function(o){return "Tengo "+o.es+".";}),review:q+" Tengo "+s.es+"."};
+  }
+  function gDay(){
+    var d=Math.floor(Math.random()*5),t=Math.floor(Math.random()*5),s=TT[d][t];
+    var frame="Tengo "+s.es+" el ___ "+TIMES[t][0]+".";
+    var wrong=pickN([0,1,2,3,4],3,[d]).map(function(i){return DAYS[i][0];});
+    return {tt:1,en:"Which day? Look at the "+TIMES[t][1]+" row.",frame:frame,answer:DAYS[d][0],wrong:wrong,review:frame.replace("___",DAYS[d][0])};
+  }
+  function gTime(){
+    var d=Math.floor(Math.random()*5),t=Math.floor(Math.random()*5),s=TT[d][t];
+    var frame="El "+DAYS[d][0]+" tengo "+s.es+" ___.";
+    var wrong=pickN([0,1,2,3,4],2,[t]).map(function(i){return TIMES[i][0];});
+    var trap=t===4?"a las una y media":t===0?"a la nueve":t===2?"a las once menos cuarto":t===3?"a las doce menos cuarto":rnd(["a las diez y media","a la diez"]);
+    wrong.push(trap);
+    return {tt:1,en:"What time? Look at "+DAYS[d][1]+".",frame:frame,answer:TIMES[t][0],wrong:wrong,review:frame.replace("___",TIMES[t][0])};
+  }
+  function gTrue(){
+    var d=Math.floor(Math.random()*5),t=Math.floor(Math.random()*5),s=TT[d][t];
+    var right="El "+DAYS[d][0]+" "+TIMES[t][0]+" tengo "+s.es+".";
+    var w1="El "+DAYS[(d+1)%5][0]+" "+TIMES[t][0]+" tengo "+(TT[(d+1)%5][t]===s?TT[d][(t+1)%5].es:s.es)+".";
+    var w2="El "+DAYS[d][0]+" "+TIMES[(t+1)%5][0]+" tengo "+s.es+".";
+    var w3="El "+DAYS[d][0]+" "+TIMES[t][0]+" tengo "+TT[(d+2)%5][t].es+".";
+    return {tt:1,en:"Which sentence is true for this timetable?",frame:"",answer:right,wrong:[w1,w2,w3],review:right};
+  }
+
+  /* ---------- Mode 2: Subjects & opinions ---------- */
+  var ADJ=[["fácil","easy"],["difícil","hard"],["interesante","interesting"],["aburrido","boring"],["útil","useful"],["divertido","fun"],["práctico","practical"]];
+  var PLUR={"fácil":"fáciles","difícil":"difíciles","útil":"útiles"};
+  function agree(a,g,pl){
+    if(/o$/.test(a))return a.slice(0,-1)+(g==="f"?"a":"o")+(pl?"s":"");
+    if(/e$/.test(a))return a+(pl?"s":"");
+    return pl?(PLUR[a]||a+"es"):a;
+  }
+  function oVocab(){
+    var s=rnd(S),w=pickN(S,3,[s]);
+    return {who:s.e,en:"Say it in Spanish (with el, la or las): "+s.en,frame:"",answer:full(s),wrong:w.map(full),review:s.en+" = "+full(s)};
+  }
+  function oArt(){
+    var s=rnd(S),a=rnd(ADJ),v=s.pl?"son":"es";
+    var frame="___ "+s.es+" "+v+" "+agree(a[0],s.g,s.pl)+".";
+    var ans=cap(s.art);
+    return {who:s.e,en:cap(s.en)+(s.pl?" is ":" is ")+a[1]+".",frame:frame,answer:ans,wrong:["El","La","Los","Las"].filter(function(x){return x!==ans;}),review:frame.replace("___",ans)};
+  }
+  function oGusta(){
+    var s=rnd(S),pos=Math.random()<.6;
+    var lead=pos?rnd([["Me","I like"],["Me","I like"],["Me encant","I love"]]):["No me","I don't like"];
+    var love=lead[0]==="Me encant";
+    var ans=love?(s.pl?"encantan":"encanta"):(s.pl?"gustan":"gusta");
+    var frame=(love?"Me":lead[0])+" ___ "+full(s)+".";
+    var wrong=love?[s.pl?"encanta":"encantan","encanto","gusto"]:[s.pl?"gusta":"gustan","gusto","gustas"];
+    return {who:s.e,en:lead[1]+" "+s.en+".",frame:frame,answer:ans,wrong:wrong,review:frame.replace("___",ans)};
+  }
+  function oAdj(){
+    var s=rnd(S),a=rnd(ADJ),v=s.pl?"son":"es";
+    var ans=agree(a[0],s.g,s.pl);
+    var forms=[];[["m",false],["f",false],["m",true],["f",true]].forEach(function(x){var f=agree(a[0],x[0],x[1]);if(f!==ans&&forms.indexOf(f)<0)forms.push(f);});
+    var others=shuffle(ADJ.filter(function(x){return x!==a;}));
+    for(var k=0;forms.length<3&&k<others.length;k++){var f2=agree(others[k][0],s.g,s.pl);if(f2!==ans&&forms.indexOf(f2)<0)forms.push(f2);}
+    var frame=cap(full(s))+" "+v+" ___.";
+    return {who:s.e,en:cap(s.en)+" is "+a[1]+".",frame:frame,answer:ans,wrong:forms.slice(0,3),review:frame.replace("___",ans)};
+  }
+  function oVerb(){
+    var s=rnd(S),a=rnd(ADJ),ans=s.pl?"son":"es";
+    var frame=cap(full(s))+" ___ "+agree(a[0],s.g,s.pl)+".";
+    return {who:s.e,en:cap(s.en)+" is "+a[1]+".",frame:frame,answer:ans,wrong:[s.pl?"es":"son","está","tiene"],review:frame.replace("___",ans)};
+  }
+  var TADJ=[["simpático","nice"],["estricto","strict"],["divertido","fun"],["serio","serious"],["paciente","patient"],["trabajador","hard-working"],["amable","kind"]];
+  function tAgree(a,g){if(/o$/.test(a))return a.slice(0,-1)+(g==="f"?"a":"o");if(/or$/.test(a))return a+(g==="f"?"a":"");return a;}
+  function oTeacher(){
+    var s=rnd(S.filter(function(x){return x.es!=="educación física";})),g=Math.random()<.5?"m":"f",a=rnd(TADJ);
+    var t=Math.random();
+    if(t<.4){
+      var ans=g==="f"?"profesora":"profesor";
+      var frame="Mi ___ de "+s.es+" es "+tAgree(a[0],g)+".";
+      return {who:g==="f"?"👩‍🏫":"👨‍🏫",en:"My "+s.en+" teacher ("+(g==="f"?"Ms":"Mr")+" "+rnd(["Ruiz","Gil","Moreno","Sanz"])+") is "+a[1]+".",frame:frame,answer:ans,wrong:[g==="f"?"profesor":"profesora","profesores","profesoras"],review:frame.replace("___",ans)};
+    }
+    if(t<.7){
+      var frame2="Mi profesor"+(g==="f"?"a":"")+" ___ "+s.es+" es "+tAgree(a[0],g)+".";
+      return {who:g==="f"?"👩‍🏫":"👨‍🏫",en:"My "+s.en+" teacher is "+a[1]+".",frame:frame2,answer:"de",wrong:["de "+s.art,"en","a"],review:frame2.replace("___","de")};
+    }
+    var ans3=tAgree(a[0],g),forms=[];
+    [tAgree(a[0],g==="f"?"m":"f"),tAgree(a[0],g)+(/[aeo]$/.test(ans3)?"s":"es")].forEach(function(f){if(f!==ans3&&forms.indexOf(f)<0)forms.push(f);});
+    while(forms.length<3){var b=rnd(TADJ.filter(function(x){return x!==a;}));var f=tAgree(b[0],g);if(forms.indexOf(f)<0)forms.push(f);}
+    var frame3="Mi profesor"+(g==="f"?"a":"")+" de "+s.es+" es ___.";
+    return {who:g==="f"?"👩‍🏫":"👨‍🏫",en:"My "+s.en+" teacher ("+(g==="f"?"a woman":"a man")+") is "+a[1]+".",frame:frame3,answer:ans3,wrong:forms.slice(0,3),review:frame3.replace("___",ans3)};
+  }
+
+  /* ---------- Mode 3: Listening ---------- */
+  function swapDay(i){return DAYS[(i+1+Math.floor(Math.random()*4))%5];}
+  function lTT(){
+    var d=Math.floor(Math.random()*5),t=Math.floor(Math.random()*5),s=rnd(S),pl=Math.random()<.4;
+    var es=(pl?"Los ":"El ")+DAYS[d][0]+" tengo "+s.es+" "+TIMES[t][0]+".";
+    var E=function(day,time,sub){return (pl?"On "+day+"s":"On "+day)+" I have "+sub+" at "+time+".";};
+    var o=rnd(S.filter(function(x){return x!==s;}));
+    var tt=TIMES[t][1],alt=t===2?"10:45":t===3?"11:45":t===4?"1:00":t===0?"10:00":"9:00";
+    var tEn=function(x){return x==="13:30"?"half one":x==="12:15"?"quarter past twelve":x==="11:15"?"quarter past eleven":x==="10:45"?"quarter to eleven":x==="11:45"?"quarter to twelve":x==="1:00"?"one o'clock":x==="10:00"?"ten":"nine";};
+    var ans=E(DAYS[d][1],tEn(tt),s.en);
+    return {listen:1,speak:es,answer:ans,wrong:[E(swapDay(d)[1],tEn(tt),s.en),E(DAYS[d][1],tEn(alt),s.en),E(DAYS[d][1],tEn(tt),o.en)],review:es+" = "+ans};
+  }
+  function lOpinion(){
+    var s=rnd(S),a=rnd(ADJ),pos=["fácil","interesante","útil","divertido","práctico"].indexOf(a[0])>=0;
+    var verb=pos?(s.pl?"Me encantan":"Me encanta"):(s.pl?"No me gustan":"No me gusta");
+    var es=verb+" "+full(s)+" porque "+(s.pl?"son":"es")+" "+agree(a[0],s.g,s.pl)+".";
+    var vEn=pos?"I love":"I don't like";
+    var E=function(v,sub,adj){return v+" "+sub+" because it's "+adj+".";};
+    var o=rnd(S.filter(function(x){return x!==s;}));
+    var oppAdj={"fácil":"hard","difícil":"easy","interesante":"boring","aburrido":"interesting","útil":"boring","divertido":"boring","práctico":"hard"}[a[0]];
+    var ans=E(vEn,s.en,a[1]);
+    return {listen:1,speak:es,answer:ans,wrong:[E(pos?"I don't like":"I love",s.en,a[1]),E(vEn,o.en,a[1]),E(vEn,s.en,oppAdj)],review:es+" = "+ans};
+  }
+  var LFIX=[
+    ["Las clases empiezan a las ocho y media y terminan a las tres.","Classes start at half eight and finish at three.",["Classes start at eight and finish at half three.","Classes start at half eight and finish at two.","Classes start at half nine and finish at three."]],
+    ["En mi colegio no llevamos uniforme.","In my school we don't wear a uniform.",["In my school we wear a uniform.","In my school we don't have a canteen.","In my school we don't have homework."]],
+    ["Tengo siete clases al día.","I have seven classes a day.",["I have six classes a day.","I have seven classes a week.","I have seventeen classes a day."]],
+    ["El recreo es a las once y cuarto.","Break is at quarter past eleven.",["Break is at quarter to eleven.","Lunch is at quarter past eleven.","Break is at quarter past twelve."]],
+    ["Mi profesora de francés es muy estricta.","My French teacher (a woman) is very strict.",["My French teacher (a man) is very strict.","My Spanish teacher is very strict.","My French teacher is very nice."]],
+    ["Estudio diez asignaturas.","I study ten subjects.",["I study twelve subjects.","I study two subjects.","I like ten subjects."]],
+    ["Mi asignatura favorita es la historia.","My favourite subject is history.",["My favourite subject is geography.","My worst subject is history.","My favourite teacher teaches history."]],
+    ["Los viernes no tengo matemáticas.","On Fridays I don't have maths.",["On Fridays I have maths.","On Thursdays I don't have maths.","On Fridays I don't have music."]],
+    ["Hay ochocientos alumnos en mi colegio.","There are 800 students in my school.",["There are 80 students in my school.","There are 800 teachers in my school.","There are 600 students in my school."]],
+    ["En España los alumnos no llevan uniforme.","In Spain the students don't wear a uniform.",["In Spain the students wear a uniform.","In Ireland the students don't wear a uniform.","In Spain the teachers don't wear a uniform."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={grid:[gWhat,gWhat,gDay,gTime,gTime,gTrue],opin:[oVocab,oArt,oGusta,oGusta,oAdj,oVerb,oTeacher,oTeacher],listen:[lTT,lTT,lOpinion,lFix,lFix],mixed:[gWhat,gDay,gTime,gTrue,oArt,oGusta,oAdj,oTeacher]};
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear a student talk about school, pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="grid"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;freshTT();
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    if(ttUses>=6)freshTT();
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<3)&&tries<30);
+    last=q.review;current=q;
+    if(q.tt){ttUses++;$("ttBox").innerHTML=drawTT();}else $("ttBox").innerHTML="";
+    $("who").textContent=q.listen?"":(q.who||"");
+    $("en").textContent=q.listen?"Listen. What did they say?":q.en;
+    $("frame").innerHTML=q.listen?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.listen){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var longish=q.listen||[q.answer].concat(q.wrong).some(function(x){return x.length>18;});
+    box.className="choices"+(longish?" long":"")+([q.answer].concat(q.wrong).some(function(x){return x.length>34;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f,listen:current.listen});
+    }
+    if(current.listen)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.listen?900:350):(current.listen||current.tt?2200:1500);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=22?"¡Increíble! That's exam-ready speed.":score>=14?"¡Muy bien! Great work.":score>=7?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,freshTT:freshTT,agree:agree};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
