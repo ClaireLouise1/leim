@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linking &amp; extending sentences: play Connector Chain | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: linking and extending sentences. Join the sentence halves with y, pero, porque, así que, aunque, cuando, o and si and build a paragraph link by link; connectors toolkit, y → e and o → u, porque or ¿por qué?, también or tampoco, and a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.mail{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;margin:0 auto 18px;max-width:540px;box-shadow:0 4px 14px rgba(27,36,48,.08);overflow:hidden;font-size:14.5px}
+.mail .bar{display:flex;justify-content:space-between;background:var(--night);color:#fff;font-weight:700;font-size:13px;padding:7px 12px}
+.mail .bar .count{color:var(--sun)}
+.mail .hd{border-bottom:1px solid var(--line);padding:4px 12px;font-size:13px;color:var(--muted)}
+.mail .hd b{color:var(--ink)}
+.mail .body{padding:8px 12px 10px;line-height:1.45;min-height:90px}
+.mail .body p{margin:0 0 2px}
+.mail .body .now{color:var(--muted)}
+.mail.sent{outline:3px solid var(--green)}
+.mail .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.9)}
+.prompt .frame.find{background:#FFFDF6;border:1px dashed var(--cream-line);border-radius:10px;padding:8px 10px}
+.prompt .frame .fixed{color:var(--green)}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.two-mail{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:15px;line-height:1.5}
+@media (max-width:620px){.two-mail{grid-template-columns:1fr}}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.mail{font-size:13px}}
+.mail .body b.c{color:var(--green)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Connector Chain</h1>
+        <p>Linking and extending sentences. Join the two halves of each sentence with the right connector (<b>y, pero, porque, así que, aunque, cuando, o, si</b>) and watch your paragraph grow link by link. Then the connectors toolkit, making sentences longer (y → e, porque or ¿por qué?, también or tampoco) and a Listening mode. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="chain"><div><b>Connector Chain</b><span>Pick the connector or the right ending, link by link: +3 bonus for every paragraph you finish</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="toolkit"><div><b>Connectors toolkit</b><span>What does it mean? Adding, contrast or reason? Sort them fast</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="extend"><div><b>Make it longer</b><span>The best extended sentence, y → e and o → u, porque or ¿por qué?, también or tampoco</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening chain 🔊</b><span id="listenNote">Hear the sentence: which connector did you hear, and what does it mean?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.18, 1.20 (2017 spec, exams 2027–2028) · 1.13, 1.15 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="mail" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Linking &amp; extending sentences</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: two answers</h3>
+        <div class="two-mail">
+          <div class="note" style="margin:0;background:var(--mist);border-color:var(--line)"><b>Answer A</b><br>Me gusta el instituto. Es grande. Tengo muchos amigos. Las clases empiezan temprano. No me gusta.</div>
+          <div class="note" style="margin:0"><b>Answer B</b><br>Me gusta el instituto <b>porque</b> es grande <b>y</b> tengo muchos amigos allí. <b>Sin embargo</b>, las clases empiezan muy temprano, <b>así que</b> siempre estoy cansado por la mañana.</div>
+        </div>
+        <p style="margin-top:10px">Both say almost the same thing. Which one sounds better? Which words make the difference, and what does each one do: add, contrast, give a reason or a result? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Answer B joins the ideas with <b>connectors</b>: <em>porque</em> gives a reason, <em>y</em> adds, <em>sin embargo</em> shows a contrast and <em>así que</em> gives a result. The facts are the same, but B reads like real Spanish and shows the examiner a range of language. That's what lifts a Writing mark.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The connectors you need</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Job</th><th>Spanish</th><th>English</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Adding ➕</td><td>y · también · además · y también</td><td>and · also / too · what's more · and also</td><td>Juego al fútbol <b>y también</b> hago natación.</td></tr>
+            <tr><td>Contrast ↔️</td><td>pero · aunque · sin embargo · en cambio</td><td>but · although · however · on the other hand</td><td>Las matemáticas son difíciles <b>pero</b> útiles.</td></tr>
+            <tr><td>Reason ❓</td><td>porque · ya que</td><td>because · since / as</td><td>Me gusta leer <b>porque</b> es relajante.</td></tr>
+            <tr><td>Result ➡️</td><td>así que · por eso</td><td>so · that's why</td><td>Estaba cansado, <b>así que</b> me acosté temprano.</td></tr>
+            <tr><td>Time 🕒</td><td>cuando · luego · después · antes de + inf.</td><td>when · then · afterwards · before …ing</td><td>Voy a pie <b>cuando</b> hace buen tiempo.</td></tr>
+            <tr><td>Choice / condition</td><td>o · si</td><td>or · if</td><td>Vamos a la playa <b>si</b> hace sol.</td></tr>
+            <tr><td>Example</td><td>por ejemplo</td><td>for example</td><td>Me gustan los deportes, <b>por ejemplo</b> el tenis.</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Little words with rules</h3>
+        <ul>
+          <li><b>y → e</b> before a word starting with an <b>i-</b> or <b>hi-</b> sound: <em>español <b>e</b> inglés · padres <b>e</b> hijos</em>.</li>
+          <li><b>o → u</b> before a word starting with an <b>o-</b> or <b>ho-</b> sound: <em>siete <b>u</b> ocho · uno <b>u</b> otro</em>.</li>
+          <li><b>porque</b> (because, one word, no accent) answers <b>¿por qué?</b> (why?, two words, accent): <em>¿Por qué estudias español? — Porque me encanta.</em></li>
+          <li><b>también</b> (too) agrees with a yes; <b>tampoco</b> (neither) agrees with a no: <em>Me gusta el pádel. — A mí también. · No me gusta el rugby. — A mí tampoco.</em></li>
+          <li><b>Sin embargo</b> and <b>además</b> usually start a new sentence and take a comma: <em>Es caro. Sin embargo, es muy bonito.</em></li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Make it longer: the 4-step sentence</h3>
+        <p>Take a short sentence and grow it, one step at a time:</p>
+        <ol>
+          <li><b>Fact:</b> <em>Juego al baloncesto.</em></li>
+          <li><b>+ when / how often:</b> <em>Juego al baloncesto <b>dos veces a la semana</b></em></li>
+          <li><b>+ reason:</b> <em>… <b>porque</b> es muy divertido</em></li>
+          <li><b>+ contrast or extra:</b> <em>… <b>pero</b> no me gusta jugar <b>cuando</b> llueve.</em></li>
+        </ol>
+        <p>One sentence, four ideas, and three connectors. You can do it in any tense: <em>El sábado <b>fui</b> al cine <b>y luego</b> cené en una pizzería.</em> · <em>En verano <b>voy a ir</b> a Francia <b>porque</b> quiero practicar el francés.</em></p>
+
+        <div class="note" style="margin-top:12px"><b>Irish and English link:</b> you already do this! <em>agus</em> = y, <em>ach</em> = pero, <em>mar</em> = porque, <em>mar sin</em> = así que, <em>nuair a</em> = cuando. Same jobs, different words.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, aim for at least one <b>porque</b>, one <b>pero</b> (or <em>sin embargo</em>) and one <b>así que</b> or <b>cuando</b> in every answer. Short choppy sentences lose range marks. But don't stretch so far that you make mistakes: check agreement and verb endings in your long sentences. In <b>Reading</b> and <b>Listening</b>, connectors are clues: after <em>pero</em> or <em>sin embargo</em> the answer often changes direction, and <em>porque</em> tells you the reason is coming next.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/linking-sentences-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/5oeIF" target="_blank" rel="noopener">Linking Sentences Teacher Pack (€5)</a>: Sentence Builders pair game, Connector Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+
+  /* What each connector means (used in reviews and Listening) */
+  var MEAN={"y":"and","y también":"and also","pero":"but","aunque":"although","porque":"because","así que":"so","cuando":"when","o":"or","si":"if"};
+
+  /* ---------- Chain paragraphs ----------
+     [first half, connector, ending, [3 wrong connectors], [3 wrong endings], English with {connector}] */
+  var CHAINS=[
+    {t:"Mi instituto",e:"🏫",l:[
+      ["Mi instituto es bastante grande","y","tiene un gimnasio muy moderno",["aunque","o","cuando"],["es muy pequeño","no es nada grande","tiene muy pocas aulas"],"My school is quite big {and} it has a very modern gym."],
+      ["Me encanta el inglés","porque","el profesor es muy divertido",["pero","aunque","o"],["odio los libros de inglés","es mi peor asignatura","nunca entiendo nada"],"I love English {because} the teacher is really fun."],
+      ["Las matemáticas son difíciles","pero","son muy útiles",["porque","así que","cuando"],["son muy complicadas","no las entiendo nada","son muy difíciles"],"Maths is difficult {but} it's very useful."],
+      ["Tengo un examen de ciencias mañana,","así que","voy a estudiar esta noche",["aunque","porque","o"],["no voy a estudiar nada","voy a ver la tele toda la noche","el examen fue ayer"],"I have a science exam tomorrow, {so} I'm going to study tonight."],
+      ["Voy al instituto a pie","cuando","hace buen tiempo",["pero","así que","o"],["llueve a cántaros","hace muy mal tiempo","tengo el pie roto"],"I walk to school {when} the weather is good."],
+      ["Me gusta mi instituto,","aunque","las clases empiezan muy temprano",["porque","así que","cuando"],["es mi sitio favorito","los profesores son muy simpáticos","tengo muchos amigos allí"],"I like my school, {although} classes start very early."]
+    ]},
+    {t:"Mi tiempo libre",e:"⚽",l:[
+      ["Juego al fútbol los sábados","y también","hago natación los domingos",["porque","aunque","así que"],["nunca hago deporte","odio todos los deportes","no juego nunca al fútbol"],"I play football on Saturdays {and also} go swimming on Sundays."],
+      ["Me gusta mucho leer","porque","es muy relajante",["pero","aunque","o"],["es muy aburrido","no tengo libros","nunca leo"],"I really like reading {because} it's very relaxing."],
+      ["Me encanta la música","pero","no sé tocar ningún instrumento",["porque","así que","cuando"],["toco la guitarra todos los días","escucho música siempre","es mi afición favorita"],"I love music {but} I can't play any instrument."],
+      ["Estaba muy cansado,","así que","me acosté temprano",["aunque","porque","o"],["salí toda la noche","no dormí nada","jugué al fútbol hasta las doce"],"I was very tired, {so} I went to bed early."],
+      ["Los fines de semana veo series","o","salgo con mis amigos",["porque","así que","aunque"],["nunca veo series","odio todas las series","no tengo tiempo libre"],"At the weekend I watch series {or} I go out with my friends."],
+      ["Voy a la piscina","cuando","tengo tiempo libre",["pero","así que","aunque"],["no tengo tiempo","estoy en clase","no sé nadar"],"I go to the pool {when} I have free time."]
+    ]},
+    {t:"Mi familia",e:"👨‍👩‍👧‍👦",l:[
+      ["Tengo un hermano","y","dos hermanas",["porque","cuando","así que"],["soy hijo único","no tengo hermanos","no tengo familia"],"I have a brother {and} two sisters."],
+      ["Mi hermana es muy simpática","pero","a veces es un poco perezosa",["porque","así que","o"],["es muy amable","siempre me ayuda","es muy generosa"],"My sister is very nice {but} sometimes she's a bit lazy."],
+      ["Me llevo bien con mi padre","porque","es muy paciente",["pero","aunque","o"],["siempre discutimos","es muy antipático","nunca habla conmigo"],"I get on well with my dad {because} he's very patient."],
+      ["Mi abuela vive con nosotros,","así que","la veo todos los días",["aunque","pero","o"],["nunca la veo","vive muy lejos","no la conozco"],"My grandmother lives with us, {so} I see her every day."],
+      ["Discuto con mi hermano","cuando","coge mis cosas sin permiso",["pero","así que","aunque"],["es muy amable conmigo","me ayuda con los deberes","me compra regalos"],"I argue with my brother {when} he takes my things without asking."],
+      ["Mi madre trabaja mucho,","aunque","siempre tiene tiempo para nosotros",["porque","así que","o"],["está muy ocupada","trabaja en un hospital","nunca está en casa"],"My mum works a lot, {although} she always has time for us."]
+    ]},
+    {t:"El fin de semana pasado",e:"⏪",l:[
+      ["El sábado fui al centro","y","compré unas zapatillas",["porque","aunque","o"],["me quedé en casa todo el día","no salí de casa","no fui al centro"],"On Saturday I went to town {and} I bought some trainers."],
+      ["Quería ir a la playa","pero","llovió todo el día",["porque","así que","cuando"],["hizo mucho sol","fui a la playa","nadé en el mar"],"I wanted to go to the beach {but} it rained all day."],
+      ["No fui a la fiesta","porque","estaba enfermo",["pero","así que","y también"],["me encantan las fiestas","bailé toda la noche","lo pasé bomba en la fiesta"],"I didn't go to the party {because} I was sick."],
+      ["Perdí el autobús,","así que","llegué tarde al partido",["aunque","porque","o"],["llegué muy temprano","cogí el autobús","fui en autobús"],"I missed the bus, {so} I was late for the match."],
+      ["Me duché","cuando","volví del partido",["pero","así que","aunque"],["estaba en el partido","jugaba en el campo","no volví a casa"],"I had a shower {when} I got back from the match."],
+      ["Fue un fin de semana muy divertido,","aunque","hizo mucho frío",["así que","o","cuando"],["lo pasé muy bien","me divertí mucho","fue genial"],"It was a really fun weekend, {although} it was very cold."]
+    ]},
+    {t:"Mis planes",e:"⏩",l:[
+      ["En verano voy a ir a España","y","voy a visitar a mis primos",["aunque","pero","cuando"],["no voy a salir de Irlanda","me voy a quedar en Cork","no voy a ir a España"],"In summer I'm going to go to Spain {and} I'm going to visit my cousins."],
+      ["Me gustaría ser médico","porque","quiero ayudar a la gente",["pero","aunque","o"],["odio los hospitales","no me gustan las ciencias","no quiero ayudar a nadie"],"I'd like to be a doctor {because} I want to help people."],
+      ["Mañana voy a tener mucho tiempo libre,","así que","voy a ir al cine con mis amigos",["aunque","porque","pero"],["no voy a poder salir","voy a estar muy ocupado","voy a trabajar todo el día"],"Tomorrow I'm going to have lots of free time, {so} I'm going to go to the cinema with my friends."],
+      ["Quiero ir a la universidad","pero","todavía no sé qué estudiar",["porque","así que","cuando"],["quiero estudiar Medicina","ya sé qué quiero estudiar","voy a estudiar Derecho"],"I want to go to university {but} I still don't know what to study."],
+      ["Vamos a ir a la playa","si","hace sol mañana",["pero","así que","aunque"],["llueve a cántaros","hace muy mal tiempo","hay una tormenta"],"We're going to go to the beach {if} it's sunny tomorrow."],
+      ["Después de clase voy a jugar al fútbol","o","voy a ir a la piscina",["porque","aunque","así que"],["no voy a hacer nada de deporte","odio el deporte","nunca hago deporte"],"After class I'm going to play football {or} I'm going to go to the pool."]
+    ]},
+    {t:"Mi ciudad",e:"🏙️",l:[
+      ["Vivo en un pueblo pequeño","pero","hay muchas cosas que hacer",["porque","así que","o"],["no hay nada que hacer","es muy tranquilo","es muy pequeño"],"I live in a small village {but} there are lots of things to do."],
+      ["Me gusta mi barrio","porque","es muy tranquilo y seguro",["pero","aunque","o"],["hay mucho ruido","es muy peligroso","no tiene parques"],"I like my area {because} it's very quiet and safe."],
+      ["En mi ciudad hay un cine","y","un centro comercial enorme",["porque","cuando","así que"],["no hay ningún cine","no hay nada","no hay cines"],"In my town there's a cinema {and} a huge shopping centre."],
+      ["No hay mucho transporte público,","así que","voy a todas partes en bici",["aunque","porque","o"],["siempre cojo el autobús","hay muchos autobuses","el tren es perfecto"],"There isn't much public transport, {so} I go everywhere by bike."],
+      ["Me encanta pasear por el centro","cuando","hay luces de Navidad",["pero","así que","aunque"],["está todo cerrado","no hay nadie","llueve a cántaros"],"I love walking around the centre {when} there are Christmas lights."],
+      ["Cork es una ciudad bonita,","aunque","llueve mucho",["porque","así que","o"],["es preciosa","tiene muchos parques","es muy bonita"],"Cork is a pretty city, {although} it rains a lot."]
+    ]}
+  ];
+  var ALL=[];CHAINS.forEach(function(c){c.l.forEach(function(x){ALL.push(x);});});
+  function full(it){return it[0]+" "+it[1]+" "+it[2]+".";}
+  function enOf(it){return it[5].replace(/[{}]/g,"");}
+
+  function mkLink(it){
+    var why=it[1]+" = "+MEAN[it[1]];
+    var review=full(it)+" ("+why+")";
+    if(Math.random()<.6)
+      return {who:"🔗",en:"Which connector joins the two halves?",frame:it[0]+" ___ "+it[2]+".",answer:it[1],wrong:it[3].slice(),line:full(it),enFull:enOf(it),conn:it[1],review:review};
+    return {who:"🧩",en:"Which ending fits? ("+it[1]+" = "+MEAN[it[1]]+")",frame:it[0]+" "+it[1]+" ___",answer:it[2],wrong:it[4].slice(),line:full(it),enFull:enOf(it),conn:it[1],review:review};
+  }
+
+  var ch=null;
+  function newChain(){var c=rnd(CHAINS.filter(function(x){return !ch||x!==ch.c;}));ch={c:c,lines:[],slot:0,done:false,n:c.l.length};}
+  function qChain(){if(!ch||ch.done)newChain();var q=mkLink(ch.c.l[ch.slot]);q.card=1;return q;}
+  function qLine(){return mkLink(rnd(ALL));}
+
+  /* ---------- Connectors toolkit ---------- */
+  var CONN=[["y","and"],["pero","but"],["porque","because"],["también","also / too"],["además","what's more"],["sin embargo","however"],["aunque","although"],["así que","so"],["por eso","that's why"],["cuando","when"],["o","or"],["si","if"],["ya que","since / as"],["luego","then / later"],["por ejemplo","for example"],["en cambio","on the other hand"]];
+  function qMean(){var w=rnd(CONN),o=others(CONN,w,3);
+    if(Math.random()<.5)return {who:"🔗",en:"What does it mean?",frame:w[0],answer:w[1],wrong:o.map(function(x){return x[1];}),review:w[0]+" = "+w[1]};
+    return {who:"🔗",en:"How do you say it in Spanish? ("+w[1]+")",frame:"___",answer:w[0],wrong:o.map(function(x){return x[0];}),review:w[1]+" = "+w[0]};}
+  var JOB=["➕ Adding","↔️ Contrast","❓ Reason"],JOBS=["and, also","but, however","because"];
+  var SORT=[
+    ["y",0,"y = and"],["también",0,"también = also"],["además",0,"además = what's more"],["y también",0,"y también = and also"],["Juego al tenis y también al pádel.",0,"y también = and also"],["Es barato. Además, es muy bonito.",0,"además = what's more"],
+    ["pero",1,"pero = but"],["sin embargo",1,"sin embargo = however"],["aunque",1,"aunque = although"],["en cambio",1,"en cambio = on the other hand"],["Es caro, pero me encanta.",1,"pero = but"],["Me gusta Cork, aunque llueve mucho.",1,"aunque = although"],
+    ["porque",2,"porque = because"],["ya que",2,"ya que = since / as"],["Me gusta leer porque es relajante.",2,"porque = because"],["No salgo ya que tengo un examen.",2,"ya que = since / as"],["Estudio español porque me encanta.",2,"porque = because"]
+  ];
+  function qSort(spoken){var s=rnd(SORT.filter(function(x){return !spoken||x[0].length>12;}));
+    return {fixed:1,tm:1,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"🗂️",en:spoken?"Listen. Adding, contrast or reason?":"Adding, contrast or reason?",frame:spoken?"":s[0],answer:JOB[s[1]],wrong:JOB.filter(function(x,i){return i!==s[1];}),opts:JOB,review:s[0]+" → "+JOB[s[1]].slice(3)+" ("+s[2]+")"};}
+  function gSort(){return qSort(false);}
+  function lSort(){return qSort(true);}
+
+  /* ---------- Make it longer ---------- */
+  var EXT=[
+    ["Me gusta el inglés porque es interesante, pero hay muchos deberes.",["Me gusta el inglés pero es interesante, porque hay muchos deberes.","Me gusta el inglés porque es interesanta, pero hay muchos deberes.","Me gusta el inglés porque es interesante, pero hay mucho deberes."],"porque + reason, pero + contrast; el inglés es interesante; muchos deberes"],
+    ["Vivo en Cork, una ciudad bonita, aunque llueve mucho.",["Vivo en Cork, una ciudad bonito, aunque llueve mucho.","Vivo en Cork, una ciudad bonita, porque llueve mucho.","Vivo en Cork, una ciudad bonita, aunque llovo mucho."],"la ciudad bonita; aunque = although; llueve"],
+    ["El sábado fui al cine y luego cené en una pizzería.",["El sábado fue al cine y luego cené en una pizzería.","El sábado fui al cine o luego cené en una pizzería.","El sábado fui al cine y luego ceno en una pizzería."],"yo, past: fui … cené; y luego = and then"],
+    ["Tengo dos hermanos y una hermana, así que mi casa es muy ruidosa.",["Tengo dos hermanos y una hermana, aunque mi casa es muy ruidosa.","Tengo dos hermano y una hermana, así que mi casa es muy ruidosa.","Tengo dos hermanos y una hermana, así que mi casa es muy ruidoso."],"así que = so (result); dos hermanos; la casa ruidosa"],
+    ["En verano voy a ir a Francia porque quiero practicar el francés.",["En verano voy ir a Francia porque quiero practicar el francés.","En verano voy a ir a Francia pero quiero practicar el francés.","En verano voy a ir a Francia porque quiero practico el francés."],"voy a + infinitive; porque = reason; quiero + infinitive"],
+    ["Hablo inglés e irlandés, y también estudio español.",["Hablo inglés y irlandés, y también estudio español.","Hablo inglés e irlandés, y tampoco estudio español.","Hablo inglés e irlandés, y también estudia español."],"y → e before irlandés; también, not tampoco; yo estudio"],
+    ["No me gustan las ciencias porque son difíciles. Sin embargo, me encanta la historia.",["No me gusta las ciencias porque son difíciles. Sin embargo, me encanta la historia.","No me gustan las ciencias porque son difíciles. Además, me encanta la historia.","No me gustan las ciencias porque son difíciles. Sin embargo, me encanto la historia."],"las ciencias → gustan; sin embargo = contrast; me encanta la historia"],
+    ["Mi mejor amiga se llama Niamh y es muy graciosa, pero a veces es un poco tímida.",["Mi mejor amiga se llama Niamh y es muy gracioso, pero a veces es un poco tímida.","Mi mejor amiga se llama Niamh porque es muy graciosa, pero a veces es un poco tímida.","Mi mejor amiga se llama Niamh y es muy graciosa, así que a veces es un poco tímida."],"amiga → graciosa; y adds; pero = contrast"],
+    ["Juego al baloncesto dos veces a la semana porque es muy divertido.",["Juego al baloncesto dos veces a la semana porque es muy divertida.","Juego al baloncesto dos veces a la semana aunque es muy divertido.","Jugo al baloncesto dos veces a la semana porque es muy divertido."],"yo juego; el baloncesto es divertido; porque = reason"]
+  ];
+  function qExt(){var x=rnd(EXT);return {who:"📏",en:"Which long sentence is 100% right?",frame:"Pick the best extended sentence",answer:x[0],wrong:x[1].slice(),review:x[0]+" ("+x[2]+")"};}
+  var YE=[
+    ["Hablo español ___ inglés.","Speak Spanish and English","e",["y","o","u"],"y → e before i-"],
+    ["Mis padres ___ mis hermanos van a la playa.","My parents and my brothers…","y",["e","o","u"],"mis hermanos starts with m-: y stays"],
+    ["En mi clase hay chicos ___ chicas.","boys and girls","y",["e","o","u"],"chicas starts with ch-: y stays"],
+    ["Estudio francés ___ historia.","French and history","e",["y","o","u"],"y → e before hi- (the h is silent)"],
+    ["Tengo siete ___ ocho euros.","seven or eight euros","u",["o","y","e"],"o → u before o-"],
+    ["¿Prefieres té ___ café?","tea or coffee?","o",["u","y","e"],"café starts with c-: o stays"],
+    ["Mi madre es simpática ___ inteligente.","nice and intelligent","e",["y","o","u"],"y → e before i-"],
+    ["¿Hay diez ___ once alumnos?","ten or eleven pupils?","u",["o","y","e"],"o → u before o-"],
+    ["Me gustan las matemáticas ___ la música.","maths and music","y",["e","o","u"],"la música starts with l-: y stays"],
+    ["Aprendo irlandés ___ inglés en el instituto.","Irish and English","e",["y","o","u"],"y → e before i-"]
+  ];
+  function qYE(){var x=rnd(YE);return {who:"🔤",en:"y, e, o or u? ("+x[1]+")",frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" ("+x[4]+")"};}
+  var PQ=[
+    ["¿___ estudias español?","Why do you study Spanish?","Por qué",["Porque","Por que","Porqué"],"question = ¿Por qué? (two words, accent)"],
+    ["Estudio español ___ me encanta.","…because I love it.","porque",["por qué","por que","porqué"],"answer = porque (one word)"],
+    ["¿___ no vienes al cine?","Why aren't you coming to the cinema?","Por qué",["Porque","Por que","Porqué"],"question = ¿Por qué?"],
+    ["No voy ___ estoy cansada.","I'm not going because I'm tired.","porque",["por qué","por que","porqué"],"because = porque"],
+    ["No sé ___ llora mi hermano.","I don't know why my brother is crying.","por qué",["porque","por que","porqué"],"why (even without ¿?) = por qué"],
+    ["Me gusta mi barrio ___ es tranquilo.","…because it's quiet.","porque",["por qué","por que","porqué"],"because = porque"]
+  ];
+  function qPQ(){var x=rnd(PQ);return {who:"❓",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" ("+x[4]+")"};}
+  var TT=[
+    ["Me gusta el pádel. —A mí ___.","Me too.","también",["tampoco","nunca","nada"],"agreeing with a yes: también"],
+    ["No me gusta el rugby. —A mí ___.","Me neither.","tampoco",["también","nunca","nada"],"agreeing with a no: tampoco"],
+    ["Juego al fútbol y ___ juego al tenis.","…and I also play tennis.","también",["tampoco","nunca","nada"],"also = también"],
+    ["No tengo perro y ___ tengo gato.","…and I don't have a cat either.","tampoco",["también","nunca","nada"],"not … either = tampoco"],
+    ["Mi hermano habla francés. Mi hermana ___.","My sister does too.","también",["tampoco","nunca","nada"],"too = también"],
+    ["No voy a la fiesta. Mis amigos ___.","My friends aren't going either.","tampoco",["también","nunca","nada"],"not either = tampoco"]
+  ];
+  function qTT(){var x=rnd(TT);return {who:"🤝",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" ("+x[4]+")"};}
+  var SE=[
+    ["Es un hotel caro. ___ es muy cómodo.","It's an expensive hotel. However, it's very comfortable.","Sin embargo,",["Además,","Por eso,","Por ejemplo,"],"contrast: sin embargo"],
+    ["Mi barrio es tranquilo. ___ hay un parque enorme.","My area is quiet. What's more, there's a huge park.","Además,",["Sin embargo,","Por eso,","En cambio,"],"adding: además"],
+    ["Mañana tengo un examen. ___ no puedo salir esta noche.","I have an exam tomorrow. That's why I can't go out tonight.","Por eso",["Sin embargo,","Además,","Por ejemplo,"],"result: por eso"],
+    ["Me encantan los deportes, ___ el tenis y el hurling.","I love sport, for example tennis and hurling.","por ejemplo",["sin embargo","por eso","en cambio"],"example: por ejemplo"],
+    ["Mi hermano es muy deportista. ___ yo prefiero leer.","My brother is very sporty. I, on the other hand, prefer reading.","En cambio,",["Además,","Por eso,","Por ejemplo,"],"contrast: en cambio"]
+  ];
+  function qSE(){var x=rnd(SE);return {who:"✍️",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" ("+x[4]+")"};}
+
+  /* ---------- Listening ---------- */
+  var EN_CONN={"y":"and","y también":"and also","pero":"but","aunque":"although","porque":"because","así que":"so","cuando":"when","o":"or","si":"if"};
+  function lHearConn(){var it=rnd(ALL);
+    return {listen:1,speak:full(it),en:"Listen. Which connector did you hear?",answer:it[1],wrong:it[3].slice(),review:full(it)+" = "+enOf(it)};}
+  function lMeaning(){var it=rnd(ALL),right=it[1];
+    var pool=Object.keys(EN_CONN).filter(function(k){return k!==right&&EN_CONN[k]!==EN_CONN[right]&&!(right==="y"&&k==="y también")&&!(right==="y también"&&k==="y");});
+    var wr=shuffle(pool).slice(0,3).map(function(k){return it[5].replace(/\{[^}]*\}/,EN_CONN[k]);});
+    return {listen:1,speak:full(it),en:"Listen. What does it mean?",answer:enOf(it),wrong:wr,review:full(it)+" = "+enOf(it)};}
+
+  var MAKERS={
+    chain:[qChain],
+    toolkit:[qMean,qMean,gSort,gSort,gSort,qSE],
+    extend:[qExt,qExt,qYE,qPQ,qTT,qSE],
+    listen:[lHearConn,lHearConn,lMeaning,lMeaning,lSort],
+    mixed:[qLine,qLine,qLine,qMean,gSort,qExt,qYE,qPQ,qTT,qSE]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the sentence: which connector did you hear, and what does it mean? (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Paragraph drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawChain(flash){
+    var el=$("card");if(mode!=="chain"||!ch){el.hidden=true;return;}
+    el.hidden=false;el.className="mail"+(ch.done?" sent":"");
+    var h="<div class='bar'><span>🔗 Mi párrafo</span><span class='count'>Link "+Math.min(ch.slot+1,ch.n)+" of "+ch.n+"</span></div>";
+    h+="<div class='hd'><b>Tema:</b> "+ch.c.e+" "+esc(ch.c.t)+"</div><div class='body'><p>";
+    h+=ch.lines.map(function(l){return esc(l[0])+" <b class='c'>"+esc(l[1])+"</b> "+esc(l[2])+".";}).join(" ");
+    if(!ch.done)h+=" <span class='now'>🔗…</span>";
+    h+="</p></div>";
+    if(flash)h+="<div class='flash'>🔗 Paragraph done! +3</div>";
+    el.innerHTML=h;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:(m==="chain"?75:60);score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;ch=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawChain(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    $("frame").innerHTML=fr;$("frame").className="frame";
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+JOBS[JOB.indexOf(f)]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){
+    if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    else if(current.line){$("frame").innerHTML="<span class='fixed'>"+esc(current.line)+"</span>";$("en").textContent=current.enFull;}
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.slice(3):f,listen:!!current.listen});
+    }
+    if(current.card&&ch){
+      ch.lines.push(ch.c.l[ch.slot]);ch.slot++;
+      if(ch.slot>=ch.n){ch.done=true;score+=3;cards++;flash=true;}
+      drawChain(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:(current.line?1000:500))):(current.speak?2600:2200);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Connector champion.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="chain"?", "+cards+" paragraph"+(cards===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,CHAINS:CHAINS,ALL:ALL,mkLink:mkLink};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
