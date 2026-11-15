@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nouns &amp; articles: play Gender Sort | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: nouns and articles. Swipe each noun to el or la, learn the endings and the exceptions (el día, la mano), make plurals (el lápiz → los lápices), pick un, una, unos or unas, and spot article slips. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px;touch-action:pan-y}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3;transition:transform .25s ease,opacity .25s ease}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+/* swipe card */
+.sc{display:block;background:linear-gradient(180deg,#FFFBEA,#fff);border:2px solid var(--cream-line);border-radius:16px;padding:22px 16px;margin-top:4px;box-shadow:0 4px 14px rgba(27,36,48,.07);user-select:none;-webkit-user-select:none}
+.sc small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:10px;letter-spacing:0}
+.frame.fly-l{transform:translateX(-60px) rotate(-6deg);opacity:.35}
+.frame.fly-r{transform:translateX(60px) rotate(6deg);opacity:.35}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.slip{color:#D9534F;text-decoration:underline wavy #D9534F;text-underline-offset:5px}
+.prompt .who{min-height:44px}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:4px}
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.dd div{border-radius:12px;padding:12px 14px}
+.dd b.h{display:block;font-size:20px;font-weight:800;letter-spacing:.04em}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.choices.three .choice small{font-size:11.5px}.dd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Gender Sort</h1>
+        <p>Every Spanish noun is masculine or feminine, and the little word in front (<b>el</b>, <b>la</b>, <b>un</b>, <b>una</b>) has to match. Swipe each noun to <b>el</b> or <b>la</b>, fast! Then make plurals (<b>el lápiz → los lápices</b>), pick <b>un, una, unos</b> or <b>unas</b>, and catch the article slips that cost marks in Writing. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Gender Sort</b><span>Swipe each noun: ⬅ EL or LA ➡? Then say why, and pick the right article</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="plural"><div><b>Plurals &amp; articles</b><span>el lápiz → los lápices, un, una, unos or unas?, and what los padres really means</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slips"><div><b>Spot the slip</b><span>Find the wrong word in the sentence, or pick the fix</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening sort 🔊</b><span id="listenNote">Hear the noun: el or la? One or more than one? What did they say?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: on a phone, swipe the noun card left (el) or right (la). On a computer, use the arrow keys (← →) or the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 2.1, 2.5 (2017 spec, exams 2027–2028) · 2.1, 2.4 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" id="promptBox" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Nouns &amp; articles: gender and plurals</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li><b>el</b> libro · <b>el</b> perro · <b>el</b> ordenador · <b>el</b> avión · <b>el</b> problema</li>
+          <li><b>la</b> casa · <b>la</b> mochila · <b>la</b> canción · <b>la</b> televisión · <b>la</b> ciudad</li>
+        </ul>
+        <p>Look at the <b>last letters</b> of each word. Which endings go with <b>el</b>, and which go with <b>la</b>? One word in the first line looks like it's in the wrong group: which one? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Words ending in <b>-o</b> are usually <b>masculine</b> (el, un), and words ending in <b>-a</b> are usually <b>feminine</b> (la, una). Some endings are even safer: <b>-ción / -sión</b> and <b>-dad / -tad</b> are always feminine, and <b>-or</b> and <b>-ón</b> are usually masculine. The odd one out is <b>el problema</b>: words ending in <b>-ma</b> that come from Greek are masculine. Masculine and feminine are just grammar labels: a table (<em>la mesa</em>) isn't "a girl"!</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The endings</h3>
+        <div class="dd">
+          <div style="background:var(--green-soft)"><b class="h">EL · masculine</b><b>-o</b>: el libro, el zapato · <b>-or</b>: el ordenador, el color · <b>-ón</b>: el avión, el balón · <b>-ma</b>: el problema, el idioma, el programa · <b>-aje</b>: el viaje</div>
+          <div style="background:var(--cream)"><b class="h">LA · feminine</b><b>-a</b>: la casa, la silla · <b>-ción / -sión</b>: la canción, la televisión · <b>-dad / -tad</b>: la ciudad, la amistad</div>
+        </div>
+        <p style="margin-top:10px"><b>Ends in -e or a consonant?</b> There's no rule: learn the word <b>with</b> its article. <em>el coche, el tomate, el árbol, el reloj, el lápiz</em> but <em>la noche, la llave, la clase, la flor, la luz</em>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The famous exceptions</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Ends in -a, but masculine</th><th>Ends in -o, but feminine</th></tr></thead>
+          <tbody>
+            <tr><td><b>el</b> día (the day)</td><td><b>la</b> mano (the hand)</td></tr>
+            <tr><td><b>el</b> mapa (the map) · <b>el</b> planeta (the planet)</td><td><b>la</b> radio (the radio)</td></tr>
+            <tr><td><b>el</b> sofá (the sofa)</td><td><b>la</b> foto (short for <em>la fotografía</em>)</td></tr>
+            <tr><td><b>el</b> problema · <b>el</b> idioma · <b>el</b> tema · <b>el</b> programa</td><td><b>la</b> moto (short for <em>la motocicleta</em>)</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> <em>el agua</em> (water) is feminine, but it takes <b>el</b> because it starts with a stressed <em>a</em> sound: <em>el agua fría</em>, <em>las aguas</em>. And people often have two forms: <em>el profesor / la profesora</em>, <em>el amigo / la amiga</em>, <em>el / la estudiante</em>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The articles</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>the</th><th>a / some</th></tr></thead>
+          <tbody>
+            <tr><td>masculine singular</td><td><b>el</b> libro</td><td><b>un</b> libro (a book)</td></tr>
+            <tr><td>feminine singular</td><td><b>la</b> casa</td><td><b>una</b> casa (a house)</td></tr>
+            <tr><td>masculine plural</td><td><b>los</b> libros</td><td><b>unos</b> libros (some books)</td></tr>
+            <tr><td>feminine plural</td><td><b>las</b> casas</td><td><b>unas</b> casas (some houses)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Mixed groups use the masculine plural:</b> <em>los padres</em> = parents (mum and dad), <em>mis hermanos</em> = my brothers and sisters, <em>mis tíos</em> = my aunt and uncle, <em>los chicos</em> = the boys, or the boys and girls. Spanish also uses the article where English doesn't: <em>Me gusta <b>el</b> fútbol</em> (I like football), <em>Odio <b>los</b> lunes</em> (I hate Mondays). And two little words join up: <b>a + el = al</b> (<em>voy al cine</em>), <b>de + el = del</b> (<em>al lado del parque</em>), but <em>a la</em> and <em>de la</em> never change.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Making plurals</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>The word ends in…</th><th>Do this</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>a vowel (-a, -e, -o, -á)</td><td>add <b>-s</b></td><td>libro → libros · coche → coches · sofá → sofás</td></tr>
+            <tr><td>a consonant</td><td>add <b>-es</b></td><td>ciudad → ciudades · árbol → árboles · flor → flores</td></tr>
+            <tr><td><b>-z</b></td><td><b>z → ces</b></td><td>lápiz → lápices · luz → luces · pez → peces</td></tr>
+            <tr><td>-ión, -ón, -ús with an accent</td><td>add <b>-es</b>, <b>lose the accent</b></td><td>canción → canciones · avión → aviones · autobús → autobuses</td></tr>
+            <tr><td>-en (stress before it)</td><td>add <b>-es</b>, <b>add an accent</b></td><td>examen → exámenes · joven → jóvenes</td></tr>
+            <tr><td>-s, with no accent on the end</td><td><b>no change</b> (only the article)</td><td>el lunes → los lunes · el paraguas → los paraguas · el cumpleaños → los cumpleaños</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">Why do the accents come and go? The <b>stress</b> stays on the same syllable: can-<b>CIÓN</b> → can-<b>CIO</b>-nes doesn't need the accent any more, but e-<b>XA</b>-men → e-<b>XÁ</b>-me-nes does.</p>
+
+        <div class="note" style="margin-top:12px"><b>Compare your languages:</b> English only has "the", so gender feels strange. But Irish nouns are masculine or feminine too: <em>an fear</em> (the man) but <em>an bhean</em> (the woman): after <em>an</em>, a feminine noun changes its first letter. French has <em>le / la</em>, and German has three genders! Spanish is one of the easier ones: the ending usually tells you.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, article slips (<em>una problema</em>, <em>el mano</em>, <em>los ciudades</em>) cost accuracy marks, and examiners see them in every answer. Learn every new noun <b>with</b> its article, as one chunk: not "casa" but "la casa". Then check the words around it agree: <em>la casa es pequeñ<b>a</b></em>, <em>los perros son negr<b>os</b></em>. In <b>Listening</b> and <b>Reading</b>, the article tells you <b>how many</b>: <em>un billete</em> is one ticket, <em>unos billetes</em> is more than one.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/nouns-and-articles-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/uPr9y" target="_blank" rel="noopener">Nouns &amp; Articles Teacher Pack (€5)</a>: Grammar Auction, Gender Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+  /* ---------- Data ---------- */
+  /* rule for el / la */
+  var R=["Ends in -o, so it's masculine","Ends in -a, so it's feminine","Ends in -ción / -sión: always feminine","Ends in -dad / -tad: always feminine",
+    "Ends in -or: usually masculine","Ends in -ma (a Greek word): masculine","Exception: ends in -a, but it's masculine","Exception: ends in -o, but it's feminine",
+    "Ends in -e or a consonant: learn it with el / la","Ends in -ón: masculine (but -ción / -sión are feminine)"];
+  var TAG=["-o → el","-a → la","-ción / -sión → la","-dad / -tad → la","-or → el","-ma → el","exception: el","exception: la","learn it","-ón → el"];
+  /* noun, gender (0 el, 1 la), plural (or null), English, English plural (or null), emoji, rule */
+  var N=[
+    ["libro",0,"libros","book","books","📖",0],["perro",0,"perros","dog","dogs","🐶",0],["gato",0,"gatos","cat","cats","🐱",0],
+    ["cuaderno",0,"cuadernos","copybook","copybooks","📓",0],["bolígrafo",0,"bolígrafos","pen","pens","🖊️",0],["zapato",0,"zapatos","shoe","shoes","👞",0],
+    ["queso",0,"quesos","cheese",null,"🧀",0],["helado",0,"helados","ice cream","ice creams","🍦",0],["plátano",0,"plátanos","banana","bananas","🍌",0],
+    ["pájaro",0,"pájaros","bird","birds","🐦",0],["regalo",0,"regalos","present","presents","🎁",0],["caballo",0,"caballos","horse","horses","🐴",0],
+    ["casa",1,"casas","house","houses","🏠",1],["manzana",1,"manzanas","apple","apples","🍎",1],["silla",1,"sillas","chair","chairs","🪑",1],
+    ["ventana",1,"ventanas","window","windows","🪟",1],["puerta",1,"puertas","door","doors","🚪",1],["pizza",1,"pizzas","pizza","pizzas","🍕",1],
+    ["camisa",1,"camisas","shirt","shirts","👕",1],["playa",1,"playas","beach","beaches","🏖️",1],["mochila",1,"mochilas","schoolbag","schoolbags","🎒",1],
+    ["naranja",1,"naranjas","orange","oranges","🍊",1],["fresa",1,"fresas","strawberry","strawberries","🍓",1],["vaca",1,"vacas","cow","cows","🐄",1],
+    ["cama",1,"camas","bed","beds","🛏️",1],["regla",1,"reglas","ruler","rulers","📏",1],
+    ["canción",1,"canciones","song","songs","🎵",2],["estación",1,"estaciones","station","stations","🚉",2],["habitación",1,"habitaciones","room","rooms","🏨",2],
+    ["televisión",1,"televisiones","television","televisions","📺",2],["lección",1,"lecciones","lesson","lessons","📝",2],["excursión",1,"excursiones","school trip","school trips","🥾",2],
+    ["ciudad",1,"ciudades","city","cities","🏙️",3],["universidad",1,"universidades","university","universities","🎓",3],["Navidad",1,null,"Christmas",null,"🎄",3],
+    ["amistad",1,null,"friendship",null,"🤝",3],["verdad",1,null,"truth",null,"✅",3],
+    ["ordenador",0,"ordenadores","computer","computers","💻",4],["color",0,"colores","colour","colours","🎨",4],["tenedor",0,"tenedores","fork","forks","🍴",4],["amor",0,null,"love",null,"❤️",4],
+    ["problema",0,"problemas","problem","problems","🤯",5],["idioma",0,"idiomas","language","languages","🗣️",5],["programa",0,"programas","programme","programmes","🎬",5],
+    ["tema",0,"temas","topic","topics","💬",5],["clima",0,null,"climate",null,"🌡️",5],
+    ["día",0,"días","day","days","📅",6],["mapa",0,"mapas","map","maps","🗺️",6],["planeta",0,"planetas","planet","planets","🪐",6],["sofá",0,"sofás","sofa","sofas","🛋️",6],
+    ["mano",1,"manos","hand","hands","✋",7],["radio",1,"radios","radio","radios","📻",7],["foto",1,"fotos","photo","photos","📷",7],["moto",1,"motos","motorbike","motorbikes","🏍️",7],
+    ["coche",0,"coches","car","cars","🚗",8],["tomate",0,"tomates","tomato","tomatoes","🍅",8],["árbol",0,"árboles","tree","trees","🌳",8],
+    ["reloj",0,"relojes","watch","watches","⌚",8],["tren",0,"trenes","train","trains","🚆",8],["lápiz",0,"lápices","pencil","pencils","✏️",8],
+    ["móvil",0,"móviles","mobile phone","mobile phones","📱",8],["autobús",0,"autobuses","bus","buses","🚌",8],["pez",0,"peces","fish",null,"🐟",8],
+    ["flor",1,"flores","flower","flowers","🌸",8],["leche",1,null,"milk",null,"🥛",8],["noche",1,"noches","night","nights","🌙",8],
+    ["llave",1,"llaves","key","keys","🔑",8],["nube",1,"nubes","cloud","clouds","☁️",8],["calle",1,"calles","street","streets","🛣️",8],
+    ["clase",1,"clases","class","classes","🏫",8],["nariz",1,"narices","nose","noses","👃",8],["luz",1,"luces","light","lights","💡",8],["carne",1,null,"meat",null,"🥩",8],
+    ["avión",0,"aviones","plane","planes","✈️",9],["camión",0,"camiones","lorry","lorries","🚚",9],["balón",0,"balones","ball","balls","⚽",9],
+    ["ratón",0,"ratones","mouse","mice","🐭",9],["jamón",0,"jamones","ham",null,"🍖",9]
+  ];
+  var DEF=[["el","la"],["los","las"]],IND=[["un","una"],["unos","unas"]];
+  var NOART=["Navidad","amor","amistad","verdad","clima","leche","carne","queso","jamón"]; /* odd with un / unos */
+  function the(x){return DEF[0][x[1]]+" "+x[0];}
+  function aEn(w){return (/^(university|universities)/.test(w)?"a ":/^[aeiou]/i.test(w)?"an ":"a ")+w;}
+  function tricky(){return N.filter(function(x){return x[6]>=5;});}
+
+  /* plurals: singular, plural, 3 wrong plurals, English, rule */
+  var PR=["Ends in a vowel: add -s","Ends in a consonant: add -es","Ends in -z: z → ces","Accent on the last syllable (-ión, -ón, -ús): add -es and lose the accent","examen → exámenes: add -es and an accent","Ends in -s with no accent on the end: no change"];
+  var PL=[
+    ["el libro","los libros",["los libroes","los libro","las libros"],"book → books",0],
+    ["la casa","las casas",["las casaes","los casas","las casa"],"house → houses",0],
+    ["el coche","los coches",["los cochees","los coche","las coches"],"car → cars",0],
+    ["la clase","las clases",["las clasees","las clase","los clases"],"class → classes",0],
+    ["el sofá","los sofás",["los sofaes","los sofá","las sofás"],"sofa → sofas",0],
+    ["el día","los días",["las días","los díaes","los día"],"day → days",0],
+    ["la mano","las manos",["los manos","las manoes","las mano"],"hand → hands",0],
+    ["la ciudad","las ciudades",["las ciudads","los ciudades","las ciudad"],"city → cities",1],
+    ["el árbol","los árboles",["los árbols","las árboles","los árbol"],"tree → trees",1],
+    ["el tren","los trenes",["los trens","las trenes","los tren"],"train → trains",1],
+    ["el reloj","los relojes",["los relojs","las relojes","los reloj"],"watch → watches",1],
+    ["la flor","las flores",["las flors","los flores","las flor"],"flower → flowers",1],
+    ["el ordenador","los ordenadores",["los ordenadors","las ordenadores","los ordenador"],"computer → computers",1],
+    ["el móvil","los móviles",["los móvils","las móviles","los móvil"],"mobile → mobiles",1],
+    ["el lápiz","los lápices",["los lápizs","los lápizes","las lápices"],"pencil → pencils",2],
+    ["la luz","las luces",["las luzs","las luzes","los luces"],"light → lights",2],
+    ["el pez","los peces",["los pezs","los pezes","las peces"],"fish → fish (more than one)",2],
+    ["la nariz","las narices",["las narizs","las narizes","los narices"],"nose → noses",2],
+    ["la canción","las canciones",["las canciónes","las cancións","los canciones"],"song → songs",3],
+    ["la estación","las estaciones",["las estaciónes","las estacións","los estaciones"],"station → stations",3],
+    ["la habitación","las habitaciones",["las habitaciónes","las habitacións","los habitaciones"],"room → rooms",3],
+    ["el autobús","los autobuses",["los autobúses","los autobúss","las autobuses"],"bus → buses",3],
+    ["el avión","los aviones",["los aviónes","los avións","las aviones"],"plane → planes",3],
+    ["el ratón","los ratones",["los ratónes","los ratóns","las ratones"],"mouse → mice",3],
+    ["el examen","los exámenes",["los examenes","los exámens","las exámenes"],"exam → exams",4],
+    ["el lunes","los lunes",["los luneses","las lunes","los lunés"],"Monday → Mondays",5],
+    ["el paraguas","los paraguas",["los paraguases","las paraguas","los paragua"],"umbrella → umbrellas",5],
+    ["el cumpleaños","los cumpleaños",["los cumpleañoses","las cumpleaños","los cumpleaño"],"birthday → birthdays",5]
+  ];
+  /* mixed groups: Spanish, right English, wrong English */
+  var MG=[
+    ["Tengo dos hermanos: Pablo y Ana.","I have a brother and a sister.",["I have two brothers.","I have two sisters.","I have two cousins."]],
+    ["Mis padres son de Cork.","My parents are from Cork.",["My fathers are from Cork.","My relatives are from Cork.","My grandparents are from Cork."]],
+    ["Mis tíos, Carmen y Luis, tienen un perro.","My aunt and uncle, Carmen and Luis, have a dog.",["My uncles, Carmen and Luis, have a dog.","My cousins, Carmen and Luis, have a dog.","My grandparents, Carmen and Luis, have a dog."]],
+    ["Mis abuelos, Rosa y Juan, viven en Kerry.","My grandparents, Rosa and Juan, live in Kerry.",["My grandfathers, Rosa and Juan, live in Kerry.","My parents, Rosa and Juan, live in Kerry.","My aunt and uncle, Rosa and Juan, live in Kerry."]],
+    ["En mi clase hay veinte alumnos: doce chicas y ocho chicos.","There are twenty pupils in my class: twelve girls and eight boys.",["There are twenty girls in my class.","There are twelve pupils in my class: eight girls and four boys.","There are twenty pupils in my class: eight girls and twelve boys."]],
+    ["Mis primos Lucía y Marcos viven en Madrid.","My cousins Lucía and Marcos live in Madrid.",["My cousin Lucía and my brother Marcos live in Madrid.","My cousins Lucía and Marcos live near Madrid.","My friends Lucía and Marcos live in Madrid."]]
+  ];
+  /* slips: correct, with a slip, wrong word, right word, English, why, 2 more wrong fixes */
+  var SL=[
+    ["Tengo un problema con los deberes.","Tengo una problema con los deberes.","una","un","I have a problem with my homework.","problema ends in -a, but it's masculine: un problema",["unos","la"]],
+    ["Me duele la mano.","Me duele el mano.","el","la","My hand hurts.","mano ends in -o, but it's feminine: la mano",["los","las"]],
+    ["Escucho la canción en la radio.","Escucho el canción en la radio.","el","la","I listen to the song on the radio.","words ending in -ción are feminine: la canción",["los","un"]],
+    ["Hay tres habitaciones en mi casa.","Hay tres habitacións en mi casa.","habitacións","habitaciones","There are three rooms in my house.","-ción → -ciones: add -es and lose the accent",["habitaciónes","habitación"]],
+    ["Mi hermano tiene dos lápices.","Mi hermano tiene dos lápizs.","lápizs","lápices","My brother has two pencils.","words ending in -z: z → ces (lápiz → lápices)",["lápizes","lápiz"]],
+    ["Los lunes juego al fútbol.","Los luneses juego al fútbol.","luneses","lunes","On Mondays I play football.","lunes doesn't change in the plural: el lunes → los lunes",["lunés","lune"]],
+    ["Vivo en una ciudad cerca de Cork.","Vivo en un ciudad cerca de Cork.","un","una","I live in a city near Cork.","words ending in -dad are feminine: una ciudad",["unos","el"]],
+    ["El mapa está en la pared.","La mapa está en la pared.","La","El","The map is on the wall.","mapa ends in -a, but it's masculine: el mapa",["Los","Las"]],
+    ["Mi padre ve la televisión por la noche.","Mi padre ve el televisión por la noche.","el","la","My dad watches TV at night.","words ending in -sión are feminine: la televisión",["los","un"]],
+    ["Tengo dos exámenes mañana.","Tengo dos examenes mañana.","examenes","exámenes","I have two exams tomorrow.","examen → exámenes: add -es and an accent",["exámens","examen"]],
+    ["No encuentro la llave de casa.","No encuentro el llave de casa.","el","la","I can't find the house key.","llave is feminine: learn -e words with their article (la llave)",["los","un"]],
+    ["Hay un árbol enorme en el jardín.","Hay una árbol enorme en el jardín.","una","un","There's a huge tree in the garden.","árbol is masculine: un árbol",["unos","la"]],
+    ["Los autobuses salen de la estación.","Los autobúses salen de la estación.","autobúses","autobuses","The buses leave from the station.","autobús → autobuses: add -es and lose the accent",["autobúss","autobús"]],
+    ["Hay muchas flores en el parque.","Hay muchas flors en el parque.","flors","flores","There are lots of flowers in the park.","ends in a consonant: add -es (flor → flores)",["florés","flor"]],
+    ["Tengo una foto de mi perro.","Tengo un foto de mi perro.","un","una","I have a photo of my dog.","foto is short for la fotografía, so it's feminine: una foto",["unos","el"]],
+    ["Mañana es el día de mi cumpleaños.","Mañana es la día de mi cumpleaños.","la","el","Tomorrow is my birthday.","día ends in -a, but it's masculine: el día",["los","un"]],
+    ["Necesito unos plátanos para el pastel.","Necesito unas plátanos para el pastel.","unas","unos","I need some bananas for the cake.","plátano is masculine: unos plátanos",["una","los"]],
+    ["Mi madre tiene una moto.","Mi madre tiene un moto.","un","una","My mum has a motorbike.","moto is short for la motocicleta, so it's feminine: una moto",["unos","el"]],
+    ["Hay dos relojes en la cocina.","Hay dos relojs en la cocina.","relojs","relojes","There are two clocks in the kitchen.","ends in a consonant: add -es (reloj → relojes)",["relojés","reloj"]],
+    ["El sofá está en el salón.","La sofá está en el salón.","La","El","The sofa is in the living room.","sofá is masculine: el sofá",["Los","Las"]],
+    ["La clase empieza a las nueve.","El clase empieza a las nueve.","El","La","The class starts at nine.","clase is feminine: learn -e words with their article (la clase)",["Los","Un"]],
+    ["Quiero un móvil para mi cumpleaños.","Quiero una móvil para mi cumpleaños.","una","un","I want a mobile phone for my birthday.","móvil is masculine: un móvil",["unos","la"]],
+    ["El idioma más difícil para mí es el francés.","La idioma más difícil para mí es el francés.","La","El","The hardest language for me is French.","idioma ends in -a, but it's masculine: el idioma",["Los","Las"]]
+  ];
+  function words(s){return s.replace(/[.,:;¡!¿?]/g,"").split(/\s+/).filter(function(w){return w;});}
+
+  /* ---------- Gender Sort ---------- */
+  var SW=["⬅ EL","LA ➡"],SWS=["masculine","feminine"];
+  function nounReview(x){return the(x)+" = the "+x[3]+" ("+TAG[x[6]]+")";}
+  function qSort(spoken){var x=Math.random()<.35?rnd(tricky()):rnd(N),a=SW[x[1]];
+    return {sort:1,fixed:1,tm:1,smalls:SWS,opts:SW,listen:spoken?1:0,speak:spoken?x[0]:"",who:spoken?"":x[5],
+      en:spoken?"Listen. El or la?":"El or la?",frame:spoken?"":x[0],cardSmall:spoken?"":"("+x[3]+")",answer:a,wrong:SW.filter(function(y){return y!==a;}),
+      review:nounReview(x)};}
+  function gSort(){return qSort(false);}
+  function lSort(){return qSort(true);}
+  /* why el / la? */
+  function qWhy(){var x=Math.random()<.5?rnd(tricky()):rnd(N),a=x[6];
+    var ban=[a];if(a===5)ban.push(6);if(a===6)ban.push(5);if([2,3,4,9].indexOf(a)>=0)ban.push(8);if(a===2)ban.push(9);if(a===9)ban.push(2);if(a===8&&/(or|ón)$/.test(x[0]))ban.push(4,9);
+    var cand=R.map(function(r,i){return i;}).filter(function(i){return ban.indexOf(i)<0;});
+    var w=shuffle(cand).slice(0,3).map(function(i){return R[i];});
+    return {who:x[5],en:"Why "+DEF[0][x[1]]+"?",frame:the(x),answer:R[a],wrong:w,review:nounReview(x)};}
+  /* English -> pick the right article + noun */
+  function qPick(){var pool=(Math.random()<.6?tricky():N).filter(function(x){return x[2]&&x[4];}),x=rnd(pool),pl=Math.random()<.35;
+    var ans=pl?DEF[1][x[1]]+" "+x[2]:the(x);
+    var cands=[DEF[0][1-x[1]]+" "+x[0],DEF[1][x[1]]+" "+x[2],DEF[1][1-x[1]]+" "+x[2],the(x)].filter(function(c){return c!==ans;});
+    return {who:x[5],en:"the "+(pl?x[4]:x[3]),frame:"Which one is right?",answer:ans,wrong:cands,review:ans+" = the "+(pl?x[4]:x[3])+" ("+TAG[x[6]]+")"};}
+
+  /* ---------- Plurals & articles ---------- */
+  function emojiFor(phrase){var w=phrase.split(" ")[1],x=N.filter(function(n){return n[0]===w;})[0];return x?x[5]:"";}
+  function qPlural(){var x=rnd(PL);
+    return {who:emojiFor(x[0]),en:"Make it plural: "+x[3],frame:x[0]+" → ___",answer:x[1],wrong:x[2].slice(),review:x[0]+" → "+x[1]+" ("+PR[x[4]]+")"};}
+  function qArt(){var pool=N.filter(function(x){return NOART.indexOf(x[0])<0;}),x=rnd(pool);
+    var pl=x[2]&&x[4]?Math.random()<.5:false,def=Math.random()<.5,n=pl?1:0,g=x[1];
+    var set=def?DEF:IND,ans=set[n][g],noun=pl?x[2]:x[0],en=def?"the "+(pl?x[4]:x[3]):(pl?"some "+x[4]:aEn(x[3]));
+    var w=[set[n][1-g],(def?IND:DEF)[n][g]];
+    if(x[2]&&x[4])w.push(set[1-n][g]);else w.push((def?IND:DEF)[n][1-g]);
+    return {who:x[5],en:en,frame:"___ "+noun,answer:ans,wrong:w,review:ans+" "+noun+" = "+en+" ("+TAG[x[6]]+")"};}
+  function qMG(){var x=rnd(MG);return {who:"👨‍👩‍👧‍👦",en:"What does it mean?",frame:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]+" (mixed group: masculine plural)"};}
+
+  /* ---------- Spot the slip ---------- */
+  function qSlip(){var x=rnd(SL),ws=words(x[1]);
+    var others=shuffle(ws.filter(function(w,i,a){return w.toLowerCase()!==x[2].toLowerCase()&&a.indexOf(w)===i;})).slice(0,3);
+    return {who:"🔍",en:"Find the mistake: tap the wrong word",frame:x[1],answer:x[2],wrong:others,review:x[0]+" = "+x[4]+" ("+x[5]+")"};}
+  function qFix(){var x=rnd(SL);
+    var html=esc(x[1]).replace(new RegExp("(^|\\s)"+x[2]+"(?=[\\s.,])"),"$1<span class='slip'>"+x[2]+"</span>");
+    return {who:"✏️",en:"What should the red word be?",html:html,frame:x[1],answer:x[3],wrong:[x[2]].concat(x[6]),review:x[0]+" = "+x[4]+" ("+x[5]+")"};}
+
+  /* ---------- Listening ---------- */
+  function lArt(){var pool=N.filter(function(x){return x[2]&&x[4]&&NOART.indexOf(x[0])<0;}),x=rnd(pool),g=x[1];
+    var forms=[[DEF[0][g]+" "+x[0],"the "+x[3]],[IND[0][g]+" "+x[0],aEn(x[3])],[DEF[1][g]+" "+x[2],"the "+x[4]],[IND[1][g]+" "+x[2],"some "+x[4]]];
+    var k=Math.floor(Math.random()*4),f=forms[k];
+    return {listen:1,speak:f[0],who:"",en:"Listen. What did they say?",answer:f[1],wrong:forms.filter(function(y,i){return i!==k;}).map(function(y){return y[1];}),review:f[0]+" = "+f[1]};}
+  var NUM=["☝️ One","More ➡"],NUMS=["singular","plural"];
+  function lNum(){var pool=N.filter(function(x){return x[2]&&x[4]&&NOART.indexOf(x[0])<0;}),x=rnd(pool),g=x[1],pl=Math.random()<.5,def=Math.random()<.5;
+    var say=(def?DEF:IND)[pl?1:0][g]+" "+(pl?x[2]:x[0]),a=NUM[pl?1:0];
+    return {sort:1,fixed:1,tm:1,num:1,smalls:NUMS,opts:NUM,listen:1,speak:say,who:"",en:"Listen. One, or more than one?",answer:a,wrong:NUM.filter(function(y){return y!==a;}),
+      review:say+" = "+(def?"the ":(pl?"some ":""))+(pl?x[4]:(def?x[3]:aEn(x[3])))+" ("+(pl?"plural":"singular")+")"};}
+  function lMG(){var x=rnd(MG);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    sort:[gSort,gSort,gSort,gSort,gSort,qWhy,qPick],
+    plural:[qPlural,qPlural,qPlural,qArt,qArt,qArt,qMG],
+    slips:[qSlip,qSlip,qFix,qFix],
+    listen:[lSort,lSort,lArt,lArt,lNum,lNum,lMG],
+    mixed:[gSort,gSort,gSort,qWhy,qPick,qPlural,qArt,qSlip,qFix]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the noun: el or la? One or more than one? What did they say? (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function bad(q){var need=q.tm?q.opts.length-1:3;return q.wrong.length<need||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=$("frame");fr.className="frame";
+    if(q.speak)fr.innerHTML="🔊";
+    else{var h=q.html||esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+      fr.innerHTML=q.sort?"<span class='sc'>"+h+"<small>"+esc(q.cardSmall||"")+" swipe ⬅ el · la ➡</small></span>":h;}
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three two";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+(q.tm?f.replace(/[⬅➡☝️]/g,"").trim():f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){var p=current.review.split(" = ");
+    if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    if(current.sort&&!current.speak)$("frame").innerHTML="<span class='sc'>"+esc(p[0])+"<small>"+esc(p.slice(1).join(" = "))+"</small></span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(current.sort&&!current.speak){var k=current.opts.indexOf(f);$("frame").className="frame "+["fly-l","fly-r"][k];}
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.replace(/[⬅➡☝️]/g,"").trim():f,listen:!!current.listen});
+    }
+    setTimeout(function(){if(current.sort||current.speak){$("frame").className="frame";reveal();}},ok?120:200);
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(current.sort?700:400)):(current.speak?2600:2100);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=30?"¡Increíble! Gender champion.":score>=18?"¡Muy bien! Great work.":score>=9?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  function swipeTo(k){if(!current||!current.sort)return;var b=$("choices").children[k];if(b)b.click();}
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    if(e.key==="ArrowLeft"){e.preventDefault();swipeTo(0);return;}
+    if(e.key==="ArrowRight"){e.preventDefault();swipeTo(1);return;}
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  /* touch swipe on the noun card */
+  var tx=null,ty=null,pb=$("promptBox");
+  pb.addEventListener("touchstart",function(e){var t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;},{passive:true});
+  pb.addEventListener("touchend",function(e){if(tx===null)return;var t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))swipeTo(dx<0?0:1);},{passive:true});
+  window.__leimTest={makers:MAKERS,N:N,PL:PL,SL:SL,MG:MG,bad:bad};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
