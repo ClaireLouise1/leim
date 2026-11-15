@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ser, estar &amp; hay: play Verb Swipe | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: ser, estar and hay. Swipe each sentence to SER, ESTAR or HAY, pick the right form, say why, and spot the words that change meaning (es aburrido / está aburrido). With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px;touch-action:pan-y}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3;transition:transform .25s ease,opacity .25s ease}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+/* swipe card */
+.sc{display:block;background:linear-gradient(180deg,#FFFBEA,#fff);border:2px solid var(--cream-line);border-radius:16px;padding:22px 16px;margin-top:4px;box-shadow:0 4px 14px rgba(27,36,48,.07);user-select:none;-webkit-user-select:none}
+.sc small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:10px;letter-spacing:0}
+.frame.fly-l{transform:translateX(-60px) rotate(-6deg);opacity:.35}
+.frame.fly-r{transform:translateX(60px) rotate(6deg);opacity:.35}
+.frame.fly-u{transform:translateY(-40px);opacity:.35}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:4px}
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.dd div{border-radius:12px;padding:12px 14px}
+.dd b.h{display:block;font-size:20px;font-weight:800;letter-spacing:.04em}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.choices.three .choice small{font-size:11.5px}.dd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Verb Swipe</h1>
+        <p>Ser, estar and hay: three ways to say "is" in Spanish. Swipe each sentence to the right one, fast! Then pick the right form (<b>soy</b> or <b>estoy</b>?), say <b>why</b>, and catch the words that change meaning, like <b>es aburrido</b> (boring) and <b>está aburrido</b> (bored). Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="swipe"><div><b>Verb Swipe</b><span>Swipe each sentence: ⬅ SER, ⬆ HAY or ➡ ESTAR? Then pick the right sentence</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="forms"><div><b>Right form &amp; why?</b><span>soy, estoy or hay? Say why, hay or está?, and words that change meaning</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening swipe 🔊</b><span id="listenNote">Hear the sentence: ser, estar or hay? What did they say?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: on a phone, swipe the sentence card left, up or right. On a computer, use the arrow keys (← ↑ →) or the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 2.1, 2.5 (2017 spec, exams 2027–2028) · 2.1, 2.4 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" id="promptBox" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Ser, estar &amp; hay</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Mi madre <b>es</b> profesora. <b>Es</b> de Cork. <b>Es</b> muy simpática. <span style="color:var(--muted)">(My mum is a teacher. She's from Cork. She's very nice.)</span></li>
+          <li>Hoy mi madre <b>está</b> cansada. <b>Está</b> en el trabajo. <b>Está</b> hablando por teléfono. <span style="color:var(--muted)">(Today my mum is tired. She's at work. She's talking on the phone.)</span></li>
+          <li><b>Hay</b> un parque cerca de mi casa. <b>Hay</b> tres dormitorios. <span style="color:var(--muted)">(There's a park near my house. There are three bedrooms.)</span></li>
+        </ul>
+        <p>All three mean "is" or "are" in English. Look at the first two lines: which one tells you <b>what someone is</b> (always, or for a long time), and which one tells you <b>where</b> they are and <b>how</b> they are right now? And what does <b>hay</b> do? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Ser</b> says what someone or something <b>is</b>: who they are, what they're like, their job, where they're from, what it's made of, the day, the date and the time. <b>Estar</b> says <b>where</b> something is and <b>how</b> it is right now: location, feelings, a state or condition, and actions happening now (<em>estoy estudiando</em>). <b>Hay</b> says something <b>exists</b> there: "there is / there are". Remember the rhyme: <em>"How you feel and where you are, that's when you use <b>estar</b>."</em></p>
+        </details>
+
+        <div class="dd">
+          <div style="background:var(--green-soft)"><b class="h">SER = DOCTOR</b><b>D</b>escription (alta, simpática) · <b>O</b>ccupation (profesora) · <b>C</b>haracteristic (es de madera) · <b>T</b>ime, day &amp; date (son las dos, es lunes) · <b>O</b>rigin (es de Cork, es irlandés) · <b>R</b>elationship (es mi primo)</div>
+          <div style="background:var(--cream)"><b class="h">ESTAR = PLACE</b><b>P</b>osition (encima de la mesa) · <b>L</b>ocation (en Madrid, en casa) · <b>A</b>ction now, -ing (está jugando) · <b>C</b>ondition (cansado, enfermo, abierta) · <b>E</b>motion (contento, nerviosa)</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The forms</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Person</th><th>ser</th><th>estar</th></tr></thead>
+          <tbody>
+            <tr><td>yo</td><td>soy</td><td>estoy</td></tr>
+            <tr><td>tú</td><td>eres</td><td>estás</td></tr>
+            <tr><td>él / ella / usted</td><td>es</td><td>está</td></tr>
+            <tr><td>nosotros / nosotras</td><td>somos</td><td>estamos</td></tr>
+            <tr><td>vosotros / vosotras</td><td>sois</td><td>estáis</td></tr>
+            <tr><td>ellos / ellas / ustedes</td><td>son</td><td>están</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Hay</b> never changes: <em>hay un perro</em>, <em>hay dos perros</em>. Don't forget the accents on <b>estás, está, estáis, están</b>: without them <em>esta</em> means "this".</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Hay or está?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Hay (there is / are)</th><th>Está / están (it is / they are, somewhere)</th></tr></thead>
+          <tbody>
+            <tr><td><b>Hay un</b> supermercado en mi calle.</td><td><b>El</b> supermercado <b>está</b> en mi calle.</td></tr>
+            <tr><td><b>Hay</b> muchas tiendas en el centro.</td><td><b>Las</b> tiendas <b>están</b> en el centro.</td></tr>
+            <tr><td>¿<b>Hay</b> un baño por aquí?</td><td>¿Dónde <b>está el</b> baño?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">The trick is the little word before the noun: <b>hay</b> + <em>un, una, unos, unas</em>, a number, <em>mucho / muchos</em> or nothing (<em>hay leche</em>). <b>Está(n)</b> + <em>el, la, los, las, mi, tu</em> or a name (<em>Madrid está en el centro</em>). So never <em>hay el…</em> and never <em>está un…</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Words that change meaning</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>with ser</th><th>with estar</th></tr></thead>
+          <tbody>
+            <tr><td>aburrido</td><td>es aburrido = he's boring</td><td>está aburrido = he's bored</td></tr>
+            <tr><td>listo</td><td>es lista = she's clever</td><td>está lista = she's ready</td></tr>
+            <tr><td>malo</td><td>es malo = he's bad / naughty</td><td>está malo = he's ill</td></tr>
+            <tr><td>rico</td><td>es rico = he's rich</td><td>está rico = it's tasty (food)</td></tr>
+            <tr><td>verde</td><td>es verde = it's green</td><td>está verde = it's not ripe yet</td></tr>
+            <tr><td>guapo</td><td>es guapa = she's beautiful</td><td>está guapa = she looks lovely (today)</td></tr>
+          </tbody></table></div>
+
+        <div class="note" style="margin-top:12px"><b>Watch out:</b> the time always uses <b>ser</b>: <em><b>Es</b> la una</em>, <em><b>Son</b> las tres</em>. Where an <b>event</b> takes place also uses ser: <em>La fiesta <b>es</b> en mi casa</em> (but <em>Mi casa <b>está</b> en el centro</em>). And some fixed phrases use estar: <em><b>Estoy</b> de vacaciones</em> (I'm on holiday), <em><b>Está</b> nublado</em> (it's cloudy), <em><b>Estoy</b> de acuerdo</em> (I agree).</div>
+
+        <div class="note" style="margin-top:12px"><b>Compare your languages:</b> English uses one verb, "to be", for everything, which is why ser and estar feel strange. But you already know a language with two! In Irish, <em><b>Is</b> múinteoir mé</em> (I am a teacher: who I am, like <b>ser</b>) and <em><b>Tá</b> mé tuirseach</em> (I am tired: how I am now, like <b>estar</b>). And Irish <em>tá … ann</em> / <em>tá siopa sa bhaile</em> works a bit like <b>hay</b>. French and Italian learners: Italian has <em>essere</em> and <em>stare</em> too.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, ser and estar mistakes are some of the most common slips, and examiners notice them. Before you finish, check every "is" and "are": who or what (<b>ser</b>), where or how right now (<b>estar</b>), there is or there are (<b>hay</b>). A good short description uses all three: <em>Mi pueblo <b>es</b> pequeño y tranquilo. <b>Está</b> en el sur de Irlanda, cerca de la costa. <b>Hay</b> un parque, dos supermercados y una piscina, pero no <b>hay</b> cine. Hoy <b>estoy</b> muy contento porque <b>es</b> viernes.</em> In <b>Listening</b> and <b>Reading</b>, watch for the words that change meaning: <em>está aburrido</em> is bored, not boring!</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/ser-estar-hay-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/8yFtu" target="_blank" rel="noopener">Ser, Estar &amp; Hay Teacher Pack (€5)</a>: Party Detectives info gap, Ser-Estar Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+
+  /* ---------- Data ---------- */
+  var SERF=["soy","eres","es","somos","sois","son"],ESTF=["estoy","estás","está","estamos","estáis","están"];
+  var VB=["SER","ESTAR","HAY"];
+  var R=["Job or what someone does","Nationality or where someone is from","What someone or something is like","Day, date or time","What it's made of","Who or what it is (identity, relationship)",
+    "Where it is (location)","How someone feels (mood)","State or condition right now","Action happening now (-ing)","There is / there are"];
+  var TAG=["job","origin","what it's like","day, date or time","what it's made of","who or what it is","location","feelings","state right now","action now (-ing)","there is / there are"];
+  /* sentence with ___, verb (0 ser, 1 estar, 2 hay), form, English, reason */
+  var S=[
+    ["Mi madre ___ profesora.",0,"es","My mum is a teacher.",0],
+    ["Vosotros ___ estudiantes.",0,"sois","You (all) are students.",0],
+    ["Mi padre ___ médico.",0,"es","My dad is a doctor.",0],
+    ["Yo ___ irlandés.",0,"soy","I'm Irish.",1],
+    ["Nosotros ___ de Cork.",0,"somos","We're from Cork.",1],
+    ["¿De dónde ___ (tú)?",0,"eres","Where are you from?",1],
+    ["Mis abuelos ___ de Galicia.",0,"son","My grandparents are from Galicia.",1],
+    ["Mi hermana ___ muy inteligente.",0,"es","My sister is very intelligent.",2],
+    ["Mis amigos ___ muy simpáticos.",0,"son","My friends are very nice.",2],
+    ["Mi casa ___ grande y moderna.",0,"es","My house is big and modern.",2],
+    ["Mi gato ___ negro.",0,"es","My cat is black.",2],
+    ["Hoy ___ lunes.",0,"es","Today is Monday.",3],
+    ["___ las cinco y media.",0,"son","It's half past five.",3],
+    ["___ la una.",0,"es","It's one o'clock.",3],
+    ["Mañana ___ mi cumpleaños.",0,"es","Tomorrow is my birthday.",3],
+    ["La mesa ___ de madera.",0,"es","The table is made of wood.",4],
+    ["Este ___ mi primo Diego.",0,"es","This is my cousin Diego.",5],
+    ["Madrid ___ la capital de España.",0,"es","Madrid is the capital of Spain.",5],
+    ["Madrid ___ en el centro de España.",1,"está","Madrid is in the centre of Spain.",6],
+    ["Mi madre ___ en el supermercado.",1,"está","My mum is in the supermarket.",6],
+    ["Nosotros ___ en clase.",1,"estamos","We're in class.",6],
+    ["El baño ___ al lado de mi dormitorio.",1,"está","The bathroom is next to my bedroom.",6],
+    ["Las llaves ___ encima de la mesa.",1,"están","The keys are on the table.",6],
+    ["¿Dónde ___ la estación?",1,"está","Where is the station?",6],
+    ["¿Cómo ___ (tú)?",1,"estás","How are you?",7],
+    ["Mis padres ___ contentos porque he aprobado.",1,"están","My parents are happy because I passed.",7],
+    ["Vosotros ___ muy nerviosos hoy.",1,"estáis","You (all) are very nervous today.",7],
+    ["Yo ___ cansado hoy.",1,"estoy","I'm tired today.",8],
+    ["Mi hermano ___ enfermo hoy.",1,"está","My brother is ill today.",8],
+    ["La ventana ___ abierta.",1,"está","The window is open.",8],
+    ["La puerta ___ cerrada.",1,"está","The door is closed.",8],
+    ["Mi dormitorio ___ muy desordenado hoy.",1,"está","My bedroom is very messy today.",8],
+    ["___ estudiando para el examen.",1,"estoy","I'm studying for the exam.",9],
+    ["Mi abuela ___ viendo la tele.",1,"está","My gran is watching TV.",9],
+    ["Mis amigos ___ jugando al fútbol.",1,"están","My friends are playing football.",9],
+    ["___ un parque cerca de mi casa.",2,"hay","There's a park near my house.",10],
+    ["En mi clase ___ veinticinco alumnos.",2,"hay","There are twenty-five pupils in my class.",10],
+    ["___ muchas tiendas en el centro.",2,"hay","There are lots of shops in the centre.",10],
+    ["No ___ cine en mi pueblo.",2,"hay","There's no cinema in my town.",10],
+    ["¿___ un banco por aquí?",2,"hay","Is there a bank around here?",10],
+    ["En mi casa ___ tres dormitorios.",2,"hay","There are three bedrooms in my house.",10],
+    ["___ una piscina en el polideportivo.",2,"hay","There's a pool at the sports centre.",10],
+    ["En la nevera ___ leche y huevos.",2,"hay","There's milk and eggs in the fridge.",10],
+    ["¿Qué ___ en tu dormitorio?",2,"hay","What is there in your bedroom?",10],
+    ["En la plaza ___ una fuente.",2,"hay","There's a fountain in the square.",10],
+    ["___ mucha gente en la playa.",2,"hay","There are lots of people on the beach.",10]
+  ];
+  function atStart(s){return /^¿?___/.test(s);}
+  function fill(s,f){return s.replace("___",atStart(s)?cap(f):f);}
+  function full(x){return fill(x[0],x[2]);}
+  function opt(x,f){return atStart(x[0])?cap(f):f;}
+
+  /* ---------- Verb Swipe ---------- */
+  var SW=["⬅ SER","⬆ HAY","➡ ESTAR"],SWS=["who · what · when","there is / there are","where · feelings · -ing"];
+  var SWI=[0,2,1]; /* verb index -> button index */
+  function qSort(spoken){var x=rnd(S),a=SW[SWI[x[1]]];
+    return {sort:1,fixed:1,tm:1,smalls:SWS,opts:SW,listen:spoken?1:0,speak:spoken?full(x):"",who:"",
+      en:spoken?"Listen. Ser, estar or hay?":"Ser, estar or hay?",frame:spoken?"":x[0],answer:a,wrong:SW.filter(function(y){return y!==a;}),
+      review:full(x)+" = "+x[3]+" ("+VB[x[1]]+": "+TAG[x[4]]+")"};}
+  function gSort(){return qSort(false);}
+  function lSort(){return qSort(true);}
+  /* English -> pick the right Spanish sentence */
+  function qPick(){var x=rnd(S),pool;
+    if(x[1]===2)pool=["está","están","es","son"];
+    else{var p=(x[1]===0?SERF:ESTF).indexOf(x[2]);pool=[(x[1]===0?ESTF:SERF)[p],"hay"];
+      var same=(x[1]===0?SERF:ESTF).filter(function(f){return f!==x[2];});pool.push(rnd(same));}
+    var w=[];shuffle(pool).forEach(function(f){var t=fill(x[0],f);if(w.length<3&&t!==full(x)&&w.indexOf(t)<0)w.push(t);});
+    return {who:"",en:x[3],frame:"Which one is right?",answer:full(x),wrong:w,review:full(x)+" = "+x[3]+" ("+VB[x[1]]+": "+TAG[x[4]]+")"};}
+
+  /* ---------- Right form & why ---------- */
+  function qForm(){var x,tries=0;do{x=rnd(S);tries++;}while(x[1]===2&&tries<20);
+    var mine=x[1]===0?SERF:ESTF,other=x[1]===0?ESTF:SERF,p=mine.indexOf(x[2]);
+    var w=[other[p]].concat(others(mine,x[2],2));
+    return {who:"",en:x[3],frame:x[0],answer:opt(x,x[2]),wrong:w.map(function(f){return opt(x,f);}),review:full(x)+" = "+x[3]+" ("+VB[x[1]]+": "+TAG[x[4]]+")"};}
+  function qWhy(){var x=rnd(S),a=x[4];
+    var ban=[a];if(a===7)ban.push(8);if(a===8)ban.push(7);if(a===2)ban.push(5);if(a===5)ban.push(2);
+    var cand=R.map(function(r,i){return i;}).filter(function(i){return ban.indexOf(i)<0;});
+    var w=shuffle(cand).slice(0,3).map(function(i){return R[i];});
+    return {who:"🤔",en:"Why "+VB[x[1]].toLowerCase()+" here?",frame:full(x),answer:R[a],wrong:w,review:full(x)+" = "+x[3]+" ("+VB[x[1]]+": "+TAG[a]+")"};}
+  /* hay or está? */
+  function qHE(){var list=S.filter(function(x){return x[4]===6||x[4]===10;}),x=rnd(list);
+    var w=shuffle(["hay","está","están","es","son"].filter(function(f){return f!==x[2];})).slice(0,3);
+    return {who:"",en:x[3],frame:x[0],answer:opt(x,x[2]),wrong:w.map(function(f){return opt(x,f);}),review:full(x)+" = "+x[3]+" (hay + un / una / a number · está + el / la / a name)"};}
+  /* words that change meaning */
+  var CH=[
+    ["Mi hermano es aburrido.","My brother is boring.","My brother is bored."],
+    ["Mi hermano está aburrido.","My brother is bored.","My brother is boring."],
+    ["Lucía es muy lista.","Lucía is very clever.","Lucía is ready."],
+    ["Lucía está lista.","Lucía is ready.","Lucía is very clever."],
+    ["El perro es malo.","The dog is bad (naughty).","The dog is ill."],
+    ["El perro está malo.","The dog is ill.","The dog is bad (naughty)."],
+    ["Mi tío es muy rico.","My uncle is very rich.","My uncle is very tasty."],
+    ["La paella está muy rica.","The paella is really tasty.","The paella is very rich (has lots of money)."],
+    ["La manzana es verde.","The apple is green.","The apple isn't ripe yet."],
+    ["El plátano está verde.","The banana isn't ripe yet.","The banana is a green one."],
+    ["Mi abuela es muy guapa.","My gran is very beautiful.","My gran looks lovely today."],
+    ["Mi abuela está muy guapa hoy.","My gran looks lovely today.","My gran is a very beautiful person."]
+  ];
+  function qChange(){var x=rnd(CH),w=[x[2]];
+    shuffle(CH.filter(function(y){return y!==x&&y[1]!==x[2];})).forEach(function(y){if(w.length<3&&w.indexOf(y[1])<0&&y[1]!==x[1])w.push(y[1]);});
+    return {who:"",en:"What does it mean?",frame:x[0],answer:x[1],wrong:w,review:x[0]+" = "+x[1],listen:1};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Mi profesor es muy aburrido.","My teacher is very boring.",["My teacher is very bored.","My teacher is very tired.","My teacher is very funny."]],
+    ["Hoy estoy muy cansada.","Today I'm very tired.",["Today I'm very bored.","Today I'm very happy.","Yesterday I was very tired."]],
+    ["Hay un supermercado al lado del colegio.","There's a supermarket next to the school.",["There's a supermarket opposite the school.","There are two supermarkets next to the school.","There isn't a supermarket next to the school."]],
+    ["Mis abuelos son de Galicia, pero están en Madrid.","My grandparents are from Galicia, but they're in Madrid.",["My grandparents are from Madrid, but they're in Galicia.","My grandparents live in Galicia and Madrid.","My parents are from Galicia, but they're in Madrid."]],
+    ["La paella está muy rica.","The paella is really tasty.",["The paella is very expensive.","The paella is very cold.","The paella is very big."]],
+    ["Son las ocho y media y estoy en el autobús.","It's half past eight and I'm on the bus.",["It's half past seven and I'm on the bus.","It's half past eight and I'm at the bus stop.","It's eight o'clock and I'm on the bus."]],
+    ["En mi pueblo no hay cine, pero hay una piscina.","In my town there's no cinema, but there's a pool.",["In my town there's a cinema, but there's no pool.","In my town there's no cinema and no pool.","In my town there's no cinema, but there's a park."]],
+    ["Lucía está lista: vamos.","Lucía is ready: let's go.",["Lucía is clever: let's go.","Lucía is late: let's go.","Lucía isn't ready: let's wait."]],
+    ["Mi hermano está enfermo y está en la cama.","My brother is ill and he's in bed.",["My brother is bored and he's in bed.","My brother is ill and he's at the doctor's.","My sister is ill and she's in bed."]],
+    ["¿Dónde está la estación? Está a la derecha.","Where is the station? It's on the right.",["Where is the station? It's on the left.","Is there a station? There's one on the right.","Where is the bus stop? It's on the right."]],
+    ["Mi madre es enfermera y hoy está trabajando.","My mum is a nurse and today she's working.",["My mum is a teacher and today she's working.","My mum is a nurse and today she's at home.","My mum is ill and today she isn't working."]],
+    ["Somos irlandeses, pero estamos de vacaciones en Málaga.","We're Irish, but we're on holiday in Málaga.",["We're Spanish, but we're on holiday in Ireland.","We're Irish and we live in Málaga.","We're Irish, but we're working in Málaga."]],
+    ["El perro está malo.","The dog is ill.",["The dog is bad.","The dog is bored.","The dog is ready."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    swipe:[gSort,gSort,gSort,gSort,gSort,qPick,qPick],
+    forms:[qForm,qForm,qForm,qWhy,qWhy,qHE,qHE,qChange,qChange],
+    listen:[lSort,lSort,lSort,lFix,lFix,lFix],
+    mixed:[gSort,gSort,gSort,qPick,qForm,qWhy,qHE,qChange]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the sentence: ser, estar or hay? What did they say? (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.tm?2:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=$("frame");fr.className="frame";
+    if(q.speak)fr.innerHTML="🔊";
+    else{var h=esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+      fr.innerHTML=q.sort?"<span class='sc'>"+h+"<small>swipe ⬅ ser · ⬆ hay · estar ➡</small></span>":h;}
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+(q.tm?f.replace(/^\S+ /,""):f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    else if(current.sort)$("frame").innerHTML="<span class='sc'>"+esc(current.review.split(" = ")[0])+"<small>"+esc(current.review.split(" = ")[1])+"</small></span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(current.sort&&!current.speak){var k=SW.indexOf(f);$("frame").className="frame "+["fly-l","fly-u","fly-r"][k];}
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.replace(/^\S+ /,""):f,listen:!!current.listen});
+    }
+    setTimeout(function(){if(current.sort||current.speak){$("frame").className="frame";reveal();}},ok?120:200);
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(current.sort?700:400)):(current.speak?2600:2100);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=30?"¡Increíble! Ser-and-estar champion.":score>=18?"¡Muy bien! Great work.":score>=9?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  function swipeTo(k){if(!current||!current.sort)return;var b=$("choices").children[k];if(b)b.click();}
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    if(e.key==="ArrowLeft"){e.preventDefault();swipeTo(0);return;}
+    if(e.key==="ArrowUp"){e.preventDefault();swipeTo(1);return;}
+    if(e.key==="ArrowRight"){e.preventDefault();swipeTo(2);return;}
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  /* touch swipe on the sentence card */
+  var tx=null,ty=null,pb=$("promptBox");
+  pb.addEventListener("touchstart",function(e){var t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;},{passive:true});
+  pb.addEventListener("touchend",function(e){if(tx===null)return;var t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))swipeTo(dx<0?0:2);
+    else if(dy<-45&&Math.abs(dy)>Math.abs(dx))swipeTo(1);},{passive:true});
+  window.__leimTest={makers:MAKERS,S:S,CH:CH,full:full};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
