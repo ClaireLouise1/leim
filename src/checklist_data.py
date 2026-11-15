@@ -44,7 +44,7 @@ MATHS = [
   ("1st year","Spring","Ratio & proportion","N.2b, N.3a","Share It Out","share-it-out.html","ratio-proportion"),
   ("1st year","Spring","Algebra 1: variables & expressions","AF.2a, AF.2b, AF.3a, U.4","Like-Term Sweep","like-term-sweep.html","algebra-variables-expressions"),
   ("1st year","Spring","Patterns 1: linear patterns & sequences","N.4, AF.1a, AF.1b, U.11","Pattern Builder","pattern-builder.html","linear-patterns-sequences"),
-  ("1st year","Spring","Units of measure, time & timetables","GT.1","Clock Dash","",""),
+  ("1st year","Spring","Units of measure, time & timetables","GT.1","Clock Dash","clock-dash.html","units-time-timetables"),
   ("1st year","Summer","Probability 1: chance & sample spaces","SP.1a, SP.2a, SP.2b","Spin & Predict","",""),
   ("1st year","Summer","Statistics 1: questions, data & tables","SP.3a, SP.3b, SP.3c","Data Detective","",""),
   ("1st year","Summer","Geometry 1: lines, angles & triangles","GT.3b, GT.3c","Angle Chase","",""),

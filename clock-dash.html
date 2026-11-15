@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clock Dash: Units, Time & Timetables Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game on units of measure and time: 24-hour clock, reading clocks, time differences, km/kg/litre conversions, hours and minutes, and bus timetables. Rules, exam corner and a free printable.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Clock Dash</h1>
+        <p>60 seconds. Read clocks, flip between 12-hour and 24-hour time, convert km, kg and litres, turn 1.25 hours into minutes, and catch the right bus in Cork. Is 1.5 hours the same as 1 hour 50 minutes? (No: it's 1 hour 30.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="dash"><div><b>Clock Dash</b><span>12-hour ↔ 24-hour clock, read the clock face, how long is it, when does it end?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="units"><div><b>Units</b><span>km, m, cm, mm · kg, g, tonnes · litres, ml: convert, compare, add, share out</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hours"><div><b>Hours &amp; minutes</b><span>1.25 h in minutes, 45 min as a decimal, seconds, days, weeks, cooking times</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="table"><div><b>Bus timetables</b><span>Read real-looking Cork timetables: journey times, the latest bus, waiting time, the quickest bus</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Clock Dash, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.1 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Units of measure, time &amp; timetables</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these. What do you notice?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">0.5 h = <b>30 min</b> &nbsp;·&nbsp; 0.25 h = <b>15 min</b></li>
+          <li class="note">1.5 h = <b>1 h 30 min</b> &nbsp;·&nbsp; 2.75 h = <b>2 h 45 min</b></li>
+          <li class="note">0.1 h = <b>6 min</b> &nbsp;·&nbsp; 1.4 h = <b>1 h 24 min</b></li>
+        </ul>
+        <p style="margin-top:10px">Why isn't 1.5 h the same as 1 h 50 min? What would 3.2 h be?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">An hour has <b>60</b> minutes, not 100, so the part after the point is a fraction of 60. 0.5 h = half of 60 = 30 min. To change the decimal part to minutes, <b>× 60</b>: 0.2 × 60 = 12, so 3.2 h = <b>3 h 12 min</b>. Going the other way, minutes ÷ 60: 45 min = 45 ÷ 60 = 0.75 h.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Metric units</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Length:</b> 1 km = 1000 m · 1 m = 100 cm · 1 cm = 10 mm (so 1 m = 1000 mm)</li>
+          <li class="note"><b>Mass:</b> 1 kg = 1000 g · 1 tonne (t) = 1000 kg</li>
+          <li class="note"><b>Capacity:</b> 1 litre (l) = 1000 ml</li>
+        </ul>
+        <p style="margin-top:10px"><b>Big unit → small unit: multiply</b> (you need more of them): 3.4 km = 3.4 × 1000 = <b>3400 m</b>. <b>Small unit → big unit: divide</b>: 250 g = 250 ÷ 1000 = <b>0.25 kg</b>. Check: the number should get bigger when the unit gets smaller.</p>
+        <div class="note" style="margin-top:10px"><b>Same units first.</b> To add, compare or divide amounts, change them to the same unit: 1.2 kg + 350 g = 1200 g + 350 g = <b>1550 g</b> (= 1.55 kg). How many 250 ml glasses from a 1.5 l jug? 1500 ÷ 250 = <b>6</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The 24-hour clock</h3>
+        <ul>
+          <li><b>am</b> times keep their hour, with a 0 in front if needed: 7:05 am = <b>07:05</b>. Midnight is <b>00:00</b>, so 12:20 am = 00:20.</li>
+          <li><b>pm</b> times: add 12 to the hour: 2:35 pm = <b>14:35</b>. But 12:40 pm (just after midday) stays <b>12:40</b>.</li>
+          <li>Back to 12-hour: hours 13–23, take away 12 and write pm: 19:05 = <b>7:05 pm</b> (not 9:05).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">How long is it? Count on</h3>
+        <p>08:47 to 11:15: count on to the next hour, then whole hours, then the rest. 08:47 → 09:00 is <b>13 min</b>; 09:00 → 11:00 is <b>2 h</b>; 11:00 → 11:15 is <b>15 min</b>. Total <b>2 h 28 min</b>.</p>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> taking away like ordinary numbers: 1115 − 847 = 268 → "2 h 68 min". There's no such thing: there are only 60 minutes in an hour. Count on instead.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Reading a timetable</h3>
+        <p>Each <b>column</b> is one bus; each <b>row</b> is a stop. Read down a column to follow one bus. A dash (—) means that bus doesn't stop there. To find the latest bus that gets you somewhere on time, look along the arrival row for the last time that's early enough, then go up the column to see when it leaves.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Units and time are the hidden part of lots of questions: <b>timetables</b> and <b>journeys</b>, <b>speed, distance and time</b> (later), <b>area and volume</b> (changing cm to m), <b>recipes</b> and <b>money</b>. Questions usually start with reading a table or a clock, then ask you to work out a time difference or plan something.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Hours aren't decimals:</b> 1 h 30 min is 1.5 h, not 1.3 h. Divide minutes by 60.</li>
+            <li><b>Count on</b> for time differences; don't subtract times like ordinary numbers.</li>
+            <li><b>Same units first,</b> and write the unit in your answer (450 g, not 450).</li>
+            <li><b>Read the question twice:</b> "leaves by", "arrives by" and "the latest bus" are different things.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The 220 bus.</b> Part of a bus timetable is shown.
+              <div style="overflow-x:auto;margin:10px -6px 10px -26px"><table style="border-collapse:collapse;min-width:0;width:auto;font-weight:700;font-size:13px">
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">Ballincollig</th><td style="border:1px solid #D1D5DB;padding:4px 5px">07:40</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:05</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:30</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">Bishopstown</th><td style="border:1px solid #D1D5DB;padding:4px 5px">07:52</td><td style="border:1px solid #D1D5DB;padding:4px 5px">—</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:43</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">UCC</th><td style="border:1px solid #D1D5DB;padding:4px 5px">08:01</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:20</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:53</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">City Centre</th><td style="border:1px solid #D1D5DB;padding:4px 5px">08:12</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:29</td><td style="border:1px solid #D1D5DB;padding:4px 5px">09:06</td></tr>
+              </table></div>
+              (a) How long does the 07:40 bus take to get from Ballincollig to the City Centre? (b) Ciara has a class in UCC at 08:30. It's a 5-minute walk from the bus stop. What's the latest bus she can catch from Ballincollig? (c) Which bus is quickest from Ballincollig to the City Centre, and why?
+              <details><summary>Show the worked answer</summary><p>(a) 07:40 → 08:00 is 20 min, 08:00 → 08:12 is 12 min: <b>32 min</b>.<br>(b) She must be at the UCC stop by 08:25. The 08:05 bus gets there at 08:20 ✓; the 08:30 bus gets there at 08:53 ✗. So the <b>08:05</b>.<br>(c) 07:40: 32 min; 08:05: 24 min; 08:30: 36 min. The <b>08:05</b> is quickest: it doesn't stop at Bishopstown.</p></details></li>
+            <li><b>Baking day.</b> A recipe needs 1.2 kg of flour. Flour is sold in 500 g bags. (a) How many bags must you buy? (b) How many grams of flour are left over?
+              <details><summary>Show the worked answer</summary><p>(a) 1.2 kg = 1200 g. 1200 ÷ 500 = 2.4, so 2 bags isn't enough: <b>3 bags</b>.<br>(b) 3 × 500 = 1500 g; 1500 − 1200 = <b>300 g</b> left over.</p></details></li>
+            <li><b>Cinema trip.</b> A film starts at 19:45 and lasts 2 h 25 min. (a) What time does it end? (b) The last bus home leaves at 22:20. How long is there to get to the bus stop? (c) The cinema website says the film is "2.4 hours long". Is that the same? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) 19:45 + 2 h = 21:45; + 25 min = <b>22:10</b>.<br>(b) 22:10 → 22:20 = <b>10 min</b>.<br>(c) 0.4 h = 0.4 × 60 = 24 min, so 2.4 h = 2 h 24 min. <b>Almost, but not quite</b> (one minute shorter). 2 h 25 min is 2.41666… h.</p></details></li>
+            <li><b>Sunday dinner.</b> A chicken needs 45 minutes per kg plus an extra 20 minutes. It weighs 1.8 kg. Dinner is at 18:30. What's the latest time it can go in the oven?
+              <details><summary>Show the worked answer</summary><p>45 × 1.8 = 81 min; + 20 = 101 min = <b>1 h 41 min</b>. Count back from 18:30: 18:30 − 1 h = 17:30; − 41 min = <b>16:49</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/units-time-timetables-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK (switch on once the pack is on Payhip: remove these comment markers and swap PAYHIP_URL)
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Units, Time &amp; Timetables Teacher Pack (€5)</a>: Timetable Swap A/B cards, Unit Line-Up, Time Dominoes, poster and worksheet.</p>
+        TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}
+  function R(p,q){q=q||1;if(q<0){p=-p;q=-q;}var g=gcd(p,q);return [p/g,q/g];}
+  function dstr(r){var p=r[0],q=r[1],k=0;while(q!==1&&k<8){if(q%2===0){q/=2;p*=5;}else if(q%5===0){q/=5;p*=2;}else break;k++;}
+    if(q!==1)return "NaN";var neg=p<0,s=String(Math.abs(p));if(k>0){while(s.length<=k)s="0"+s;s=s.slice(0,s.length-k)+"."+s.slice(-k);s=s.replace(/0+$/,"").replace(/\.$/,"");}return (neg?"-":"")+s;}
+  function dp(r){var s=dstr(r);if(s==="NaN")return 99;return s.indexOf(".")<0?0:s.split(".")[1].length;}
+  /* ---------- time ---------- */
+  function p2(n){return (n<10?"0":"")+n;}
+  function hm(m){m=((m%1440)+1440)%1440;return p2(Math.floor(m/60))+":"+p2(m%60);}            // 24-hour clock
+  function t12(m){m=((m%1440)+1440)%1440;var h=Math.floor(m/60),am=h<12;h=h%12;if(h===0)h=12;return h+":"+p2(m%60)+(am?" am":" pm");}
+  function dur(m){var h=Math.floor(m/60),r=m%60;return h&&r?h+" h "+r+" min":h?h+" h":r+" min";}
+  /* units: base = mm, g, ml */
+  var U={mm:1,cm:10,m:1000,km:1000000,g:1,kg:1000,t:1000000,ml:1,l:1000};
+  var KIND={length:["mm","cm","m","km"],mass:["g","kg","t"],capacity:["ml","l"]};
+  function amt(base,u){return dstr(R(base,U[u]))+" "+u;}
+  /* value of any option: "14:35", "2:35 pm", "2 h 28 min", "45 min", "3400 m", "1.25 h", "6" */
+  function val(s){s=String(s).trim();var m;
+    if((m=s.match(/^(\d{1,2}):(\d{2})( am| pm)?$/))){var h=+m[1];if(m[3]){h=h%12;if(m[3]===" pm")h+=12;}return h*60+(+m[2]);}
+    if((m=s.match(/^(\d+) h(?: (\d+) min)?$/)))return (+m[1])*60+(m[2]?+m[2]:0);
+    if((m=s.match(/^(\d+) min$/)))return +m[1];
+    if((m=s.match(/^([\d.]+) (mm|cm|m|km|g|kg|t|ml|l)$/)))return (+m[1])*U[m[2]];
+    if((m=s.match(/^([\d.]+) h$/)))return (+m[1])*60;
+    return +s;}
+  function Q(en,frame,ans,slips,pads,why,html,data){var seen=[val(ans)],out=[];
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|null|-/.test(x))return;var y=val(x);
+      if(!isFinite(y)||y<=0)return;if(seen.some(function(z){return Math.abs(z-y)<1e-6;}))return;if(out.length<3){seen.push(y);out.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:ans,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function tPads(m){return [hm(m+10),hm(m-10),hm(m+60),hm(m-60),hm(m+5),hm(m-5)];}
+  function dPads(m){return [dur(m+10),dur(m-10),dur(m+60),dur(m-60),dur(m+5),dur(m-5)].filter(function(x){return !/^-|^0/.test(x);});}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430";
+  function clockSVG(m){ // analogue clock; hands are <line class="hh"> and <line class="mh">
+    var h=Math.floor(m/60)%12,mi=m%60,ah=(h*30+mi*0.5)*Math.PI/180,am=mi*6*Math.PI/180,o='<svg viewBox="0 0 200 200" width="100%" style="max-width:190px" role="img" aria-label="An analogue clock">';
+    o+='<circle cx="100" cy="100" r="92" fill="#fff" stroke="'+INK+'" stroke-width="5"/>';
+    for(var i=0;i<60;i++){var a=i*6*Math.PI/180,r1=i%5?84:78;o+='<line x1="'+(100+r1*Math.sin(a)).toFixed(1)+'" y1="'+(100-r1*Math.cos(a)).toFixed(1)+'" x2="'+(100+88*Math.sin(a)).toFixed(1)+'" y2="'+(100-88*Math.cos(a)).toFixed(1)+'" stroke="'+INK+'" stroke-width="'+(i%5?1:3)+'"/>';}
+    for(var k=1;k<=12;k++){var b=k*30*Math.PI/180;o+='<text x="'+(100+64*Math.sin(b)).toFixed(1)+'" y="'+(107-64*Math.cos(b)).toFixed(1)+'" font-size="19" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+k+'</text>';}
+    o+='<line class="hh" x1="100" y1="100" x2="'+(100+44*Math.sin(ah)).toFixed(2)+'" y2="'+(100-44*Math.cos(ah)).toFixed(2)+'" stroke="'+INK+'" stroke-width="8" stroke-linecap="round"/>';
+    o+='<line class="mh" x1="100" y1="100" x2="'+(100+72*Math.sin(am)).toFixed(2)+'" y2="'+(100-72*Math.cos(am)).toFixed(2)+'" stroke="#2E7D57" stroke-width="5" stroke-linecap="round"/>';
+    return o+'<circle cx="100" cy="100" r="6" fill="'+INK+'"/></svg>';}
+  function tableHTML(stops,times){ // times[bus][stop] = minutes or null
+    var base='border:1px solid #D1D5DB;padding:4px 4px;line-height:1.2;',td='style="'+base+'text-align:center;font-size:13px"',th='style="'+base+'text-align:left;background:#E8F3EC;color:#1B2430;font-size:12px;text-transform:none;letter-spacing:0;max-width:76px"',thc='style="'+base+'text-align:center;background:#E8F3EC;color:#1B2430;font-size:12px;text-transform:none;letter-spacing:0;white-space:nowrap"';
+    var o='<div style="overflow-x:auto"><table class="ttab" style="border-collapse:collapse;margin:0 auto 10px;font-weight:700;min-width:0;width:auto"><tr><th '+th+'>Stop</th>'+times.map(function(_,b){return '<th '+thc+'>Bus '+(b+1)+'</th>';}).join("")+'</tr>';
+    stops.forEach(function(s,j){o+='<tr data-stop="'+s+'"><th '+th+'>'+s+'</th>'+times.map(function(t){return '<td '+td+'>'+(t[j]==null?"—":hm(t[j]))+'</td>';}).join("")+'</tr>';});
+    return o+'</table></div>';}
+
+  /* ---------- Clock Dash: 12/24-hour clock, clocks, durations ---------- */
+  function anyTime(){var m;do{m=ri(0,287)*5+rnd([0,0,1,2,3,4]);}while(m<15||m%60===0&&Math.random()<.5);return m;}
+  function q12to24(){
+    var m=anyTime(),h=Math.floor(m/60),s=t12(m);
+    var sl=[p2(h%12)+":"+p2(m%60),hm(m+720),h%12===0?"12:"+p2(m%60):hm(m+120),hm(m-120)];
+    return Q("Write in 24-hour clock:",s,hm(m),sl,tPads(m),
+      h>=12?"pm: add 12 to the hour (unless it's 12). "+s+" = "+hm(m)+".":(h===0?"12 am is midnight, so the hour is 00: "+hm(m)+".":"am times keep their hour (with a 0 in front): "+hm(m)+"."),"",{t:"to24"});
+  }
+  function q24to12(){
+    var m=anyTime(),h=Math.floor(m/60);
+    var sl=[t12(m+720),t12(m-120),t12(m+120),(h%12===0?12:h%12)+":"+p2(m%60)+(h<12?" pm":" am"),h>12?(h-10)+":"+p2(m%60)+" pm":null];
+    return Q("Write in 12-hour clock:",hm(m),t12(m),sl,[t12(m+10),t12(m-10),t12(m+60)],
+      h>=12?"Hours from 13 to 23: take away 12 and write pm. "+hm(m)+" = "+t12(m)+".":"Hours from 00 to 11 are am"+(h===0?" (00 is 12 am, midnight)":"")+": "+t12(m)+".","",{t:"to12"});
+  }
+  var PARTS=[["morning",7,11],["afternoon",12,17],["evening",18,22]];
+  function qClock(){
+    var pt=rnd(PARTS),h=ri(pt[1],pt[2]),mi=rnd([ri(0,11)*5,ri(0,11)*5,ri(1,59)]),m=h*60+mi,who=rnd(["Ciara","Darragh","Aoife","Oisín","Niamh","Seán"]);
+    var sl=[hm(m-720),hm(m+60),hm(Math.floor(mi/5)*60+ (h%12)*5 ),hm(m-60)];
+    if(pt[0]==="afternoon"&&h===12)sl[0]="00:"+p2(mi);
+    return Q(who+" looks at this clock one "+pt[0]+". What time is it in 24-hour clock?","",hm(m),sl,tPads(m),
+      "The short hand shows the hour ("+(h%12||12)+"), the long hand the minutes ("+mi+"). In the "+pt[0]+" that's "+hm(m)+".",clockSVG(m),{t:"clock",part:pt[0]});
+  }
+  function naiveDiff(a,b){ // the "subtract like ordinary numbers" slip: 11:15 − 08:47 → 1115 − 847 = 268 → "2 h 68 min"
+    var x=Math.floor(b/60)*100+b%60-(Math.floor(a/60)*100+a%60);if(x<=0)return null;var h=Math.floor(x/100),r=x%100;return r>=60?(h?h+" h "+r+" min":r+" min"):null;}
+  function qDuration(){
+    var a=ri(7*12,19*12)*5+rnd([0,0,2,3,7]),d=ri(3,60)*5+rnd([0,0,3,4,8]),b=a+d;if(b>=1440)return qDuration();
+    var ctx=rnd(["A film runs from {a} to {b}. How long is it?","A train leaves at {a} and arrives at {b}. How long is the journey?","Ciara's shift starts at {a} and ends at {b}. How long is it?","A match kicks off at {a} and ends at {b}. How long is that?"]);
+    return Q(ctx.replace("{a}",hm(a)).replace("{b}",hm(b)),"",dur(d),[naiveDiff(a,b),d>40?dur(d-40):null,dur(d+40)],dPads(d),
+      "Count on: "+hm(a)+" → "+hm(Math.ceil(a/60)*60)+" is "+dur(Math.ceil(a/60)*60-a||60)+", then on to "+hm(b)+". Total "+dur(d)+". (There are 60 minutes in an hour, not 100.)","",{t:"dur"});
+  }
+  function qAddTime(){
+    var a=ri(6*12,19*12)*5+rnd([0,0,0,3,8]),d=ri(2,40)*5+rnd([0,0,5]),b=a+d;if(b>=1440||a%60+d%60<60&&Math.random()<.6)return qAddTime();
+    var ctx=rnd(["A bus leaves at {a}. The journey takes {d}. When does it arrive?","A cake goes in the oven at {a} and needs {d}. When is it ready?","A concert starts at {a} and lasts {d}. When does it end?"]);
+    var noCarry=Math.floor(a/60)*60+Math.floor(d/60)*60+((a%60+d%60)%60);
+    return Q(ctx.replace("{a}",hm(a)).replace("{d}",dur(d)),"",hm(b),[hm(noCarry),hm(b+40),hm(b-40)],tPads(b),
+      hm(a)+" + "+dur(d)+": add the hours, then the minutes; every 60 minutes makes another hour. Answer "+hm(b)+".","",{t:"add"});
+  }
+
+  /* ---------- Units ---------- */
+  var PAIRS=[["km","m"],["m","cm"],["cm","mm"],["m","mm"],["kg","g"],["t","kg"],["l","ml"]];
+  function qConv(){
+    var pr=rnd(PAIRS),big=Math.random()<.5,from=big?pr[0]:pr[1],to=big?pr[1]:pr[0],f=U[pr[0]]/U[pr[1]];
+    var base,fs,ts,tries=0;
+    do{base=ri(1,999)*Math.pow(10,ri(0,6));fs=R(base,U[from]);ts=R(base,U[to]);tries++;}
+    while((dp(fs)>3||dp(ts)>3||fs[0]/fs[1]>99999||ts[0]/ts[1]>99999||fs[0]/fs[1]<0.001||ts[0]/ts[1]<0.001)&&tries<200);
+    if(tries>=200)return qConv();
+    var A=amt(base,to),tv=R(base,U[to]),wr=function(x){return dstr(x)+" "+to;};
+    var sl=[big?wr(R(ts[0],ts[1]*f*f)):wr(R(ts[0]*f*f,ts[1])),wr(R(ts[0]*10,ts[1])),wr(R(ts[0],ts[1]*10)),wr(R(ts[0]*(f===1000?100:1000),ts[1]))];
+    return Q("Convert:",amt(base,from)+" = ? "+to,A,sl,[],
+      "1 "+pr[0]+" = "+f+" "+pr[1]+". "+(big?"Big unit → small unit: × "+f:"Small unit → big unit: ÷ "+f)+". "+amt(base,from)+" = "+A+".","",{t:"conv"});
+  }
+  function qOrder(){
+    var kind=rnd(["length","mass","capacity"]),us=KIND[kind],c=Math.pow(10,ri(2,5)),vals=[],strs=[],tries=0;
+    while(vals.length<4&&tries<300){tries++;var k10=Math.pow(10,ri(0,2)),b=Math.round(c*(0.4+Math.random()*1.4)/k10)*k10,u=rnd(us),r=R(b,U[u]);
+      if(b<=0||dp(r)>3||r[0]/r[1]<0.01||r[0]/r[1]>99999||vals.indexOf(b)>=0)continue;
+      if(vals.some(function(v){return Math.abs(v-b)/b<0.04;}))continue;vals.push(b);strs.push(amt(b,u));}
+    if(vals.length<4||new Set(strs.map(function(s){return s.split(" ")[1];})).size<2)return qOrder();
+    var big=Math.random()<.6,idx=[0,1,2,3].sort(function(a,b){return vals[a]-vals[b];}),ans=strs[big?idx[3]:idx[0]],base=us[0];
+    return C("Which is the "+(big?(kind==="length"?"longest":kind==="mass"?"heaviest":"most"):(kind==="length"?"shortest":kind==="mass"?"lightest":"least"))+"?","",ans,strs.filter(function(s){return s!==ans;}),
+      "Change them all to the same unit ("+base+"): "+strs.map(function(s,i){return s+" = "+vals[i]+" "+base;}).join(", ")+".",
+      (big?"Biggest":"Smallest")+" of "+strs.join(", ")+" → "+ans,"",{t:"order",big:big,opts:strs});
+  }
+  var ADDS=[["kg","g","A bag holds {a} of potatoes and {b} of onions. What is the total mass in {u}?"],["l","ml","A jug has {a} of juice. You add {b}. How much is in the jug now, in {u}?"],["m","cm","A plank is {a} long. Another piece {b} long is glued on the end. What is the total length in {u}?"],["km","m","Aoife walks {a} to the shop and {b} more to school. How far is that in {u}?"]];
+  function qAddU(){
+    var s=rnd(ADDS),big=s[0],sm=s[1],f=U[big]/U[sm],a=ri(11,49)*f/10,b=ri(1,f/10-1)*10;if(b>=f)b=f/2;
+    var tot=a+b,u=Math.random()<.5?big:sm,A=dstr(R(tot,U[u]/U[sm]))+" "+u;
+    var an=dstr(R(a,f)),bn=String(b),naive=dstr(R(a+b*f,f))+" "+u;
+    var sl=[naive,dstr(R(a+b*10,U[u]/U[sm]))+" "+u,dstr(R(a+b/10,U[u]/U[sm]))+" "+u,dstr(R(tot*10,U[u]/U[sm]))+" "+u];
+    return Q(s[2].replace("{a}",an+" "+big).replace("{b}",bn+" "+sm).replace("{u}",u==="l"?"litres":u==="ml"?"ml":u),"",A,sl,[],
+      "Same units first: "+an+" "+big+" = "+a+" "+sm+". "+a+" + "+b+" = "+tot+" "+sm+" = "+dstr(R(tot,f))+" "+big+".","",{t:"addu"});
+  }
+  var PIECES=[["l","ml","How many {p} glasses can you fill from a {w} jug?"],["m","cm","A {w} ribbon is cut into pieces {p} long. How many pieces?"],["kg","g","A {w} bag of rice is split into {p} portions. How many portions?"]];
+  function qPieces(){
+    var s=rnd(PIECES),f=U[s[0]]/U[s[1]],p=rnd(s[0]==="m"?[20,25,40,50,15,30]:[100,125,150,200,250,300,400,500]),n=ri(3,24),w=p*n;
+    if(R(w,f)[1]>100||w/f>20)return qPieces();
+    var W=dstr(R(w,f))+" "+s[0];
+    return Q(s[2].replace("{p}",p+" "+s[1]).replace("{w}",W),"",String(n),[String(n*10),dstr(R(n,10)),String(n+1),String(n-1),String(Math.round(w/f*p)||1)],[String(n+2),String(n*2)],
+      "Same units first: "+W+" = "+w+" "+s[1]+". "+w+" ÷ "+p+" = "+n+".","",{t:"pieces"});
+  }
+
+  /* ---------- Hours & minutes ---------- */
+  function qMinToH(){
+    var m=rnd([15,30,45,75,90,105,135,150,165,6,12,18,24,36,42,48,54,66,72,84,96,114,126,138,144,156]),h=R(m,60);
+    var hh=Math.floor(m/60),r=m%60,sl=[hh+"."+p2(r).replace(/0$/,"")+" h",dstr(R(m,100))+" h",hh+"."+r+" h",dstr(R(m,30))+" h"];
+    return Q("Write in hours, as a decimal:",dur(m),dstr(h)+" h",sl,[dstr(R(m+6,60))+" h",dstr(R(m-6,60))+" h",dstr(R(m+3,60))+" h"],
+      "Divide by 60, not 100: "+m+" ÷ 60 = "+dstr(h)+" h. ("+dur(m)+" is NOT "+hh+"."+r+" h.)","",{t:"m2h"});
+  }
+  function qHToMin(){
+    var tenths=rnd([ri(1,9),ri(11,49),ri(11,49)]),qtr=Math.random()<.35,h=qtr?R(rnd([1,3,5,7,9,11,13,15]),4):R(tenths,10);
+    if(h[1]===1)return qHToMin();
+    var m=h[0]*60/h[1],s=dstr(h),parts=s.split("."),hh=+parts[0],fake=+parts[1];
+    var sl=[fake<60?dur(hh*60+fake):null,parts[1].length===1?dur(hh*60+fake*10):null,dur(m+6)];
+    return Q("Write in hours and minutes:",s+" h",dur(m),sl,dPads(m),
+      "0."+parts[1]+" of an hour = 0."+parts[1]+" × 60 = "+(m-hh*60)+" min. So "+s+" h = "+dur(m)+".","",{t:"h2m"});
+  }
+  function qTotal(){
+    var k=ri(0,3),q,a,sl,why;
+    if(k===0){var h=ri(1,6),mi=ri(5,55);a=h*60+mi;q="How many minutes are in "+dur(a)+"?";sl=[String(h*100+mi),String(h*60),String(h+mi),String(a+60)];why=h+" × 60 + "+mi+" = "+a+" minutes.";}
+    else if(k===1){var mm=rnd([1.5,2.5,3.5,4.5,0.75,0.25]);a=mm*60;q="How many seconds are in "+dstr(R(mm*4,4))+" minutes?";sl=[String(mm*100),String(a*60),String(a+30),String(a-30)];why=dstr(R(mm*4,4))+" × 60 = "+a+" seconds.";}
+    else if(k===2){var d=ri(2,6);a=d*24;q="How many hours are in "+d+" days?";sl=[String(d*12),String(d*60),String(a+24),String(a-24)];why=d+" × 24 = "+a+" hours.";}
+    else{var w=ri(2,5);a=w*7*24;q="How many hours are in "+w+" weeks?";sl=[String(w*7),String(w*24),String(w*7*12),String(w*5*24)];why=w+" weeks = "+(w*7)+" days; "+(w*7)+" × 24 = "+a+" hours.";}
+    return Q(q,"",String(a),sl,[String(a+10),String(a-10),String(a*2)],why,"",{t:"tot",k:k});
+  }
+  var FOODS=[["turkey",40,20],["chicken",45,20],["leg of lamb",50,25],["joint of beef",30,15],["ham",40,20]];
+  function qCook(){
+    var f=rnd(FOODS),w=R(rnd([3,4,5,6,7,8,9,10,11,12,3,5]),2),mins=f[1]*w[0]/w[1]+f[2];if(mins!==Math.round(mins)||mins<60)return qCook();
+    var start=ri(9*12,15*12)*5,end=start+mins,ask=Math.random()<.5;
+    var en="A "+f[0]+" needs "+f[1]+" minutes per kg plus "+f[2]+" minutes. It weighs "+dstr(w)+" kg"+(ask?" and goes in at "+hm(start)+". When is it ready?":". How long does it need?");
+    var why=f[1]+" × "+dstr(w)+" = "+(mins-f[2])+" min, + "+f[2]+" = "+mins+" min = "+dur(mins)+(ask?". "+hm(start)+" + "+dur(mins)+" = "+hm(end)+".":".");
+    if(ask)return Q(en,"",hm(end),[hm(end-f[2]),mins%100<60?hm(start+Math.floor(mins/100)*60+mins%100):null,hm(end+60)],tPads(end),why,"",{t:"cook",ask:"time"});
+    return Q(en,"",dur(mins),[dur(mins-f[2]),dur(f[1]*w[0]/w[1]+f[2]*2),mins>=100&&mins%100<60?dur(Math.floor(mins/100)*60+mins%100):null],dPads(mins),why,"",{t:"cook",ask:"dur"});
+  }
+
+  /* ---------- Timetables ---------- */
+  var ROUTES=[["Ballincollig","Bishopstown","UCC","City Centre"],["Midleton","Carrigtwohill","Little Island","Kent Station"],["Douglas","Ballinlough","South Mall","Parnell Place"],["Blarney","Blackpool","Patrick Street","Cork Airport"]];
+  function makeTT(){
+    var stops=rnd(ROUTES),seg=[ri(6,16),ri(5,14),ri(6,18)],first=ri(78,96)*5,times=[],dep=first,ex=Math.random()<.5?ri(0,3):-1;
+    for(var b=0;b<4;b++){var t=[dep],cur=dep;for(var j=0;j<3;j++){cur+=seg[j]+ri(-2,4);t.push(cur);}
+      if(b===ex){t[1]=null;t[2]-=ri(2,4);t[3]-=ri(3,6);if(t[3]<t[2]+4)t[3]=t[2]+ri(4,8);}times.push(t);dep+=ri(3,8)*5;}
+    return {stops:stops,times:times,ex:ex};}
+  function arr(tt,b,j){return tt.times[b][j];}
+  function qTT(){
+    var tt=makeTT(),S=tt.stops,html=tableHTML(S,tt.times),k=ri(0,4),deps=tt.times.map(function(t){return hm(t[0]);});
+    if(k===0){ // journey time
+      var b=ri(0,3),i=0,j=ri(2,3);if(tt.times[b][j]==null)j=3;var d=arr(tt,b,j)-arr(tt,b,i);
+      return Q("How long does the "+hm(tt.times[b][0])+" bus from "+S[0]+" take to get to "+S[j]+"?","",dur(d),[naiveDiff(arr(tt,b,i),arr(tt,b,j)),dur(d+5),dur(d-5)],dPads(d),
+        "Arrives "+hm(arr(tt,b,j))+", leaves "+hm(arr(tt,b,i))+": "+dur(d)+".",html,{t:"tt",k:"jt"});}
+    if(k===1){ // latest bus
+      var b2=ri(0,3),A=arr(tt,b2,3),T=A+ri(0,6),ok=tt.times.map(function(t,i){return t[3]<=T?i:-1;}).filter(function(i){return i>=0;});
+      var best=ok.reduce(function(x,i){return tt.times[i][0]>tt.times[x][0]?i:x;},ok[0]),ans=deps[best];
+      return C("You need to be at "+S[3]+" by "+hm(T)+". What's the latest bus you can catch from "+S[0]+"?","",ans,deps.filter(function(d){return d!==ans;}),
+        "Look along the "+S[3]+" row for the last time that is "+hm(T)+" or earlier ("+hm(tt.times[best][3])+"), then go up to "+S[0]+": "+ans+".",null,html,{t:"tt",k:"latest"});}
+    if(k===2){ // wait at a stop
+      var j2=ri(1,2),list=tt.times.map(function(t){return t[j2];}).filter(function(x){return x!=null;}).sort(function(a,b){return a-b;}),pos=ri(0,list.length-1),nx=list[pos],prev=pos?list[pos-1]:nx-40,t=nx-ri(1,Math.min(12,nx-prev-1));
+      if(nx-prev<2)return qTT();var w=nx-t;
+      return Q("You get to the "+S[j2]+" stop at "+hm(t)+". How long do you wait for the next bus?","",dur(w),[dur(w+5),dur(w+10),w>2?dur(w-2):null],[dur(w+1),dur(w+3),dur(w+15)],
+        "The next bus at "+S[j2]+" after "+hm(t)+" is at "+hm(nx)+": you wait "+dur(w)+".",html,{t:"tt",k:"wait"});}
+    if(k===3){ // quickest
+      var js=tt.times.map(function(t){return t[3]-t[0];}),mn=Math.min.apply(null,js);if(js.filter(function(x){return x===mn;}).length>1)return qTT();
+      var bi=js.indexOf(mn);
+      return C("Which bus is the quickest from "+S[0]+" to "+S[3]+"? (Give the time it leaves "+S[0]+".)","",deps[bi],deps.filter(function(d,i){return i!==bi;}),
+        "Journey times: "+tt.times.map(function(t,i){return deps[i]+" → "+dur(js[i]);}).join(", ")+".",null,html,{t:"tt",k:"quick"});}
+    if(tt.ex<0)return qTT();
+    return C("Which bus does not stop at "+S[1]+"?","",deps[tt.ex],deps.filter(function(d,i){return i!==tt.ex;}),
+      "A dash (—) means the bus doesn't stop there: the "+deps[tt.ex]+" bus.",null,html,{t:"tt",k:"skip"});
+  }
+
+  var MAKERS={
+    dash:[q12to24,q12to24,q24to12,q24to12,qClock,qClock,qDuration,qDuration,qAddTime],
+    units:[qConv,qConv,qConv,qOrder,qOrder,qAddU,qPieces],
+    hours:[qMinToH,qMinToH,qHToMin,qHToMin,qTotal,qCook,qDuration],
+    table:[qTT,qTT,qTT,qAddTime],
+    mixed:[q12to24,q24to12,qClock,qDuration,qAddTime,qConv,qOrder,qAddU,qPieces,qMinToH,qHToMin,qTotal,qCook,qTT,qTT]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="table"||m==="mixed")?80:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="dash"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="dash"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

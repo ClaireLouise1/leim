@@ -73,6 +73,7 @@ def page(key):
     h = re.sub(r'<meta name="description" content=".*?">',
                f'<meta name="description" content="Every Junior Cycle {name} topic in teaching order, 1st to 3rd year, with learning outcome codes. Tick off the game, the rules and the revision sheet, and rate how confident you feel. Free, no login.">', h)
     h = h.replace(' aria-current="page"', "").replace("</head>", CSS + "</head>")
+    h = h.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)  # new tab bar (15 Nov): subject pages highlight "Subjects"
     out = [h, '<main id="main">\n']
     out.append(f'''<section class="hero"><div class="wrap" style="padding-bottom:56px">
   <div class="hero-copy">

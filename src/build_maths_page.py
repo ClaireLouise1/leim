@@ -10,6 +10,7 @@ head = T[:T.index('<main id="main">')]
 head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle Maths revision | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Free Junior Cycle Maths revision games mapped to the 2018 specification: integers, BIMDAS and more, with rules, free printable sheets, an exam corner for every topic and a topic checklist for 1st to 3rd year.">', head)
 head = head.replace(' aria-current="page"', "").replace('<a href="junior-cycle-maths.html">', '<a href="junior-cycle-maths.html" aria-current="page">')
+head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)  # new tab bar (15 Nov)
 signup = T[T.index('<div class="signup" id="join">'):T.index('</section>', T.index('<div class="signup" id="join">'))]
 foot = T[T.index("</main>"):]
 
@@ -21,7 +22,8 @@ DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the 
         "percent-pop.html": "fractions ↔ decimals ↔ percentages, percentage of an amount, sale prices and multipliers, percentage change and finding the price before the sale, with an Exam corner of exam-style questions.",
         "share-it-out.html": "sharing money in a ratio (bar models), simplifying ratios, recipes and the unitary method, map scales, best buys and absolute v relative comparison, with an Exam corner of exam-style questions.",
         "like-term-sweep.html": "collecting like terms (with x² and minus signs), algebra tiles, writing expressions from words, substituting negative numbers and spotting equal expressions, with an Exam corner of exam-style questions.",
-        "pattern-builder.html": "matchstick and tile patterns, the common difference, the general term Tₙ, far-away terms, tables and graphs, start value and rate of change, with an Exam corner of exam-style questions."}
+        "pattern-builder.html": "matchstick and tile patterns, the common difference, the general term Tₙ, far-away terms, tables and graphs, start value and rate of change, with an Exam corner of exam-style questions.",
+        "clock-dash.html": "the 24-hour clock, reading clock faces, time differences by counting on, metric units of length, mass and capacity, hours and minutes as decimals, and Cork bus timetables, with an Exam corner of exam-style questions."}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]
@@ -80,7 +82,7 @@ main = f'''<main id="main">
 
 <section class="block"><div class="wrap"><div class="note" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><div><strong>My Maths topic checklist.</strong> All {len(MATHS)} topics from 1st to 3rd year in one list: tick off the game, the rules and the revision sheet, and rate how confident you feel. Free, no login, and there's a printable copy for the fridge.</div><a class="btn" href="junior-cycle-maths-checklist.html">Open the checklist →</a></div></div></section>
 
-<section class="block">
+<section class="block" id="teacher-packs" style="scroll-margin-top:90px">
   <div class="wrap">
     <div class="sec-head">
       <h2>For teachers: ready-to-teach packs</h2>

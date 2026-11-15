@@ -1,0 +1,139 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Clock Dash</h1>
+        <p>60 seconds. Read clocks, flip between 12-hour and 24-hour time, convert km, kg and litres, turn 1.25 hours into minutes, and catch the right bus in Cork. Is 1.5 hours the same as 1 hour 50 minutes? (No: it's 1 hour 30.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="dash"><div><b>Clock Dash</b><span>12-hour ↔ 24-hour clock, read the clock face, how long is it, when does it end?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="units"><div><b>Units</b><span>km, m, cm, mm · kg, g, tonnes · litres, ml: convert, compare, add, share out</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hours"><div><b>Hours &amp; minutes</b><span>1.25 h in minutes, 45 min as a decimal, seconds, days, weeks, cooking times</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="table"><div><b>Bus timetables</b><span>Read real-looking Cork timetables: journey times, the latest bus, waiting time, the quickest bus</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Clock Dash, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.1 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Units of measure, time &amp; timetables</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these. What do you notice?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">0.5 h = <b>30 min</b> &nbsp;·&nbsp; 0.25 h = <b>15 min</b></li>
+          <li class="note">1.5 h = <b>1 h 30 min</b> &nbsp;·&nbsp; 2.75 h = <b>2 h 45 min</b></li>
+          <li class="note">0.1 h = <b>6 min</b> &nbsp;·&nbsp; 1.4 h = <b>1 h 24 min</b></li>
+        </ul>
+        <p style="margin-top:10px">Why isn't 1.5 h the same as 1 h 50 min? What would 3.2 h be?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">An hour has <b>60</b> minutes, not 100, so the part after the point is a fraction of 60. 0.5 h = half of 60 = 30 min. To change the decimal part to minutes, <b>× 60</b>: 0.2 × 60 = 12, so 3.2 h = <b>3 h 12 min</b>. Going the other way, minutes ÷ 60: 45 min = 45 ÷ 60 = 0.75 h.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Metric units</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Length:</b> 1 km = 1000 m · 1 m = 100 cm · 1 cm = 10 mm (so 1 m = 1000 mm)</li>
+          <li class="note"><b>Mass:</b> 1 kg = 1000 g · 1 tonne (t) = 1000 kg</li>
+          <li class="note"><b>Capacity:</b> 1 litre (l) = 1000 ml</li>
+        </ul>
+        <p style="margin-top:10px"><b>Big unit → small unit: multiply</b> (you need more of them): 3.4 km = 3.4 × 1000 = <b>3400 m</b>. <b>Small unit → big unit: divide</b>: 250 g = 250 ÷ 1000 = <b>0.25 kg</b>. Check: the number should get bigger when the unit gets smaller.</p>
+        <div class="note" style="margin-top:10px"><b>Same units first.</b> To add, compare or divide amounts, change them to the same unit: 1.2 kg + 350 g = 1200 g + 350 g = <b>1550 g</b> (= 1.55 kg). How many 250 ml glasses from a 1.5 l jug? 1500 ÷ 250 = <b>6</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The 24-hour clock</h3>
+        <ul>
+          <li><b>am</b> times keep their hour, with a 0 in front if needed: 7:05 am = <b>07:05</b>. Midnight is <b>00:00</b>, so 12:20 am = 00:20.</li>
+          <li><b>pm</b> times: add 12 to the hour: 2:35 pm = <b>14:35</b>. But 12:40 pm (just after midday) stays <b>12:40</b>.</li>
+          <li>Back to 12-hour: hours 13–23, take away 12 and write pm: 19:05 = <b>7:05 pm</b> (not 9:05).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">How long is it? Count on</h3>
+        <p>08:47 to 11:15: count on to the next hour, then whole hours, then the rest. 08:47 → 09:00 is <b>13 min</b>; 09:00 → 11:00 is <b>2 h</b>; 11:00 → 11:15 is <b>15 min</b>. Total <b>2 h 28 min</b>.</p>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> taking away like ordinary numbers: 1115 − 847 = 268 → "2 h 68 min". There's no such thing: there are only 60 minutes in an hour. Count on instead.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Reading a timetable</h3>
+        <p>Each <b>column</b> is one bus; each <b>row</b> is a stop. Read down a column to follow one bus. A dash (—) means that bus doesn't stop there. To find the latest bus that gets you somewhere on time, look along the arrival row for the last time that's early enough, then go up the column to see when it leaves.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Units and time are the hidden part of lots of questions: <b>timetables</b> and <b>journeys</b>, <b>speed, distance and time</b> (later), <b>area and volume</b> (changing cm to m), <b>recipes</b> and <b>money</b>. Questions usually start with reading a table or a clock, then ask you to work out a time difference or plan something.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Hours aren't decimals:</b> 1 h 30 min is 1.5 h, not 1.3 h. Divide minutes by 60.</li>
+            <li><b>Count on</b> for time differences; don't subtract times like ordinary numbers.</li>
+            <li><b>Same units first,</b> and write the unit in your answer (450 g, not 450).</li>
+            <li><b>Read the question twice:</b> "leaves by", "arrives by" and "the latest bus" are different things.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The 220 bus.</b> Part of a bus timetable is shown.
+              <div style="overflow-x:auto;margin:10px -6px 10px -26px"><table style="border-collapse:collapse;min-width:0;width:auto;font-weight:700;font-size:13px">
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">Ballincollig</th><td style="border:1px solid #D1D5DB;padding:4px 5px">07:40</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:05</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:30</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">Bishopstown</th><td style="border:1px solid #D1D5DB;padding:4px 5px">07:52</td><td style="border:1px solid #D1D5DB;padding:4px 5px">—</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:43</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">UCC</th><td style="border:1px solid #D1D5DB;padding:4px 5px">08:01</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:20</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:53</td></tr>
+                <tr><th style="border:1px solid #D1D5DB;padding:4px 5px;text-align:left;background:#E8F3EC;color:#1B2430;font-size:11.5px;text-transform:none;letter-spacing:0;padding:4px 3px">City Centre</th><td style="border:1px solid #D1D5DB;padding:4px 5px">08:12</td><td style="border:1px solid #D1D5DB;padding:4px 5px">08:29</td><td style="border:1px solid #D1D5DB;padding:4px 5px">09:06</td></tr>
+              </table></div>
+              (a) How long does the 07:40 bus take to get from Ballincollig to the City Centre? (b) Ciara has a class in UCC at 08:30. It's a 5-minute walk from the bus stop. What's the latest bus she can catch from Ballincollig? (c) Which bus is quickest from Ballincollig to the City Centre, and why?
+              <details><summary>Show the worked answer</summary><p>(a) 07:40 → 08:00 is 20 min, 08:00 → 08:12 is 12 min: <b>32 min</b>.<br>(b) She must be at the UCC stop by 08:25. The 08:05 bus gets there at 08:20 ✓; the 08:30 bus gets there at 08:53 ✗. So the <b>08:05</b>.<br>(c) 07:40: 32 min; 08:05: 24 min; 08:30: 36 min. The <b>08:05</b> is quickest: it doesn't stop at Bishopstown.</p></details></li>
+            <li><b>Baking day.</b> A recipe needs 1.2 kg of flour. Flour is sold in 500 g bags. (a) How many bags must you buy? (b) How many grams of flour are left over?
+              <details><summary>Show the worked answer</summary><p>(a) 1.2 kg = 1200 g. 1200 ÷ 500 = 2.4, so 2 bags isn't enough: <b>3 bags</b>.<br>(b) 3 × 500 = 1500 g; 1500 − 1200 = <b>300 g</b> left over.</p></details></li>
+            <li><b>Cinema trip.</b> A film starts at 19:45 and lasts 2 h 25 min. (a) What time does it end? (b) The last bus home leaves at 22:20. How long is there to get to the bus stop? (c) The cinema website says the film is "2.4 hours long". Is that the same? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) 19:45 + 2 h = 21:45; + 25 min = <b>22:10</b>.<br>(b) 22:10 → 22:20 = <b>10 min</b>.<br>(c) 0.4 h = 0.4 × 60 = 24 min, so 2.4 h = 2 h 24 min. <b>Almost, but not quite</b> (one minute shorter). 2 h 25 min is 2.41666… h.</p></details></li>
+            <li><b>Sunday dinner.</b> A chicken needs 45 minutes per kg plus an extra 20 minutes. It weighs 1.8 kg. Dinner is at 18:30. What's the latest time it can go in the oven?
+              <details><summary>Show the worked answer</summary><p>45 × 1.8 = 81 min; + 20 = 101 min = <b>1 h 41 min</b>. Count back from 18:30: 18:30 − 1 h = 17:30; − 41 min = <b>16:49</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/units-time-timetables-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK (switch on once the pack is on Payhip: remove these comment markers and swap PAYHIP_URL)
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Units, Time &amp; Timetables Teacher Pack (€5)</a>: Timetable Swap A/B cards, Unit Line-Up, Time Dominoes, poster and worksheet.</p>
+        TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
