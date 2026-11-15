@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopping, clothes &amp; prices: play Price Check | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: shopping, clothes and prices. Read or hear the price and pick the right price tag, ¿cuánto cuesta o cuestan?, colours that agree, este / ese, más barato que, and phrases for the clothes shop. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.tag{display:inline-flex;flex-direction:column;align-items:center;gap:5px;background:#FFF6DD;border:1px solid var(--cream-line);border-radius:14px;padding:18px 22px 12px;min-width:140px;position:relative;color:var(--ink)}
+.tag:before{content:"";position:absolute;top:7px;left:50%;width:9px;height:9px;margin-left:-5px;border-radius:50%;background:#fff;border:1px solid var(--cream-line)}
+.tag i{font-style:normal;font-size:50px;line-height:1.1}
+.tag em{display:block;width:58px;height:14px;border-radius:99px;border:1px solid rgba(0,0,0,.25)}
+.tag span{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.choices.cards .choice{padding:6px}
+.choices.cards .tag{min-width:0;width:100%;padding:16px 4px 6px;border:0;background:transparent}
+.choices.cards .tag:before{display:none}
+.choices.cards .tag i{font-size:38px}.choices.cards .tag span{font-size:18px}
+.pair{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.pair .tag{min-width:120px;padding:16px 14px 10px}.pair .tag i{font-size:40px}.pair .tag span{font-size:19px}
+.swb{display:inline-block;width:84px;height:26px;border-radius:99px;border:1px solid rgba(0,0,0,.25);vertical-align:middle}
+.choices.price .choice{font-size:22px;font-weight:800}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.25);vertical-align:-2px;margin-right:4px}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.choices.cards .tag i{font-size:30px}.choices.cards .tag span{font-size:16px}.pair .tag{min-width:104px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Price Check</h1>
+        <p>Shopping, clothes and prices. Read or hear the price and pick the right price tag! Then <b>¿cuánto cuesta</b> or <b>cuestan?</b>, colours that agree, <b>este</b> or <b>ese</b>, <b>más barato que</b>, and the phrases you need in a clothes shop. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="price"><div><b>Price Check</b><span>Find the right price tag; prices in words; cuesta or cuestan; dearer or cheaper?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="clothes"><div><b>Clothes &amp; colours</b><span>Clothes words, colours that agree, este / ese, in the clothes shop</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening price check 🔊</b><span id="listenNote">Hear the price and find the tag; shopping sentences</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.11, 1.14, 3.10 (2017 spec, exams 2027–2028) · 1.4, 1.10, 2.6 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Shopping, clothes &amp; prices</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: colours</h3>
+        <ul>
+          <li>un jersey <b>negro</b> · una falda <b>negra</b> · unos zapatos <b>negros</b> · unas botas <b>negras</b></li>
+          <li>un bolso <b>azul</b> · una gorra <b>azul</b> · unos guantes <b>azules</b> · unas zapatillas <b>azules</b></li>
+          <li>un vestido <b>verde</b> · una camiseta <b>verde</b> · unos calcetines <b>verdes</b></li>
+          <li>un bolso <b>rosa</b> · una gorra <b>naranja</b></li>
+        </ul>
+        <p>Where does the colour go: before or after the clothes word? Which colours change four ways, which change only for plural, and which hardly change at all? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The colour goes <b>after</b> the noun: <em>una camiseta roja</em> (not <em>una roja camiseta</em>). Colours ending in <b>-o</b> change four ways, like any adjective: <em>rojo, roja, rojos, rojas</em> (also <em>blanco, negro, amarillo, morado</em>). Colours ending in <b>-e</b> or a <b>consonant</b> only add <b>-s</b> / <b>-es</b> for plural: <em>verde → verdes, azul → azules, gris → grises, marrón → marrones</em> (no accent in the plural). <b>Rosa</b> and <b>naranja</b> are really nouns (a rose, an orange), so they don't change for masculine: <em>un bolso rosa</em>. Learn them with singular clothes and you're safe.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Clothes: la ropa</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Spanish</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>👕</td><td>la camiseta · la camisa</td><td>T-shirt · shirt</td></tr>
+            <tr><td>🧶</td><td>el jersey · la sudadera</td><td>jumper · hoodie</td></tr>
+            <tr><td>🧥</td><td>el abrigo · la chaqueta</td><td>coat · jacket</td></tr>
+            <tr><td>👖</td><td>los vaqueros · los pantalones · los pantalones cortos</td><td>jeans · trousers · shorts</td></tr>
+            <tr><td>👗</td><td>el vestido · la falda</td><td>dress · skirt</td></tr>
+            <tr><td>👟</td><td>las zapatillas (de deporte) · los zapatos · las botas</td><td>trainers · shoes · boots</td></tr>
+            <tr><td>🧢</td><td>la gorra · el sombrero · la bufanda · los guantes</td><td>cap · hat · scarf · gloves</td></tr>
+            <tr><td>🧦</td><td>los calcetines · el chándal · el bañador</td><td>socks · tracksuit · swimsuit</td></tr>
+            <tr><td>🎒</td><td>la mochila · el bolso · el reloj · las gafas de sol</td><td>backpack · bag · watch · sunglasses</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Llevar</b> = to wear: <em>Hoy <b>llevo</b> unos vaqueros y una sudadera gris.</em> <em>En el instituto <b>llevamos</b> uniforme: un jersey verde, una camisa blanca y una falda o unos pantalones grises.</em> Colours: <span class="dot" style="background:#D9342B"></span>rojo <span class="dot" style="background:#2F6FD6"></span>azul <span class="dot" style="background:#2E9E4F"></span>verde <span class="dot" style="background:#F2C830"></span>amarillo <span class="dot" style="background:#1B1B1B"></span>negro <span class="dot" style="background:#fff"></span>blanco <span class="dot" style="background:#9AA0A6"></span>gris <span class="dot" style="background:#F08DB8"></span>rosa <span class="dot" style="background:#F28C28"></span>naranja <span class="dot" style="background:#8B5A2B"></span>marrón <span class="dot" style="background:#7E4FB8"></span>morado.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">¿Cuánto cuesta? ¿Cuánto cuestan?</h3>
+        <ul>
+          <li>¿Cuánto <b>cuesta</b> la camiseta? <b>Cuesta</b> doce euros. <span style="color:var(--muted)">(one thing)</span></li>
+          <li>¿Cuánto <b>cuestan</b> las botas? <b>Cuestan</b> cincuenta euros. <span style="color:var(--muted)">(two or more things)</span></li>
+          <li>At the till: <b>¿Cuánto es?</b> (How much is it altogether?) <b>Son</b> veinte euros.</li>
+        </ul>
+        <p>Spot it: <em>las botas</em> are one pair to us, but in Spanish they are plural, so it's <b>cuestan</b>. The same goes for <em>los vaqueros, las zapatillas, las gafas de sol</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Prices</h3>
+        <p>Spain writes prices with a <b>comma</b> and the € sign <b>after</b> the number: <b>12,99 €</b> = €12.99. Say it: <b>doce euros con noventa y nueve</b> (<em>con</em> = with). <b>1 €</b> = un euro · <b>21 €</b> = veintiún euros · <b>100 €</b> = cien euros.</p>
+        <div class="note" style="margin-top:10px"><b>Listening traps:</b> <b>quince</b> 15 / <b>cincuenta</b> 50 · <b>catorce</b> 14 / <b>cuarenta</b> 40 · <b>trece</b> 13 / <b>treinta</b> 30 · <b>sesenta</b> 60 / <b>setenta</b> 70 · <b>doce</b> 12 / <b>dos</b> 2. Listen for the ending: <em>-ce</em> numbers are the teens, <em>-enta</em> numbers are the tens.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">This one or that one? Este and ese</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>this / these (near me)</th><th>that / those (near you)</th></tr></thead>
+          <tbody>
+            <tr><td>el jersey</td><td><b>este</b> jersey</td><td><b>ese</b> jersey</td></tr>
+            <tr><td>la falda</td><td><b>esta</b> falda</td><td><b>esa</b> falda</td></tr>
+            <tr><td>los zapatos</td><td><b>estos</b> zapatos</td><td><b>esos</b> zapatos</td></tr>
+            <tr><td>las botas</td><td><b>estas</b> botas</td><td><b>esas</b> botas</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">Careful: the masculine singular is <b>este</b> / <b>ese</b>, not <em>esto</em> / <em>eso</em> (those mean "this thing" / "that thing": <em>¿Qué es eso?</em>).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Dearer or cheaper?</h3>
+        <p>La gorra es <b>más barata que</b> la mochila. (cheaper than) · Las botas son <b>más caras que</b> los zapatos. (dearer than) · El jersey es <b>tan caro como</b> la sudadera. (as dear as) · <b>caro</b> and <b>barato</b> agree like colours: <em>caro, cara, caros, caras</em>. Too dear: <b>Es demasiado caro.</b></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">In the clothes shop</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Shop assistant</th><th>You</th></tr></thead>
+          <tbody>
+            <tr><td>¿En qué puedo ayudarle? <span style="color:var(--muted)">(How can I help you?)</span></td><td>Busco unas zapatillas. · Solo estoy mirando, gracias. <span style="color:var(--muted)">(I'm just looking.)</span></td></tr>
+            <tr><td>¿Qué talla usa? · ¿Qué número calza? <span style="color:var(--muted)">(clothes size · shoe size)</span></td><td>Uso la talla M. · Calzo el 38.</td></tr>
+            <tr><td>Los probadores están al fondo. <span style="color:var(--muted)">(fitting rooms at the back)</span></td><td>¿Puedo probármelo? · ¿Lo tiene en azul?</td></tr>
+            <tr><td>¿Qué tal le queda?</td><td>Me queda bien. · Me queda grande / pequeño. <span style="color:var(--muted)">(It fits. It's too big / small.)</span></td></tr>
+            <tr><td>¿Cómo quiere pagar?</td><td>Me lo llevo. ¿Puedo pagar con tarjeta? · en efectivo <span style="color:var(--muted)">(in cash)</span></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><em>Le / usted</em> is the polite "you" that shop assistants use. <b>Me queda / me quedan</b> works like <em>me gusta / me gustan</em>: <em>Los pantalones me <b>quedan</b> grandes.</em></p>
+
+        <div class="note" style="margin-top:12px"><b>Culture:</b> Spain has two big sale seasons, <b>las rebajas</b>: from 7 January (straight after the Three Kings on the 6th) and from 1 July. Smaller shops often close from about 2 to 5 in the afternoon and stay open until 8 or 9 in the evening. Zara and Mango are Spanish brands: Zara started in A Coruña, in Galicia. Shoe sizes are European: an Irish size 5 is about a 38. Compare: when are the sales where you live, and what time do shops close?</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b>, prices are a favourite detail: write the number down the moment you hear it, and watch the traps (<em>quince / cincuenta, sesenta / setenta</em>) and <em>con</em> for the cents. Check <b>which</b> item the price goes with: the questions often mention two. In <b>Reading</b>, adverts and shop signs come up: <em>rebajas</em>, <em>oferta</em>, <em>2 x 1</em>, <em>-50 %</em>, <em>horario</em>. In <b>Writing</b>, describe what you wear and give an opinion with a reason and a comparison: <em>Los fines de semana llevo vaqueros y una sudadera porque es cómoda. Me encanta ir de compras, pero la ropa de marca es demasiado cara: prefiero las tiendas más baratas.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/shopping-and-clothes-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/Y7ope" target="_blank" rel="noopener">Shopping &amp; Clothes Teacher Pack (€5)</a>: Clothes Shop info gap and role-play, Shopping Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function uniq(a){var o=[];a.forEach(function(x){if(o.indexOf(x)<0)o.push(x);});return o;}
+
+  /* ---------- Clothes ---------- */
+  /* gender, plural?, Spanish, English, emoji ("" = no picture), min €, max € */
+  var C=[
+    ["f",0,"camiseta","T-shirt","👕",8,25],["f",0,"corbata","tie","👔",10,30],["m",0,"vestido","dress","👗",20,60],["m",0,"abrigo","coat","🧥",40,99],
+    ["m",1,"vaqueros","jeans","👖",20,60],["m",1,"pantalones cortos","shorts","🩳",10,25],["f",1,"zapatillas","trainers","👟",30,90],["m",1,"zapatos","shoes","👞",35,90],
+    ["f",1,"botas","boots","👢",40,99],["f",0,"gorra","cap","🧢",8,20],["m",0,"sombrero","hat","👒",12,30],["f",0,"bufanda","scarf","🧣",8,25],
+    ["m",1,"guantes","gloves","🧤",6,20],["m",1,"calcetines","socks","🧦",3,9],["m",0,"bolso","bag","👜",20,60],["f",0,"mochila","backpack","🎒",15,45],
+    ["f",1,"gafas de sol","sunglasses","🕶️",10,40],["m",0,"reloj","watch","⌚",25,99],["m",0,"bañador","swimsuit","🩱",12,30],
+    ["f",0,"falda","skirt","",15,40],["f",0,"chaqueta","jacket","",30,80],["m",0,"jersey","jumper","",20,50],["f",0,"sudadera","hoodie","",20,45],
+    ["m",0,"chándal","tracksuit","",25,60],["m",1,"pantalones","trousers","",20,50],["f",0,"camisa","shirt","",15,40]
+  ].map(function(x,i){return {id:i,g:x[0],pl:!!x[1],es:x[2],en:x[3],e:x[4],lo:x[5],hi:x[6]};});
+  var PIC=C.filter(function(c){return c.e;});
+  function def(c){return c.g==="m"?(c.pl?"los":"el"):(c.pl?"las":"la");}
+  function ind(c){return c.g==="m"?(c.pl?"unos":"un"):(c.pl?"unas":"una");}
+  function cuesta(c){return c.pl?"cuestan":"cuesta";}
+  function esSon(c){return c.pl?"son":"es";}
+  function agreeO(stem,c){return stem+(c.g==="m"?"o":"a")+(c.pl?"s":"");}
+  /* colours: Spanish stem/base, English, hex, type (o = 4 forms, s = add -s, es = add -es, n = no change) */
+  var K=[["roj","red","#D9342B","o"],["azul","blue","#2F6FD6","es"],["verde","green","#2E9E4F","s"],["amarill","yellow","#F2C830","o"],["negr","black","#1B1B1B","o"],
+    ["blanc","white","#FFFFFF","o"],["gris","grey","#9AA0A6","es"],["rosa","pink","#F08DB8","n"],["naranja","orange","#F28C28","n"],["marrón","brown","#8B5A2B","es"],["morad","purple","#7E4FB8","o"]]
+    .map(function(x,i){return {id:i,s:x[0],en:x[1],hex:x[2],t:x[3]};});
+  function colES(k,c){
+    if(k.t==="o")return agreeO(k.s,c);
+    if(k.t==="n")return k.s;
+    if(!c.pl)return k.s;
+    return (k.s==="marrón"?"marron":k.s)+k.t;}
+  function colForms(k){ /* the four forms shown as options: m sg, f sg, m pl, f pl */
+    if(k.t==="o")return [k.s+"o",k.s+"a",k.s+"os",k.s+"as"];
+    if(k.t==="n")return [k.s,k.s.replace(/a$/,"o"),k.s+"s",k.s.replace(/a$/,"o")+"s"];
+    var b=k.s==="marrón"?"marron":k.s,pl=b+k.t;
+    return [k.s,b.replace(/e$/,"")+"a",pl,b.replace(/e$/,"")+"as"];}
+  function okCol(k,c){return !(k.t==="n"&&c.pl);}
+  function colsFor(c){return K.filter(function(k){return okCol(k,c);});}
+
+  /* ---------- Numbers and prices (in cents) ---------- */
+  var U=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
+  var T={3:"treinta",4:"cuarenta",5:"cincuenta",6:"sesenta",7:"setenta",8:"ochenta",9:"noventa"};
+  function num(n){if(n<30)return U[n];var t=Math.floor(n/10),u=n%10;return T[t]+(u?" y "+U[u]:"");}
+  function eurN(e){if(e===1)return "un";if(e===21)return "veintiún";if(e>30&&e%10===1)return T[Math.floor(e/10)]+" y un";if(e===100)return "cien";return num(e);}
+  function sp(p){return [Math.floor(p/100),p%100];}
+  function pad(c){return c<10?"0"+c:""+c;}
+  function priceES(p){var s=sp(p),eu=eurN(s[0])+(s[0]===1?" euro":" euros");return s[1]?eu+" con "+num(s[1]):eu;}
+  function priceTag(p){var s=sp(p);return s[0]+(s[1]?","+pad(s[1]):"")+" €";}
+  function priceEN(p){var s=sp(p);return "€"+s[0]+(s[1]?"."+pad(s[1]):"");}
+  function okE(e){return e>=2&&e<=99&&e%10!==1;}
+  function cents(){var r=Math.random();return r<.5?0:r<.75?99:r<.9?50:95;}
+  function priceFor(c){var e;do{e=ri(c.lo,c.hi);}while(!okE(e));return e*100+cents();}
+  var CONF={2:[12],12:[2,20],20:[12],13:[30,33],30:[13,33],14:[40,44],40:[14,44],15:[50,55],50:[15,55],16:[60,66],60:[16,70],17:[70,77],70:[17,60],18:[80,88],80:[18,90],19:[90,99],90:[19,80],66:[76,16],76:[66],44:[14,40],55:[15,65],65:[55,75],75:[65,57],57:[75],35:[25,45],45:[35,54],54:[45],25:[35,52],52:[25]};
+  function pricePool(p,n){
+    var s=sp(p),e=s[0],c=s[1],o=[];
+    (CONF[e]||[]).forEach(function(x){o.push([x,c]);});
+    shuffle(o);
+    var more=[[e+10,c],[e-10,c],[e,c?0:50],[e,c===99?95:99],[e+20,c],[e+5,c],[e-5,c]];
+    o=o.concat(shuffle(more));
+    return uniq(o.filter(function(x){return okE(x[0]);}).map(function(x){return x[0]*100+x[1];}).filter(function(x){return x!==p;})).slice(0,n||3);
+  }
+
+  /* ---------- Price tags ---------- */
+  function tagKey(s){return "T|"+s.i+"|"+s.k+"|"+s.p;}
+  function tagParts(f){var a=f.split("|");return {i:+a[1],k:+a[2],p:+a[3]};}
+  function tagEN(f){var s=tagParts(f);return K[s.k].en+" "+C[s.i].en+", "+priceEN(s.p);}
+  function tagHTML(f){var s=tagParts(f);return "<div class='tag' aria-hidden='true'><i>"+C[s.i].e+"</i><em style='background:"+K[s.k].hex+"'></em><span>"+priceTag(s.p)+"</span></div>";}
+  function pickTag(){var c=rnd(PIC);return {i:c.id,k:rnd(colsFor(c)).id,p:priceFor(c)};}
+  function wrongTags(s){
+    var c=C[s.i],out=[],keys=[tagKey(s)];
+    function add(x){var k=tagKey(x);if(keys.indexOf(k)<0){keys.push(k);out.push(x);}}
+    var pp=pricePool(s.p,3);
+    add({i:s.i,k:s.k,p:pp[0]});
+    var opts=shuffle(["p","k","i","k2"]);
+    opts.forEach(function(t){if(out.length>=3)return;
+      if(t==="p"&&pp[1])add({i:s.i,k:s.k,p:pp[1]});
+      else if(t==="k"||t==="k2"){var ks=colsFor(c).filter(function(k){return k.id!==s.k;});add({i:s.i,k:rnd(ks).id,p:s.p});}
+      else if(t==="i"){var is=PIC.filter(function(x){return x!==c&&x.pl===c.pl;});add({i:rnd(is).id,k:s.k,p:s.p});}
+    });
+    return out;}
+  function tagSent(s,k){var c=C[s.i],col=colES(K[s.k],c),n=c.es+" "+col;
+    if(k===0)return cap(def(c)+" "+n+" "+cuesta(c)+" "+priceES(s.p)+".");
+    if(k===1)return "—¿Cuánto "+cuesta(c)+" "+def(c)+" "+n+"? —"+cap(cuesta(c))+" "+priceES(s.p)+".";
+    return cap(ind(c)+" "+n+" por "+priceES(s.p)+".");}
+  function tagRev(s,k){return tagSent(s,k)+" = "+tagEN(tagKey(s));}
+  /* read (or hear) the price, find the tag */
+  function qTag(spoken){var s=pickTag(),k=Math.floor(Math.random()*3),t=tagSent(s,k);
+    return {kind:"cards",en:spoken?"Listen. Which price tag?":"Which price tag is it?",frame:spoken?"":t,speak:spoken?t:"",listen:spoken?1:0,
+      answer:tagKey(s),wrong:wrongTags(s).map(tagKey),review:tagRev(s,k)};}
+  function gTag(){return qTag(false);}
+  function lTag(){return qTag(true);}
+  /* look at the tag, pick the sentence */
+  function qTagSay(){var s=pickTag(),k=Math.random()<.5?0:2;
+    return {card:tagKey(s),en:"Which sentence matches the price tag?",frame:"",answer:tagSent(s,k),
+      wrong:wrongTags(s).map(function(w){return tagSent(w,k);}),review:tagRev(s,k)};}
+  /* prices in words */
+  function qNum(){var c=rnd(PIC),p=priceFor(c),pool=pricePool(p,3);
+    if(Math.random()<.5)return {kind:"price",who:"🏷️",en:"How do you say the price?",frame:priceTag(p),answer:priceES(p),wrong:pool.map(priceES),review:priceTag(p)+" = "+priceES(p)};
+    return {kind:"price",who:"🏷️",en:"Which price is it?",frame:cap(priceES(p))+".",answer:priceTag(p),wrong:pool.map(priceTag),review:cap(priceES(p))+" = "+priceTag(p)+" ("+priceEN(p)+")"};}
+  function lPrice(){var c=rnd(PIC),p=priceFor(c),t=rnd(["Son ","Cuesta ","Total: "])+priceES(p)+".";
+    return {kind:"price",listen:1,speak:t,en:"Listen. How much is it?",answer:priceTag(p),wrong:pricePool(p,3).map(priceTag),review:t+" = "+priceTag(p)+" ("+priceEN(p)+")"};}
+  /* cuesta or cuestan? */
+  function qCuesta(){var c=rnd(C),w=["cuesta","cuestan","cuestas","cuesto"];
+    return {who:c.e||"🏷️",en:"How much "+(c.pl?"are the ":"is the ")+c.en+"?",frame:"¿Cuánto ___ "+def(c)+" "+c.es+"?",answer:cuesta(c),wrong:w.filter(function(x){return x!==cuesta(c);}),
+      review:"¿Cuánto "+cuesta(c)+" "+def(c)+" "+c.es+"? = How much "+(c.pl?"are the ":"is the ")+c.en+"? ("+(c.pl?"plural: cuestan":"one thing: cuesta")+")"};}
+  /* dearer, cheaper or the same? */
+  function qCmp(){
+    var a=rnd(PIC),pa=priceFor(a),b,pb,eq=Math.random()<.28;
+    if(eq){var e=Math.floor(pa/100),bs=PIC.filter(function(x){return x!==a&&x.lo<=e&&x.hi>=e;});if(bs.length){b=rnd(bs);pb=pa;}else eq=false;}
+    if(!eq){do{b=rnd(PIC);}while(b===a);do{pb=priceFor(b);}while(Math.floor(pb/100)===Math.floor(pa/100));}
+    var caro=agreeO("car",a),barato=agreeO("barat",a);
+    var opts=["más "+caro+" que","más "+barato+" que","tan "+caro+" como"],ans=eq?2:(pa>pb?0:1);
+    var A=cap(def(a)+" "+a.es),B=def(b)+" "+b.es,v=esSon(a);
+    var who="<div class='pair'>"+tagHTML("T|"+a.id+"|"+colsFor(a)[0].id+"|"+pa).replace(/<em[^>]*><\/em>/,"")+tagHTML("T|"+b.id+"|"+colsFor(b)[0].id+"|"+pb).replace(/<em[^>]*><\/em>/,"")+"</div>";
+    var en=["dearer than","cheaper than","as dear as"][ans];
+    return {fixed:1,tm:1,html:1,who:who,smalls:["💸 dearer","🪙 cheaper","🟰 same price"],en:a.en+" "+priceTag(pa)+" · "+b.en+" "+priceTag(pb),frame:A+" "+v+" ___ "+B+".",
+      answer:opts[ans],wrong:opts.filter(function(x,i){return i!==ans;}),opts:opts,
+      review:A+" ("+priceTag(pa)+") "+v+" "+opts[ans]+" "+B+" ("+priceTag(pb)+"). = The "+a.en+" "+(a.pl?"are ":"is ")+en+" the "+b.en+"."};}
+
+  /* ---------- Clothes & colours ---------- */
+  function qWord(){var c=rnd(C),pool=shuffle(C.filter(function(x){return x!==c;})).slice(0,3);
+    if(Math.random()<.5)return {who:c.e,en:c.en,frame:"How do you say it in Spanish?",answer:def(c)+" "+c.es,wrong:pool.map(function(x){return def(x)+" "+x.es;}),review:c.en+" = "+def(c)+" "+c.es};
+    return {who:"",en:"What is it in English?",frame:cap(def(c)+" "+c.es),answer:(c.e?c.e+" ":"")+c.en,wrong:pool.map(function(x){return (x.e?x.e+" ":"")+x.en;}),review:cap(def(c)+" "+c.es)+" = "+c.en};}
+  function qColour(){var c=rnd(C),k=rnd(colsFor(c)),ans=colES(k,c),forms=uniq(colForms(k));
+    var w=forms.filter(function(x){return x!==ans;});
+    var en=(c.pl?"":(/^[aeiou]/i.test(k.en)?"an ":"a "))+k.en+" "+c.en;
+    return {html:1,who:(c.e?c.e+" ":"")+"<span class='swb' style='background:"+k.hex+"'></span>",en:en,frame:cap(ind(c))+" "+c.es+" ___.",answer:ans,wrong:w.slice(0,3),
+      review:cap(ind(c))+" "+c.es+" "+ans+" = "+en};}
+  function qDem(){var c=rnd(C),near=Math.random()<.5,set=near?["este","esta","estos","estas"]:["ese","esa","esos","esas"];
+    var ans=set[(c.g==="f"?1:0)+(c.pl?2:0)],en=(near?(c.pl?"These ":"This "):(c.pl?"Those ":"That "))+c.en+(c.pl?" are":" is")+" really nice.";
+    return {who:c.e||"",en:en,frame:"___ "+c.es+" "+esSon(c)+" muy "+agreeO("bonit",c)+".",answer:ans,wrong:set.filter(function(x){return x!==ans;}),
+      review:cap(ans)+" "+c.es+" "+esSon(c)+" muy "+agreeO("bonit",c)+". = "+en};}
+  var FIX=[
+    ["¿Cuánto ___ esta camiseta?","How much is this T-shirt?","cuesta",["cuestan","cuento","cuestas"]],
+    ["¿Cuánto ___ estos zapatos?","How much are these shoes?","cuestan",["cuesta","cuentan","cuestas"]],
+    ["¿Qué ___ usas? —Uso la M.","What size do you take? —I take a medium.","talla",["tienda","tarjeta","caja"]],
+    ["¿Qué ___ calzas? —Calzo el 38.","What shoe size are you? —I'm a 38.","número",["talla","precio","color"]],
+    ["¿Puedo ___ el vestido?","Can I try on the dress?","probarme",["pruebo","probé","probado"]],
+    ["Los probadores están ___ fondo.","The fitting rooms are at the back.","al",["a la","a el","del"]],
+    ["El jersey me queda ___: necesito una talla más grande.","The jumper is too small for me: I need a bigger size.","pequeño",["grande","bien","barato"]],
+    ["Los pantalones me quedan ___: necesito una talla más pequeña.","The trousers are too big for me: I need a smaller size.","grandes",["grande","pequeños","bien"]],
+    ["Es demasiado ___. ¿Tiene algo más barato?","It's too expensive. Do you have anything cheaper?","caro",["barato","bonito","pequeño"]],
+    ["Me lo ___. ¿Puedo pagar con tarjeta?","I'll take it. Can I pay by card?","llevo",["llevas","llevé","llevar"]],
+    ["¿Puedo pagar con ___?","Can I pay by card?","tarjeta",["talla","tienda","caja"]],
+    ["En enero hay ___: todo está más barato.","In January there are sales: everything is cheaper.","rebajas",["regalos","tallas","probadores"]],
+    ["En el instituto ___ uniforme.","At school I wear a uniform.","llevo",["lleva","llevar","llevado"]],
+    ["Mi uniforme es un jersey ___ y una falda gris.","My uniform is a green jumper and a grey skirt.","verde",["verda","verdes","verdas"]],
+    ["Hoy llevo unas zapatillas ___.","Today I'm wearing white trainers.","blancas",["blanco","blanca","blancos"]],
+    ["Mi hermana lleva una falda ___.","My sister is wearing a black skirt.","negra",["negro","negros","negras"]],
+    ["Me encantan los calcetines ___.","I love blue socks.","azules",["azul","azulas","azulos"]],
+    ["Prefiero la ropa ___ porque es cómoda.","I prefer sportswear because it's comfortable.","deportiva",["deportivo","deportivas","deporte"]],
+    ["Esta chaqueta es más barata ___ esa.","This jacket is cheaper than that one.","que",["como","de","a"]],
+    ["Estos vaqueros son tan caros ___ esos.","These jeans are as dear as those.","como",["que","de","más"]],
+    ["Los sábados voy de compras ___ centro comercial.","On Saturdays I go shopping in the shopping centre.","al",["a el","a la","del"]],
+    ["¿En qué puedo ___? (shop assistant)","How can I help you?","ayudarle",["ayudo","ayuda","ayudé"]],
+    ["La ropa de marca es muy ___.","Designer clothes are very expensive.","cara",["caro","caros","caras"]],
+    ["Ayer ___ una sudadera en las rebajas.","Yesterday I bought a hoodie in the sales.","compré",["compro","compra","voy a comprar"]],
+    ["___ jersey es bonito, pero prefiero ese.","This jumper is nice, but I prefer that one.","Este",["Esta","Esto","Estos"]],
+    ["¿Lo tiene ___ azul?","Do you have it in blue?","en",["de","con","a"]]
+  ];
+  function qFix(){var x=rnd(FIX);return {who:"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace(/ \(shop assistant\)/,"").replace("___",x[2])+" = "+x[1]};}
+  var MEAN=[["¿En qué puedo ayudarle?","How can I help you?"],["¿Qué talla usa?","What size do you take?"],["¿Puedo probármelo?","Can I try it on?"],["Los probadores están al fondo.","The fitting rooms are at the back."],
+    ["Me queda bien.","It fits me well."],["Me queda grande.","It's too big for me."],["Me queda pequeño.","It's too small for me."],["¿Lo tiene en azul?","Do you have it in blue?"],
+    ["Es demasiado caro.","It's too expensive."],["¿Tiene algo más barato?","Do you have anything cheaper?"],["Me lo llevo.","I'll take it."],["¿Puedo pagar con tarjeta?","Can I pay by card?"],
+    ["Está de rebajas.","It's on sale."],["Solo estoy mirando, gracias.","I'm just looking, thanks."],["¿Quiere una bolsa?","Do you want a bag?"],["Es de algodón.","It's made of cotton."],
+    ["Es de cuero.","It's made of leather."],["No me gusta ir de compras.","I don't like going shopping."],["¿Cuánto es?","How much is it (altogether)?"],["Pago en efectivo.","I'll pay in cash."]];
+  function qMean(){var x=rnd(MEAN),w=shuffle(MEAN.filter(function(y){return y!==x;})).slice(0,3).map(function(y){return y[1];});
+    return {who:"🛍️",en:"What does it mean?",frame:x[0],answer:x[1],wrong:w,review:x[0]+" = "+x[1],listen:1};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Busco unas zapatillas de deporte negras.","I'm looking for black trainers.",["I'm looking for white trainers.","I'm looking for black shoes.","I bought black trainers."]],
+    ["Esta camiseta cuesta quince euros.","This T-shirt costs €15.",["This T-shirt costs €50.","That T-shirt costs €15.","This shirt costs €15."]],
+    ["Los vaqueros me quedan grandes. ¿Tiene una talla más pequeña?","The jeans are too big for me. Do you have a smaller size?",["The jeans are too small for me. Do you have a bigger size?","The jeans fit me well. I'll take them.","The trousers are too big for me. Do you have them in blue?"]],
+    ["En el instituto llevo un jersey azul y unos pantalones grises.","At school I wear a blue jumper and grey trousers.",["At school I wear a grey jumper and blue trousers.","At school I wear a blue jacket and grey trousers.","At the weekend I wear a blue jumper and grey trousers."]],
+    ["Me encanta ir de compras con mis amigas los sábados.","I love going shopping with my friends on Saturdays.",["I love going shopping with my sister on Saturdays.","I love going shopping with my friends on Sundays.","I hate going shopping with my friends on Saturdays."]],
+    ["Las botas están de rebajas: cuestan sesenta euros.","The boots are on sale: they cost €60.",["The boots are on sale: they cost €70.","The boots are on sale: they cost €16.","The shoes are on sale: they cost €60."]],
+    ["¿Puedo pagar con tarjeta? —Sí, claro.","Can I pay by card? —Yes, of course.",["Can I pay in cash? —Yes, of course.","Can I pay by card? —No, sorry.","Can I try it on? —Yes, of course."]],
+    ["Prefiero la ropa deportiva porque es cómoda.","I prefer sportswear because it's comfortable.",["I prefer sportswear because it's cheap.","I prefer designer clothes because they're comfortable.","I hate sportswear because it isn't comfortable."]],
+    ["Este abrigo es más caro que ese.","This coat is dearer than that one.",["This coat is cheaper than that one.","This coat is as dear as that one.","That coat is dearer than this one."]],
+    ["El bolso rojo cuesta veinticinco euros con noventa y nueve.","The red bag costs €25.99.",["The red bag costs €35.99.","The red bag costs €25.95.","The red backpack costs €25.99."]],
+    ["Ayer compré una gorra y unos calcetines.","Yesterday I bought a cap and some socks.",["Yesterday I bought a hat and some socks.","Yesterday I bought a cap and some gloves.","Tomorrow I'm going to buy a cap and some socks."]],
+    ["No me gusta la ropa de marca porque es demasiado cara.","I don't like designer clothes because they're too expensive.",["I love designer clothes because they're too expensive.","I don't like designer clothes because they're ugly.","I don't like cheap clothes because they're ugly."]],
+    ["Las gafas de sol cuestan cuarenta euros.","The sunglasses cost €40.",["The sunglasses cost €14.","The sunglasses cost €44.","The watch costs €40."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    price:[gTag,gTag,gTag,qTagSay,qNum,qNum,qCuesta,qCmp,qCmp],
+    clothes:[qWord,qWord,qColour,qColour,qDem,qDem,qFix,qFix,qFix,qMean],
+    listen:[lTag,lTag,lTag,lPrice,lPrice,lFix,lFix],
+    mixed:[gTag,gTag,qTagSay,qNum,qCuesta,qCmp,qWord,qColour,qDem,qFix,qMean]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the price and find the tag; shopping sentences (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function label(f){return f.indexOf("T|")===0?tagEN(f):f;}
+  function bad(q){return q.wrong.length<(q.tm?2:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    if(q.card)$("who").innerHTML=tagHTML(q.card);else if(q.html)$("who").innerHTML=q.who;else $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.kind==="cards")box.className="choices cards";
+    else if(q.tm)box.className="choices three";
+    else if(q.kind==="price"&&opts.every(function(x){return x.length<10;}))box.className="choices price";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.kind==="cards")b.innerHTML=tagHTML(f);
+      else if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+label(f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:label(f),listen:!!(current.listen||current.kind==="cards"||!!current.card)});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:400):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Shopping champion.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,C:C,K:K,priceES:priceES,priceTag:priceTag,pricePool:pricePool,colES:colES,bad:bad};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
