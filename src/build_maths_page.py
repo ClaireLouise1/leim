@@ -54,7 +54,8 @@ main = f'''<main id="main">
       <div class="stat"><b>13</b><span>questions, and every one must be answered: there is no choice</span></div>
       <div class="stat"><b>1 CBA</b><span>in class (a Mathematical or a Statistical Investigation), reported separately on the JCPA</span></div>
     </div>
-    <p style="color:#C9D1DA;margin-top:24px;font-size:15px">Because every question is compulsory, every topic matters. Our Maths Exam Centre (paper explained, timing per question, model answers) is on the way.</p>
+    <p style="color:#C9D1DA;margin-top:24px;font-size:15px">Because every question is compulsory, every topic matters. See exactly how the paper is marked, question by question, in the Maths Exam Centre.</p>
+    <p style="margin-top:16px"><a class="btn" href="junior-cycle-maths-exam-centre.html">Open the Maths Exam Centre →</a></p>
   </div>
 </section>
 
