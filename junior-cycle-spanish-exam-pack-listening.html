@@ -140,9 +140,12 @@ function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&l
 function findVoices(){
   if(!synth){$("liWarn").classList.add("show");return;}
   var v=synth.getVoices()||[];
-  var es=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);});
-  if(es.length<2)es=es.concat(v.filter(function(x){return /^es/i.test(x.lang)&&es.indexOf(x)<0;}));
-  voices=es;
+  var bad=/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley|bells|bubbles|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|bad news|good news|boing|cellos|fred|junior|kathy|ralph/i;
+  var good=/m[oó]nica|jorge|marisol|google|microsoft|elvira|[aá]lvaro|helena|pablo|laura|lucia|luc[ií]a|enrique|conchita|dar[ií]o|paulina|juan|diego|isabela/i;
+  function score(x){return (/^es[-_]ES/i.test(x.lang)?4:0)+(good.test(x.name)?2:0)+(x.localService===false?0:0)-(bad.test(x.name)?10:0);}
+  var es=v.filter(function(x){return /^es/i.test(x.lang);}).sort(function(a,b){return score(b)-score(a);});
+  var ok=es.filter(function(x){return !bad.test(x.name);});if(ok.length)es=ok;
+  voices=es.slice(0,2);
   $("liWarn").classList.toggle("show",!voices.length&&v.length>0);
 }
 if(synth){findVoices();synth.onvoiceschanged=findVoices;setTimeout(function(){findVoices();if(!voices.length)$("liWarn").classList.add("show");},1500);}else findVoices();
