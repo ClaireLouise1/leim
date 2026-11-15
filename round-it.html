@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Round It: decimals, rounding & estimation | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: round to decimal places and significant figures, compare decimals, decimal sums and estimation. Rules, exam corner and a free practice sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Round It</h1>
+        <p>60 seconds. Round to the right place, find the biggest decimal, race through decimal sums, then ask the big exam question: is this answer reasonable? Which is bigger, 0.5 or 0.45? (0.5: it's 0.50.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="round"><div><b>Round It</b><span>Decimal places, nearest 10, 100, 1000, significant figures and number lines</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="place"><div><b>Place value &amp; order</b><span>What's the digit worth? Which is bigger? × and ÷ by 10, 100, 1000, fractions ↔ decimals</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="ops"><div><b>Decimal sums</b><span>Add, subtract, multiply, divide and money problems</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="est"><div><b>Is it reasonable?</b><span>Estimate first, spot the wrong decimal point, don't round too early</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Round It, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1e, N.2a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Decimals, rounding &amp; estimation</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at what happens to the digits 3, 4 and 7.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td>3.47 × 10</td><td><b>34.7</b></td><td>3.47 ÷ 10</td><td><b>0.347</b></td></tr>
+            <tr><td>3.47 × 100</td><td><b>347</b></td><td>3.47 ÷ 100</td><td><b>0.0347</b></td></tr>
+            <tr><td>3.47 × 1000</td><td><b>3470</b></td><td>3.47 ÷ 1000</td><td><b>0.00347</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">Count the zeros in 10, 100 and 1000. How many places do the digits move each time, and which way? So what is 0.52 × 100? And 52 ÷ 1000?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The digits move <b>one place for every zero</b>: to the <b>left</b> when you multiply (the number gets bigger) and to the <b>right</b> when you divide (it gets smaller). The point stays put; empty places get a 0. 0.52 × 100 = <b>52</b> and 52 ÷ 1000 = <b>0.052</b>. That's why "add a zero" only works for whole numbers: 3.47 × 10 is not 3.470.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Place value</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Tens</th><th>Units</th><th>.</th><th>Tenths</th><th>Hundredths</th><th>Thousandths</th></tr></thead>
+          <tbody><tr><td>2</td><td>5</td><td>.</td><td>4</td><td>7</td><td>3</td></tr></tbody></table></div>
+        <p style="margin-top:8px">In 25.473 the 7 is worth 7 hundredths (0.07). <b>Comparing decimals:</b> give them the same number of decimal places first. 0.5 = 0.50 and 0.45 = 0.45, so <b>0.5 is bigger</b>. More digits doesn't mean bigger!</p>
+        <div class="note" style="margin-top:10px"><b>Fractions ↔ decimals:</b> 1/2 = 0.5 · 1/4 = 0.25 · 3/4 = 0.75 · 1/5 = 0.2 · 1/8 = 0.125 · 1/10 = 0.1 · 3/20 = 0.15. To go from a decimal to a fraction, use the place value: 0.35 = 35/100 = 7/20.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Rounding</h3>
+        <ol>
+          <li>Find the last digit you're keeping (the 1st decimal place, the hundreds, the 2nd significant figure…).</li>
+          <li>Look at the <b>next</b> digit. <b>5 or more</b>: round up. <b>Less than 5</b>: leave it.</li>
+          <li>Drop the digits after it. In whole numbers, fill the gaps with <b>zeros</b> (48,372 to the nearest thousand is 48,000, not 48).</li>
+        </ol>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Round 6.2849 to…</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>the nearest whole number</td><td><b>6</b></td></tr>
+            <tr><td>1 decimal place</td><td><b>6.3</b> (the 8 rounds the 2 up)</td></tr>
+            <tr><td>2 decimal places</td><td><b>6.28</b> (the 4 leaves the 8)</td></tr>
+            <tr><td>3 significant figures</td><td><b>6.28</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Significant figures:</b> start counting at the <b>first digit that isn't zero</b>. 0.004637 to 2 significant figures = <b>0.0046</b> (the zeros at the front don't count). 3.0496 to 3 significant figures = <b>3.05</b> (a zero between digits does count).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Decimal sums</h3>
+        <ul>
+          <li><b>+ and −:</b> line up the decimal points. Fill gaps with zeros: 7 − 2.35 → 7.00 − 2.35 = <b>4.65</b>.</li>
+          <li><b>×:</b> multiply without the points, then count the decimal places in the question: 0.3 × 0.4 → 3 × 4 = 12, two places → <b>0.12</b>.</li>
+          <li><b>÷ by a decimal:</b> multiply both numbers by 10 (or 100) until you're dividing by a whole number: 4.8 ÷ 0.6 = 48 ÷ 6 = <b>8</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Is it reasonable? Estimate first</h3>
+        <p>Round every number to <b>1 significant figure</b> and work it out in your head. 4.87 × 21.3 ≈ 5 × 20 = <b>100</b>, so 103.731 looks right and 10.3731 doesn't. If your answer is about 10 times too big or too small, check the decimal point.</p>
+        <div class="note" style="margin-top:10px"><b>Don't round too early.</b> Keep every digit until the last line, then round once. 4.56 × 2.34 = 10.6704 → <b>10.7</b>. Rounding first (4.6 × 2.3 = 10.58 → 10.6) gives the wrong answer.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Almost every question with a number answer ends with an instruction like <b>"give your answer correct to 2 decimal places"</b> or <b>"to 1 significant figure"</b>. Decimals also run through <b>money</b> (bills, change, best buy), <b>measurement</b> (area, volume, speed) and <b>statistics</b> (the mean). "Estimate…" questions test whether you can check an answer without a calculator.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Round only at the end.</b> Rounding a middle step changes the final answer and costs marks.</li>
+            <li><b>Read the instruction twice:</b> decimal places and significant figures are not the same thing. 0.04637 to 2 decimal places is 0.05; to 2 significant figures it's 0.046.</li>
+            <li><b>Show the estimate</b> when asked: "5 × 20 = 100" written down earns the marks; just the answer doesn't.</li>
+            <li><b>Money has 2 decimal places:</b> write €9.80, not €9.8.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Round it.</b> Write 2847.365 correct to (a) the nearest whole number (b) 2 decimal places (c) 2 significant figures (d) the nearest hundred.
+              <details><summary>Show the worked answer</summary><p>(a) The digit after the units is 3, so leave it: <b>2847</b>.<br>(b) The digit after the 6 is 5, so round up: <b>2847.37</b>.<br>(c) Keep 2 and 8; the next digit is 4, so leave it and fill with zeros: <b>2800</b>.<br>(d) The digit after the hundreds is 4: <b>2800</b> (the same as (c) here).</p></details></li>
+            <li><b>Estimate, then calculate.</b> (a) Estimate (19.8 × 3.1) ÷ 0.49 by rounding each number to 1 significant figure. (b) Use a calculator to work it out correct to 2 decimal places. (c) Is your answer reasonable?
+              <details><summary>Show the worked answer</summary><p>(a) 20 × 3 ÷ 0.5 = 60 ÷ 0.5 = <b>120</b>.<br>(b) 19.8 × 3.1 = 61.38, and 61.38 ÷ 0.49 = 125.265… = <b>125.27</b>.<br>(c) <b>Yes</b>: 125.27 is close to the estimate of 120.</p></details></li>
+            <li><b>Change.</b> Seán buys 3 notebooks at €2.45 each and 2 pens at €1.39 each. How much change does he get from €20?
+              <details><summary>Show the worked answer</summary><p>3 × €2.45 = €7.35 and 2 × €1.39 = €2.78. Total €7.35 + €2.78 = €10.13. Change: €20.00 − €10.13 = <b>€9.87</b>.</p></details></li>
+            <li><b>Too early!</b> A rug measures 4.56 m by 2.34 m. (a) Find its area correct to 1 decimal place. (b) Ciara rounds both lengths to 1 decimal place first. What answer does she get, and why is it wrong?
+              <details><summary>Show the worked answer</summary><p>(a) 4.56 × 2.34 = 10.6704 m² = <b>10.7 m²</b>.<br>(b) 4.6 × 2.3 = 10.58 → <b>10.6 m²</b>. She rounded too early: each rounding adds a small error, so round only the final answer.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/decimals-rounding-estimation-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/OYqXC" target="_blank" rel="noopener">Decimals &amp; Rounding Teacher Pack (€5)</a>: Human Number Line, Estimation Auction, Rounding Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function pw(e){return Math.pow(10,e);}
+  /* a decimal is [n,k] = n × 10^-k with n a whole number, so all the maths is exact */
+  function S(n,k){var s=String(n);if(k>0){while(s.length<=k)s="0"+s;s=s.slice(0,s.length-k)+"."+s.slice(-k);}return s;}
+  function norm(n,k){while(k>0&&n%10===0){n/=10;k--;}return [n,k];}
+  function N(x){return S.apply(null,norm(x[0],x[1]));}          // tidy: no trailing zeros
+  function v(s){return parseFloat(String(s).replace(/[€ ]|[a-z]+$/g,""));}
+  // round to d decimal places (d can be negative: −1 tens, −2 hundreds); half up
+  function rd(n,k,d){if(d>=k)return [n,k];var s=pw(k-d),q=Math.floor((n+s/2)/s);return d>=0?[q,d]:[q*pw(-d),0];}
+  function tr(n,k,d){if(d>=k)return [n,k];var s=pw(k-d),q=Math.floor(n/s);return d>=0?[q,d]:[q*pw(-d),0];}
+  function sfd(n,k,s){return s-(String(n).length-k);}         // decimal places that give s significant figures
+  function money(c){return "€"+S(c,2);}
+  // 3 distinct wrong options whose VALUE differs from the answer (3.4 is never marked wrong when 3.40 is right)
+  function dw(ans,slips,pads){var seen={},out=[];seen[v(ans)]=1;
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);var y=v(x);if(!isFinite(y)||y<=0||x.indexOf("NaN")>=0)return;if(!seen[y]&&out.length<3){seen[y]=1;out.push(x);}});return out;}
+  function stepPads(a){var n=a[0],k=a[1];return [S(n+1,k),S(Math.max(n-1,0),k),S(n+10,k),S(n*10,k),S(n,k+1)];}
+  function QD(en,frame,ans,slips,why,html,data){var a=S(ans[0],ans[1]);
+    return {en:en,frame:frame,html:html||"",answer:a,wrong:dw(a,slips.map(function(x){return typeof x==="string"?x:S(x[0],x[1]);}),stepPads(ans)),why:why,review:(frame?en+" "+frame:en)+" → "+a,data:data||{}};}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  var PLACE=["nearest whole number","1 decimal place","2 decimal places"];
+
+  /* ---------- number line picture ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",GREEN="#2E7D57";
+  function lineSVG(a,k,j){ // from a (k dp) to the next step, 10 small jumps; arrow at jump j
+    var b=[a[0]+1,a[1]],o='<svg viewBox="-30 -34 360 86" width="100%" style="max-width:340px" role="img" aria-label="A number line from '+S(a[0],a[1])+' to '+S(b[0],b[1])+'" data-a="'+S(a[0],a[1])+'" data-k="'+a[1]+'" data-j="'+j+'">';
+    o+='<line x1="0" y1="20" x2="300" y2="20" stroke="'+INK+'" stroke-width="2.5"/>';
+    for(var i=0;i<=10;i++){var x=i*30,big=i===0||i===10,mid=i===5;o+='<line x1="'+x+'" y1="'+(big?4:mid?9:12)+'" x2="'+x+'" y2="'+(big?36:mid?31:28)+'" stroke="'+(mid?GREEN:INK)+'" stroke-width="'+(big?2.5:mid?2.5:1.5)+'"/>';}
+    o+='<text x="0" y="52" font-size="16" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+S(a[0],a[1])+'</text>';
+    o+='<text x="300" y="52" font-size="16" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+S(b[0],b[1])+'</text>';
+    o+='<path d="M'+(j*30)+' 4 l-9 -16 h18 z" fill="'+YEL+'" stroke="'+INK+'" stroke-width="2"/>';
+    return o+'</svg>';}
+
+  /* ---------- Round It ---------- */
+  function qRoundDP(){
+    var k=3,n,d=rnd([0,1,1,2,2]);do{n=ri(1001,99999);}while(n%10===0);
+    var a=rd(n,k,d),t=tr(n,k,d),next=Math.floor(n/pw(k-d-1))%10;
+    var wrongPlace=rd(n,k,d===0?1:d-1),other=(next>=5?t:[t[0]+1,t[1]]);
+    return QD("Round to "+PLACE[d]+":",S(n,k),a,[other,wrongPlace,rd(n,k,d+1)],"Look at the digit after the "+(d===0?"units":d===1?"1st decimal place":"2nd decimal place")+": it's "+next+". "+(next>=5?"5 or more, so round up":"Less than 5, so leave it")+": "+S(a[0],a[1])+".","",{t:"dp",x:S(n,k),d:d});
+  }
+  function qRoundPlace(){
+    var n=ri(1201,98999),p=rnd([1,2,3]),name=["","ten","hundred","thousand"][p];if(n%10===0)n++;
+    var a=rd(n,0,-p),t=tr(n,0,-p),next=Math.floor(n/pw(p-1))%10,other=next>=5?t:[t[0]+pw(p),0];
+    var o=QD("Round to the nearest "+name+":",String(n),a,[other,[a[0]/pw(p),0],rd(n,0,p===3?-2:-(p+1)),rd(n,0,-(p===1?2:p-1))],"Look at the digit to the right of the "+name+"s: it's "+next+", so "+(next>=5?"round up":"round down")+". Keep the zeros as place holders: "+a[0]+".","",{t:"place",x:String(n),p:p});
+    return o;
+  }
+  function qSigFig(){
+    var s=rnd([1,2,2,3]),n,k,d,a,tries=0;
+    do{k=rnd([0,0,1,2,3,4,5,6]);n=ri(1001,99999);if(n%10===0)n++;
+      if(k>=4)n=ri(11,9999);if(n%10===0)n++;
+      d=sfd(n,k,s);a=rd(n,k,d);tries++;}
+    while((String(d>=0?a[0]:a[0]/pw(-d)).length!==s||d===k||(d>=k))&&tries<50);
+    if(tries>=50)return qRoundDP();
+    var x=S(n,k),lead=x.match(/^0\.0*/);
+    var slips=[rd(n,k,s),tr(n,k,d),d<0?[a[0]/pw(-d),0]:rd(n,k,d+1),rd(n,k,d-1)];
+    return QD("Round to "+s+" significant figure"+(s>1?"s":"")+":",x,a,slips,(lead&&lead[0].length>2?"Zeros at the start don't count. ":"")+"Start counting at the first non-zero digit and keep "+s+" digit"+(s>1?"s":"")+", then look at the next one. "+(d<0?"Fill the gap with zeros: ":"")+S(a[0],a[1])+".","",{t:"sf",x:x,s:s});
+  }
+  function qLineRound(){
+    var whole=Math.random()<.5,j;do{j=ri(1,9);}while(j===5);
+    var a=whole?[ri(1,19),0]:[ri(11,99),1],k=a[1],exact=[a[0]*10+j,k+1],ans=j>5?[a[0]+1,k]:a,other=j>5?a:[a[0]+1,k];
+    return QD("The yellow arrow points to a number. Round it to "+(whole?"the nearest whole number":"1 decimal place")+".","",ans,[other,exact,[a[0]+2,k],[Math.max(a[0]-1,0),k]],"The arrow is at "+S(exact[0],exact[1])+". The green mark is halfway. The arrow is "+(j>5?"past":"before")+" halfway, so it rounds to "+S(ans[0],ans[1])+".",lineSVG(a,k,j),{t:"line",a:S(a[0],k),j:j,k:k});
+  }
+
+  /* ---------- Place value & order ---------- */
+  function qDigit(){
+    var digs=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,4),n=digs[0]*1000+digs[1]*100+digs[2]*10+digs[3],k=3,pos=ri(1,3),dg=digs[pos];
+    var pool=[[dg,0],[dg,1],[dg,2],[dg,3],[dg*10,0]].filter(function(x){return x[1]!==pos||x[0]!==dg;}).map(function(x){return S(x[0],x[1]);});
+    return C("What is the value of the "+dg+" in this number?",S(n,k),S(dg,pos),pool,"Places after the point: tenths, hundredths, thousandths. The "+dg+" is in the "+["","tenths","hundredths","thousandths"][pos]+" place, so it's worth "+S(dg,pos)+".",null,"",{t:"digit",x:S(n,k),dg:dg});
+  }
+  function qOrder(){
+    var w=ri(0,3),a=ri(3,8),list;
+    list=[[w*10+a,1],[w*100+(a-1)*10+ri(5,9),2],[w*1000+(a-1)*100+ri(10,99),3],[w*100+a*10+ri(1,9),2]];
+    var strs=list.map(function(x){return S(x[0],x[1]);}),vals=strs.map(v);
+    if(new Set(vals).size<4)return qOrder();
+    var big=Math.random()<.6,s=strs.slice().sort(function(p,q){return v(p)-v(q);}),ans=big?s[3]:s[0];
+    return C("Which number is the "+(big?"biggest":"smallest")+"?","",ans,strs.filter(function(x){return x!==ans;}),"Give them all 3 decimal places: "+list.map(function(x){return S(x[0]*pw(3-x[1]),3);}).join(", ")+". More digits doesn't mean bigger!",(big?"Biggest":"Smallest")+": "+ans+" (from "+strs.join(", ")+")","",{t:"order",list:strs,big:big});
+  }
+  function qShift(){
+    var n,k=rnd([1,2,2,3]),p=rnd([1,2,3]),times=Math.random()<.5;do{n=ri(12,9999);}while(n%10===0);
+    var a=times?norm(n*pw(Math.max(0,p-k)),Math.max(0,k-p)):norm(n,k+p);
+    var s=times?"×":"÷",f=pw(p);
+    var slips=[times?norm(n,k+p):norm(n*pw(Math.max(0,p-k)),Math.max(0,k-p)),norm(times?n*pw(Math.max(0,p-1-k)):n,times?Math.max(0,k-p+1):k+p-1),norm(times?n*pw(Math.max(0,p+1-k)):n,times?Math.max(0,k-p-1):k+p+1),[n*f,k]];
+    return QD("Work out:",S(n,k)+" "+s+" "+f,a,slips,(times?"× ":"÷ ")+f+": the digits move "+p+" place"+(p>1?"s":"")+" to the "+(times?"left (the number gets bigger)":"right (the number gets smaller)")+". Answer "+S(a[0],a[1])+".","",{t:"op",x:S(n,k)+" "+s+" "+f});
+  }
+  var FD=[["1/2","0.5"],["1/4","0.25"],["3/4","0.75"],["1/5","0.2"],["2/5","0.4"],["3/5","0.6"],["4/5","0.8"],["1/8","0.125"],["3/8","0.375"],["1/10","0.1"],["3/10","0.3"],["7/10","0.7"],["1/20","0.05"],["3/20","0.15"],["7/100","0.07"],["13/100","0.13"],["1/25","0.04"],["9/50","0.18"]];
+  function qFracDec(){
+    var p=rnd(FD),toDec=Math.random()<.6;
+    if(toDec){var den=+p[0].split("/")[1],top=+p[0].split("/")[0];
+      var pool=[top/10+"",(top+"/"+den).replace("/","."),"0."+top+den,"0."+den,(den/top+"").slice(0,5),"0.0"+top].filter(function(x){return v(x)!==v(p[1])&&x.indexOf("/")<0;});
+      return C("Write as a decimal:",p[0],p[1],pool,p[0]+" = "+top+" ÷ "+den+" = "+p[1]+". Tip: make the bottom 10, 100 or 1000 first.",null,"",{t:"fd",f:p[0],dec:p[1]});}
+    var pool2=FD.filter(function(x){return x[1]!==p[1];}).map(function(x){return x[0];});
+    var near=pool2.filter(function(f){return Math.abs(+f.split("/")[0]/+f.split("/")[1]-v(p[1]))<0.3;});
+    return C("Write as a fraction in its simplest form:",p[1],p[0],near.length>=3?near:pool2,p[1]+" = "+p[1].split(".")[1]+"/"+pw(p[1].split(".")[1].length)+" = "+p[0]+" (simplest form).",null,"",{t:"df",f:p[0],dec:p[1]});
+  }
+
+  /* ---------- Decimal sums ---------- */
+  function dec(lo,hi,k){var n;do{n=ri(lo,hi);}while(n%10===0);return [n,k];}
+  function qAdd(){
+    var ak=rnd([1,2]),bk=ak===1?2:rnd([1,2,0]),a=dec(11,999,ak),b=bk?dec(11,999,bk):[ri(2,30),0],K=Math.max(ak,bk);
+    var s=[a[0]*pw(K-ak)+b[0]*pw(K-bk),K],mis=[a[0]+b[0],K];
+    return QD("Work out:",S(a[0],ak)+" + "+S(b[0],bk),norm(s[0],s[1]),[norm(mis[0],mis[1]),norm(s[0]+pw(K-1),K),norm(Math.max(s[0]-pw(K-1),1),K)],"Line up the decimal points (fill gaps with 0): "+S(a[0]*pw(K-ak),K)+" + "+S(b[0]*pw(K-bk),K)+" = "+N(s)+".","",{t:"op",x:S(a[0],ak)+" + "+S(b[0],bk)});
+  }
+  function qSub(){
+    var w=ri(3,20),b=dec(101,w*100-11,2),r=[w*100-b[0],2],fb=Math.floor(b[0]/100),forgot=[(w-fb)*100+b[0]%100,2];
+    if(b[0]%100===0)return qSub();
+    return QD("Work out:",w+" − "+S(b[0],2),norm(r[0],r[1]),[norm(forgot[0],2),norm(r[0]+10,2),norm(Math.max(r[0]-10,1),2)],"Write "+w+" as "+w+".00, line up the points and borrow: "+w+".00 − "+S(b[0],2)+" = "+N(r)+". Check: "+N(r)+" + "+S(b[0],2)+" = "+w+".","",{t:"op",x:w+" − "+S(b[0],2)});
+  }
+  function qMul(){
+    var ak=rnd([1,1,2]),bk=rnd([0,1,1]),a=dec(2,ak===1?99:49,ak),b=bk?dec(2,9,1):[ri(2,9),0],p=[a[0]*b[0],ak+bk];
+    return QD("Work out:",S(a[0],ak)+" × "+S(b[0],bk),norm(p[0],p[1]),[norm(p[0],p[1]-1),norm(p[0],p[1]+1),norm(a[0]*b[0],Math.max(ak,bk))],"Multiply without the points: "+a[0]+" × "+b[0]+" = "+a[0]*b[0]+". Count the decimal places in the question ("+(ak+bk)+") and put that many in the answer: "+N(p)+".","",{t:"op",x:S(a[0],ak)+" × "+S(b[0],bk)});
+  }
+  function qDiv(){
+    var dk=rnd([1,1,2]),dv=[ri(2,9),dk],q=Math.random()<.7?[ri(2,15),0]:dec(11,49,1),n=norm(q[0]*dv[0],q[1]+dk);
+    var a=norm(q[0],q[1]);
+    return QD("Work out:",S(n[0],n[1])+" ÷ "+S(dv[0],dk),a,[norm(q[0],q[1]+1),norm(q[0]*10,q[1]),norm(q[0],q[1]+2),norm(q[0]*100,q[1])],"Multiply both numbers by "+pw(dk)+" so you divide by a whole number: "+N([n[0]*pw(dk),n[1]])+" ÷ "+dv[0]+" = "+N(a)+".","",{t:"op",x:S(n[0],n[1])+" ÷ "+S(dv[0],dk)});
+  }
+  var SHOP=[["notebooks","a pen"],["cinema tickets","popcorn"],["sandwiches","a drink"],["bus tickets","a magazine"],["hurley grips","a sliotar"]];
+  function qMoney(){
+    var it=rnd(SHOP),q=ri(2,4),p1=ri(115,895),p2=ri(85,495),T=rnd([1000,2000,2000,5000]);
+    if(q*p1+p2>=T)return qMoney();
+    var ch=T-q*p1-p2;
+    var o=QD("You buy "+q+" "+it[0]+" at "+money(p1)+" each and "+it[1]+" for "+money(p2)+". How much change do you get from "+money(T)+"?","",[ch,2],[[T-p1-p2,2],[q*p1+p2,2],[T-q*p1,2],[ch+100,2]],q+" × "+money(p1)+" = "+money(q*p1)+", plus "+money(p2)+" = "+money(q*p1+p2)+". Change: "+money(T)+" − "+money(q*p1+p2)+" = "+money(ch)+".","",{t:"money",q:q,p1:S(p1,2),p2:S(p2,2),T:S(T,2)});
+    o.answer="€"+o.answer;o.wrong=o.wrong.map(function(x){return "€"+S(Math.round(v(x)*100),2);});o.review=o.en+" → "+o.answer;return o;
+  }
+
+  /* ---------- Is it reasonable? ---------- */
+  function sf1(x){return rd(x[0],x[1],sfd(x[0],x[1],1));}
+  function qEstimate(){
+    if(Math.random()<.35)return qEstDiv();
+    var a=Math.random()<.5?dec(151,999,2):dec(15,99,1),b=(function(r){return dec(r[0],r[1],1);})(rnd([[11,99],[110,990]]));
+    var ra=sf1(a),rb=sf1(b),est=norm(ra[0]*rb[0],ra[1]+rb[1]);
+    var tA=tr(a[0],a[1],sfd(a[0],a[1],1)),tB=tr(b[0],b[1],sfd(b[0],b[1],1)),low=norm(tA[0]*tB[0],tA[1]+tB[1]);
+    return QD("Estimate by rounding each number to 1 significant figure:",N(a)+" × "+N(b),est,[norm(est[0]*10,est[1]),norm(est[0],est[1]+1),low],N(a)+" ≈ "+N(ra)+" and "+N(b)+" ≈ "+N(rb)+", so "+N(ra)+" × "+N(rb)+" = "+N(est)+".","",{t:"est",x:N(a)+" × "+N(b)});
+  }
+  function qEstDiv(){
+    // rounded numbers divide exactly: e.g. 61.7 ÷ 2.94 → 60 ÷ 3 = 20
+    var rb=rnd([[2,0],[3,0],[4,0],[5,0],[2,1],[4,1],[5,1]]),q=rnd([2,3,4,5,10,20,30,40,50]),rt=norm(rb[0]*q,rb[1]);
+    if(String(rt[0]).replace(/0+$/,"").length>1)return qEstDiv();
+    var top=[rt[0]*100+ri(-30,30),rt[1]+2],bot=[rb[0]*100+ri(-30,30),rb[1]+2];
+    if(top[0]%10===0)top[0]++;if(bot[0]%10===0)bot[0]++;
+    top=norm(top[0],top[1]);bot=norm(bot[0],bot[1]);
+    if(N(sf1(top))!==N(rt)||N(sf1(bot))!==N(rb))return qEstDiv();
+    var est=[q,0];
+    return QD("Estimate by rounding each number to 1 significant figure:",N(top)+" ÷ "+N(bot),est,[[q*10,0],norm(q,1),[q*100,0]],N(top)+" ≈ "+N(rt)+" and "+N(bot)+" ≈ "+N(rb)+", so "+N(rt)+" ÷ "+N(rb)+" = "+q+".","",{t:"est",x:N(top)+" ÷ "+N(bot)});
+  }
+  function qReasonable(){
+    var a=dec(11,99,1),b=(function(r){return dec(r[0],r[1],1);})(rnd([[12,99],[101,999]])),p=norm(a[0]*b[0],a[1]+b[1]);
+    var ra=sf1(a),rb=sf1(b),est=norm(ra[0]*rb[0],ra[1]+rb[1]);
+    return C("Only one of these is the right answer to this sum. Estimate first, then pick it.",N(a)+" × "+N(b),N(p),[N([p[0],p[1]+1]),N([p[0]*10,p[1]]),N([p[0],p[1]+2])],"Estimate: "+N(ra)+" × "+N(rb)+" = "+N(est)+". Only "+N(p)+" is close to that. A wrong decimal point makes the answer 10 times too big or too small.",null,"",{t:"op",x:N(a)+" × "+N(b)});
+  }
+  var EW=[["Petrol costs €{p} a litre. Roughly how much do {x} litres cost?",[130,199],[201,489]],["Cheese costs €{p} per kg. Roughly how much is {x} kg?",[610,990],[11,49]],["Fabric costs €{p} per metre. Roughly how much do {x} metres cost?",[210,490],[61,99]]];
+  function qEstWord(){
+    var e=rnd(EW),p=ri(e[1][0],e[1][1]),x=[ri(e[2][0],e[2][1]),1];if(p%10===0)p++;if(x[0]%10===0)x[0]++;
+    var rp=sf1([p,2]),rx=sf1(x),est=norm(rp[0]*rx[0],rp[1]+rx[1]),tp=tr(p,2,sfd(p,2,1)),tx=tr(x[0],1,sfd(x[0],1,1)),low=norm(tp[0]*tx[0],tp[1]+tx[1]);
+    if(v(N(low))===v(N(est)))low=norm(est[0]*2,est[1]);
+    var pool=["€"+N(norm(est[0],est[1]+1)),"€"+N(norm(est[0]*10,est[1])),"€"+N(low)];
+    return C(e[0].replace("{p}",S(p,2)).replace("{x}",N(x)),"","€"+N(est),pool,"Round each to 1 significant figure: €"+S(p,2)+" ≈ €"+N(rp)+" and "+N(x)+" ≈ "+N(rx)+". "+N(rp)+" × "+N(rx)+" = €"+N(est)+".",null,"",{t:"estw",p:S(p,2),x:N(x)});
+  }
+  function qRoundEarly(){
+    var a=dec(111,999,2),b=dec(11,99,1),p=[a[0]*b[0],3],ans=rd(p[0],3,1),ea=rd(a[0],2,1),early=rd(ea[0]*b[0],2,1);
+    if(ans[0]===early[0])return qRoundEarly();
+    return QD("Work out, then round your answer to 1 decimal place:",S(a[0],2)+" × "+S(b[0],1),ans,[early,rd(p[0],3,2),[ans[0]+1,1]],"Exact answer first: "+S(a[0],2)+" × "+S(b[0],1)+" = "+S(p[0],3)+" → "+S(ans[0],1)+". Rounding "+S(a[0],2)+" to "+S(ea[0],1)+" too early gives "+S(early[0],1)+": round at the END.","",{t:"early",x:S(a[0],2)+" × "+S(b[0],1)});
+  }
+
+  var MAKERS={
+    round:[qRoundDP,qRoundDP,qRoundPlace,qSigFig,qSigFig,qLineRound,qLineRound],
+    place:[qDigit,qOrder,qOrder,qShift,qShift,qFracDec,qFracDec],
+    ops:[qAdd,qSub,qMul,qMul,qDiv,qDiv,qMoney],
+    est:[qEstimate,qEstimate,qReasonable,qEstWord,qRoundEarly],
+    mixed:[qRoundDP,qRoundPlace,qSigFig,qLineRound,qDigit,qOrder,qShift,qFracDec,qAdd,qSub,qMul,qDiv,qMoney,qEstimate,qReasonable,qEstWord,qRoundEarly]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="ops"||m==="est"||m==="mixed")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="round"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="round"&&streak%5===0?700:350):2600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

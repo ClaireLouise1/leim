@@ -38,7 +38,7 @@ MATHS = [
   ("1st year","Autumn","Integers & order of operations","N.1a, N.1b, N.1c, U.1, U.2","Integer Rush","integer-rush.html","integers-order-of-operations"),
   ("1st year","Autumn","Factors, multiples & primes (HCF, LCM)","N.1d","Prime Smash","prime-smash.html","factors-multiples-primes"),
   ("1st year","Autumn","Fractions","N.1a, N.1b, N.2a","Fraction Match","fraction-match.html","fractions"),
-  ("1st year","Autumn","Decimals, rounding & estimation","N.1e, N.2a","Round It","",""),
+  ("1st year","Autumn","Decimals, rounding & estimation","N.1e, N.2a","Round It","round-it.html","decimals-rounding-estimation"),
   ("1st year","Autumn","Sets & Venn diagrams","N.5, U.4","Venn Sorter","",""),
   ("1st year","Spring","Percentages","N.2a, N.2b","Percent Pop","",""),
   ("1st year","Spring","Ratio & proportion","N.2b, N.3a","Share It Out","",""),

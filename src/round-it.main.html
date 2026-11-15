@@ -1,0 +1,142 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Round It</h1>
+        <p>60 seconds. Round to the right place, find the biggest decimal, race through decimal sums, then ask the big exam question: is this answer reasonable? Which is bigger, 0.5 or 0.45? (0.5: it's 0.50.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="round"><div><b>Round It</b><span>Decimal places, nearest 10, 100, 1000, significant figures and number lines</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="place"><div><b>Place value &amp; order</b><span>What's the digit worth? Which is bigger? × and ÷ by 10, 100, 1000, fractions ↔ decimals</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="ops"><div><b>Decimal sums</b><span>Add, subtract, multiply, divide and money problems</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="est"><div><b>Is it reasonable?</b><span>Estimate first, spot the wrong decimal point, don't round too early</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Round It, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1e, N.2a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Decimals, rounding &amp; estimation</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at what happens to the digits 3, 4 and 7.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td>3.47 × 10</td><td><b>34.7</b></td><td>3.47 ÷ 10</td><td><b>0.347</b></td></tr>
+            <tr><td>3.47 × 100</td><td><b>347</b></td><td>3.47 ÷ 100</td><td><b>0.0347</b></td></tr>
+            <tr><td>3.47 × 1000</td><td><b>3470</b></td><td>3.47 ÷ 1000</td><td><b>0.00347</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">Count the zeros in 10, 100 and 1000. How many places do the digits move each time, and which way? So what is 0.52 × 100? And 52 ÷ 1000?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The digits move <b>one place for every zero</b>: to the <b>left</b> when you multiply (the number gets bigger) and to the <b>right</b> when you divide (it gets smaller). The point stays put; empty places get a 0. 0.52 × 100 = <b>52</b> and 52 ÷ 1000 = <b>0.052</b>. That's why "add a zero" only works for whole numbers: 3.47 × 10 is not 3.470.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Place value</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Tens</th><th>Units</th><th>.</th><th>Tenths</th><th>Hundredths</th><th>Thousandths</th></tr></thead>
+          <tbody><tr><td>2</td><td>5</td><td>.</td><td>4</td><td>7</td><td>3</td></tr></tbody></table></div>
+        <p style="margin-top:8px">In 25.473 the 7 is worth 7 hundredths (0.07). <b>Comparing decimals:</b> give them the same number of decimal places first. 0.5 = 0.50 and 0.45 = 0.45, so <b>0.5 is bigger</b>. More digits doesn't mean bigger!</p>
+        <div class="note" style="margin-top:10px"><b>Fractions ↔ decimals:</b> 1/2 = 0.5 · 1/4 = 0.25 · 3/4 = 0.75 · 1/5 = 0.2 · 1/8 = 0.125 · 1/10 = 0.1 · 3/20 = 0.15. To go from a decimal to a fraction, use the place value: 0.35 = 35/100 = 7/20.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Rounding</h3>
+        <ol>
+          <li>Find the last digit you're keeping (the 1st decimal place, the hundreds, the 2nd significant figure…).</li>
+          <li>Look at the <b>next</b> digit. <b>5 or more</b>: round up. <b>Less than 5</b>: leave it.</li>
+          <li>Drop the digits after it. In whole numbers, fill the gaps with <b>zeros</b> (48,372 to the nearest thousand is 48,000, not 48).</li>
+        </ol>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Round 6.2849 to…</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>the nearest whole number</td><td><b>6</b></td></tr>
+            <tr><td>1 decimal place</td><td><b>6.3</b> (the 8 rounds the 2 up)</td></tr>
+            <tr><td>2 decimal places</td><td><b>6.28</b> (the 4 leaves the 8)</td></tr>
+            <tr><td>3 significant figures</td><td><b>6.28</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Significant figures:</b> start counting at the <b>first digit that isn't zero</b>. 0.004637 to 2 significant figures = <b>0.0046</b> (the zeros at the front don't count). 3.0496 to 3 significant figures = <b>3.05</b> (a zero between digits does count).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Decimal sums</h3>
+        <ul>
+          <li><b>+ and −:</b> line up the decimal points. Fill gaps with zeros: 7 − 2.35 → 7.00 − 2.35 = <b>4.65</b>.</li>
+          <li><b>×:</b> multiply without the points, then count the decimal places in the question: 0.3 × 0.4 → 3 × 4 = 12, two places → <b>0.12</b>.</li>
+          <li><b>÷ by a decimal:</b> multiply both numbers by 10 (or 100) until you're dividing by a whole number: 4.8 ÷ 0.6 = 48 ÷ 6 = <b>8</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Is it reasonable? Estimate first</h3>
+        <p>Round every number to <b>1 significant figure</b> and work it out in your head. 4.87 × 21.3 ≈ 5 × 20 = <b>100</b>, so 103.731 looks right and 10.3731 doesn't. If your answer is about 10 times too big or too small, check the decimal point.</p>
+        <div class="note" style="margin-top:10px"><b>Don't round too early.</b> Keep every digit until the last line, then round once. 4.56 × 2.34 = 10.6704 → <b>10.7</b>. Rounding first (4.6 × 2.3 = 10.58 → 10.6) gives the wrong answer.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Almost every question with a number answer ends with an instruction like <b>"give your answer correct to 2 decimal places"</b> or <b>"to 1 significant figure"</b>. Decimals also run through <b>money</b> (bills, change, best buy), <b>measurement</b> (area, volume, speed) and <b>statistics</b> (the mean). "Estimate…" questions test whether you can check an answer without a calculator.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Round only at the end.</b> Rounding a middle step changes the final answer and costs marks.</li>
+            <li><b>Read the instruction twice:</b> decimal places and significant figures are not the same thing. 0.04637 to 2 decimal places is 0.05; to 2 significant figures it's 0.046.</li>
+            <li><b>Show the estimate</b> when asked: "5 × 20 = 100" written down earns the marks; just the answer doesn't.</li>
+            <li><b>Money has 2 decimal places:</b> write €9.80, not €9.8.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Round it.</b> Write 2847.365 correct to (a) the nearest whole number (b) 2 decimal places (c) 2 significant figures (d) the nearest hundred.
+              <details><summary>Show the worked answer</summary><p>(a) The digit after the units is 3, so leave it: <b>2847</b>.<br>(b) The digit after the 6 is 5, so round up: <b>2847.37</b>.<br>(c) Keep 2 and 8; the next digit is 4, so leave it and fill with zeros: <b>2800</b>.<br>(d) The digit after the hundreds is 4: <b>2800</b> (the same as (c) here).</p></details></li>
+            <li><b>Estimate, then calculate.</b> (a) Estimate (19.8 × 3.1) ÷ 0.49 by rounding each number to 1 significant figure. (b) Use a calculator to work it out correct to 2 decimal places. (c) Is your answer reasonable?
+              <details><summary>Show the worked answer</summary><p>(a) 20 × 3 ÷ 0.5 = 60 ÷ 0.5 = <b>120</b>.<br>(b) 19.8 × 3.1 = 61.38, and 61.38 ÷ 0.49 = 125.265… = <b>125.27</b>.<br>(c) <b>Yes</b>: 125.27 is close to the estimate of 120.</p></details></li>
+            <li><b>Change.</b> Seán buys 3 notebooks at €2.45 each and 2 pens at €1.39 each. How much change does he get from €20?
+              <details><summary>Show the worked answer</summary><p>3 × €2.45 = €7.35 and 2 × €1.39 = €2.78. Total €7.35 + €2.78 = €10.13. Change: €20.00 − €10.13 = <b>€9.87</b>.</p></details></li>
+            <li><b>Too early!</b> A rug measures 4.56 m by 2.34 m. (a) Find its area correct to 1 decimal place. (b) Ciara rounds both lengths to 1 decimal place first. What answer does she get, and why is it wrong?
+              <details><summary>Show the worked answer</summary><p>(a) 4.56 × 2.34 = 10.6704 m² = <b>10.7 m²</b>.<br>(b) 4.6 × 2.3 = 10.58 → <b>10.6 m²</b>. She rounded too early: each rounding adds a small error, so round only the final answer.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/decimals-rounding-estimation-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/OYqXC" target="_blank" rel="noopener">Decimals &amp; Rounding Teacher Pack (€5)</a>: Human Number Line, Estimation Auction, Rounding Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
