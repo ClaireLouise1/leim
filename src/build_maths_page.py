@@ -51,10 +51,10 @@ main = f'''<main id="main">
       <p>One written paper in June, at Higher or Ordinary level, set and marked by the State Examinations Commission.</p>
     </div>
     <div class="stats">
-      <div class="stat"><b>2 hours</b><span>for the Higher level paper (2025)</span></div>
-      <div class="stat"><b>270</b><span>marks on the Higher paper</span></div>
+      <div class="stat"><b>2 hours</b><span>for the Higher and the Ordinary paper (2026)</span></div>
+      <div class="stat"><b>270</b><span>marks at both levels (2026)</span></div>
       <div class="stat"><b>13</b><span>questions, and every one must be answered: there is no choice</span></div>
-      <div class="stat"><b>1 CBA</b><span>in class (a Mathematical or a Statistical Investigation), reported separately on the JCPA</span></div>
+      <div class="stat"><b>1+ CBA</b><span>at least one in class (a Mathematical or a Statistical Investigation; most schools do one), reported separately on the JCPA</span></div>
     </div>
     <p style="color:#C9D1DA;margin-top:24px;font-size:15px">Because every question is compulsory, every topic matters. See exactly how the Higher and Ordinary papers are marked, question by question, in the Maths Exam Centre.</p>
     <p style="margin-top:16px"><a class="btn" href="junior-cycle-maths-exam-centre.html">Open the Maths Exam Centre →</a></p>
