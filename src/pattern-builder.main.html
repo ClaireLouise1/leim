@@ -1,0 +1,144 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Pattern Builder</h1>
+        <p>60 seconds. Build the next stage of a matchstick pattern, crack the rule for the nth term, read tables and graphs, and work out when the savings hit €200. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="build"><div><b>Pattern Builder</b><span>What comes next? Matchstick and tile patterns, the common difference, the 10th or 50th term</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rule"><div><b>Find the rule</b><span>The general term Tₙ from a list, a picture or a table, and is the rule right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="graph"><div><b>Tables &amp; graphs</b><span>Fill the table, read the graph: start value, rate of change, which point fits?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="life"><div><b>Real-life patterns</b><span>Savings, plants, candles, phone credit: formulas, "after how many weeks?", is 100 in the pattern?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Pattern Builder, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.4, AF.1a, AF.1b, U.4, U.11 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Linear patterns &amp; sequences</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>A row of matchstick squares: 1 square uses 4 matchsticks, 2 squares use 7, 3 squares use 10. Fill in the next rows in your head (or on paper):</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">1 square: <b>4</b> &nbsp;·&nbsp; 3 × 1 + 1 = 4</li>
+          <li class="note">2 squares: <b>7</b> &nbsp;·&nbsp; 3 × 2 + 1 = 7</li>
+          <li class="note">3 squares: <b>10</b> &nbsp;·&nbsp; 3 × 3 + 1 = 10</li>
+        </ul>
+        <p style="margin-top:10px">How many for 4 squares? For 100 squares? Why is it "3 × the number of squares, + 1"? Where does the 3 come from, and where does the 1 come from?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every new square needs <b>3</b> more matchsticks (a top, a bottom and one side), so the pattern goes up by 3 each time: that's the <b>3n</b>. The very first square needs one extra stick for its left side, and that extra stick is only ever counted once: that's the <b>+ 1</b>. So n squares need <b>3n + 1</b> matchsticks: 13 for 4 squares, 301 for 100 squares. (Not 100 × 4 = 400: the squares share their sides.)</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <ul>
+          <li>A <b>sequence</b> (pattern) is a list of numbers in order: 5, 8, 11, 14, … Each number is a <b>term</b>. T₁ is the 1st term, T₂ the 2nd, and <b>Tₙ</b> is the nth term.</li>
+          <li>In a <b>linear pattern</b> you add (or take away) the <b>same amount</b> every time. That amount is the <b>common difference</b>: 3 for 5, 8, 11, 14, … and −4 for 20, 16, 12, …</li>
+          <li>The <b>general term</b> (the rule) gives any term from its position n: Tₙ = 3n + 2 gives T₁ = 5, T₂ = 8, T₁₀ = 32.</li>
+          <li>In real life the common difference is the <b>rate of change</b> (€15 a week), and the value at the very start (week 0) is the <b>start value</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Finding the general term Tₙ</h3>
+        <ol style="padding-left:22px">
+          <li>Find the <b>common difference</b> d. The rule starts <b>dn</b>.</li>
+          <li>Compare dn with term 1, then add or take away to fix it.</li>
+          <li><b>Check</b> with term 2.</li>
+        </ol>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>5, 8, 11, 14, …</b> The jump is 3, so start with 3n. When n = 1, 3n = 3, but T₁ = 5: add 2. <b>Tₙ = 3n + 2</b>. Check: 3(2) + 2 = 8 ✓</li>
+          <li class="note"><b>30, 26, 22, 18, …</b> The jump is −4, so start with −4n. When n = 1, −4n = −4, but T₁ = 30: add 34. <b>Tₙ = 34 − 4n</b>. Check: 34 − 8 = 26 ✓</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> for 5, 8, 11, … writing "n + 3" because "it goes up 3". That only says how to get from one term to the next. Test it: n + 3 gives 4 for n = 1, not 5. The jump goes <b>in front of the n</b>: 3n + 2.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Far-away terms and working backwards</h3>
+        <ul>
+          <li><b>The 50th term</b> of 5, 8, 11, …: use the rule, 3(50) + 2 = <b>152</b>. (Or: term 1 plus 49 jumps of 3 = 5 + 147 = 152. It's 49 jumps, not 50.)</li>
+          <li><b>Which term is 65?</b> Work backwards: 65 − 5 = 60 above term 1; 60 ÷ 3 = 20 jumps; so it's term <b>21</b>. Check: 3(21) + 2 = 65 ✓</li>
+          <li><b>Is 100 in the pattern?</b> (100 − 5) ÷ 3 = 31.66…, not a whole number, so <b>no</b>. (Term 32 is 98 and term 33 is 101.)</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Tables and graphs</h3>
+        <ul>
+          <li>Put n in the top row of a table and Tₙ in the bottom row. In a linear pattern the bottom row goes up by the same amount each step.</li>
+          <li>Plot each pair (n, Tₙ) as a point: the points of a <b>linear</b> pattern lie on a <b>straight line</b>.</li>
+          <li>On a real-life graph, the <b>start value</b> is where the points meet the vertical axis (at 0), and the <b>rate of change</b> is how much the line goes up for each 1 across. Savings of €35 plus €15 a week: S = 15w + 35.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Patterns are a favourite <b>longer question</b>: a picture pattern (matchsticks, tiles, dots) or a real-life situation, followed by a table to fill in, the next stages, a graph, the general term, and a "which stage…?" or "will it ever reach…?" part at the end. It links number, tables, graphs and algebra, so one question can carry a lot of marks.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Fill in the table carefully</b>: the later parts use it, so one slip early can cost several parts.</li>
+            <li><b>Always check your rule</b> with two terms before you use it. A rule that only works for term 1 is wrong.</li>
+            <li><b>Don't just multiply stage 1</b>: stage 10 is not 10 × stage 1 when there's an extra bit at the start.</li>
+            <li><b>Explain in words when asked</b>: "it's linear because it goes up by 3 each time" / "the points lie on a straight line".</li>
+            <li><b>Show your working backwards</b> for "which stage" questions: (100 − 1) ÷ 3 = 33, so stage 33.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Matchstick squares.</b> Stage 1 is 1 square (4 matchsticks), stage 2 is 2 squares in a row (7 matchsticks), stage 3 is 3 squares in a row (10 matchsticks). (a) How many matchsticks are needed for stage 4? (b) Write a formula for the number of matchsticks in stage n. (c) Which stage uses exactly 100 matchsticks? (d) Can any stage use exactly 50 matchsticks? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) It goes up by 3 each time: 10 + 3 = <b>13</b>.<br>(b) The jump is 3, so 3n; stage 1 has 4 = 3 + 1, so <b>3n + 1</b>. Check: 3(2) + 1 = 7 ✓<br>(c) (100 − 1) ÷ 3 = 99 ÷ 3 = 33, so <b>stage 33</b>. Check: 3(33) + 1 = 100 ✓<br>(d) (50 − 1) ÷ 3 = 49 ÷ 3 = 16.33…, not a whole number, so <b>no</b>. (Stage 16 uses 49 and stage 17 uses 52.)</p></details></li>
+            <li><b>The sequence 7, 11, 15, 19, …</b> (a) Find Tₙ, the general term. (b) Find the 50th term. (c) Is 99 a term of the sequence? Is 101? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) Common difference 4, so 4n; 4 × 1 = 4 but T₁ = 7, so add 3: <b>Tₙ = 4n + 3</b>. Check: 4(2) + 3 = 11 ✓<br>(b) T₅₀ = 4(50) + 3 = <b>203</b>.<br>(c) 99: (99 − 3) ÷ 4 = 24, a whole number, so <b>yes, 99 is T₂₄</b> (4(24) + 3 = 99 ✓). 101: (101 − 3) ÷ 4 = 24.5, so <b>no</b>. (All the terms are odd, but that's not enough: you have to test it.)</p></details></li>
+            <li><b>Seán's savings.</b> Seán has €35 saved. He saves €15 every week. (a) Make a table of his savings for weeks 0 to 4. (b) Write down the start value and the rate of change. (c) Write a formula for his savings S after w weeks. (d) After how many weeks will he have €200?
+              <details><summary>Show the worked answer</summary><p>(a) Weeks 0, 1, 2, 3, 4 → €35, €50, €65, €80, €95.<br>(b) Start value <b>€35</b> (week 0); rate of change <b>€15 per week</b>.<br>(c) <b>S = 15w + 35</b>.<br>(d) He needs €200 − €35 = €165 more; 165 ÷ 15 = <b>11 weeks</b>. Check: 15(11) + 35 = 200 ✓</p></details></li>
+            <li><b>Two patterns.</b> Ella's pattern is 2, 5, 8, 11, … and Max's is 20, 22, 24, 26, … (a) Find the general term of each. (b) At which stage are the two patterns equal? Explain your method.
+              <details><summary>Show the worked answer</summary><p>(a) Ella: <b>3n − 1</b>. Max: <b>2n + 18</b>.<br>(b) At stage 1 the gap is 20 − 2 = 18. Ella goes up 3 each time and Max goes up 2, so the gap shrinks by 1 each stage. It reaches 0 after 18 more stages: <b>stage 19</b>. Check: 3(19) − 1 = 56 and 2(19) + 18 = 56 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/linear-patterns-sequences-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK (switch on once the Léim Payhip product exists: swap PAYHIP_URL and remove the comment markers)
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Linear Patterns Teacher Pack (€5)</a>: Build It matchstick task, Pattern Detectives cards, Pattern Dominoes, poster and worksheet.</p>
+        -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

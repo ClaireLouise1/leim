@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pattern Builder: Linear Patterns & Sequences Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: continue matchstick and tile patterns, find the general term Tₙ, read tables and graphs, start value and rate of change. Rules and exam-style questions included.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Pattern Builder</h1>
+        <p>60 seconds. Build the next stage of a matchstick pattern, crack the rule for the nth term, read tables and graphs, and work out when the savings hit €200. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="build"><div><b>Pattern Builder</b><span>What comes next? Matchstick and tile patterns, the common difference, the 10th or 50th term</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rule"><div><b>Find the rule</b><span>The general term Tₙ from a list, a picture or a table, and is the rule right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="graph"><div><b>Tables &amp; graphs</b><span>Fill the table, read the graph: start value, rate of change, which point fits?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="life"><div><b>Real-life patterns</b><span>Savings, plants, candles, phone credit: formulas, "after how many weeks?", is 100 in the pattern?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Pattern Builder, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.4, AF.1a, AF.1b, U.4, U.11 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Linear patterns &amp; sequences</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>A row of matchstick squares: 1 square uses 4 matchsticks, 2 squares use 7, 3 squares use 10. Fill in the next rows in your head (or on paper):</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">1 square: <b>4</b> &nbsp;·&nbsp; 3 × 1 + 1 = 4</li>
+          <li class="note">2 squares: <b>7</b> &nbsp;·&nbsp; 3 × 2 + 1 = 7</li>
+          <li class="note">3 squares: <b>10</b> &nbsp;·&nbsp; 3 × 3 + 1 = 10</li>
+        </ul>
+        <p style="margin-top:10px">How many for 4 squares? For 100 squares? Why is it "3 × the number of squares, + 1"? Where does the 3 come from, and where does the 1 come from?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every new square needs <b>3</b> more matchsticks (a top, a bottom and one side), so the pattern goes up by 3 each time: that's the <b>3n</b>. The very first square needs one extra stick for its left side, and that extra stick is only ever counted once: that's the <b>+ 1</b>. So n squares need <b>3n + 1</b> matchsticks: 13 for 4 squares, 301 for 100 squares. (Not 100 × 4 = 400: the squares share their sides.)</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <ul>
+          <li>A <b>sequence</b> (pattern) is a list of numbers in order: 5, 8, 11, 14, … Each number is a <b>term</b>. T₁ is the 1st term, T₂ the 2nd, and <b>Tₙ</b> is the nth term.</li>
+          <li>In a <b>linear pattern</b> you add (or take away) the <b>same amount</b> every time. That amount is the <b>common difference</b>: 3 for 5, 8, 11, 14, … and −4 for 20, 16, 12, …</li>
+          <li>The <b>general term</b> (the rule) gives any term from its position n: Tₙ = 3n + 2 gives T₁ = 5, T₂ = 8, T₁₀ = 32.</li>
+          <li>In real life the common difference is the <b>rate of change</b> (€15 a week), and the value at the very start (week 0) is the <b>start value</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Finding the general term Tₙ</h3>
+        <ol style="padding-left:22px">
+          <li>Find the <b>common difference</b> d. The rule starts <b>dn</b>.</li>
+          <li>Compare dn with term 1, then add or take away to fix it.</li>
+          <li><b>Check</b> with term 2.</li>
+        </ol>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>5, 8, 11, 14, …</b> The jump is 3, so start with 3n. When n = 1, 3n = 3, but T₁ = 5: add 2. <b>Tₙ = 3n + 2</b>. Check: 3(2) + 2 = 8 ✓</li>
+          <li class="note"><b>30, 26, 22, 18, …</b> The jump is −4, so start with −4n. When n = 1, −4n = −4, but T₁ = 30: add 34. <b>Tₙ = 34 − 4n</b>. Check: 34 − 8 = 26 ✓</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> for 5, 8, 11, … writing "n + 3" because "it goes up 3". That only says how to get from one term to the next. Test it: n + 3 gives 4 for n = 1, not 5. The jump goes <b>in front of the n</b>: 3n + 2.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Far-away terms and working backwards</h3>
+        <ul>
+          <li><b>The 50th term</b> of 5, 8, 11, …: use the rule, 3(50) + 2 = <b>152</b>. (Or: term 1 plus 49 jumps of 3 = 5 + 147 = 152. It's 49 jumps, not 50.)</li>
+          <li><b>Which term is 65?</b> Work backwards: 65 − 5 = 60 above term 1; 60 ÷ 3 = 20 jumps; so it's term <b>21</b>. Check: 3(21) + 2 = 65 ✓</li>
+          <li><b>Is 100 in the pattern?</b> (100 − 5) ÷ 3 = 31.66…, not a whole number, so <b>no</b>. (Term 32 is 98 and term 33 is 101.)</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Tables and graphs</h3>
+        <ul>
+          <li>Put n in the top row of a table and Tₙ in the bottom row. In a linear pattern the bottom row goes up by the same amount each step.</li>
+          <li>Plot each pair (n, Tₙ) as a point: the points of a <b>linear</b> pattern lie on a <b>straight line</b>.</li>
+          <li>On a real-life graph, the <b>start value</b> is where the points meet the vertical axis (at 0), and the <b>rate of change</b> is how much the line goes up for each 1 across. Savings of €35 plus €15 a week: S = 15w + 35.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Patterns are a favourite <b>longer question</b>: a picture pattern (matchsticks, tiles, dots) or a real-life situation, followed by a table to fill in, the next stages, a graph, the general term, and a "which stage…?" or "will it ever reach…?" part at the end. It links number, tables, graphs and algebra, so one question can carry a lot of marks.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Fill in the table carefully</b>: the later parts use it, so one slip early can cost several parts.</li>
+            <li><b>Always check your rule</b> with two terms before you use it. A rule that only works for term 1 is wrong.</li>
+            <li><b>Don't just multiply stage 1</b>: stage 10 is not 10 × stage 1 when there's an extra bit at the start.</li>
+            <li><b>Explain in words when asked</b>: "it's linear because it goes up by 3 each time" / "the points lie on a straight line".</li>
+            <li><b>Show your working backwards</b> for "which stage" questions: (100 − 1) ÷ 3 = 33, so stage 33.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Matchstick squares.</b> Stage 1 is 1 square (4 matchsticks), stage 2 is 2 squares in a row (7 matchsticks), stage 3 is 3 squares in a row (10 matchsticks). (a) How many matchsticks are needed for stage 4? (b) Write a formula for the number of matchsticks in stage n. (c) Which stage uses exactly 100 matchsticks? (d) Can any stage use exactly 50 matchsticks? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) It goes up by 3 each time: 10 + 3 = <b>13</b>.<br>(b) The jump is 3, so 3n; stage 1 has 4 = 3 + 1, so <b>3n + 1</b>. Check: 3(2) + 1 = 7 ✓<br>(c) (100 − 1) ÷ 3 = 99 ÷ 3 = 33, so <b>stage 33</b>. Check: 3(33) + 1 = 100 ✓<br>(d) (50 − 1) ÷ 3 = 49 ÷ 3 = 16.33…, not a whole number, so <b>no</b>. (Stage 16 uses 49 and stage 17 uses 52.)</p></details></li>
+            <li><b>The sequence 7, 11, 15, 19, …</b> (a) Find Tₙ, the general term. (b) Find the 50th term. (c) Is 99 a term of the sequence? Is 101? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) Common difference 4, so 4n; 4 × 1 = 4 but T₁ = 7, so add 3: <b>Tₙ = 4n + 3</b>. Check: 4(2) + 3 = 11 ✓<br>(b) T₅₀ = 4(50) + 3 = <b>203</b>.<br>(c) 99: (99 − 3) ÷ 4 = 24, a whole number, so <b>yes, 99 is T₂₄</b> (4(24) + 3 = 99 ✓). 101: (101 − 3) ÷ 4 = 24.5, so <b>no</b>. (All the terms are odd, but that's not enough: you have to test it.)</p></details></li>
+            <li><b>Seán's savings.</b> Seán has €35 saved. He saves €15 every week. (a) Make a table of his savings for weeks 0 to 4. (b) Write down the start value and the rate of change. (c) Write a formula for his savings S after w weeks. (d) After how many weeks will he have €200?
+              <details><summary>Show the worked answer</summary><p>(a) Weeks 0, 1, 2, 3, 4 → €35, €50, €65, €80, €95.<br>(b) Start value <b>€35</b> (week 0); rate of change <b>€15 per week</b>.<br>(c) <b>S = 15w + 35</b>.<br>(d) He needs €200 − €35 = €165 more; 165 ÷ 15 = <b>11 weeks</b>. Check: 15(11) + 35 = 200 ✓</p></details></li>
+            <li><b>Two patterns.</b> Ella's pattern is 2, 5, 8, 11, … and Max's is 20, 22, 24, 26, … (a) Find the general term of each. (b) At which stage are the two patterns equal? Explain your method.
+              <details><summary>Show the worked answer</summary><p>(a) Ella: <b>3n − 1</b>. Max: <b>2n + 18</b>.<br>(b) At stage 1 the gap is 20 − 2 = 18. Ella goes up 3 each time and Max goes up 2, so the gap shrinks by 1 each stage. It reaches 0 after 18 more stages: <b>stage 19</b>. Check: 3(19) − 1 = 56 and 2(19) + 18 = 56 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/linear-patterns-sequences-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK (switch on once the Léim Payhip product exists: swap PAYHIP_URL and remove the comment markers)
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Linear Patterns Teacher Pack (€5)</a>: Build It matchstick task, Pattern Detectives cards, Pattern Dominoes, poster and worksheet.</p>
+        -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}
+  function pm(n){return n<0?" "+M+" "+(-n):" + "+n;}           // " + 3" / " − 3"
+  /* expressions: map {key: coefficient}; key "" = constant */
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return (b===""?0:1)-(a===""?0:1)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");}
+  function fmt(m){var l=keys(m).map(function(k){return [m[k],k];});if(l.length&&l[0][0]<0){var i=0;while(i<l.length&&l[i][0]<0)i++;if(i<l.length)l=[l[i]].concat(l.slice(0,i),l.slice(i+1));}return fmtList(l);}
+  function lin(d,b,v){var m={};m[v||"n"]=d;m[""]=b;return m;}
+  /* expression question: wrong options never EQUAL the answer, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=Object.assign({},ans);a[k]+=1;pads.push(a);var b=Object.assign({},ans);b[k]-=1;pads.push(b);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data,pos){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3||(pos&&x<1))return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function pl(n,w){return n+" "+(n===1?w.replace(/s$/,""):w);}
+  function seq(a,d,k){var s=[];for(var i=0;i<k;i++)s.push(a+i*d);return s;}
+  function seqStr(arr){return arr.map(num).join(", ")+", …";}
+  function rule(d,b){return "Tₙ = "+fmt(lin(d,b));}
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás","Niamh","Seán"];
+  function she(nm){return /^(Ciara|Aoife|Zara|Emma|Niamh)$/.test(nm)?"she":"he";}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",GRN="#9BD3AE",BLU="#A9C4E8",F='font-family="Inter,sans-serif"';
+  /* matchstick patterns, stages 1–3; every stick is a <line class="m"> inside <g data-stage> */
+  var STICKS={squares:{name:"squares",d:3,b:1},triangles:{name:"triangles",d:2,b:1},houses:{name:"houses",d:5,b:1},double:{name:"a double row of squares",d:5,b:2}};
+  function edges(kind,n){var E={},out=[];
+    function add(p,q){var k=[p,q].map(String).sort().join("|");if(!E[k]){E[k]=1;out.push([p,q]);}}
+    for(var i=0;i<n;i++){
+      if(kind==="squares"||kind==="houses"){add([i,0],[i+1,0]);add([i+1,0],[i+1,1]);add([i+1,1],[i,1]);add([i,1],[i,0]);
+        if(kind==="houses"){add([i,1],[i+.5,1.7]);add([i+1,1],[i+.5,1.7]);}}
+      else if(kind==="double"){for(var r=0;r<2;r++){add([i,r],[i+1,r]);add([i+1,r],[i+1,r+1]);add([i+1,r+1],[i,r+1]);add([i,r+1],[i,r]);}}
+      else{var j=Math.floor(i/2);if(i%2===0){add([j,0],[j+1,0]);add([j,0],[j+.5,.87]);add([j+1,0],[j+.5,.87]);}else{add([j+.5,.87],[j+1.5,.87]);add([j+1,0],[j+1.5,.87]);}}
+    }return out;}
+  function sticksSVG(kind,stages){var u=24,x0=8,o="",H=kind==="houses"?1.7:kind==="double"?2:1,top=12,base=top+H*u;
+    stages.forEach(function(n){var aw=kind==="triangles"?(Math.ceil(n/2)+(n%2===0?.5:0)):n,w=Math.max(1.8,aw),ox=x0+(w-aw)*u/2;
+      o+='<g data-stage="'+n+'">';edges(kind,n).forEach(function(e){o+='<line class="m" x1="'+(ox+e[0][0]*u)+'" y1="'+(base-e[0][1]*u)+'" x2="'+(ox+e[1][0]*u)+'" y2="'+(base-e[1][1]*u)+'" stroke="#C0392B" stroke-width="3.5" stroke-linecap="round"/>';});
+      o+='</g><text x="'+(x0+w*u/2)+'" y="'+(base+20)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+INK+'" '+F+'>Stage '+n+'</text>';
+      x0+=w*u+30;});
+    return '<svg viewBox="0 0 '+(x0-14)+' '+(base+28)+'" width="100%" style="max-width:'+Math.min(340,Math.round((x0-14)*1.6))+'px" role="img" aria-label="Matchstick pattern made of '+STICKS[kind].name+', stages '+stages.join(", ")+'">'+o+'</svg>';}
+  /* tile patterns: stage n = k rows of n tiles + a column of b extra (yellow) tiles on the left; tiles are <rect class="tile"> inside <g data-stage> */
+  function tilesSVG(k,b,stages){var u=14,x0=8,o="",rows=Math.max(k,b),base=10+rows*u;
+    stages.forEach(function(n){var aw=n+1,w=Math.max(aw,3.4),ox=x0+(w-aw)*u/2;o+='<g data-stage="'+n+'">';
+      for(var c=0;c<b;c++)o+='<rect class="tile" x="'+ox+'" y="'+(base-(c+1)*u)+'" width="'+(u-1)+'" height="'+(u-1)+'" fill="'+YEL+'" stroke="'+INK+'" stroke-width="1"/>';
+      for(var r=0;r<k;r++)for(c=0;c<n;c++)o+='<rect class="tile" x="'+(ox+(c+1)*u)+'" y="'+(base-(r+1)*u)+'" width="'+(u-1)+'" height="'+(u-1)+'" fill="'+GRN+'" stroke="'+INK+'" stroke-width="1"/>';
+      o+='</g><text x="'+(x0+w*u/2)+'" y="'+(base+18)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+INK+'" '+F+'>Stage '+n+'</text>';x0+=w*u+26;});
+    return '<svg viewBox="0 0 '+(x0-10)+' '+(base+26)+'" width="100%" style="max-width:'+Math.min(340,Math.round((x0-10)*1.6))+'px" role="img" aria-label="Tile pattern, stages '+stages.join(", ")+'">'+o+'</svg>';}
+  function picture(P0,stages){return P0.kind==="tiles"?tilesSVG(P0.k,P0.b,stages):sticksSVG(P0.kind,stages);}
+  function newPic(){if(Math.random()<.55){var kind=rnd(["squares","squares","triangles","houses","double"]);return {kind:kind,d:STICKS[kind].d,b:STICKS[kind].b,thing:"matchsticks"};}
+    var k=ri(1,3),b=ri(1,4);return {kind:"tiles",k:k,b:b,d:k,b0:b,thing:"tiles"};}
+  function picRule(P0){return P0.kind==="tiles"?[P0.k,P0.b]:[P0.d,P0.b];}
+  /* table: <table class="ptab"> with data-row="n" / data-row="v" */
+  function tableHTML(label,ns,vs){var td='style="border:1px solid #D1D5DB;padding:6px 10px;text-align:center"';
+    var th='style="border:1px solid #D1D5DB;padding:6px 8px;text-transform:none;letter-spacing:0;font-size:14px"';
+    return '<table class="ptab" style="border-collapse:collapse;margin:0 auto 10px;font-size:17px;font-weight:700;min-width:0;width:auto"><tr data-row="n"><th '+th+'>Stage (n)</th>'+ns.map(function(n){return '<td '+td+'>'+n+'</td>';}).join("")+'</tr><tr data-row="v"><th '+th+'>'+label+'</th>'+vs.map(function(v){return '<td '+td+(v==="?"?' style="border:1px solid #D1D5DB;padding:6px 10px;text-align:center;background:#FFF4CC"':'')+'>'+(v==="?"?"?":num(v))+'</td>';}).join("")+'</tr></table>';}
+  /* graph: points are <circle class="pt" data-x data-y>; value labels next to each point */
+  function graphSVG(pts,xlab,ylab){var W=300,H=210,L=40,B=176,T=14,R=286,xmax=pts[pts.length-1][0]+1,ymax=0;pts.forEach(function(p){ymax=Math.max(ymax,p[1]);});
+    var step=ymax<=12?2:ymax<=30?5:ymax<=60?10:20;ymax=Math.ceil((ymax+1)/step)*step;
+    var X=function(x){return L+(R-L)*x/xmax;},Y=function(y){return B-(B-T)*y/ymax;},o="";
+    for(var y=0;y<=ymax;y+=step)o+='<line x1="'+L+'" y1="'+Y(y)+'" x2="'+R+'" y2="'+Y(y)+'" stroke="#E5E7EB"/><text x="'+(L-6)+'" y="'+(Y(y)+4)+'" font-size="11" text-anchor="end" fill="#6B7280" '+F+'>'+y+'</text>';
+    for(var x=0;x<xmax;x++)o+='<text x="'+X(x)+'" y="'+(B+15)+'" font-size="11" text-anchor="middle" fill="#6B7280" '+F+'>'+x+'</text>';
+    o+='<line x1="'+L+'" y1="'+B+'" x2="'+R+'" y2="'+B+'" stroke="'+INK+'" stroke-width="2"/><line x1="'+L+'" y1="'+B+'" x2="'+L+'" y2="'+T+'" stroke="'+INK+'" stroke-width="2"/>';
+    o+='<text x="'+((L+R)/2)+'" y="'+(H-2)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+INK+'" '+F+'>'+xlab+'</text><text x="12" y="'+((T+B)/2)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+INK+'" '+F+' transform="rotate(-90 12 '+((T+B)/2)+')">'+ylab+'</text>';
+    pts.forEach(function(p){var z=p[0]===0;o+='<circle class="pt" data-x="'+p[0]+'" data-y="'+p[1]+'" cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="5" fill="#C0392B"/><text x="'+(X(p[0])+(z?8:-4))+'" y="'+(Y(p[1])-(z?6:9))+'" font-size="11" font-weight="700" text-anchor="'+(z?"start":"end")+'" fill="'+INK+'" '+F+'>'+p[1]+'</text>';});
+    return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:330px" role="img" aria-label="Graph with points '+pts.map(function(p){return "("+p[0]+", "+p[1]+")";}).join(", ")+'">'+o+'</svg>';}
+
+  /* ---------- Pattern Builder ---------- */
+  function newSeq(){var d=Math.random()<.78?ri(2,9):-ri(2,7),a=d>0?ri(-6,20):ri(25,60);return {a:a,d:d};}
+  function qNext(){
+    var s=newSeq(),t=seq(s.a,s.d,5),gap=Math.random()<.65?4:ri(1,3),shown=t.map(function(v,i){return i===gap?"?":num(v);}).join(", "),ans=t[gap];
+    return QN(gap===4?"What comes next?":"Fill in the missing number:",shown,ans,[ans+s.d,ans-s.d,gap===4?t[3]+1:ans+1,-ans],
+      "The pattern goes "+(s.d>0?"up":"down")+" by "+Math.abs(s.d)+" each time"+(gap===4?": "+num(t[3])+pm(s.d)+" = "+num(ans)+".":", so the missing number is "+num(ans)+"."),"",{t:"next"});
+  }
+  function qJump(){
+    var s=newSeq(),t=seq(s.a,s.d,4);
+    return QN("What is the common difference (the jump from one term to the next)?"+(s.d<0?" Use "+M+" if the pattern goes down.":""),seqStr(t),s.d,[-s.d,s.a,s.d+1,t[1]],
+      "Take any term away from the next one: "+num(t[1])+" "+M+" "+br(t[0])+" = "+num(s.d)+"."+(s.d<0?" It goes down, so the difference is negative.":""),"",{t:"jump"});
+  }
+  function qTermK(){
+    var s=newSeq();if(s.d<0)s.a=ri(80,150);var t=seq(s.a,s.d,4),k=rnd([10,12,15,20,25,30,50,100]),ans=s.a+(k-1)*s.d;
+    return QN("Find the "+k+"th term of this pattern:",seqStr(t),ans,[s.a+k*s.d,k*s.d,k*s.a,ans+s.d],
+      "From term 1 to term "+k+" there are "+(k-1)+" jumps of "+num(s.d)+": "+num(s.a)+pm(k-1)+" × "+br(s.d)+" = "+num(s.a)+pm((k-1)*s.d)+" = "+num(ans)+". (Not "+k+" jumps: you start at term 1.)","",{t:"termk",k:k});
+  }
+  function qPicNext(){
+    var P0=newPic(),r=picRule(P0),k=rnd([4,4,5]),ans=r[0]*k+r[1],s3=r[0]*3+r[1];
+    return QN("How many "+P0.thing+" will stage "+k+" need?","",ans,[s3+(k-3)*(r[0]+r[1]),k*(r[0]+r[1]),ans+1,ans-1],
+      "Each new stage adds "+pl(r[0],P0.thing)+". Stage 3 has "+s3+(k===4?", so stage 4 has "+s3+" + "+r[0]+" = "+ans+".":", so stage 5 has "+s3+" + "+r[0]+" + "+r[0]+" = "+ans+"."),picture(P0,[1,2,3]),{t:"picnext",k:k});
+  }
+  function qPicFar(){
+    var P0=newPic(),r=picRule(P0),k=rnd([10,10,20,25,50]),ans=r[0]*k+r[1],s1=r[0]+r[1];
+    return QN("How many "+P0.thing+" will stage "+k+" need?","",ans,[k*s1,ans-r[1],ans+r[0],r[0]*(k-1)],
+      "Each stage adds "+r[0]+", and there "+(r[1]===1?"is 1":"are "+r[1])+" extra at the start: "+r[0]+" × "+k+" + "+r[1]+" = "+ans+". (Careful: "+k+" × stage 1 = "+(k*s1)+" is wrong, because the extra "+r[1]+" is only counted once.)",picture(P0,[1,2,3]),{t:"picfar",k:k});
+  }
+
+  /* ---------- Find the rule ---------- */
+  function ruleWhy(d,b,first){return "The jump is "+num(d)+", so the rule starts "+tm(d,"n",true)+". "+tm(d,"n",true)+" gives "+num(d)+" for n = 1, but term 1 is "+num(first)+", so "+(b<0?"take away "+(-b):"add "+b)+": Tₙ = "+fmt(lin(d,b))+". Check n = 2: "+num(d)+" × 2"+pm(b)+" = "+num(2*d+b)+" ✓";}
+  function ruleSlips(d,b,first){return [lin(1,d),lin(d,first),lin(first,d),lin(d,-b),lin(d+b,0)];}
+  function qRuleSeq(){
+    var d=Math.random()<.8?ri(2,9):-ri(2,6),b=d>0?nz(-6,9):ri(20,50),t=seq(d+b,d,4);
+    return P("Which is the general term Tₙ (the rule for the nth term)?",seqStr(t),lin(d,b),ruleSlips(d,b,t[0]),ruleWhy(d,b,t[0])+".","",{t:"ruleseq"});
+  }
+  function qRulePic(){
+    var P0=newPic(),r=picRule(P0),d=r[0],b=r[1];
+    return P("Which rule gives the number of "+P0.thing+" in stage n?","",lin(d,b),ruleSlips(d,b,d+b),
+      "Each new stage adds "+pl(d,P0.thing)+" (the jump), so the rule starts "+tm(d,"n",true)+". Stage 1 has "+(d+b)+" = "+d+" + "+b+", so add "+b+": "+fmt(lin(d,b))+". Check stage 3: "+d+" × 3 + "+b+" = "+(3*d+b)+" ✓",picture(P0,[1,2,3]),{t:"rulepic"});
+  }
+  function qRuleTable(){
+    var d=Math.random()<.8?ri(2,12):-ri(2,6),b=d>0?nz(-8,15):ri(20,60),lab=rnd(["Value","Number of dots","Cost (€)","Total"]),ns=[1,2,3,4],vs=ns.map(function(n){return d*n+b;});
+    if(lab==="Cost (€)"&&d<0)lab="Value";
+    return P("Which rule fits this table?","",lin(d,b),ruleSlips(d,b,vs[0]),ruleWhy(d,b,vs[0])+".",tableHTML(lab,ns,vs),{t:"ruletable"});
+  }
+  function qRuleCheck(){
+    var d=ri(2,8),b=nz(-5,8),ans=seqStr(seq(d+b,d,4));
+    var wrong=[[d,-b],[b,d],[d+1,b-1],[d,b+d],[1,d+b]].filter(function(w){return w[0]!==0&&!(w[0]===d&&w[1]===b);}).map(function(w){return seqStr(seq(w[0]+w[1],w[0],4));});
+    return C("Which pattern has the general term "+rule(d,b)+"?","",ans,wrong,
+      "Put n = 1, 2, 3, 4 into "+fmt(lin(d,b))+": "+[1,2,3,4].map(function(n){return d+" × "+n+pm(b)+" = "+num(d*n+b);}).join("; ")+".",null,"",{t:"rulecheck"});
+  }
+  function qClaim(){
+    var nm=rnd(NAMES),d=ri(2,9),b=nz(-4,9),t=seq(d+b,d,4),right=Math.random()<.3,claim=right?lin(d,b):rnd([lin(1,d),lin(d,t[0]),lin(t[0],d)]);
+    if(!right&&fmt(claim)===fmt(lin(d,b)))right=true;
+    var ans=right?"Right":"Wrong: it should be "+fmt(lin(d,b)),pool=[];
+    [lin(1,d),lin(d,t[0]),lin(t[0],d),lin(d,-b),lin(d+1,b)].forEach(function(m){var s=fmt(m);if(s!==fmt(lin(d,b))&&s!==fmt(claim))pool.push("Wrong: it should be "+s);});
+    if(!right)pool.push("Right");
+    return C(nm+" says the general term of "+seqStr(t)+" is Tₙ = "+fmt(claim)+". Is "+she(nm)+" right?","",ans,pool,
+      (right?"Check: n = 1 gives "+num(t[0])+" and n = 2 gives "+num(t[1])+" ✓. ":"Test it: n = 1 gives "+num(claim.n+claim[""])+(claim.n+claim[""]!==t[0]?", but term 1 is "+num(t[0])+". ":", but n = 2 gives "+num(2*claim.n+claim[""])+", not "+num(t[1])+". "))+ruleWhy(d,b,t[0])+".",
+      nm+": Tₙ = "+fmt(claim)+" for "+seqStr(t)+" → "+ans,"",{t:"claim"});
+  }
+
+  /* ---------- Tables & graphs ---------- */
+  function qTableFill(){
+    var d=Math.random()<.8?ri(2,9):-ri(2,5),b=d>0?nz(-5,10):ri(30,60),ns=[1,2,3,rnd([6,7,8,10,12])],pos=ri(1,3),vs=ns.map(function(n,i){return i===pos?"?":d*n+b;}),ans=d*ns[pos]+b;
+    return QN("Use the rule "+rule(d,b)+" to fill in the missing value in the table.","",ans,[d*ns[pos],d*(ns[pos]+b),(d+b)*ns[pos],ans+d],
+      "Put n = "+ns[pos]+" into the rule: "+num(d)+" × "+ns[pos]+pm(b)+" = "+num(d*ns[pos])+pm(b)+" = "+num(ans)+".",tableHTML("Tₙ",ns,vs),{t:"tablefill"});
+  }
+  var GCTX=[["Weeks","Height (cm)","the height of a plant, in cm","week"],["Weeks","Savings (€)","money saved, in euro","week"],["Hours","Distance (km)","the distance walked, in km","hour"],["Days","Pages read","the total number of pages read","day"]];
+  function qGraph(){
+    var g=rnd(GCTX),d=ri(1,6),b=ri(0,10),pts=[0,1,2,3,4,5].map(function(x){return [x,b+d*x];}),ask=rnd(["start","rate","rule","rule","value"]),html=graphSVG(pts,g[0],g[1]);
+    var en="The graph shows "+g[2]+", after each "+g[3]+". It is a linear pattern. ";
+    if(ask==="start")return QN(en+"What is the start value?","",b,[d,b+d,0===b?d+1:0,b+1],"The start value is the value at 0 "+g[3]+"s, where the line of points starts on the vertical axis: "+b+".",html,{t:"gstart"});
+    if(ask==="rate")return QN(en+"What is the rate of change (how much it goes up each "+g[3]+")?","",d,[b,b+d,d+1,2*d],"From one "+g[3]+" to the next the value goes up by "+d+": "+(b+d)+" "+M+" "+b+" = "+d+". That's the rate of change.",html,{t:"grate"});
+    if(ask==="value"){var k=rnd([8,10,12,20]);return QN(en+"If the pattern continues, what will the value be after "+k+" "+g[3]+"s?","",b+d*k,[d*k,b+d*(k-1),(b+d)*k,b+d*k+d],"Start value "+b+", plus "+d+" for each of the "+k+" "+g[3]+"s: "+b+" + "+d+" × "+k+" = "+(b+d*k)+".",html,{t:"gvalue",k:k});}
+    var v=g[3].charAt(0);
+    return P(en+"Which formula gives the value after "+v+" "+g[3]+"s?","",lin(d,b,v),[lin(b,d,v),lin(d+b,0,v),lin(1,d,v),lin(d,b+d,v)],
+      "Start value "+b+" (at 0), rate of change "+d+" per "+g[3]+": "+fmt(lin(d,b,v))+". Check "+v+" = 2: "+d+" × 2"+(b?" + "+b:"")+" = "+(2*d+b)+" ✓",html,{t:"grule",v:v});
+  }
+  function qPointOn(){
+    var d=ri(2,7),b=nz(-4,8),x=ri(2,9),y=d*x+b,ans="("+x+", "+num(y)+")",pool=[];
+    [[x,y+1],[x,y-1],[x+1,y],[y,x],[x,d*x],[x,y+d]].forEach(function(p){if(p[1]!==d*p[0]+b)pool.push("("+num(p[0])+", "+num(p[1])+")");});
+    return C("The points (n, Tₙ) of the pattern "+rule(d,b)+" are plotted on a graph. Which point is on the graph?","",ans,pool,
+      "For n = "+x+": "+d+" × "+x+pm(b)+" = "+num(y)+", so the point is "+ans+". The first number is n (across), the second is Tₙ (up).",null,"",{t:"pointon"});
+  }
+  function qLinear(){
+    var d=ri(2,8),a=ri(1,12),ans=seqStr(seq(a,d,5)),b=ri(1,9);
+    var pool=[seqStr([b,b+1,b+3,b+6,b+10]),seqStr([b,2*b,4*b,8*b,16*b]),seqStr([1,4,9,16,25].map(function(s){return s+b-1;})),seqStr([a,a+d,a+2*d,a+3*d+1,a+4*d+1]),seqStr([b,b+2,b+6,b+8,b+12])];
+    return C("Which pattern is linear (goes up by the same amount every time)?","",ans,pool,
+      "Find the jumps between terms. In "+ans.replace(", …","")+" the jump is always "+d+", so it's linear. In the others the jump changes.",null,"",{t:"linear"});
+  }
+
+  /* ---------- Real-life patterns ---------- */
+  var LIFE=[
+    {f:function(nm,S,r){return nm+" has €"+S+" saved and adds €"+r+" every week.";},q:"the amount saved",un:"in euro",T:function(x){return "€"+x;},u:"week",v:"w",S:[10,60],r:[5,25],up:true},
+    {f:function(nm,S,r){return "A sunflower is "+S+" cm tall when "+nm+" plants it. It grows "+r+" cm every week.";},q:"the height",un:"in cm",T:function(x){return x+" cm";},u:"week",v:"w",S:[5,30],r:[3,12],up:true},
+    {f:function(nm,S,r){return "A gym charges a €"+S+" joining fee plus €"+r+" a month.";},q:"the total cost",un:"in euro",T:function(x){return "€"+x;},u:"month",v:"m",S:[20,80],r:[15,40],up:true},
+    {f:function(nm,S,r){return "A pool already holds "+S+" litres of water. A hose adds "+r+" litres every minute.";},q:"the amount of water in the pool",un:"in litres",T:function(x){return x+" litres";},u:"minute",v:"t",S:[100,400],r:[20,60],up:true},
+    {f:function(nm,S,r){return "A candle is "+S+" cm tall. It burns down "+r+" cm every hour.";},q:"the height of the candle",un:"in cm",T:function(x){return x+" cm";},u:"hour",v:"h",S:[24,40],r:[2,4],up:false},
+    {f:function(nm,S,r){return nm+" has €"+S+" of phone credit and uses €"+r+" every day.";},q:"the credit left",un:"in euro",T:function(x){return "€"+x;},u:"day",v:"d",S:[20,50],r:[2,5],up:false}];
+  function newLife(){var c=rnd(LIFE),S=ri(c.S[0],c.S[1]),r=ri(c.r[0],c.r[1]);if(c.S[0]>=100){S=Math.round(S/10)*10;r=Math.round(r/5)*5;}if(r===S)S++;return {c:c,S:S,r:r,d:c.up?r:-r,nm:rnd(NAMES)};}
+  function qLife(){
+    var L=newLife(),c=L.c,en=c.f(L.nm,L.S,L.r)+" ",ask=rnd(["value","value","start","rate","formula","formula","when"]);
+    var kmax=c.up?12:Math.floor((L.S-1)/L.r),k=ri(2,Math.max(2,Math.min(12,kmax)));if(!c.up&&L.S-L.r*k<=0)k=1;
+    var val=L.S+L.d*k;
+    if(ask==="value")return QN(en+"Find "+c.q+" after "+k+" "+c.u+(k>1?"s":"")+", "+c.un+".","",val,[L.S+L.d*(k-1),L.d*k,c.up?val+L.r:L.S+L.r*k,L.S*k],
+      "Start at "+L.S+", then "+(c.up?"add ":"take away ")+L.r+" for each of the "+k+" "+c.u+"s: "+L.S+(c.up?" + ":" "+M+" ")+L.r+" × "+k+" = "+num(val)+".","",{t:"lifevalue"});
+    if(ask==="start")return QN(en+"What is the start value (the value at 0 "+c.u+"s)?","",L.S,[L.d,L.S+L.d,L.S-L.d],"At the start, before any "+c.u+"s have passed, the value is "+L.S+".","",{t:"lifestart"},true);
+    if(ask==="rate")return QN(en+"What is the rate of change per "+c.u+"?"+(c.up?"":" (Use "+M+" if it goes down.)"),"",L.d,[-L.d,L.S,L.d+1],
+      "It "+(c.up?"goes up":"goes down")+" by "+L.r+" every "+c.u+", so the rate of change is "+num(L.d)+(c.up?".":" (negative, because it's going down)."),"",{t:"liferate"});
+    if(ask==="formula")return P(en+"Which formula gives "+c.q+", "+c.un+", after "+c.v+" "+c.u+"s?","",lin(L.d,L.S,c.v),[lin(L.S,L.d,c.v),lin(-L.d,L.S,c.v),lin(L.d+L.S,0,c.v),lin(1,L.S+L.d,c.v)],
+      "Start value "+L.S+", rate of change "+num(L.d)+" per "+c.u+": "+fmt(lin(L.d,L.S,c.v))+".","",{t:"lifeformula",v:c.v});
+    var T=val;
+    return QN(en+"After how many "+c.u+"s will "+c.q+" be "+c.T(T)+"?","",k,[Math.round(T/L.r),k+1,k-1,Math.round((T+L.S)/L.r)],
+      "Work backwards: from "+L.S+" to "+T+" is a change of "+Math.abs(T-L.S)+". "+Math.abs(T-L.S)+" ÷ "+L.r+" = "+k+" "+c.u+"s. Check: "+L.S+(c.up?" + ":" "+M+" ")+L.r+" × "+k+" = "+T+" ✓","",{t:"lifewhen"},true);
+  }
+  function qWhichTerm(){
+    var d=ri(2,9),a=ri(1,15),k=ri(12,40),T=a+(k-1)*d;
+    return QN("Which term of the pattern "+seqStr(seq(a,d,4))+" is "+T+"?","",k,[k-1,Math.round(T/d),k+1,Math.round((T-a)/d)+2],
+      "Work backwards: "+T+" "+M+" "+a+" = "+(T-a)+", that's "+(T-a)+" ÷ "+d+" = "+(k-1)+" jumps after term 1, so it is term "+(k-1)+" + 1 = "+k+". Check: "+a+" + "+(k-1)+" × "+d+" = "+T+" ✓","",{t:"whichterm"},true);
+  }
+  function qInPat(){
+    var d=ri(3,9),a=ri(1,12),k=ri(15,40),yes=Math.random()<.5,X=a+(k-1)*d+(yes?0:ri(1,d-1)),q=(X-a)/d;
+    var lo=Math.floor(q)+1,hi=lo+1,ans=yes?"Yes, it is term "+k:"No, it is not a term";
+    var pool=yes?["Yes, it is term "+(k-1),"Yes, it is term "+(k+1),"No, it is not a term","Yes, it is term "+Math.round(X/d)]:["Yes, it is term "+lo,"Yes, it is term "+hi,"Yes, it is term "+Math.round(X/d),"Yes, it is term "+(lo-1)];
+    pool=pool.filter(function(p){var m=/term (\d+)/.exec(p);return !m||a+(+m[1]-1)*d!==X;});
+    return C("Is "+X+" a term of the pattern "+seqStr(seq(a,d,4))+"?","",ans,pool,
+      "Work backwards: ("+X+" "+M+" "+a+") ÷ "+d+" = "+(X-a)+" ÷ "+d+(yes?" = "+(k-1)+" jumps, a whole number, so yes: term "+(k-1)+" + 1 = "+k+".":" is not a whole number, so "+X+" is not in the pattern (term "+(lo)+" is "+(a+(lo-1)*d)+" and term "+hi+" is "+(a+(hi-1)*d)+")."),null,"",{t:"inpat"});
+  }
+
+  var MAKERS={
+    build:[qNext,qNext,qNext,qJump,qTermK,qTermK,qPicNext,qPicNext,qPicFar],
+    rule:[qRuleSeq,qRuleSeq,qRulePic,qRulePic,qRuleTable,qRuleCheck,qClaim],
+    graph:[qTableFill,qTableFill,qGraph,qGraph,qGraph,qPointOn,qLinear],
+    life:[qLife,qLife,qLife,qLife,qWhichTerm,qInPat],
+    mixed:[qNext,qJump,qTermK,qPicNext,qPicFar,qRuleSeq,qRulePic,qRuleTable,qRuleCheck,qClaim,qTableFill,qGraph,qPointOn,qLinear,qLife,qLife,qWhichTerm,qInPat]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="build")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="build"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="build"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

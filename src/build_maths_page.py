@@ -20,7 +20,8 @@ DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the 
         "venn-sorter.html": "sorting into Venn diagrams, set notation (∩, ∪, \\, ′, ∈, ⊂, #), naming shaded regions and survey questions with x, with an Exam corner of exam-style questions.",
         "percent-pop.html": "fractions ↔ decimals ↔ percentages, percentage of an amount, sale prices and multipliers, percentage change and finding the price before the sale, with an Exam corner of exam-style questions.",
         "share-it-out.html": "sharing money in a ratio (bar models), simplifying ratios, recipes and the unitary method, map scales, best buys and absolute v relative comparison, with an Exam corner of exam-style questions.",
-        "like-term-sweep.html": "collecting like terms (with x² and minus signs), algebra tiles, writing expressions from words, substituting negative numbers and spotting equal expressions, with an Exam corner of exam-style questions."}
+        "like-term-sweep.html": "collecting like terms (with x² and minus signs), algebra tiles, writing expressions from words, substituting negative numbers and spotting equal expressions, with an Exam corner of exam-style questions.",
+        "pattern-builder.html": "matchstick and tile patterns, the common difference, the general term Tₙ, far-away terms, tables and graphs, start value and rate of change, with an Exam corner of exam-style questions."}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]
