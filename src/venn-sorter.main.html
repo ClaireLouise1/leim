@@ -1,0 +1,154 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Venn Sorter</h1>
+        <p>Sort numbers and letters into the right part of a Venn diagram, learn the set symbols, name the shaded region, then crack survey questions like the ones in the exam. Is 12 in A only, B only, or the overlap? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Venn Sorter</b><span>Where does each number or letter go? 2 sets, then 3</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="lang"><div><b>Set language</b><span>∩, ∪, \ and ′, listing sets, ∈, ⊂ and #</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="shade"><div><b>Shade &amp; name</b><span>Which set is shaded? Which sets are always equal?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="survey"><div><b>Survey sums</b><span>Read the numbers in a Venn diagram, find x, "how many do neither?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: sketch the Venn diagram on paper, then tap. You can also answer with the keys 1, 2, 3 and 4. In Venn Sorter, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.5, U.4 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Sets &amp; Venn diagrams</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are three pairs of sets. Count the elements (# means "how many").</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">A = {1, 2, 3, 4, 6}, B = {2, 4, 6, 8}<br>#A = 5 · #B = 4 · #(A ∩ B) = 3 · <b style="white-space:nowrap">#(A ∪ B) = 6</b></li>
+          <li class="note">A = {C, O, R, K}, B = {K, E, R, Y}<br>#A = 4 · #B = 4 · #(A ∩ B) = 2 · <b style="white-space:nowrap">#(A ∪ B) = 6</b></li>
+          <li class="note">A = {3, 6, 9, 12}, B = {2, 4, 6, 8, 10, 12}<br>#A = 4 · #B = 6 · #(A ∩ B) = 2 · <b style="white-space:nowrap">#(A ∪ B) = 8</b></li>
+        </ul>
+        <p style="margin-top:10px">Why isn't #(A ∪ B) just #A + #B? Can you find a rule that uses #(A ∩ B)?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">#A + #B counts the elements in the overlap <b>twice</b>, so take them away once: <b>#(A ∪ B) = #A + #B − #(A ∩ B)</b>. 5 + 4 − 3 = 6, 4 + 4 − 2 = 6 and 4 + 6 − 2 = 8. This is the idea behind every survey question.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The language of sets</h3>
+        <p>A <b>set</b> is a well-defined collection of things, called <b>elements</b>. You can <b>list</b> it, A = {2, 4, 6, 8}, or give a <b>rule</b>: A = the even numbers from 1 to 9.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Symbol</th><th>Say it</th><th>Example (A = {2, 4, 6, 8})</th></tr></thead>
+          <tbody>
+            <tr><td><b>∈</b></td><td>is an element of</td><td>4 ∈ A</td></tr>
+            <tr><td><b>∉</b></td><td>is not an element of</td><td>5 ∉ A</td></tr>
+            <tr><td><b>#</b></td><td>the number of elements</td><td>#A = 4</td></tr>
+            <tr><td><b>⊂</b></td><td>is a subset of (every element is also in)</td><td>{2, 8} ⊂ A</td></tr>
+            <tr><td><b>∅</b> or { }</td><td>the empty (null) set</td><td>the odd numbers in A = ∅</td></tr>
+            <tr><td><b>U</b></td><td>the universal set: everything we're talking about</td><td>U = {1, 2, …, 10}</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The four operations</h3>
+        <p>U = {1, 2, 3, 4, 5, 6, 7, 8}, A = {1, 2, 3, 4, 6}, B = {2, 4, 6, 8}</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Write</th><th>Means</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><b>A ∩ B</b></td><td>intersection: in A <b>and</b> in B</td><td>{2, 4, 6}</td></tr>
+            <tr><td><b>A ∪ B</b></td><td>union: in A <b>or</b> B (or both)</td><td>{1, 2, 3, 4, 6, 8}</td></tr>
+            <tr><td><b>A \ B</b></td><td>difference ("A less B"): in A <b>but not</b> in B</td><td>{1, 3}</td></tr>
+            <tr><td><b>A′</b></td><td>complement: in U but <b>not</b> in A</td><td>{5, 7, 8}</td></tr>
+          </tbody></table></div>
+        <svg viewBox="0 0 300 210" width="100%" style="max-width:340px;display:block;margin:14px auto 0" role="img" aria-label="A Venn diagram showing the regions A only, A and B, B only and outside both">
+          <rect x="4" y="4" width="292" height="202" rx="10" fill="#fff" stroke="#1B2430" stroke-width="2"/>
+          <circle cx="110" cy="105" r="64" fill="#F6CF5A" fill-opacity=".35" stroke="#1B2430" stroke-width="2.5"/>
+          <circle cx="190" cy="105" r="64" fill="#2E7D57" fill-opacity=".15" stroke="#1B2430" stroke-width="2.5"/>
+          <g font-family="Inter,sans-serif" font-weight="800" text-anchor="middle" fill="#1B2430">
+            <text x="18" y="28" font-size="17" text-anchor="start">U</text><text x="52" y="40" font-size="18" fill="#2E7D57">A</text><text x="248" y="40" font-size="18" fill="#2E7D57">B</text>
+            <text x="80" y="100" font-size="12">A \ B</text><text x="80" y="116" font-size="11" font-weight="600">(A only)</text>
+            <text x="150" y="110" font-size="12">A ∩ B</text>
+            <text x="220" y="100" font-size="12">B \ A</text><text x="220" y="116" font-size="11" font-weight="600">(B only)</text>
+            <text x="236" y="195" font-size="12">(A ∪ B)′</text>
+          </g></svg>
+        <div class="note" style="margin-top:12px"><b>Does the order matter?</b> A ∩ B = B ∩ A and A ∪ B = B ∪ A, always (they are <b>commutative</b>). With three sets, (A ∩ B) ∩ C = A ∩ (B ∩ C), and the same for ∪ (they are <b>associative</b>). But <b>A \ B is not the same as B \ A</b>: above, A \ B = {1, 3} and B \ A = {8}.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Survey questions: fill from the middle out</h3>
+        <ol>
+          <li>Draw the Venn diagram inside a box (U) and label the circles.</li>
+          <li>Fill in the <b>middle</b> (the overlap) first. If it's unknown, call it <b>x</b>.</li>
+          <li>For each circle, take the overlap away: if 15 play Gaelic and x play both, then <b>15 − x</b> play Gaelic only.</li>
+          <li>Put "neither" <b>outside</b> the circles but inside the box.</li>
+          <li>All the regions add up to the total. Make an equation and solve for x.</li>
+        </ol>
+        <p>With <b>three sets</b> there are 8 regions. Start with the centre (in all three), then the three "two only" parts, then the "one only" parts, then outside. "Exactly two" means the three "two only" parts, <b>not</b> the centre; "at least two" includes the centre.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Sets usually come up as a <b>survey question</b>: a group of students or customers, two or three things they like or do, and a Venn diagram to fill in. You may need to <b>list</b> sets like A ∩ B or (A ∪ B)′, use <b>x</b> for an unknown region and solve an equation, or <b>shade</b> a region and describe it in set notation.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Draw the box.</b> The universal set U is a rectangle; "neither" goes inside it, outside the circles.</li>
+            <li><b>Don't double count.</b> "15 play Gaelic" includes the ones who play both, so Gaelic only is 15 − x.</li>
+            <li><b>Read the words carefully:</b> "only", "exactly two", "at least two", "neither" all mean different regions.</li>
+            <li><b>Use set brackets</b> { } and list each element once. An empty answer is ∅ (or { }), not 0.</li>
+            <li><b>Show your equation</b> when you find x: it earns marks even if you slip later.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>List them.</b> U = {1, 2, 3, …, 12}. A = the factors of 12, B = the even numbers in U. (a) List A and B. (b) List A ∩ B, A ∪ B and B \ A. (c) List (A ∪ B)′. (d) Check that #(A ∪ B) = #A + #B − #(A ∩ B).
+              <details><summary>Show the worked answer</summary><p>(a) A = <b>{1, 2, 3, 4, 6, 12}</b>, B = <b>{2, 4, 6, 8, 10, 12}</b>.<br>(b) A ∩ B = <b>{2, 4, 6, 12}</b>, A ∪ B = <b>{1, 2, 3, 4, 6, 8, 10, 12}</b>, B \ A = <b>{8, 10}</b>.<br>(c) Everything in U not in A ∪ B: <b>{5, 7, 9, 11}</b>.<br>(d) #(A ∪ B) = 8 and 6 + 6 − 4 = 8 ✓.</p></details></li>
+            <li><b>Find x.</b> 32 second-year students were asked if they use Instagram (I) or Snapchat (S). 19 use Instagram, 16 use Snapchat and 5 use neither. x students use both. (a) Draw a Venn diagram showing this. (b) Find x. (c) How many use exactly one of the two?
+              <details><summary>Show the worked answer</summary><p>(a) Overlap x; Instagram only 19 − x; Snapchat only 16 − x; outside 5.<br>(b) (19 − x) + x + (16 − x) + 5 = 32, so 40 − x = 32 and <b>x = 8</b>.<br>(c) Instagram only 19 − 8 = 11, Snapchat only 16 − 8 = 8, so <b>19</b> use exactly one. Check: 11 + 8 + 8 + 5 = 32 ✓.</p></details></li>
+            <li><b>Three clubs.</b> 50 students were asked about the Chess (C), Drama (D) and Science (S) clubs. 4 are in all three. 9 are in Chess and Drama, 7 in Drama and Science and 6 in Chess and Science. 20 are in Chess, 18 in Drama and 17 in Science. (a) Draw the Venn diagram. (b) How many are in none of the clubs? (c) How many are in exactly one club?
+              <details><summary>Show the worked answer</summary><p>(a) Centre 4. Two only: C and D 9 − 4 = 5, D and S 7 − 4 = 3, C and S 6 − 4 = 2. One only: Chess 20 − 5 − 2 − 4 = 9, Drama 18 − 5 − 3 − 4 = 6, Science 17 − 3 − 2 − 4 = 8.<br>(b) Inside the circles: 9 + 6 + 8 + 5 + 3 + 2 + 4 = 37, so <b>13</b> are in none.<br>(c) 9 + 6 + 8 = <b>23</b>.</p></details></li>
+            <li><b>Does the order matter?</b> A = {1, 2, 3, 4}, B = {3, 4, 5} and C = {4, 5, 6}. (a) Describe the region A ∩ B′ in words and list it. (b) Is A \ B the same as B \ A? (c) Show that (A ∩ B) ∩ C = A ∩ (B ∩ C) for these sets.
+              <details><summary>Show the worked answer</summary><p>(a) In A and not in B: <b>{1, 2}</b> (the same as A \ B).<br>(b) A \ B = {1, 2} but B \ A = {5}, so <b>no</b>: set difference is not commutative.<br>(c) A ∩ B = {3, 4}, then ∩ C = <b>{4}</b>. B ∩ C = {4, 5}, then A ∩ {4, 5} = <b>{4}</b>. The same ✓.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/sets-venn-diagrams-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/IA3F1" target="_blank" rel="noopener">Sets &amp; Venn Diagrams Teacher Pack (€5)</a>: Human Venn Diagram, Class Survey, Venn Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

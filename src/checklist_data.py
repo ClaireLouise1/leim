@@ -39,7 +39,7 @@ MATHS = [
   ("1st year","Autumn","Factors, multiples & primes (HCF, LCM)","N.1d","Prime Smash","prime-smash.html","factors-multiples-primes"),
   ("1st year","Autumn","Fractions","N.1a, N.1b, N.2a","Fraction Match","fraction-match.html","fractions"),
   ("1st year","Autumn","Decimals, rounding & estimation","N.1e, N.2a","Round It","round-it.html","decimals-rounding-estimation"),
-  ("1st year","Autumn","Sets & Venn diagrams","N.5, U.4","Venn Sorter","",""),
+  ("1st year","Autumn","Sets & Venn diagrams","N.5, U.4","Venn Sorter","venn-sorter.html","sets-venn-diagrams"),
   ("1st year","Spring","Percentages","N.2a, N.2b","Percent Pop","",""),
   ("1st year","Spring","Ratio & proportion","N.2b, N.3a","Share It Out","",""),
   ("1st year","Spring","Algebra 1: variables & expressions","AF.2a, AF.2b, AF.3a, U.4","Like-Term Sweep","",""),

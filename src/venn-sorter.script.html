@@ -1,0 +1,303 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function range(a,b){var o=[];for(var i=a;i<=b;i++)o.push(i);return o;}
+  function L(arr){return arr.length?"{"+arr.join(", ")+"}":"∅";}            // set listing
+  function inter(a,b){return a.filter(function(x){return b.indexOf(x)>=0;});}
+  function uni(a,b){return a.concat(b.filter(function(x){return a.indexOf(x)<0;})).sort(function(p,q){return p-q;});}
+  function minus(a,b){return a.filter(function(x){return b.indexOf(x)<0;});}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // numeric answer: slips first, then near misses; never negative, never equal to the answer
+  function Q(en,frame,ans,slips,why,html,data){
+    var pads=[ans+1,ans-1,ans+2,ans-2,ans+10,ans+3],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<0||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(String(x));}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+
+  /* ---------- rules for sets of numbers ---------- */
+  var RULES={
+    even:["even numbers",function(n){return n%2===0;}],
+    odd:["odd numbers",function(n){return n%2===1;}],
+    m3:["multiples of 3",function(n){return n%3===0;}],
+    m4:["multiples of 4",function(n){return n%4===0;}],
+    m5:["multiples of 5",function(n){return n%5===0;}],
+    prime:["prime numbers",function(n){if(n<2)return false;for(var d=2;d*d<=n;d++)if(n%d===0)return false;return true;}],
+    sq:["square numbers",function(n){var r=Math.round(Math.sqrt(n));return r*r===n;}],
+    f24:["factors of 24",function(n){return 24%n===0;}],
+    f30:["factors of 30",function(n){return 30%n===0;}],
+    f36:["factors of 36",function(n){return 36%n===0;}]
+  };
+  var PAIRS=[["even","m3"],["m3","m4"],["even","m5"],["prime","odd"],["f24","even"],["f36","m4"],["sq","odd"],["f30","m3"],["m4","sq"],["prime","f30"],["m5","odd"],["f24","f36"]];
+  var TRIPLES=[["even","m3","m5"],["f24","f36","even"],["prime","odd","f30"],["m3","m4","even"],["sq","odd","m3"],["even","m5","f30"]];
+  var WORDS=[["CORK","KERRY"],["CLARE","LIMERICK"],["SLIGO","LOUTH"],["MAYO","MEATH"],["DUBLIN","WICKLOW"],["CAVAN","WATERFORD"],["GALWAY","LAOIS"]];
+  function letters(w){var o=[];w.split("").forEach(function(c){if(o.indexOf(c)<0)o.push(c);});return o;}
+  function name2(r){return r===1?"A only":r===2?"B only":r===3?"A and B (A ∩ B)":"Outside both";}
+  function name3(r){return ["Outside all three","A only","B only","A and B only","C only","A and C only","B and C only","A, B and C"][r];}
+
+  /* ---------- Venn pictures ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",GREEN="#2E7D57",uid=0;
+  var CIR2=[[110,105],[190,105]],R=64;
+  var CIR3=[[118,98],[182,98],[150,155]],R3=58;
+  function frameSVG(n,labels,inner,aria){
+    var H=n===2?210:262,c=n===2?CIR2:CIR3,r=n===2?R:R3,o='<svg viewBox="0 0 300 '+H+'" width="100%" style="max-width:320px" role="img" aria-label="'+aria+'">';
+    o+='<rect x="4" y="4" width="292" height="'+(H-8)+'" rx="10" fill="#fff" stroke="'+INK+'" stroke-width="2"/>'+inner;
+    for(var i=0;i<n;i++)o+='<circle cx="'+c[i][0]+'" cy="'+c[i][1]+'" r="'+r+'" fill="none" stroke="'+INK+'" stroke-width="2.5"/>';
+    o+='<text x="18" y="28" font-size="17" font-weight="800" fill="'+INK+'" font-family="Inter,sans-serif">U</text>';
+    var lp=n===2?[[52,40],[248,40]]:[[70,30],[230,30],[150,250]];
+    for(i=0;i<n;i++)o+='<text x="'+lp[i][0]+'" y="'+lp[i][1]+'" font-size="'+(labels[i].length>2?14:18)+'" font-weight="800" text-anchor="middle" fill="'+GREEN+'" font-family="Inter,sans-serif">'+labels[i]+'</text>';
+    return o+'</svg>';}
+  // shade a set of regions (r = bits: bit i set = inside circle i)
+  function shadeSVG(n,regions){
+    var c=n===2?CIR2:CIR3,r=n===2?R:R3,H=n===2?210:262,id="v"+(++uid),defs="<defs>",body="";
+    for(var i=0;i<n;i++)defs+='<clipPath id="'+id+'c'+i+'"><circle cx="'+c[i][0]+'" cy="'+c[i][1]+'" r="'+r+'"/></clipPath>';
+    regions.forEach(function(g){
+      var mid=id+"m"+g,m='<mask id="'+mid+'"><rect x="0" y="0" width="300" height="'+H+'" fill="#fff"/>';
+      for(var i=0;i<n;i++)if(!(g>>i&1))m+='<circle cx="'+c[i][0]+'" cy="'+c[i][1]+'" r="'+r+'" fill="#000"/>';
+      defs+=m+'</mask>';
+      var s='<rect x="4" y="4" width="292" height="'+(H-8)+'" fill="'+YEL+'" mask="url(#'+mid+')"/>';
+      for(i=0;i<n;i++)if(g>>i&1)s='<g clip-path="url(#'+id+'c'+i+')">'+s+'</g>';
+      body+='<g data-r="'+g+'">'+s+'</g>';});
+    return frameSVG(n,n===2?["A","B"]:["A","B","C"],defs+'</defs>'+body,"A Venn diagram with part of it shaded yellow");}
+  // numbers (or labels) written in each region
+  var POS2={1:[80,110],3:[150,110],2:[220,110],0:[262,192]};
+  var POS3={1:[92,84],2:[208,84],3:[150,70],4:[150,192],5:[115,139],6:[185,139],7:[150,116],0:[268,244]};
+  function countSVG(n,vals,labels){
+    var P=n===2?POS2:POS3,t="";
+    Object.keys(vals).forEach(function(g){var s=String(vals[g]);t+='<text data-r="'+g+'" x="'+P[g][0]+'" y="'+(P[g][1]+6)+'" font-size="'+(s.length>3?15:n===3?15:18)+'" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+s.replace("-","−")+'</text>';});
+    return frameSVG(n,labels,t,"A Venn diagram with numbers in each region");}
+  function dotSVG(n,labels){return frameSVG(n,labels,"","An empty Venn diagram");}
+
+  /* ---------- set algebra on regions (for the shading and laws questions) ---------- */
+  function FULL(n){return (1<<(1<<n))-1;}
+  function SET(i,n){var m=0;for(var g=0;g<(1<<n);g++)if(g>>i&1)m|=1<<g;return m;}
+  function E(s,m,atom){return {s:s,m:m,atom:atom};}
+  function P(x){return x.atom?x.s:"("+x.s+")";}
+  function V(n){return [E("A",SET(0,n),1),E("B",SET(1,n),1),E("C",SET(2,n),1)].slice(0,n);}
+  function I(x,y){return E(P(x)+" ∩ "+P(y),x.m&y.m,0);}
+  function U(x,y){return E(P(x)+" ∪ "+P(y),x.m|y.m,0);}
+  function D(x,y){return E(P(x)+" \\ "+P(y),x.m&~y.m,0);}
+  function K(x,n){return E(P(x)+"′",FULL(n)&~x.m,1);}
+  function I3(a,b,c){return E(a.s+" ∩ "+b.s+" ∩ "+c.s,a.m&b.m&c.m,0);}
+  function U3(a,b,c){return E(a.s+" ∪ "+b.s+" ∪ "+c.s,a.m|b.m|c.m,0);}
+  function pool2(){var v=V(2),A=v[0],B=v[1];return [I(A,B),U(A,B),D(A,B),D(B,A),K(A,2),K(B,2),K(U(A,B),2),K(I(A,B),2),A,B];}
+  function pool3(){var v=V(3),A=v[0],B=v[1],c=v[2];
+    return [I3(A,B,c),D(I(A,B),c),D(I(A,c),B),D(I(B,c),A),D(A,U(B,c)),D(B,U(A,c)),D(c,U(A,B)),K(U3(A,B,c),3),I(A,U(B,c)),I(U(A,B),c),U(A,I(B,c)),I(A,B),I(B,c),U3(A,B,c),I(A,K(c,3))];}
+  function regionsOf(m,n){var o=[];for(var g=0;g<(1<<n);g++)if(m>>g&1)o.push(g);return o;}
+  function pickWrong(ans,pool){var seen={},w=[];seen[ans.m]=1;shuffle(pool.slice()).forEach(function(x){if(!seen[x.m]&&w.length<3){seen[x.m]=1;w.push(x.s);}});return w;}
+
+  /* ---------- Venn Sorter ---------- */
+  function qSort2(){
+    if(Math.random()<.3)return qSortWord();
+    var p=shuffle(rnd(PAIRS).slice()),top=rnd([20,24,30]),U=range(1,top),byR={0:[],1:[],2:[],3:[]};
+    U.forEach(function(x){var g=(RULES[p[0]][1](x)?1:0)+(RULES[p[1]][1](x)?2:0);byR[g].push(x);});
+    var ok=[0,1,2,3].filter(function(g){return byR[g].length;}),g=rnd(ok),x=rnd(byR[g]);
+    var inA=g&1,inB=g&2;
+    return C("U = {1, 2, 3, …, "+top+"}. A = the "+RULES[p[0]][0]+", B = the "+RULES[p[1]][0]+". Where does "+x+" go?","",name2(g),[0,1,2,3].filter(function(h){return h!==g;}).map(name2),
+      x+(inA?" is":" is not")+" one of the "+RULES[p[0]][0]+" and "+(inB?"is":"is not")+" one of the "+RULES[p[1]][0]+", so it goes in: "+name2(g)+".",
+      x+" (A = "+RULES[p[0]][0]+", B = "+RULES[p[1]][0]+") → "+name2(g),dotSVG(2,["A","B"]),{t:"sort",rules:p,top:top,x:x});
+  }
+  function qSortWord(){
+    var w=shuffle(rnd(WORDS).slice()),A=letters(w[0]),B=letters(w[1]),all=uni(A,B),outs="BDFHJNPQTVXZ".split("").filter(function(c){return all.indexOf(c)<0;});
+    var g=rnd([0,1,1,2,2,3,3]),pool={0:outs,1:minus(A,B),2:minus(B,A),3:inter(A,B)};
+    if(!pool[g].length)return qSortWord();var x=rnd(pool[g]);
+    return C("U = the letters of the alphabet. A = the letters in "+w[0]+", B = the letters in "+w[1]+". Where does the letter "+x+" go?","",name2(g),[0,1,2,3].filter(function(h){return h!==g;}).map(name2),
+      x+(g&1?" is":" is not")+" in "+w[0]+" and "+(g&2?"is":"is not")+" in "+w[1]+": "+name2(g)+".",
+      "Letter "+x+" (A = "+w[0]+", B = "+w[1]+") → "+name2(g),dotSVG(2,["A","B"]),{t:"sortw",A:w[0],B:w[1],x:x});
+  }
+  function qSort3(){
+    var p=shuffle(rnd(TRIPLES).slice()),U=range(1,30),byR={};
+    U.forEach(function(x){var g=0;for(var i=0;i<3;i++)if(RULES[p[i]][1](x))g|=1<<i;(byR[g]=byR[g]||[]).push(x);});
+    var g=rnd(Object.keys(byR).map(Number)),x=rnd(byR[g]);
+    var near=[0,1,2].map(function(i){return g^(1<<i);}),pool=near.concat([0,1,2,3,4,5,6,7]).filter(function(h){return h!==g;}).map(name3);
+    var ins=[0,1,2].filter(function(i){return g>>i&1;}).map(function(i){return "ABC"[i];});
+    return C("U = {1, 2, 3, …, 30}. A = the "+RULES[p[0]][0]+", B = the "+RULES[p[1]][0]+", C = the "+RULES[p[2]][0]+". Where does "+x+" go?","",name3(g),pool.slice(0,3).concat(shuffle(pool.slice(3))),
+      "Check "+x+" against each set: "+(ins.length?"it is in "+ins.join(" and "):"it is in none of them")+". So: "+name3(g)+".",
+      x+" (A = "+RULES[p[0]][0]+", B = "+RULES[p[1]][0]+", C = "+RULES[p[2]][0]+") → "+name3(g),dotSVG(3,["A","B","C"]),{t:"sort3",rules:p,top:30,x:x});
+  }
+
+  /* ---------- Set language ---------- */
+  function pickN(lo,hi,k){return shuffle(range(lo,hi)).slice(0,k).sort(function(a,b){return a-b;});}
+  function twoSets(){var A,B;do{A=pickN(1,12,ri(4,6));B=pickN(1,12,ri(4,6));}while(inter(A,B).length<1||inter(A,B).length>3||minus(A,B).length<1||minus(B,A).length<1);return [A,B];}
+  function qOp(){
+    var s=twoSets(),A=s[0],B=s[1],ops={"A ∩ B":inter(A,B),"A ∪ B":uni(A,B),"A \\ B":minus(A,B),"B \\ A":minus(B,A)},op=rnd(Object.keys(ops));
+    var pool=Object.keys(ops).filter(function(k){return k!==op;}).map(function(k){return L(ops[k]);}).concat([L(minus(uni(A,B),inter(A,B))),L(A),L(B)]);
+    var expl={"A ∩ B":"∩ means in A AND in B: the elements in both.","A ∪ B":"∪ means in A OR B (or both): put every element in once.","A \\ B":"A \\ B means in A but NOT in B.","B \\ A":"B \\ A means in B but NOT in A."}[op];
+    return C("A = "+L(A)+" and B = "+L(B)+". List the elements of:",op,L(ops[op]),pool,expl+" Answer: "+L(ops[op])+".","A = "+L(A)+", B = "+L(B)+": "+op+" = "+L(ops[op]),"",{t:"op",A:A,B:B,op:op});
+  }
+  function qComp(){
+    var top=rnd([8,9,10,12]),A=pickN(1,top,ri(3,5)),B=pickN(1,top,ri(3,5)),Uu=range(1,top),useU=Math.random()<.5;
+    var ans=minus(Uu,A),pool=[L(A),L(minus(Uu,B)),L(minus(ans,[rnd(ans)])),L(minus(B,A)),L(uni(ans,[rnd(A)]))];
+    if(useU&&minus(Uu,uni(A,B)).length){var a2=minus(Uu,uni(A,B));
+      return C("U = {1, 2, …, "+top+"}, A = "+L(A)+", B = "+L(B)+". List the elements of:","(A ∪ B)′",L(a2),[L(uni(A,B)),L(minus(Uu,inter(A,B))),L(ans),L(minus(Uu,B)),L(minus(a2,[rnd(a2)])),L(uni(a2,[rnd(uni(A,B))]))],"′ means NOT in. First A ∪ B = "+L(uni(A,B))+", then everything in U that isn't in it: "+L(a2)+".","U = 1–"+top+", A = "+L(A)+", B = "+L(B)+": (A ∪ B)′ = "+L(a2),"",{t:"op",A:A,B:B,top:top,op:"(A ∪ B)′"});}
+    return C("U = {1, 2, …, "+top+"} and A = "+L(A)+". List the elements of:","A′",L(ans),pool,"A′ (the complement of A) is everything in U that is NOT in A: "+L(ans)+".","U = 1–"+top+", A = "+L(A)+": A′ = "+L(ans),"",{t:"op",A:A,B:B,top:top,op:"A′"});
+  }
+  function qState(){
+    var s=twoSets(),A=s[0],B=s[1],all=range(1,12),T=[],F=[];
+    function add(txt,ok){(ok?T:F).push(txt);}
+    var a=rnd(A),na=rnd(minus(all,A)),b=rnd(B),nb=rnd(minus(all,B));
+    add(a+" ∈ A",1);add(na+" ∈ A",0);add(nb+" ∉ B",1);add(b+" ∉ B",0);
+    var sub=A.slice(0,2),bad=[A[0],na].sort(function(p,q){return p-q;});
+    add("{"+sub.join(", ")+"} ⊂ A",1);add("{"+bad.join(", ")+"} ⊂ A",0);
+    var k=uni(A,B).length,j=inter(A,B).length;
+    add("#(A ∪ B) = "+k,1);add("#(A ∪ B) = "+(A.length+B.length),0);add("#(A ∩ B) = "+j,1);add("#(A ∩ B) = "+(j+1),0);
+    var ans=rnd(T);
+    return C("A = "+L(A)+" and B = "+L(B)+". Which statement is TRUE?","",ans,F,"∈ means \"is an element of\", ∉ \"is not an element of\", ⊂ \"is a subset of\" (every element is in the bigger set) and # means \"how many elements\". True: "+ans+".","A = "+L(A)+", B = "+L(B)+": true statement → "+ans,"",{t:"state",A:A,B:B});
+  }
+  var LIST=[["factors of {n}",[12,18,20,24,28,30,36]],["prime numbers less than {n}",[10,12,15,20,24]],["multiples of {k} less than {n}",[20,25,30]],["square numbers less than {n}",[30,40,50,70]]];
+  function listOf(kind,n,k){var o=[];for(var x=1;x<n+(kind===0?1:0);x++){
+      if(kind===0&&n%x===0)o.push(x);if(kind===1&&RULES.prime[1](x))o.push(x);if(kind===2&&x%k===0)o.push(x);if(kind===3&&RULES.sq[1](x))o.push(x);}return o;}
+  function qList(){
+    var kind=ri(0,3),n=rnd(LIST[kind][1]),k=ri(3,6),ans=listOf(kind,n,k),rule=LIST[kind][0].replace("{n}",n).replace("{k}",k),wr=[];
+    if(kind===0){wr.push(L(ans.slice(1,-1)),L(ans.slice(0,-1)),L(uni(ans,[n/2+1])),L(minus(ans,[rnd(ans.slice(1,-1))])));}
+    if(kind===1){wr.push(L(uni([1],ans)),L(uni(ans,[9])),L(minus(ans,[2])),L(uni(ans,[15]).filter(function(x){return x<n;})));}
+    if(kind===2){wr.push(L(uni(ans,[n%k===0?n:ans[ans.length-1]+k])),L(listOf(2,n,k+1)),L(minus(ans,[k])),L(listOf(0,k*ri(2,4),0).filter(function(x){return x<n;})));}
+    if(kind===3){wr.push(L(uni([0],ans)),L(ans.map(function(x){return x*2;}).filter(function(x){return x<n;})),L(minus(ans,[1])),L(uni(ans,[Math.pow(Math.floor(Math.sqrt(n))+1,2)])));}
+    var why=["Factors divide in exactly. Work in pairs: 1 × "+n+", 2 × …. Don't forget 1 and "+n+" itself.","A prime has exactly 2 factors. 1 is NOT prime and 2 is the only even prime.","Multiples of "+k+": "+k+", "+2*k+", "+3*k+"… \"less than "+n+"\" means "+n+" itself is out.","Square numbers: 1 × 1, 2 × 2, 3 × 3… (1 counts!)"][kind];
+    return C("List the elements of the set:",rule,L(ans),wr,why+" Answer: "+L(ans)+".",rule+" → "+L(ans),"",{t:"list",kind:kind,n:n,k:k});
+  }
+
+  /* ---------- Shade & name ---------- */
+  function qShade(){
+    var n=Math.random()<.55?2:3,pool=n===2?pool2():pool3(),ans=rnd(pool.slice(0,n===2?8:12));
+    var w=pickWrong(ans,pool);
+    return {en:"Which set is shaded yellow?",frame:"",html:shadeSVG(n,regionsOf(ans.m,n)),answer:ans.s,wrong:w,
+      why:"Read the shading one region at a time: which circles is it inside, and which is it outside? ∩ = AND, ∪ = OR, \\ = BUT NOT, ′ = NOT. Shaded: "+ans.s+".",review:"Shaded: "+ans.s,data:{t:"shade",n:n}};
+  }
+  function qWhere(){ // which region(s) does this set cover? pick the right picture → use region names instead
+    var n=2,v=V(2),A=v[0],B=v[1],opts=[I(A,B),D(A,B),D(B,A),K(U(A,B),2)],names=["A and B (A ∩ B)","A only","B only","Outside both"],k=ri(0,3);
+    return C("In a 2-set Venn diagram, which region is this set?",opts[k].s,names[k],names.filter(function(x,i){return i!==k;}),
+      ["∩ = in BOTH: the overlap.","A \\ B = in A but not in B: the part of A outside the overlap.","B \\ A = in B but not in A.","′ = NOT: outside both circles, but still inside U."][k],null,dotSVG(2,["A","B"]),{t:"where",k:k});
+  }
+  var LAWS=[["B ∩ A","A ∩ B"],["(A ∪ B) ∩ C","C ∩ (A ∪ B)"],["(A ∪ B)′","A′ ∩ B′"],["(A ∩ B)′","A′ ∪ B′"],["A \\ B","A ∩ B′"],["B ∪ A","A ∪ B"],["(A ∩ B) ∩ C","A ∩ (B ∩ C)"],["(A ∪ B) ∪ C","A ∪ (B ∪ C)"]];
+  function qLaw(){
+    var v=V(3),A=v[0],B=v[1],c=v[2],cands=[I(A,U(B,c)),U(I(A,B),I(A,c)),U(A,I(B,c)),I(U(A,B),U(A,c)),K(U(A,B),3),I(K(A,3),K(B,3)),K(I(A,B),3),U(K(A,3),K(B,3)),D(A,B),I(A,K(B,3)),U(B,A),U(A,B),I(B,A),I(U(A,B),c),I(c,U(A,B)),D(B,A),I(I(A,B),c),I(A,I(B,c)),U(U(A,B),c),U(A,U(B,c)),
+      U(I(A,B),c),I(U(A,B),I(A,c)),D(B,A),U(K(A,3),B),I(K(A,3),B),K(I(A,K(B,3)),3),U(A,c),I(A,B),U(A,B),I(A,c)];
+    var L0=rnd(LAWS),tgt=cands.filter(function(x){return x.s===L0[0];})[0],ans=cands.filter(function(x){return x.s===L0[1];})[0];
+    var w=pickWrong(ans,cands.filter(function(x){return x.s!==L0[0];}));
+    return {en:"Which set is always the same as this one? (Draw both on a Venn diagram to check.)",frame:L0[0],html:"",answer:ans.s,wrong:w,
+      why:L0[0]+" and "+ans.s+" shade exactly the same regions of a Venn diagram, so they are equal sets.",review:L0[0]+" = "+ans.s,data:{t:"law",of:L0[0]}};
+  }
+
+  /* ---------- Survey sums ---------- */
+  var TOP2=[["Tea","Coffee","drink tea","drink coffee"],["Gaelic","Soccer","play Gaelic","play soccer"],["TikTok","YouTube","use TikTok","use YouTube"],["Dog","Cat","have a dog","have a cat"],["French","German","study French","study German"]];
+  function qRead2(){
+    var t=rnd(TOP2),v={1:ri(3,19),3:ri(2,12),2:ri(3,19),0:ri(1,9)},A=v[1]+v[3],B=v[2]+v[3],T=v[0]+v[1]+v[2]+v[3];
+    var qs=[["How many "+t[2]+" only?",v[1],[A,v[3],v[2]],"\"Only\" means the part of the circle outside the overlap: "+v[1]+".","onlyA"],
+      ["How many "+t[2]+"? (#A)",A,[v[1],A+v[2],v[3]],"Everything inside circle A, overlap included: "+v[1]+" + "+v[3]+" = "+A+".","A"],
+      ["How many "+t[2]+" or "+t[3].replace(/^(drink|play|use|have a|study) /,"")+"? #(A ∪ B)",A+v[2],[A+B,T,v[1]+v[2]],"Add every region inside the circles, the overlap once: "+v[1]+" + "+v[3]+" + "+v[2]+" = "+(A+v[2])+".","union"],
+      ["How many do neither?",v[0],[T-A,T-B,v[3]],"Neither = outside both circles: "+v[0]+".","none"],
+      ["How many do exactly one of the two?",v[1]+v[2],[A+B,v[1]+v[2]+v[3],v[3]],"Exactly one = A only + B only: "+v[1]+" + "+v[2]+" = "+(v[1]+v[2])+".","one"],
+      ["How many people were asked in total?",T,[T-v[0],A+B+v[0],A+B],"Add all four regions, including outside: "+v[1]+" + "+v[3]+" + "+v[2]+" + "+v[0]+" = "+T+".","total"],
+      ["How many "+t[3]+" but not "+t[2].replace(/^(drink|play|use|have a|study) /,"")+"? #(B \\ A)",v[2],[B,v[1],v[3]],"B \\ A = inside B, outside A: "+v[2]+".","BnotA"]];
+    var q=rnd(qs);
+    return Q("A = "+t[0]+", B = "+t[1]+". "+q[0],"",q[1],q[2],q[3],countSVG(2,v,[t[0],t[1]]),{t:"read2",q:q[4]});
+  }
+  function qX(){
+    var T=ri(24,36),x=ri(2,9),a=ri(x+3,20),b=ri(x+3,18),nn=T-(a+b-x);
+    if(nn<2||nn>12)return qX();
+    var t=rnd(TOP2),vals={1:a+"-x",3:"x",2:b+"-x",0:nn};
+    return Q("There are "+T+" students in a class. "+a+" "+t[2]+", "+b+" "+t[3]+" and "+nn+" do neither. x students do both. Find x.","",x,[a+b-T,T-nn,a+b+nn-T+nn,T-a-b+nn,x+nn],"Add the four regions and set equal to "+T+": ("+a+" − x) + x + ("+b+" − x) + "+nn+" = "+T+", so "+(a+b+nn)+" − x = "+T+" and x = "+x+".",countSVG(2,vals,[t[0],t[1]]),{t:"x",T:T,a:a,b:b,n:nn});
+  }
+  function qWord(){
+    var t=rnd(TOP2),both=ri(2,9),a=ri(both+2,20),b=ri(both+2,18),nn=ri(2,8),T=a+b-both+nn,flip=Math.random()<.4;
+    if(flip)return Q("In a survey of "+T+" people, "+a+" "+t[2]+" and "+b+" "+t[3]+". "+nn+" do neither. How many do both?","",both,[a+b-T,T-nn,a+b-T+nn+nn],"Inside the circles: "+T+" − "+nn+" = "+(T-nn)+". "+a+" + "+b+" = "+(a+b)+" counts the overlap twice, so both = "+(a+b)+" − "+(T-nn)+" = "+both+".","",{t:"word",T:T,a:a,b:b,n:nn,ask:"both"});
+    return Q("In a class of "+T+", "+a+" "+t[2]+", "+b+" "+t[3]+" and "+both+" do both. How many do neither?","",nn,[T-a-b+both+both,T-(a-both)-(b-both),T-a,T-b],"#(A ∪ B) = "+a+" + "+b+" − "+both+" = "+(a+b-both)+" (take away the overlap so it isn't counted twice). Neither = "+T+" − "+(a+b-both)+" = "+nn+".","",{t:"word",T:T,a:a,b:b,both:both,ask:"none"});
+  }
+  var TOP3=[["Bus","Car","Walk"],["Maths","Art","PE"],["Netflix","Disney+","Prime"],["Pizza","Curry","Tacos"]];
+  function qRead3(){
+    var t=rnd(TOP3),v={};[0,1,2,3,4,5,6,7].forEach(function(g){v[g]=ri(g===7?1:2,g===0?9:14);});
+    function S(f){var s=0;for(var g=0;g<8;g++)if(f(g))s+=v[g];return s;}
+    function bits(g){return (g&1)+(g>>1&1)+(g>>2&1);}
+    var qs=[["How many chose "+t[2]+" only?",v[4],[S(function(g){return g&4;}),v[7],v[5]+v[6]],"\"Only\" = inside C and outside A and B: "+v[4]+".","onlyC"],
+      ["How many chose exactly two?",S(function(g){return bits(g)===2;}),[S(function(g){return bits(g)>=2;}),v[3],S(function(g){return bits(g)===1;})],"Exactly two = the three \"only\" overlaps, NOT the centre: "+v[3]+" + "+v[5]+" + "+v[6]+".","two"],
+      ["How many chose at least two?",S(function(g){return bits(g)>=2;}),[S(function(g){return bits(g)===2;}),v[7],S(function(g){return bits(g)>=1;})],"At least two = the three overlaps AND the centre: "+v[3]+" + "+v[5]+" + "+v[6]+" + "+v[7]+".","atleast2"],
+      ["How many chose "+t[0]+" and "+t[1]+" but not "+t[2]+"?",v[3],[v[3]+v[7],v[7],v[1]+v[2]],"In A and B, outside C: just the A–B overlap region: "+v[3]+".","ABnotC"],
+      ["How many chose "+t[1]+"? (#B)",S(function(g){return g&2;}),[v[2],S(function(g){return g&2;})-v[7],v[2]+v[3]+v[6]+v[7]+v[0]],"Add all four regions inside B: "+v[2]+" + "+v[3]+" + "+v[6]+" + "+v[7]+".","B"],
+      ["How many chose none of the three?",v[0],[v[4],S(function(g){return g;})-v[7],v[7]],"None = outside all three circles: "+v[0]+".","none"]];
+    var q=rnd(qs);
+    return Q("A = "+t[0]+", B = "+t[1]+", C = "+t[2]+". "+q[0],"",q[1],q[2],q[3],countSVG(3,v,[t[0],t[1],t[2]]),{t:"read3",q:q[4]});
+  }
+
+  var MAKERS={
+    sort:[qSort2,qSort2,qSort2,qSort3,qSort3],
+    lang:[qOp,qOp,qComp,qState,qState,qList],
+    shade:[qShade,qShade,qShade,qWhere,qLaw],
+    survey:[qRead2,qRead2,qX,qWord,qWord,qRead3],
+    mixed:[qSort2,qSort3,qOp,qComp,qState,qList,qShade,qShade,qWhere,qLaw,qRead2,qX,qWord,qRead3]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="sort")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sort"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sort"&&streak%5===0?700:350):2600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
