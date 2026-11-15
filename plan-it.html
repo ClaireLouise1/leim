@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Near future &amp; making plans: play Plan It! | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: the near future (ir a + infinitive) and making plans. Build a text-message chat to plan the weekend, invite, accept or say no, arrange a time and place. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Plan It!</h1>
+        <p>The near future and making plans. Text a friend and plan the weekend message by message: ask what they're <b>going to do</b>, invite them, accept or say no, then agree a time and a place. Then <b>ir a + infinitive</b>, time phrases and <b>yes, no or another day?</b> Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="plan"><div><b>Plan It!</b><span>Build a text-message chat to plan the weekend: +3 bonus for every plan you make</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="goingto"><div><b>Going to…</b><span>voy a, vas a, va a… + infinitive, time phrases, and past, present or future?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="invite"><div><b>Yes, no or another day?</b><span>Invitations, accepting, saying no with an excuse, and suggesting another time</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening plans 🔊</b><span id="listenNote">Hear people making plans and pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.13, 1.18, 1.20 (2017 spec, exams 2027–2028) · 1.11, 1.15 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="chat" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The near future &amp; making plans</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Esta tarde <b>voy a ver</b> una película. <span style="color:var(--muted)">(This evening I'm going to watch a film.)</span></li>
+          <li>¿Qué <b>vas a hacer</b> el sábado? <span style="color:var(--muted)">(What are you going to do on Saturday?)</span></li>
+          <li>Mañana <b>vamos a jugar</b> al fútbol. <span style="color:var(--muted)">(Tomorrow we're going to play football.)</span></li>
+        </ul>
+        <p>Look at the three words in bold each time. Which word changes? Which word never changes? What form is the last verb in? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">It's always <b>ir</b> in the present (<em>voy, vas, vamos</em>) + <b>a</b> + a verb in the <b>infinitive</b> (<em>ver, hacer, jugar</em>: the -ar/-er/-ir form from the dictionary). Only <b>ir</b> changes for the person. The <b>a</b> never disappears and the second verb never changes. It's exactly like English "going to + verb".</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">ir a + infinitive</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Person</th><th>ir</th><th>+ a + infinitive</th></tr></thead>
+          <tbody>
+            <tr><td>yo (I)</td><td><b>voy</b></td><td>voy a salir</td></tr>
+            <tr><td>tú (you)</td><td><b>vas</b></td><td>¿vas a venir?</td></tr>
+            <tr><td>él / ella / mi madre</td><td><b>va</b></td><td>va a llover (it's going to rain)</td></tr>
+            <tr><td>nosotros (we)</td><td><b>vamos</b></td><td>vamos a comer</td></tr>
+            <tr><td>vosotros (you all)</td><td><b>vais</b></td><td>vais a jugar</td></tr>
+            <tr><td>ellos / ellas / mis padres</td><td><b>van</b></td><td>van a viajar</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Not going to:</b> put <b>no</b> before <em>voy</em>: <em><b>No</b> voy a salir esta noche.</em> · <b>Watch out:</b> <em>Voy <b>al</b> cine</em> = I'm going to the cinema (a place) · <em>Voy <b>a ir</b> al cine</em> = I'm going to go to the cinema (a plan). <em>Mi familia <b>va</b></em> (one family: va, not van). <em>Me voy a quedar en casa</em> or <em>Voy a quedarme en casa</em> = I'm going to stay at home.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Future time phrases</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>esta tarde · esta noche</td><td>this afternoon / evening · tonight</td></tr>
+            <tr><td>mañana · mañana por la mañana</td><td>tomorrow · tomorrow morning</td></tr>
+            <tr><td>pasado mañana</td><td>the day after tomorrow</td></tr>
+            <tr><td>el sábado · el sábado por la noche</td><td>on Saturday · on Saturday night</td></tr>
+            <tr><td>el fin de semana que viene · la semana que viene</td><td>next weekend · next week</td></tr>
+            <tr><td>el próximo verano · dentro de dos días</td><td>next summer · in two days' time</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Invite, accept, say no</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>To…</th><th>Say…</th></tr></thead>
+          <tbody>
+            <tr><td>invite</td><td>¿<b>Quieres</b> venir al cine? · ¿<b>Te apetece</b> ir a la piscina? (Do you fancy…?) · ¿<b>Vamos</b> a la bolera?</td></tr>
+            <tr><td>accept 👍</td><td>¡Vale! · ¡Claro que sí! · ¡Qué buena idea! · ¡Me encantaría! (I'd love to)</td></tr>
+            <tr><td>say no 👎</td><td>Lo siento, no puedo. Es que <b>tengo que</b> + infinitive: tengo que estudiar · tengo que cuidar a mi hermano (mind) · tengo que ayudar en casa · or: estoy enfermo/a · no tengo dinero · mis padres no me dejan (won't let me)</td></tr>
+            <tr><td>another time 🔁</td><td>El sábado no puedo, pero ¿qué tal el domingo? · ¿Y si quedamos a las ocho? (What if we meet at eight?)</td></tr>
+            <tr><td>arrange it</td><td>¿A qué hora <b>quedamos</b>? (What time shall we meet?) · Quedamos a las siete y media. · ¿Dónde quedamos? · Delante del cine · En la parada del autobús · En mi casa</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>quedar</b> = to arrange to meet (<em>He quedado con Ana</em>, <em>¿Quedamos?</em>) · <b>quedarse</b> = to stay (<em>me quedo en casa</em>). After <b>tengo que</b>, <b>quiero</b>, <b>puedo</b> and <b>me apetece</b>, the next verb is always the infinitive.</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> Spanish teenagers <em>quedan</em> to meet friends in the street, the plaza or the park, often later than in Ireland: dinner is at about 9 or 10 pm, so "por la tarde" can mean up to 8 pm. In texts you'll see short forms: <b>q</b> = que, <b>xq</b> = porque, <b>tb</b> = también, <b>finde</b> = fin de semana, <b>peli</b> = película, <b>bss</b> = besos. Use them to read messages, but write the full words in the exam!</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, plans and invitations are favourite tasks (a text, a note or an email), and the near future earns you <b>range</b> marks. Check the task for who, what, when and where: <em>¡Hola, Pablo! ¿Qué vas a hacer el sábado? ¿Te apetece ir al cine conmigo? La película empieza a las ocho. Quedamos a las siete y media delante del cine. Después vamos a comer una pizza. Mi madre nos va a llevar en coche. ¡Hasta el sábado! Ciara.</em> In <b>Listening</b> and <b>Reading</b>, catch the day, the time, the place and whether the person says yes or no, and why.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/near-future-and-plans-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<!-- TEACHER LINE (add back once the Payhip product exists, swap PAYHIP_URL): <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Making Plans Teacher Pack (€5)</a>: Busy Diaries info gap, Plans Dominoes, poster and worksheet.</p> -->
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function fixQ(x,extra){var q={who:x[4]||"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};
+    if(extra)for(var k in extra)q[k]=extra[k];return q;}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+
+  /* ---------- Data ---------- */
+  var NAMES_F=["Ana","Lucía","Sara","Marta","Aoife","Ciara","Elena"],NAMES_M=["Pablo","Diego","Sergio","Mateo","Seán","Cian","Javier"];
+  /* [Spanish, "on Saturday", "See you Saturday" form, can say ¡Hasta …!] */
+  var DAYS=[["el sábado","on Saturday","Saturday"],["el domingo","on Sunday","Sunday"],["el viernes","on Friday","Friday"],["mañana","tomorrow","tomorrow"]];
+  /* [with a/al, English, emoji, gender m/f, noun with article for "delante de…"] */
+  var PLACES=[["al cine","to the cinema","🎬","m","el cine","the cinema"],["a la piscina","to the swimming pool","🏊","f","la piscina","the swimming pool"],["a la bolera","bowling","🎳","f","la bolera","the bowling alley"],["al parque","to the park","🌳","m","la biblioteca","the library"],["a la playa","to the beach","🏖️","f","la estación","the station"],["al centro comercial","to the shopping centre","🛍️","m","el centro comercial","the shopping centre"],["al partido de fútbol","to the football match","⚽","m","el estadio","the stadium"]];
+  var HOURS=[["cinco","five","5"],["seis","six","6"],["siete","seven","7"],["ocho","eight","8"]];
+  /* activities: [infinitive phrase, English, emoji, wrong forms for yo: present, preterite, 3rd person] */
+  var ACTS=[["ver una película","watch a film","🎬",["veo","vi","ve"]],["jugar al tenis","play tennis","🎾",["juego","jugué","juega"]],["hacer los deberes","do my homework","📚",["hago","hice","hace"]],["ir de compras","go shopping","🛍️",["voy","fui","va"]],["visitar a mis abuelos","visit my grandparents","👵",["visito","visité","visita"]],["salir con mis amigos","go out with my friends","🧑‍🤝‍🧑",["salgo","salí","sale"]],["estudiar para el examen","study for the exam","📝",["estudio","estudié","estudia"]],["nadar en la piscina","swim in the pool","🏊",["nado","nadé","nada"]],["montar en bici","go cycling","🚲",["monto","monté","monta"]],["descansar en casa","rest at home","🛋️",["descanso","descansé","descansa"]],["escuchar música","listen to music","🎧",["escucho","escuché","escucha"]],["cocinar la cena","cook the dinner","🍝",["cocino","cociné","cocina"]]];
+  var TIMES=[["esta tarde","this afternoon"],["esta noche","tonight"],["mañana","tomorrow"],["mañana por la mañana","tomorrow morning"],["pasado mañana","the day after tomorrow"],["el fin de semana que viene","next weekend"],["la semana que viene","next week"],["el sábado por la noche","on Saturday night"],["el próximo verano","next summer"],["dentro de dos días","in two days' time"]];
+  var SUBJ=[["Yo","voy","I'm"],["Tú","vas","You're"],["Mi hermana","va","My sister is"],["Mi amigo y yo","vamos","My friend and I are"],["Vosotros","vais","You (all) are"],["Mis padres","van","My parents are"]];
+  var IRFORMS=["voy","vas","va","vamos","vais","van"];
+
+  /* ---------- Plan It! chat (message by message) ---------- */
+  var pc=null;
+  function newCard(){var f=Math.random()<.5,fr=rnd(f?NAMES_F:NAMES_M);
+    var d=rnd(DAYS),p=rnd(PLACES),h=rnd(HOURS);
+    pc={friend:fr,fF:f,me:rnd(Math.random()<.5?NAMES_F:NAMES_M),day:d,place:p,hour:h,lines:[],slot:0,sent:false};}
+  var SLOTS=[
+    function(c){ /* 1 me: what are you going to do? */
+      var r=Math.random(),d=c.day;
+      if(r<.4)return {from:"me",frame:"¡Hola, "+c.friend+"! ¿Qué ___ a hacer "+d[0]+"?",en:"Hi "+c.friend+"! What are you going to do "+d[1]+"?",answer:"vas",wrong:["voy","va","vamos"],line:"¡Hola, "+c.friend+"! ¿Qué vas a hacer "+d[0]+"?"};
+      if(r<.7)return {from:"me",frame:"¡Hola, "+c.friend+"! ¿Qué vas a ___ "+d[0]+"?",en:"Hi "+c.friend+"! What are you going to do "+d[1]+"?",answer:"hacer",wrong:["haces","hiciste","hace"],line:"¡Hola, "+c.friend+"! ¿Qué vas a hacer "+d[0]+"?"};
+      return {from:"me",frame:"¡Hola, "+c.friend+"! ¿Qué vas a hacer ___?",en:"Hi "+c.friend+"! What are you going to do "+d[1]+"?",answer:d[0],wrong:others(DAYS,d,3).map(function(x){return x[0];}),line:"¡Hola, "+c.friend+"! ¿Qué vas a hacer "+d[0]+"?"};},
+    function(c){ /* 2 them: no plans */
+      var r=Math.random();
+      if(r<.4)return {from:"them",frame:"No ___ planes. ¿Por qué?",en:"I don't have any plans. Why?",answer:"tengo",wrong:["tienes","tiene","tener"],line:"No tengo planes. ¿Por qué?"};
+      if(r<.7)return {from:"them",frame:"Nada especial. Voy a ___ en casa.",en:"Nothing special. I'm going to stay at home.",answer:"quedarme",wrong:["me quedo","me quedé","quedarse"],line:"Nada especial. Voy a quedarme en casa."};
+      return {from:"them",frame:"Por la mañana voy ___ estudiar, pero por la tarde estoy libre.",en:"In the morning I'm going to study, but in the afternoon I'm free.",answer:"a",wrong:["de","en","que"],line:"Por la mañana voy a estudiar, pero por la tarde estoy libre."};},
+    function(c){ /* 3 me: invitation */
+      var p=c.place,r=Math.random(),noun=p[0].replace(/^(al|a la) /,"");
+      if(r<.4){var ans=p[3]==="m"?"al":"a la",wr=p[3]==="m"?["a el","a la","en el"]:["al","a el","en la"];
+        return {who:p[2],from:"me",frame:"¿Quieres venir ___ "+noun+" conmigo?",en:"Do you want to come "+p[1]+" with me?",answer:ans,wrong:wr,line:"¿Quieres venir "+p[0]+" conmigo?"};}
+      if(r<.7)return {who:p[2],from:"me",frame:"¿Te ___ ir "+p[0]+"?",en:"Do you fancy going "+p[1]+"?",answer:"apetece",wrong:["apetezco","apetecen","apetecer"],line:"¿Te apetece ir "+p[0]+"?"};
+      return {who:p[2],from:"me",frame:"¿___ venir "+p[0]+" conmigo?",en:"Do you want to come "+p[1]+" with me?",answer:"Quieres",wrong:["Quiero","Quiere","Quise"],line:"¿Quieres venir "+p[0]+" conmigo?"};},
+    function(c){ /* 4 them: accept, or no + another day */
+      var r=Math.random();
+      if(r<.2)return {from:"them",frame:"¡Vale! ¡Qué ___ idea!",en:"OK! What a good idea!",answer:"buena",wrong:["bueno","buen","bien"],line:"¡Vale! ¡Qué buena idea!"};
+      if(r<.4)return {from:"them",frame:"¡Me ___! ¿A qué hora quedamos?",en:"I'd love to! What time shall we meet?",answer:"encantaría",wrong:["encantaré","encantarías","encanto"],line:"¡Me encantaría! ¿A qué hora quedamos?"};
+      if(r<.6)return {from:"them",frame:"¡Vale! ¿A qué hora ___?",en:"OK! What time shall we meet?",answer:"quedamos",wrong:["quedo","quedan","quedé"],line:"¡Vale! ¿A qué hora quedamos?"};
+      var p2=rnd(PLACES.filter(function(x){return x!==c.place;})),n2=p2[0].replace(/^(al|a la) /,"");c.place=p2;
+      if(r<.8){var ans=p2[3]==="m"?"al":"a la",wr=p2[3]==="m"?["a el","a la","en el"]:["al","a el","en la"];
+        return {from:"them",who:p2[2],frame:"Mmm, no me apetece mucho. ¿Y si vamos ___ "+n2+"?",en:"Hmm, I don't really fancy it. What if we go "+p2[1]+"?",answer:ans,wrong:wr,line:"Mmm, no me apetece mucho. ¿Y si vamos "+p2[0]+"?"};}
+      return {from:"them",who:p2[2],frame:"No me apetece mucho, la verdad. ¿Por qué no ___ "+p2[0]+"?",en:"I don't really fancy it, to be honest. Why don't we go "+p2[1]+"?",answer:"vamos",wrong:["fuimos","ir","vamos a"],line:"No me apetece mucho, la verdad. ¿Por qué no vamos "+p2[0]+"?"};},
+    function(c){ /* 5 me: the time */
+      var h=c.hour,r=Math.random(),ev=c.place[0]==="al cine"||c.place[0]==="al partido de fútbol";
+      if(ev&&r<.3){var what=c.place[0]==="al cine"?"La película":"El partido";
+        return {from:"me",who:"🕗",frame:what+" ___ a las "+h[0]+".",en:(what==="La película"?"The film":"The match")+" starts at "+h[1]+".",answer:"empieza",wrong:["empezó","empiezo","empezar"],line:what+" empieza a las "+h[0]+"."};}
+      if(r<.55)return {from:"me",who:"🕖",frame:"Perfecto. Quedamos ___ las "+h[0]+".",en:"Perfect. Let's meet at "+h[1]+".",answer:"a",wrong:["en","de","por"],line:"Perfecto. Quedamos a las "+h[0]+"."};
+      if(r<.8)return {from:"me",who:"🕢",frame:"Quedamos a las "+h[0]+" y ___.",en:"Let's meet at half past "+h[1]+".",answer:"media",wrong:["cuarto","menos","mitad"],line:"Quedamos a las "+h[0]+" y media."};
+      return {from:"me",who:"🕖",frame:"¿___ a las "+h[0]+" y cuarto?",en:"Shall we meet at quarter past "+h[1]+"?",answer:"Quedamos",wrong:["Quedé","Quedan","Quedar"],line:"¿Quedamos a las "+h[0]+" y cuarto?"};},
+    function(c){ /* 6 them: where */
+      var p=c.place,r=Math.random(),n=p[4];
+      if(r<.45){var m=n.indexOf("el ")===0,ans=m?"del":"de la",wr=m?["de el","al","de la"]:["del","de el","a la"],nn=n.replace(/^(el|la) /,"");
+        return {from:"them",who:"📍",frame:"Vale. Quedamos delante ___ "+nn+".",en:"OK. Let's meet in front of "+p[5]+".",answer:ans,wrong:wr,line:"Vale. Quedamos delante "+ans+" "+nn+"."};}
+      if(r<.75)return {from:"them",who:"🚏",frame:"Vale. ¿Quedamos en la parada ___ autobús?",en:"OK. Shall we meet at the bus stop?",answer:"del",wrong:["de el","de la","al"],line:"Vale. ¿Quedamos en la parada del autobús?"};
+      return {from:"them",who:"🏠",frame:"Vale. Paso ___ tu casa un poco antes.",en:"OK. I'll call to your house a bit before.",answer:"por",wrong:["a","de","con"],line:"Vale. Paso por tu casa un poco antes."};},
+    function(c){ /* 7 me: more plans with ir a */
+      return rnd([
+        {from:"me",who:"🍕",frame:"Después vamos a ___ una pizza.",en:"Afterwards we're going to eat a pizza.",answer:"comer",wrong:["comemos","comimos","come"],line:"Después vamos a comer una pizza."},
+        {from:"me",who:"🚗",frame:"Mi madre nos ___ a llevar en coche.",en:"My mum is going to give us a lift.",answer:"va",wrong:["voy","vamos","fue"],line:"Mi madre nos va a llevar en coche."},
+        {from:"me",who:"👦",frame:"Voy a ___ con mi hermano también.",en:"I'm going to go with my brother too.",answer:"ir",wrong:["voy","fui","va"],line:"Voy a ir con mi hermano también."},
+        {from:"me",who:"☀️",frame:"Va a ___ sol, ¡qué bien!",en:"It's going to be sunny, great!",answer:"hacer",wrong:["hace","hizo","hago"],line:"Va a hacer sol, ¡qué bien!"},
+        {from:"me",who:"🚶",frame:"Después vamos ___ dar un paseo.",en:"Afterwards we're going to go for a walk.",answer:"a",wrong:["de","en","por"],line:"Después vamos a dar un paseo."},
+        {from:"me",who:"💶",frame:"¿Vas a ___ dinero?",en:"Are you going to bring money?",answer:"traer",wrong:["traes","trajiste","trae"],line:"¿Vas a traer dinero?"}
+      ]);},
+    function(c){ /* 8 them: sign-off */
+      var r=Math.random(),d=c.day;
+      if(r<.45)return {from:"them",frame:"¡Genial! ¡Hasta ___!",en:"Great! See you "+d[2]+"!",answer:d[0],wrong:others(DAYS,d,3).map(function(x){return x[0];}),line:"¡Genial! ¡Hasta "+d[0]+"!"};
+      if(r<.75)return {from:"them",frame:"¡Perfecto! Nos ___ allí.",en:"Perfect! See you there.",answer:"vemos",wrong:["vimos","veo","ven"],line:"¡Perfecto! Nos vemos allí."};
+      return {from:"them",frame:"¡Qué guay! Va a ___ genial.",en:"How cool! It's going to be great.",answer:"ser",wrong:["es","fue","sido"],line:"¡Qué guay! Va a ser genial."};}
+  ];
+  function lineQ(c,i){var q=SLOTS[i](c);q.review=q.line+" = "+q.en;q.who=q.who||"";return q;}
+  function qCard(){if(!pc||pc.sent)newCard();var q=lineQ(pc,pc.slot);q.card=1;return q;}
+  function qLine(){var f=Math.random()<.5;
+    var c={friend:rnd(f?NAMES_F:NAMES_M),fF:f,day:rnd(DAYS),place:rnd(PLACES),hour:rnd(HOURS)};
+    return lineQ(c,Math.floor(Math.random()*SLOTS.length));}
+
+  /* ---------- Going to… ---------- */
+  function qIrA(){var s=rnd(SUBJ),a=rnd(ACTS),t=rnd(TIMES);
+    var useAct=s[0]==="Yo"?a[0]:a[0].replace(/\bmis\b/,"los");
+    var useEn=s[0]==="Yo"?a[1]:a[1].replace(/\bmy\b/,"the");
+    return {who:a[2],en:s[2]+" going to "+useEn+" "+t[1]+".",frame:cap(t[0])+" "+(s[0]==="Yo"?"":s[0].toLowerCase()+" ")+"___ a "+useAct+".",answer:s[1],wrong:others(IRFORMS,s[1],3),review:cap(t[0])+" "+(s[0]==="Yo"?"":s[0].toLowerCase()+" ")+s[1]+" a "+useAct+". = "+s[2]+" going to "+useEn+" "+t[1]+"."};}
+  function qInf(){var a=rnd(ACTS),t=rnd(TIMES),parts=a[0].split(" "),inf=parts[0],rest=parts.slice(1).join(" ");
+    return {who:a[2],en:cap(t[1])+" I'm going to "+a[1]+".",frame:cap(t[0])+" voy a ___ "+rest+".",answer:inf,wrong:a[3].slice(),review:cap(t[0])+" voy a "+a[0]+". = "+cap(t[1])+" I'm going to "+a[1]+"."};}
+  function qMissA(){var a=rnd(ACTS),t=rnd(TIMES);
+    return {who:a[2],en:cap(t[1])+" I'm going to "+a[1]+".",frame:cap(t[0])+" voy ___ "+a[0]+".",answer:"a",wrong:["de","en","que"],review:cap(t[0])+" voy a "+a[0]+". = I'm going to "+a[1]+" (ir + a + infinitive)"};}
+  function qTime(){var t=rnd(TIMES),w=others(TIMES,t,3);
+    if(Math.random()<.5)return {who:"📅",en:"What does it mean?",frame:cap(t[0]),answer:t[1],wrong:w.map(function(x){return x[1];}),review:cap(t[0])+" = "+t[1]};
+    return {who:"📅",en:"How do you say it in Spanish? ("+t[1]+")",frame:"___",answer:t[0],wrong:w.map(function(x){return x[0];}),review:t[1]+" = "+t[0]};}
+  function qActMean(){var a=rnd(ACTS),w=others(ACTS,a,3);
+    return {who:"",en:"What does it mean?",frame:"El sábado voy a "+a[0]+".",answer:a[2]+" "+a[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:"El sábado voy a "+a[0]+". = On Saturday I'm going to "+a[1]+"."};}
+  var FIXG=[
+    ["Esta noche ___ a salir porque estoy cansada.","Tonight I'm not going to go out because I'm tired.","no voy",["voy no","no fui","no vas"],"😴"],
+    ["Mañana ___ a llover, así que vamos al cine.","Tomorrow it's going to rain, so we're going to the cinema.","va",["voy","fue","van"],"🌧️"],
+    ["¿Qué vas a hacer el fin de semana ___ viene?","What are you going to do next weekend?","que",["qué","de","se"],""],
+    ["El sábado voy a ___ en casa: tengo que estudiar.","On Saturday I'm going to stay at home: I have to study.","quedarme",["me quedo","quedo","me quedé"],"🏠"],
+    ["Pasado mañana ___ a visitar el museo.","The day after tomorrow we're going to visit the museum.","vamos",["fuimos","vais","va"],"🏛️"],
+    ["Mis amigos van a ___ una fiesta el viernes.","My friends are going to have a party on Friday.","hacer",["hacen","hicieron","hago"],"🎉"],
+    ["En el futuro voy a ___ en España.","In the future I'm going to work in Spain.","trabajar",["trabajo","trabajé","trabaja"],"💼"],
+    ["¿Vas a ___ a mi fiesta?","Are you going to come to my party?","venir",["vienes","viniste","vengo"],"🎂"],
+    ["Este verano mi familia ___ a alquilar una casa en la playa.","This summer my family is going to rent a house at the beach.","va",["van","vamos","fue"],"🏖️"],
+    ["Esta tarde ___ al cine con Ana.","This afternoon I'm going to the cinema with Ana.","voy",["voy a","fui","vamos a"],"🎬"]
+  ];
+  function qFixG(){return fixQ(rnd(FIXG));}
+  /* past, present or future? */
+  var TM=["⏪ Past","▶ Present","⏩ Future"],TMS=["pasado","presente","futuro"];
+  var WHEN=[
+    ["El sábado pasado fui al cine con mis amigos.",0,"el sábado pasado + fui"],["Ayer jugué al fútbol en el parque.",0,"ayer + jugué"],["Anoche vimos una película de terror.",0,"anoche + vimos"],["El fin de semana pasado me quedé en casa.",0,"me quedé"],["Hace dos días fuimos a la bolera.",0,"hace dos días + fuimos"],
+    ["Normalmente los sábados juego al baloncesto.",1,"normalmente + juego"],["Los domingos siempre visito a mis abuelos.",1,"siempre + visito"],["Hoy estoy en casa con mi hermano.",1,"hoy + estoy"],["Todos los viernes salgo con mis amigas.",1,"todos los viernes + salgo"],["Ahora mismo veo la tele.",1,"ahora mismo + veo"],
+    ["Esta noche voy a ver una película.",2,"esta noche + voy a ver"],["El sábado que viene vamos a ir a la playa.",2,"que viene + vamos a ir"],["Mañana mi hermana va a jugar un partido.",2,"mañana + va a jugar"],["Pasado mañana vamos a hacer una fiesta.",2,"pasado mañana + vamos a hacer"],["La semana que viene voy a visitar a mis tíos.",2,"la semana que viene + voy a visitar"],["El próximo verano voy a trabajar en una tienda.",2,"el próximo verano + voy a trabajar"]
+  ];
+  function qWhen(spoken){var s=rnd(WHEN);
+    return {fixed:1,tm:1,smalls:TMS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"🗓️",en:spoken?"Listen. Past, present or future?":"Past, present or future?",frame:spoken?"":s[0],answer:TM[s[1]],wrong:TM.filter(function(x,i){return i!==s[1];}),opts:TM,review:s[0]+" = "+noEmoji(TM[s[1]])+" ("+s[2]+")"};}
+  function gWhen(){return qWhen(false);}
+
+  /* ---------- Yes, no or another day? ---------- */
+  var RP=["👍 Yes","👎 No","🔁 Another time"],RPS=["acepta","dice que no","otro día"];
+  var REPLIES=[
+    ["¡Vale! ¡Qué buena idea!",0,"¡qué buena idea!"],["¡Claro que sí! Me encantaría.",0,"me encantaría = I'd love to"],["¡Genial! ¿A qué hora quedamos?",0,"genial + a qué hora"],["Sí, vale. Nos vemos allí.",0,"sí, vale"],["¡Me apetece mucho! ¡Hasta luego!",0,"me apetece mucho"],
+    ["Lo siento, no puedo. Tengo que estudiar.",1,"no puedo + tengo que"],["Es que estoy enfermo. ¡Qué pena!",1,"estoy enfermo"],["No me apetece mucho, la verdad.",1,"no me apetece"],["Lo siento, mis padres no me dejan.",1,"no me dejan"],["Imposible, no tengo dinero.",1,"imposible"],
+    ["El sábado no puedo, pero ¿qué tal el domingo?",2,"¿qué tal el domingo?"],["Hoy no, pero ¿quedamos mañana?",2,"hoy no, ¿mañana?"],["¿Y si quedamos a las ocho en vez de a las seis?",2,"¿y si quedamos…?"],["Esta tarde no puedo. ¿Vamos el viernes?",2,"¿vamos el viernes?"],["Por la mañana tengo clase, ¿por qué no vamos por la tarde?",2,"¿por qué no… por la tarde?"]
+  ];
+  function qReply(spoken){var s=rnd(REPLIES);
+    return {fixed:1,tm:1,smalls:RPS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"💬",en:spoken?"Listen. Do they say yes, no, or suggest another time?":"Yes, no, or another time?",frame:spoken?"":s[0],answer:RP[s[1]],wrong:RP.filter(function(x,i){return i!==s[1];}),opts:RP,review:s[0]+" = "+noEmoji(RP[s[1]])+" ("+s[2]+")"};}
+  function gReply(){return qReply(false);}
+  var EXC=[["tengo que hacer los deberes","I have to do my homework","📚"],["tengo que estudiar para un examen","I have to study for an exam","📝"],["tengo que cuidar a mi hermano pequeño","I have to mind my little brother","👶"],["tengo que ayudar en casa","I have to help at home","🧹"],["tengo que ir al dentista","I have to go to the dentist","🦷"],["tengo entrenamiento","I have training","🏃"],["estoy enfermo","I'm sick","🤒"],["mis padres no me dejan","my parents won't let me","🙅"],["no tengo dinero","I have no money","💸"],["voy a visitar a mis abuelos","I'm going to visit my grandparents","👵"]];
+  function qExc(){var e=rnd(EXC),w=others(EXC,e,3);
+    if(Math.random()<.5)return {who:e[2],en:"Sorry, I can't: "+e[1]+".",frame:"Lo siento, no puedo: ___.",answer:e[0],wrong:w.map(function(x){return x[0];}),review:"Lo siento, no puedo: "+e[0]+". = Sorry, I can't: "+e[1]+"."};
+    return {who:"",en:"What's the excuse?",frame:"Lo siento, no puedo: "+e[0]+".",answer:e[2]+" "+e[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:"Lo siento, no puedo: "+e[0]+". = "+e[1]};}
+  var LINV=[
+    ["¿Te apetece ir a la bolera?","Do you fancy going bowling?",["Did you go bowling?","Do you like bowling?","Are you going bowling?"]],
+    ["¿Quieres venir a mi fiesta?","Do you want to come to my party?",["Did you come to my party?","Do you want a party?","Are you having a party?"]],
+    ["¿Vamos al cine esta noche?","Shall we go to the cinema tonight?",["Did we go to the cinema last night?","Is the cinema open tonight?","Are you going to the cinema tomorrow?"]],
+    ["¿A qué hora quedamos?","What time shall we meet?",["Where shall we meet?","What time is it?","Who are we meeting?"]],
+    ["¿Dónde quedamos?","Where shall we meet?",["What time shall we meet?","Where are you?","Where do you live?"]],
+    ["¿Qué tal el domingo?","What about Sunday?",["How was Sunday?","What time on Sunday?","Not on Sunday."]],
+    ["¿Estás libre el viernes?","Are you free on Friday?",["Were you free on Friday?","Are you busy on Friday?","Is it free on Friday?"]],
+    ["¿Y si vamos a la playa?","What if we go to the beach?",["Yes, we're going to the beach.","Did we go to the beach?","Why don't you like the beach?"]]
+  ];
+  function qInv(){var x=rnd(LINV);return {who:"📱",en:"What does it mean?",frame:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  var FIXI=[
+    ["No puedo, tengo ___ estudiar.","I can't, I have to study.","que",["a","de","para"],"📝"],
+    ["Lo siento, no ___. Tengo un partido.","Sorry, I can't. I have a match.","puedo",["puedes","pude","poder"],"⚽"],
+    ["¿Te ___ venir a la piscina?","Do you fancy coming to the pool?","apetece",["apetecen","apetezco","gustas"],"🏊"],
+    ["¡Me ___ ir contigo!","I'd love to go with you!","encantaría",["encanto","encantaré","encantan"],"😍"],
+    ["¿Quieres ___ al parque conmigo?","Do you want to go to the park with me?","ir",["vas","fuiste","voy"],"🌳"],
+    ["Quedamos ___ la parada del autobús.","Let's meet at the bus stop.","en",["a","de","por"],"🚏"],
+    ["Quedamos delante ___ cine.","Let's meet in front of the cinema.","del",["de el","al","en el"],"🎬"],
+    ["¿___ libre el sábado?","Are you free on Saturday?","Estás",["Eres","Está","Estoy"],"📅"]
+  ];
+  function qFixI(){return fixQ(rnd(FIXI));}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["El sábado voy a ir al cine con mi hermana.","On Saturday I'm going to go to the cinema with my sister.",["On Saturday I went to the cinema with my sister.","On Sunday I'm going to go to the cinema with my sister.","On Saturday I'm going to go to the cinema with my brother."]],
+    ["¿Quieres venir a la piscina esta tarde?","Do you want to come to the pool this afternoon?",["Do you want to come to the pool tomorrow?","Do you want to come to the beach this afternoon?","Did you go to the pool this afternoon?"]],
+    ["Lo siento, no puedo. Tengo que estudiar.","Sorry, I can't. I have to study.",["Sorry, I can't. I have to work.","Great, I can. I don't have to study.","Sorry, I can't. I have to help at home."]],
+    ["Quedamos a las siete y media delante del cine.","Let's meet at 7:30 in front of the cinema.",["Let's meet at 7:15 in front of the cinema.","Let's meet at 7:30 behind the cinema.","Let's meet at 6:30 in front of the cinema."]],
+    ["Mañana va a llover, así que me voy a quedar en casa.","Tomorrow it's going to rain, so I'm going to stay at home.",["Tomorrow it's going to be sunny, so I'm going to stay at home.","Yesterday it rained, so I stayed at home.","Tomorrow it's going to rain, so I'm going to go to the cinema."]],
+    ["El sábado no puedo, pero ¿qué tal el domingo?","I can't on Saturday, but what about Sunday?",["I can't on Sunday, but what about Saturday?","I can on Saturday, and on Sunday too.","I can't on Friday, but what about Sunday?"]],
+    ["Mis padres van a comprar un perro la semana que viene.","My parents are going to buy a dog next week.",["My parents bought a dog last week.","My parents are going to buy a cat next week.","My parents are going to buy a dog next month."]],
+    ["Pasado mañana vamos a hacer una fiesta en mi casa.","The day after tomorrow we're going to have a party at my house.",["Tomorrow we're going to have a party at my house.","The day after tomorrow we're going to have a party at your house.","Last night we had a party at my house."]],
+    ["¿Te apetece ir a la bolera el viernes por la noche?","Do you fancy going bowling on Friday night?",["Do you fancy going bowling on Friday morning?","Do you fancy going swimming on Friday night?","Did you go bowling on Friday night?"]],
+    ["¡Qué buena idea! Me encantaría ir.","What a good idea! I'd love to go.",["What a bad idea! I don't want to go.","What a good idea! I'm going to go tomorrow.","Good idea! I went yesterday."]],
+    ["Esta noche no voy a salir porque estoy cansado.","Tonight I'm not going to go out because I'm tired.",["Tonight I'm going to go out because I'm bored.","Last night I didn't go out because I was tired.","Tonight I'm not going to go out because I'm sick."]],
+    ["Este verano voy a trabajar en una tienda.","This summer I'm going to work in a shop.",["Last summer I worked in a shop.","This summer I'm going to work in a café.","This summer I'm going to go shopping a lot."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  var LH=[["una","1",1],["dos","2",2],["tres","3",3],["cuatro","4",4],["cinco","5",5],["seis","6",6],["siete","7",7],["ocho","8",8],["nueve","9",9],["diez","10",10]];
+  var LM=[["en punto",":00",0],["y cuarto",":15",15],["y media",":30",30],["y diez",":10",10],["menos cuarto",":45",-15]];
+  function clock(hi,mi){var h=LH[hi][2],m=LM[mi][2];if(m<0){h=h-1;if(h<1)h=12;m=60+m;}return h+":"+(m<10?"0":"")+m;}
+  function lTime(){var hi=1+Math.floor(Math.random()*(LH.length-1)),mi=Math.floor(Math.random()*LM.length);
+    var sp="Quedamos a la"+(hi===0?"":"s")+" "+LH[hi][0]+" "+LM[mi][0]+".",ans=clock(hi,mi),w=[],seen={};seen[ans]=1;
+    var cand=[[hi,(mi+1)%LM.length],[hi,(mi+2)%LM.length],[(hi+1)%LH.length||1,mi],[hi-1>0?hi-1:hi+2,mi],[hi,(mi+3)%LM.length]];
+    cand.forEach(function(c){var t=clock(c[0],c[1]);if(!seen[t]&&w.length<3){seen[t]=1;w.push(t);}});
+    return {listen:1,speak:sp,en:"Listen. What time are they meeting?",answer:ans,wrong:w,review:sp+" = "+ans};}
+  function lAct(){var a=rnd(ACTS),w=others(ACTS,a,3),t=rnd(TIMES),sp=cap(t[0])+" voy a "+a[0]+".";
+    return {listen:1,speak:sp,en:"Listen. What are they going to do?",answer:a[2]+" "+a[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:sp+" = "+cap(t[1])+" I'm going to "+a[1]+"."};}
+  function lReply(){return qReply(true);}
+  function lWhen(){return qWhen(true);}
+
+  var MAKERS={
+    plan:[qCard],
+    goingto:[qIrA,qIrA,qInf,qInf,qMissA,qTime,qActMean,qFixG,qFixG,gWhen,gWhen],
+    invite:[gReply,gReply,gReply,qExc,qExc,qInv,qInv,qFixI,qFixI],
+    listen:[lFix,lFix,lFix,lTime,lAct,lReply,lWhen],
+    mixed:[qLine,qLine,qIrA,qInf,qTime,qFixG,gWhen,gReply,qExc,qInv,qFixI]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear people making plans and pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Chat drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(flash){
+    var el=$("card");if(mode!=="plan"||!pc){el.hidden=true;return;}
+    el.hidden=false;el.className="chat"+(pc.sent?" done":"");
+    var h="<div class='top'><span>💬 "+esc(pc.friend)+"</span><small>Message "+Math.min(pc.slot+1,SLOTS.length)+" of "+SLOTS.length+"</small></div><div class='msgs' id='msgs'>";
+    pc.lines.forEach(function(l){h+="<div class='b "+l.from+"'>"+esc(l.text)+"</div>";});
+    if(!pc.sent&&current&&current.card)h+="<div class='b "+current.from+" typing'>…</div>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>📅 Plan made! +3</div>";
+    el.innerHTML=h;var m=$("msgs");if(m)m.scrollTop=m.scrollHeight;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||q.wrong.length<(q.tm?2:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.lines.push({from:current.from,text:current.line});
+      pc.slot++;
+      if(pc.slot>=SLOTS.length){pc.sent=true;score+=3;cards++;flash=true;}
+      current.card=0;drawCard(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:500)):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Planning champion.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="plan"?", "+cards+" plan"+(cards===1?"":"s")+" made":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SLOTS:SLOTS,lineQ:lineQ,newCard:newCard,getCard:function(){return pc;}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
