@@ -18,7 +18,8 @@ DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the 
         "fraction-match.html": "fraction pictures, simplest form, mixed numbers, +, −, × and ÷ with fractions and fractions of amounts, with an Exam corner of exam-style questions.",
         "round-it.html": "place value, comparing decimals, decimal sums, rounding to decimal places and significant figures, and estimating to check an answer, with an Exam corner of exam-style questions.",
         "venn-sorter.html": "sorting into Venn diagrams, set notation (∩, ∪, \\, ′, ∈, ⊂, #), naming shaded regions and survey questions with x, with an Exam corner of exam-style questions.",
-        "percent-pop.html": "fractions ↔ decimals ↔ percentages, percentage of an amount, sale prices and multipliers, percentage change and finding the price before the sale, with an Exam corner of exam-style questions."}
+        "percent-pop.html": "fractions ↔ decimals ↔ percentages, percentage of an amount, sale prices and multipliers, percentage change and finding the price before the sale, with an Exam corner of exam-style questions.",
+        "share-it-out.html": "sharing money in a ratio (bar models), simplifying ratios, recipes and the unitary method, map scales, best buys and absolute v relative comparison, with an Exam corner of exam-style questions."}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]
@@ -90,6 +91,7 @@ main = f'''<main id="main">
       <a class="card" href="https://payhip.com/b/OYqXC" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Decimals &amp; Rounding Teacher Pack · €5</h3><p>Human Number Line, Estimation Auction, Rounding Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/IA3F1" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Sets &amp; Venn Diagrams Teacher Pack · €5</h3><p>Human Venn Diagram, Class Survey with x, Venn Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/kt1Nz" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Percentages Teacher Pack · €5</h3><p>Percent Trios, Sale Shop role-play, Percentage Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
+      <a class="card" href="https://payhip.com/b/t1wTR" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Ratio &amp; Proportion Teacher Pack · €5</h3><p>Share It Out mingle, Recipe Swap A/B cards, Ratio Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
     </div>
   </div>
 </section>

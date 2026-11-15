@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share It Out: Ratio &amp; Proportion Game | Junior Cycle Maths | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: share money in a ratio, simplify ratios, scale recipes, map scales, best buys and absolute vs relative comparison. Rules, exam-style questions and a free practice sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Share It Out</h1>
+        <p>60 seconds. Split the prize money in the right ratio, simplify ratios, scale up recipes, read map scales, spot the best buy, then decide who really did better. Is 12 out of 20 better than 15 out of 30? (Yes: 60% beats 50%.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="share"><div><b>Share It Out</b><span>Split money in a ratio (2 or 3 people), bar models, "she gets €12 more", what fraction?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="simp"><div><b>Simplify &amp; write</b><span>Simplest form, mixed units (50 cm : 2 m), counters, equivalent ratios, fill the gap</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="prop"><div><b>Recipes, maps &amp; best buys</b><span>The unitary method, scaling a recipe, map scales like 1 : 25 000, best value packs</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rel"><div><b>Who did better?</b><span>Absolute vs relative comparison: more, or a bigger proportion?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Share It Out, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.2b, N.3a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Ratio &amp; proportion</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Aoife and Ben always share money in the ratio 2 : 3. Look at what Aoife gets each time. What do you notice?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Share €20 → Aoife <b>€8</b>, Ben €12</li>
+          <li class="note">Share €45 → Aoife <b>€18</b>, Ben €27</li>
+          <li class="note">Share €100 → Aoife <b>€40</b>, Ben €60</li>
+        </ul>
+        <p style="margin-top:10px">What fraction of the money does Aoife always get? So how much would she get from €350?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">2 : 3 means <b>5 parts</b> altogether, and Aoife has 2 of them, so she always gets <b>2/5</b> of the total (and Ben gets 3/5). 2/5 of €350 = <b>€140</b>. The bottom of the fraction is the <b>total</b> number of parts (5), not Ben's 3.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">What a ratio means</h3>
+        <p>A ratio compares amounts <b>in order</b>. "Girls to boys is 3 : 4" means 3 girls for every 4 boys. Boys to girls would be 4 : 3.</p>
+        <ul>
+          <li><b>Simplify</b> by dividing both numbers by the same number (the HCF): 12 : 18 = <b>2 : 3</b> (÷ 6).</li>
+          <li><b>Same units first:</b> 50 cm : 2 m = 50 cm : 200 cm = <b>1 : 4</b>.</li>
+          <li><b>Equivalent ratios</b> come from multiplying (or dividing) both numbers by the same number: 3 : 5 = 6 : 10 = 12 : 20. Adding the same number to both does <b>not</b> work: 3 : 5 is not 4 : 6.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Sharing in a ratio</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Share €60 in the ratio 1 : 2 : 3.</b> 1 + 2 + 3 = 6 parts. One part = €60 ÷ 6 = €10. Shares: <b>€10, €20, €30</b>. Check: they add to €60 ✓.</li>
+          <li class="note"><b>You know one share.</b> Red to blue = 3 : 5 and there are 21 red. 3 parts = 21, so 1 part = 7 and blue = 5 × 7 = <b>35</b>.</li>
+          <li class="note"><b>You know the difference.</b> Ratio 2 : 7 and Ben gets €35 more. 7 − 2 = 5 parts = €35, so 1 part = €7 and the total is 9 × €7 = <b>€63</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Proportion: the unitary method</h3>
+        <p>Find <b>one</b> first, then multiply. 4 tickets cost €18. One costs €18 ÷ 4 = €4.50, so 7 cost 7 × €4.50 = <b>€31.50</b>.</p>
+        <ul>
+          <li><b>Recipes:</b> 300 g of flour for 6 people → 50 g each → 9 people need <b>450 g</b>. Don't just add 3 to the amount.</li>
+          <li><b>Map scales:</b> 1 : 25 000 means 1 cm on the map is 25 000 cm in real life. 6 cm → 150 000 cm = 1 500 m = <b>1.5 km</b> (÷ 100 for metres, then ÷ 1 000 for km).</li>
+          <li><b>Best buy:</b> work out the price of <b>one</b> (or of 100 g) for each pack. 6 for €4.20 is 70c each; 10 for €6.50 is 65c each, so the 10-pack is better value.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Absolute vs relative comparison</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Absolute</b> = how many, or how much it changed: Class B had 15 passes, Class A had 12. "Prices went up by €5."</li>
+          <li class="note"><b>Relative</b> = as a fraction or percentage of the whole: Class A had 12 out of 20 = 60%, Class B had 15 out of 30 = 50%. So <b>Class A did better</b>, even though B had more passes.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> saying "B is better because 15 is bigger than 12". When the groups are different sizes, compare <b>fractions or percentages</b>. For a relative change, divide by the <b>start</b> amount.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Ratio and proportion usually come in a <b>real-life setting</b>: sharing prize money, scaling a recipe, mixing paint or concrete, reading a <b>map scale</b>, choosing the <b>better value</b> pack, or deciding which group "did better". They also sit inside other questions: scale drawings, similar triangles, statistics and probability.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Keep the order:</b> "boys to girls" and "girls to boys" are different ratios.</li>
+            <li><b>Show the "1 part" step</b> (€840 ÷ 12 = €70): it earns marks even if a later line slips.</li>
+            <li><b>Check your shares add up</b> to the total. It takes five seconds.</li>
+            <li><b>Change to the same units</b> before simplifying or using a map scale, and give the units the question asks for (km, not cm).</li>
+            <li><b>"Which is better?" needs a reason:</b> show the price of one, or the percentages, and say which is better.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Prize money.</b> Niamh, Ola and Tadhg win €840 in a quiz. They share it in the ratio 2 : 3 : 7. (a) How much does each person get? (b) Tadhg then gives some of his money to Niamh so that the two of them have the same amount. How much does he give her?
+              <details><summary>Show the worked answer</summary><p>(a) 2 + 3 + 7 = 12 parts. One part = €840 ÷ 12 = €70. Niamh 2 × 70 = <b>€140</b>, Ola 3 × 70 = <b>€210</b>, Tadhg 7 × 70 = <b>€490</b>. Check: 140 + 210 + 490 = 840 ✓.<br>(b) Together they have €140 + €490 = €630, so they each need €315. Tadhg gives 490 − 315 = <b>€175</b>.</p></details></li>
+            <li><b>Pancakes.</b> A recipe for 6 people uses 240 g of flour and 450 ml of milk. (a) How much flour and milk are needed for 9 people? (b) Seán has 400 g of flour and plenty of milk. What is the largest number of people he can make pancakes for? (c) Flour costs €1.60 for a 1 kg bag or €0.70 for a 400 g bag. Which bag is better value? Show your work.
+              <details><summary>Show the worked answer</summary><p>(a) For 1 person: 240 ÷ 6 = 40 g flour and 450 ÷ 6 = 75 ml milk. For 9: <b>360 g</b> of flour and <b>675 ml</b> of milk.<br>(b) 400 ÷ 40 = <b>10 people</b>.<br>(c) Price per 100 g: 1 kg bag €1.60 ÷ 10 = 16c; 400 g bag €0.70 ÷ 4 = 17.5c. The <b>1 kg bag</b> is better value.</p></details></li>
+            <li><b>The map.</b> A walking map has a scale of 1 : 50 000. (a) Two car parks are 7 cm apart on the map. How far apart are they in real life, in km? (b) A lake is 2.5 km long. How long is it on the map, in cm?
+              <details><summary>Show the worked answer</summary><p>(a) 7 × 50 000 = 350 000 cm = 3 500 m = <b>3.5 km</b>.<br>(b) 2.5 km = 2 500 m = 250 000 cm. 250 000 ÷ 50 000 = <b>5 cm</b>.</p></details></li>
+            <li><b>Which school did better?</b> In School A, 84 of the 120 students got Merit or higher. In School B, 126 of the 200 students did. (a) Which school had more students with Merit or higher? (b) Which school did better relatively? Show your work. (c) Explain the difference between your answers to (a) and (b).
+              <details><summary>Show the worked answer</summary><p>(a) <b>School B</b> (126 is more than 84).<br>(b) School A: 84/120 = 70%. School B: 126/200 = 63%. <b>School A</b> did better relatively.<br>(c) (a) is an <b>absolute</b> comparison (how many students); (b) is a <b>relative</b> comparison (what fraction of each school). School B is bigger, so it can have more students with Merit while a smaller proportion of its students got it.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/ratio-proportion-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/t1wTR" target="_blank" rel="noopener">Ratio &amp; Proportion Teacher Pack (€5)</a>: Recipe Swap A/B cards, Share It Out mingle, Ratio Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}
+  /* exact fractions: R(p,q) = p/q, always simplified, q > 0 */
+  function R(p,q){q=q||1;if(q<0){p=-p;q=-q;}var g=gcd(p,q);return [p/g,q/g];}
+  function mul(a,b){return R(a[0]*b[0],a[1]*b[1]);}
+  function add(a,b){return R(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);}
+  function sub(a,b){return R(a[0]*b[1]-b[0]*a[1],a[1]*b[1]);}
+  function dvd(a,b){return R(a[0]*b[1],a[1]*b[0]);}
+  function dstr(r){var p=r[0],q=r[1],k=0;while(q!==1&&k<8){if(q%2===0){q/=2;p*=5;}else if(q%5===0){q/=5;p*=2;}else break;k++;}
+    if(q!==1)return "NaN";var neg=p<0,s=String(Math.abs(p));if(k>0){while(s.length<=k)s="0"+s;s=s.slice(0,s.length-k)+"."+s.slice(-k);s=s.replace(/0+$/,"").replace(/\.$/,"");}return (neg?"-":"")+s;}
+  function pstr(r){return dstr(mul(r,[100,1]))+"%";}
+  function fstr(r){return r[1]===1?String(r[0]):r[0]+"/"+r[1];}
+  function cents(c){return "€"+(Math.floor(c/100))+"."+String(c%100).padStart(2,"0");}
+  function mny(r){var c=mul(r,[100,1]);return c[1]===1?cents(c[0]):"NaN";}  // euros (exact) → €x.xx; non-whole cents are dropped as options
+  function rs(a){return a.join(" : ");}                                    // ratio string "2 : 3"
+  function simp(a){var g=a.reduce(gcd);return a.map(function(x){return x/g;});}
+  /* value of any option: 3/8, 0.375, 37.5%, €12.50, 450 g, 1.5 km */
+  function val(s){s=String(s).replace(/[€ ,]/g,"").replace(/(km|cm|ml|kg|g|m|l)$/,"");var pc=/%$/.test(s);s=s.replace(/%$/,"");var x;
+    if(s.indexOf("/")>0){var t=s.split("/");x=+t[0]/+t[1];}else x=+s;return pc?x/100:x;}
+  /* numeric question: wrong options never equal the answer in VALUE, never ≤ 0, no duplicates */
+  function Q(en,frame,ans,slips,pads,why,html,data){var seen=[val(ans)],out=[];
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|null/.test(x))return;var y=val(x);
+      if(!isFinite(y)||y<=0)return;if(seen.some(function(z){return Math.abs(z-y)<1e-9;}))return;if(out.length<3){seen.push(y);out.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:ans,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  /* ratio-choice question: drop any wrong ratio that is EQUIVALENT to the answer (when equivalents count as right) */
+  function notEquiv(ans,pool){return pool.filter(function(p){if(!p||p.length!==ans.length||p.some(function(x){return x<=0||x!==Math.floor(x);}))return false;
+    return !p.every(function(x,i){return x*ans[0]===ans[i]*p[0];});});}
+  function numPads(r){return [dstr(add(r,[1,1])),dstr(sub(r,[1,1])),dstr(add(r,[2,1])),dstr(mul(r,[2,1])),dstr(mul(r,[1,2]))];}
+  function mnyPads(r){return [mny(add(r,[1,1])),mny(sub(r,[1,1])),mny(add(r,[5,1])),mny(sub(r,[5,1])),mny(mul(r,[2,1]))];}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",GRN="#2E8B57",RED="#C8463D",BLU="#3A6EA5";
+  var COLS=[YEL,"#9BD3AE","#A9C4E8"];
+  function barSVG(parts,names){ // bar model: one row per person, one box per part
+    var n=Math.max.apply(null,parts),w=Math.min(46,Math.floor(220/n)),h=34,W=90+n*w+8,H=parts.length*(h+12)+6;
+    var o='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:'+Math.min(340,W*1.25)+'px" role="img" aria-label="Bar model: '+parts.map(function(p,i){return names[i]+' '+p+' boxes';}).join(', ')+'" data-parts="'+parts.join(",")+'">';
+    parts.forEach(function(p,i){var y=4+i*(h+12);
+      o+='<text x="82" y="'+(y+h/2+6)+'" font-size="15" font-weight="700" text-anchor="end" fill="'+INK+'" font-family="Inter,sans-serif">'+names[i]+'</text>';
+      for(var k=0;k<p;k++)o+='<rect class="box" x="'+(90+k*w)+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+COLS[i%3]+'" stroke="'+INK+'" stroke-width="2"/>';});
+    return o+'</svg>';}
+  function dotsSVG(r,b){ // r red counters and b blue counters, mixed up
+    var all=shuffle(Array(r).fill(RED).concat(Array(b).fill(BLU))),cols=6,rows=Math.ceil(all.length/cols);
+    var o='<svg viewBox="0 0 '+(cols*36+4)+' '+(rows*36+4)+'" width="100%" style="max-width:240px" role="img" aria-label="'+r+' red counters and '+b+' blue counters">';
+    all.forEach(function(c,i){o+='<circle cx="'+(20+(i%cols)*36)+'" cy="'+(20+Math.floor(i/cols)*36)+'" r="14" fill="'+c+'" stroke="'+INK+'" stroke-width="2"/>';});
+    return o+'</svg>';}
+
+  var NAMES=[["Aoife","Ben"],["Cian","Dara"],["Emma","Fionn"],["Gráinne","Hugo"],["Isla","Jack"],["Kate","Liam"],["Maya","Niall"],["Orla","Pádraig"]];
+  var NAMES3=[["Ruth","Seán","Tara"],["Úna","Vlad","Zoe"],["Amy","Brian","Cara"],["Dan","Ella","Finn"]];
+  var R2=[[1,2],[1,3],[2,3],[3,4],[2,5],[3,5],[1,4],[4,5],[3,7],[5,7],[1,5],[2,7]];
+  var R3=[[1,2,3],[2,3,5],[1,1,2],[3,4,5],[1,2,5],[2,2,3],[1,3,4],[2,5,3]];
+
+  /* ---------- Share It Out ---------- */
+  function qShare2(){
+    var r=rnd(R2),sw=Math.random()<.5,a=sw?r[1]:r[0],b=sw?r[0]:r[1],nm=rnd(NAMES),k=rnd([ri(2,25),ri(2,25),5*ri(2,30),ri(2,12)*10+5]),T=k*(a+b),who=ri(0,1),mine=(who?b:a)*k,other=(who?a:b)*k;
+    var euro=Math.random()<.65;if(!euro){k=ri(2,12);T=k*(a+b);mine=(who?b:a)*k;other=(who?a:b)*k;}var unit=euro?"€":"",f=function(x){return euro?mny([x,1]):String(x);};
+    var en=euro?"Share "+unit+T+" between "+nm[0]+" and "+nm[1]+" in the ratio "+a+" : "+b+". How much does "+nm[who]+" get?":nm[0]+" and "+nm[1]+" share "+T+" sweets in the ratio "+a+" : "+b+". How many sweets does "+nm[who]+" get?";
+    return Q(en,"",f(mine),[f(other),euro?mny(R(T,who?b:a)):dstr(R(T,who?b:a)),f(k),euro?mny(R(T*(who?b:a),10)):null,f(T-(who?b:a))],euro?mnyPads([mine,1]):numPads([mine,1]),
+      "Add the parts: "+a+" + "+b+" = "+(a+b)+" parts. One part = "+T+" ÷ "+(a+b)+" = "+k+". "+nm[who]+" gets "+(who?b:a)+" × "+k+" = "+f(mine)+".",barSVG([a,b],nm),{t:"share2"});
+  }
+  function qShare3(){
+    var r=shuffle(rnd(R3).slice()),nm=rnd(NAMES3),k=rnd([ri(2,20),5*ri(2,20),10*ri(2,15)]),S=r[0]+r[1]+r[2],T=S*k,who=ri(0,2),mine=r[who]*k;
+    return Q(nm[0]+", "+nm[1]+" and "+nm[2]+" share €"+T+" in the ratio "+rs(r)+". How much does "+nm[who]+" get?","",mny([mine,1]),[mny([k,1]),mny(R(T,r[who])),mny(R(T,3)),mny([r[(who+1)%3]*k,1])],mnyPads([mine,1]),
+      r.join(" + ")+" = "+S+" parts. One part = €"+T+" ÷ "+S+" = €"+k+". "+nm[who]+" gets "+r[who]+" × €"+k+" = "+mny([mine,1])+".",barSVG(r,nm),{t:"share3"});
+  }
+  function qKnown(){
+    var r=rnd(R2),sw=Math.random()<.5,a=sw?r[1]:r[0],b=sw?r[0]:r[1],k=ri(2,15),A=a*k,B=b*k,ask=rnd(["other","total"]);
+    var ctx=rnd([["Cordial and water are mixed in the ratio {a} : {b}. There are {A} ml of cordial.","How much water is there?","How much drink is there altogether?"," ml"],
+      ["The ratio of girls to boys in a club is {a} : {b}. There are {A} girls.","How many boys are there?","How many children are in the club altogether?",""],
+      ["Sand and cement are mixed in the ratio {a} : {b}. A builder uses {A} kg of sand.","How much cement does she use?","How much mix is there altogether?"," kg"],
+      ["Red and blue beads are on a bracelet in the ratio {a} : {b}. There are {A} red beads.","How many blue beads are there?","How many beads are there altogether?",""]]);
+    var stem=ctx[0].replace("{a}",a).replace("{b}",b).replace("{A}",A),u=ctx[3],ans=ask==="other"?B:A+B,f=function(x){return dstr(x)+u;};
+    return Q(stem+" "+(ask==="other"?ctx[1]:ctx[2]),"",String(ans)+u,[f([A*b,1]),f(R(A,b)),f([A+b-a,1]),f([B+A+k,1]),ask==="other"?f([A+B,1]):f([B,1]),f(R(A*a,b))],numPads([ans,1]).map(function(x){return x+u;}),
+      a+" parts = "+A+", so 1 part = "+A+" ÷ "+a+" = "+k+". "+(ask==="other"?b+" parts = "+b+" × "+k+" = "+ans+".":"Altogether "+(a+b)+" parts = "+(a+b)+" × "+k+" = "+ans+"."),"",{t:"known",ask:ask});
+  }
+  function qDiff(){
+    var r=rnd(R2.filter(function(x){return x[1]-x[0]>=1;})),nm=rnd(NAMES),k=rnd([ri(3,20),5*ri(2,16)]),D=(r[1]-r[0])*k,T=(r[0]+r[1])*k;
+    return Q(nm[0]+" and "+nm[1]+" share some money in the ratio "+r[0]+" : "+r[1]+". "+nm[1]+" gets €"+D+" more than "+nm[0]+". How much money was shared?","",mny([T,1]),[mny([D*(r[0]+r[1]),1]),mny([D,1]),mny([r[1]*k,1]),mny(R(D,r[1]-r[0])),mny([2*D,1])],mnyPads([T,1]),
+      "The difference is "+r[1]+" − "+r[0]+" = "+(r[1]-r[0])+" part"+(r[1]-r[0]>1?"s":"")+" = €"+D+", so 1 part = €"+k+". Altogether "+(r[0]+r[1])+" parts = "+mny([T,1])+".",barSVG(r,nm),{t:"diff"});
+  }
+  function qFrac(){
+    var r=rnd(R2),sw=Math.random()<.5,a=sw?r[1]:r[0],b=sw?r[0]:r[1],c=rnd([["boys","girls","the class","girls"],["cats","dogs","the pets","dogs"],["red","green","the sweets","green"],["walkers","cyclists","the group","cyclists"]]);
+    var ans=R(b,a+b);
+    return Q("The ratio of "+c[0]+" to "+c[1]+" is "+a+" : "+b+". What fraction of "+c[2]+" are "+c[3]+"?","",fstr(ans),[fstr(R(b,a)),fstr(R(a,a+b)),"1/"+b,fstr(R(a,b)),"1/"+(a+b)],[],
+      "There are "+a+" + "+b+" = "+(a+b)+" parts and "+b+" of them are "+c[3]+": "+b+"/"+(a+b)+(fstr(ans)!==b+"/"+(a+b)?" = "+fstr(ans):"")+". The bottom is the TOTAL, not the other part.","",{t:"frac"});
+  }
+
+  /* ---------- Simplify & write ratios ---------- */
+  function qSimp(){
+    var base=rnd(R2.concat([[2,5],[3,2],[5,4],[7,3]])),k=rnd([2,3,4,5,6,8,10,12,15]),a=base[0]*k,b=base[1]*k,s=simp([a,b]);
+    var half=null;[2,3,5].forEach(function(p){if(!half&&k%p===0&&p<k)half=[a/p,b/p];});
+    return C("Write in its simplest form:",a+" : "+b,rs(s),[half?rs(half):null,rs([s[1],s[0]]),rs([s[0],s[0]+s[1]]),rs([s[0]+1,s[1]+1]),rs([s[0],s[1]+s[0]*2])].filter(function(x){return x&&x!==rs(s);}),
+      "Divide both by the highest common factor, "+gcd(a,b)+": "+a+" ÷ "+gcd(a,b)+" = "+s[0]+" and "+b+" ÷ "+gcd(a,b)+" = "+s[1]+". So "+rs(s)+".",null,"",{t:"simp"});
+  }
+  var UNITS=[["cm","m",100],["g","kg",1000],["minutes","hours",60],["c","€",100],["ml","litres",1000],["m","km",1000]];
+  function qUnits(){
+    var U=rnd(UNITS),big=rnd([1,2,3,4,5]),small,tries=0;
+    do{small=rnd(U[2]===60?[10,15,20,30,40,45,50,90]:U[2]===100?[5,10,20,25,40,50,60,75,80,150]:[50,100,200,250,400,500,750,1500]);tries++;}while(small===big*U[2]&&tries<10);
+    if(small===big*U[2])small=U[2]/2;
+    var s=simp([small,big*U[2]]),bigTxt=U[1]==="€"?"€"+big:big+" "+(big===1?U[1].replace(/s$/,""):U[1]),smallTxt=U[0]==="c"?small+"c":small+" "+U[0];
+    var noconv=simp([small,big]);
+    return C("Write as a ratio in its simplest form:",smallTxt+" : "+bigTxt,rs(s),[rs(noconv),rs([s[1],s[0]]),rs([small,big]),rs([s[0],s[1]*10]),rs([s[0]*10,s[1]])].filter(function(x){return x!==rs(s);}),
+      "Same units first: "+bigTxt+" = "+big*U[2]+" "+U[0]+". So "+small+" : "+big*U[2]+" = "+rs(s)+".",null,"",{t:"units"});
+  }
+  function qDots(){
+    var r=ri(2,12),b=ri(2,12);while(r===b||r+b>18||gcd(r,b)===1&&Math.random()<.4){r=ri(2,12);b=ri(2,12);}
+    var s=simp([r,b]),ask=Math.random()<.5;
+    var ans=ask?s:[s[1],s[0]],lbl=ask?"red to blue":"blue to red";
+    return C("What is the ratio of "+lbl+" counters? Give it in its simplest form.","",rs(ans),[rs([ans[1],ans[0]]),rs(simp(ask?[r,r+b]:[b,r+b])),gcd(r,b)>1?rs(ask?[r,b]:[b,r]):null,rs([ans[0]+1,ans[1]])].filter(function(x){return x&&x!==rs(ans);}),
+      "Count them: "+r+" red and "+b+" blue. "+(ask?"Red to blue = "+r+" : "+b:"Blue to red = "+b+" : "+r)+(gcd(r,b)>1?" = "+rs(ans)+" (÷ "+gcd(r,b)+").":".")+" The order of the words is the order of the numbers.",null,dotsSVG(r,b),{t:"dots",ask:ask});
+  }
+  function qEquiv(){
+    var base=rnd(R2.concat([[3,2],[5,3],[4,3]])),k=ri(2,9),ans=[base[0]*k,base[1]*k],j=ri(2,9);
+    var pool=notEquiv(ans,[[base[0]+k,base[1]+k],[ans[1],ans[0]],[ans[0],ans[1]+base[0]],[base[0]*j,base[1]*j+1],[base[0]*k+1,base[1]*k],[base[0]+j,base[1]+j]]);
+    return C("Which ratio is the same as "+rs(base)+"?","",rs(ans),pool.map(rs),
+      "Multiply BOTH numbers by the same number: "+rs(base)+" × "+k+" = "+rs(ans)+". Adding the same number to both does NOT keep the ratio.",null,"",{t:"equiv",base:base});
+  }
+  function qGap(){
+    var base=rnd(R2.concat([[3,2],[5,3],[4,3]])),k=ri(2,12),left=Math.random()<.5,A=base[0]*k,B=base[1]*k;
+    var frame=left?rs(base)+" = "+A+" : ?":rs(base)+" = ? : "+B,ans=left?B:A;
+    return Q("Fill the gap:",frame,String(ans),[String(left?base[1]+A-base[0]:base[0]+B-base[1]),String(left?A*base[1]:B*base[0]),String(left?A+base[1]:B+base[0])],numPads([ans,1]),
+      (left?base[0]+" × "+k+" = "+A+", so "+base[1]+" × "+k+" = "+B:base[1]+" × "+k+" = "+B+", so "+base[0]+" × "+k+" = "+A)+". Multiply both sides by the same number.","",{t:"gap"});
+  }
+
+  /* ---------- Proportion: recipes, unit price, maps, best buy ---------- */
+  var RECIPES=[["pancakes","flour"," g",[30,40,50,60]],["a curry","rice"," g",[60,75,80,100]],["smoothies","milk"," ml",[50,100,125,150]],["a stew","potatoes"," g",[100,150,200,250]],["brownies","sugar"," g",[20,25,30,40]]];
+  function qRecipe(){
+    var c=rnd(RECIPES),per=rnd(c[3]),N=rnd([2,3,4,5,6,8]),M;do{M=rnd([2,3,4,5,6,7,8,9,10,12,15]);}while(M===N);var X=per*N,Y=per*M,u=c[2];
+    return Q("A recipe for "+c[0]+" for "+N+" people uses "+X+u+" of "+c[1]+". How much "+c[1]+" is needed for "+M+" people?","",Y+u,[(X+M-N)+u,(X*M)+u,dstr(R(X*N,M))+u,(X+(M-N)*10)+u],numPads([Y,1]).map(function(x){return x+u;}),
+      "Find 1 person first: "+X+" ÷ "+N+" = "+per+u+". Then × "+M+": "+per+" × "+M+" = "+Y+u+". (Unitary method.)","",{t:"recipe"});
+  }
+  var BUY=[["pens"],["copybooks"],["apples"],["bus tickets"],["cans of cola"],["packets of crisps"]];
+  function qUnit(){
+    var it=rnd(BUY)[0],u=rnd([25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,120,125,150,175,180]),n=rnd([2,3,4,5,6,8,10]),m;do{m=rnd([3,4,5,6,7,8,9,10,12,15,20]);}while(m===n);
+    var P=n*u,ans=m*u;
+    return Q(n+" "+it+" cost "+cents(P)+". How much do "+m+" "+it+" cost?","",cents(ans),[cents(P+(m-n)*100),cents(P*m),cents(P+(m-n)),cents(Math.round(P*n/m))],mnyPads(R(ans,100)),
+      "1 costs "+cents(P)+" ÷ "+n+" = "+cents(u)+". So "+m+" cost "+m+" × "+cents(u)+" = "+cents(ans)+".","",{t:"unit"});
+  }
+  function qMap(){
+    var sc=rnd([10000,20000,25000,50000,100000]),toReal=Math.random()<.55,cm,km;
+    do{cm=rnd([2,3,4,5,6,7,8,9,10,12,1.5,2.5,3.5,4.5]);km=R(Math.round(cm*10)*sc,10*100000);}while(!/^\d+(\.\d{1,2})?$/.test(dstr(km)));
+    var K=dstr(km),C2=dstr(R(Math.round(cm*10),10));
+    if(toReal)return Q("A map has a scale of 1 : "+sc.toLocaleString("en-IE").replace(/,/g," ")+". Two places are "+C2+" cm apart on the map. How far apart are they in real life?","",K+" km",[dstr(mul(km,[10,1]))+" km",dstr(mul(km,[1,10]))+" km",dstr(mul(km,[100,1]))+" km",dstr(mul(km,[1000,1]))+" m"],[],
+      C2+" cm × "+sc+" = "+dstr(R(Math.round(cm*10)*sc,10))+" cm in real life. ÷ 100 for metres, ÷ 1000 for km: "+K+" km.","",{t:"map",dir:"real"});
+    return Q("A map has a scale of 1 : "+sc.toLocaleString("en-IE").replace(/,/g," ")+". Two places are "+K+" km apart in real life. How far apart are they on the map?","",C2+" cm",[dstr(R(Math.round(cm*10)*10,10))+" cm",dstr(R(Math.round(cm*10),100))+" cm",dstr(R(Math.round(cm*10)*100,10))+" cm",dstr(R(Math.round(cm*10),1000))+" cm"],[],
+      K+" km = "+dstr(R(Math.round(cm*10)*sc,10))+" cm (× 1000 × 100). ÷ "+sc+" = "+C2+" cm on the map.","",{t:"map",dir:"map"});
+  }
+  function qBest(){
+    var it=rnd(["yoghurts","batteries","rolls","bottles of water","pencils"]),packs=[],seenU={},seenN={},tries=0;
+    while(packs.length<4&&tries<100){tries++;var n=rnd([2,3,4,5,6,8,10,12,15,20,24]),u=ri(15,95);if(seenU[u]||seenN[n])continue;seenU[u]=1;seenN[n]=1;packs.push({n:n,u:u,s:n+" for "+cents(n*u)});}
+    if(packs.length<4)return qBest();
+    var best=packs.slice().sort(function(a,b){return a.u-b.u;})[0];
+    return C("Which pack of "+it+" is the best value?","",best.s,packs.filter(function(p){return p!==best;}).map(function(p){return p.s;}),
+      "Find the price of ONE in each pack: "+packs.map(function(p){return p.s+" → "+p.u+"c each";}).join("; ")+". Cheapest each = best value.",
+      "Best value: "+best.s+" (from "+packs.map(function(p){return p.s;}).join(", ")+")","",{t:"best",opts:packs.map(function(p){return p.s;})});
+  }
+
+  /* ---------- Absolute vs relative ---------- */
+  var GROUPS=[["Class A","Class B","passed the test","Which class did better, relatively (as a proportion)?"],["Team Red","Team Blue","of their shots went in","Which team was the better shooter, relatively?"],["Shop X","Shop Y","of its phones were sold","Which shop sold the bigger proportion of its phones?"],["Town A","Town B","of the voters voted yes","Which town had the bigger proportion voting yes?"],["Club A","Club B","of the members are under 16","Which club has the bigger proportion of under-16s?"]];
+  function pcf(a,b){var x=a/b*100,y=Math.round(x*10)/10;return a+"/"+b+(Math.abs(x-y)<1e-9?" = ":" ≈ ")+y+"%";}
+  function frac(){var b=rnd([20,25,30,40,50,60,80,100,120,150,200,250]),a=ri(Math.ceil(b*0.2),b-1);return [a,b];}
+  function qRel(){
+    var g=rnd(GROUPS),x,y,tries=0;
+    do{x=frac();y=frac();tries++;}while((x[0]*y[1]===y[0]*x[1]||x[0]===y[0]||(x[0]>y[0])===(x[0]*y[1]>y[0]*x[1])&&Math.random()<.7)&&tries<60);
+    if(x[0]*y[1]===y[0]*x[1]||x[0]===y[0])return qRel();
+    var ans=x[0]*y[1]>y[0]*x[1]?g[0]:g[1],en=g[3];
+    return C(g[0]+": "+x[0]+" out of "+x[1]+" "+g[2]+". "+g[1]+": "+y[0]+" out of "+y[1]+" "+g[2]+". "+en,"",ans,[ans===g[0]?g[1]:g[0],"They're the same","You can't tell"],
+      "Compare fractions, not just the numbers: "+pcf(x[0],x[1])+" and "+pcf(y[0],y[1])+". "+ans+" is ahead relatively"+((x[0]>y[0])!==(ans===g[0])?", even though the other has more in absolute terms.":"."),null,"",{t:"rel",g:g.slice(0,2)});
+  }
+  var GROWS=[["Shop X","Shop Y","The price of a pizza went from €{a} to €{b}","€"],["Town A","Town B","The population went from {a} to {b}",""],["Seán","Orla","Their savings went from €{a} to €{b}","€"]];
+  function qAbsRel(){
+    var g=rnd(GROWS),a1,c1,a2,c2,tries=0,abs=Math.random()<.5;
+    do{a1=rnd([10,20,40,50,80,100,200,250,400,500]);c1=a1*rnd([10,20,25,50,5,30,40])/100;a2=rnd([10,20,40,50,80,100,200,250,400,500]);c2=a2*rnd([10,20,25,50,5,30,40])/100;tries++;}
+    while((c1===c2||c1*a2===c2*a1||c1!==Math.floor(c1)||c2!==Math.floor(c2)||((c1>c2)===(c1*a2>c2*a1)&&tries<40))&&tries<80);
+    if(c1===c2||c1*a2===c2*a1||c1!==Math.floor(c1)||c2!==Math.floor(c2))return qAbsRel();
+    if(g[0]==="Town A"){a1*=100;c1*=100;a2*=100;c2*=100;}
+    var s1=g[2].replace("{a}",a1).replace("{b}",a1+c1),s2=g[2].replace("{a}",a2).replace("{b}",a2+c2),bigAbs=c1>c2?g[0]:g[1],bigRel=c1*a2>c2*a1?g[0]:g[1],ans=abs?bigAbs:bigRel;
+    return C(g[0]+": "+s1+". "+g[1]+": "+s2.charAt(0).toLowerCase()+s2.slice(1)+". Which had the bigger "+(abs?"ABSOLUTE":"RELATIVE (percentage)")+" increase?","",ans,[ans===g[0]?g[1]:g[0],"They're the same","You can't tell"],
+      "Absolute = how much it went up: "+g[0]+" "+g[3]+c1+", "+g[1]+" "+g[3]+c2+". Relative = increase ÷ start: "+g[0]+" "+pstr(R(c1,a1))+", "+g[1]+" "+pstr(R(c2,a2))+".",null,"",{t:"absrel",abs:abs,g:g.slice(0,2)});
+  }
+  function qChange(){
+    var a,p,c;do{a=rnd([20,40,50,80,100,200,250,400,500,2000]);p=rnd([5,10,20,25,40,50,60,75]);c=a*p/100;}while(c!==Math.floor(c));var rel=Math.random()<.55,u=Math.random()<.5?"€":"";
+    var en=(u?"A price":"The number of members in a club")+" went from "+u+a+" to "+u+(a+c)+". What is the "+(rel?"relative (percentage)":"absolute")+" increase?";
+    if(rel)return Q(en,"",p+"%",[c+"%",pstr(R(c,a+c)),pstr(R(a+c,a)),(p*2)+"%"],[(p+5)+"%",(p+10)+"%",(p>5?p-5:p+15)+"%"],"Relative increase = increase ÷ START × 100 = "+c+" ÷ "+a+" × 100 = "+p+"%.","",{t:"chg",rel:true});
+    return Q(en,"",u+c,[u+(a+c),p+"%",u+(c*2),u+(c+10)],[u+(c+5),u+a,u+(c*3)],"Absolute increase = new − old = "+(a+c)+" − "+a+" = "+u+c+". (The relative increase would be "+p+"%.)","",{t:"chg",rel:false});
+  }
+
+  var MAKERS={
+    share:[qShare2,qShare2,qShare2,qShare3,qShare3,qKnown,qKnown,qDiff,qFrac],
+    simp:[qSimp,qSimp,qUnits,qUnits,qDots,qDots,qEquiv,qEquiv,qGap],
+    prop:[qRecipe,qRecipe,qUnit,qUnit,qMap,qMap,qBest,qBest],
+    rel:[qRel,qRel,qRel,qAbsRel,qAbsRel,qChange,qChange],
+    mixed:[qShare2,qShare3,qKnown,qDiff,qFrac,qSimp,qUnits,qDots,qEquiv,qGap,qRecipe,qUnit,qMap,qBest,qRel,qAbsRel,qChange]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="share"||m==="simp")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="share"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="share"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
