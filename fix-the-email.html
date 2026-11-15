@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Messages, emails &amp; forms: play Fix the Email | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: messages, emails and forms. Find and fix the mistakes in an email line by line, friend or formal?, email phrases, filling in a Spanish form, and a Listening mode with voicemails and email addresses. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.mail{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;margin:0 auto 18px;max-width:540px;box-shadow:0 4px 14px rgba(27,36,48,.08);overflow:hidden;font-size:14.5px}
+.mail .bar{display:flex;justify-content:space-between;background:var(--night);color:#fff;font-weight:700;font-size:13px;padding:7px 12px}
+.mail .bar .count{color:var(--sun)}
+.mail .hd{border-bottom:1px solid var(--line);padding:4px 12px;font-size:13px;color:var(--muted)}
+.mail .hd b{color:var(--ink)}
+.mail .body{padding:8px 12px 10px;line-height:1.45;min-height:90px}
+.mail .body p{margin:0 0 2px}
+.mail .body .now{color:var(--muted)}
+.mail.sent{outline:3px solid var(--green)}
+.mail .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.9)}
+.prompt .frame.find{background:#FFFDF6;border:1px dashed var(--cream-line);border-radius:10px;padding:8px 10px}
+.prompt .frame .fixed{color:var(--green)}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.two-mail{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:15px;line-height:1.5}
+@media (max-width:620px){.two-mail{grid-template-columns:1fr}}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.mail{font-size:13px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Fix the Email</h1>
+        <p>Messages, emails and forms. Every line of this email has a slip in it: <b>find the mistake</b> or <b>pick the fix</b>, and watch the email build up line by line until you can send it. Then friend, formal or text?, email words, filling in a Spanish form, and a Listening mode with voicemails and email addresses. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="email"><div><b>Fix the Email</b><span>Find the mistake or pick the fix, line by line: +3 bonus for every email you send</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="register"><div><b>Friend, formal or text?</b><span>Who would write it? Plus email phrases, Querido or Querida, and the date at the top</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="forms"><div><b>Fill in the form</b><span>Which box does it go in? Apellidos, fecha de nacimiento, nacionalidad…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening messages 🔊</b><span id="listenNote">Hear voicemails, messages and email addresses and pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.16, 1.17, 1.21, 1.22 (2017 spec, exams 2027–2028) · 1.13, 2.8 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="mail" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Messages, emails &amp; forms</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: two emails</h3>
+        <div class="two-mail">
+          <div class="note" style="margin:0"><b>To a friend</b><br>Querida Ana:<br>¿Qué tal estás? Gracias por <b>tu</b> correo. <b>Te</b> escribo para contarte mis vacaciones… ¿Y <b>tú</b>? ¿Qué <b>haces</b> en verano?<br>Escríbeme pronto.<br>Un abrazo,<br>Ciara</div>
+          <div class="note" style="margin:0;background:var(--mist);border-color:var(--line)"><b>Formal</b><br>Estimado señor:<br><b>Le</b> escribo para reservar una habitación doble para dos noches. ¿<b>Tiene</b> el hotel aparcamiento? <b>Le</b> agradezco de antemano <b>su</b> ayuda.<br>Atentamente,<br>Ciara Murphy</div>
+        </div>
+        <p style="margin-top:10px">Look at the words in bold. How do you say "you" and "your" in each email? What changes at the start and at the end? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">To a friend you use <b>tú</b>: <em>te, tu, ¿Qué haces?, ¿Tienes…?</em> In a formal email (a hotel, a school, a campsite) you use <b>usted</b>: <em>le, su, ¿Qué hace?, ¿Tiene…?</em>, the same verb form as "he / she". Pick one and stick to it. Friends: <b>Querido/a</b> … <b>Un abrazo</b>. Formal: <b>Estimado/a señor(a)</b> … <b>Atentamente</b> or <b>Un cordial saludo</b>. Spanish puts a <b>colon</b> after the greeting: <em>Querida Ana:</em></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Start, middle, end</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>To a friend (tú)</th><th>Formal (usted)</th></tr></thead>
+          <tbody>
+            <tr><td>Date</td><td colspan="2">Cork, 15 de noviembre de 2026 (no capital letter for the month)</td></tr>
+            <tr><td>Start</td><td>Querido Pablo: · Querida Ana: · Queridos abuelos: · ¡Hola, Marta!</td><td>Estimado señor: · Estimada señora: · Muy señores míos:</td></tr>
+            <tr><td>First line</td><td>¿Qué tal estás? · Gracias por tu correo. · Perdona por no escribir antes. · Me alegro de recibir tu mensaje.</td><td>Le escribo para… pedir información / reservar / preguntar…</td></tr>
+            <tr><td>Asking</td><td>¿Y tú? · ¿Qué haces…? · ¿Tienes…? · Mándame una foto. · Cuéntame tus noticias.</td><td>¿Tiene…? · ¿Podría enviarme…? · ¿Cuánto cuesta…? · Quisiera saber…</td></tr>
+            <tr><td>Before you finish</td><td>Escríbeme pronto. · Saluda a tu familia de mi parte.</td><td>Le agradezco de antemano su ayuda. · Quedo a la espera de su respuesta.</td></tr>
+            <tr><td>End</td><td>Un abrazo · Besos · Hasta pronto · Tu amiga, Ciara / Tu amigo, Seán</td><td>Atentamente · Un cordial saludo</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Agreement in greetings:</b> Queri<b>do</b> Pablo · Queri<b>da</b> Ana · Queri<b>dos</b> abuelos · Queri<b>das</b> amigas, and the same with <em>tu amig<b>o</b> / tu amig<b>a</b></em> when you sign off.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Answering the questions in a message</h3>
+        <p>Exam emails ask you things. Turn each question round and answer in full: <em>¿Qué haces los fines de semana? → Los fines de semana juego al fútbol.</em> Useful starts: <b>Me preguntas por…</b> (you ask about…) · <b>En cuanto a…</b> (as for…) · <b>Te cuento que…</b> (I can tell you that…). Then ask one back: <em>¿Y tú?</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Email and phone words</h3>
+        <p>el correo (electrónico) email · el mensaje message · <b>el asunto</b> subject · <b>el archivo adjunto</b> attachment · la contraseña password · enviar send · contestar reply · borrar delete · llamar call · el móvil mobile. Saying an email address: <b>arroba</b> = @ · <b>punto</b> = . · <b>guion</b> = - · <b>guion bajo</b> = _. <em>ana.garcia@gmail.com</em> = "ana punto garcía arroba gmail punto com".</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Filling in a form</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>On the form</th><th>Means</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Nombre · Apellido(s)</td><td>first name · surname(s)</td><td>Aoife · Murphy</td></tr>
+            <tr><td>Edad · Fecha de nacimiento</td><td>age · date of birth</td><td>14 años · 3 de mayo de 2012</td></tr>
+            <tr><td>Lugar de nacimiento · Nacionalidad</td><td>place of birth · nationality</td><td>Cork · irlandesa (a boy: irlandés)</td></tr>
+            <tr><td>Dirección / Domicilio · Código postal</td><td>address · postcode</td><td>12 Main Street, Mallow</td></tr>
+            <tr><td>Teléfono (móvil) · Correo electrónico</td><td>(mobile) phone · email</td><td>087 123 4567 · aoife.murphy@gmail.com</td></tr>
+            <tr><td>Idiomas · Aficiones · Firma</td><td>languages · hobbies · signature</td><td>inglés, irlandés y español · el baloncesto</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">Nationalities and languages take <b>no capital letter</b> in Spanish: <em>irlandés, español, inglés</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Fix your own email: the 5-point check</h3>
+        <ol>
+          <li><b>Agreement:</b> la ciudad bonit<b>a</b>, mis padres simpátic<b>os</b>, <b>una</b> foto, tu<b>s</b> noticias.</li>
+          <li><b>Verb endings:</b> yo = tengo, juego; past yo = fui, jugué, recibí; my sister and I = jugamos.</li>
+          <li><b>tú or usted?</b> Don't mix <em>te</em> and <em>le</em>, <em>tu</em> and <em>su</em> in one email.</li>
+          <li><b>After a, de, para, por, ir a, quiero:</b> the infinitive (<em>voy a visitar, para reservar, quieres venir</em>).</li>
+          <li><b>¿ ¡ and accents:</b> ¿Qué? ¿Cuándo? ¿Dónde? ¡Qué guay!</li>
+        </ol>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> Spanish people have <b>two surnames</b>: the father's first and the mother's second (<em>Lucía García López</em>). Forms often ask for <b>primer apellido</b> and <b>segundo apellido</b>. In chats and on social media teens write short forms: <b>q</b> (que / qué) · <b>xq</b> (porque / por qué) · <b>tb</b> (también) · <b>finde</b> (fin de semana) · <b>bss</b> (besos) · <b>jajaja</b>. Fun to read, but never use them in your exam email! How do you shorten words in English or Irish texts?</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, the email or message task tells you exactly what to include: tick off <b>every point</b> and answer every question, because each point you leave out costs marks. Use the right start and end, show off a past and a future (<em>el fin de semana pasado fui… / en verano voy a…</em>), then do the 5-point check before you move on. In <b>Reading</b>, look at <b>who</b> wrote the message and <b>why</b> (an invitation? a complaint? a booking?). In <b>Listening</b>, voicemails give you a name, a time, a place or a phone number: write it down as you hear it.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/messages-and-emails-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/gc04R" target="_blank" rel="noopener">Messages &amp; Emails Teacher Pack (€5)</a>: Sign-up Desk info gap, Email Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function strip(w){return w.replace(/[¿?¡!,.:;()]/g,"");}
+
+  /* ---------- Email lines ----------
+     [correct line, right word, wrong word, [2 more wrong words], English, why] */
+  var IN=[
+    [ /* 1 opener */
+      ["¿Qué tal estás? Yo estoy muy bien.","estás","eres",["estoy","estar"],"How are you? I'm very well.","how you are: estar"],
+      ["Gracias por tu correo electrónico.","por","para",["de","con"],"Thanks for your email.","gracias por"],
+      ["Perdona por no escribir antes, pero tengo muchos deberes.","escribir","escribo",["escribí","escribes"],"Sorry for not writing sooner, but I have lots of homework.","por + infinitive"],
+      ["Me alegro mucho de recibir tu mensaje.","recibir","recibo",["recibí","recibes"],"I'm really glad to get your message.","de + infinitive"],
+      ["Muchas gracias por las fotos de tu fiesta.","Muchas","Muchos",["Mucho","Mucha"],"Thanks a lot for the photos of your party.","las gracias: feminine plural"]
+    ],
+    [ /* 2 about me now */
+      ["Ahora estoy en tercero y tengo muchos exámenes.","tengo","tiene",["tienes","tener"],"Now I'm in third year and I have lots of exams.","yo: tengo"],
+      ["Mi hermana y yo jugamos al fútbol los sábados.","jugamos","juego",["juegan","jugáis"],"My sister and I play football on Saturdays.","my sister and I = nosotros"],
+      ["Vivo en Cork, una ciudad bonita en el sur de Irlanda.","bonita","bonito",["bonitas","bonitos"],"I live in Cork, a pretty city in the south of Ireland.","la ciudad: feminine"],
+      ["Mis padres son muy simpáticos y divertidos.","simpáticos","simpático",["simpática","simpáticas"],"My parents are very nice and fun.","mis padres: plural"],
+      ["Me gustan mucho los deportes de equipo.","gustan","gusta",["gusto","gustas"],"I really like team sports.","los deportes: plural, gustan"]
+    ],
+    [ /* 3 past news */
+      ["El fin de semana pasado fui a un concierto con mis amigos.","fui","fue",["voy","ir"],"Last weekend I went to a concert with my friends.","yo, past: fui"],
+      ["Ayer jugué un partido de baloncesto y ganamos.","jugué","jugé",["jugo","juego"],"Yesterday I played a basketball match and we won.","g → gu: jugué"],
+      ["En Navidad recibí muchos regalos bonitos.","recibí","recibió",["recibo","recibe"],"At Christmas I got lots of nice presents.","yo, past: recibí"],
+      ["El sábado pasado hizo mucho frío en Cork.","hizo","hició",["hace","hice"],"Last Saturday it was very cold in Cork.","weather in the past: hizo"],
+      ["Anoche vimos una película de miedo en casa.","vimos","vemos",["vamos","veo"],"Last night we watched a horror film at home.","anoche = past: vimos"]
+    ],
+    [ /* 4 answer + ask */
+      ["Me preguntas por mi instituto: es grande y moderno.","moderno","moderna",["modernos","modernas"],"You ask about my school: it's big and modern.","el instituto: masculine"],
+      ["¿Cuál es tu asignatura favorita este año?","favorita","favorito",["favoritas","favoritos"],"What's your favourite subject this year?","la asignatura: feminine"],
+      ["¿Qué haces tú normalmente los fines de semana?","haces","hace",["hago","hacen"],"What do you usually do at the weekend?","tú: haces"],
+      ["¿Tienes hermanos o eres hijo único?","Tienes","Tiene",["Tengo","Tienen"],"Do you have brothers and sisters or are you an only child?","tú: tienes"],
+      ["¿Te gusta la música pop o prefieres el rap?","gusta","gustan",["gusto","gustas"],"Do you like pop music or do you prefer rap?","la música: singular, gusta"]
+    ],
+    [ /* 5 plans */
+      ["En verano voy a visitar a mis abuelos en Galicia.","visitar","visito",["visité","visita"],"In summer I'm going to visit my grandparents in Galicia.","ir a + infinitive"],
+      ["El mes que viene mi familia va a ir a Madrid.","va","van",["voy","vamos"],"Next month my family is going to go to Madrid.","mi familia = ella: va"],
+      ["¿Quieres venir a Cork en julio?","venir","vienes",["vengo","viene"],"Do you want to come to Cork in July?","quieres + infinitive"],
+      ["Este verano voy a hacer un curso de surf.","hacer","hago",["hice","hace"],"This summer I'm going to do a surf course.","ir a + infinitive"]
+    ],
+    [ /* 6 request */
+      ["Escríbeme pronto y cuéntame tus noticias.","tus","tu",["su","ti"],"Write soon and tell me your news.","las noticias: plural, tus"],
+      ["Mándame una foto de tu perro, por favor.","una","un",["unos","unas"],"Send me a photo of your dog, please.","la foto: feminine (even though it ends in -o)"],
+      ["Saluda a tu familia de mi parte.","tu","tus",["ti","sus"],"Say hello to your family from me.","la familia: singular, tu"],
+      ["Espero tu respuesta con muchas ganas.","muchas","muchos",["mucho","mucha"],"I'm really looking forward to your reply.","las ganas: feminine plural"]
+    ]
+  ];
+  var FO=[
+    [ /* 1 why */
+      ["Le escribo para reservar una habitación doble.","Le","Te",["Me","Se"],"I'm writing to you to book a double room.","formal: usted → le"],
+      ["Le escribo para pedir información sobre el hotel.","pedir","pido",["pidió","pide"],"I'm writing to you to ask for information about the hotel.","para + infinitive"]
+    ],
+    [ /* 2 details */
+      ["Quisiera reservar una habitación para dos noches.","noches","noche",["nochas","noché"],"I would like to book a room for two nights.","dos → plural"],
+      ["Somos cuatro personas: mis padres, mi hermano y yo.","Somos","Estamos",["Son","Sois"],"There are four of us: my parents, my brother and me.","somos cuatro = there are four of us"]
+    ],
+    [ /* 3 dates */
+      ["Vamos a llegar el quince de julio por la tarde.","llegar","llego",["llegamos","llegó"],"We're going to arrive on the fifteenth of July in the afternoon.","ir a + infinitive"],
+      ["Vamos a quedarnos del dos al cinco de agosto.","quedarnos","quedamos",["quedé","quedo"],"We're going to stay from the second to the fifth of August.","ir a + infinitive"]
+    ],
+    [ /* 4 question */
+      ["¿Tiene el hotel piscina o aparcamiento?","Tiene","Tienes",["Tengo","Tienen"],"Does the hotel have a pool or parking?","el hotel = it: tiene"],
+      ["¿Cuánto cuesta la habitación por noche?","cuesta","cuestan",["cuesto","cuestas"],"How much is the room per night?","la habitación: one thing, cuesta"],
+      ["¿Está el hotel cerca de la playa?","Está","Es",["Hay","Son"],"Is the hotel near the beach?","location: estar"]
+    ],
+    [ /* 5 thanks */
+      ["Le agradezco de antemano su ayuda.","su","tu",["tus","sus"],"Thank you in advance for your help.","formal: su, not tu"],
+      ["Muchas gracias por su atención.","Muchas","Muchos",["Mucho","Mucha"],"Thank you very much for your attention.","las gracias: feminine plural"]
+    ]
+  ];
+  var NAMES_F=["Ana","Lucía","Sara","Marta","Elena","Nerea","Carmen"],NAMES_M=["Pablo","Diego","Sergio","Mateo","Javier","Iker","Hugo"];
+  var FROM_F=["Aoife","Ciara","Niamh","Róisín"],FROM_M=["Seán","Cian","Oisín","Darragh"];
+  var CITIES=["Madrid","Sevilla","Valencia","Bilbao","Granada","Salamanca"];
+
+  function mkLine(it,c){
+    var toks=it[0].split(" "),idx=-1;
+    toks.forEach(function(t,i){if(strip(t)===it[1]&&idx<0)idx=i;});
+    var faulty=toks.map(function(t,i){return i===idx?t.replace(it[1],it[2]):t;}).join(" ");
+    var gap=toks.map(function(t,i){return i===idx?t.replace(it[1],"___"):t;}).join(" ");
+    var review="✗ "+it[2]+" → ✓ "+it[1]+": "+it[0]+" ("+it[5]+")";
+    if(Math.random()<.6){ /* find the mistake */
+      var pool=[],seen={};seen[it[2].toLowerCase()]=1;
+      toks.forEach(function(t,i){var w=strip(t);if(i===idx||w.length<3||seen[w.toLowerCase()])return;seen[w.toLowerCase()]=1;pool.push(w);});
+      return {mode:"find",who:"🔍",en:"Find the mistake · "+it[4],frame:faulty,answer:it[2],wrong:shuffle(pool).slice(0,3),line:it[0],review:review};
+    }
+    return {mode:"fix",who:"✏️",en:it[4],frame:gap,answer:it[1],wrong:[it[2]].concat(it[3]),line:it[0],review:review};
+  }
+
+  var em=null;
+  function newEmail(){
+    var formal=Math.random()<.3,toF=Math.random()<.5,fromF=Math.random()<.5;
+    var e={formal:formal,toF:toF,fromF:fromF,from:rnd(fromF?FROM_F:FROM_M),lines:[],slot:0,sent:false};
+    if(formal){e.to=toF?"la señora García":"el señor García";e.addr="reservas@hotelsol.es";e.subj="Reserva de habitación";e.city="Valencia";
+      e.pool=[0,1,2,3,4].map(function(i){return rnd(FO[i]);});}
+    else{e.to=rnd(toF?NAMES_F:NAMES_M);e.addr=e.to.toLowerCase().replace("í","i")+"@correo.es";e.subj=rnd(["¡Hola desde Cork!","Noticias de Irlanda","Respuesta a tu correo"]);e.city=rnd(CITIES);
+      e.pool=[0,1,2,3,4,5].map(function(i){return rnd(IN[i]);});}
+    e.n=e.pool.length+2;em=e;}
+  function emailQ(e,i){
+    if(i===0){ /* greeting */
+      if(e.formal){var a=e.toF?"Estimada":"Estimado";
+        return {who:"👔",frame:"___ señora:".replace("señora",e.toF?"señora":"señor"),en:e.toF?"Dear Madam (formal)":"Dear Sir (formal)",answer:a,wrong:["Estimado","Estimada","Estimados","Querido"].filter(function(x){return x!==a;}).slice(0,3),line:a+(e.toF?" señora:":" señor:"),review:a+(e.toF?" señora:":" señor:")+" = "+(e.toF?"Dear Madam":"Dear Sir")+" (formal: estimado/a, agrees)"};}
+      var g=e.toF?"Querida":"Querido";
+      return {who:"😊",frame:"___ "+e.to+":",en:"Dear "+e.to+",",answer:g,wrong:["Querido","Querida","Queridos","Queridas"].filter(function(x){return x!==g;}),line:g+" "+e.to+":",review:g+" "+e.to+": ("+e.to+(e.toF?" is a girl: Querida, and a colon after the name)":" is a boy: Querido, and a colon after the name)")};}
+    if(i===e.n-1){ /* sign-off */
+      if(e.formal){if(Math.random()<.5)return {who:"👔",frame:"___,",en:"Yours faithfully (formal)",answer:"Atentamente",wrong:["Un abrazo","Besos","Hasta pronto"],line:"Atentamente,",tail:e.from+" Murphy",review:"Atentamente = Yours faithfully (formal; un abrazo and besos are for friends)"};
+        return {who:"👔",frame:"Un cordial ___,",en:"Kind regards (formal)",answer:"saludo",wrong:["saluda","abrazo","beso"],line:"Un cordial saludo,",tail:e.from+" Murphy",review:"Un cordial saludo = Kind regards (formal)"};}
+      if(Math.random()<.5){var am=e.fromF?"amiga":"amigo";
+        return {who:"😊",frame:"Un abrazo de tu ___, "+e.from,en:"Love from your friend, "+e.from,answer:am,wrong:["amigo","amiga","amigos","amigas"].filter(function(x){return x!==am;}),line:"Un abrazo de tu "+am+", "+e.from,review:"Un abrazo de tu "+am+", "+e.from+" ("+e.from+(e.fromF?" is a girl: amiga)":" is a boy: amigo)")};}
+      var s=rnd([["Un ___,","abrazo",["abrazos","abrazar","abraza"],"Love (a hug),"],["Hasta ___,","pronto",["pronta","prontos","rápido"],"See you soon,"],["Muchos ___,","besos",["beso","besar","besas"],"Lots of love (kisses),"]]);
+      return {who:"😊",frame:s[0],en:s[3],answer:s[1],wrong:s[2],line:s[0].replace("___",s[1]),tail:e.from,review:s[0].replace("___",s[1])+" = "+s[3]};}
+    return mkLine(e.pool[i-1],e);}
+  function qEmail(){if(!em||em.sent)newEmail();var q=emailQ(em,em.slot);q.card=1;return q;}
+  function qLine(){var g=Math.random()<.75?IN:FO,s=rnd(g);return mkLine(rnd(s));}
+
+  /* ---------- Friend, formal or text? ---------- */
+  var REG=["😊 Friend","👔 Formal","📱 Text"],REGS=["email to a friend","formal email","text / social"];
+  var SORT=[
+    ["Querida Lucía:",0,"Querida + name"],["¡Hola, Pablo! ¿Qué tal?",0,"¿Qué tal?"],["Un abrazo, Ciara",0,"un abrazo"],["Gracias por tu correo.",0,"tu correo (tú)"],["Escríbeme pronto.",0,"escríbeme (tú)"],["Te escribo para contarte mis vacaciones.",0,"te escribo (tú)"],["Besos a tu familia.",0,"besos"],["¿Qué tal te va en el instituto?",0,"te va (tú)"],
+    ["Estimado señor:",1,"estimado señor"],["Muy señores míos:",1,"muy señores míos"],["Le escribo para pedir información.",1,"le escribo (usted)"],["Atentamente,",1,"atentamente"],["Un cordial saludo,",1,"un cordial saludo"],["¿Podría enviarme un folleto?",1,"¿podría…? (usted)"],["Le agradezco su ayuda.",1,"le… su (usted)"],["Quisiera reservar una habitación.",1,"quisiera"],
+    ["q tal?? 😊",2,"q = qué"],["xq no vienes al cine?",2,"xq = por qué"],["nos vemos a las 6 bss",2,"bss = besos"],["finde en la playa!! 🏖️",2,"finde = fin de semana"],["yo tb voy",2,"tb = también"],["ok, hablamos luego 👍",2,"short chat"],["jajaja 😂",2,"jajaja"],["k guay!!",2,"k = qué"]
+  ];
+  function qSort(spoken){var s=rnd(SORT.filter(function(x){return !spoken||x[1]<2;}));
+    var opts=spoken?REG.slice(0,2):REG;
+    return {fixed:1,tm:1,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"✉️",en:spoken?"Listen. A friend or formal?":"Who would write this?",frame:spoken?"":s[0],answer:REG[s[1]],wrong:opts.filter(function(x,i){return i!==s[1];}),opts:opts,review:s[0]+" = "+REG[s[1]].slice(3)+" ("+s[2]+")"};}
+  function gSort(){return qSort(false);}
+  function lSort(){return qSort(true);}
+
+  /* ---------- Email words & phrases ---------- */
+  var WORDS=[["el correo electrónico","the email"],["el asunto","the subject"],["el archivo adjunto","the attachment"],["la arroba","the @ sign"],["el punto","the dot"],["el guion bajo","the underscore _"],["la contraseña","the password"],["enviar","to send"],["contestar","to reply"],["borrar","to delete"],["el mensaje","the message"],["la bandeja de entrada","the inbox"]];
+  function qWord(){var w=rnd(WORDS),o=others(WORDS,w,3);
+    if(Math.random()<.5)return {who:"💻",en:"What does it mean?",frame:cap(w[0]),answer:w[1],wrong:o.map(function(x){return x[1];}),review:cap(w[0])+" = "+w[1]};
+    return {who:"💻",en:"How do you say it in Spanish? ("+w[1]+")",frame:"___",answer:w[0],wrong:o.map(function(x){return x[0];}),review:w[1]+" = "+w[0]};}
+  var PHR=[["Gracias por tu correo.","Thanks for your email."],["Perdona por no escribir antes.","Sorry for not writing sooner."],["Te escribo para contarte…","I'm writing to tell you…"],["Me preguntas por mi familia.","You ask about my family."],["Escríbeme pronto.","Write to me soon."],["Mándame una foto.","Send me a photo."],["Saluda a tu familia de mi parte.","Say hello to your family from me."],["Te mando una foto de mi perro.","I'm sending you a photo of my dog."],["Espero tu respuesta.","I'm waiting for your reply."],["Tengo muchas ganas de verte.","I really want to see you."],["Le escribo para reservar una habitación.","I'm writing to you to book a room."],["Le agradezco su ayuda.","Thank you for your help (formal)."]];
+  function qPhr(){var p=rnd(PHR),o=others(PHR,p,3);
+    if(Math.random()<.55)return {who:"✉️",en:"What does it mean?",frame:p[0],answer:p[1],wrong:o.map(function(x){return x[1];}),review:p[0]+" = "+p[1]};
+    return {who:"✉️",en:p[1],frame:"In Spanish?",answer:p[0],wrong:o.map(function(x){return x[0];}),review:p[1]+" = "+p[0]};}
+  var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var MONTH_EN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function qDate(){var d=2+Math.floor(Math.random()*26),m=Math.floor(Math.random()*12),y=2027,c=rnd(["Cork","Galway","Dublín","Limerick"]);
+    var ok=c+", "+d+" de "+MONTHS[m]+" de "+y;
+    return {who:"📅",en:"Write the date at the top of a letter or email ("+d+" "+MONTH_EN[m]+" "+y+")",frame:"Which one is right?",answer:ok,wrong:[c+", "+d+" de "+cap(MONTHS[m])+" de "+y,c+", "+MONTHS[m]+" "+d+", "+y,c+", "+d+" "+MONTHS[m]+" "+y],review:ok+" (day + de + month + de + year; no capital letter for the month)"};}
+  var GQ=[
+    ["Queridos ___:","Dear grandparents,","abuelos",["abuelo","abuela","abuelas"],"Queridos → more than one"],
+    ["Querida ___:","Dear Grandma,","abuela",["abuelo","abuelos","abuelas"],"Querida → one female"],
+    ["___ amigas:","Dear friends (all girls),","Queridas",["Querida","Queridos","Querido"],"amigas → Queridas"],
+    ["___ profesores:","Dear teachers (formal),","Estimados",["Estimado","Estimada","Queridas"],"profesores → Estimados"],
+    ["Un abrazo de tu ___, Niamh","Love from your friend, Niamh","amiga",["amigo","amigas","amigos"],"Niamh is a girl: amiga"],
+    ["Un abrazo de tu ___, Oisín","Love from your friend, Oisín","amigo",["amiga","amigos","amigas"],"Oisín is a boy: amigo"]
+  ];
+  function qGreet(){var x=rnd(GQ);return {who:"😊",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]+" ("+x[4]+")"};}
+
+  /* ---------- Forms ---------- */
+  var FIELDS=[["Nombre","First name"],["Apellidos","Surnames"],["Edad","Age"],["Fecha de nacimiento","Date of birth"],["Lugar de nacimiento","Place of birth"],["Nacionalidad","Nationality"],["Dirección","Address"],["Teléfono móvil","Mobile phone"],["Correo electrónico","Email"],["Idiomas","Languages"],["Aficiones","Hobbies"],["Firma","Signature"]];
+  var PEOPLE=[
+    {Nombre:"Aoife",Apellidos:"Murphy",Edad:"14 años","Fecha de nacimiento":"3 de mayo de 2012","Lugar de nacimiento":"Cork",Nacionalidad:"irlandesa","Dirección":"12 Main Street, Mallow","Teléfono móvil":"087 123 4567","Correo electrónico":"aoife.murphy@gmail.com",Idiomas:"inglés, irlandés y español",Aficiones:"el baloncesto y la música"},
+    {Nombre:"Cian",Apellidos:"O'Brien",Edad:"15 años","Fecha de nacimiento":"21 de enero de 2011","Lugar de nacimiento":"Galway",Nacionalidad:"irlandés","Dirección":"4 Sea Road, Salthill","Teléfono móvil":"085 765 4321","Correo electrónico":"cian.ob@yahoo.ie",Idiomas:"inglés, irlandés y francés",Aficiones:"el hurling y los videojuegos"},
+    {Nombre:"Lucía",Apellidos:"García López",Edad:"13 años","Fecha de nacimiento":"9 de octubre de 2013","Lugar de nacimiento":"Sevilla",Nacionalidad:"española","Dirección":"Calle Sol 8, 2º B","Teléfono móvil":"612 345 678","Correo electrónico":"lucia.garcia@correo.es",Idiomas:"español e inglés",Aficiones:"bailar flamenco y leer"}
+  ];
+  function qForm(){var p=rnd(PEOPLE),keys=Object.keys(p),k=rnd(keys);
+    var f=FIELDS.filter(function(x){return x[0]===k;})[0],o=others(FIELDS.filter(function(x){return keys.indexOf(x[0])>=0||x[0]==="Firma";}),f,3);
+    return {who:"📝",en:"Filling in a form. Which box does this go in?",frame:p[k],answer:k,wrong:o.map(function(x){return x[0];}),review:p[k]+" → "+k+" ("+f[1]+")"};}
+  function qField(){var f=rnd(FIELDS),o=others(FIELDS,f,3);
+    if(Math.random()<.5)return {who:"📝",en:"On a Spanish form, what does it mean?",frame:f[0],answer:f[1],wrong:o.map(function(x){return x[1];}),review:f[0]+" = "+f[1]};
+    return {who:"📝",en:"Which box on the form? ("+f[1]+")",frame:"___",answer:f[0],wrong:o.map(function(x){return x[0];}),review:f[1]+" = "+f[0]};}
+  var FQ=[
+    ["¿Cómo te llamas?","Nombre"],["¿Cuáles son tus apellidos?","Apellidos"],["¿Cuántos años tienes?","Edad"],["¿Cuándo naciste?","Fecha de nacimiento"],["¿Dónde naciste?","Lugar de nacimiento"],["¿De qué nacionalidad eres?","Nacionalidad"],["¿Dónde vives?","Dirección"],["¿Cuál es tu número de móvil?","Teléfono móvil"],["¿Cuál es tu correo electrónico?","Correo electrónico"],["¿Qué idiomas hablas?","Idiomas"],["¿Qué haces en tu tiempo libre?","Aficiones"]
+  ];
+  function qFQ(){var x=rnd(FQ),o=others(FQ,x,3);return {who:"🗣️",en:"Which box on the form does this question go with?",frame:x[0],answer:x[1],wrong:o.map(function(y){return y[1];}),review:x[0]+" → "+x[1]};}
+  var NAT=[["Aoife es ___.","Aoife is Irish.","irlandesa",["irlandés","irlandeses","irlandesas"],"Aoife is a girl: irlandesa"],["Cian es ___.","Cian is Irish.","irlandés",["irlandesa","irlandeses","irlandesas"],"Cian is a boy: irlandés"],["Lucía es ___.","Lucía is Spanish.","española",["español","españolas","españoles"],"Lucía is a girl: española"],["Mis primos son ___.","My cousins are Spanish.","españoles",["español","española","españolas"],"plural boys/mixed: españoles"],["Mi madre es ___.","My mother is French.","francesa",["francés","franceses","francesas"],"una mujer: francesa"],["Mi padre es ___.","My father is English.","inglés",["inglesa","ingleses","inglesas"],"un hombre: inglés"]];
+  function qNat(){var x=rnd(NAT);return {who:"🌍",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" ("+x[4]+")"};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Hola, soy Marta. Te llamo para invitarte a mi fiesta el sábado.","Hi, it's Marta. I'm calling to invite you to my party on Saturday.",["Hi, it's Marta. I'm calling to invite you to my party on Sunday.","Hi, it's Marta. I'm calling to say the party is cancelled.","Hi, it's Marta. I'm calling to invite you to the cinema on Saturday."]],
+    ["Gracias por tu correo. Perdona por no escribir antes.","Thanks for your email. Sorry for not writing sooner.",["Thanks for your email. I'll write again soon.","Thanks for the photos. Sorry for not writing sooner.","Thanks for your letter. Sorry I can't come."]],
+    ["Mándame una foto de tu nuevo perro, por favor.","Send me a photo of your new dog, please.",["Send me a photo of your new cat, please.","I'm sending you a photo of my new dog.","Send me a video of your new dog, please."]],
+    ["El concierto empieza a las ocho. Nos vemos en la puerta.","The concert starts at eight. See you at the door.",["The concert starts at nine. See you at the door.","The concert starts at eight. See you at the bus stop.","The film starts at eight. See you at the door."]],
+    ["Le escribo para reservar una habitación para tres noches.","I'm writing to book a room for three nights.",["I'm writing to book a room for two nights.","I'm writing to cancel a room for three nights.","I'm writing to book a table for three people."]],
+    ["No puedo ir al partido porque estoy enfermo.","I can't go to the match because I'm sick.",["I can't go to the match because I'm busy.","I can go to the match but I'll be late.","I can't go to the cinema because I'm sick."]],
+    ["Te mando el archivo adjunto con los deberes de inglés.","I'm sending you the attachment with the English homework.",["I'm sending you the attachment with the Maths homework.","Send me the attachment with the English homework.","I'm sending you the link to the English homework."]],
+    ["Llámame esta tarde a mi móvil, por favor.","Call me on my mobile this afternoon, please.",["Call me on my mobile tonight, please.","Text me this afternoon, please.","Call me at home this afternoon, please."]],
+    ["Mi nuevo correo electrónico es más fácil de recordar.","My new email address is easier to remember.",["My new phone number is easier to remember.","My old email address was easier to remember.","My new password is easier to remember."]],
+    ["Escríbeme pronto y cuéntame qué tal tus vacaciones.","Write soon and tell me how your holidays were.",["Call me soon and tell me about your holidays.","Write soon and tell me about your new school.","I'll write soon and tell you about my holidays."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What's the message?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  var USERS=[["ana","garcía","garcia"],["pablo","ruiz","ruiz"],["sara","lópez","lopez"],["diego","martín","martin"],["lucía","sanz","sanz"],["javi","moreno","moreno"]],DOMS=["gmail","yahoo","hotmail","correo"],TLDS=["com","es","ie"];
+  function lMail(){var u=rnd(USERS),d=rnd(DOMS),t=rnd(TLDS),first=u[0].replace("í","i");
+    var dOther=rnd(DOMS.filter(function(x){return x!==d;})),tOther=rnd(TLDS.filter(function(x){return x!==t;}));
+    var ok=first+"."+u[2]+"@"+d+"."+t;
+    var sp=u[0]+" punto "+u[1]+" arroba "+d+" punto "+t;
+    return {listen:1,speak:sp,en:"Listen. What's the email address?",answer:ok,wrong:[first+u[2]+"@"+d+"."+t,first+"."+u[2]+"@"+dOther+"."+t,first+"."+u[2]+"@"+d+"."+tOther],review:sp+" = "+ok+" (arroba = @, punto = .)"};}
+
+  var MAKERS={
+    email:[qEmail],
+    register:[gSort,gSort,gSort,qWord,qPhr,qPhr,qDate,qGreet],
+    forms:[qForm,qForm,qField,qFQ,qNat,qWord],
+    listen:[lFix,lFix,lFix,lMail,lMail,lSort],
+    mixed:[qLine,qLine,qLine,gSort,qPhr,qDate,qForm,qFQ,qNat,qGreet]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear voicemails, messages and email addresses and pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Email drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawEmail(flash){
+    var el=$("card");if(mode!=="email"||!em){el.hidden=true;return;}
+    el.hidden=false;el.className="mail"+(em.sent?" sent":"");
+    var h="<div class='bar'><span>✉️ Nuevo mensaje</span><span class='count'>Line "+Math.min(em.slot+1,em.n)+" of "+em.n+"</span></div>";
+    h+="<div class='hd'><b>Para:</b> "+esc(em.addr)+"</div><div class='hd'><b>Asunto:</b> "+esc(em.subj)+"</div><div class='body'>";
+    em.lines.forEach(function(l){h+="<p>"+esc(l)+"</p>";});
+    if(!em.sent)h+="<p class='now'>…</p>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>📨 Email sent! +3</div>";
+    el.innerHTML=h;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:(m==="email"?75:60);score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;em=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawEmail(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    $("frame").innerHTML=fr;$("frame").className="frame"+(q.mode==="find"?" find":"");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+REGS[REG.indexOf(f)]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){
+    if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";
+    else if(current.mode)$("frame").innerHTML="<span class='fixed'>"+esc(current.line)+"</span>";
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.slice(3):f,listen:!!current.listen,find:current.mode==="find"});
+    }
+    if(current.card&&em){
+      em.lines.push(current.line);if(current.tail)em.lines.push(current.tail);
+      em.slot++;
+      if(em.slot>=em.n){em.sent=true;score+=3;cards++;flash=true;}
+      drawEmail(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:(current.mode?900:500))):(current.speak?2600:2100);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Email expert.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="email"?", "+cards+" email"+(cards===1?"":"s")+" sent":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        var not=m.find?"you picked "+m.said:"not "+m.said;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>("+esc(not)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,IN:IN,FO:FO,mkLine:mkLine,emailQ:emailQ,newEmail:newEmail,getEmail:function(){return em;}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
