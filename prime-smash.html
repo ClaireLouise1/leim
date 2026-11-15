@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factors, multiples and primes: play Prime Smash | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: prime numbers, factors and multiples, factor trees, products of primes, HCF and LCM, with an Exam corner. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="junior-cycle-spanish-exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Prime Smash</h1>
+        <p>60 seconds. Spot the primes, build the factor trees and crack HCF and LCM. Is <b>51</b> prime? (No: 51 = 3 × 17.) If one bus comes every 12 minutes and another every 18, when do they next arrive together? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="smash"><div><b>Prime Smash</b><span>Smash the prime, spot the fake: is 91 prime? Is 1?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="factors"><div><b>Factors &amp; multiples</b><span>Which numbers go into 48? What's the 7th multiple of 8?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tree"><div><b>Factor trees</b><span>Fill the tree and write the number as a product of primes</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hcf"><div><b>HCF &amp; LCM</b><span>Highest common factor, lowest common multiple, and buses that arrive together</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Prime Smash, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcome: N.1d (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Factors, multiples and primes</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are some numbers and all of their factors (the numbers that divide into them exactly).</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td>6</td><td>1, 2, 3, 6</td><td>7</td><td>1, 7</td></tr>
+            <tr><td>8</td><td>1, 2, 4, 8</td><td>11</td><td>1, 11</td></tr>
+            <tr><td>9</td><td>1, 3, 9</td><td>13</td><td>1, 13</td></tr>
+            <tr><td>10</td><td>1, 2, 5, 10</td><td>1</td><td>1</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">What do 7, 11 and 13 have in common that 6, 8, 9 and 10 don't? And is 1 more like the left group or the right group?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">7, 11 and 13 have <b>exactly two factors</b>: 1 and themselves. Those are the <b>prime numbers</b>. 6, 8, 9 and 10 have more than two factors: they are <b>composite</b>. And 1 has only <b>one</b> factor, so it fits neither group: <b>1 is not a prime number</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Factors and multiples</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Word</th><th>Means</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><b>Factor</b></td><td>a number that divides in exactly, with no remainder</td><td>The factors of 12 are 1, 2, 3, 4, 6, 12</td></tr>
+            <tr><td><b>Multiple</b></td><td>a number in its times table</td><td>The multiples of 6 are 6, 12, 18, 24, 30 …</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px"><b>Find all the factors in pairs</b> so you don't miss any. For 36: 1 × 36, 2 × 18, 3 × 12, 4 × 9, 6 × 6. Stop when the pairs meet. So 36 has <b>9</b> factors: 1, 2, 3, 4, 6, 9, 12, 18, 36.</p>
+        <div class="note" style="margin-top:10px"><b>Remember:</b> factors are <b>small</b> (they fit into the number), multiples are <b>big</b> (the number fits into them). Every number is a factor and a multiple of itself.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Prime numbers</h3>
+        <p>A <b>prime</b> has exactly two factors: 1 and itself. The primes up to 50 are:</p>
+        <p style="font-weight:700;letter-spacing:.02em">2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47</p>
+        <ul>
+          <li><b>2</b> is the only even prime (every other even number divides by 2).</li>
+          <li><b>1 is not prime</b>: it has only one factor.</li>
+          <li>Watch out for odd numbers that <b>look</b> prime: 51 = 3 × 17, 57 = 3 × 19, 91 = 7 × 13, 87 = 3 × 29.</li>
+          <li><b>Quick checks:</b> divides by 3 if its digits add to a multiple of 3 (5 + 1 = 6, so 51 divides by 3); by 5 if it ends in 0 or 5. To test a number, you only need to try primes up to its square root: for 91, try 2, 3, 5, 7.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Products of primes: factor trees</h3>
+        <p>Every whole number bigger than 1 can be written as a product of primes in exactly one way. Split the number into any two factors, and keep splitting until every branch ends in a prime.</p>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>360 = 10 × 36</td><td>10 = 2 × 5</td><td>36 = 4 × 9 = 2 × 2 × 3 × 3</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">So 360 = 2 × 2 × 2 × 3 × 3 × 5. In <b>index form</b>: <b>360 = 2³ × 3² × 5</b>. Start the tree any way you like: you always end up with the same primes.</p>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> 2² × 15 equals 60, but it isn't finished: 15 isn't prime (15 = 3 × 5). The answer is 60 = 2² × 3 × 5. And 2³ means 2 × 2 × 2 = 8, not 2 × 3 = 6.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">HCF and LCM</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Means</th><th>12 and 18</th></tr></thead>
+          <tbody>
+            <tr><td><b>HCF</b></td><td>Highest Common Factor: the biggest number that goes into both</td><td>Factors of 12: 1, 2, 3, 4, <b>6</b>, 12 · of 18: 1, 2, 3, <b>6</b>, 9, 18 → HCF = <b>6</b></td></tr>
+            <tr><td><b>LCM</b></td><td>Lowest Common Multiple: the smallest number both go into</td><td>Multiples of 12: 12, 24, <b>36</b> … · of 18: 18, <b>36</b> … → LCM = <b>36</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px"><b>Bigger numbers? Use the primes.</b> 84 = 2² × 3 × 7 and 90 = 2 × 3² × 5.</p>
+        <ul>
+          <li><b>HCF:</b> take the primes they <b>share</b>, with the <b>smaller</b> power: 2 × 3 = <b>6</b>.</li>
+          <li><b>LCM:</b> take <b>every</b> prime, with the <b>bigger</b> power: 2² × 3² × 5 × 7 = <b>1260</b>.</li>
+          <li><b>Check:</b> HCF × LCM = the two numbers multiplied: 6 × 1260 = 7560 = 84 × 90 ✓</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Which one does the question want?</b> "Together again", "at the same time", "the first time both…" → <b>LCM</b>. "Biggest equal groups", "largest size", "share out with nothing left over" → <b>HCF</b>. The HCF is never bigger than the smaller number; the LCM is never smaller than the bigger number.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Primes, factors, HCF and LCM usually come up as a <b>short part of a Number question</b>: write a number as a product of primes, find the HCF or LCM, or solve a timing or sharing problem. They are also the tools behind other topics: the LCM gives the common denominator when you add fractions, and the HCF is how you factorise in algebra (6x + 9 = 3(2x + 3)).</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the factor tree or the division.</b> A correct method with one slip still earns part marks; a bare wrong answer earns nothing.</li>
+            <li><b>Finish the job:</b> "as a product of primes" means every factor must be prime. Write it in index form if the question says so (2³ × 3², not 2 × 2 × 2 × 3 × 3).</li>
+            <li><b>Check your product</b> by multiplying back: 2³ × 3² × 5 = 8 × 9 × 5 = 360 ✓</li>
+            <li><b>Answer the question asked.</b> If buses leave together at 7:30 and the LCM is 60 minutes, the answer is <b>8:30</b>, not "60".</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Product of primes.</b> Write 360 as a product of prime numbers. Give your answer in index form.
+              <details><summary>Show the worked answer</summary><p>360 = 10 × 36 = (2 × 5) × (4 × 9) = 2 × 5 × 2 × 2 × 3 × 3.<br>Put the primes in order: 2 × 2 × 2 × 3 × 3 × 5 = <b>2³ × 3² × 5</b>.<br>Check: 8 × 9 × 5 = 72 × 5 = 360 ✓</p></details></li>
+            <li><b>HCF and LCM.</b> 84 = 2² × 3 × 7 and 90 = 2 × 3² × 5. Find (a) the HCF and (b) the LCM of 84 and 90.
+              <details><summary>Show the worked answer</summary><p>(a) Shared primes, smaller power: 2 and 3 → HCF = 2 × 3 = <b>6</b>.<br>(b) Every prime, bigger power: 2² × 3² × 5 × 7 = 4 × 9 × 35 = <b>1260</b>.<br>Check: 6 × 1260 = 7560 and 84 × 90 = 7560 ✓</p></details></li>
+            <li><b>The buses.</b> The 208 bus leaves the station every 12 minutes and the 220 leaves every 20 minutes. Both leave at 7:30 a.m. When is the next time they both leave together?
+              <details><summary>Show the worked answer</summary><p>"Together again" → LCM. 12 = 2² × 3 and 20 = 2² × 5, so LCM = 2² × 3 × 5 = 60.<br>(Or list: 12, 24, 36, 48, <b>60</b> and 20, 40, <b>60</b>.)<br>60 minutes after 7:30 → <b>8:30 a.m.</b></p></details></li>
+            <li><b>Party bags.</b> Orla has 48 red sweets and 60 blue sweets. She wants to make identical party bags, using every sweet. What is the greatest number of bags she can make, and what is in each bag?
+              <details><summary>Show the worked answer</summary><p>Identical groups, nothing left over → HCF. 48 = 2⁴ × 3 and 60 = 2² × 3 × 5, so HCF = 2² × 3 = <b>12 bags</b>.<br>Each bag: 48 ÷ 12 = <b>4 red</b> and 60 ÷ 12 = <b>5 blue</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/factors-multiples-primes-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/UCG1v" target="_blank" rel="noopener">Factors, Multiples &amp; Primes Teacher Pack (€5)</a>: Sieve of Eratosthenes, Number Detective clue cards, HCF &amp; LCM Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function isP(n){if(n<2)return false;for(var i=2;i*i<=n;i++)if(n%i===0)return false;return true;}
+  function gcd(a,b){while(b){var t=b;b=a%b;a=t;}return a;}
+  function lcm(a,b){return a/gcd(a,b)*b;}
+  function divs(n){var o=[];for(var i=1;i<=n;i++)if(n%i===0)o.push(i);return o;}
+  function pf(n){var o={},d=2;while(n>1){while(n%d===0){o[d]=(o[d]||0)+1;n/=d;}d++;}return o;}
+  var SUP={2:"²",3:"³",4:"⁴",5:"⁵",6:"⁶",7:"⁷"};
+  function idx(o){return Object.keys(o).map(Number).sort(function(a,b){return a-b;}).map(function(p){return p+(o[p]>1?SUP[o[p]]:"");}).join(" × ");}
+  function longf(n){var o=pf(n),out=[];Object.keys(o).map(Number).sort(function(a,b){return a-b;}).forEach(function(p){for(var k=0;k<o[p];k++)out.push(p);});return out.join(" × ");}
+  function why2(n){if(n===1)return "1 has only one factor, so it isn't prime";var o=pf(n),ks=Object.keys(o);return n+" = "+(ks.length===1&&o[ks[0]]===2?ks[0]+" × "+ks[0]:smallSplit(n));}
+  function smallSplit(n){for(var d=2;d*d<=n;d++)if(n%d===0)return d+" × "+(n/d);return String(n);}
+  var P=[];for(var i=2;i<100;i++)if(isP(i))P.push(i);
+  var TRICKY=[1,9,15,21,27,33,39,49,51,57,63,69,77,81,87,91,93,95,99,45,35,55,65,85,25];
+  // 3 distinct wrong numbers from slips, padded with near misses
+  function wrongs(ans,c,fmt){
+    fmt=fmt||String;var seen={},out=[];seen[fmt(ans)]=1;
+    c.concat([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10]).forEach(function(x){
+      if(typeof x!=="number"||!isFinite(x)||Math.round(x)!==x||x<1)return;
+      var s=fmt(x);if(!seen[s]&&out.length<3){seen[s]=1;out.push(s);}});
+    return out;}
+  function Q(en,frame,ans,c,why,fmt,html){fmt=fmt||String;
+    return {en:en,frame:frame,html:html||"",answer:fmt(ans),wrong:wrongs(ans,c,fmt),why:why,review:(frame?en+" "+frame:en)+" → "+fmt(ans)};}
+  // choose: answer string + a pool of strings that are all definitely wrong
+  function C(en,frame,ans,pool,why,review,html){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans)};}
+
+  /* ---------- Prime Smash ---------- */
+  function composites(k,max){var s={},o=[];while(o.length<k){var n=Math.random()<.7?rnd(TRICKY):ri(4,max);if(!isP(n)&&n<=max&&!s[n]){s[n]=1;o.push(n);}}return o;}
+  function qIsPrime(){
+    var p=Math.random()<.08?2:rnd(P.slice(1)),c=composites(3,99);
+    return C("Smash the prime! Which one is prime?","",p,c,
+      "Not prime: "+c.map(why2).join(" · ")+".", "Prime: "+p+" (not "+c.join(", ")+")");
+  }
+  function qNotPrime(){
+    var s={},ps=[];while(ps.length<3){var x=rnd(P);if(!s[x]){s[x]=1;ps.push(x);}}
+    var c=composites(1,99)[0];
+    return C("Spot the fake! Which one is NOT prime?","",c,ps,why2(c)+".","Not prime: "+c+" ("+why2(c)+")");
+  }
+  var TRUE=["1 is not a prime number","2 is the only even prime","A prime has exactly two factors","Every number above 1 is prime or a product of primes","51 is not prime","91 = 7 × 13"];
+  var FALSE=["1 is a prime number","All odd numbers are prime","9 is a prime number","51 is a prime number","A prime can have three factors","2 is not a prime number","91 is a prime number","57 is a prime number","Every prime is odd","15 is a prime number"];
+  function qFact(){
+    var t=rnd(TRUE);
+    var why={"1 is not a prime number":"1 has only one factor (itself), so it isn't prime.","2 is the only even prime":"2 has factors 1 and 2. Every other even number also divides by 2.","A prime has exactly two factors":"Exactly two: 1 and itself.","Every number above 1 is prime or a product of primes":"That's why factor trees always end in primes.","51 is not prime":"5 + 1 = 6, so 51 divides by 3: 51 = 3 × 17.","91 = 7 × 13":"7 × 13 = 91, so 91 is not prime."}[t];
+    return C("Which one is true?","",t,FALSE,why,"True: "+t);
+  }
+
+  /* ---------- Factors & multiples ---------- */
+  var FN=[12,18,20,24,28,30,36,40,42,45,48,54,56,60,72,84,90,96,100];
+  function qFactor(){
+    var n=rnd(FN),d=divs(n).filter(function(x){return x>1&&x<n;}),a=rnd(d);
+    var pool=[];for(var x=2;x<=Math.min(n-1,25);x++)if(n%x!==0)pool.push(x);
+    return C("Which one is a factor of "+n+"?","",a,pool,n+" ÷ "+a+" = "+(n/a)+" exactly. Factors of "+n+": "+divs(n).join(", ")+".","A factor of "+n+": "+a);
+  }
+  function qNotFactor(){
+    var n=rnd(FN),d=shuffle(divs(n).filter(function(x){return x>1&&x<n;})).slice(0,3);
+    var pool=[];for(var x=3;x<=Math.min(n-1,25);x++)if(n%x!==0)pool.push(x);
+    var a=rnd(pool);
+    return C("Which one is NOT a factor of "+n+"?","",a,d,n+" ÷ "+a+" leaves a remainder. Factors of "+n+": "+divs(n).join(", ")+".","Not a factor of "+n+": "+a);
+  }
+  function qMultiple(){
+    var k=ri(3,12),m=ri(3,12),a=k*m,pool=[];
+    for(var x=a-6;x<=a+6;x++)if(x>k&&x%k!==0)pool.push(x);
+    return C("Which one is a multiple of "+k+"?","",a,pool,k+" × "+m+" = "+a+", so "+a+" is in the "+k+" times table.","A multiple of "+k+": "+a);
+  }
+  function qNth(){
+    var k=ri(3,12),m=ri(3,9),a=k*m,ord={3:"3rd"}[m]||m+"th";
+    return Q("What is the "+ord+" multiple of "+k+"?","",a,[k+m,k*(m-1),k*(m+1)],"The "+ord+" multiple is "+k+" × "+m+" = "+a+".");
+  }
+  function qCount(){
+    var n=rnd([10,12,15,16,18,20,24,28,30,32,36,40,48,49,50,60,64,100]),c=divs(n).length;
+    return Q("How many factors does "+n+" have?","",c,[c-1,c+1,c-2,Math.floor(c/2)],"In pairs: "+pairs(n)+". That's "+c+" factors: "+divs(n).join(", ")+".");
+  }
+  function pairs(n){var o=[];for(var i=1;i*i<=n;i++)if(n%i===0)o.push(i+" × "+(n/i));return o.join(", ");}
+
+  /* ---------- Factor trees ---------- */
+  function node(x,y,t,prime,hide){
+    var r='<g>';
+    if(hide)r+='<rect x="'+(x-24)+'" y="'+(y-18)+'" width="48" height="36" rx="8" fill="#F6CF5A" stroke="#1B2430" stroke-width="2"/><text x="'+x+'" y="'+(y+7)+'" font-size="20" font-weight="800" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">?</text>';
+    else{if(prime)r+='<circle cx="'+x+'" cy="'+y+'" r="21" fill="#E7F3EC" stroke="#2E7D57" stroke-width="2.5"/>';
+      r+='<text x="'+x+'" y="'+(y+7)+'" font-size="20" font-weight="800" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">'+t+'</text>';}
+    return r+'</g>';}
+  function treeSVG(n,p,m,q,r,hide){
+    var o='<svg viewBox="0 0 340 210" width="100%" style="max-width:340px" role="img" aria-label="Factor tree for '+n+'">';
+    o+='<g stroke="#1B2430" stroke-width="2"><line x1="170" y1="46" x2="100" y2="88"/><line x1="170" y1="46" x2="240" y2="88"/><line x1="240" y1="122" x2="195" y2="162"/><line x1="240" y1="122" x2="285" y2="162"/></g>';
+    o+=node(170,30,n,false,false)+node(100,105,p,true,hide==="p")+node(240,105,m,false,hide==="m")+node(195,180,q,true,hide==="q")+node(285,180,r,true,hide==="r");
+    return o+'</svg>';}
+  function qTree(){
+    var p=rnd([2,2,3,3,5,7]),q=rnd([2,3,3,5,7]),r=rnd([2,3,5,7,11]),m=q*r,n=p*m,h=rnd(["p","m","r"]);
+    var ans={p:p,m:m,r:r}[h];
+    var why={p:n+" ÷ "+m+" = "+p+".",m:m+" = "+q+" × "+r+" (and "+p+" × "+m+" = "+n+").",r:m+" ÷ "+q+" = "+r+"."}[h];
+    var c={p:[m,n-m,p+1],m:[n-p,q+r,n/q],r:[m-q,q,r+q]}[h];
+    var o=Q("Fill in the factor tree. What number goes in the yellow box?","",ans,c,why+" Circled numbers are prime.",String,treeSVG(n,p,m,q,r,h));
+    o.review="Factor tree for "+n+": "+n+" = "+p+" × "+m+", "+m+" = "+q+" × "+r+" → ? = "+ans;return o;
+  }
+  var PFN=[12,18,20,24,28,30,36,40,44,45,48,50,52,54,56,60,63,72,75,80,84,88,90,96,98,100,108,112,120,126,132,135,140,144,150,168,180,200,210,225,240,252,270,280,300,360];
+  function qIndex(){
+    var n=rnd(PFN),o=pf(n),ks=Object.keys(o).map(Number).sort(function(a,b){return a-b;}),ans=idx(o),pool=[];
+    // slip 1: a composite left in (looks right, equals n)
+    if(ks.length>=2||o[ks[0]]>1){var a=ks[0],b=ks.length>1?ks[1]:ks[0],o2=JSON.parse(JSON.stringify(o));o2[a]--;o2[b]--;var rest=idx(cl(o2));pool.push((rest?rest+" × ":"")+(a*b));}
+    // slip 2/3: a power one too big / too small
+    ks.forEach(function(p){var o3=JSON.parse(JSON.stringify(o));o3[p]++;pool.push(idx(o3));var o4=JSON.parse(JSON.stringify(o));o4[p]--;if(Object.keys(cl(o4)).length)pool.push(idx(cl(o4)));});
+    // slip 4: 2 × n/2 style
+    pool.push(ks[0]+" × "+(n/ks[0]));
+    pool=pool.filter(function(s){return s!==ans&&s.indexOf("1²")<0;});
+    return C("Write "+n+" as a product of primes (index form).","",ans,pool,n+" = "+longf(n)+" = "+ans+". Every factor must be prime.","Product of primes: "+n+" = "+ans);
+  }
+  function cl(o){var r={};for(var k in o)if(o[k]>0)r[k]=o[k];return r;}
+  function qFromIndex(){
+    var n=rnd(PFN),o=pf(n),s=idx(o),ks=Object.keys(o).map(Number),c=[];
+    var add=0,ex=1;ks.forEach(function(p){add+=p*o[p];ex*=p;});c.push(add);if(ex!==n)c.push(ex);
+    ks.forEach(function(p){if(o[p]>1)c.push(n/Math.pow(p,o[p])*p*o[p]);});
+    return Q("Which number is this?",s,n,c,s+" = "+longf(n)+" = "+n+". A power means multiply: 2³ = 2 × 2 × 2 = 8.");
+  }
+
+  /* ---------- HCF & LCM ---------- */
+  function pair(){
+    var g,x,y,a,b;do{g=rnd([2,3,4,5,6,8,9,10,12,14,15]);x=ri(2,9);y=ri(2,9);a=g*x;b=g*y;}while(x===y||gcd(x,y)!==1||a>120||b>120);
+    return [Math.min(a,b),Math.max(a,b)];}
+  function qHCF(){
+    var ab=pair(),a=ab[0],b=ab[1],h=gcd(a,b),l=lcm(a,b),cf=divs(h).filter(function(x){return x>1&&x<h;});
+    return Q("What is the HCF of "+a+" and "+b+"?","",h,[cf.length?cf[cf.length-1]:1,l,a,b-a],"HCF = the biggest number that goes into both: "+a+" = "+h+" × "+(a/h)+", "+b+" = "+h+" × "+(b/h)+".");
+  }
+  function qLCM(){
+    var ab=pair(),a=ab[0],b=ab[1],h=gcd(a,b),l=lcm(a,b);
+    return Q("What is the LCM of "+a+" and "+b+"?","",l,[a*b,h,b*2,l+a],"LCM = the smallest number both go into: "+b+" × "+(l/b)+" = "+l+" and "+a+" × "+(l/a)+" = "+l+".");
+  }
+  function clock(start,add){var t=start+add,hh=Math.floor(t/60)%24,mm=t%60;return (hh%12||12)+":"+(mm<10?"0":"")+mm+(hh<12?" a.m.":" p.m.");}
+  var BUS=[[6,8],[6,10],[8,12],[10,15],[12,18],[12,20],[15,20],[9,12],[10,25],[14,21],[16,24],[20,30],[18,24]];
+  function qTogether(){
+    var ab=rnd(BUS),a=ab[0],b=ab[1],l=lcm(a,b),st=rnd([7*60,7*60+30,8*60,8*60+15,9*60,13*60,15*60+30,16*60]),t=rnd(["bus","light"]);
+    var en=t==="bus"?"One bus leaves every "+a+" minutes and another every "+b+" minutes. Both leave at "+clock(st,0)+" When do they next leave together?"
+      :"One light flashes every "+a+" seconds and another every "+b+" seconds. They flash together now. After how many seconds do they next flash together?";
+    var fmt=t==="bus"?function(n){return clock(st,n);}:function(n){return n+" seconds";};
+    var o=Q(en,"",l,[a*b,a+b,gcd(a,b),b*2],"\"Together again\" means LCM. LCM of "+a+" and "+b+" = "+l+(t==="bus"?" minutes after "+clock(st,0):"."),fmt);
+    o.review="LCM of "+a+" and "+b+" = "+l+" → "+fmt(l);return o;
+  }
+  var SHARE=[["pencils","rubbers","packs"],["red sweets","blue sweets","party bags"],["girls","boys","teams"],["apples","oranges","fruit boxes"]];
+  function qShare(){
+    var ab=pair(),a=ab[0],b=ab[1],h=gcd(a,b),s=rnd(SHARE);
+    var o=Q("There are "+a+" "+s[0]+" and "+b+" "+s[1]+". They're shared into identical "+s[2]+" with nothing left over. What is the greatest number of "+s[2]+"?","",h,[lcm(a,b),a,b-a,(divs(h).filter(function(x){return x<h;}).pop()||1)],"Equal groups, nothing left over → HCF of "+a+" and "+b+" = "+h+". Each has "+(a/h)+" "+s[0]+" and "+(b/h)+" "+s[1]+".");
+    o.review="HCF of "+a+" and "+b+" = "+h+" "+s[2];return o;
+  }
+  function qWhich(){
+    var w=rnd([["Two buses arrive together again","LCM"],["Bells ringing together for the next time","LCM"],["The biggest equal teams from a class","HCF"],["Cutting two ribbons into the longest equal pieces","HCF"],["The first day both events happen again","LCM"],["The largest square tile that fits a floor exactly","HCF"]]);
+    return {en:"HCF or LCM? Which one solves this?",frame:w[0],answer:w[1],wrong:[w[1]==="LCM"?"HCF":"LCM","Neither: just add them","Neither: just multiply them"],why:w[1]==="LCM"?"Together again / the next time → LCM.":"Biggest equal groups / largest size → HCF.",review:w[0]+" → "+w[1]};
+  }
+
+  var MAKERS={
+    smash:[qIsPrime,qIsPrime,qIsPrime,qNotPrime,qNotPrime,qFact],
+    factors:[qFactor,qFactor,qNotFactor,qMultiple,qMultiple,qNth,qCount],
+    tree:[qTree,qTree,qIndex,qIndex,qFromIndex],
+    hcf:[qHCF,qHCF,qLCM,qLCM,qTogether,qShare,qWhich],
+    mixed:[qIsPrime,qNotPrime,qFact,qFactor,qNotFactor,qMultiple,qCount,qTree,qIndex,qFromIndex,qHCF,qLCM,qTogether,qShare,qWhich]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="hcf"||m==="tree")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="smash"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="smash"&&streak%5===0?700:350):2400);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,isP:isP,gcd:gcd,lcm:lcm,pf:pf,idx:idx};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
