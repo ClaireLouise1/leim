@@ -1,0 +1,142 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Like-Term Sweep</h1>
+        <p>60 seconds. Sweep the like terms together, turn words into algebra, spin the Substitution Slot Machine (watch those minus signs!) and spot who's right about 3x + 2y. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sweep"><div><b>Like-Term Sweep</b><span>Collect like terms (with minus signs and x²), algebra tiles, coefficients and constants</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>Words to algebra</b><span>"5 less than n", ticket prices, ages, perimeters of shapes, which sentence matches?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sub"><div><b>Substitution Slot Machine</b><span>Put the numbers in, including negatives: 5 − 2x when x = −3, x² when x = −4, formulas</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="talk"><div><b>Algebra talk</b><span>x × x × x or 3x? Equal expressions, and is 3x + 2y = 5xy right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Like-Term Sweep, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.2a, AF.2b, AF.3a, U.4 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Variables &amp; expressions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Try some numbers. Fill in each row in your head (or on paper):</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">x = 2: &nbsp;3x + 2x = 6 + 4 = <b>10</b> &nbsp;and&nbsp; 5x = <b>10</b></li>
+          <li class="note">x = 7: &nbsp;3x + 2x = 21 + 14 = <b>35</b> &nbsp;and&nbsp; 5x = <b>35</b></li>
+          <li class="note">x = 2, y = 5: &nbsp;3x + 2y = 6 + 10 = <b>16</b> &nbsp;but&nbsp; 5xy = 5 × 2 × 5 = <b>50</b></li>
+        </ul>
+        <p style="margin-top:10px">Why does 3x + 2x always equal 5x, but 3x + 2y is not 5xy? Is x + x the same as x²? Try x = 3.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">3x + 2x is 3 lots of x plus 2 lots of x: 5 lots of x, whatever x is. Those are <b>like terms</b>. 3x and 2y are lots of <b>different</b> things (like 3 apples and 2 bananas), so they can't be added into one term: 3x + 2y stays as it is. And x + x = 2x, not x²: with x = 3, x + x = 6 but x² = 9.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <ul>
+          <li>A <b>variable</b> is a letter that stands for a number that can change (x, n, t…).</li>
+          <li>An <b>expression</b> is made of <b>terms</b> joined by + and − signs. 4x² − 3x + 7 has 3 terms.</li>
+          <li>The <b>coefficient</b> is the number in front of the letter, sign included: in 4x² − 3x + 7, the coefficient of x is <b>−3</b>.</li>
+          <li>The <b>constant</b> is the term with no letter: <b>7</b>.</li>
+          <li>Short ways to write things: 3 × n = <b>3n</b>, n × n = <b>n²</b>, a × b = <b>ab</b>, n ÷ 2 = <b>n/2</b>, and 1x is just <b>x</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Collecting like terms</h3>
+        <p><b>Like terms</b> have exactly the same letters with the same powers: 3x and −5x are like terms; 3x and 3x² are not; xy and yx are (the order of the letters doesn't matter).</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Simplify 5a + 3b − 2a + b.</b> a terms: 5 − 2 = 3. b terms: 3 + 1 = 4. Answer: <b>3a + 4b</b>. Each term takes the sign in <b>front</b> of it.</li>
+          <li class="note"><b>Simplify 2x² + 5x − x² − 8x + 3.</b> x² terms: 2 − 1 = 1. x terms: 5 − 8 = −3. Answer: <b>x² − 3x + 3</b>. Adding never changes the power: x² + x² = 2x², not x⁴.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Words into algebra</h3>
+        <ul>
+          <li>"5 more than n" → <b>n + 5</b>. "5 less than n" → <b>n − 5</b> (not 5 − n: start with n and take 5 away).</li>
+          <li>"Double n, then subtract 3" → <b>2n − 3</b>. "Half of n" → <b>n/2</b>.</li>
+          <li>Tickets at €8 each plus a €3 booking fee for the order: n tickets cost <b>8n + 3</b>. The fee is paid once, so it isn't multiplied by n.</li>
+          <li>Perimeter: add <b>all</b> the sides. A rectangle with length 2x + 1 and width x has perimeter 2(2x + 1) + 2x = <b>6x + 2</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Substitution (putting numbers in)</h3>
+        <p>Swap each letter for its number, <b>in brackets</b>, then follow BIMDAS.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>5 − 2x when x = −3:</b> 5 − 2(−3) = 5 + 6 = <b>11</b>. Minus × minus = plus.</li>
+          <li class="note"><b>x² when x = −4:</b> (−4)² = (−4) × (−4) = <b>16</b>, not −16.</li>
+          <li class="note"><b>3x² when x = −2:</b> square first: (−2)² = 4, then × 3 = <b>12</b> (not (3 × −2)² = 36).</li>
+          <li class="note"><b>ab − b when a = −2 and b = 5:</b> (−2)(5) − 5 = −10 − 5 = <b>−15</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> 2x when x = 3 is 2 × 3 = 6, not 23. A number next to a letter always means <b>multiply</b>.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Expressions are everywhere in the paper: "simplify" parts, "find the value when x = −2", writing an expression for a <b>cost</b>, an <b>age</b> or a <b>perimeter</b>, and then using it. Later questions on equations, patterns, functions and graphs all start from these skills, so a slip here can cost marks in several questions.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use brackets for negative numbers</b> when you substitute: 2(−3)², not 2 − 3². It's where most marks go.</li>
+            <li><b>Each term keeps the sign in front of it</b> when you collect like terms.</li>
+            <li><b>Don't mix unlike terms</b>: 3x + 2y and x² + x can't be simplified any further. Leave them.</li>
+            <li><b>Show the line where you put the numbers in</b>: it earns marks even if the final answer slips.</li>
+            <li><b>Check your expression with a number</b>: if n = 2 tickets cost €19, does 8n + 3 give 19? Yes.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Simplify.</b> (a) 5x + 3y − 2x + y &nbsp;(b) 4a² − 3a + a² + 7a − 2
+              <details><summary>Show the worked answer</summary><p>(a) x terms: 5 − 2 = 3; y terms: 3 + 1 = 4. <b>3x + 4y</b>.<br>(b) a² terms: 4 + 1 = 5; a terms: −3 + 7 = 4; the constant stays. <b>5a² + 4a − 2</b>.</p></details></li>
+            <li><b>Find the value.</b> a = −2 and b = 5. Find the value of (a) 3a + 2b &nbsp;(b) a² − b &nbsp;(c) 2ab − b²
+              <details><summary>Show the worked answer</summary><p>(a) 3(−2) + 2(5) = −6 + 10 = <b>4</b>.<br>(b) (−2)² − 5 = 4 − 5 = <b>−1</b>.<br>(c) 2(−2)(5) − (5)² = −20 − 25 = <b>−45</b>.</p></details></li>
+            <li><b>Phone plan.</b> Plan A costs €15 a month plus 10c for each text. (a) Write an expression for the monthly cost, in euro, of t texts. (b) Find the cost of 40 texts. (c) Plan B costs €20 a month with free texts. Which plan is cheaper for someone who sends 40 texts a month?
+              <details><summary>Show the worked answer</summary><p>(a) 10c = €0.10, so the cost is <b>15 + 0.1t</b> euro.<br>(b) 15 + 0.1(40) = 15 + 4 = <b>€19</b>.<br>(c) €19 is less than €20, so <b>Plan A</b> is cheaper (by €1).</p></details></li>
+            <li><b>The garden.</b> A rectangular garden has length 3x + 2 metres and width x − 1 metres. (a) Write the perimeter in its simplest form. (b) Find the perimeter when x = 4. (c) Explain why x can't be 1.
+              <details><summary>Show the worked answer</summary><p>(a) 2(3x + 2) + 2(x − 1) = 6x + 4 + 2x − 2 = <b>8x + 2</b> metres.<br>(b) 8(4) + 2 = <b>34 m</b>. Check: the sides are 14 m and 3 m, and 14 + 3 + 14 + 3 = 34 ✓.<br>(c) If x = 1 the width is 1 − 1 = <b>0 m</b>, so there would be no garden. x must be bigger than 1.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/algebra-variables-expressions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/24uOJ" target="_blank" rel="noopener">Algebra: Variables &amp; Expressions Teacher Pack (€5)</a>: Think of a Number, Algebra Tiles cards, Algebra Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

@@ -42,7 +42,7 @@ MATHS = [
   ("1st year","Autumn","Sets & Venn diagrams","N.5, U.4","Venn Sorter","venn-sorter.html","sets-venn-diagrams"),
   ("1st year","Spring","Percentages","N.2a, N.2b","Percent Pop","percent-pop.html","percentages"),
   ("1st year","Spring","Ratio & proportion","N.2b, N.3a","Share It Out","share-it-out.html","ratio-proportion"),
-  ("1st year","Spring","Algebra 1: variables & expressions","AF.2a, AF.2b, AF.3a, U.4","Like-Term Sweep","",""),
+  ("1st year","Spring","Algebra 1: variables & expressions","AF.2a, AF.2b, AF.3a, U.4","Like-Term Sweep","like-term-sweep.html","algebra-variables-expressions"),
   ("1st year","Spring","Patterns 1: linear patterns & sequences","N.4, AF.1a, AF.1b, U.11","Pattern Builder","",""),
   ("1st year","Spring","Units of measure, time & timetables","GT.1","Clock Dash","",""),
   ("1st year","Summer","Probability 1: chance & sample spaces","SP.1a, SP.2a, SP.2b","Spin & Predict","",""),

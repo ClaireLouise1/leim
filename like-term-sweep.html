@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Like-Term Sweep: algebra, like terms & substitution game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: collect like terms, write expressions from words, substitute negative numbers and spot equal expressions, with the rules and an Exam corner. AF.2a, AF.2b, AF.3a.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Like-Term Sweep</h1>
+        <p>60 seconds. Sweep the like terms together, turn words into algebra, spin the Substitution Slot Machine (watch those minus signs!) and spot who's right about 3x + 2y. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sweep"><div><b>Like-Term Sweep</b><span>Collect like terms (with minus signs and x²), algebra tiles, coefficients and constants</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>Words to algebra</b><span>"5 less than n", ticket prices, ages, perimeters of shapes, which sentence matches?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sub"><div><b>Substitution Slot Machine</b><span>Put the numbers in, including negatives: 5 − 2x when x = −3, x² when x = −4, formulas</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="talk"><div><b>Algebra talk</b><span>x × x × x or 3x? Equal expressions, and is 3x + 2y = 5xy right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Like-Term Sweep, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.2a, AF.2b, AF.3a, U.4 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Variables &amp; expressions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Try some numbers. Fill in each row in your head (or on paper):</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">x = 2: &nbsp;3x + 2x = 6 + 4 = <b>10</b> &nbsp;and&nbsp; 5x = <b>10</b></li>
+          <li class="note">x = 7: &nbsp;3x + 2x = 21 + 14 = <b>35</b> &nbsp;and&nbsp; 5x = <b>35</b></li>
+          <li class="note">x = 2, y = 5: &nbsp;3x + 2y = 6 + 10 = <b>16</b> &nbsp;but&nbsp; 5xy = 5 × 2 × 5 = <b>50</b></li>
+        </ul>
+        <p style="margin-top:10px">Why does 3x + 2x always equal 5x, but 3x + 2y is not 5xy? Is x + x the same as x²? Try x = 3.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">3x + 2x is 3 lots of x plus 2 lots of x: 5 lots of x, whatever x is. Those are <b>like terms</b>. 3x and 2y are lots of <b>different</b> things (like 3 apples and 2 bananas), so they can't be added into one term: 3x + 2y stays as it is. And x + x = 2x, not x²: with x = 3, x + x = 6 but x² = 9.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <ul>
+          <li>A <b>variable</b> is a letter that stands for a number that can change (x, n, t…).</li>
+          <li>An <b>expression</b> is made of <b>terms</b> joined by + and − signs. 4x² − 3x + 7 has 3 terms.</li>
+          <li>The <b>coefficient</b> is the number in front of the letter, sign included: in 4x² − 3x + 7, the coefficient of x is <b>−3</b>.</li>
+          <li>The <b>constant</b> is the term with no letter: <b>7</b>.</li>
+          <li>Short ways to write things: 3 × n = <b>3n</b>, n × n = <b>n²</b>, a × b = <b>ab</b>, n ÷ 2 = <b>n/2</b>, and 1x is just <b>x</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Collecting like terms</h3>
+        <p><b>Like terms</b> have exactly the same letters with the same powers: 3x and −5x are like terms; 3x and 3x² are not; xy and yx are (the order of the letters doesn't matter).</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Simplify 5a + 3b − 2a + b.</b> a terms: 5 − 2 = 3. b terms: 3 + 1 = 4. Answer: <b>3a + 4b</b>. Each term takes the sign in <b>front</b> of it.</li>
+          <li class="note"><b>Simplify 2x² + 5x − x² − 8x + 3.</b> x² terms: 2 − 1 = 1. x terms: 5 − 8 = −3. Answer: <b>x² − 3x + 3</b>. Adding never changes the power: x² + x² = 2x², not x⁴.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Words into algebra</h3>
+        <ul>
+          <li>"5 more than n" → <b>n + 5</b>. "5 less than n" → <b>n − 5</b> (not 5 − n: start with n and take 5 away).</li>
+          <li>"Double n, then subtract 3" → <b>2n − 3</b>. "Half of n" → <b>n/2</b>.</li>
+          <li>Tickets at €8 each plus a €3 booking fee for the order: n tickets cost <b>8n + 3</b>. The fee is paid once, so it isn't multiplied by n.</li>
+          <li>Perimeter: add <b>all</b> the sides. A rectangle with length 2x + 1 and width x has perimeter 2(2x + 1) + 2x = <b>6x + 2</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Substitution (putting numbers in)</h3>
+        <p>Swap each letter for its number, <b>in brackets</b>, then follow BIMDAS.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>5 − 2x when x = −3:</b> 5 − 2(−3) = 5 + 6 = <b>11</b>. Minus × minus = plus.</li>
+          <li class="note"><b>x² when x = −4:</b> (−4)² = (−4) × (−4) = <b>16</b>, not −16.</li>
+          <li class="note"><b>3x² when x = −2:</b> square first: (−2)² = 4, then × 3 = <b>12</b> (not (3 × −2)² = 36).</li>
+          <li class="note"><b>ab − b when a = −2 and b = 5:</b> (−2)(5) − 5 = −10 − 5 = <b>−15</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> 2x when x = 3 is 2 × 3 = 6, not 23. A number next to a letter always means <b>multiply</b>.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Expressions are everywhere in the paper: "simplify" parts, "find the value when x = −2", writing an expression for a <b>cost</b>, an <b>age</b> or a <b>perimeter</b>, and then using it. Later questions on equations, patterns, functions and graphs all start from these skills, so a slip here can cost marks in several questions.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use brackets for negative numbers</b> when you substitute: 2(−3)², not 2 − 3². It's where most marks go.</li>
+            <li><b>Each term keeps the sign in front of it</b> when you collect like terms.</li>
+            <li><b>Don't mix unlike terms</b>: 3x + 2y and x² + x can't be simplified any further. Leave them.</li>
+            <li><b>Show the line where you put the numbers in</b>: it earns marks even if the final answer slips.</li>
+            <li><b>Check your expression with a number</b>: if n = 2 tickets cost €19, does 8n + 3 give 19? Yes.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Simplify.</b> (a) 5x + 3y − 2x + y &nbsp;(b) 4a² − 3a + a² + 7a − 2
+              <details><summary>Show the worked answer</summary><p>(a) x terms: 5 − 2 = 3; y terms: 3 + 1 = 4. <b>3x + 4y</b>.<br>(b) a² terms: 4 + 1 = 5; a terms: −3 + 7 = 4; the constant stays. <b>5a² + 4a − 2</b>.</p></details></li>
+            <li><b>Find the value.</b> a = −2 and b = 5. Find the value of (a) 3a + 2b &nbsp;(b) a² − b &nbsp;(c) 2ab − b²
+              <details><summary>Show the worked answer</summary><p>(a) 3(−2) + 2(5) = −6 + 10 = <b>4</b>.<br>(b) (−2)² − 5 = 4 − 5 = <b>−1</b>.<br>(c) 2(−2)(5) − (5)² = −20 − 25 = <b>−45</b>.</p></details></li>
+            <li><b>Phone plan.</b> Plan A costs €15 a month plus 10c for each text. (a) Write an expression for the monthly cost, in euro, of t texts. (b) Find the cost of 40 texts. (c) Plan B costs €20 a month with free texts. Which plan is cheaper for someone who sends 40 texts a month?
+              <details><summary>Show the worked answer</summary><p>(a) 10c = €0.10, so the cost is <b>15 + 0.1t</b> euro.<br>(b) 15 + 0.1(40) = 15 + 4 = <b>€19</b>.<br>(c) €19 is less than €20, so <b>Plan A</b> is cheaper (by €1).</p></details></li>
+            <li><b>The garden.</b> A rectangular garden has length 3x + 2 metres and width x − 1 metres. (a) Write the perimeter in its simplest form. (b) Find the perimeter when x = 4. (c) Explain why x can't be 1.
+              <details><summary>Show the worked answer</summary><p>(a) 2(3x + 2) + 2(x − 1) = 6x + 4 + 2x − 2 = <b>8x + 2</b> metres.<br>(b) 8(4) + 2 = <b>34 m</b>. Check: the sides are 14 m and 3 m, and 14 + 3 + 14 + 3 = 34 ✓.<br>(c) If x = 1 the width is 1 − 1 = <b>0 m</b>, so there would be no garden. x must be bigger than 1.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/algebra-variables-expressions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/24uOJ" target="_blank" rel="noopener">Algebra: Variables &amp; Expressions Teacher Pack (€5)</a>: Think of a Number, Algebra Tiles cards, Algebra Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){var l=keys(m).map(function(k){return [m[k],k];});if(l.length&&l[0][0]<0){var i=0;while(i<l.length&&l[i][0]<0)i++;if(i<l.length)l=[l[i]].concat(l.slice(0,i),l.slice(i+1));}return fmtList(l);} // a positive term goes first: 9 − 6x
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  var VARS2=[["x","y"],["a","b"],["m","n"],["p","q"],["c","d"]];
+  var VARS1=["x","a","n","y","t","p"];
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás"];
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",GRN="#9BD3AE",BLU="#A9C4E8";
+  function tilesSVG(n2,nx,n1){ // algebra tiles: big square x², long tile x, small square 1
+    var items=[],x=4,y=4,rowH=0,W=300,o="";
+    function place(w,h){if(x+w>W-4){x=4;y+=rowH+8;rowH=0;}var p=[x,y];x+=w+8;rowH=Math.max(rowH,h);return p;}
+    for(var i=0;i<n2;i++){var p=place(56,56);o+='<g class="t2"><rect x="'+p[0]+'" y="'+p[1]+'" width="56" height="56" rx="3" fill="'+YEL+'" stroke="'+INK+'" stroke-width="2"/><text x="'+(p[0]+28)+'" y="'+(p[1]+34)+'" font-size="16" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">x²</text></g>';}
+    for(i=0;i<nx;i++){p=place(18,56);o+='<g class="tx"><rect x="'+p[0]+'" y="'+p[1]+'" width="18" height="56" rx="3" fill="'+GRN+'" stroke="'+INK+'" stroke-width="2"/><text x="'+(p[0]+9)+'" y="'+(p[1]+33)+'" font-size="13" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">x</text></g>';}
+    for(i=0;i<n1;i++){p=place(18,18);o+='<g class="t1"><rect x="'+p[0]+'" y="'+p[1]+'" width="18" height="18" rx="3" fill="'+BLU+'" stroke="'+INK+'" stroke-width="2"/></g>';}
+    var H=y+rowH+6;
+    return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:320px" role="img" aria-label="Algebra tiles: '+n2+' x-squared tiles, '+nx+' x tiles, '+n1+' unit tiles">'+o+'</svg>';}
+  function shapeSVG(kind,labels){ // rectangle (length, width) or triangle (3 sides), labels are expression strings
+    var o,T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="15" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+INK+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    if(kind==="rect")o='<rect x="70" y="30" width="180" height="90" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(160,22,labels[0],0)+T(62,80,labels[1],1,"end");
+    else o='<polygon points="40,130 280,130 120,25" fill="'+GRN+'" stroke="'+INK+'" stroke-width="3"/>'+T(160,152,labels[0],0)+T(70,72,labels[1],1,"end")+T(210,72,labels[2],2,"start");
+    return '<svg viewBox="0 0 320 '+(kind==="rect"?135:160)+'" width="100%" style="max-width:320px" role="img" data-shape="'+kind+'" aria-label="'+(kind==="rect"?"Rectangle with length "+labels[0]+" and width "+labels[1]:"Triangle with sides "+labels.join(", "))+'">'+o+'</svg>';}
+  function slotSVG(pairs){ // slot machine reels: [[letter, value], ...]
+    var w=96*pairs.length+20,o='<rect x="2" y="2" width="'+(w-4)+'" height="66" rx="14" fill="#1B2430"/>';
+    pairs.forEach(function(p,i){var x=14+i*96;o+='<rect x="'+x+'" y="12" width="84" height="46" rx="8" fill="#fff" stroke="'+YEL+'" stroke-width="3"/><text class="reel" data-v="'+p[0]+'" data-n="'+p[1]+'" x="'+(x+42)+'" y="42" font-size="20" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+p[0]+' = '+num(p[1])+'</text>';});
+    return '<svg viewBox="0 0 '+w+' 70" width="100%" style="max-width:'+Math.min(320,w)+'px" role="img" aria-label="'+pairs.map(function(p){return p[0]+" = "+num(p[1]);}).join(", ")+'">'+o+'</svg>';}
+
+  /* ---------- Like-Term Sweep ---------- */
+  function qCollect(){
+    var v=rnd(VARS2),a1=ri(2,9),a2=nz(-9,9),b1=nz(-9,9),b2=nz(-9,9),c=Math.random()<.4?nz(-9,9):0,t=0;
+    while((a1+a2===0||b1+b2===0)&&t<20){a2=nz(-9,9);b2=nz(-9,9);t++;}if(a1+a2===0||b1+b2===0)return qCollect();
+    var list=[[a1,v[0]]].concat(shuffle([[b1,v[1]],[a2,v[0]],[b2,v[1]]].concat(c?[[c,""]]:[])));
+    var ans=mapOf(list),lump={};lump[v[0]+v[1]]=a1+a2+b1+b2;
+    var flip=plus(ans,{});flip[v[0]]=a1-a2;var noc=plus(ans,{});if(c)noc[""]=0;
+    return P("Simplify:",fmtList(list),ans,[absMap(list),lump,flip,c?noc:null],
+      "Collect the "+v[0]+" terms: "+sum([a1,a2])+" = "+num(a1+a2)+". Collect the "+v[1]+" terms: "+sum([b1,b2])+" = "+num(b1+b2)+"."+(c?" The number "+num(c)+" stays on its own.":"")+" "+v[0]+" and "+v[1]+" are not like terms, so stop there: "+fmt(ans)+".","",{t:"simp"});
+  }
+  function qCollectSq(){
+    var v=rnd(VARS1),s=v+"²",p=ri(1,6),r=nz(-6,6),q=nz(-9,9),w=nz(-9,9),c=Math.random()<.6?nz(-9,9):0,t=0;
+    while((p+r===0||q+w===0)&&t<20){r=nz(-6,6);w=nz(-9,9);t++;}if(p+r===0||q+w===0)return qCollectSq();
+    var list=[[p,s]].concat(shuffle([[q,v],[r,s],[w,v]].concat(c?[[c,""]]:[])));
+    var ans=mapOf(list),lump={};lump[s]=p+r+q+w;if(c)lump[""]=c;var pw={};pw[v+"⁴"]=p+r;pw[v]=q+w;if(c)pw[""]=c;var cube={};cube[v+"³"]=p+r+q+w;if(c)cube[""]=c;
+    return P("Simplify:",fmtList(list),ans,[lump,pw,absMap(list),cube],
+      s+" and "+v+" are NOT like terms. "+s+" terms: "+sum([p,r])+" = "+num(p+r)+". "+v+" terms: "+sum([q,w])+" = "+num(q+w)+". Adding never changes the power ("+v+"² + "+v+"² = 2"+v+"², not "+v+"⁴). Answer: "+fmt(ans)+".","",{t:"simp"});
+  }
+  var DIFF={"x":["x²","y","","xy"],"x²":["x","x³","y²","xy"],"xy":["x","y","x²y","x²"],"ab":["a","b","a²b","ab²"],"a²":["a","a³","b²","ab"],"y":["y²","x","xy",""],"n²":["n","n³","2n",""]};
+  function qLike(){
+    var k=rnd(Object.keys(DIFF)),c0=nz(-9,9),c1;do{c1=nz(-9,9);}while(c1===c0);
+    var key=k,swap={"xy":"yx","ab":"ba"};if(swap[k]&&Math.random()<.4)key=swap[k];
+    var pool=DIFF[k].map(function(d){var c=nz(-9,9);if(d==="2n")return tm(c,"n",true);if(d==="")return num(ri(2,9));return tm(c,d,true);});
+    return C("Which of these is a like term to "+tm(c0,k,true)+"?","",tm(c1,key,true),pool,
+      "Like terms have exactly the same letters with the same powers; only the number in front changes. "+tm(c1,key,true)+(key!==k?" ("+key+" is the same as "+k+")":"")+" is a like term to "+tm(c0,k,true)+".",null,"",{t:"like",target:tm(c0,k,true)});
+  }
+  function qTerms(){
+    var two=Math.random()<.5,v=two?rnd(VARS2):[rnd(VARS1)],list;
+    if(two)list=[[nz(-9,9),v[0]],[nz(-9,9),v[1]],[nz(-9,9),""]].concat(Math.random()<.5?[[nz(-9,9),v[0]+v[1]]]:[]);
+    else list=[[nz(-9,9),v[0]+"²"],[nz(-9,9),v[0]],[nz(-9,9),""]].concat(Math.random()<.4?[[nz(-9,9),v[0]+"³"]]:[]);
+    list=shuffle(list);var frame=fmtList(list),ask=rnd(["coef","coef","const","count"]),tgt=list.filter(function(t){return t[1]!=="";});tgt=rnd(two?tgt.filter(function(t){return t[1].length===1;}):tgt.filter(function(t){return t[1]===v[0];}));
+    var cst=list.filter(function(t){return t[1]==="";})[0][0];
+    if(ask==="coef")return QN("What is the coefficient of "+tgt[1]+" in this expression?",frame,tgt[0],[Math.abs(tgt[0]),cst,-tgt[0]],
+      "The coefficient is the number in front of "+tgt[1]+", sign included: "+tm(tgt[0],tgt[1],true)+" → "+num(tgt[0])+".","",{t:"coef",v:tgt[1]});
+    if(ask==="const")return QN("What is the constant term in this expression?",frame,cst,[Math.abs(cst),list.length,list[0][0]],
+      "The constant is the term with no letter, sign included: "+num(cst)+".","",{t:"const"});
+    return QN("How many terms are in this expression?",frame,list.length,[list.length+1,list.length-1,list.length*2],
+      "Terms are separated by + and "+M+" signs: "+list.map(function(t){return tm(t[0],t[1],true);}).join(", ")+" → "+list.length+" terms.","",{t:"count"});
+  }
+  function qTiles(){
+    var n2=ri(0,3),nx=ri(1,5),n1=ri(0,6);if(n2+n1===0)n1=ri(1,4);
+    var ans={"x²":n2,"x":nx,"":n1},all={"x":n2+nx+n1},sw={"x²":nx,"x":n2,"":n1},lump={"x²":n2+nx,"":n1},lump2={"x":nx,"":n2+n1};
+    return P("Each big square is x², each long tile is x and each small square is 1. Write the expression the tiles show.","",ans,[all,sw,lump,lump2],
+      "Count each kind separately: "+n2+" × x², "+nx+" × x, "+n1+" × 1 → "+fmt(ans)+". Different shapes are not like terms, so they can't be added together.",tilesSVG(n2,nx,n1),{t:"tiles"});
+  }
+
+  /* ---------- Words to algebra ---------- */
+  function qWords(){
+    var v=rnd(["n","x","y","p","t"]),k=ri(2,9),m;do{m=ri(2,9);}while(m===k);var s={};s[v]=1;
+    function mk(o){var r={};for(var key in o)r[key.replace("V",v)]=o[key];return r;}
+    var T=rnd([
+      [k+" more than "+v,{V:1,"":k},[{V:k},{V:1,"":-k},{V:k+1}]],
+      [k+" less than "+v,{V:1,"":-k},[{V:-1,"":k},{V:1,"":k},{V:-k}]],
+      [v+" multiplied by "+k,{V:k},[{V:1,"":k},{"":k},{V:k,"":k}]],
+      [k+" times "+v+", then add "+m,{V:k,"":m},[{V:k,"":k*m},{V:k+m},{V:m,"":k}]],
+      ["double "+v+", then subtract "+m,{V:2,"":-m},[{V:-2,"":m},{V:2,"":-2*m},{V:2,"":m}]],
+      [v+" squared, plus "+k,{"V²":1,"":k},[{V:2,"":k},{"V²":k},{"V²":1,"":-k}]],
+      ["subtract "+v+" from "+k,{V:-1,"":k},[{V:1,"":-k},{V:-k},{V:1,"":k}]],
+      [v+" cubed",{"V³":1},[{V:3},{V:1,"":3},{"V²":1,V:1}]]]);
+    return P("Write as an expression:","“"+T[0]+"”",mk(T[1]),T[2].map(mk),
+      "“"+T[0]+"” → "+fmt(mk(T[1]))+"."+(/less than/.test(T[0])?" Careful with the order: it starts with "+v+" and takes "+k+" away, so not "+k+" "+M+" "+v+".":/^subtract/.test(T[0])?" Careful with the order: it starts with "+k+" and takes "+v+" away, so not "+v+" "+M+" "+k+".":""),"",{t:"words"});
+  }
+  function qHalf(){
+    var v=rnd(["n","x","y","p"]),f=rnd([[2,"half"],[3,"a third"],[4,"a quarter"]]),k=ri(1,9),plusK=Math.random()<.45;
+    if(!plusK)return C("Write as an expression:","“"+f[1]+" of "+v+"”",v+"/"+f[0],[f[0]+v,v+" "+M+" "+f[0],f[0]+"/"+v,v+" + "+f[0]],
+      f[1]+" of "+v+" means "+v+" ÷ "+f[0]+", written "+v+"/"+f[0]+".",null,"",{t:"half"});
+    return C("Write as an expression:","“"+f[1]+" of "+v+", then add "+k+"”",v+"/"+f[0]+" + "+k,["("+v+" + "+k+")/"+f[0],f[0]+v+" + "+k,v+"/"+f[0]+" "+M+" "+k,f[0]+"/"+v+" + "+k],
+      "First "+f[1]+" of "+v+" ("+v+"/"+f[0]+"), then add "+k+": "+v+"/"+f[0]+" + "+k+". ("+v+" + "+k+")/"+f[0]+" would add "+k+" first.",null,"",{t:"half"});
+  }
+  function qCost(){
+    var ctx=ri(0,3),p=ri(3,12),f=ri(2,9),k=ri(2,9),m=ri(2,9),nm=rnd(NAMES);if(f===p)f=p+1;
+    if(ctx===0)return P("Cinema tickets cost €"+p+" each, plus a €"+f+" booking fee for the whole order. Which expression gives the total cost, in euro, of n tickets?","",{n:p,"":f},[{n:p+f},{n:f,"":p},{n:p,"":-f}],
+      "n tickets at €"+p+" each = "+p+"n. Add the fee once: "+p+"n + "+f+".","",{t:"cost",c:"cinema"});
+    if(ctx===1)return P("A taxi charges a €"+f+" call-out fee plus €"+p+" per km. Write the cost, in euro, of a trip of d km.","",{d:p,"":f},[{d:p+f},{d:f,"":p},{d:p*f}],
+      "€"+p+" for each of the d km = "+p+"d. Plus the fee: "+p+"d + "+f+".","",{t:"cost",c:"taxi"});
+    if(ctx===2)return P(nm+" is x years old. "+(nm==="Ciara"||nm==="Aoife"||nm==="Zara"||nm==="Emma"?"Her":"His")+" brother is "+k+" years older. Their mum is "+m+" times "+nm+"'s age. Write the total of their three ages.","",{x:2+m,"":k},[{x:2+m,"":-k},{x:1+m,"":k},{x:3,"":k+m}],
+      nm+": x. Brother: x + "+k+". Mum: "+m+"x. Total: x + x + "+k+" + "+m+"x = "+fmt({x:2+m,"":k})+".","",{t:"cost",c:"ages"});
+    if(m===k)m=k+1;
+    return P(nm+" has n sweets, gives "+k+" to a friend, then buys "+m+" more. How many sweets does "+nm+" have now?","",{n:1,"":m-k},[{n:1,"":m+k},{n:1,"":k-m},{n:m-k}],
+      "n − "+k+" + "+m+" = "+fmt({n:1,"":m-k})+".","",{t:"cost",c:"sweets"});
+  }
+  function qPerim(){
+    var v="x";
+    if(Math.random()<.6){
+      var a=ri(1,4),b=ri(1,6),c=ri(1,3),d=rnd([0,0,-1,-2,1,2,3]);var L={x:a,"":b},W={x:c,"":d},ans=plus(times(L,2),times(W,2));
+      var half=plus(L,W),nodbl={x:2*a+2*c,"":b+d},lump={x:2*(a+b+c+d)};
+      return P("Write the perimeter of this rectangle in its simplest form.","",ans,[half,b+d!==2*(b+d)?nodbl:null,lump,{x:2*a+2*c,"":b+d+2}],
+        "Perimeter = all four sides: 2("+fmt(L)+") + 2("+fmt(W)+") = "+fmt(times(L,2))+" + "+fmt(times(W,2))+" = "+fmt(ans)+".",shapeSVG("rect",[fmt(L),fmt(W)]),{t:"perim"});
+    }
+    var S=[0,1,2].map(function(){return {x:ri(1,4),"":rnd([0,1,2,3,4,5,-1,-2])};});S.forEach(function(s){if(s.x===1&&s[""]===0)s[""]=2;});
+    var ans=S.reduce(plus,{}),lump={x:S.reduce(function(t,s){return t+s.x+s[""];},0)},sgn={x:ans.x,"":S.reduce(function(t,s){return t+Math.abs(s[""]);},0)};
+    return P("Write the perimeter of this triangle in its simplest form.","",ans,[lump,sgn,{x:ans.x*2,"":ans[""]}],
+      "Add the three sides: "+S.map(function(s){return "("+fmt(s)+")";}).join(" + ")+" = "+fmt(ans)+". Collect the x terms and the numbers separately.",shapeSVG("tri",S.map(fmt)),{t:"perim"});
+  }
+  function qRead(){
+    var v=rnd(["n","x","p"]),k=ri(2,7),m;do{m=ri(2,9);}while(m===k);
+    var C0=[[m+" more than "+k+" times "+v,{V:k,"":m}],[m+" less than "+k+" times "+v,{V:k,"":-m}],[k+" less than "+m+" times "+v,{V:m,"":-k}],
+      [k+" times "+v+", taken away from "+m,{V:-k,"":m}],[m+" less than "+v+", then multiplied by "+k,{V:k,"":-k*m}],[k+" more than "+m+" times "+v,{V:m,"":k}]];
+    var cand=C0.map(function(c){var r={};for(var key in c[1])r[key.replace("V",v)]=c[1][key];return [c[0],r];});
+    var a=rnd(cand.slice(0,4)),pool=cand.filter(function(c){return !same(c[1],a[1]);}).map(function(c){return c[0];});
+    return C("Which sentence matches this expression?",fmt(a[1]),a[0],pool,"“"+a[0]+"” → "+fmt(a[1])+".",null,"",{t:"read"});
+  }
+
+  /* ---------- Substitution Slot Machine ---------- */
+  function qSub1(){
+    var v=rnd(VARS1),x=Math.random()<.7?-ri(1,6):ri(1,6),a=ri(2,9),b=nz(-9,9),form=ri(0,2),list,ans,work;
+    if(form===0){list=[[a,v],[b,""]];ans=a*x+b;work=a+br(x)+" "+(b<0?M+" "+(-b):"+ "+b)+" = "+num(a*x)+(b<0?" "+M+" "+(-b):" + "+b)+" = "+num(ans);}
+    else if(form===1){b=Math.abs(b);list=[[b,""],[-a,v]];ans=b-a*x;work=b+" "+M+" "+a+br(x)+" = "+b+" "+(a*x<0?"+ "+(-a*x):M+" "+(a*x))+" = "+num(ans);}
+    else{b=Math.abs(b);list=[[a,v],[-b,""]];ans=a*x-b;work=a+br(x)+" "+M+" "+b+" = "+num(a*x)+" "+M+" "+b+" = "+num(ans);}
+    var ax=Math.abs(x),slips=[form===1?b-a*ax:form===0?a*ax+b:a*ax-b,form===1?b+a*x:-ans,form===0?a+x+b:form===1?b-a-x:a+x-b];
+    if(x>0&&form!==1)slips.push(+(String(a)+String(x))+(form===0?b:-b));
+    return QN("Find the value when "+v+" = "+num(x)+":",fmtList(list),ans,slips,
+      "Put "+num(x)+" in brackets in place of "+v+": "+work+".",slotSVG([[v,x]]),{t:"sub",vals:[[v,x]]});
+  }
+  function qSubSq(){
+    var v=rnd(VARS1),x=Math.random()<.8?-ri(2,5):ri(2,5),a=ri(1,4),b=Math.random()<.5?nz(-6,6):0,list=[[a,v+"²"]].concat(b?[[b,v]]:[]),ans=a*x*x+b*x;
+    var slips=[-a*x*x+b*x,(a*x)*(a*x)+b*x,a*2*x+b*x,a*x*x-b*x];
+    return QN("Find the value when "+v+" = "+num(x)+":",fmtList(list),ans,slips,
+      "Square first: "+br(x)+"² = "+br(x)+" × "+br(x)+" = "+(x*x)+(x<0?" (minus × minus = plus).":".")+(a>1?" Then × "+a+": "+a*x*x+".":"")+(b?" "+tm(b,v,true)+" = "+num(b)+" × "+br(x)+" = "+num(b*x)+".":"")+" Answer: "+num(ans)+".",slotSVG([[v,x]]),{t:"sub",vals:[[v,x]]});
+  }
+  function qSub2(){
+    var v=rnd([["a","b"],["x","y"],["p","q"]]),A=nz(-6,6),B=nz(-6,6);if(A>0&&B>0)A=-A;
+    var form=ri(0,4),frame,ans,slips,work;
+    if(form===0){var p=ri(2,5),q=ri(2,5);frame=fmtList([[p,v[0]],[q,v[1]]]);ans=p*A+q*B;slips=[p*Math.abs(A)+q*Math.abs(B),p*A-q*B,p+A+q+B];work=p+br(A)+" + "+q+br(B)+" = "+num(p*A)+" + "+br(q*B)+" = "+num(ans);}
+    else if(form===1){frame=v[0]+v[1];ans=A*B;slips=[A+B,-A*B,Math.abs(A)+Math.abs(B)];work=br(A)+" × "+br(B)+" = "+num(ans);}
+    else if(form===2){frame=v[0]+" "+M+" "+v[1];ans=A-B;slips=[B-A,A+B,Math.abs(A)-Math.abs(B)];work=br(A)+" "+M+" "+br(B)+" = "+num(ans);}
+    else if(form===3){frame=v[0]+"² + "+v[1];ans=A*A+B;slips=[-A*A+B,2*A+B,A*A-B];work=br(A)+"² + "+br(B)+" = "+(A*A)+" + "+br(B)+" = "+num(ans);}
+    else{frame="2"+v[0]+v[1]+" "+M+" "+v[1];ans=2*A*B-B;slips=[2*A*B+B,-2*A*B-B,2*A+B-B];work="2 × "+br(A)+" × "+br(B)+" "+M+" "+br(B)+" = "+num(2*A*B)+" "+M+" "+br(B)+" = "+num(ans);}
+    return QN("Find the value when "+v[0]+" = "+num(A)+" and "+v[1]+" = "+num(B)+":",frame,ans,slips,
+      "Swap each letter for its value, in brackets: "+work+".",slotSVG([[v[0],A],[v[1],B]]),{t:"sub",vals:[[v[0],A],[v[1],B]]});
+  }
+  function qFormula(){
+    var c=ri(0,4),r,x,ans,en;
+    if(c===0){var p=ri(2,4),f=ri(3,6);x=ri(3,12);ans=p*x+f;en="A taxi fare in euro is C = "+p+"k + "+f+", where k is the number of km. Find C when k = "+x+".";r=[["k",x]];
+      return QN(en,"",ans,[(p+f)*x,p+x+f,p*x],"C = "+p+" × "+x+" + "+f+" = "+ans+".",slotSVG(r),{t:"formula"});}
+    if(c===1){var s=rnd([6,7]);x=ri(2,5);ans=15-s*x;en="Roughly, the temperature (°C) on a mountain is T = 15 "+M+" "+s+"h, where h is the height in km. Find T when h = "+x+".";r=[["h",x]];
+      return QN(en,"",ans,[(15-s)*x,15+s*x,s*x-15],"T = 15 "+M+" "+s+" × "+x+" = 15 "+M+" "+s*x+" = "+num(ans)+" °C.",slotSVG(r),{t:"formula"});}
+    if(c===2){x=-ri(2,15);ans=2*x+30;en="A rough rule to change °C to °F is F = 2C + 30. Find F when C = "+num(x)+".";r=[["C",x]];
+      return QN(en,"",ans,[2*Math.abs(x)+30,30-2*x,2*(x+30)],"F = 2 × "+br(x)+" + 30 = "+num(2*x)+" + 30 = "+num(ans)+".",slotSVG(r),{t:"formula"});}
+    if(c===3){var d=ri(2,6);x=ri(3,10);ans=-d*x;en="A diver goes down "+d+" m every minute. Her depth is D = "+M+d+"t metres after t minutes. Find D when t = "+x+".";r=[["t",x]];
+      return QN(en,"",ans,[d*x,-d-x,d-x],"D = "+M+d+" × "+x+" = "+num(ans)+" (that's "+(d*x)+" m below the surface).",slotSVG(r),{t:"formula"});}
+    var g=ri(2,5),b2=ri(10,25);x=ri(2,9);ans=b2+g*x;en="A phone plan costs C = "+b2+" + "+g+"g euro a month, where g is the number of extra GB. Find C when g = "+x+".";r=[["g",x]];
+    return QN(en,"",ans,[(b2+g)*x,b2+g+x,g*x],"C = "+b2+" + "+g+" × "+x+" = "+b2+" + "+g*x+" = "+ans+".",slotSVG(r),{t:"formula"});
+  }
+
+  /* ---------- Algebra talk ---------- */
+  function qNotation(){
+    var v=rnd(VARS1),k=ri(3,6),T=rnd([
+      [v+" + "+v+" + "+v,"3"+v,[v+"³",v+" + 3","3"+v+"³"]],
+      [v+" × "+v+" × "+v,v+"³",["3"+v,v+" + 3","3"+v+"³"]],
+      [v+" × "+v,v+"²",["2"+v,v+" + 2","2"+v+"²"]],
+      [k+" × "+v,k+v,[v+(k===3?"³":k===4?"⁴":"²"),k+" + "+v,k+v+"²"]],
+      ["a × b × "+k,k+"ab",[k+"a + b","a + b + "+k,"ab"+(k===3?"³":"²")]],
+      [v+" ÷ "+k,v+"/"+k,[k+v,v+" "+M+" "+k,k+"/"+v]],
+      ["2 × "+v+" × "+v,"2"+v+"²",["4"+v,"4"+v+"²",v+"⁴"]],
+      ["p + p + q + q + q","2p + 3q",["5pq","p² + q³","6pq"]]]);
+    return C("Write this the short (algebra) way:",T[0],T[1],T[2],
+      /\+/.test(T[0])?"Adding the same letter counts them: "+T[0]+" = "+T[1]+".":/÷/.test(T[0])?"Divide is written as a fraction: "+T[0]+" = "+T[1]+".":"Multiplying: write the number first and leave out the × sign; a letter times itself gives a power. "+T[0]+" = "+T[1]+".",null,"",{t:"notation"});
+  }
+  function qEquiv(){
+    var v=rnd(VARS2),a1=ri(2,9),a2=nz(-9,9),b1=ri(1,9),c=nz(-9,9);if(a1+a2===0)a2=a2>0?a2+1:a2-1;
+    var list=[[a1,v[0]],[c,""],[a2,v[0]],[b1,v[1]]];list=[list[0]].concat(shuffle(list.slice(1)));
+    var ans=mapOf(list),order=[[b1,v[1]],[c,""],[a1+a2,v[0]]],ansStr=fmtList(shuffle(order.slice()));
+    var slips=[absMap(list),(function(){var m={};m[v[0]+v[1]]=a1+a2+b1;m[""]=c;return m;})(),plus(ans,(function(){var m={};m[v[0]]=-2*a2;return m;})()),plus(ans,{"":-2*c})];
+    var pool=[];slips.forEach(function(s){if(!same(s,ans)){var l=keys(s).map(function(k){return [s[k],k];});pool.push(fmtList(shuffle(l)));}});
+    return C("Which expression is equal to this one?",fmtList(list),ansStr,pool,
+      "Simplify it first: "+fmt(ans)+". "+ansStr+" is the same terms in a different order, so it is equal. (The order of terms doesn't matter, as long as each keeps its sign.)",null,"",{t:"equiv"});
+  }
+  function qClaim(){
+    var nm=rnd(NAMES),v=rnd(VARS2),x=v[0],y=v[1],p=ri(2,7),q=p,T=ri(0,6),lhs,rhs,right,cor,sl;
+    while(q===p)q=ri(2,7);
+    if(T===0){lhs=p+x+" + "+q+y;rhs=(p+q)+x+y;right=false;cor="Wrong: it can't be simplified";sl=[(p+q)+x,(p*q)+x+y];}
+    else if(T===1){lhs=p+x+" + "+q+x;rhs=(p+q)+x;right=true;sl=[(p+q)+x+"²",(p*q)+x,(p+q)+""];}
+    else if(T===2){lhs=x+"² + "+x+"²";rhs=x+"⁴";right=false;cor="Wrong: it should be 2"+x+"²";sl=["4"+x,x+"²"];}
+    else if(T===3){lhs=p+x+" + "+q;rhs=(p+q)+x;right=false;cor="Wrong: it can't be simplified";sl=[(p+q)+"",(p*q)+x];}
+    else if(T===4){lhs=p+x+" "+M+" "+x;rhs=p+"";right=false;cor="Wrong: it should be "+(p-1)+x;sl=[(p-1)+"",(p+1)+x];if(p===2)cor="Wrong: it should be "+x;}
+    else if(T===5){lhs=x+" + "+y;rhs=y+" + "+x;right=true;sl=[x+y,"2"+x+y,y+" "+M+" "+x];}
+    else{lhs=p+x+" "+M+" "+p+x;rhs="0";right=true;sl=[x,"2"+x,p+""];}
+    var ans=right?"Right":cor,pool=right?sl.map(function(s){return "Wrong: it should be "+s;}):["Right"].concat(sl.map(function(s){return "Wrong: it should be "+s;}));
+    if(T===5)pool=["Wrong: the order matters"].concat(pool);
+    return C(nm+" writes: "+lhs+" = "+rhs+". Is "+(nm==="Ciara"||nm==="Aoife"||nm==="Zara"||nm==="Emma"?"she":"he")+" right?","",ans,pool,
+      right?lhs+" really does equal "+rhs+": "+(T===5?"you can add in any order.":"they are like terms."):"Only like terms can be added. "+(T===2?x+"² + "+x+"² = 2"+x+"²: the power doesn't change.":T===4?p+x+" "+M+" "+x+" = "+(p-1===1?"":p-1)+x+": the "+x+" doesn't disappear.":lhs+" has unlike terms, so it stays as it is."),
+      lhs+" = "+rhs+"? → "+ans,"",{t:"claim",lhs:lhs,rhs:rhs});
+  }
+
+  var MAKERS={
+    sweep:[qCollect,qCollect,qCollect,qCollectSq,qCollectSq,qLike,qTerms,qTiles],
+    words:[qWords,qWords,qWords,qHalf,qCost,qCost,qPerim,qPerim,qRead],
+    sub:[qSub1,qSub1,qSub1,qSubSq,qSubSq,qSub2,qSub2,qFormula,qFormula],
+    talk:[qNotation,qNotation,qEquiv,qEquiv,qClaim,qClaim,qClaim],
+    mixed:[qCollect,qCollectSq,qLike,qTerms,qTiles,qWords,qHalf,qCost,qPerim,qRead,qSub1,qSubSq,qSub2,qFormula,qNotation,qEquiv,qClaim]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="sweep"||m==="sub")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sweep"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sweep"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
