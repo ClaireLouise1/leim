@@ -1,6 +1,6 @@
 // Léim — small site script
 // Waitlist form: sends sign-ups to the Léim MailerLite form
-// (account 2794931, form "Léim – JC Spanish free guide (website)").
+// (account 2794931, form "Léim – JC Spanish free guide (website)"; since 15 Nov 2026 the freebie is the parent college guide).
 var ML_URL = 'https://assets.mailerlite.com/jsonp/2794931/forms/204102674478531601/subscribe';
 document.querySelectorAll('form.waitlist').forEach(function (form) {
   form.addEventListener('submit', function (e) {
