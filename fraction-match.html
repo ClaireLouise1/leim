@@ -384,7 +384,7 @@
     return QF("Work out:",raw(x)+" ÷ "+raw(y),q,[mul(x,y),dvd(y,x),[x[0]*y[0],x[1]*y[1]],F(x[1]*y[0],x[0]*y[1])],"Keep, change, flip: "+raw(x)+" × "+y[1]+"/"+y[0]+" = "+(x[0]*y[1])+"/"+(x[1]*y[0])+(F(x[0]*y[1],x[1]*y[0])[1]!==x[1]*y[0]||q[0]>q[1]?" = "+mx(q):"")+".",mx);
   }
   function qOf(){
-    var d=rnd([3,4,5,6,8,10]),n=ri(1,d-1),m=ri(2,12),Q0=d*m,a=n*m;
+    var d=rnd([3,4,5,6,8,10]),n=cop(d),m=ri(2,12),Q0=d*m,a=n*m;
     var things=rnd([["€",""],["","students"],["","km"],["","g of flour"],["","minutes"]]);
     var o=Q("Work out:",n+"/"+d+" of "+(things[0]?things[0]+Q0:Q0+" "+things[1]),a,[m,Q0/n|0,Q0-a,n*d],Q0+" ÷ "+d+" = "+m+" (that's 1/"+d+"), then × "+n+" = "+a+". Divide by the bottom, times by the top.");
     if(things[0]){o.answer=things[0]+a;o.wrong=o.wrong.map(function(x){return things[0]+x;});o.review=o.en+" "+o.frame+" → "+o.answer;}
