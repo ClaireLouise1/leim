@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exam skills: listening &amp; reading strategies: play Gist or Detail? | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish exam-skills game: read short texts against the clock, get the gist, then find the details. Cognates and false friends, number traps, times, prices, dates, change-of-mind traps and a Listening mode. Strategies and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.mail{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;margin:0 auto 18px;max-width:540px;box-shadow:0 4px 14px rgba(27,36,48,.08);overflow:hidden;font-size:14.5px}
+.mail .bar{display:flex;justify-content:space-between;background:var(--night);color:#fff;font-weight:700;font-size:13px;padding:7px 12px}
+.mail .bar .count{color:var(--sun)}
+.mail .hd{border-bottom:1px solid var(--line);padding:4px 12px;font-size:13px;color:var(--muted)}
+.mail .hd b{color:var(--ink)}
+.mail .body{padding:8px 12px 10px;line-height:1.45;min-height:90px}
+.mail .body p{margin:0 0 2px}
+.mail .body .now{color:var(--muted)}
+.mail.sent{outline:3px solid var(--green)}
+.mail .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.9)}
+.prompt .frame.find{background:#FFFDF6;border:1px dashed var(--cream-line);border-radius:10px;padding:8px 10px}
+.prompt .frame .fixed{color:var(--green)}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.two-mail{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:15px;line-height:1.5}
+@media (max-width:620px){.two-mail{grid-template-columns:1fr}}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.mail{font-size:13px}}
+.mail .body b.c{color:var(--green)}
+.mail .body mark{background:var(--sun);color:var(--ink);padding:0 2px;border-radius:3px}
+.mail .body{font-size:15.5px;line-height:1.55}
+.mail .hd b{font-size:14px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Gist or Detail?</h1>
+        <p>Exam skills for Listening and Reading. Read short Spanish texts against the clock: first get the <b>gist</b> (what is it about?), then hunt for the <b>details</b> (times, prices, days, reasons). Then cognates and false friends, number traps, "change of mind" traps and a Listening mode. Stuck? The strategies are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the strategies</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="texts"><div><b>Gist or Detail?</b><span>A short text, one gist question, then three detail questions: +3 bonus for every text you finish (2 minutes)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="cognates"><div><b>Cognates &amp; false friends</b><span>Words that look like English, and the ones that trick you</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="detective"><div><b>Detail detective</b><span>Number traps, times, prices, dates, "change of mind" traps and gist-or-detail questions</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: gist or detail 🔊</b><span id="listenNote">Hear a message or announcement: get the gist, then catch the detail</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.1, 1.3, 1.6, 1.7, 2.5, 2.6, 2.7 (2017 spec, exams 2027–2028) · 1.3, 1.5, 1.6, 1.17, 2.4, 2.7, 2.9 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="mail" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the strategies</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Exam skills: Listening &amp; Reading</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: two questions</h3>
+        <div class="note" style="margin:0;background:var(--mist);border-color:var(--line)"><b>📢 Aviso</b><br>Instituto San Jorge: excursión a Madrid el jueves doce de marzo. El autobús sale del instituto a las ocho en punto. Precio: veinticinco euros, comida incluida.</div>
+        <p style="margin-top:10px"><b>Question 1:</b> What is this notice about? &nbsp; <b>Question 2:</b> At what time does the bus leave?<br>To answer one of them you need the whole text. For the other you need just three words. Which is which? What did you look for each time?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Question 1 is a <b>gist</b> question: the big picture (a school trip). You get it from the title, the type of text and a few key words (<em>excursión, autobús, precio</em>). You don't need every word. Question 2 is a <b>detail</b> question: one fact (8 o'clock). You scan for the time (<em>a las…</em>) and ignore the rest. Knowing which kind of question you have tells you <b>how</b> to read or listen.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Gist or detail?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>🔭 Gist</th><th>🔍 Detail</th></tr></thead>
+          <tbody>
+            <tr><td><b>It asks</b></td><td>What is it about? What kind of text? Where would you hear it? How does the writer feel overall?</td><td>When? Where? How much? How many? Who? Why? Name two things…</td></tr>
+            <tr><td><b>You…</b></td><td>skim: the title, the first and last lines, words you know, the tone</td><td>scan: look or listen for one kind of word (a time, a price, a day) and stop there</td></tr>
+            <tr><td><b>Clues</b></td><td>the text type (📱 text, 📢 notice, 📻 announcement), pictures, greetings like <em>Querido…</em> or <em>Atención, señores pasajeros</em></td><td>question words: <em>¿Cuándo? ¿Dónde? ¿Quién? ¿Por qué? ¿Cuánto? ¿A qué hora?</em></td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Before, during and after</h3>
+        <ol>
+          <li><b>Before:</b> read the questions first and underline the question word. <b>Predict</b> the kind of answer: a time? a price? a place? a reason? Look at the title and any pictures.</li>
+          <li><b>During:</b> first time through, get the gist. Next time, go for the details. If you hear a piece more than once, use each listen for a different job. Don't panic at words you don't know: keep going.</li>
+          <li><b>After:</b> check every answer. Does it answer the question word? (A "when?" question needs a time or day.) Did you give the number of points asked ("name <b>two</b> things")? Is it sensible? (€550 for a T-shirt? Look again.) Never leave a blank: a smart guess can still get marks.</li>
+        </ol>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Cognates: free words</h3>
+        <p>Lots of Spanish words look like English. Learn the patterns and you understand hundreds of words you've never studied:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>-ción</td><td>-tion</td><td>la estación, la información, la nación</td></tr>
+            <tr><td>-dad</td><td>-ty</td><td>la ciudad, la universidad, la electricidad</td></tr>
+            <tr><td>-oso</td><td>-ous</td><td>famoso, delicioso, nervioso</td></tr>
+            <tr><td>-mente</td><td>-ly</td><td>rápidamente, normalmente, finalmente</td></tr>
+            <tr><td>es- + consonant</td><td>s- + consonant</td><td>la escuela, el estudiante, el estómago, España</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">⚠️ False friends: they look like English, but they're not</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>Really means</th><th>Not…</th></tr></thead>
+          <tbody>
+            <tr><td>embarazada</td><td>pregnant</td><td>embarrassed (= avergonzado/a)</td></tr>
+            <tr><td>la librería</td><td>bookshop</td><td>library (= la biblioteca)</td></tr>
+            <tr><td>constipado/a</td><td>has a cold</td><td>constipated</td></tr>
+            <tr><td>el éxito</td><td>success</td><td>exit (= la salida)</td></tr>
+            <tr><td>la carpeta</td><td>folder</td><td>carpet (= la alfombra)</td></tr>
+            <tr><td>sensible</td><td>sensitive</td><td>sensible (= sensato/a)</td></tr>
+            <tr><td>la ropa · largo · actual</td><td>clothes · long · current</td><td>rope · large · actual</td></tr>
+            <tr><td>asistir · recordar · el campo</td><td>to attend · to remember · countryside</td><td>to assist · to record · camp</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Traps examiners love</h3>
+        <ul>
+          <li><b>Numbers that sound alike:</b> <em>cuatro</em> 4 · <em>catorce</em> 14 · <em>cuarenta</em> 40 · <em>seis</em> 6 · <em>dieciséis</em> 16 · <em>sesenta</em> 60 · <em>setenta</em> 70 · <em>quince</em> 15 · <em>cincuenta</em> 50 · <em>doce</em> 12 · <em>dos</em> 2.</li>
+          <li><b>Times:</b> <em>menos cuarto</em> = quarter <b>to</b> (<em>las nueve menos cuarto</em> = 8:45, not 9:45). <em>y media</em> = half past.</li>
+          <li><b>Prices:</b> <em>doce euros con cincuenta</em> = €12.50.</li>
+          <li><b>Days and months:</b> <em>martes</em> (Tue) / <em>miércoles</em> (Wed), <em>junio</em> (June) / <em>julio</em> (July).</li>
+          <li><b>Change of mind:</b> the first thing you hear is often <b>not</b> the answer. Listen for <em>pero, sin embargo, al final, ahora, no… sino, perdón</em>: <em>El partido no es el sábado; es el domingo.</em> → Sunday.</li>
+        </ul>
+
+        <div class="note" style="margin-top:12px"><b>Irish and English link:</b> it's the same skill as your Irish <em>cluastuiscint</em> and <em>léamhthuiscint</em>, and English comprehension. Read the questions first, find the key word, check your answer. You already know how to do this!</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> Listening (140 marks) and Reading (140 marks) are <b>280 of the 360 marks</b> on the JC Spanish paper, so these skills are worth more than any one topic. Answer in <b>English</b> when the question is in English, don't copy chunks of Spanish, and give exactly what's asked: one detail, two details, a time or a reason.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/exam-skills-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the strategies + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: strategies, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/vzmDL" target="_blank" rel="noopener">Exam Skills Teacher Pack (€5)</a>: Read &amp; Report pair game, False Friend Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+
+  /* ---------- Texts ----------
+     {t:title, k:type, b:Spanish text, g:[gist question, answer, [3 wrong], evidence], d:[[detail question, answer, [3 wrong], evidence], …]}
+     All texts are original (written for Léim), not taken from exam papers. */
+  var TEXTS=[
+    {t:"Mensaje de Lucía",k:"📱 Text message",b:"¡Hola, Ana! Lo siento, pero no puedo ir al cine esta tarde porque tengo que cuidar a mi hermano pequeño. ¿Vamos el sábado? La película empieza a las seis y media. Un beso, Lucía",
+     g:["Why is Lucía writing?","To change their cinema plans",["To invite Ana to a party","To say she loved the film","To ask Ana for help with homework"],"¿Vamos el sábado?"],
+     d:[["Why can't Lucía go today?","She has to mind her little brother",["She is sick","She has an exam tomorrow","She has no money"],"tengo que cuidar a mi hermano pequeño"],
+        ["Which day does she suggest instead?","Saturday",["Sunday","Friday","Tuesday"],"¿Vamos el sábado?"],
+        ["What time does the film start?","6:30",["7:30","6:15","5:30"],"a las seis y media"],
+        ["When was the original plan?","This afternoon",["Tomorrow morning","Last night","Next week"],"esta tarde"]]},
+    {t:"Instituto San Jorge",k:"📢 School notice",b:"Instituto San Jorge: excursión a Madrid el jueves doce de marzo. El autobús sale del instituto a las ocho en punto. Precio: veinticinco euros, comida incluida. Trae ropa cómoda y una botella de agua. Hay que pagar antes del lunes.",
+     g:["What is this notice about?","A school trip",["A sports match","A new school timetable","A school concert"],"excursión a Madrid"],
+     d:[["When is the trip?","Thursday 12 March",["Tuesday 12 March","Thursday 2 March","Thursday 12 May"],"el jueves doce de marzo"],
+        ["How much does it cost?","€25, lunch included",["€25, lunch not included","€35, lunch included","€20, lunch included"],"veinticinco euros, comida incluida"],
+        ["What must you bring?","Comfortable clothes and a bottle of water",["A packed lunch and a coat","Your passport and some money","A camera and a raincoat"],"ropa cómoda y una botella de agua"],
+        ["By when must you pay?","Before Monday",["On Monday","Before Thursday","On the bus"],"antes del lunes"],
+        ["What time does the bus leave?","8:00 on the dot",["8:30","7:00","8:15"],"a las ocho en punto"]]},
+    {t:"Deportes Martín",k:"🛍️ Advert",b:"¡Rebajas en Deportes Martín! Zapatillas de running: antes ochenta euros, ahora cincuenta y cinco. Camisetas de fútbol a mitad de precio. Abrimos de lunes a sábado, de diez de la mañana a ocho de la tarde. Los domingos, cerrado.",
+     g:["What kind of text is this?","An advert for a sale in a sports shop",["A menu for a restaurant","A notice about a football match","A weather forecast"],"¡Rebajas en Deportes Martín!"],
+     d:[["How much are the running shoes now?","€55",["€80","€65","€45"],"ahora cincuenta y cinco"],
+        ["What is half price?","Football shirts",["Running shoes","Football boots","Tracksuits"],"Camisetas de fútbol a mitad de precio"],
+        ["When is the shop closed?","On Sundays",["On Mondays","On Saturdays","Every evening after six"],"Los domingos, cerrado"],
+        ["What time does the shop open?","10 am",["8 am","9 am","12 noon"],"de diez de la mañana"]]},
+    {t:"El tiempo para mañana",k:"🌦️ Forecast",b:"Mañana por la mañana va a llover en el norte de España. Por la tarde va a hacer sol en el sur y las temperaturas van a subir hasta los veintiocho grados en Sevilla. En Madrid va a hacer viento y la máxima va a ser de dieciocho grados.",
+     g:["What is this?","A weather forecast",["A travel advert","A sports news report","A train timetable"],"Mañana por la mañana va a llover"],
+     d:[["What will the weather be like in the north in the morning?","Rainy",["Sunny","Windy","Snowy"],"va a llover en el norte de España"],
+        ["What is the top temperature in Seville?","28°",["18°","38°","26°"],"veintiocho grados en Sevilla"],
+        ["What will Madrid be like?","Windy, with a top of 18°",["Sunny, with a top of 28°","Rainy, with a top of 18°","Windy, with a top of 8°"],"En Madrid va a hacer viento"],
+        ["When will it be sunny in the south?","In the afternoon",["In the morning","At night","All day"],"Por la tarde va a hacer sol"]]},
+    {t:"Un nuevo amigo",k:"✉️ Email",b:"¡Hola! Me llamo Pablo y tengo catorce años. Vivo en Valencia con mis padres y mi hermana mayor, Marta. Me encanta el baloncesto, pero no me gusta nada el fútbol. Este verano voy a visitar Irlanda por primera vez. ¿Qué tiempo hace en Cork en julio? Escríbeme pronto. Pablo",
+     g:["What is the main purpose of the email?","To introduce himself to a new penpal",["To complain about a holiday","To book a hotel room","To invite you to his birthday party"],"Me llamo Pablo"],
+     d:[["How old is Pablo?","14",["4","15","40"],"tengo catorce años"],
+        ["Who is Marta?","His older sister",["His younger sister","His mother","His cousin"],"mi hermana mayor, Marta"],
+        ["Which sport does he NOT like?","Football",["Basketball","Tennis","Swimming"],"no me gusta nada el fútbol"],
+        ["What does he want to know?","What the weather is like in Cork in July",["What time school starts in Cork","Where to stay in Cork","How much things cost in Cork"],"¿Qué tiempo hace en Cork en julio?"],
+        ["What is he going to do this summer?","Visit Ireland for the first time",["Visit Ireland for the second time","Go to a summer camp in Valencia","Play in a basketball tournament"],"voy a visitar Irlanda por primera vez"]]},
+    {t:"Estación de Zaragoza",k:"📻 Announcement",b:"Atención, señores pasajeros. El tren con destino a Barcelona, que sale a las once y cuarto, tiene un retraso de veinte minutos. Va a salir del andén número seis. Disculpen las molestias.",
+     g:["Where would you hear this?","At a train station",["At an airport","In a shopping centre","At a football stadium"],"señores pasajeros. El tren"],
+     d:[["Where is the train going?","Barcelona",["Valencia","Bilbao","Madrid"],"con destino a Barcelona"],
+        ["How late is the train?","20 minutes",["12 minutes","15 minutes","2 hours"],"un retraso de veinte minutos"],
+        ["Which platform will it leave from?","Platform 6",["Platform 7","Platform 16","Platform 60"],"andén número seis"],
+        ["What time was it meant to leave?","11:15",["11:45","10:15","11:20"],"a las once y cuarto"]]},
+    {t:"Concierto de verano",k:"🎉 Poster",b:"Concierto de verano en la Plaza Mayor. Sábado cinco de julio, a las nueve y media de la noche. Entrada gratuita. Va a haber comida y bebida a la venta. Si llueve, el concierto va a ser en el polideportivo.",
+     g:["What is this poster for?","A summer concert",["A cooking class","A football tournament","A summer camp"],"Concierto de verano"],
+     d:[["When does it start?","9:30 pm",["9:30 am","7:30 pm","10:30 pm"],"a las nueve y media de la noche"],
+        ["How much are the tickets?","Nothing: it's free",["€9","€5","Half price for children"],"Entrada gratuita"],
+        ["What happens if it rains?","It moves to the sports centre",["It is cancelled","It moves to Sunday","It starts later"],"en el polideportivo"],
+        ["What date is it?","Saturday 5 July",["Saturday 15 July","Sunday 5 July","Saturday 5 June"],"Sábado cinco de julio"],
+        ["What can you buy there?","Food and drink",["T-shirts and posters","Only drinks","Tickets for the next concert"],"comida y bebida a la venta"]]},
+    {t:"Mi fin de semana",k:"📝 Blog",b:"El fin de semana pasado fui a la playa con mi familia. Íbamos a hacer un picnic, pero empezó a llover, así que comimos en un restaurante del puerto. Después fuimos al cine a ver una comedia. ¡Fue un día genial!",
+     g:["How did the writer feel about the day overall?","It was a great day",["It was a boring day","It was a disaster","It was too long"],"¡Fue un día genial!"],
+     d:[["Who did the writer go with?","Their family",["Their friends","Their class","Their cousins"],"con mi familia"],
+        ["Where did they eat?","In a restaurant at the harbour",["On the beach (a picnic)","At home","In the cinema"],"comimos en un restaurante del puerto"],
+        ["Why didn't they have the picnic?","It started to rain",["The restaurant was cheaper","They forgot the food","It was too hot"],"empezó a llover"],
+        ["What did they see at the cinema?","A comedy",["A horror film","A cartoon","A documentary"],"una comedia"]]},
+    {t:"Centro de salud",k:"☎️ Voicemail",b:"Hola, buenos días. Soy la doctora Ruiz, del centro de salud. Llamo para cambiar la cita de su hijo. No es el martes a las cuatro: ahora es el miércoles a las cinco menos cuarto. Si no puede venir, llame antes del viernes. Gracias.",
+     g:["Why is the doctor calling?","To change an appointment",["To cancel an appointment","To give some test results","To ask for a payment"],"para cambiar la cita"],
+     d:[["Who is the appointment for?","Your son",["You","Your daughter","Your husband"],"la cita de su hijo"],
+        ["When is the new appointment?","Wednesday at 4:45",["Tuesday at 4:00","Wednesday at 5:15","Tuesday at 4:45"],"el miércoles a las cinco menos cuarto"],
+        ["What should you do if you can't come?","Phone before Friday",["Phone on Friday","Send an email","Come on Tuesday instead"],"llame antes del viernes"],
+        ["Where does Dr Ruiz work?","At the health centre",["At the hospital","At the school","At the chemist's"],"del centro de salud"]]},
+    {t:"Hotel Miramar",k:"🏨 Advert",b:"Hotel Miramar, en Santander. A cinco minutos andando de la playa. Todas las habitaciones tienen balcón y wifi gratis. La piscina está abierta de junio a septiembre. Desayuno incluido. No se admiten perros.",
+     g:["What is this?","An advert for a hotel",["A review of a restaurant","A postcard from a holiday","A notice in a school"],"Hotel Miramar"],
+     d:[["How far is the beach?","A 5-minute walk",["A 15-minute walk","A 50-minute walk","5 kilometres"],"A cinco minutos andando de la playa"],
+        ["What do all the rooms have?","A balcony and free wifi",["A sea view and a TV","A balcony and a minibar","A kitchen and free wifi"],"balcón y wifi gratis"],
+        ["When is the pool open?","June to September",["All year round","July and August only","May to September"],"de junio a septiembre"],
+        ["What is not allowed?","Dogs",["Children","Bikes","Food in the rooms"],"No se admiten perros"],
+        ["Which meal is included?","Breakfast",["Lunch","Dinner","All meals"],"Desayuno incluido"]]}
+  ];
+
+  function tq(text,item,kind){
+    return {who:kind==="g"?"🔭":"🔍",tag:kind,en:(kind==="g"?"Gist: ":"Detail: ")+item[0],frame:"",answer:item[1],wrong:item[2].slice(),ev:item[3],txt:text,
+      review:item[0]+" → "+item[1]+(kind==="d"?" («"+item[3]+"»)":"")};
+  }
+  var cur=null;
+  function newText(){var t=rnd(TEXTS.filter(function(x){return !cur||x!==cur.t;}));
+    cur={t:t,qs:[tq(t,t.g,"g")].concat(shuffle(t.d.slice()).slice(0,3).map(function(d){return tq(t,d,"d");})),slot:0,done:false};cur.qs.forEach(function(q,i){q.idx=i;});}
+  function qText(){if(!cur||cur.done)newText();var q=cur.qs[cur.slot];q.card=1;return q;}
+  function qTextOne(){var t=rnd(TEXTS),g=Math.random()<.35;return tq(t,g?t.g:rnd(t.d),g?"g":"d");}
+
+  /* ---------- Gist or detail question sort ---------- */
+  var GD=[
+    ["What is the text mainly about?",0],["What kind of text is this?",0],["Where would you hear this announcement?",0],["What is the main purpose of the email?",0],
+    ["How does the writer feel about the trip overall?",0],["Is the review mostly positive or negative?",0],["Who is this advert for?",0],["Choose the best title for the article.",0],
+    ["At what time does the bus leave?",1],["How much do the tickets cost?",1],["Name two things you must bring.",1],["On which day is the match?",1],
+    ["Which platform does the train leave from?",1],["What is the name of Pablo's sister?",1],["How old is the writer?",1],["What is not allowed in the hotel?",1],["Why can't Lucía go to the cinema?",1]
+  ];
+  var GDL=["🔭 Gist","🔍 Detail"],GDS=["the big picture","one fact"];
+  function qGD(){var x=rnd(GD);return {fixed:1,tm:1,opts:GDL,smalls:GDS,who:"🗂️",en:"Is this a gist question or a detail question?",frame:x[0],answer:GDL[x[1]],wrong:GDL.filter(function(y,i){return i!==x[1];}),review:x[0]+" → "+GDL[x[1]].slice(3)};}
+
+  /* ---------- Numbers, times, prices, dates ---------- */
+  var NUM=[
+    ["a las nueve menos cuarto","8:45",["9:45","9:15","8:15"],"menos cuarto = quarter to"],
+    ["a las cinco y media","5:30",["6:30","5:15","4:30"],"y media = half past"],
+    ["a las once y cuarto","11:15",["11:45","10:45","12:15"],"y cuarto = quarter past"],
+    ["a las siete menos diez","6:50",["7:10","7:50","6:10"],"menos diez = ten to"],
+    ["a la una y veinte","1:20",["12:20","1:40","2:20"],"y veinte = twenty past"],
+    ["a las doce menos cinco","11:55",["12:05","12:55","11:05"],"menos cinco = five to"],
+    ["catorce","14",["4","40","24"],"cuatro 4 · catorce 14 · cuarenta 40"],
+    ["cuarenta","40",["14","4","44"],"cuatro 4 · catorce 14 · cuarenta 40"],
+    ["cuatro","4",["14","40","44"],"cuatro 4 · catorce 14 · cuarenta 40"],
+    ["dieciséis","16",["6","60","26"],"seis 6 · dieciséis 16 · sesenta 60"],
+    ["sesenta","60",["70","16","6"],"sesenta 60 · setenta 70"],
+    ["setenta","70",["60","17","7"],"setenta 70 · sesenta 60"],
+    ["quince","15",["50","5","55"],"quince 15 · cincuenta 50"],
+    ["cincuenta","50",["15","5","500"],"quince 15 · cincuenta 50 · quinientos 500"],
+    ["doce","12",["2","20","22"],"dos 2 · doce 12 · veinte 20"],
+    ["trece","13",["3","30","33"],"tres 3 · trece 13 · treinta 30"],
+    ["quinientos","500",["50","5,000","150"],"quinientos 500"],
+    ["doce euros con cincuenta","€12.50",["€2.50","€12.15","€20.50"],"con = and (euros and cents)"],
+    ["tres euros con veinte","€3.20",["€13.20","€3.02","€30.20"],"tres 3 · trece 13 · treinta 30"],
+    ["cuarenta y cinco euros","€45",["€54","€14.50","€405"],"cuarenta y cinco = 45"],
+    ["el martes trece de mayo","Tuesday 13 May",["Thursday 13 May","Tuesday 3 May","Tuesday 13 March"],"martes = Tuesday · mayo = May"],
+    ["el miércoles dos de junio","Wednesday 2 June",["Monday 2 June","Wednesday 12 June","Wednesday 2 July"],"junio = June · julio = July"],
+    ["el sábado treinta de enero","Saturday 30 January",["Sunday 30 January","Saturday 13 January","Saturday 30 June"],"sábado = Saturday · enero = January"],
+    ["el jueves diecisiete de octubre","Thursday 17 October",["Tuesday 17 October","Thursday 7 October","Thursday 17 August"],"jueves = Thursday · martes = Tuesday"]
+  ];
+  function qNum(){var x=rnd(NUM);return {who:"🔢",en:"Number trap! What does it say?",frame:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]+" ("+x[3]+")"};}
+  function lNum(){var x=rnd(NUM);return {listen:1,speak:x[0],en:"Listen. Which number, time, price or date did you hear?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]+" ("+x[3]+")"};}
+
+  /* ---------- Change-of-mind traps ---------- */
+  var TRAP=[
+    ["Quería ir a la playa, pero al final fuimos a la montaña.","Where did they go in the end?","To the mountains",["To the beach","To the town centre","Nowhere"]],
+    ["El partido no es el sábado; es el domingo por la mañana.","When is the match?","Sunday morning",["Saturday morning","Saturday evening","Sunday evening"]],
+    ["Normalmente voy al instituto en autobús, pero hoy voy a pie.","How is the speaker getting to school today?","On foot",["By bus","By car","By bike"]],
+    ["Mi hermano no tiene diez años; tiene doce.","How old is the brother?","12",["10","2","20"]],
+    ["La reunión era a las cinco, pero ahora es a las seis.","What time is the meeting now?","6:00",["5:00","5:30","7:00"]],
+    ["No quiero pizza. Prefiero una hamburguesa con patatas fritas.","What does the speaker want?","A burger and chips",["A pizza","A pizza and chips","A salad"]],
+    ["Antes vivía en Madrid, pero ahora vivo en Sevilla.","Where does the speaker live now?","Seville",["Madrid","Valencia","In both cities"]],
+    ["Iba a comprar una camiseta, pero al final compré una sudadera.","What did the speaker buy?","A sweatshirt",["A T-shirt","A T-shirt and a sweatshirt","Nothing"]],
+    ["El vuelo sale a las ocho… no, perdón, a las nueve.","When does the flight leave?","9:00",["8:00","8:30","10:00"]],
+    ["Las entradas costaban veinte euros, pero hoy hay un descuento y cuestan quince.","How much are the tickets today?","€15",["€20","€5","€35"]],
+    ["Mi color favorito era el azul, pero ahora es el verde.","What is the favourite colour now?","Green",["Blue","Red","Blue and green"]],
+    ["No me gusta el inglés; sin embargo, me encanta la historia.","Which subject does the speaker love?","History",["English","English and history","Neither"]]
+  ];
+  function qTrap(){var x=rnd(TRAP);return {who:"🪤",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0]+" → "+x[2]+" (the answer changes after the trap word)"};}
+  function lTrap(){var x=rnd(TRAP);return {listen:1,speak:x[0],en:"Listen. "+x[1],answer:x[2],wrong:x[3].slice(),review:x[0]+" → "+x[2]+" (the answer changes after the trap word)"};}
+
+  /* ---------- Question words + what to listen for ---------- */
+  var QW=[["¿Cuándo…?","When…?"],["¿Dónde…?","Where…?"],["¿Quién…?","Who…?"],["¿Por qué…?","Why…?"],["¿Cuánto cuesta…?","How much does … cost?"],["¿Cuántos…?","How many…?"],["¿A qué hora…?","At what time…?"],["¿Cómo…?","How…?"],["¿Qué…?","What…?"],["¿Cuál…?","Which…?"]];
+  function qQW(){var w=rnd(QW),o=others(QW,w,3);return {who:"❓",en:"Question word: what does it mean?",frame:w[0],answer:w[1],wrong:o.map(function(x){return x[1];}),review:w[0]+" = "+w[1]};}
+  var KIND=["A time (on the clock)","A price (€)","A place","A person","A reason","A day or date","A number (how many)","Weather words"];
+  var LF=[["At what time does the shop open?",0],["How much is the ticket?",1],["Where is the party?",2],["Who is coming to the party?",3],["Why is the train late?",4],["On which day is the exam?",5],["How many brothers does she have?",6],["What will the weather be like at the weekend?",7],
+    ["At what time does the film start?",0],["How much does the T-shirt cost?",1],["Where does Pablo live?",2],["Who is Marta?",3],["Why can't Lucía go out?",4],["When is the school trip? (day and date)",5],["How many people are in the family?",6]];
+  function qLF(){var x=rnd(LF),a=KIND[x[1]];return {who:"🎯",en:"Before you listen: what kind of answer do you need?",frame:x[0],answer:a,wrong:others(KIND,a,3),review:x[0]+" → listen for "+a.toLowerCase()};}
+
+  /* ---------- Cognates & false friends ---------- */
+  var FR=[["la información","information"],["interesante","interesting"],["la estación","station"],["la universidad","university"],["importante","important"],["el estudiante","student"],["famoso","famous"],["delicioso","delicious"],["el teléfono","phone"],["diferente","different"],["la escuela","school"],["el problema","problem"],["rápidamente","quickly"],["la ciudad","city"],["el museo","museum"],["el aeropuerto","airport"],["la familia","family"],["nervioso","nervous"],["la electricidad","electricity"],["finalmente","finally"],["el estómago","stomach"]];
+  var FF=[["embarazada","pregnant","embarrassed"],["la librería","bookshop","library"],["constipado","has a cold","constipated"],["el éxito","success","exit"],["la carpeta","folder","carpet"],["sensible","sensitive","sensible"],["la ropa","clothes","rope"],["actual","current, present-day","actual, real"],["asistir","to attend","to assist"],["recordar","to remember","to record"],["el campo","countryside, field","camp"],["la fábrica","factory","fabric"],["largo","long","large"],["la lectura","reading","lecture"],["el pariente","relative","parent"],["el colegio","school","college"],["la decepción","disappointment","deception"]];
+  function qCog(){var x=rnd(FR),o=others(FR,x,3).map(function(y){return y[1];});
+    return {who:"✅",en:"A cognate: what does it mean?",frame:x[0],answer:x[1],wrong:o,review:x[0]+" = "+x[1]};}
+  function qFalse(){var x=rnd(FF),o=others(FF,x,2).map(function(y){return y[1];});
+    return {who:"⚠️",en:"Careful, false friend! What does it really mean?",frame:x[0],answer:x[1],wrong:[x[2]].concat(o),review:x[0]+" = "+x[1]+" (not "+x[2]+")"};}
+  var FFL=["✅ True friend","⚠️ False friend"],FFS=["means what it looks like","doesn't!"];
+  function qFFSort(){var f=Math.random()<.5,x=f?rnd(FF):rnd(FR),i=f?1:0;
+    return {fixed:1,tm:1,opts:FFL,smalls:FFS,who:"🗂️",en:"True friend or false friend?",frame:x[0],answer:FFL[i],wrong:[FFL[1-i]],review:x[0]+" = "+x[1]+(f?" (false friend: not "+x[2]+")":" (true friend)")};}
+  var PAT=[["-ción","-tion",["-ty","-ous","-ly"],"la estación = station"],["-dad","-ty",["-tion","-ous","-ly"],"la ciudad = city"],["-oso","-ous",["-ty","-tion","-ly"],"famoso = famous"],["-mente","-ly",["-ous","-ment","-tion"],"rápidamente = quickly"],["es- + consonant (escuela)","s- + consonant (school)",["es- (eschool)","ex- (exchool)","is- (ischool)"],"la escuela = school, el estudiante = student"]];
+  function qPat(){var x=rnd(PAT);return {who:"🧩",en:"Cognate pattern: Spanish ending → English ending",frame:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" → "+x[1]+" ("+x[3]+")"};}
+
+  /* ---------- Listening ---------- */
+  function lGist(){var t=rnd(TEXTS);return {listen:1,speak:t.b,en:"Listen. Gist: "+t.g[0],answer:t.g[1],wrong:t.g[2].slice(),review:t.g[0]+" → "+t.g[1]+" ("+t.k.slice(3)+": "+t.t+")"};}
+  function lDetail(){var t=rnd(TEXTS),d=rnd(t.d);return {listen:1,speak:t.b,en:"Listen. Detail: "+d[0],answer:d[1],wrong:d[2].slice(),review:d[0]+" → "+d[1]+" («"+d[3]+"»)"};}
+
+  var MAKERS={
+    texts:[qText],
+    cognates:[qCog,qCog,qFalse,qFalse,qFFSort,qFFSort,qPat],
+    detective:[qNum,qNum,qTrap,qTrap,qGD,qQW,qLF],
+    listen:[lGist,lDetail,lDetail,lNum,lNum,lTrap,lTrap],
+    mixed:[qTextOne,qTextOne,qTextOne,qNum,qTrap,qGD,qQW,qLF,qCog,qFalse,qFFSort]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear a message or announcement: get the gist, then catch the detail (2 minutes)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Text card ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(q,showEv,flash){
+    var el=$("card");if(!q||!q.txt){el.hidden=true;return;}
+    var t=q.txt,body=esc(t.b);
+    if(showEv&&q.ev){var e=esc(q.ev),i=body.indexOf(e);if(i>=0)body=body.slice(0,i)+"<mark>"+e+"</mark>"+body.slice(i+e.length);}
+    el.hidden=false;el.className="mail"+(cur&&q.card&&cur.done?" sent":"");
+    var count=q.card?"Question "+(q.idx+1)+" of 4":(q.tag==="g"?"🔭 Gist":"🔍 Detail");
+    var h="<div class='bar'><span>"+esc(t.k)+"</span><span class='count'>"+count+"</span></div>";
+    h+="<div class='hd'><b>"+esc(t.t)+"</b></div><div class='body' lang='es'><p>"+body+"</p></div>";
+    if(flash)h+="<div class='flash'>📰 Text done! +3</div>";
+    el.innerHTML=h;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,texts,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="texts"||m==="listen")?120:(m==="mixed"?90:60);score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;texts=0;cur=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawCard(q,false,false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    var fr=q.speak?"🔊":esc(q.frame||"");
+    $("frame").innerHTML=fr;$("frame").className="frame";$("frame").hidden=!fr;
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+esc(q.smalls[i])+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f});
+    }
+    if(current.card&&cur){
+      cur.slot++;
+      if(cur.slot>=cur.qs.length){cur.done=true;score+=3;texts++;flash=true;}
+    }
+    if(current.txt)drawCard(current,true,flash);
+    if(current.speak)$("frame").innerHTML="<span style='font-size:.62em;line-height:1.4;display:block'>"+esc(current.speak)+"</span>";
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?(current.speak.length>80?1800:1000):(flash?1600:(current.txt?1100:600))):(current.speak?(current.speak.length>80?4200:2600):(current.txt?2600:2200));
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Exam detective.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="texts"?", "+texts+" text"+(texts===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,TEXTS:TEXTS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
