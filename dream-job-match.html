@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobs &amp; future plans: play Dream Job Match | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: jobs, future plans and me gustaría. Fill in a careers card line by line and find the dream job, jobs for men and women, workplaces, part-time jobs, me gustaría / quiero / voy a. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+.ficha{position:relative;background:#FFFDF6;border:1px solid var(--cream-line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.ficha .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.ficha .top small{color:var(--sun);font-weight:700;font-size:12px}
+.ficha .lines{display:flex;flex-direction:column;gap:6px;padding:10px 14px 12px;min-height:100px;max-height:250px;overflow-y:auto}
+.ficha .l{padding:6px 10px;border-left:4px solid var(--green);background:#fff;border-radius:6px;font-size:14.5px;line-height:1.35}
+.ficha .l.match{border-left-color:var(--sun);background:#FFF6D6;font-weight:800;font-size:16px}
+.ficha .l.typing{color:var(--muted);font-weight:700;letter-spacing:.15em;border-left-color:var(--line)}
+.ficha.done{outline:3px solid var(--green)}
+.ficha .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+.choices.three.two{grid-template-columns:1fr 1fr}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Dream Job Match</h1>
+        <p>Jobs, future plans and <b>me gustaría</b>. Read a teenager's careers card line by line (what they love, what they're like, where they'd like to work) and find their dream job. Then <b>jobs for men and women</b> (médico / médica), workplaces and part-time jobs, and <b>me gustaría, quiero, voy a</b> for your plans after school. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="match"><div><b>Dream Job Match</b><span>Fill in a careers card line by line and find the perfect job: +3 bonus for every match</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="jobs"><div><b>Jobs &amp; work</b><span>Job words, el médico / la médica, no "un" after ser, workplaces and part-time jobs</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="future"><div><b>Me gustaría… my future</b><span>me / te / le gustaría, quiero, voy a, time phrases, dream, plan or no way? and pros &amp; cons of jobs</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: jobs &amp; plans 🔊</b><span id="listenNote">Hear people talk about jobs and plans and pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.19, 1.20 (2017 spec, exams 2027–2028) · 1.14, 1.15 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="ficha" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Jobs, future plans &amp; me gustaría</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul>
+          <li>Mi padre es <b>médico</b> y mi madre es <b>médica</b>. <span style="color:var(--muted)">(My dad is a doctor and my mum is a doctor.)</span></li>
+          <li>Mi tío es <b>profesor</b> y mi tía es <b>profesora</b>. <span style="color:var(--muted)">(My uncle is a teacher and my aunt is a teacher.)</span></li>
+          <li>Mi hermano es <b>periodista</b> y mi hermana es <b>periodista</b> también. <span style="color:var(--muted)">(…a journalist… a journalist too.)</span></li>
+        </ul>
+        <p>Compare the Spanish with the English. Which little word does English have that Spanish leaves out? How does each job change for a woman, and which one doesn't change at all? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">After <b>ser</b>, Spanish has <b>no un / una</b> before a job: <em>Es médica</em> (not <s>es una médica</s>). Jobs ending in <b>-o</b> change to <b>-a</b> (médico → médica), jobs ending in <b>-or</b> add <b>-a</b> (profesor → profesora), but jobs ending in <b>-ista</b> or <b>-e</b> stay the same: <em>el / la periodista, el / la cantante</em>. Only the article changes.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Jobs for men and women</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Pattern</th><th>He is…</th><th>She is…</th></tr></thead>
+          <tbody>
+            <tr><td>-o → -a</td><td>médico, enfermero, veterinario, cocinero, camarero, mecánico, abogado, ingeniero, bombero</td><td>médica, enfermera, veterinaria, cocinera, camarera, mecánica, abogada, ingeniera, bombera</td></tr>
+            <tr><td>-or → -ora</td><td>profesor, programador, diseñador</td><td>profesora, programadora, diseñadora</td></tr>
+            <tr><td>-ista, -e: no change</td><td>periodista, dentista, futbolista, cantante</td><td>periodista, dentista, futbolista, cantante</td></tr>
+            <tr><td>no change (just el / la)</td><td>policía, piloto</td><td>policía, piloto</td></tr>
+            <tr><td>special</td><td>actor · dependiente (shop assistant)</td><td>actriz · dependienta</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Plurals:</b> add <b>-s</b> after a vowel (médicos), <b>-es</b> after a consonant (profesores), <b>z → ces</b> (actrices). <b>Mis padres son médicos</b> = my parents are doctors. · <b>Is or works?</b> <em>Mi madre <b>es</b> enfermera</em> · <em>Trabaja <b>en</b> un hospital</em> · <em>Trabaja <b>de</b> camarero</em> (works as a waiter).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Where do they work?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Job</th><th>Trabaja…</th></tr></thead>
+          <tbody>
+            <tr><td>médico · enfermero</td><td>en un hospital</td></tr>
+            <tr><td>profesor</td><td>en un instituto (a secondary school) · en un colegio (a primary school)</td></tr>
+            <tr><td>mecánico</td><td>en un taller (a garage / workshop)</td></tr>
+            <tr><td>cocinero · camarero</td><td>en un restaurante · en una cafetería</td></tr>
+            <tr><td>granjero</td><td>en una granja (a farm), al aire libre (outdoors)</td></tr>
+            <tr><td>policía · bombero</td><td>en una comisaría (police station) · en un parque de bomberos (fire station)</td></tr>
+            <tr><td>programador · abogado</td><td>en una oficina · en un bufete de abogados (a law firm)</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Talking about the future</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>To say…</th><th>Use… + infinitive</th></tr></thead>
+          <tbody>
+            <tr><td>what you'd like (a dream)</td><td><b>Me gustaría</b> ser piloto · <b>Me encantaría</b> vivir en España · <b>Mi sueño es</b> tener mi propia empresa</td></tr>
+            <tr><td>what you want</td><td><b>Quiero</b> ser veterinaria · <b>Cuando sea mayor</b>, quiero ser actor (learn it as a chunk)</td></tr>
+            <tr><td>what you hope</td><td><b>Espero</b> ir a la universidad</td></tr>
+            <tr><td>a fixed plan</td><td><b>Voy a</b> hacer el año de transición · El año que viene <b>voy a</b> buscar un trabajo a tiempo parcial</td></tr>
+            <tr><td>what you'd hate</td><td><b>No me gustaría nada</b> ser policía · <b>Nunca</b> trabajaría en una oficina</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>gustaría</b> works like <em>gusta</em>: <b>me</b> gustaría (I'd like) · <b>te</b> gustaría (you'd like) · <b>le</b> gustaría (he / she would like) · <b>nos</b> gustaría · <b>os</b> gustaría · <b>les</b> gustaría. <em>A mi hermana <b>le</b> gustaría ser piloto.</em> The next verb is always the <b>infinitive</b>: <em>me gustaría <b>trabajar</b></em>, never <s>me gustaría trabajo</s>. Time phrases: <em>en el futuro, algún día (some day), cuando sea mayor (when I'm older), después del instituto, el año que viene, dentro de diez años (in ten years' time)</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Give a reason</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>👍 Good points</th><th>👎 Bad points</th></tr></thead>
+          <tbody>
+            <tr><td>Es <b>bien pagado</b> (well paid) · Es <b>gratificante</b> (rewarding) · Es <b>variado</b> · Es <b>útil</b> (useful) · Puedes viajar · Trabajas <b>al aire libre</b></td><td>Es <b>estresante</b> · Es <b>peligroso</b> (dangerous) · Es <b>duro</b> (hard) · Está <b>mal pagado</b> · Hay que trabajar los fines de semana · Los horarios son largos</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><em>Me gustaría ser médica <b>porque</b> me encanta ayudar a la gente y soy muy trabajadora. Es un trabajo duro, <b>pero</b> es muy gratificante. <b>No me gustaría nada</b> ser policía <b>porque</b> es peligroso.</em> Describe yourself with an adjective that agrees: <em>soy creativo / creativa, organizado / organizada, trabajador / trabajadora</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Part-time jobs</h3>
+        <p><em>Trabajo <b>los sábados</b> en una cafetería</em> (on Saturdays) · <em><b>Hago de canguro</b></em> (I babysit) · <em><b>Reparto</b> periódicos</em> (I deliver newspapers) · <em>Paseo los perros de mis vecinos</em> · <em>Ayudo en la granja de mi tío</em> · <em><b>Gano</b> ocho euros <b>a la hora</b></em> (I earn €8 an hour) · <em>Con el dinero compro ropa</em> · <em>Ahorro para el verano</em> (I'm saving for the summer).</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> In Spain, compulsory school (the <b>ESO</b>) ends at about 16. Then students choose <b>Bachillerato</b> (two years, a bit like 5th and 6th year) or <b>Formación Profesional (FP)</b>, a practical, job-based course. At the end of Bachillerato there's the <b>PAU</b>, the university entrance exam that everyone still calls <b>"la Selectividad"</b>: the entrance mark is 60% your Bachillerato average + 40% the PAU, a bit like CAO points. There's no Transition Year in Spain. You have to be <b>16</b> to have a work contract, so younger teens earn money informally: babysitting (<em>hacer de canguro</em>) or giving private classes.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Writing</b>, "your plans for the future" is a favourite task. Hit every point and show <b>range</b>: a job + reason (porque), an adjective about you, a plan with <b>voy a</b>, a dream with <b>me gustaría</b>, and a job you <b>wouldn't</b> like: <em>¡Hola, Pablo! En el futuro me gustaría ser veterinaria porque me encantan los animales y soy muy tranquila. El año que viene voy a hacer el año de transición y después del Leaving Cert espero ir a la universidad. No me gustaría nada trabajar en una oficina porque es aburrido. ¿Y tú? ¿Qué te gustaría ser? Un abrazo, Aoife.</em> In <b>Listening</b>, catch the job, the workplace, the money (<em>ocho euros con cincuenta</em> = €8.50) and the <b>no</b>: <em>no me gustaría</em> means they <b>don't</b> want it.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/future-plans-and-jobs-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/RmV31" target="_blank" rel="noopener">Future Plans &amp; Jobs Teacher Pack (€5)</a>: Careers Fair info gap, Job Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function fixQ(x,extra){var q={who:x[4]||"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};
+    if(extra)for(var k in extra)q[k]=extra[k];return q;}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+  function pl(w){return /z$/.test(w)?w.replace(/z$/,"ces"):/[aeiouáéíóú]$/.test(w)?w+"s":w+"es";}
+
+  /* ---------- Data ---------- */
+  var NAMES_F=["Lucía","Aoife","Sara","Marta","Ciara","Elena","Nerea","Sofía"],NAMES_M=["Pablo","Diego","Seán","Mateo","Cian","Javier","Hugo","Darragh"];
+  /* adjectives: [m, f, English] */
+  var ADJ=[["trabajador","trabajadora","hard-working"],["creativo","creativa","creative"],["organizado","organizada","organised"],["hablador","habladora","chatty"],["tranquilo","tranquila","calm"],["curioso","curiosa","curious"],["simpático","simpática","friendly"],["atrevido","atrevida","daring"],["serio","seria","serious"]];
+  /* jobs: [m, f, English, emoji, group, clue ES, clue EN, adjective index, workplace ES, workplace EN] */
+  var JOBS=[
+    ["médico","médica","doctor","🩺","health","Quiero curar a las personas enfermas.","I want to cure sick people.",0,"en un hospital","in a hospital"],
+    ["enfermero","enfermera","nurse","💉","health","Quiero cuidar a los pacientes.","I want to look after patients.",4,"en un centro de salud","in a health centre"],
+    ["dentista","dentista","dentist","🦷","health","Quiero cuidar los dientes de la gente.","I want to look after people's teeth.",2,"en una clínica dental","in a dental clinic"],
+    ["veterinario","veterinaria","vet","🐶","animals","Me encantan los animales y quiero curarlos.","I love animals and I want to make them better.",4,"en una clínica veterinaria","in a vet's clinic"],
+    ["granjero","granjera","farmer","🚜","animals","Me encanta el campo y quiero tener vacas y ovejas.","I love the countryside and I want to have cows and sheep.",0,"en una granja","on a farm"],
+    ["profesor","profesora","teacher","🧑‍🏫","school","Me encanta explicar cosas a los jóvenes.","I love explaining things to young people.",2,"en un instituto","in a secondary school"],
+    ["cocinero","cocinera","chef","🧑‍🍳","food","Me encanta cocinar platos nuevos.","I love cooking new dishes.",1,"en un restaurante","in a restaurant"],
+    ["camarero","camarera","waiter","🍽️","food","Me gusta servir comida y hablar con los clientes.","I like serving food and talking to customers.",3,"en una cafetería","in a café"],
+    ["mecánico","mecánica","mechanic","🔧","fix","Me encanta arreglar coches y motos.","I love fixing cars and motorbikes.",5,"en un taller","in a garage"],
+    ["ingeniero","ingeniera","engineer","🏗️","build","Me encantan las matemáticas y quiero diseñar puentes.","I love maths and I want to design bridges.",5,"en una obra","on a building site"],
+    ["arquitecto","arquitecta","architect","📐","build","Me encanta dibujar casas y edificios.","I love drawing houses and buildings.",1,"en un estudio de arquitectura","in an architect's studio"],
+    ["bombero","bombera","firefighter","🚒","emergency","Quiero apagar incendios y salvar vidas.","I want to put out fires and save lives.",7,"en un parque de bomberos","in a fire station"],
+    ["policía","policía","police officer","👮","emergency","Quiero proteger a la gente en la calle.","I want to protect people on the street.",8,"en una comisaría","in a police station"],
+    ["periodista","periodista","journalist","📰","media","Me encanta escribir y hacer entrevistas.","I love writing and doing interviews.",5,"en un periódico","for a newspaper"],
+    ["programador","programadora","programmer","💻","tech","Me encantan los ordenadores y quiero crear aplicaciones.","I love computers and I want to create apps.",2,"en una oficina","in an office"],
+    ["abogado","abogada","lawyer","⚖️","law","Quiero defender a las personas y ayudarlas con la ley.","I want to defend people and help them with the law.",8,"en un bufete de abogados","in a law firm"],
+    ["peluquero","peluquera","hairdresser","💇","style","Me encanta cortar el pelo y probar estilos nuevos.","I love cutting hair and trying new styles.",1,"en una peluquería","in a hairdresser's"],
+    ["piloto","piloto","pilot","✈️","travel","Quiero volar y viajar a muchos países.","I want to fly and travel to lots of countries.",4,"en un aeropuerto","at an airport"],
+    ["futbolista","futbolista","footballer","⚽","sport","Quiero jugar en un equipo famoso y marcar goles.","I want to play for a famous team and score goals.",0,"en un estadio","in a stadium"],
+    ["dependiente","dependienta","shop assistant","🛍️","shop","Me gusta vender ropa y ayudar a los clientes.","I like selling clothes and helping customers.",6,"en una tienda de ropa","in a clothes shop"],
+    ["científico","científica","scientist","🔬","science","Me encantan las ciencias y quiero descubrir cosas nuevas.","I love science and I want to discover new things.",5,"en un laboratorio","in a laboratory"],
+    ["actor","actriz","actor","🎭","arts","Me encanta actuar delante del público.","I love acting in front of an audience.",7,"en un teatro","in a theatre"],
+    ["cantante","cantante","singer","🎤","arts","Quiero cantar en conciertos con mi grupo.","I want to sing at concerts with my band.",1,"en un estudio de grabación","in a recording studio"]
+  ];
+  function jf(j,f){return f?j[1]:j[0];}
+  function jobWrong(j,f){var form=jf(j,f),w=[(f?"una ":"un ")+form,pl(form)],o=jf(j,!f);w.push(o!==form?o:(f?"la ":"el ")+form);return w;}
+  function otherJobs(j,n){return shuffle(JOBS.filter(function(x){return x[4]!==j[4];})).slice(0,n);}
+  function adjWrong(a,f){var form=a[f?1:0],o=a[f?0:1];return [o,pl(form),pl(o)];}
+  var REL=[["madre",1,"mum"],["padre",0,"dad"],["hermana",1,"sister"],["hermano",0,"brother"],["tía",1,"aunt"],["tío",0,"uncle"],["prima",1,"cousin"],["primo",0,"cousin"]];
+
+  /* ---------- Dream Job Match: careers card, line by line ---------- */
+  var pc=null;
+  function newCard(){var f=Math.random()<.5,j=rnd(JOBS);
+    pc={name:rnd(f?NAMES_F:NAMES_M),f:f,age:rnd([14,15,16]),job:j,adj:ADJ[j[7]],lines:[],slot:0,sent:false};}
+  var CLUEV=[["Me encantan ","encantan",["encanta","encanto","encantas"]],["Me encanta ","encanta",["encantan","encanto","encantas"]],["Me gusta ","gusta",["gustan","gusto","gustas"]],["Quiero ","Quiero",["Quiere","Quise","Querer"]]];
+  var PLANS=[
+    ["Primero voy a ___ en la universidad.","First I'm going to study at university.","estudiar",["estudio","estudié","estudiaría"],"🎓"],
+    ["El año que viene voy a hacer el año ___ transición.","Next year I'm going to do Transition Year.","de",["en","a","del"],"📅"],
+    ["Me gustaría ___ un año en el extranjero.","I'd like to live abroad for a year.","vivir",["vivo","viví","viviría"],"✈️"],
+    ["No quiero trabajar en una oficina ___ es aburrido.","I don't want to work in an office because it's boring.","porque",["pero","por qué","y"],"🏢"],
+    ["Este verano voy a buscar un trabajo a tiempo ___.","This summer I'm going to look for a part-time job.","parcial",["partido","parte","medio"],"🔎"],
+    ["Mi sueño es ___ mi propia empresa.","My dream is to have my own company.","tener",["tengo","tuve","tendría"],"💼"],
+    ["Después del Leaving Cert ___ ir a la universidad.","After the Leaving Cert I hope to go to university.","espero",["espera","esperé","esperar"],"🎓"],
+    ["Para mí, lo más importante es ___ feliz en mi trabajo.","For me, the most important thing is to be happy in my job.","ser",["soy","es","sido"],"😊"]
+  ];
+  var SLOTS=[
+    function(c){ /* 1 what they love */
+      var j=c.job,cl=j[5];
+      if(Math.random()<.5){var v=CLUEV.filter(function(x){return cl.indexOf(x[0])===0;})[0];
+        return {from:"them",who:"💬",frame:cl.replace(v[1],"___"),en:j[6],answer:v[1],wrong:v[2].slice(),line:cl};}
+      return {from:"them",who:"💬",frame:cl,en:"What does "+c.name+" say?",answer:j[6],wrong:otherJobs(j,3).map(function(x){return x[6];}),line:cl};},
+    function(c){ /* 2 what they're like */
+      var a=c.adj,form=a[c.f?1:0];
+      if(Math.random()<.5)return {from:"them",who:"🙂",frame:"Soy muy ___.",en:"I'm very "+a[2]+". ("+c.name+")",answer:form,wrong:adjWrong(a,c.f),line:"Soy muy "+form+"."};
+      return {from:"them",who:"🙂",frame:"Mis amigos dicen que soy muy ___.",en:"My friends say I'm very "+a[2]+". ("+c.name+")",answer:form,wrong:adjWrong(a,c.f),line:"Mis amigos dicen que soy muy "+form+"."};},
+    function(c){ /* 3 where they'd like to work */
+      var j=c.job;
+      if(Math.random()<.5)return {from:"them",who:"📍",frame:"Me gustaría ___ "+j[8]+".",en:"I'd like to work "+j[9]+".",answer:"trabajar",wrong:["trabajo","trabajé","trabaja"],line:"Me gustaría trabajar "+j[8]+"."};
+      return {from:"them",who:"📍",frame:"Me gustaría trabajar ___.",en:"I'd like to work "+j[9]+".",answer:j[8],wrong:otherJobs(j,3).map(function(x){return x[8];}),line:"Me gustaría trabajar "+j[8]+"."};},
+    function(c){ /* 4 the match */
+      var j=c.job,f=c.f,o=otherJobs(j,3);
+      return {from:"match",who:"🎯",frame:"El trabajo ideal para "+c.name+": ___",en:"Which job is perfect for "+c.name+"?",answer:j[3]+" "+jf(j,f),wrong:o.map(function(x){return x[3]+" "+jf(x,f);}),line:"🎯 Trabajo ideal: "+j[3]+" "+jf(j,f)};},
+    function(c){ /* 5 quiero ser (no un/una) */
+      var j=c.job,f=c.f,form=jf(j,f),r=Math.random(),st=r<.35?"En el futuro quiero ser":r<.7?"Me gustaría ser":"Cuando sea mayor, quiero ser",
+        en=r<.35?"In the future I want to be a":r<.7?"I'd like to be a":"When I'm older, I want to be a";
+      if(/^[aeiou]/.test(j[2]))en+="n";
+      return {from:"them",who:j[3],frame:st+" ___.",en:en+" "+j[2]+".",answer:form,wrong:jobWrong(j,f),line:st+" "+form+".",note:" (no un / una after ser)"};},
+    function(c){ /* 6 plans */
+      var p=rnd(PLANS);return {from:"them",who:p[4],frame:p[0],en:p[1],answer:p[2],wrong:p[3].slice(),line:p[0].replace("___",p[2])};}
+  ];
+  function lineQ(c,i){var q=SLOTS[i](c);q.review=q.line+" = "+q.en+(q.note||"");q.who=q.who||"";return q;}
+  function qCard(){if(!pc||pc.sent)newCard();var q=lineQ(pc,pc.slot);q.card=1;return q;}
+  function qLine(){var f=Math.random()<.5,j=rnd(JOBS);
+    var c={name:rnd(f?NAMES_F:NAMES_M),f:f,job:j,adj:ADJ[j[7]]};
+    return lineQ(c,Math.floor(Math.random()*SLOTS.length));}
+
+  /* ---------- Jobs & work ---------- */
+  function qJobWord(){var j=rnd(JOBS),f=Math.random()<.5,o=otherJobs(j,3);
+    return {who:j[3],en:(f?"She":"He")+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+".",frame:"Es ___.",answer:jf(j,f),wrong:o.map(function(x){return jf(x,f);}),review:"Es "+jf(j,f)+". = "+(f?"She":"He")+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+"."};}
+  function qJobMean(){var j=rnd(JOBS),r=rnd(REL),o=otherJobs(j,3),f=!!r[1];
+    return {who:"",en:"What does it mean?",frame:"Mi "+r[0]+" es "+jf(j,f)+".",answer:j[3]+" "+j[2],wrong:o.map(function(x){return x[3]+" "+x[2];}),review:"Mi "+r[0]+" es "+jf(j,f)+". = My "+r[2]+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+"."};}
+  function qGender(){var j=rnd(JOBS),pair=rnd([["padre","madre","dad","mum"],["hermano","hermana","brother","sister"],["tío","tía","uncle","aunt"]]);
+    var form=jf(j,true);
+    return {who:j[3],en:"My "+pair[2]+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+" and my "+pair[3]+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+" too.",frame:"Mi "+pair[0]+" es "+j[0]+" y mi "+pair[1]+" es ___ también.",answer:form,wrong:jobWrong(j,true),review:"Mi "+pair[0]+" es "+j[0]+" y mi "+pair[1]+" es "+form+" también."+(j[0]===j[1]?" ("+form+" doesn't change)":" ("+j[0]+" → "+form+")")};}
+  function qWhere(){var j=rnd(JOBS),f=Math.random()<.5,o=otherJobs(j,3),art=f?"Una":"Un";
+    return {who:j[3],en:"Where does a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+" work?",frame:art+" "+jf(j,f)+" trabaja ___.",answer:j[8],wrong:o.map(function(x){return x[8];}),review:art+" "+jf(j,f)+" trabaja "+j[8]+". = "+j[9]};}
+  function qRight(){var j=rnd(JOBS),r=rnd(REL),f=!!r[1],form=jf(j,f),s="Mi "+r[0]+" ";
+    var wr=[s+"es "+(f?"una ":"un ")+form+".",s+"está "+form+"."];
+    var o=jf(j,!f);wr.push(o!==form?s+"es "+o+".":s+"son "+form+".");
+    return {who:j[3],en:"Which sentence is right? (My "+r[2]+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+".)",frame:"",answer:s+"es "+form+".",wrong:wr,review:s+"es "+form+". (ser + job, no un / una)"};}
+  var PT=[["Trabajo los sábados en una cafetería.","I work in a café on Saturdays.","☕"],["Hago de canguro los viernes.","I babysit on Fridays.","👶"],["Reparto periódicos por la mañana.","I deliver newspapers in the morning.","📰"],["Paseo los perros de mis vecinos.","I walk my neighbours' dogs.","🐕"],["Ayudo en la granja de mi tío.","I help on my uncle's farm.","🚜"],["Corto el césped de mis vecinos.","I cut my neighbours' grass.","🌱"],["Lavo coches los domingos.","I wash cars on Sundays.","🚗"],["Trabajo en el supermercado de mi barrio.","I work in my local supermarket.","🛒"],["Doy clases de inglés a niños.","I give English classes to children.","📚"]];
+  function qPT(){var x=rnd(PT),w=others(PT,x,3);
+    if(Math.random()<.5)return {who:"",en:"What's the part-time job?",frame:x[0],answer:x[2]+" "+x[1],wrong:w.map(function(y){return y[2]+" "+y[1];}),review:x[0]+" = "+x[1]};
+    return {who:x[2],en:x[1],frame:"___",answer:x[0],wrong:w.map(function(y){return y[0];}),review:x[1]+" = "+x[0]};}
+  var FIXW=[
+    ["Gano ocho euros ___ la hora.","I earn eight euros an hour.","a",["por","en","de"],"💶"],
+    ["Trabajo ___ sábados en una cafetería.","I work on Saturdays in a café.","los",["el","en","a"],"☕"],
+    ["Mi madre es ___ en un hospital.","My mum is a nurse in a hospital.","enfermera",["una enfermera","enfermero","enfermeras"],"💉"],
+    ["Mi padre ___ en una oficina.","My dad works in an office.","trabaja",["trabajo","trabajar","trabajas"],"💼"],
+    ["Mi hermano ___ policía.","My brother is a police officer.","es",["está","hay","tiene"],"👮"],
+    ["Hago ___ canguro los viernes.","I babysit on Fridays.","de",["a","la","el"],"👶"],
+    ["Con el dinero ___ ropa y videojuegos.","With the money I buy clothes and video games.","compro",["compra","compré","comprar"],"🛍️"],
+    ["Mi trabajo es un poco aburrido, ___ gano dinero.","My job is a bit boring, but I earn money.","pero",["porque","y","o"],"💶"],
+    ["Mi tía es ___ y trabaja en un periódico.","My aunt is a journalist and works for a newspaper.","periodista",["una periodista","periodistas","periódico"],"📰"],
+    ["Mi tío trabaja ___ mecánico en un taller.","My uncle works as a mechanic in a garage.","de",["como un","en","por"],"🔧"],
+    ["Mis padres ___ médicos.","My parents are doctors.","son",["es","están","somos"],"🩺"],
+    ["Mi hermana es actriz y mi hermano es ___.","My sister is an actress and my brother is an actor.","actor",["actriz","un actor","actores"],"🎭"],
+    ["Ahorro dinero ___ el verano.","I'm saving money for the summer.","para",["por","a","en"],"🐷"]
+  ];
+  function qFixW(){return fixQ(rnd(FIXW));}
+
+  /* ---------- Me gustaría… my future ---------- */
+  var DREAMS=[["viajar","por todo el mundo","travel all over the world","🌍",["viajo","viajé","viaja"]],["ir","a la universidad","go to university","🎓",["voy","fui","va"]],["vivir","en España","live in Spain","🇪🇸",["vivo","viví","vive"]],["trabajar","en el extranjero","work abroad","✈️",["trabajo","trabajé","trabaja"]],["ganar","mucho dinero","earn a lot of money","💰",["gano","gané","gana"]],["aprender","a conducir","learn to drive","🚗",["aprendo","aprendí","aprende"]],["estudiar","Medicina","study Medicine","🩺",["estudio","estudié","estudia"]],["hablar","cuatro idiomas","speak four languages","🗣️",["hablo","hablé","habla"]],["trabajar","con animales","work with animals","🐾",["trabajo","trabajé","trabaja"]],["tener","una casa grande","have a big house","🏡",["tengo","tuve","tiene"]]];
+  var GP=[["A mí","me","I'd"],["A ti","te","You'd"],["A mi hermano","le","My brother would"],["A mi madre","le","My mum would"],["A nosotros","nos","We'd"],["A vosotros","os","You (all) would"],["A mis padres","les","My parents would"]];
+  var GPRON=["me","te","le","nos","os","les"];
+  function qGustP(){var p=rnd(GP),d=rnd(DREAMS);
+    return {who:d[3],en:p[2]+" like to "+d[2]+".",frame:p[0]+" ___ gustaría "+d[0]+" "+d[1]+".",answer:p[1],wrong:others(GPRON,p[1],3),review:p[0]+" "+p[1]+" gustaría "+d[0]+" "+d[1]+". = "+p[2]+" like to "+d[2]+"."};}
+  function qGustInf(){var d=rnd(DREAMS);
+    return {who:d[3],en:"I'd like to "+d[2]+".",frame:"Me gustaría ___ "+d[1]+".",answer:d[0],wrong:d[4].slice(),review:"Me gustaría "+d[0]+" "+d[1]+". = I'd like to "+d[2]+". (gustaría + infinitive)"};}
+  function qDreamMean(){var d=rnd(DREAMS),w=others(DREAMS,d,3).filter(function(x){return x[2]!==d[2];});
+    return {who:"",en:"What does it mean?",frame:"Me gustaría "+d[0]+" "+d[1]+".",answer:d[3]+" "+d[2],wrong:w.map(function(x){return x[3]+" "+x[2];}),review:"Me gustaría "+d[0]+" "+d[1]+". = I'd like to "+d[2]+"."};}
+  var FT=[["en el futuro","in the future"],["cuando sea mayor","when I'm older"],["después del instituto","after secondary school"],["el año que viene","next year"],["dentro de diez años","in ten years' time"],["algún día","some day"],["después del Leaving Cert","after the Leaving Cert"],["el próximo verano","next summer"]];
+  function qFT(){var t=rnd(FT),w=others(FT,t,3);
+    if(Math.random()<.5)return {who:"📅",en:"What does it mean?",frame:cap(t[0]),answer:t[1],wrong:w.map(function(x){return x[1];}),review:cap(t[0])+" = "+t[1]};
+    return {who:"📅",en:"How do you say it in Spanish? ("+t[1]+")",frame:"___",answer:t[0],wrong:w.map(function(x){return x[0];}),review:t[1]+" = "+t[0]};}
+  var JW=[["bien pagado","well paid"],["mal pagado","badly paid"],["estresante","stressful"],["gratificante","rewarding"],["peligroso","dangerous"],["aburrido","boring"],["variado","varied"],["duro","hard / tough"],["útil","useful"],["al aire libre","outdoors"],["a tiempo parcial","part-time"],["el sueldo","the pay / salary"]];
+  function qJW(){var x=rnd(JW),w=others(JW,x,3);
+    if(Math.random()<.5)return {who:"💼",en:"What does it mean?",frame:"Es un trabajo… "+x[0],answer:x[1],wrong:w.map(function(y){return y[1];}),review:x[0]+" = "+x[1]};
+    return {who:"💼",en:"How do you say it in Spanish? ("+x[1]+")",frame:"___",answer:x[0],wrong:w.map(function(y){return y[0];}),review:x[1]+" = "+x[0]};}
+  var DP=["💭 Dream","📅 Plan","🙅 No way"],DPS=["me gustaría / quiero","voy a + time","no / nunca"];
+  var DPL=[
+    ["Me gustaría ser piloto.",0,"me gustaría"],["Mi sueño es vivir en Nueva York.",0,"mi sueño es"],["Quiero ser veterinaria algún día.",0,"quiero… algún día"],["Me encantaría trabajar en el extranjero.",0,"me encantaría"],["Espero ir a la universidad.",0,"espero = I hope"],
+    ["El año que viene voy a hacer el año de transición.",1,"el año que viene + voy a"],["Este verano voy a trabajar en una cafetería.",1,"este verano + voy a"],["Mañana voy a buscar un trabajo a tiempo parcial.",1,"mañana + voy a"],["En septiembre voy a empezar quinto año.",1,"en septiembre + voy a"],["El sábado voy a hacer de canguro.",1,"el sábado + voy a"],
+    ["No me gustaría nada ser policía.",2,"no me gustaría nada"],["Nunca trabajaría en una oficina.",2,"nunca"],["No quiero ser profesor: ¡qué estrés!",2,"no quiero"],["Odiaría trabajar los fines de semana.",2,"odiaría = I'd hate"],["No me gustaría ser médico porque es muy estresante.",2,"no me gustaría"]
+  ];
+  function qDP(spoken){var s=rnd(DPL);
+    return {fixed:1,tm:1,smalls:DPS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"🔮",en:spoken?"Listen. A dream, a plan, or no way?":"A dream, a plan, or no way?",frame:spoken?"":s[0],answer:DP[s[1]],wrong:DP.filter(function(x,i){return i!==s[1];}),opts:DP,review:s[0]+" = "+noEmoji(DP[s[1]])+" ("+s[2]+")"};}
+  function gDP(){return qDP(false);}
+  var PC=["👍 Good point","👎 Bad point"],PCS=["a reason to do it","a reason not to"];
+  var PCL=[
+    ["Es un trabajo bien pagado.",0,"bien pagado = well paid"],["Es muy gratificante ayudar a la gente.",0,"gratificante = rewarding"],["Puedes viajar mucho.",0,"you can travel a lot"],["Tienes vacaciones largas.",0,"long holidays"],["Es un trabajo variado y creativo.",0,"varied and creative"],["Trabajas al aire libre.",0,"outdoors"],
+    ["Es un trabajo muy estresante.",1,"estresante = stressful"],["Hay que trabajar los fines de semana.",1,"you have to work weekends"],["Es bastante peligroso.",1,"peligroso = dangerous"],["Está mal pagado.",1,"mal pagado = badly paid"],["Los horarios son muy largos.",1,"long hours"],["Es un poco aburrido y repetitivo.",1,"boring and repetitive"]
+  ];
+  function qPC(spoken){var s=rnd(PCL);
+    return {fixed:1,tm:1,smalls:PCS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"⚖️",en:spoken?"Listen. A good point or a bad point about the job?":"A good point or a bad point about the job?",frame:spoken?"":s[0],answer:PC[s[1]],wrong:PC.filter(function(x,i){return i!==s[1];}),opts:PC,review:s[0]+" = "+noEmoji(PC[s[1]])+" ("+s[2]+")"};}
+  function gPC(){return qPC(false);}
+  var FIXF=[
+    ["¿Qué ___ ser en el futuro?","What do you want to be in the future?","quieres",["quiero","quiere","quisiste"],"🤔"],
+    ["¿Qué te ___ ser?","What would you like to be?","gustaría",["gustarías","gustaré","gustan"],"🤔"],
+    ["Me gustaría ___ a la universidad.","I'd like to go to university.","ir",["voy","iría","fui"],"🎓"],
+    ["Después del instituto voy ___ estudiar Medicina.","After school I'm going to study Medicine.","a",["de","que","en"],"🩺"],
+    ["Quiero ser médica ___ me encanta ayudar a la gente.","I want to be a doctor because I love helping people.","porque",["pero","por qué","que"],"❤️"],
+    ["No me gustaría ser policía porque es muy ___.","I wouldn't like to be a police officer because it's very dangerous.","peligroso",["peligrosa","peligrosos","peligro"],"🚨"],
+    ["En el futuro me gustaría ___ mi propia empresa.","In the future I'd like to have my own company.","tener",["tengo","tendría","tuve"],"💼"],
+    ["Mi hermano quiere ___ futbolista.","My brother wants to be a footballer.","ser",["es","estar","sea"],"⚽"],
+    ["Cuando sea ___, quiero ser veterinaria.","When I'm older, I want to be a vet.","mayor",["mayora","viejo","grande"],"🐶"],
+    ["___ ir a la universidad después del Leaving Cert.","I hope to go to university after the Leaving Cert.","Espero",["Espera","Esperé","Esperar"],"🎓"],
+    ["Ser profesor es un trabajo duro ___ gratificante.","Being a teacher is a hard but rewarding job.","pero",["porque","o","que"],"🧑‍🏫"]
+  ];
+  function qFixF(){return fixQ(rnd(FIXF));}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Me gustaría ser veterinaria porque me encantan los animales.","I'd like to be a vet because I love animals.",["I'm a vet because I love animals.","I'd like to be a vet because I have lots of animals.","I'd like to be a doctor because I love animals."]],
+    ["Mi madre es enfermera y trabaja en un hospital.","My mum is a nurse and works in a hospital.",["My mum is a doctor and works in a hospital.","My mum is a nurse and works in a school.","My aunt is a nurse and works in a hospital."]],
+    ["No me gustaría nada ser policía porque es peligroso.","I wouldn't like to be a police officer at all because it's dangerous.",["I'd love to be a police officer because it's exciting.","I wouldn't like to be a firefighter because it's dangerous.","I wouldn't like to be a police officer because it's boring."]],
+    ["El año que viene voy a hacer el año de transición.","Next year I'm going to do Transition Year.",["Last year I did Transition Year.","Next year I'm going to do the Leaving Cert.","This year I'm doing Transition Year."]],
+    ["Trabajo los sábados en una cafetería y gano nueve euros a la hora.","I work on Saturdays in a café and earn nine euros an hour.",["I work on Sundays in a café and earn nine euros an hour.","I work on Saturdays in a café and earn nineteen euros a day.","I work on Saturdays in a shop and earn nine euros an hour."]],
+    ["En el futuro quiero ser programador y trabajar en el extranjero.","In the future I want to be a programmer and work abroad.",["In the future I want to be a programmer and work at home.","In the future I want to be a journalist and work abroad.","At the moment I'm a programmer and I work abroad."]],
+    ["Mi padre es mecánico, pero a mí no me gustaría trabajar en un taller.","My dad is a mechanic, but I wouldn't like to work in a garage.",["My dad is a mechanic and I'd love to work in his garage.","My uncle is a mechanic, but I wouldn't like to work in a garage.","My dad is a chef, but I wouldn't like to work in a restaurant."]],
+    ["Después del Leaving Cert espero estudiar Medicina en la universidad.","After the Leaving Cert I hope to study Medicine at university.",["After the Leaving Cert I hope to study Law at university.","After the Junior Cycle I'm going to study Medicine.","After university I hope to work in a hospital."]],
+    ["Ser profesor es un trabajo duro pero muy gratificante.","Being a teacher is a hard but very rewarding job.",["Being a teacher is an easy and very rewarding job.","Being a teacher is a hard and very boring job.","Being a teacher is a hard but very well-paid job."]],
+    ["Hago de canguro los viernes para ahorrar dinero.","I babysit on Fridays to save money.",["I babysit on Saturdays to save money.","I babysit on Fridays to buy clothes.","I walk dogs on Fridays to save money."]],
+    ["A mi hermana le gustaría ser actriz y vivir en Madrid.","My sister would like to be an actress and live in Madrid.",["My sister is an actress and lives in Madrid.","I'd like to be an actress and live in Madrid.","My sister would like to be a singer and live in Madrid."]],
+    ["Mi sueño es tener mi propia empresa dentro de diez años.","My dream is to have my own company in ten years' time.",["My dream is to have my own company in two years' time.","My dad has his own company and it's ten years old.","My dream is to work for a big company in ten years' time."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  function lJob(){var j=rnd(JOBS),r=rnd(REL),f=!!r[1],o=otherJobs(j,3),sp="Mi "+r[0]+" es "+jf(j,f)+" y trabaja "+j[8]+".";
+    return {listen:1,speak:sp,en:"Listen. What's their "+r[2]+"'s job?",answer:j[3]+" "+j[2],wrong:o.map(function(x){return x[3]+" "+x[2];}),review:sp+" = My "+r[2]+" is a"+(/^[aeiou]/.test(j[2])?"n ":" ")+j[2]+" and works "+j[9]+"."};}
+  var NUM=["","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve"];
+  function eur(n,h){return n+","+(h?"50":"00")+" €";}
+  function lMoney(){var n=5+Math.floor(Math.random()*8),h=Math.random()<.5;
+    var sp="Gano "+NUM[n]+" euros"+(h?" con cincuenta":"")+" a la hora.",ans=eur(n,h),seen={},w=[];seen[ans]=1;
+    [[n,!h],[n+1,h],[n-1,h],[n+10,h],[n+1,!h]].forEach(function(c){var t=eur(c[0],c[1]);if(!seen[t]&&w.length<3){seen[t]=1;w.push(t);}});
+    return {listen:1,speak:sp,en:"Listen. How much do they earn an hour?",answer:ans,wrong:w,review:sp+" = "+ans+" an hour"};}
+  function lDP(){return qDP(true);}
+  function lPC(){return qPC(true);}
+
+  var MAKERS={
+    match:[qCard],
+    jobs:[qJobWord,qJobWord,qJobMean,qGender,qGender,qWhere,qRight,qRight,qPT,qFixW,qFixW],
+    future:[qGustP,qGustP,qGustInf,qDreamMean,qFT,qJW,gDP,gDP,gPC,qFixF,qFixF],
+    listen:[lFix,lFix,lFix,lJob,lJob,lMoney,lDP,lPC],
+    mixed:[qLine,qLine,qJobWord,qGender,qWhere,qRight,qPT,qFixW,qGustP,qGustInf,qFT,gDP,gPC,qFixF]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear people talk about jobs and plans and pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Careers card drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(flash){
+    var el=$("card");if(mode!=="match"||!pc){el.hidden=true;return;}
+    el.hidden=false;el.className="ficha"+(pc.sent?" done":"");
+    var h="<div class='top'><span>🎯 Careers card · "+esc(pc.name)+", "+pc.age+"</span><small>Line "+Math.min(pc.slot+1,SLOTS.length)+" of "+SLOTS.length+"</small></div><div class='lines' id='lines'>";
+    pc.lines.forEach(function(l){h+="<div class='l "+l.from+"'>"+esc(l.text)+"</div>";});
+    if(!pc.sent&&current&&current.card)h+="<div class='l typing'>…</div>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>💼 Perfect match! +3</div>";
+    el.innerHTML=h;var m=$("lines");if(m)m.scrollTop=m.scrollHeight;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){var need=q.tm?q.opts.length-1:3;return q.review===last||q.wrong.length<need||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&bad(q)&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.lines.push({from:current.from,text:current.line});
+      pc.slot++;
+      if(pc.slot>=SLOTS.length){pc.sent=true;score+=3;cards++;flash=true;}
+      current.card=0;drawCard(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:500)):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Careers champion.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="match"?", "+cards+" dream job"+(cards===1?"":"s")+" matched":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SLOTS:SLOTS,lineQ:lineQ,newCard:newCard,getCard:function(){return pc;},JOBS:JOBS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
