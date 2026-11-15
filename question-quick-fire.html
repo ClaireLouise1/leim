@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asking questions in Spanish: play Question Quick-Fire | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: asking questions. Build interviews question by question, pick the right question word (qué, dónde, cuándo, cuántos, cuál), write questions with no mistakes and answer them in full. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Question Quick-Fire</h1>
+        <p>Asking questions in Spanish. Interview an exchange partner, ask your way round a tourist office and grill the new Spanish assistant for the school magazine, one line at a time. Then pick the right question word (<b>¿dónde? ¿cuándo? ¿cuántos?</b>), build questions with no mistakes and answer them in full. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="interview"><div><b>Quick-Fire Interview</b><span>Build an interview question by question: your exchange partner 😊, the tourist office 👔 or the school magazine 📰. +3 for every finished interview</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>Question words</b><span>¿Qué? ¿Dónde? ¿Cuántos? Read the answer, pick the question word. ¿Qué or ¿cuál? ¿Por qué or porque?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="make"><div><b>Ask it right, answer in full</b><span>Pick the question with no mistakes, turn a sentence into a question, sort yes/no or information questions, answer with the right verb</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: quick-fire 🔊</b><span id="listenNote">Hear a question and pick the best answer</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.11, 1.13, 2.1 (2017 spec, exams 2027–2028) · 1.2, 1.7, 1.9 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="chat" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Asking questions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Statement</th><th>Question</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>Tienes un perro.</td><td><b>¿</b>Tienes un perro<b>?</b></td><td>Do you have a dog?</td></tr>
+            <tr><td>Hablas francés.</td><td><b>¿</b>Hablas francés<b>?</b></td><td>Do you speak French?</td></tr>
+            <tr><td>Vives en Cork.</td><td><b>¿Dónde</b> vives?</td><td>Where do you live?</td></tr>
+            <tr><td>Mi abuela vive en Kerry.</td><td><b>¿Dónde</b> vive tu abuela?</td><td>Where does your grandmother live?</td></tr>
+          </tbody></table></div>
+        <p>Look at the questions. What's at the start? What's missing that English needs (<em>do / does</em>)? Where does the verb go after <em>dónde</em>? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">1. A Spanish question has an upside-down <b>¿</b> at the start and <b>?</b> at the end. 2. There's <b>no "do / does"</b> in Spanish: the verb ending already says who. <em>¿Tienes…?</em> = Do you have…? 3. For a yes/no question, you can keep the words in the same order and just change your voice: it goes <b>up</b> at the end. 4. After a question word, the <b>verb usually comes next</b>, then the person: <em>¿Dónde vive tu abuela?</em> 5. Question words always have an <b>accent</b>: <em>dónde, qué, cómo, cuándo</em>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Question words</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><b>¿Qué…?</b></td><td>What…?</td><td>¿Qué haces los sábados?</td><td>Juego al fútbol.</td></tr>
+            <tr><td><b>¿Quién…? / ¿Quiénes…?</b></td><td>Who…? (one / more than one)</td><td>¿Quién es tu mejor amigo?</td><td>Es Cian.</td></tr>
+            <tr><td><b>¿Dónde…?</b></td><td>Where…?</td><td>¿Dónde vives?</td><td>Vivo en Mallow.</td></tr>
+            <tr><td><b>¿Adónde…?</b></td><td>Where (to)…?</td><td>¿Adónde vas en verano?</td><td>Voy a Kerry.</td></tr>
+            <tr><td><b>¿De dónde…?</b></td><td>Where… from?</td><td>¿De dónde eres?</td><td>Soy de Cork.</td></tr>
+            <tr><td><b>¿Cuándo…?</b></td><td>When…?</td><td>¿Cuándo es tu cumpleaños?</td><td>Es el doce de mayo.</td></tr>
+            <tr><td><b>¿A qué hora…?</b></td><td>(At) what time…?</td><td>¿A qué hora te levantas?</td><td>A las siete.</td></tr>
+            <tr><td><b>¿Cómo…?</b></td><td>How…? / What… like?</td><td>¿Cómo vas al instituto? · ¿Cómo es tu casa?</td><td>En autobús. · Es grande.</td></tr>
+            <tr><td><b>¿Por qué…?</b></td><td>Why…?</td><td>¿Por qué estudias español?</td><td><b>Porque</b> me gusta.</td></tr>
+            <tr><td><b>¿Cuánto…?</b></td><td>How much…?</td><td>¿Cuánto cuesta?</td><td>Cuesta diez euros.</td></tr>
+            <tr><td><b>¿Cuántos / Cuántas…?</b></td><td>How many…?</td><td>¿Cuántos hermanos tienes?</td><td>Tengo dos.</td></tr>
+            <tr><td><b>¿Cuál…? / ¿Cuáles…?</b></td><td>Which…? / What…?</td><td>¿Cuál es tu color favorito?</td><td>El verde.</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Watch out:</b> <em>¿Cuánto?</em> agrees with the noun after it: <em>¿Cuánt<b>o</b> dinero? ¿Cuánt<b>a</b> agua? ¿Cuánt<b>os</b> hermanos? ¿Cuánt<b>as</b> hermanas?</em> <em>¿Quién?</em> becomes <em>¿Quién<b>es</b>?</em> for more than one: <em>¿Quiénes son esos chicos?</em> A little word like <em>con, de, a</em> goes <b>in front</b> of the question word: <em>¿<b>Con</b> quién vives?</em> (Who do you live with?)</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">¿Qué or ¿cuál?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Use…</th><th>When…</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><b>¿Qué…?</b></td><td>before a noun, before a verb (not <em>es / son</em>), or to ask for a definition</td><td>¿Qué deporte practicas? · ¿Qué haces? · ¿Qué es un bocadillo?</td></tr>
+            <tr><td><b>¿Cuál…? / ¿Cuáles…?</b></td><td>with <em>es / son</em> to pick one from a group, and "which one?"</td><td>¿Cuál es tu asignatura favorita? · ¿Cuál es la capital de Perú? · ¿Cuál prefieres?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">So "What's your name / address / favourite film?" is <em>¿<b>Cuál</b> es…?</em> in Spanish, not <em>¿Qué es…?</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">¿Por qué? or porque?</h3>
+        <p><b>¿Por qué?</b> (two words, accent) asks <em>why</em>. <b>Porque</b> (one word, no accent) answers: <em>because</em>. <em>—¿Por qué llegas tarde? —Porque he perdido el autobús.</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Answer in full: change the verb</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>They ask (tú)</th><th>You answer (yo)</th></tr></thead>
+          <tbody>
+            <tr><td>¿Dónde viv<b>es</b>?</td><td>Viv<b>o</b> en Kinsale.</td></tr>
+            <tr><td>¿Cuántos años tien<b>es</b>?</td><td>Teng<b>o</b> quince años.</td></tr>
+            <tr><td>¿A qué hora <b>te</b> levant<b>as</b>?</td><td><b>Me</b> levant<b>o</b> a las siete.</td></tr>
+            <tr><td>¿<b>Te</b> gusta el inglés?</td><td>Sí, <b>me</b> gusta mucho.</td></tr>
+            <tr><td>¿Habla <b>usted</b> inglés? (polite)</td><td>Sí, habl<b>o</b> un poco de inglés.</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Polite questions</b> (a shop, a hotel, a tourist office) use <b>usted</b>, the él / ella form: <em>¿Tiene usted un mapa? ¿Puede repetir? ¿Me puede decir dónde está la estación?</em> A quick tag turns a sentence into a question: <em>Eres de Cork, <b>¿verdad?</b></em> (aren't you?) · <em>Vienes mañana, <b>¿no?</b></em></p>
+        <div class="note" style="margin-top:12px"><b>Irish link:</b> Irish also builds questions with a question word in front: <em>Cad? Cé? Cá? Cathain? Conas? Cén fáth? Cé mhéad?</em> = <em>¿Qué? ¿Quién? ¿Dónde? ¿Cuándo? ¿Cómo? ¿Por qué? ¿Cuánto?</em> And like Spanish, Irish has no "do / does": <em>An bhfuil madra agat?</em> = <em>¿Tienes un perro?</em> <b>Culture:</b> Spanish speakers often answer the phone with <em>¿Sí?</em> or <em>¿Dígame?</em> (lit. "Tell me?"), and many questions are just a sentence with the voice going up.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b> and <b>Reading</b>, the question word tells you <b>what kind of answer</b> to look for: <em>¿cuándo?</em> → a day or date, <em>¿a qué hora?</em> → a time, <em>¿cuánto?</em> → a price or amount, <em>¿dónde?</em> → a place, <em>¿por qué?</em> → listen for <em>porque</em>. In <b>Writing</b>, a message or email to a friend usually asks you to ask questions: end with two or three of your own: <em>¿Y tú? ¿Qué haces los fines de semana? ¿Cuál es tu asignatura favorita? ¿Cuándo vienes a Irlanda?</em> Check every question has <b>¿ ?</b> and an accent on the question word: easy marks.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/asking-questions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/WkPRO" target="_blank" rel="noopener">Asking Questions Teacher Pack (€5)</a>: Hot Seat Interview, Question Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+  function fixQ(x){return {who:x[4]||"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};}
+
+  /* ---------- Data ---------- */
+  var ES_F=["Lucía","Marta","Elena","Sara","Carmen","Nerea"],ES_M=["Pablo","Diego","Javier","Hugo","Álvaro","Mateo"];
+  var CITIES=[["Bilbao","Bilbao","en el norte","north"],["Sevilla","Seville","en el sur","south"],["Valencia","Valencia","en el este","east"],["Salamanca","Salamanca","en el oeste","west"],["Santander","Santander","en el norte","north"],["Málaga","Málaga","en el sur","south"]];
+  var AGES=[["trece","13"],["catorce","14"],["quince","15"]];
+  var HOBBY=[["Juego al baloncesto","I play basketball","Juego",["Juegas","Juega","Jugar"]],["Juego al fútbol","I play football","Juego",["Juegas","Juega","Jugar"]],["Hago natación","I go swimming","Hago",["Haces","Hace","Hacer"]],["Toco la guitarra","I play the guitar","Toco",["Tocas","Toca","Tocar"]]];
+  var MUSEUMS=[["el museo","the museum"],["la catedral","the cathedral"],["el castillo","the castle"],["el acuario","the aquarium"]];
+  var PRICES=[["ocho","8"],["seis","6"],["doce","12"],["cinco","5"]];
+  var FOOD=[["la tortilla de patatas","Spanish omelette"],["la paella","paella"],["el gazpacho","gazpacho (cold tomato soup)"],["el pulpo a la gallega","Galician-style octopus"]];
+
+  /* ---------- Quick-Fire Interview (line by line) ---------- */
+  var SCEN=[
+    {id:"exch",icon:"😊",title:function(c){return "Interviewing your exchange partner, "+c.friend;},tag:"Friendly · tú",slots:[
+      function(c){var r=Math.random(),l="¡Hola, "+c.friend+"! ¿De dónde eres?",e="Hi, "+c.friend+"! Where are you from?";
+        if(r<.5)return {from:"me",who:"👋",frame:"¡Hola, "+c.friend+"! ¿___ eres?",en:e,answer:"De dónde",wrong:["Adónde","Cuándo","Cuánto"],line:l};
+        return {from:"me",who:"👋",frame:"¡Hola, "+c.friend+"! ¿De dónde ___?",en:e,answer:"eres",wrong:["soy","es","estás"],line:l};},
+      function(c){var ct=c.city,r=Math.random(),l="Soy de "+ct[0]+", "+ct[2]+" de España.",e="I'm from "+ct[1]+", in the "+ct[3]+" of Spain.";
+        if(r<.5)return {from:"them",who:"🇪🇸",frame:"___ de "+ct[0]+", "+ct[2]+" de España.",en:e,answer:"Soy",wrong:["Eres","Es","Estoy"],line:l};
+        return {from:"them",who:"🇪🇸",frame:"Soy ___ "+ct[0]+", "+ct[2]+" de España.",en:e,answer:"de",wrong:["en","a","por"],line:l};},
+      function(c){var r=Math.random(),l="¡Qué bonito! ¿Cuántos años tienes?",e="How lovely! How old are you?";
+        if(r<.5)return {from:"me",who:"🎂",frame:"¡Qué bonito! ¿___ años tienes?",en:e,answer:"Cuántos",wrong:["Cuántas","Cuánto","Cuándo"],line:l};
+        return {from:"me",who:"🎂",frame:"¡Qué bonito! ¿Cuántos años ___?",en:e,answer:"tienes",wrong:["tengo","eres","tiene"],line:l};},
+      function(c){var a=c.age,l="Tengo "+a[0]+" años. ¿Y tú?",e="I'm "+a[1]+". And you?";
+        if(Math.random()<.5)return {from:"them",who:"🙂",frame:"___ "+a[0]+" años. ¿Y tú?",en:e,answer:"Tengo",wrong:["Soy","Tienes","Estoy"],line:l};
+        return {from:"them",who:"🙂",frame:"Tengo ___ años. ¿Y tú?",en:e,answer:a[0],wrong:AGES.filter(function(x){return x!==a;}).map(function(x){return x[0];}).concat(["treinta"]),line:l};},
+      function(c){var r=Math.random(),l="Yo también. ¿Qué haces en tu tiempo libre?",e="Me too. What do you do in your free time?";
+        if(r<.5)return {from:"me",who:"⏱️",frame:"Yo también. ¿___ haces en tu tiempo libre?",en:e,answer:"Qué",wrong:["Cuál","Quién","Dónde"],line:l};
+        return {from:"me",who:"⏱️",frame:"Yo también. ¿Qué ___ en tu tiempo libre?",en:e,answer:"haces",wrong:["hago","hace","hacer"],line:l};},
+      function(c){var h=c.hobby,l=h[0]+" con mis amigos.";
+        return {from:"them",who:"⚽",frame:"___ "+h[0].split(" ").slice(1).join(" ")+" con mis amigos.",en:h[1]+" with my friends.",answer:h[2],wrong:h[3].slice(),line:l};},
+      function(c){var r=Math.random(),l="¡Qué guay! ¿Por qué te gusta?",e="Cool! Why do you like it?";
+        if(r<.5)return {from:"me",who:"🤔",frame:"¡Qué guay! ¿___ te gusta?",en:e,answer:"Por qué",wrong:["Porque","Porqué","Para qué"],line:l};
+        return {from:"me",who:"🤔",frame:"¡Qué guay! ¿Por qué ___ gusta?",en:e,answer:"te",wrong:["me","tu","ti"],line:l};},
+      function(c){var r=Math.random(),l="Porque es muy divertido. ¿Y a ti qué te gusta hacer?",e="Because it's great fun. And what do you like doing?";
+        if(r<.5)return {from:"them",who:"😄",frame:"___ es muy divertido. ¿Y a ti qué te gusta hacer?",en:e,answer:"Porque",wrong:["Por qué","Porqué","Pero"],line:l};
+        return {from:"them",who:"😄",frame:"Porque es muy divertido. ¿Y a ti ___ te gusta hacer?",en:e,answer:"qué",wrong:["que","cuál","quién"],line:l};}
+    ]},
+    {id:"tour",icon:"👔",title:function(c){return "At the tourist office in "+c.city[0];},tag:"Polite · usted",slots:[
+      function(c){var m=c.mus,r=Math.random(),l="Buenos días. ¿Dónde está "+m[0]+", por favor?",e="Good morning. Where is "+m[1]+", please?";
+        if(r<.5)return {from:"me",who:"🗺️",frame:"Buenos días. ¿___ está "+m[0]+", por favor?",en:e,answer:"Dónde",wrong:["Adónde","Cuándo","Quién"],line:l};
+        return {from:"me",who:"🗺️",frame:"Buenos días. ¿Dónde ___ "+m[0]+", por favor?",en:e,answer:"está",wrong:["es","hay","estás"],line:l};},
+      function(c){var r=Math.random(),l="Está en la plaza Mayor, a cinco minutos de aquí.",e="It's in the main square, five minutes from here.";
+        if(r<.5)return {from:"them",who:"📍",frame:"___ en la plaza Mayor, a cinco minutos de aquí.",en:e,answer:"Está",wrong:["Es","Hay","Estás"],line:l};
+        return {from:"them",who:"📍",frame:"Está en la plaza Mayor, a cinco ___ de aquí.",en:e,answer:"minutos",wrong:["minuto","menos","metros"],line:l};},
+      function(c){var r=Math.random(),l="Gracias. ¿A qué hora abre?",e="Thank you. What time does it open?";
+        if(r<.5)return {from:"me",who:"🕘",frame:"Gracias. ¿___ abre?",en:e,answer:"A qué hora",wrong:["Qué hora","A cuál hora","Cuándo hora"],line:l};
+        return {from:"me",who:"🕘",frame:"Gracias. ¿A qué hora ___?",en:e,answer:"abre",wrong:["abro","abres","abrir"],line:l};},
+      function(c){var r=Math.random(),l="Abre a las diez y cierra a las seis.",e="It opens at ten and closes at six.";
+        if(r<.5)return {from:"them",who:"🔓",frame:"Abre a las diez y ___ a las seis.",en:e,answer:"cierra",wrong:["cerra","cierro","cierran"],line:l};
+        return {from:"them",who:"🔓",frame:"Abre a las ___ y cierra a las seis.",en:e,answer:"diez",wrong:["dos","doce","once"],line:l};},
+      function(c){var r=Math.random(),l="¿Cuánto cuesta la entrada?",e="How much is the entrance ticket?";
+        if(r<.5)return {from:"me",who:"🎟️",frame:"¿___ cuesta la entrada?",en:e,answer:"Cuánto",wrong:["Cuánta","Cuántos","Cuándo"],line:l};
+        return {from:"me",who:"🎟️",frame:"¿Cuánto ___ la entrada?",en:e,answer:"cuesta",wrong:["cuestan","costa","cuesto"],line:l};},
+      function(c){var p=c.price,l="Cuesta "+p[0]+" euros, pero para estudiantes es gratis.",e="It costs €"+p[1]+", but it's free for students.";
+        if(Math.random()<.5)return {from:"them",who:"💶",frame:"Cuesta ___ euros, pero para estudiantes es gratis.",en:e,answer:p[0],wrong:PRICES.filter(function(x){return x!==p;}).map(function(x){return x[0];}),line:l};
+        return {from:"them",who:"💶",frame:"___ "+p[0]+" euros, pero para estudiantes es gratis.",en:e,answer:"Cuesta",wrong:["Cuestan","Costa","Cuesto"],line:l};},
+      function(c){var r=Math.random(),l="¡Genial! ¿Tiene usted un mapa de la ciudad?",e="Great! Do you have a map of the city? (polite)";
+        if(r<.5)return {from:"me",who:"🗺️",frame:"¡Genial! ¿___ usted un mapa de la ciudad?",en:e,answer:"Tiene",wrong:["Tienes","Tengo","Tener"],line:l};
+        return {from:"me",who:"🗺️",frame:"¡Genial! ¿Tiene ___ un mapa de la ciudad?",en:e,answer:"usted",wrong:["tú","ti","te"],line:l};},
+      function(c){var r=Math.random(),l="Sí, claro. Aquí tiene. ¡Que lo pase bien!",e="Yes, of course. Here you are. Have a good time!";
+        if(r<.5)return {from:"them",who:"😊",frame:"Sí, ___. Aquí tiene. ¡Que lo pase bien!",en:e,answer:"claro",wrong:["clara","claros","caro"],line:l};
+        return {from:"them",who:"😊",frame:"Sí, claro. Aquí ___. ¡Que lo pase bien!",en:e,answer:"tiene",wrong:["tengo","tener","tenemos"],line:l};}
+    ]},
+    {id:"mag",icon:"📰",title:function(c){return "School magazine: meet the new Spanish assistant, "+c.asst;},tag:"Interview · tú",slots:[
+      function(c){var r=Math.random(),l="¡Hola! ¿Cómo te llamas y de dónde eres?",e="Hi! What's your name and where are you from?";
+        if(r<.5)return {from:"me",who:"🎤",frame:"¡Hola! ¿___ te llamas y de dónde eres?",en:e,answer:"Cómo",wrong:["Qué","Cuál","Quién"],line:l};
+        return {from:"me",who:"🎤",frame:"¡Hola! ¿Cómo te llamas y de ___ eres?",en:e,answer:"dónde",wrong:["donde","cuándo","quién"],line:l};},
+      function(c){var l="Me llamo "+c.asst+" y soy de "+c.city[0]+".",e="My name is "+c.asst+" and I'm from "+c.city[1]+".";
+        if(Math.random()<.5)return {from:"them",who:"🙋",frame:"Me ___ "+c.asst+" y soy de "+c.city[0]+".",en:e,answer:"llamo",wrong:["llamas","llama","llamar"],line:l};
+        return {from:"them",who:"🙋",frame:"Me llamo "+c.asst+" y ___ de "+c.city[0]+".",en:e,answer:"soy",wrong:["eres","es","estoy"],line:l};},
+      function(c){var r=Math.random(),l="¿Cuál es tu comida favorita?",e="What's your favourite food?";
+        if(r<.5)return {from:"me",who:"🍽️",frame:"¿___ es tu comida favorita?",en:e,answer:"Cuál",wrong:["Quién","Cuánto","Dónde"],line:l};
+        return {from:"me",who:"🍽️",frame:"¿Cuál es ___ comida favorita?",en:e,answer:"tu",wrong:["tú","te","ti"],line:l};},
+      function(c){var f=c.food,l="Me encanta "+f[0]+".",e="I love "+f[1]+".";
+        return {from:"them",who:"😋",frame:"Me ___ "+f[0]+".",en:e,answer:"encanta",wrong:["encantan","encanto","encantas"],line:l};},
+      function(c){var r=Math.random(),l="¿Qué piensas de Irlanda?",e="What do you think of Ireland?";
+        if(r<.5)return {from:"me",who:"🇮🇪",frame:"¿___ piensas de Irlanda?",en:e,answer:"Qué",wrong:["Cuál","Quién","Cuándo"],line:l};
+        return {from:"me",who:"🇮🇪",frame:"¿Qué ___ de Irlanda?",en:e,answer:"piensas",wrong:["pienso","piensa","pensar"],line:l};},
+      function(c){var r=Math.random(),l="Me gusta mucho, ¡pero llueve todos los días!",e="I really like it, but it rains every day!";
+        if(r<.5)return {from:"them",who:"🌧️",frame:"Me gusta mucho, ¡pero ___ todos los días!",en:e,answer:"llueve",wrong:["lluvia","lloviendo","llover"],line:l};
+        return {from:"them",who:"🌧️",frame:"Me gusta mucho, ¡pero llueve ___ los días!",en:e,answer:"todos",wrong:["todas","todo","toda"],line:l};},
+      function(c){var r=Math.random(),l="¿Con quién vives aquí en Cork?",e="Who do you live with here in Cork?";
+        if(r<.5)return {from:"me",who:"🏠",frame:"¿Con ___ vives aquí en Cork?",en:e,answer:"quién",wrong:["qué","cuál","dónde"],line:l};
+        return {from:"me",who:"🏠",frame:"¿___ quién vives aquí en Cork?",en:e,answer:"Con",wrong:["De","A","En"],line:l};},
+      function(c){var r=Math.random(),l="Vivo con una familia irlandesa muy simpática.",e="I live with a very nice Irish family.";
+        if(r<.5)return {from:"them",who:"👨‍👩‍👧",frame:"___ con una familia irlandesa muy simpática.",en:e,answer:"Vivo",wrong:["Vives","Vive","Vivir"],line:l};
+        return {from:"them",who:"👨‍👩‍👧",frame:"Vivo con una familia irlandesa muy ___.",en:e,answer:"simpática",wrong:["simpático","simpáticas","simpáticos"],line:l};}
+    ]}
+  ];
+  var pc=null,lastScen=null;
+  function makeCtx(){var fF=Math.random()<.5;
+    return {friend:rnd(fF?ES_F:ES_M),fF:fF,asst:rnd(["Inés","Marcos","Paula","Sergio"]),city:rnd(CITIES),age:rnd(AGES),hobby:rnd(HOBBY),mus:rnd(MUSEUMS),price:rnd(PRICES),food:rnd(FOOD)};}
+  function newCard(){var s;do{s=rnd(SCEN);}while(s===lastScen&&SCEN.length>1);lastScen=s;
+    pc=makeCtx();pc.scen=s;pc.lines=[];pc.slot=0;pc.sent=false;}
+  function lineQ(s,c,i){var q=s.slots[i](c);q.review=q.line+" = "+q.en;q.who=q.who||"";return q;}
+  function qCard(){if(!pc||pc.sent)newCard();var q=lineQ(pc.scen,pc,pc.slot);q.card=1;return q;}
+  function qLine(){var s=rnd(SCEN),c=makeCtx();return lineQ(s,c,Math.floor(Math.random()*s.slots.length));}
+
+  /* ---------- Question words ---------- */
+  /* [question with ___, missing word, 3 wrong, English question, answer ES, answer EN, kind] */
+  var QA=[
+    ["¿___ vives?","Dónde",["Cuándo","Cuánto","Quién"],"Where do you live?","Vivo en Mallow, cerca de Cork.","I live in Mallow, near Cork.","place"],
+    ["¿___ años tienes?","Cuántos",["Cuántas","Cuánto","Cuándo"],"How old are you?","Tengo catorce años.","I'm fourteen.","num"],
+    ["¿___ te llamas?","Cómo",["Qué","Cuál","Quién"],"What's your name?","Me llamo Aoife.","My name is Aoife.","name"],
+    ["¿___ eres?","De dónde",["Adónde","Cuándo","Por qué"],"Where are you from?","Soy de Galway.","I'm from Galway.","from"],
+    ["¿___ es tu cumpleaños?","Cuándo",["Dónde","Cuánto","Quién"],"When is your birthday?","Es el doce de mayo.","It's on the 12th of May.","date"],
+    ["¿___ te levantas?","A qué hora",["Qué hora","Cuál hora","Cuánto"],"What time do you get up?","Me levanto a las siete.","I get up at seven.","time"],
+    ["¿___ estudias español?","Por qué",["Porque","Dónde","Quién"],"Why do you study Spanish?","Porque me gusta viajar.","Because I like travelling.","reason"],
+    ["¿___ haces los sábados?","Qué",["Cuál","Quién","Cuántos"],"What do you do on Saturdays?","Juego al fútbol con mis amigos.","I play football with my friends.","act"],
+    ["¿___ es tu mejor amigo?","Quién",["Quiénes","Qué","Cuándo"],"Who is your best friend?","Mi mejor amigo es Cian.","My best friend is Cian.","person"],
+    ["¿___ es tu asignatura favorita?","Cuál",["Quién","Cuánto","Dónde"],"What's your favourite subject?","Mi asignatura favorita es la historia.","My favourite subject is history.","pick"],
+    ["¿___ hermanas tienes?","Cuántas",["Cuántos","Cuánta","Cuándo"],"How many sisters do you have?","Tengo dos hermanas.","I have two sisters.","num"],
+    ["¿___ cuesta la camiseta?","Cuánto",["Cuántos","Cuánta","Cuándo"],"How much is the T-shirt?","Cuesta quince euros.","It costs €15.","price"],
+    ["¿___ vas en verano?","Adónde",["De dónde","Cuánto","Quién"],"Where do you go in summer?","Voy a la playa con mi familia.","I go to the beach with my family.","act"],
+    ["¿Con ___ vives?","quién",["qué","cuál","cuánto"],"Who do you live with?","Vivo con mi madre y mi hermano.","I live with my mother and my brother.","person"],
+    ["¿___ vas al instituto?","Cómo",["Qué","Cuál","Quién"],"How do you get to school?","Voy en autobús.","I go by bus.","how"],
+    ["¿___ es tu instituto?","Cómo",["Qué","Quién","Cuánto"],"What is your school like?","Es grande y bastante moderno.","It's big and quite modern.","like"],
+    ["¿___ alumnos hay en tu clase?","Cuántos",["Cuántas","Cuánto","Cuándo"],"How many students are there in your class?","Hay veinticuatro alumnos.","There are 24 students.","num"],
+    ["¿___ no vienes a la fiesta?","Por qué",["Porque","Qué","Cuál"],"Why aren't you coming to the party?","Porque tengo que estudiar.","Because I have to study.","reason"],
+    ["¿___ tiempo hace hoy?","Qué",["Cuál","Cómo","Cuánto"],"What's the weather like today?","Hace sol y calor.","It's sunny and hot.","weather"],
+    ["¿___ son tus profesores favoritos?","Quiénes",["Quién","Qué","Cuál"],"Who are your favourite teachers?","Son la señora Ruiz y el señor Byrne.","Mrs Ruiz and Mr Byrne.","person"],
+    ["¿___ empieza la película?","A qué hora",["Qué hora","Cuál hora","Cuántas"],"What time does the film start?","Empieza a las ocho y media.","It starts at half past eight.","time"],
+    ["¿___ deporte practicas?","Qué",["Cuál","Quién","Cuánto"],"What sport do you do?","Practico el hurling.","I play hurling.","act"]
+  ];
+  function full(x){var s=x[0].replace("___",x[1]);return s;}
+  /* read the answer, pick the question word */
+  function qFromAns(){var x=rnd(QA);
+    return {who:"💬",en:"Answer: “"+x[4]+"”",frame:x[0],answer:x[1],wrong:x[2].slice(),review:full(x)+" = "+x[3]};}
+  /* English question → question word */
+  function qFromEn(){var x=rnd(QA);
+    return {who:"🇬🇧",en:x[3],frame:x[0],answer:x[1],wrong:x[2].slice(),review:full(x)+" = "+x[3]};}
+  var QW=[["¿Qué?","What?"],["¿Quién?","Who? (one person)"],["¿Quiénes?","Who? (more than one)"],["¿Dónde?","Where?"],["¿Adónde?","Where to?"],["¿De dónde?","Where from?"],["¿Cuándo?","When?"],["¿A qué hora?","At what time?"],
+    ["¿Cómo?","How?"],["¿Por qué?","Why?"],["¿Cuánto?","How much?"],["¿Cuántos?","How many?"],["¿Cuál?","Which one?"],["¿Con quién?","Who with?"]];
+  function qMean(){var g=rnd(QW),w=others(QW,g,3);
+    if(Math.random()<.5)return {who:"❓",en:"What does it mean?",frame:g[0],answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};
+    return {who:"❓",en:"How do you say it in Spanish? ("+g[1]+")",frame:"___",answer:g[0],wrong:w.map(function(x){return x[0];}),review:g[1]+" = "+g[0]};}
+  /* what kind of answer do you want? [situation, question word, group] */
+  var NEED=[["You want to know where someone lives.","¿Dónde…?","p"],["You want to know where someone is from.","¿De dónde…?","p"],["You want to know a time: when the film starts.","¿A qué hora…?","t"],
+    ["You want to know the date of a birthday.","¿Cuándo…?","t"],["You want to know the reason.","¿Por qué…?","r"],["You want to know a price.","¿Cuánto cuesta…?","n"],["You want to know how many brothers someone has.","¿Cuántos…?","n"],
+    ["You want to know who someone is.","¿Quién…?","w"],["You want to know how someone travels to school.","¿Cómo…?","h"],["You want to know which one of two T-shirts your friend prefers.","¿Cuál…?","c"],["You want to know who your friend goes to the cinema with.","¿Con quién…?","w"]];
+  function qNeed(){var s=rnd(NEED),w=shuffle(NEED.filter(function(x){return x[2]!==s[2];})).slice(0,3);
+    return {who:"🎯",en:s[0],frame:"Which question do you start with?",answer:s[1],wrong:w.map(function(x){return x[1];}),review:s[0]+" → "+s[1]};}
+  /* ¿Qué or ¿Cuál? */
+  var QC=["🔤 Qué","☝️ Cuál"],QCS=["what","which / what is"];
+  var QCL=[["¿___ es tu color favorito?",1,"What's your favourite colour?"],["¿___ es la capital de Perú?",1,"What's the capital of Peru?"],["¿___ haces mañana?",0,"What are you doing tomorrow?"],
+    ["¿___ es un bocadillo?",0,"What is a bocadillo? (a definition)"],["¿___ deporte practicas?",0,"What sport do you do?"],["¿___ prefieres, el rojo o el azul?",1,"Which do you prefer, the red one or the blue one?"],
+    ["¿___ es tu dirección?",1,"What's your address?"],["¿___ hora es?",0,"What time is it?"],["¿___ de los dos es tu hermano?",1,"Which of the two is your brother?"],["¿___ quieres para tu cumpleaños?",0,"What do you want for your birthday?"],
+    ["¿___ es tu nombre?",1,"What's your name?"],["¿___ significa “pizarra”?",0,"What does “pizarra” mean?"],["¿___ libro estás leyendo?",0,"What book are you reading?"],["¿___ son tus asignaturas favoritas?",1,"What are your favourite subjects?"]];
+  function qQC(){var s=rnd(QCL),ans=s[1]===1&&s[0].indexOf(" son ")>0?"Cuáles":noEmoji(QC[s[1]]);
+    return {fixed:1,tm:1,smalls:QCS,who:"🤔",en:s[2],frame:s[0],answer:QC[s[1]],wrong:QC.filter(function(x,i){return i!==s[1];}),opts:QC,review:s[0].replace("___",ans)+" = "+s[2]};}
+  /* ¿Por qué or porque? */
+  var PQ=["❓ Por qué","💬 Porque"],PQS=["why?","because"];
+  var PQL=[["¿___ llegas tarde?",0,"Why are you late?"],["Llego tarde ___ he perdido el autobús.",1,"I'm late because I missed the bus."],["¿___ no te gusta el inglés?",0,"Why don't you like English?"],
+    ["No me gustan las ciencias ___ son difíciles.",1,"I don't like science because it's difficult."],["No sé ___ está triste mi hermano.",0,"I don't know why my brother is sad."],["Estudio español ___ quiero vivir en Madrid.",1,"I study Spanish because I want to live in Madrid."],
+    ["¿___ estudias español?",0,"Why do you study Spanish?"],["Voy a pie ___ vivo cerca.",1,"I walk because I live nearby."],["¿___ estás tan contento?",0,"Why are you so happy?"],["Estoy contento ___ es viernes.",1,"I'm happy because it's Friday."]];
+  function qPQ(){var s=rnd(PQL),ans=s[1]===0?(s[0].charAt(0)==="¿"?"Por qué":"por qué"):"porque";
+    return {fixed:1,tm:1,smalls:PQS,who:"🔀",en:s[2],frame:s[0],answer:PQ[s[1]],wrong:PQ.filter(function(x,i){return i!==s[1];}),opts:PQ,review:s[0].replace("___",ans)+" = "+s[2]};}
+  /* cuánto / cuánta / cuántos / cuántas ; quién / quiénes */
+  var CU=["Cuánto","Cuánta","Cuántos","Cuántas"];
+  var CUL=[["¿___ hermanos tienes?",2,"How many brothers and sisters do you have?"],["¿___ hermanas tienes?",3,"How many sisters do you have?"],["¿___ agua bebes al día?",1,"How much water do you drink a day?"],
+    ["¿___ cuesta la mochila?",0,"How much is the schoolbag?"],["¿___ dinero tienes?",0,"How much money have you got?"],["¿___ horas duermes?",3,"How many hours do you sleep?"],["¿___ años tiene tu abuelo?",2,"How old is your grandfather?"],
+    ["¿___ asignaturas estudias?",3,"How many subjects do you study?"],["¿___ leche quieres?",1,"How much milk do you want?"],["¿___ cuestan las botas?",0,"How much are the boots?"],["¿___ perros tienes?",2,"How many dogs do you have?"]];
+  function qCU(){var s=rnd(CUL);return {who:"🔢",en:s[2],frame:s[0],answer:CU[s[1]],wrong:CU.filter(function(x,i){return i!==s[1];}),review:s[0].replace("___",CU[s[1]])+" = "+s[2]};}
+  var QUL=[["¿___ es tu profesor de inglés?","Quién",["Quiénes","Qué","Cuánto"],"Who is your English teacher?"],["¿___ son esos chicos?","Quiénes",["Quién","Qué","Cuál"],"Who are those boys?"],
+    ["¿___ es la chica de la foto?","Quién",["Quiénes","Qué","Cuánto"],"Who is the girl in the photo?"],["¿___ son tus mejores amigas?","Quiénes",["Quién","Qué","Cuál"],"Who are your best friends?"]];
+  function qQU(){var s=rnd(QUL);return {who:"👥",en:s[3],frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1])+" = "+s[3]};}
+  /* accent or not? */
+  var ACC=[["¿___ vives?","Dónde",["Donde","Dondé","Dônde"],"Where do you live?"],["¿___ haces?","Qué",["Que","Qúe","Quê"],"What are you doing?"],["¿___ estás?","Cómo",["Como","Comó","Cômo"],"How are you?"],
+    ["¿___ es el concierto?","Cuándo",["Cuando","Cuandó","Cúando"],"When is the concert?"],["¿___ es tu hermana?","Quién",["Quien","Quíen","Quiên"],"Who is your sister?"]];
+  function qAcc(){var s=rnd(ACC);return {who:"✍️",en:s[3]+" (which spelling is right?)",frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1])+" = "+s[3]+" (accent on the question word)"};}
+
+  /* ---------- Ask it right, answer in full ---------- */
+  /* pick the question with no mistakes: [right, 3 wrong (one slip each), English] */
+  var ORD=[
+    ["¿Dónde vive tu abuela?",["¿Donde vive tu abuela?","Dónde vive tu abuela?","¿Dónde vives tu abuela?"],"Where does your grandmother live?"],
+    ["¿A qué hora empieza la película?",["¿A que hora empieza la película?","¿A qué hora empiezas la película?","¿Qué hora empieza la película?"],"What time does the film start?"],
+    ["¿Tienes hermanos?",["¿Haces tienes hermanos?","Tienes hermanos?","¿Tiene hermanos tú?"],"Do you have any brothers or sisters?"],
+    ["¿Cuántos años tiene tu hermano?",["¿Cuántas años tiene tu hermano?","¿Cuántos años eres tu hermano?","¿Cuantos años tiene tu hermano?"],"How old is your brother?"],
+    ["¿Te gusta la música pop?",["¿Te gustas la música pop?","¿Haces te gusta la música pop?","¿Tú gusta la música pop?"],"Do you like pop music?"],
+    ["¿Cuál es tu película favorita?",["¿Cuál es tú película favorita?","¿Cuál eres tu película favorita?","¿Cual es tu película favorita?"],"What's your favourite film?"],
+    ["¿Por qué no vienes al partido?",["¿Porque no vienes al partido?","¿Por qué no vengo al partido?","¿Por que no vienes al partido?"],"Why aren't you coming to the match?"],
+    ["¿Con quién vas al cine?",["¿Quién vas al cine con?","¿Con quien vas al cine?","¿Con quién vas a el cine?"],"Who are you going to the cinema with?"],
+    ["¿Qué hiciste el fin de semana?",["¿Qué haciste el fin de semana?","¿Que hiciste el fin de semana?","¿Qué hiciste el fin de semana."],"What did you do at the weekend?"],
+    ["¿Puede repetir, por favor?",["¿Puede repetir, por favor.","¿Puede repite, por favor?","¿Haces puede repetir, por favor?"],"Can you repeat that, please? (polite)"],
+    ["¿Cuánto cuestan las zapatillas?",["¿Cuánto cuesta las zapatillas?","¿Cuántos cuestan las zapatillas?","¿Cuanto cuestan las zapatillas?"],"How much are the trainers?"],
+    ["¿Adónde vas el sábado?",["¿Adónde vas el sábado.","¿Adónde vais tú el sábado?","¿Adonde vas el sábado?"],"Where are you going on Saturday?"]
+  ];
+  function qOrd(){var s=rnd(ORD);return {who:"🔍",en:s[2]+" Which question has no mistakes?",frame:"",answer:s[0],wrong:s[1].slice(),review:s[0]+" = "+s[2]};}
+  /* statement → question: [statement, English, "do"-form] */
+  var ST=[["Tienes hermanos","Do you have brothers or sisters?","Haces"],["Te gusta el chocolate","Do you like chocolate?","Haces"],["Hablas francés","Do you speak French?","Haces"],["Juegas al fútbol","Do you play football?","Haces"],
+    ["Vives cerca del instituto","Do you live near the school?","Haces"],["Tu hermano estudia en Cork","Does your brother study in Cork?","Hace"],["Hay una piscina en el hotel","Is there a pool in the hotel?","Hace"],["Vienes a la fiesta","Are you coming to the party?","Haces"]];
+  function lc(s){return s.charAt(0).toLowerCase()+s.slice(1);}
+  function qSt(){var s=rnd(ST);
+    return {who:"↩️",en:"Turn it into a question: "+s[1],frame:s[0]+".",answer:"¿"+s[0]+"?",wrong:[s[0]+"?","¿"+s[0]+".","¿"+s[2]+" "+lc(s[0])+"?"],review:"¿"+s[0]+"? = "+s[1]};}
+  /* yes/no question or information question */
+  var YN=["👍 Yes / no","🔎 Information"],YNS=["sí or no answer","asks for a detail"];
+  var YNL=[["¿Tienes un perro?",0,"Do you have a dog?"],["¿Dónde está la estación?",1,"Where is the station?"],["¿Te gusta el rugby?",0,"Do you like rugby?"],["¿Cuántos años tienes?",1,"How old are you?"],
+    ["¿Vienes al cine esta noche?",0,"Are you coming to the cinema tonight?"],["¿A qué hora sale el tren?",1,"What time does the train leave?"],["¿Hablas irlandés?",0,"Do you speak Irish?"],["¿Por qué estás triste?",1,"Why are you sad?"],
+    ["Eres de Cork, ¿verdad?",0,"You're from Cork, aren't you?"],["¿Hay un supermercado cerca?",0,"Is there a supermarket nearby?"],["¿Cómo se llama tu profesora?",1,"What's your teacher's name?"],["¿Quién es tu cantante favorito?",1,"Who is your favourite singer?"]];
+  function qYN(){var s=rnd(YNL);
+    return {fixed:1,tm:1,smalls:YNS,who:"❔",en:s[2],frame:s[0],answer:YN[s[1]],wrong:YN.filter(function(x,i){return i!==s[1];}),opts:YN,review:s[0]+" = "+noEmoji(YN[s[1]])+" question ("+s[2]+")"};}
+  /* answer in full: [question, right answer, 3 wrong, English of answer] */
+  var FULL=[
+    ["¿Dónde vives?","Vivo en Kinsale.",["Vives en Kinsale.","Vive en Kinsale.","Vivir en Kinsale."],"I live in Kinsale."],
+    ["¿Qué haces los sábados?","Juego al fútbol.",["Juegas al fútbol.","Juega al fútbol.","Jugar al fútbol."],"I play football."],
+    ["¿Cómo te llamas?","Me llamo Sara.",["Te llamas Sara.","Se llamo Sara.","Me llamas Sara."],"My name is Sara."],
+    ["¿Cuántos años tienes?","Tengo quince años.",["Tienes quince años.","Soy quince años.","Tiene quince años."],"I'm fifteen."],
+    ["¿A qué hora te levantas?","Me levanto a las siete.",["Te levantas a las siete.","Me levantas a las siete.","Se levanta a las siete."],"I get up at seven."],
+    ["¿Te gusta el inglés?","Sí, me gusta mucho.",["Sí, te gusta mucho.","Sí, me gusto mucho.","Sí, le gusta mucho."],"Yes, I like it a lot."],
+    ["¿Adónde vas en verano?","Voy a Galicia con mi familia.",["Vas a Galicia con mi familia.","Va a Galicia con mi familia.","Ir a Galicia con mi familia."],"I go to Galicia with my family."],
+    ["¿Puedes venir mañana?","No, no puedo. Tengo un partido.",["No, no puedes. Tengo un partido.","No, no puede. Tengo un partido.","No, no poder. Tengo un partido."],"No, I can't. I have a match."],
+    ["¿Habla usted inglés?","Sí, hablo un poco de inglés.",["Sí, habla un poco de inglés.","Sí, hablas un poco de inglés.","Sí, hablar un poco de inglés."],"Yes, I speak a little English."],
+    ["¿Por qué estudias español?","Porque me gusta viajar.",["Por qué me gusta viajar.","Porque te gusta viajar.","Porqué me gusta viajar."],"Because I like travelling."],
+    ["¿Tienes mascotas?","Sí, tengo un gato.",["Sí, tienes un gato.","Sí, tiene un gato.","Sí, tener un gato."],"Yes, I have a cat."],
+    ["¿Cómo vas al instituto?","Voy en bici.",["Vas en bici.","Va en bici.","Ir en bici."],"I go by bike."]
+  ];
+  function qFull(){var s=rnd(FULL);return {who:"💬",en:"Pick the best answer.",frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0]+" → "+s[1]+" = "+s[3]};}
+  /* match question → answer (different kinds only) */
+  function qMatch(){var x=rnd(QA),w=shuffle(QA.filter(function(y){return y[6]!==x[6];})).slice(0,3);
+    return {who:"🔗",en:"Pick the answer that fits the question.",frame:full(x),answer:x[4],wrong:w.map(function(y){return y[4];}),review:full(x)+" → "+x[4]};}
+
+  /* ---------- Listening ---------- */
+  function lAns(){var x=rnd(QA),w=shuffle(QA.filter(function(y){return y[6]!==x[6];})).slice(0,3);
+    return {listen:1,speak:full(x),en:"Listen to the question. Pick the best answer.",answer:x[4],wrong:w.map(function(y){return y[4];}),review:full(x)+" = "+x[3]+" → "+x[4]};}
+  function lMean(){var x=rnd(QA),w=shuffle(QA.filter(function(y){return y[6]!==x[6];})).slice(0,3);
+    return {listen:1,speak:full(x),en:"Listen. What's the question in English?",answer:x[3],wrong:w.map(function(y){return y[3];}),review:full(x)+" = "+x[3]};}
+  function lWord(){var x=rnd(QA);
+    return {listen:1,speak:full(x),en:"Listen. Which question word did you hear?",answer:x[1],wrong:x[2].slice(),review:full(x)+" = "+x[3]};}
+  function lBack(){var x=rnd(QA),w=shuffle(QA.filter(function(y){return y[6]!==x[6];})).slice(0,3);
+    return {listen:1,speak:x[4],en:"Listen to the answer. What was the question?",answer:full(x),wrong:w.map(function(y){return full(y);}),review:x[4]+" = "+x[5]+" ← "+full(x)};}
+  function lYN(){var s=rnd(YNL);
+    return {fixed:1,tm:1,smalls:YNS,listen:1,speak:s[0],en:"Listen. Yes/no question or information question?",answer:YN[s[1]],wrong:YN.filter(function(x,i){return i!==s[1];}),opts:YN,review:s[0]+" = "+s[2]+" ("+noEmoji(YN[s[1]])+")"};}
+
+  var MAKERS={
+    interview:[qCard],
+    words:[qFromAns,qFromAns,qFromAns,qFromEn,qFromEn,qMean,qMean,qNeed,qNeed,qQC,qQC,qPQ,qPQ,qCU,qQU,qAcc],
+    make:[qOrd,qOrd,qOrd,qSt,qSt,qYN,qYN,qFull,qFull,qFull,qMatch,qMatch],
+    listen:[lAns,lAns,lAns,lMean,lMean,lWord,lBack,lBack,lYN],
+    mixed:[qLine,qLine,qFromAns,qFromEn,qMean,qNeed,qQC,qPQ,qCU,qOrd,qOrd,qSt,qYN,qFull,qFull,qMatch]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear a question and pick the best answer (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Chat drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(flash){
+    var el=$("card");if(mode!=="interview"||!pc){el.hidden=true;return;}
+    var n=pc.scen.slots.length;
+    el.hidden=false;el.className="chat"+(pc.sent?" done":"");
+    var h="<div class='top'><span>"+pc.scen.icon+" "+esc(pc.scen.title(pc))+"</span><small>"+esc(pc.scen.tag)+" · "+Math.min(pc.slot+1,n)+"/"+n+"</small></div><div class='msgs' id='msgs'>";
+    pc.lines.forEach(function(l){h+="<div class='b "+l.from+"'>"+esc(l.text)+"</div>";});
+    if(!pc.sent&&current&&current.card)h+="<div class='b "+current.from+" typing'>…</div>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>"+pc.scen.icon+" ¡Muy bien! +3</div>";
+    el.innerHTML=h;var m=$("msgs");if(m)m.scrollTop=m.scrollHeight;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="interview"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?q.opts.length-1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.lines.push({from:current.from,text:current.line});
+      pc.slot++;
+      if(pc.slot>=pc.scen.slots.length){pc.sent=true;score+=3;cards++;flash=true;}
+      current.card=0;drawCard(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:500)):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! You could interview anyone in Spanish.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="interview"?", "+cards+" interview"+(cards===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SCEN:SCEN,lineQ:lineQ,makeCtx:makeCtx};
+})();
+</script>
+
+<script src="site.js"></script>
+</body>
+</html>
