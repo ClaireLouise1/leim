@@ -108,7 +108,7 @@ main='''<main id="main">
         <li><b>Android:</b> Settings → Accessibility → Text-to-speech → Google speech engine → Install voice data → Spanish (Spain).</li>
         <li>Still nothing? The scripts are at the back of the Exam Pack (pages 28–31): a parent or friend can read them aloud.</li>
       </ul>
-      <div class="note"><b>About this audio:</b> all texts were written by Léim in the style of the Junior Cycle exam. It is not official exam material. Léim is independent and not connected to the State Examinations Commission or the NCCA. The real past papers and their audio are free on <b>examinations.ie</b>. Don't have the Exam Pack yet? <a href="https://payhip.com/b/ulLk6">Get it here (€10)</a>.</div>
+      <div class="note"><b>About this audio:</b> all texts were written by Léim in the style of the Junior Cycle exam. It is not official exam material. Léim is independent and not connected to the State Examinations Commission or the NCCA. The real past papers and their audio are free on <b>examinations.ie</b>. Don't have the Exam Pack yet? <a href="https://payhip.com/b/IAjDY">Get it here (€10)</a>.</div>
     </section>
 </div></div>
 
