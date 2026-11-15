@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health and the body in Spanish: play ¿Qué te duele? | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: health and the body. Talk to a sick friend, the doctor and the chemist line by line, learn body parts, me duele or me duelen, tengo, estoy or me duele, and match problems to advice. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">¿Qué te duele?</h1>
+        <p>Health and the body in Spanish. Text a friend who's off sick, see the doctor at the health centre and buy something at a Spanish chemist's, one line at a time. Then learn the body parts, <b>me duele or me duelen?</b>, <b>tengo, estoy or me duele?</b>, and match each problem to the right advice. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="clinic"><div><b>¿Qué te pasa?</b><span>Build the conversation line by line: a friend who's off sick 😷, the doctor 🩺 or the chemist's 💊. +3 for every finished conversation</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="body"><div><b>Body &amp; me duele</b><span>Body parts, me duele or me duelen?, me / te / le / les, tengo, estoy or me duele?, spot the slip</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="advice"><div><b>Problems &amp; advice</b><span>Match each problem to the right advice, tienes que / debes + infinitive, doctor and chemist words, healthy or unhealthy?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: ¿qué te duele? 🔊</b><span id="listenNote">Hear the problem and pick what's wrong</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.11, 1.13 (2017 spec, exams 2027–2028) · 1.10, 1.12 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="chat" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Health and the body</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td><b>Me</b> duel<b>e</b> <b>la</b> cabeza.</td><td>I have a headache. (My head hurts.)</td></tr>
+            <tr><td><b>Me</b> duel<b>en</b> <b>los</b> pies.</td><td>My feet hurt.</td></tr>
+            <tr><td>¿<b>Te</b> duele <b>el</b> brazo?</td><td>Does your arm hurt?</td></tr>
+            <tr><td>A mi madre <b>le</b> duele <b>la</b> espalda.</td><td>My mother's back hurts.</td></tr>
+          </tbody></table></div>
+        <p>Look at the verb: when is it <em>duele</em> and when <em>duelen</em>? Which little word shows <b>who</b> is in pain? And where is the word for "my"? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">1. <em>Doler</em> works like <em>gustar</em>: the body part does the hurting. One thing → <b>duele</b>; more than one → <b>duelen</b>. 2. The person goes in front: <b>me</b> (me), <b>te</b> (you), <b>le</b> (him / her / you polite), <b>nos</b> (us), <b>os</b> (you all), <b>les</b> (them). 3. Spanish says <b>el / la / los / las</b> with body parts, <b>not</b> <em>mi</em>: <em>Me duele <b>la</b> cabeza</em>, never <em>me duele mi cabeza</em>. 4. <em>Doler</em> is a boot verb: o → <b>ue</b> (duele).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">El cuerpo: the body</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Head</th><th>Body</th><th>Arms and legs</th></tr></thead>
+          <tbody>
+            <tr><td>la cabeza (head)</td><td>el cuello (neck)</td><td>el brazo (arm)</td></tr>
+            <tr><td>el ojo / los ojos (eye / eyes)</td><td>el hombro (shoulder)</td><td>la mano (hand)</td></tr>
+            <tr><td>la nariz (nose)</td><td>la espalda (back)</td><td>el dedo (finger)</td></tr>
+            <tr><td>la boca (mouth)</td><td>el pecho (chest)</td><td>la pierna (leg)</td></tr>
+            <tr><td>los dientes · la muela (teeth · back tooth)</td><td>el estómago (stomach)</td><td>la rodilla (knee)</td></tr>
+            <tr><td>la garganta (throat)</td><td>el corazón (heart)</td><td>el pie / los pies (foot / feet)</td></tr>
+            <tr><td>la oreja (ear) · el oído (inner ear)</td><td></td><td>el tobillo (ankle)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Watch out:</b> <em>la oreja</em> is the ear you can see; earache is <em>me duele <b>el oído</b></em>. Toothache: <em>me duelen las muelas</em> or <em>tengo dolor de muelas</em>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Tengo, estoy or me duele?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Tengo + noun</th><th>Estoy + adjective</th><th>Me duele(n) + body part</th></tr></thead>
+          <tbody>
+            <tr><td>Tengo <b>fiebre</b> (a temperature)</td><td>Estoy <b>enfermo / enferma</b> (ill)</td><td>Me duele la garganta (sore throat)</td></tr>
+            <tr><td>Tengo <b>tos</b> (a cough)</td><td>Estoy <b>resfriado / resfriada</b> (got a cold)</td><td>Me duele el estómago (stomach ache)</td></tr>
+            <tr><td>Tengo <b>gripe</b> (the flu)</td><td>Estoy <b>cansado / cansada</b> (tired)</td><td>Me duele el oído (earache)</td></tr>
+            <tr><td>Tengo <b>náuseas</b> (I feel sick)</td><td>Estoy <b>mareado / mareada</b> (dizzy)</td><td>Me duelen las piernas (my legs hurt)</td></tr>
+            <tr><td>Tengo <b>dolor de cabeza</b> (a headache)</td><td>Estoy <b>fatal</b> (awful)</td><td>Me duele todo (everything hurts)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">The adjectives after <em>estoy</em> agree: <em>Mi hermana está enferm<b>a</b>.</em> Accidents use the perfect: <em>Me he cortado el dedo</em> (I've cut my finger) · <em>Me he roto la pierna</em> (I've broken my leg) · <em>Me he quemado con el sol</em> (I've got sunburnt).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Giving advice</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Pattern</th><th>Example</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td><b>Tienes que</b> + infinitive</td><td>Tienes que ir al médico.</td><td>You have to go to the doctor.</td></tr>
+            <tr><td><b>Debes</b> + infinitive</td><td>Debes beber mucha agua.</td><td>You should drink lots of water.</td></tr>
+            <tr><td><b>No debes</b> + infinitive</td><td>No debes comer tantos dulces.</td><td>You shouldn't eat so many sweets.</td></tr>
+            <tr><td><b>Necesitas</b> + noun</td><td>Necesitas una tirita.</td><td>You need a plaster.</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">Doctors and chemists also give orders: <em>toma, bebe, descansa</em> (to a young person, tú) · <em>tome, beba, descanse</em> (polite, usted). Listen for how often: <em>dos veces al día</em> (twice a day), <em>cada ocho horas</em> (every eight hours), <em>después de comer</em> (after meals).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">At the doctor's and the chemist's</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>They ask</th><th>You say</th></tr></thead>
+          <tbody>
+            <tr><td>¿Qué te pasa? / ¿Qué le pasa? (polite)</td><td>Me duele mucho el oído.</td></tr>
+            <tr><td>¿Desde cuándo?</td><td>Desde ayer. · Desde hace dos días.</td></tr>
+            <tr><td>¿Tienes fiebre?</td><td>Sí, tengo treinta y ocho grados.</td></tr>
+            <tr><td>¿En qué puedo ayudarle?</td><td>¿Tiene algo para la tos?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">Useful words: <em>el médico / la médica</em> (doctor), <em>el centro de salud</em> (health centre), <em>la cita</em> (appointment), <em>la receta</em> (prescription), <em>las pastillas</em> (tablets), <em>el jarabe</em> (syrup), <em>la crema</em> (cream), <em>la tirita</em> (plaster), <em>urgencias</em> (A&amp;E). When someone is ill, say <b>¡Que te mejores!</b> (Get well soon!).</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> in Spain you look for the <b>green cross</b>: Spanish chemists (<em>farmacias</em>) give a lot of advice, and at night one <em>farmacia de guardia</em> in each area stays open. The emergency number is <b>112</b>, in Spain and in Ireland. <b>Irish link:</b> Irish puts the illness "on" you: <em>Tá tinneas cinn <b>orm</b></em> (I have a headache), <em>Tá slaghdán <b>orm</b></em> (I have a cold). Spanish puts the person in front too: <em><b>Me</b> duele la cabeza.</em></div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b>, health dialogues are short: listen for <b>what hurts</b>, <b>since when</b> (<em>desde ayer, desde hace tres días</em>), the <b>temperature</b>, and the <b>advice</b> and <b>how often</b> (<em>tres veces al día</em>). In <b>Writing</b>, illness is a classic excuse in a message: <em>Lo siento, no puedo ir a tu fiesta porque estoy enfermo. Me duele la garganta y tengo fiebre.</em> Check <b>duele / duelen</b> and use <b>la / el</b>, not <em>mi</em>: easy accuracy marks.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/health-and-the-body-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/vZ4az" target="_blank" rel="noopener">Health &amp; the Body Teacher Pack (€5)</a>: Doctor, Doctor! role-play, Health Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+  /* ---------- Data ---------- */
+  /* [Spanish with article, English, emoji, plural?, "it hurts" in English] */
+  var BODY=[
+    ["la cabeza","head","🤕",0,"I have a headache."],
+    ["el ojo","eye","👁️",0,"My eye hurts."],
+    ["los ojos","eyes","👀",1,"My eyes hurt."],
+    ["la nariz","nose","👃",0,"My nose hurts."],
+    ["la boca","mouth","👄",0,"My mouth hurts."],
+    ["los dientes","teeth","🦷",1,"My teeth hurt."],
+    ["la garganta","throat","🧣",0,"I have a sore throat."],
+    ["el oído","ear (inside)","👂",0,"I have earache."],
+    ["el cuello","neck","🦒",0,"My neck hurts."],
+    ["la espalda","back","🎒",0,"My back hurts."],
+    ["el estómago","stomach","🤢",0,"I have a stomach ache."],
+    ["el brazo","arm","💪",0,"My arm hurts."],
+    ["la mano","hand","✋",0,"My hand hurts."],
+    ["las manos","hands","🙌",1,"My hands hurt."],
+    ["el dedo","finger","☝️",0,"My finger hurts."],
+    ["la pierna","leg","🦵",0,"My leg hurts."],
+    ["las piernas","legs","🏃",1,"My legs hurt."],
+    ["la rodilla","knee","🧎",0,"My knee hurts."],
+    ["el pie","foot","🦶",0,"My foot hurts."],
+    ["los pies","feet","👣",1,"My feet hurt."],
+    ["el hombro","shoulder","🤷",0,"My shoulder hurts."],
+    ["las muelas","back teeth","🦷",1,"I have toothache."]
+  ];
+  var SING=BODY.filter(function(b){return !b[3];}),PLUR=BODY.filter(function(b){return b[3];});
+  function bodyWord(b){return b[0].split(" ")[1];}
+  /* English → Spanish (wrong options never the same word in the other number) */
+  function qBody(){var b=rnd(BODY),w=shuffle(BODY.filter(function(x){return x!==b&&bodyWord(x).slice(0,3)!==bodyWord(b).slice(0,3);})).slice(0,3);
+    return {who:b[2],en:"How do you say it in Spanish? ("+b[1]+")",frame:"___",answer:b[0],wrong:w.map(function(x){return x[0];}),review:b[0]+" = "+b[1]};}
+  function qBodyEs(){var b=rnd(BODY),w=shuffle(BODY.filter(function(x){return x!==b&&bodyWord(x).slice(0,3)!==bodyWord(b).slice(0,3);})).slice(0,3);
+    return {who:"🔤",en:"What does it mean?",frame:b[0],answer:b[1],wrong:w.map(function(x){return x[1];}),review:b[0]+" = "+b[1]};}
+  /* me duele or me duelen? */
+  var DU=["☝️ Me duele","👐 Me duelen"],DUS=["one thing hurts","more than one"];
+  function qDu(){var b=rnd(BODY);
+    return {fixed:1,tm:1,smalls:DUS,who:b[2],en:b[4],frame:"___ "+b[0]+".",answer:DU[b[3]],wrong:DU.filter(function(x,i){return i!==b[3];}),opts:DU,review:noEmoji(DU[b[3]])+" "+b[0]+". = "+b[4]};}
+  /* me / te / le / nos / os / les: [frame, answer, 3 wrong, English] */
+  var WHO=[
+    ["A mi hermano ___ duele la pierna.","le",["me","les","nos"],"My brother's leg hurts."],
+    ["A mis padres ___ duele la espalda.","les",["le","me","nos"],"My parents' backs hurt."],
+    ["¿___ duele la cabeza, Marta?","Te",["Me","Les","Nos"],"Do you have a headache, Marta?"],
+    ["A nosotros ___ duelen los pies después del paseo.","nos",["les","me","os"],"Our feet hurt after the walk."],
+    ["A mi abuela ___ duelen las rodillas.","le",["les","me","te"],"My grandmother's knees hurt."],
+    ["___ duele mucho la garganta. No puedo hablar.","Me",["Le","Les","Nos"],"I have a really sore throat. I can't talk."],
+    ["¿A vosotros ___ duele el estómago?","os",["les","nos","me"],"Do you (all) have a stomach ache?"],
+    ["A mis amigas ___ duelen las piernas después del partido.","les",["le","nos","me"],"My friends' legs hurt after the match."],
+    ["Señor López, ¿dónde ___ duele?","le",["les","me","nos"],"Mr López, where does it hurt? (polite)"],
+    ["A mí ___ duelen los ojos.","me",["te","le","nos"],"My eyes hurt."]
+  ];
+  function qWho(){var s=rnd(WHO);return {who:"👥",en:s[3],frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1])+" = "+s[3]};}
+  /* tengo, estoy or me duele? */
+  var TEM=["🤒 Tengo","😵 Estoy","🤕 Me duele"],TEMS=["+ noun","+ adjective","+ body part"];
+  var TEML=[["___ fiebre.",0,"I have a temperature."],["___ tos.",0,"I have a cough."],["___ gripe.",0,"I have the flu."],["___ náuseas.",0,"I feel sick."],["___ dolor de cabeza.",0,"I have a headache."],
+    ["___ un resfriado.",0,"I have a cold."],["___ mucho sueño.",0,"I'm very sleepy."],["___ enfermo.",1,"I'm ill."],["___ muy cansada.",1,"I'm very tired."],["___ mareado.",1,"I feel dizzy."],
+    ["___ resfriada.",1,"I've got a cold."],["___ fatal.",1,"I feel awful."],["___ la cabeza.",2,"My head hurts."],["___ el estómago.",2,"I have a stomach ache."],["___ la garganta.",2,"I have a sore throat."],
+    ["___ el oído.",2,"I have earache."],["___ la espalda.",2,"My back hurts."]];
+  function qTem(){var s=rnd(TEML);
+    return {fixed:1,tm:1,smalls:TEMS,who:"🩺",en:s[2],frame:s[0],answer:TEM[s[1]],wrong:TEM.filter(function(x,i){return i!==s[1];}),opts:TEM,review:s[0].replace("___",noEmoji(TEM[s[1]]))+" = "+s[2]};}
+  /* which sentence is right? [right, 3 wrong, English] */
+  var SLIP=[
+    ["Me duele la cabeza.",["Me duele mi cabeza.","Me duelen la cabeza.","Mi duele la cabeza."],"I have a headache."],
+    ["Me duelen los pies.",["Me duele los pies.","Me duelen mis pies.","Me duelo los pies."],"My feet hurt."],
+    ["A mi hermana le duele el brazo.",["A mi hermana duele el brazo.","A mi hermana le duele su brazo.","A mi hermana les duele el brazo."],"My sister's arm hurts."],
+    ["Tengo fiebre y tos.",["Estoy fiebre y tos.","Tengo fiebra y tos.","Tengo fiebre y toso."],"I have a temperature and a cough."],
+    ["Estoy enferma y no puedo ir al instituto.",["Tengo enferma y no puedo ir al instituto.","Estoy enferma y no puedo ir a el instituto.","Estoy enferma y no puedo voy al instituto."],"I'm ill and I can't go to school."],
+    ["¿Qué te pasa?",["¿Qué te pasas?","¿Que te pasa?","¿Qué tú pasa?"],"What's wrong?"],
+    ["Debes beber mucha agua.",["Debes bebes mucha agua.","Debes beber mucho agua.","Debes a beber mucha agua."],"You should drink lots of water."],
+    ["Tienes que ir al médico.",["Tienes ir al médico.","Tienes que vas al médico.","Tienes que ir a el médico."],"You have to go to the doctor."],
+    ["Me he cortado el dedo.",["Me he cortado mi dedo.","Me he cortido el dedo.","Me he cortada el dedo."],"I've cut my finger."],
+    ["¡Que te mejores!",["¡Que te mejoras!","¡Qué te mejores!","¡Que tu mejores!"],"Get well soon!"],
+    ["Mis padres están resfriados.",["Mis padres son resfriados.","Mis padres están resfriado.","Mis padres tienen resfriados."],"My parents have got colds."],
+    ["¿Te duelen los ojos?",["¿Te duele los ojos?","¿Tú duelen los ojos?","¿Te duelen tus ojos?"],"Do your eyes hurt?"]
+  ];
+  function qSlip(){var s=rnd(SLIP);return {who:"🔍",en:s[2]+" Which sentence has no mistakes?",frame:"",answer:s[0],wrong:s[1].slice(),review:s[0]+" = "+s[2]};}
+
+  /* ---------- Problems & advice ---------- */
+  /* [problem ES, problem EN, advice ES, advice EN, group (same group = never a wrong answer for each other)] */
+  var REM=[
+    ["Me duelen las muelas.","I have toothache.","Tienes que ir al dentista.","You have to go to the dentist.","t"],
+    ["Me duelen los ojos.","My eyes hurt.","No debes mirar el móvil tanto tiempo.","You shouldn't look at your phone for so long.","g"],
+    ["Tengo mucha tos.","I have a bad cough.","Debes tomar un jarabe para la tos.","You should take some cough syrup.","g"],
+    ["Me duele mucho la cabeza.","I have a bad headache.","Debes tomar una aspirina y descansar.","You should take an aspirin and rest.","g"],
+    ["Tengo fiebre.","I have a temperature.","Tienes que quedarte en la cama y beber mucha agua.","You have to stay in bed and drink lots of water.","g"],
+    ["Me he cortado el dedo.","I've cut my finger.","Necesitas una tirita.","You need a plaster.","b"],
+    ["Creo que me he roto el brazo.","I think I've broken my arm.","Tienes que ir a urgencias.","You have to go to A&E.","b"],
+    ["Estoy muy cansado.","I'm very tired.","Debes acostarte más temprano.","You should go to bed earlier.","g"],
+    ["Estoy muy estresada por los exámenes.","I'm very stressed about the exams.","Debes hacer deporte y hablar con alguien.","You should do some sport and talk to someone.","g"],
+    ["Me duele la espalda.","My back hurts.","No debes llevar una mochila tan pesada.","You shouldn't carry such a heavy schoolbag.","k"],
+    ["Me duelen los pies después de la excursión.","My feet hurt after the hike.","Debes ponerte zapatillas más cómodas.","You should wear more comfortable trainers.","k"],
+    ["Me he quemado con el sol.","I've got sunburnt.","Debes ponerte crema y no tomar el sol.","You should put on cream and stay out of the sun.","u"],
+    ["Me duele el estómago: he comido demasiados caramelos.","I have a stomach ache: I've eaten too many sweets.","No debes comer tantos dulces.","You shouldn't eat so many sweets.","g"]
+  ];
+  function remWrong(x,i){return shuffle(REM.filter(function(y){return y[4]!==x[4];})).slice(0,3).map(function(y){return y[i];});}
+  function qRem(){var x=rnd(REM);return {who:"🤒",en:x[1]+" Pick the best advice.",frame:x[0],answer:x[2],wrong:remWrong(x,2),review:x[0]+" → "+x[2]+" = "+x[3]};}
+  function qRemBack(){var x=rnd(REM);return {who:"💡",en:"The advice is: “"+x[2]+"” What's the problem?",frame:"",answer:x[0],wrong:remWrong(x,0),review:x[0]+" → "+x[2]+" = "+x[3]};}
+  function qRemEn(){var x=rnd(REM);return {who:"🇬🇧",en:"What does the advice mean?",frame:x[2],answer:x[3],wrong:remWrong(x,3),review:x[2]+" = "+x[3]};}
+  /* tienes que / debes + infinitive: [frame, answer, 3 wrong, English] */
+  var ADV=[
+    ["Debes ___ mucha agua.","beber",["bebes","bebe","bebo"],"You should drink lots of water."],
+    ["Tienes que ___ al médico.","ir",["vas","va","voy"],"You have to go to the doctor."],
+    ["Tienes que ___ en la cama.","quedarte",["te quedas","quedarse","quedarme"],"You have to stay in bed."],
+    ["No debes ___ tanto chocolate.","comer",["comes","come","como"],"You shouldn't eat so much chocolate."],
+    ["Tienes que ___ este jarabe.","tomar",["tomas","toma","tomo"],"You have to take this syrup."],
+    ["Debes ___ más temprano.","acostarte",["te acuestas","acostarse","acostarme"],"You should go to bed earlier."],
+    ["Debes ___ crema solar.","ponerte",["te pones","ponerse","ponerme"],"You should put on sun cream."],
+    ["Necesitas ___ unos días.","descansar",["descansas","descansa","descanso"],"You need to rest for a few days."],
+    ["Tienes ___ ir a urgencias.","que",["de","a","por"],"You have to go to A&E."],
+    ["No ___ salir hoy: tienes fiebre.","debes",["debe","debo","deber"],"You shouldn't go out today: you have a temperature."]
+  ];
+  function qAdv(){var s=rnd(ADV);return {who:"👩‍⚕️",en:s[3],frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1])+" = "+s[3]};}
+  /* doctor and chemist words [Spanish, English] */
+  var PHR=[["¿Qué te pasa?","What's wrong (with you)?"],["¿Desde cuándo?","Since when?"],["¡Que te mejores!","Get well soon!"],["Estoy enfermo.","I'm ill."],["Tengo fiebre.","I have a temperature."],
+    ["Tengo tos.","I have a cough."],["Estoy resfriada.","I've got a cold."],["Tengo gripe.","I have the flu."],["Estoy mareado.","I feel dizzy."],["Tengo náuseas.","I feel sick."],
+    ["la receta","the prescription"],["la farmacia","the chemist's"],["el centro de salud","the health centre"],["urgencias","A&E (accident and emergency)"],["la cita","the appointment"],
+    ["el jarabe","the (cough) syrup"],["la tirita","the plaster"],["las pastillas","the tablets"],["la crema solar","sun cream"],["cada ocho horas","every eight hours"],
+    ["dos veces al día","twice a day"],["Me he roto la pierna.","I've broken my leg."],["la ambulancia","the ambulance"],["el médico","the doctor"]];
+  function qPhr(){var g=rnd(PHR),w=others(PHR,g,3);
+    if(Math.random()<.55)return {who:"💬",en:"What does it mean?",frame:g[0],answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};
+    return {who:"💬",en:"How do you say it in Spanish? ("+g[1]+")",frame:"___",answer:g[0],wrong:w.map(function(x){return x[0];}),review:g[1]+" = "+g[0]};}
+  /* healthy or unhealthy? */
+  var SA=["🥦 Healthy","🍟 Unhealthy"],SAS=["sano","no es sano"];
+  var SAL=[["Como fruta y verdura todos los días.",0,"I eat fruit and vegetables every day."],["Bebo mucha agua.",0,"I drink lots of water."],["Duermo nueve horas cada noche.",0,"I sleep nine hours every night."],
+    ["Hago deporte tres veces a la semana.",0,"I do sport three times a week."],["Voy al instituto a pie.",0,"I walk to school."],["Desayuno cereales y un zumo de naranja.",0,"I have cereal and an orange juice for breakfast."],
+    ["Bebo muchos refrescos con azúcar.",1,"I drink lots of sugary fizzy drinks."],["Me acuesto a las dos de la mañana.",1,"I go to bed at two in the morning."],["Como comida rápida casi todos los días.",1,"I eat fast food nearly every day."],
+    ["Paso seis horas al día delante de la pantalla.",1,"I spend six hours a day in front of a screen."],["Nunca desayuno.",1,"I never have breakfast."],["No hago ejercicio nunca.",1,"I never do any exercise."]];
+  function qSa(){var s=rnd(SAL);return {fixed:1,tm:1,smalls:SAS,who:"⚖️",en:s[2],frame:s[0],answer:SA[s[1]],wrong:SA.filter(function(x,i){return i!==s[1];}),opts:SA,review:s[0]+" = "+s[2]+" ("+noEmoji(SA[s[1]]).toLowerCase()+")"};}
+
+  /* ---------- ¿Qué te pasa? conversations (line by line) ---------- */
+  var ES_F=["Lucía","Marta","Elena","Sara","Nerea","Paula"],ES_M=["Pablo","Diego","Javier","Hugo","Álvaro","Mateo"];
+  /* sick friend's problem: [Spanish body part, English line] */
+  var SICK=[["la garganta","I have a sore throat"],["la cabeza","I have a headache"],["el estómago","I have a stomach ache"],["el oído","I have earache"]];
+  var DOC=[["el estómago","my stomach"],["la cabeza","my head"],["el oído","my ear"],["la garganta","my throat"]];
+  /* chemist: [what for ES, EN] */
+  var CHEM=[["la tos","a cough"],["el dolor de cabeza","a headache"],["el dolor de garganta","a sore throat"],["las picaduras de mosquito","mosquito bites"]];
+  var PRICES=[["seis euros con cincuenta","€6.50"],["ocho euros","€8"],["cinco euros con veinte","€5.20"],["nueve euros con noventa","€9.90"]];
+  var TIMES=[["Tres","Three"],["Dos","Two"]];
+  var SCEN=[
+    {id:"sick",icon:"😷",title:function(c){return "Texting "+c.friend+", who's off sick";},tag:"Friends · tú",slots:[
+      function(c){var l="¡Hola, "+c.friend+"! ¿Vienes al partido esta tarde?",e="Hi, "+c.friend+"! Are you coming to the match this afternoon?";
+        if(Math.random()<.5)return {from:"me",who:"⚽",frame:"¡Hola, "+c.friend+"! ¿___ al partido esta tarde?",en:e,answer:"Vienes",wrong:["Vengo","Viene","Venir"],line:l};
+        return {from:"me",who:"⚽",frame:"¡Hola, "+c.friend+"! ¿Vienes al partido ___ tarde?",en:e,answer:"esta",wrong:["este","esto","estas"],line:l};},
+      function(c){var a=c.fF?"enferma":"enfermo",l="No puedo. Estoy "+a+".",e="I can't. I'm ill.";
+        if(Math.random()<.5)return {from:"them",who:"🤒",frame:"No puedo. ___ "+a+".",en:e,answer:"Estoy",wrong:["Tengo","Soy","Está"],line:l};
+        return {from:"them",who:"🤒",frame:"No puedo. Estoy ___.",en:e+" ("+c.friend+" is a "+(c.fF?"girl":"boy")+")",answer:a,wrong:c.fF?["enfermo","enfermas","enfermos"]:["enferma","enfermos","enfermas"],line:l};},
+      function(c){var l="¡Vaya! ¿Qué te pasa?",e="Oh no! What's wrong?";
+        if(Math.random()<.5)return {from:"me",who:"😮",frame:"¡Vaya! ¿Qué te ___?",en:e,answer:"pasa",wrong:["pasas","paso","pasar"],line:l};
+        return {from:"me",who:"😮",frame:"¡Vaya! ¿Qué ___ pasa?",en:e,answer:"te",wrong:["tu","tú","se"],line:l};},
+      function(c){var s=c.sick,l="Me duele "+s[0]+" y tengo fiebre.",e=s[1]+" and I have a temperature.";
+        if(Math.random()<.5)return {from:"them",who:"🤕",frame:"Me ___ "+s[0]+" y tengo fiebre.",en:e,answer:"duele",wrong:["duelen","duelo","dueles"],line:l};
+        return {from:"them",who:"🤕",frame:"Me duele "+s[0]+" y ___ fiebre.",en:e,answer:"tengo",wrong:["estoy","soy","tienes"],line:l};},
+      function(c){var l="¡Pobre! ¿Vas a ir al médico?",e="You poor thing! Are you going to go to the doctor?";
+        if(Math.random()<.5)return {from:"me",who:"🩺",frame:"¡Pobre! ¿Vas a ___ al médico?",en:e,answer:"ir",wrong:["vas","voy","va"],line:l};
+        return {from:"me",who:"🩺",frame:"¡Pobre! ¿Vas a ir ___ médico?",en:e,answer:"al",wrong:["a el","a la","el"],line:l};},
+      function(c){var l="Sí, tengo una cita a las cinco.",e="Yes, I have an appointment at five.";
+        if(Math.random()<.5)return {from:"them",who:"📅",frame:"Sí, tengo una ___ a las cinco.",en:e,answer:"cita",wrong:["receta","tirita","cama"],line:l};
+        return {from:"them",who:"📅",frame:"Sí, tengo una cita ___ cinco.",en:e,answer:"a las",wrong:["a la","en las","los"],line:l};},
+      function(c){var l="Bebe mucha agua y descansa. ¡Que te mejores!",e="Drink lots of water and rest. Get well soon!";
+        if(Math.random()<.5)return {from:"me",who:"💧",frame:"Bebe ___ agua y descansa. ¡Que te mejores!",en:e,answer:"mucha",wrong:["mucho","muchos","muchas"],line:l};
+        return {from:"me",who:"💧",frame:"Bebe mucha agua y descansa. ¡Que te ___!",en:e,answer:"mejores",wrong:["mejoras","mejoro","mejor"],line:l};},
+      function(c){var l="¡Gracias! El sábado juego seguro.",e="Thanks! I'll definitely play on Saturday.";
+        return {from:"them",who:"🙂",frame:"¡Gracias! El sábado ___ seguro.",en:e,answer:"juego",wrong:["juegas","juega","jugar"],line:l};}
+    ]},
+    {id:"doc",icon:"🩺",title:function(c){return "At the health centre with "+(c.docF?"Doctora":"Doctor")+" Ruiz";},tag:"Doctor: tú · You: usted",slots:[
+      function(c){var l="Buenos días. Siéntate. ¿Qué te pasa?",e="Good morning. Sit down. What's wrong?";
+        if(Math.random()<.5)return {from:"them",who:"👋",frame:"Buenos días. Siéntate. ¿Qué te ___?",en:e,answer:"pasa",wrong:["pasas","paso","pasan"],line:l};
+        return {from:"them",who:"👋",frame:"Buenos días. Siéntate. ¿___ te pasa?",en:e,answer:"Qué",wrong:["Cuál","Quién","Dónde"],line:l};},
+      function(c){var d=c.doc,t=c.docF?"doctora":"doctor",l="Me duele mucho "+d[0]+", "+t+".",e="My "+d[1].slice(3)+" really hurts, doctor.";
+        if(Math.random()<.5)return {from:"me",who:"🤕",frame:"Me ___ mucho "+d[0]+", "+t+".",en:e,answer:"duele",wrong:["duelen","duelo","dueles"],line:l};
+        return {from:"me",who:"🤕",frame:"Me duele mucho ___ "+d[0].split(" ")[1]+", "+t+".",en:e,answer:d[0].split(" ")[0],wrong:d[0].split(" ")[0]==="el"?["la","mi","los"]:["el","mi","las"],line:l};},
+      function(c){var l="¿Desde cuándo te duele?",e="Since when has it hurt?";
+        if(Math.random()<.5)return {from:"them",who:"🕒",frame:"¿___ cuándo te duele?",en:e,answer:"Desde",wrong:["Hasta","Para","Por"],line:l};
+        return {from:"them",who:"🕒",frame:"¿Desde ___ te duele?",en:e,answer:"cuándo",wrong:["cuando","cuánto","dónde"],line:l};},
+      function(c){var l="Desde ayer. Y no tengo hambre.",e="Since yesterday. And I'm not hungry.";
+        if(Math.random()<.5)return {from:"me",who:"📆",frame:"Desde ___. Y no tengo hambre.",en:e,answer:"ayer",wrong:["mañana","pasado mañana","la semana que viene"],line:l};
+        return {from:"me",who:"📆",frame:"Desde ayer. Y no ___ hambre.",en:e,answer:"tengo",wrong:["estoy","soy","tiene"],line:l};},
+      function(c){var l="¿Tienes fiebre?",e="Do you have a temperature?";
+        if(Math.random()<.5)return {from:"them",who:"🌡️",frame:"¿___ fiebre?",en:e,answer:"Tienes",wrong:["Estás","Eres","Tengo"],line:l};
+        return {from:"them",who:"🌡️",frame:"¿Tienes ___?",en:e,answer:"fiebre",wrong:["fiebra","fiebres","fiebro"],line:l};},
+      function(c){var l="Sí, un poco. Tengo treinta y ocho grados.",e="Yes, a little. I have a temperature of 38 degrees.";
+        if(Math.random()<.5)return {from:"me",who:"🌡️",frame:"Sí, un poco. Tengo ___ grados.",en:e,answer:"treinta y ocho",wrong:["dieciocho","ochenta y tres","veintiocho"],line:l};
+        return {from:"me",who:"🌡️",frame:"Sí, un poco. Tengo treinta y ocho ___.",en:e,answer:"grados",wrong:["grado","gradas","grandes"],line:l};},
+      function(c){var l="Tienes que beber mucha agua y descansar dos días.",e="You have to drink lots of water and rest for two days.";
+        if(Math.random()<.5)return {from:"them",who:"💧",frame:"Tienes ___ beber mucha agua y descansar dos días.",en:e,answer:"que",wrong:["de","a","por"],line:l};
+        return {from:"them",who:"💧",frame:"Tienes que beber mucha agua y ___ dos días.",en:e,answer:"descansar",wrong:["descansas","descanso","descansa"],line:l};},
+      function(c){var t=c.docF?"doctora":"doctor",l="Vale. ¿Me puede dar algo para el dolor, "+t+"?",e="OK. Can you give me something for the pain, doctor? (polite)";
+        if(Math.random()<.5)return {from:"me",who:"💊",frame:"Vale. ¿Me ___ dar algo para el dolor, "+t+"?",en:e,answer:"puede",wrong:["puedo","poder","podemos"],line:l};
+        return {from:"me",who:"💊",frame:"Vale. ¿Me puede dar ___ para el dolor, "+t+"?",en:e,answer:"algo",wrong:["alguien","algún","nada"],line:l};}
+    ]},
+    {id:"chem",icon:"💊",title:function(c){return "At a chemist's in Málaga";},tag:"Polite · usted",slots:[
+      function(c){var p=c.chem,l="Buenas tardes. ¿Tiene algo para "+p[0]+"?",e="Good afternoon. Do you have anything for "+p[1]+"? (polite)";
+        if(Math.random()<.5)return {from:"me",who:"🏥",frame:"Buenas tardes. ¿___ algo para "+p[0]+"?",en:e,answer:"Tiene",wrong:["Tengo","Tener","Tenemos"],line:l};
+        return {from:"me",who:"🏥",frame:"Buenas tardes. ¿Tiene ___ para "+p[0]+"?",en:e,answer:"algo",wrong:["alguien","algún","alga"],line:l};},
+      function(c){var l="Sí, claro. ¿Es para usted?",e="Yes, of course. Is it for you? (polite)";
+        if(Math.random()<.5)return {from:"them",who:"🧑‍⚕️",frame:"Sí, claro. ¿Es para ___?",en:e,answer:"usted",wrong:["tú","te","tu"],line:l};
+        return {from:"them",who:"🧑‍⚕️",frame:"Sí, claro. ¿___ para usted?",en:e,answer:"Es",wrong:["Está","Eres","Soy"],line:l};},
+      function(c){var s=c.sibF?"hermana":"hermano",l="No, es para mi "+s+". Tiene diez años.",e="No, it's for my "+(c.sibF?"sister":"brother")+". "+(c.sibF?"She's":"He's")+" ten.";
+        if(Math.random()<.5)return {from:"me",who:"🧒",frame:"No, es para ___ "+s+". Tiene diez años.",en:e,answer:"mi",wrong:["mí","me","mis"],line:l};
+        return {from:"me",who:"🧒",frame:"No, es para mi "+s+". ___ diez años.",en:e,answer:"Tiene",wrong:["Es","Está","Tienes"],line:l};},
+      function(c){var l="Entonces le recomiendo este producto para niños.",e="Then I recommend this product for children.";
+        if(Math.random()<.5)return {from:"them",who:"🧴",frame:"Entonces le ___ este producto para niños.",en:e,answer:"recomiendo",wrong:["recomienda","recomiendas","recomendar"],line:l};
+        return {from:"them",who:"🧴",frame:"Entonces le recomiendo ___ producto para niños.",en:e,answer:"este",wrong:["esta","estos","estas"],line:l};},
+      function(c){var l="Muy bien. ¿Cuántas veces al día?",e="Great. How many times a day?";
+        if(Math.random()<.5)return {from:"me",who:"🔢",frame:"Muy bien. ¿___ veces al día?",en:e,answer:"Cuántas",wrong:["Cuántos","Cuánta","Cuándo"],line:l};
+        return {from:"me",who:"🔢",frame:"Muy bien. ¿Cuántas ___ al día?",en:e,answer:"veces",wrong:["vez","vezes","voces"],line:l};},
+      function(c){var t=c.times,l=t[0]+" veces al día, después de comer.",e=t[1]+" times a day, after meals.";
+        if(Math.random()<.5)return {from:"them",who:"🍽️",frame:"___ veces al día, después de comer.",en:e,answer:t[0],wrong:t[0]==="Tres"?["Trece","Treinta","Tercera"]:["Doce","Veinte","Segunda"],line:l};
+        return {from:"them",who:"🍽️",frame:t[0]+" veces al día, ___ de comer.",en:e,answer:"después",wrong:["antes","durante","detrás"],line:l};},
+      function(c){var l="Perfecto. ¿Cuánto es?",e="Perfect. How much is it?";
+        return {from:"me",who:"💶",frame:"Perfecto. ¿___ es?",en:e,answer:"Cuánto",wrong:["Cuánta","Cuántos","Cuándo"],line:l};},
+      function(c){var p=c.price,s=c.sibF?"hermana":"hermano",l="Son "+p[0]+". ¡Que se mejore su "+s+"!",e="It's "+p[1]+". I hope your "+(c.sibF?"sister":"brother")+" gets well soon!";
+        if(Math.random()<.5)return {from:"them",who:"😊",frame:"Son "+p[0]+". ¡Que se ___ su "+s+"!",en:e,answer:"mejore",wrong:["mejora","mejoras","mejor"],line:l};
+        return {from:"them",who:"😊",frame:"Son ___. ¡Que se mejore su "+s+"!",en:e,answer:p[0],wrong:PRICES.filter(function(x){return x!==p;}).map(function(x){return x[0];}),line:l};}
+    ]}
+  ];
+  var pc=null,lastScen=null;
+  function makeCtx(){var fF=Math.random()<.5;
+    return {friend:rnd(fF?ES_F:ES_M),fF:fF,sick:rnd(SICK),doc:rnd(DOC),docF:Math.random()<.5,chem:rnd(CHEM),sibF:Math.random()<.5,price:rnd(PRICES),times:rnd(TIMES)};}
+  function newCard(){var s;do{s=rnd(SCEN);}while(s===lastScen&&SCEN.length>1);lastScen=s;
+    pc=makeCtx();pc.scen=s;pc.lines=[];pc.slot=0;pc.sent=false;}
+  function lineQ(s,c,i){var q=s.slots[i](c);q.review=q.line+" = "+q.en;q.who=q.who||"";return q;}
+  function qCard(){if(!pc||pc.sent)newCard();var q=lineQ(pc.scen,pc,pc.slot);q.card=1;return q;}
+  function qLine(){var s=rnd(SCEN),c=makeCtx();return lineQ(s,c,Math.floor(Math.random()*s.slots.length));}
+
+  /* ---------- Listening ---------- */
+  function hurtES(b){return (b[3]?"Me duelen ":"Me duele ")+b[0]+".";}
+  function lBody(){var b=rnd(BODY),w=shuffle(BODY.filter(function(x){return x!==b&&bodyWord(x).slice(0,3)!==bodyWord(b).slice(0,3);})).slice(0,3);
+    return {listen:1,speak:hurtES(b),en:"Listen. What hurts?",answer:b[2]+" "+b[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:hurtES(b)+" = "+b[4]};}
+  function lDu(){var b=rnd(BODY);
+    return {fixed:1,tm:1,smalls:DUS,listen:1,speak:hurtES(b),en:"Listen. Did you hear duele or duelen?",answer:DU[b[3]],wrong:DU.filter(function(x,i){return i!==b[3];}),opts:DU,review:hurtES(b)+" = "+b[4]};}
+  function mk(e){return e.indexOf("cold")>=0?"cold":e.indexOf("head")>=0?"head":e.indexOf("sick")>=0||e.indexOf("awful")>=0||e.indexOf("ill.")>=0?"ill":e;}
+  function lTem(){var s=rnd(TEML),t=s[0].replace("___",noEmoji(TEM[s[1]])),w=shuffle(TEML.filter(function(y){return mk(y[2])!==mk(s[2]);})).slice(0,3);
+    return {listen:1,speak:t,en:"Listen. What's the matter?",answer:s[2],wrong:w.map(function(y){return y[2];}),review:t+" = "+s[2]};}
+  function lRem(){var x=rnd(REM);
+    return {listen:1,speak:x[0],en:"Listen to the problem. Pick the best advice.",answer:x[3],wrong:remWrong(x,3),review:x[0]+" = "+x[1]+" → "+x[3]};}
+  function lAdv(){var x=rnd(REM);
+    return {listen:1,speak:x[2],en:"Listen to the advice. What does it mean?",answer:x[3],wrong:remWrong(x,3),review:x[2]+" = "+x[3]};}
+  function lPhr(){var g=rnd(PHR),w=others(PHR,g,3);
+    return {listen:1,speak:g[0],en:"Listen. What does it mean?",answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};}
+  function lChat(){var s=rnd(SCEN),c=makeCtx(),i=Math.floor(Math.random()*s.slots.length),q=s.slots[i](c),pool=[],t=0;
+    while(pool.length<3&&t<60){t++;var s2=rnd(SCEN),c2=makeCtx(),q2=s2.slots[Math.floor(Math.random()*s2.slots.length)](c2);
+      if(q2.line!==q.line&&q2.en.slice(0,12)!==q.en.slice(0,12)&&pool.indexOf(q2.en)<0)pool.push(q2.en);}
+    return {listen:1,speak:q.line,en:"Listen. What did they say?",answer:q.en,wrong:pool,review:q.line+" = "+q.en};}
+
+  var MAKERS={
+    clinic:[qCard],
+    body:[qBody,qBody,qBody,qBodyEs,qBodyEs,qDu,qDu,qDu,qWho,qWho,qTem,qTem,qTem,qSlip,qSlip],
+    advice:[qRem,qRem,qRem,qRemBack,qRemEn,qAdv,qAdv,qAdv,qPhr,qPhr,qPhr,qSa,qSa],
+    listen:[lBody,lBody,lBody,lDu,lTem,lTem,lRem,lRem,lAdv,lPhr,lPhr,lChat,lChat],
+    mixed:[qLine,qLine,qBody,qBodyEs,qDu,qWho,qTem,qSlip,qRem,qRemBack,qAdv,qPhr,qSa]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the problem and pick what's wrong (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Chat drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(flash){
+    var el=$("card");if(mode!=="clinic"||!pc){el.hidden=true;return;}
+    var n=pc.scen.slots.length;
+    el.hidden=false;el.className="chat"+(pc.sent?" done":"");
+    var h="<div class='top'><span>"+pc.scen.icon+" "+esc(pc.scen.title(pc))+"</span><small>"+esc(pc.scen.tag)+" · "+Math.min(pc.slot+1,n)+"/"+n+"</small></div><div class='msgs' id='msgs'>";
+    pc.lines.forEach(function(l){h+="<div class='b "+l.from+"'>"+esc(l.text)+"</div>";});
+    if(!pc.sent&&current&&current.card)h+="<div class='b "+current.from+" typing'>…</div>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>"+pc.scen.icon+" ¡Muy bien! +3</div>";
+    el.innerHTML=h;var m=$("msgs");if(m)m.scrollTop=m.scrollHeight;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="clinic"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?q.opts.length-1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.lines.push({from:current.from,text:current.line});
+      pc.slot++;
+      if(pc.slot>=pc.scen.slots.length){pc.sent=true;score+=3;cards++;flash=true;}
+      current.card=0;drawCard(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:500)):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! You'd be fine at any Spanish doctor's.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="clinic"?", "+cards+" conversation"+(cards===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SCEN:SCEN,lineQ:lineQ,makeCtx:makeCtx};
+})();
+</script>
+
+<script src="site.js"></script>
+</body>
+</html>
