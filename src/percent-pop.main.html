@@ -1,0 +1,132 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Percent Pop</h1>
+        <p>60 seconds. Pop the matching fraction, decimal and percentage, find any percentage of a number in your head, race the sale tags, then work backwards to the price before the sale. Is 3/8 bigger than 38%? (No: 3/8 = 37.5%.) Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="pop"><div><b>Percent Pop</b><span>Fractions ↔ decimals ↔ percentages, 100-square grids, which is biggest?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="of"><div><b>Percentage of</b><span>15% of 240 in your head, "18 out of 24 as a percentage", the swap trick</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sale"><div><b>Sale-tag race</b><span>Price after a % off or a % rise, multipliers, percentage change, best deal</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="back"><div><b>Back to the start</b><span>Find the price before the sale, or the whole when you know a part</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Percent Pop, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.2a, N.2b (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Percentages</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these. What do you notice?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">8% of 25 = <b>2</b> &nbsp;·&nbsp; 25% of 8 = <b>2</b></li>
+          <li class="note">12% of 50 = <b>6</b> &nbsp;·&nbsp; 50% of 12 = <b>6</b></li>
+          <li class="note">36% of 75 = <b>27</b> &nbsp;·&nbsp; 75% of 36 = <b>27</b></li>
+        </ul>
+        <p style="margin-top:10px">Does it always work? Why? So what's the easy way to find 16% of 25?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>x% of y is always the same as y% of x</b>, because both are x × y ÷ 100. So 16% of 25 = 25% of 16 = a quarter of 16 = <b>4</b>. When one way looks hard, swap it round.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Percent means "out of 100"</h3>
+        <p>45% = 45/100 = 0.45. To change between the three:</p>
+        <ul>
+          <li><b>Percentage → decimal:</b> ÷ 100 (digits move 2 places right): 7% = <b>0.07</b>, not 0.7. 120% = 1.2.</li>
+          <li><b>Decimal → percentage:</b> × 100: 0.375 = <b>37.5%</b>.</li>
+          <li><b>Fraction → percentage:</b> make the bottom 100, or divide then × 100: 3/20 = 15/100 = <b>15%</b>; 3/8 = 0.375 = 37.5%.</li>
+          <li><b>Percentage → fraction:</b> put it over 100 and simplify: 35% = 35/100 = <b>7/20</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Learn these:</b> 1/2 = 0.5 = 50% · 1/4 = 0.25 = 25% · 3/4 = 0.75 = 75% · 1/5 = 0.2 = 20% · 1/10 = 0.1 = 10% · 1/20 = 0.05 = 5% · 1/8 = 0.125 = 12.5% · 1/3 = 0.333… ≈ 33.3%. To compare, change them all to percentages first.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Finding a percentage of an amount</h3>
+        <p>Build it from <b>10%</b> (÷ 10), <b>5%</b> (half of 10%) and <b>1%</b> (÷ 100). For 35% of €80: 10% = €8, so 30% = €24; 5% = €4; 35% = <b>€28</b>. On a calculator: 0.35 × 80.</p>
+        <p style="margin-top:8px"><b>One amount as a percentage of another:</b> write it as a fraction, then × 100. 18 out of 24 → 18/24 × 100 = <b>75%</b>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Increase and decrease</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Decrease by 20%:</b> you keep 80%, so × 0.8. €60 → 0.8 × 60 = <b>€48</b>.</li>
+          <li class="note"><b>Increase by 15%:</b> you have 115%, so × 1.15. €40 → 1.15 × 40 = <b>€46</b>.</li>
+          <li class="note"><b>Percentage change</b> = change ÷ <b>original</b> × 100. €50 → €60: 10 ÷ 50 × 100 = <b>20% increase</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Back to the start (finding the original)</h3>
+        <p>After 20% off, a jacket costs €48. The €48 is <b>80%</b> of the old price, so 1% = €0.60 and 100% = <b>€60</b>. (Or €48 ÷ 0.8 = €60.)</p>
+        <div class="note" style="margin-top:10px"><b>The classic mistake:</b> adding 20% back on. 48 × 1.2 = €57.60, not €60, because the 20% was taken off the <b>old</b> price, not the new one. Always ask: "100% is which amount?"</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Percentages turn up all over the paper: <b>money questions</b> (sales, price rises, and later VAT, interest and tax), <b>statistics</b> (what percentage of a survey said yes), <b>probability</b> and <b>ordering</b> fractions, decimals and percentages. Questions often build up: (a) a simple percentage of an amount, (b) a percentage change, (c) "find the original price".</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Divide by the original</b> for a percentage change, never by the new amount.</li>
+            <li><b>Don't add the % back on</b> to find an old price: work out what 1% is, or divide by the multiplier.</li>
+            <li><b>Show the step:</b> "10% = €8, 30% = €24" earns marks even if the last line slips.</li>
+            <li><b>Money has 2 decimal places</b> (€57.60, not €57.6), and check the answer makes sense: a sale price must be less than the old price.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>In order.</b> Write these in order, starting with the smallest: 0.4, 3/8, 38%, 0.35.
+              <details><summary>Show the worked answer</summary><p>Change them all to percentages: 0.4 = 40%, 3/8 = 37.5%, 38%, 0.35 = 35%. So the order is <b>0.35, 3/8, 38%, 0.4</b>.</p></details></li>
+            <li><b>Getting to school.</b> A school has 640 students. 35% walk to school, 1/4 cycle and the rest come by bus. (a) How many walk? (b) How many come by bus? (c) What percentage come by bus?
+              <details><summary>Show the worked answer</summary><p>(a) 10% = 64, 30% = 192, 5% = 32, so 35% = <b>224</b>.<br>(b) 1/4 of 640 = 160 cycle. Bus: 640 − 224 − 160 = <b>256</b>.<br>(c) 256/640 × 100 = <b>40%</b>. Check: 35% + 25% + 40% = 100% ✓.</p></details></li>
+            <li><b>Two shops.</b> A bike costs €480. Shop A has 30% off. Shop B has €150 off. (a) Which shop is cheaper, and by how much? (b) When Shop A's sale ends, the price goes back up from the sale price to €480. Find the percentage increase, correct to 1 decimal place. Why isn't it 30%?
+              <details><summary>Show the worked answer</summary><p>(a) Shop A: 0.7 × 480 = €336. Shop B: 480 − 150 = €330. <b>Shop B is cheaper by €6</b>.<br>(b) Increase = 480 − 336 = €144. 144 ÷ 336 × 100 = 42.857…% = <b>42.9%</b>. It isn't 30% because the increase is worked out on the sale price (€336), which is a smaller amount than €480.</p></details></li>
+            <li><b>Back to the start.</b> After a 15% increase, a concert ticket costs €69. (a) What did it cost before the increase? (b) Seán says, "Just take 15% off €69." What answer does he get, and why is it wrong?
+              <details><summary>Show the worked answer</summary><p>(a) €69 is 115% of the old price. 1% = 69 ÷ 115 = €0.60, so 100% = <b>€60</b>. (Or 69 ÷ 1.15 = 60.)<br>(b) 0.85 × 69 = <b>€58.65</b>. It's wrong because the 15% was worked out on the old price (€60), not on €69.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/percentages-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/kt1Nz" target="_blank" rel="noopener">Percentages Teacher Pack (€5)</a>: Percent Trios, Sale Shop role-play, Percentage Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

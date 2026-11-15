@@ -1,0 +1,280 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}
+  /* exact fractions: R(p,q) = p/q, always simplified, q > 0 */
+  function R(p,q){q=q||1;if(q<0){p=-p;q=-q;}var g=gcd(p,q);return [p/g,q/g];}
+  function mul(a,b){return R(a[0]*b[0],a[1]*b[1]);}
+  function add(a,b){return R(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);}
+  function sub(a,b){return R(a[0]*b[1]-b[0]*a[1],a[1]*b[1]);}
+  function dvd(a,b){return R(a[0]*b[1],a[1]*b[0]);}
+  function term(r){var q=r[1];while(q%2===0)q/=2;while(q%5===0)q/=5;return q===1;}
+  /* decimal string of an exact fraction (only call when it terminates) */
+  function dstr(r){var p=r[0],q=r[1],k=0;while(q!==1&&k<8){if(q%2===0){q/=2;p*=5;}else if(q%5===0){q/=5;p*=2;}else break;k++;}
+    if(q!==1)return "NaN";var neg=p<0,s=String(Math.abs(p));if(k>0){while(s.length<=k)s="0"+s;s=s.slice(0,s.length-k)+"."+s.slice(-k);s=s.replace(/0+$/,"").replace(/\.$/,"");}return (neg?"-":"")+s;}
+  function pstr(r){return dstr(mul(r,[100,1]))+"%";}              // fraction → percentage
+  function fstr(r){return r[1]===1?String(r[0]):r[0]+"/"+r[1];}
+  function cents(c){return "€"+(Math.floor(c/100))+"."+String(c%100).padStart(2,"0");} // c = whole cents
+  function mny(r){var c=mul(r,[100,1]);return c[1]===1?cents(c[0]):"€"+(Math.round(r[0]/r[1]*100)/100).toFixed(2);} // euros (fraction) → €x.xx
+  /* value of any option: 3/8, 0.375, 37.5%, €12.50 */
+  function val(s){s=String(s).replace(/[€ ,]/g,"");var pc=/%$/.test(s);s=s.replace(/%$/,"");var x;
+    if(s.indexOf("/")>0){var t=s.split("/");x=+t[0]/+t[1];}else x=+s;return pc?x/100:x;}
+  /* numeric question: wrong options never equal the answer in VALUE, never ≤ 0, no duplicates */
+  function Q(en,frame,ans,slips,pads,why,html,data){var seen=[val(ans)],out=[];
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|null/.test(x))return;var y=val(x);
+      if(!isFinite(y)||y<=0)return;if(seen.some(function(z){return Math.abs(z-y)<1e-9;}))return;if(out.length<3){seen.push(y);out.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:ans,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function pctPads(r){var p=mul(r,[100,1]);return [pstr(R(p[0]+5*p[1],100*p[1])),pstr(R(p[0]-5*p[1],100*p[1])),pstr(R(p[0]+10*p[1],100*p[1])),pstr(mul(r,[10,1])),pstr(mul(r,[1,10]))];}
+  function numPads(r){return [dstr(add(r,[1,1])),dstr(sub(r,[1,1])),dstr(add(r,[2,1])),dstr(mul(r,[10,1])),dstr(mul(r,[1,10]))];}
+  function mnyPads(r){return [mny(add(r,[1,1])),mny(sub(r,[1,1])),mny(add(r,[1,2])),mny(sub(r,[1,2])),mny(mul(r,[10,1]))];}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",YEL="#F6CF5A",RED="#C8463D";
+  function gridSVG(n){ // 10 × 10 grid, first n squares shaded (column by column)
+    var o='<svg viewBox="0 0 224 224" width="100%" style="max-width:200px" role="img" aria-label="A 100-square grid with some squares shaded" data-n="'+n+'">';
+    for(var c=0;c<10;c++)for(var r=0;r<10;r++){var i=c*10+r;o+='<rect x="'+(2+c*22)+'" y="'+(2+r*22)+'" width="22" height="22" fill="'+(i<n?YEL:"#fff")+'" stroke="'+INK+'" stroke-width="1.2"/>';}
+    return o+'<rect x="2" y="2" width="220" height="220" fill="none" stroke="'+INK+'" stroke-width="3"/></svg>';}
+  function tagSVG(price,pct,item){ // a sale tag: item, old price, % off
+    return '<svg viewBox="0 0 300 130" width="100%" style="max-width:300px" role="img" aria-label="'+item+', was '+price+', '+pct+' off" data-price="'+price+'" data-pct="'+pct+'">'+
+      '<path d="M40 10 H285 a8 8 0 0 1 8 8 V112 a8 8 0 0 1 -8 8 H40 L6 65 Z" fill="#FFF8E1" stroke="'+INK+'" stroke-width="3"/>'+
+      '<circle cx="34" cy="65" r="7" fill="#fff" stroke="'+INK+'" stroke-width="2.5"/>'+
+      '<text x="165" y="42" font-size="18" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+item+'</text>'+
+      '<text x="165" y="76" font-size="28" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+price+'</text>'+
+      '<rect x="105" y="86" width="120" height="28" rx="6" fill="'+RED+'"/>'+
+      '<text x="165" y="107" font-size="18" font-weight="800" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif">'+pct+' OFF</text></svg>';}
+
+  /* ---------- Percent Pop: fractions ↔ decimals ↔ percentages ---------- */
+  var EQ=[[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,10],[3,10],[7,10],[9,10],[1,20],[3,20],[7,20],[9,20],[11,20],[1,25],[3,25],[6,25],[1,8],[3,8],[5,8],[1,50],[7,50],[1,100],[3,2],[6,5],[5,4]];
+  function qFracPct(){
+    var f=rnd(EQ),r=R(f[0],f[1]);
+    var pool=EQ.filter(function(g){return Math.abs(g[0]/g[1]-r[0]/r[1])<0.3;}).map(function(g){return pstr(R(g[0],g[1]));});
+    return Q("Write as a percentage:",fstr(r),pstr(r),[f[0]+"%",f[1]+"%",f[0]+"."+f[1]+"%",pstr(mul(r,[1,10]))],shuffle(pool).concat(pctPads(r)),
+      "Make the bottom 100 (or multiply by 100): "+fstr(r)+" × 100 = "+pstr(r)+".","",{t:"f2p"});
+  }
+  function hund(){var n=rnd([ri(1,9),ri(11,99),ri(11,99),ri(101,180),125,375,25,75]);if(n>9&&n<100&&n%10===0)n++;return n;}
+  function qDecPct(){
+    var n=hund(),r=n===125||n===375?R(n,1000):R(n,100),d=dstr(r);
+    return Q("Write as a percentage:",d,pstr(r),[pstr(mul(r,[1,10])),pstr(mul(r,[10,1])),pstr(mul(r,[1,100]))],pctPads(r),
+      "× 100: move the digits 2 places to the left. "+d+" = "+pstr(r)+".","",{t:"d2p"});
+  }
+  function qPctDec(){
+    var n=hund(),r=n===125||n===375?R(n,1000):R(n,100),p=pstr(r);
+    return Q("Write as a decimal:",p,dstr(r),[dstr(mul(r,[10,1])),dstr(mul(r,[100,1])),dstr(mul(r,[1,10]))],numPads(r),
+      "÷ 100: move the digits 2 places to the right. "+p+" = "+dstr(r)+(r[0]/r[1]<0.1?" (watch the zero: "+p+" is less than 10%).":"."),"",{t:"p2d"});
+  }
+  function qPctFrac(){
+    var f=rnd(EQ.filter(function(g){return g[1]!==100&&g[0]<g[1];})),r=R(f[0],f[1]),p=pstr(r),near=EQ.filter(function(g){return g[0]<g[1]&&Math.abs(g[0]/g[1]-r[0]/r[1])<0.25;});
+    var pool=near.map(function(g){return fstr(R(g[0],g[1]));});
+    var top=mul(r,[100,1]);
+    return Q("Write as a fraction in its simplest form:",p,fstr(r),[top[1]===1?"1/"+top[0]:null,(f[1]-f[0])+"/"+f[1]],shuffle(pool),
+      p+" = "+(top[1]===1?top[0]+"/100":dstr(top)+"/100")+" = "+fstr(r)+" (divide the top and bottom by the same number until you can't any more).","",{t:"p2f"});
+  }
+  function qGrid(){
+    var n=ri(3,97),ask=rnd(["percentage","percentage","decimal","fraction"]);
+    if(n%10===0)n++;
+    var r=R(n,100),html=gridSVG(n);
+    if(ask==="fraction"){while(R(n,100)[1]===100)n=rnd([5,15,20,25,35,40,45,55,60,65,75,80,85,95,12,24,36,48,64,72,88,4,8,16,28,32,44,52,56,68,76,84,92,96]);r=R(n,100);html=gridSVG(n);}
+    var un=R(100-n,100);
+    if(ask==="percentage")return Q("What percentage of the grid is shaded?","",pstr(r),[pstr(un),pstr(mul(r,[1,10])),(n/10)+"%"],pctPads(r),
+      "There are 100 squares, so each one is 1%. "+n+" are shaded: "+n+"%.",html,{t:"grid",ask:ask});
+    if(ask==="decimal")return Q("What part of the grid is shaded? Give it as a decimal.","",dstr(r),[dstr(un),dstr(mul(r,[1,10])),String(n)],numPads(r),
+      n+" out of 100 squares = "+n+"/100 = "+dstr(r)+".",html,{t:"grid",ask:ask});
+    var pool=[fstr(un),fstr(R(n+5,100)),fstr(R(Math.max(n-5,1),100)),fstr(R(n,10)),"1/"+n];
+    return Q("What fraction of the grid is shaded? Give it in its simplest form.","",fstr(r),pool,[],
+      n+" out of 100 = "+n+"/100 = "+fstr(r)+" (simplest form).",html,{t:"grid",ask:ask});
+  }
+  function show3(r,kind){return kind==="f"?fstr(r):kind==="d"?dstr(r):pstr(r);}
+  function qOrder(){
+    var pool=[];EQ.forEach(function(g){if(g[0]<g[1])pool.push(R(g[0],g[1]));});
+    for(var k=5;k<96;k++)pool.push(R(k,100));
+    var c=Math.random()*0.7+0.15,near=pool.filter(function(r){return Math.abs(r[0]/r[1]-c)<0.09;}),pick4=[],seen={};
+    shuffle(near).forEach(function(r){var key=r[0]+"/"+r[1];if(!seen[key]&&pick4.length<4){seen[key]=1;pick4.push(r);}});
+    if(pick4.length<4)return qOrder();
+    var kinds=shuffle(["f","d","p",rnd(["d","p"])]),strs=pick4.map(function(r,i){var k=kinds[i];if(k==="f"&&r[1]===100)k="p";return show3(r,k);});
+    var big=Math.random()<.6,idx=[0,1,2,3].sort(function(a,b){return pick4[a][0]/pick4[a][1]-pick4[b][0]/pick4[b][1];}),ans=strs[big?idx[3]:idx[0]];
+    return C("Which is the "+(big?"biggest":"smallest")+"?",strs.join("   "),ans,strs.filter(function(x){return x!==ans;}),
+      "Change them all to percentages: "+pick4.map(function(r,i){return /%$/.test(strs[i])?strs[i]:strs[i]+" = "+pstr(r);}).join(", ")+".",
+      (big?"Biggest":"Smallest")+" of "+strs.join(", ")+" → "+ans,"",{t:"order",big:big,opts:strs});
+  }
+
+  /* ---------- Percentage of ---------- */
+  var PCTS=[10,20,25,50,75,5,15,30,40,60,35,1,2,90,45,12];
+  function qPctOf(){
+    var p=rnd(PCTS),q=rnd([20*ri(2,30),4*ri(5,60),ri(12,99)*10,50*ri(2,16)]),euro=Math.random()<.4;
+    var a=R(p*q,100);if(!term(a)||a[1]>100)return qPctOf();
+    var f=function(x){return euro?mny(x):dstr(x);},A=f(a);
+    return Q("Work out:",p+"% of "+(euro?"€":"")+q,A,[f(R(p*q,10)),f(sub([q,1],a)),f([p,1]),f(R(q,p)),f(add([q,1],a))],euro?mnyPads(a):numPads(a),
+      p+"% = "+p+"/100. "+(p%10===0?"10% of "+q+" = "+dstr(R(q,10))+", so "+p+"% = "+(p/10)+" × "+dstr(R(q,10))+" = "+dstr(a)+".":p+" × "+q+" ÷ 100 = "+dstr(a)+"."),"",{t:"of",euro:euro});
+  }
+  function qBuild(){
+    var q=20*ri(3,40),p=rnd([5,15,20,30,35,45,55,65,90,95]),ten=R(q,10),a=R(p*q,100);
+    var sl=[dstr(add(ten,[p,1])),dstr(R(p*q,10)),dstr(add(ten,[5,1])),dstr(sub(ten,R(p,10)))];
+    var how=p===5?"5% is half of 10%":p===15?"15% = 10% + 5%":p===20?"20% = 2 × 10%":p===30?"30% = 3 × 10%":p===35?"35% = 3 × 10% + 5%":p===45?"45% = 4 × 10% + 5%":p===55?"55% = 50% + 5%":p===65?"65% = 6 × 10% + 5%":p===90?"90% = 100% − 10%":"95% = 100% − 5%";
+    return Q("10% of "+q+" is "+dstr(ten)+". Use that to find "+p+"% of "+q+".","",dstr(a),sl,numPads(a),how+": "+dstr(a)+".","",{t:"build"});
+  }
+  var OUTOF=[["In a test, Aoife got {a} marks out of {b}. What percentage did she get?"],["{a} of the {b} students in a year group walk to school. What percentage walk?"],["A team won {a} of its {b} matches. What percentage did it win?"],["{a} of the {b} seats on a bus are taken. What percentage are taken?"]];
+  function qAsPct(){
+    var b=rnd([20,25,40,50,80,200,16,250,400,60,30,120]),a=ri(Math.ceil(b*0.1),b-1),r=R(a,b);
+    if(!term(r)||mul(r,[100,1])[1]>2)return qAsPct();
+    return Q(rnd(OUTOF)[0].replace("{a}",a).replace("{b}",b),"",pstr(r),[a+"%",pstr(R(b-a,b)),pstr(mul(r,[1,10])),pstr(R(a,100+b))],pctPads(r),
+      "Write it as a fraction, then × 100: "+a+"/"+b+" × 100 = "+pstr(r)+".","",{t:"aspct"});
+  }
+  function qSwap(){
+    var swap=Math.random()<.5,x,y,c,d,A,B;
+    if(swap){x=rnd([4,8,12,16,20,24,36,44,48]);y=rnd([25,50,75]);A=x+"% of "+y;B=y+"% of "+x;}
+    else{do{x=rnd([10,20,25,30,40,50,60,75]);y=20*ri(1,10);c=rnd([10,20,25,30,40,50,60,75]);d=20*ri(1,10);}while(x*y===c*d||(x===d&&y===c));A=x+"% of "+y;B=c+"% of "+d;}
+    var va=swap?x*y:x*y,vb=swap?x*y:c*d,ans=swap?"They're the same":(va>vb?A:B);
+    return C("Which is bigger?",A+"   or   "+B,ans,[A,B,"They're the same","You need a calculator"].filter(function(s){return s!==ans;}),
+      swap?"x% of y is always the same as y% of x. "+A+" = "+dstr(R(x*y,100))+" and so is "+B+". Swap them when one way is easier!":A+" = "+dstr(R(va,100))+" and "+B+" = "+dstr(R(vb,100))+".",
+      "Which is bigger, "+A+" or "+B+"? → "+ans,"",{t:"swap",A:A,B:B});
+  }
+
+  /* ---------- Sale tags: increase & decrease ---------- */
+  var ITEMS=["Runners","Hoodie","Headphones","Jacket","Football","Backpack","Jeans","Phone case","Hurley","Board game"];
+  function qSale(){
+    var d=rnd([10,20,25,30,40,50,15,35,60,5,75]),P=rnd([20*ri(1,10),10*ri(2,15),4*ri(5,25),ri(12,90)]);
+    var off=R(P*d,100),now=sub([P,1],off),it=rnd(ITEMS);
+    return Q("Sale! What does it cost now?","",mny(now),[mny(off),mny([P-d,1]),mny(add([P,1],off)),mny(R(P*d,10))],mnyPads(now),
+      d+"% of €"+P+" = "+mny(off)+". €"+P+" − "+mny(off)+" = "+mny(now)+". Quick way: "+(100-d)+"% of €"+P+" = "+mny(now)+".",tagSVG("€"+P,d+"%",it),{t:"sale"});
+  }
+  var UPS=["A €{P} gym membership goes up by {d}%. What is the new price?","A €{P} concert ticket rises by {d}%. What is the new price?","Rent of €{P} a week goes up by {d}%. What is the new rent?","The price of a €{P} bike goes up by {d}% next year. What is the new price?"];
+  function qIncrease(){
+    var d=rnd([10,20,25,5,15,30,50,8,12,4]),P=rnd([20*ri(2,15),25*ri(2,12),50*ri(2,8)]),up=R(P*d,100),now=add([P,1],up);
+    return Q(rnd(UPS).replace("{P}",P).replace("{d}",d),"",mny(now),[mny(up),mny([P+d,1]),mny(sub([P,1],up)),mny(R(P*(100+d),10))],mnyPads(now),
+      d+"% of €"+P+" = "+mny(up)+". €"+P+" + "+mny(up)+" = "+mny(now)+". Quick way: €"+P+" × "+dstr(R(100+d,100))+".","",{t:"inc"});
+  }
+  function qMult(){
+    var up=Math.random()<.5,d=rnd([5,8,12,15,20,23,25,30,35,40,3,60]),m=R(up?100+d:100-d,100);
+    return Q("To "+(up?"increase":"decrease")+" an amount by "+d+"%, multiply it by…","",dstr(m),[dstr(R(d,100)),dstr(R(up?100-d:100+d,100)),String(d),dstr(R(d,10))],[dstr(add(m,[1,100])),dstr(sub(m,[1,100]))],
+      (up?"100% + "+d+"% = ":"100% − "+d+"% = ")+(up?100+d:100-d)+"% = "+dstr(m)+". So multiply by "+dstr(m)+".","",{t:"mult",up:up,d:d});
+  }
+  function qChange(){
+    var p=rnd([5,10,15,20,25,30,40,50,60,75,80]),up=Math.random()<.5;if(!up&&p>60)p=rnd([10,20,25,40]);
+    var o=20*ri(2,20),c=o*p/100,n=up?o+c:o-c,r=R(c,o);
+    var wrong=R(c,n);
+    return Q("A price goes from €"+o+" to €"+n+". What is the percentage "+(up?"increase":"decrease")+"?","",pstr(r),[term(wrong)&&wrong[1]<=1000?pstr(wrong):null,c+"%",pstr(R(n,o))],pctPads(r),
+      "Change ÷ ORIGINAL × 100: "+c+" ÷ "+o+" × 100 = "+pstr(r)+". Always divide by the starting price.","",{t:"chg"});
+  }
+  function deal(){var P=rnd([40,50,60,80,90,100,120,150,200]),k=ri(0,2),o;
+    if(k===0){var d=rnd([10,20,25,30,40]);o={s:d+"% off €"+P,v:R(P*(100-d),100)};}
+    else if(k===1){var e=rnd([5,10,15,20,25,30,40]);if(e>=P)e=5;o={s:"€"+e+" off €"+P,v:[P-e,1]};}
+    else{var b=rnd([30,45,55,65,72,85,95]);o={s:"€"+b+" (no sale)",v:[b,1]};}return o;}
+  function qBest(){
+    var ds=[],seen={},tries=0;while(ds.length<4&&tries<80){var x=deal(),key=x.v[0]/x.v[1];tries++;if(!seen[key]&&!seen[x.s]){seen[key]=1;seen[x.s]=1;ds.push(x);}}
+    if(ds.length<4)return qBest();
+    var best=ds.slice().sort(function(a,b){return a.v[0]/a.v[1]-b.v[0]/b.v[1];})[0];
+    return C("Four shops sell the same bike seat. Which deal is cheapest?","",best.s,ds.filter(function(x){return x!==best;}).map(function(x){return x.s;}),
+      "Work out each final price: "+ds.map(function(x){return x.s+" → "+mny(x.v);}).join("; ")+".",
+      "Cheapest: "+best.s+" (from "+ds.map(function(x){return x.s;}).join(", ")+")","",{t:"best",opts:ds.map(function(x){return x.s;})});
+  }
+
+  /* ---------- Back to the start: reverse percentages ---------- */
+  function qRevDown(){
+    var d=rnd([10,20,25,30,40,50,15,35,60]),O=5*ri(4,60),now=R(O*(100-d),100),it=rnd(["jacket","pair of runners","tent","bike","guitar","laptop bag"]);
+    return Q("After "+d+"% off, a "+it+" costs "+mny(now)+". What was the price before the sale?","",mny([O,1]),[mny(mul(now,R(100+d,100))),mny(add(now,[d,1])),mny(mul(now,R(100-d,100)))],mnyPads([O,1]),
+      "The sale price is "+(100-d)+"% of the old price. "+(100-d)+"% = "+mny(now)+", so 1% = "+mny(dvd(now,[100-d,1]))+" and 100% = €"+O+". (Or "+mny(now)+" ÷ "+dstr(R(100-d,100))+".) Adding "+d+"% to the sale price does NOT work.","",{t:"revdown"});
+  }
+  function qRevUp(){
+    var d=rnd([10,20,25,5,15,50,30,40]),O=rnd([20*ri(1,15),40*ri(1,8)]),now=R(O*(100+d),100),it=rnd(["concert ticket","bus pass","phone bill","gym membership","school tour"]);
+    return Q("After a "+d+"% increase, a "+it+" costs "+mny(now)+". What did it cost before?","",mny([O,1]),[mny(mul(now,R(100-d,100))),mny(sub(now,[d,1])),mny(mul(now,R(100+d,100)))],mnyPads([O,1]),
+      "The new price is "+(100+d)+"% of the old price. "+(100+d)+"% = "+mny(now)+", so 1% = "+mny(dvd(now,[100+d,1]))+" and 100% = €"+O+". (Or "+mny(now)+" ÷ "+dstr(R(100+d,100))+".) Taking "+d+"% off the new price does NOT work.","",{t:"revup"});
+  }
+  var PARTS=[["{p}% of a number is {x}. What is the number?"],["{p}% of the students in a school walk to school. That's {x} students. How many students are in the school?"],["{p}% of a tank is full. That's {x} litres. How many litres does the full tank hold?"],["A phone battery is at {p}%. That's enough for {x} minutes of video. How many minutes would a full battery give?"],["{x} people at a match were under 16. That's {p}% of the crowd. How many people were at the match?"]];
+  function qRevPart(){
+    var p=rnd([10,20,25,30,40,60,75,5,15,35,45,80]),n=20*ri(2,40),x=n*p/100;
+    return Q(rnd(PARTS)[0].replace("{p}",p).replace("{x}",x),"",String(n),[dstr(R(x*p,100)),String(x*p),dstr(R(x*(100-p),100)),dstr(R(x*100,100-p))],numPads([n,1]),
+      p+"% = "+x+", so 1% = "+dstr(R(x,p))+" and 100% = "+dstr(R(x,p))+" × 100 = "+n+".","",{t:"part"});
+  }
+  function qWhich(){
+    var down=Math.random()<.5,d=rnd([10,20,25,15,30,5,40,12]),O=rnd([40,60,80,120,140,160,180,200,240,260,280,300]),now=R(O*(down?100-d:100+d),100),S=dstr(now),m=dstr(R(down?100-d:100+d,100)),mo=dstr(R(down?100+d:100-d,100));
+    var ans=S+" ÷ "+m,pool=[S+" × "+m,S+" × "+mo,(down?S+" + "+d:S+" − "+d),S+" ÷ "+mo];
+    return C("A price "+(down?"was cut":"went up")+" by "+d+"% and it's now "+mny(now)+". Which calculation finds the price BEFORE the change?","",ans,pool,
+      "New price = old price × "+m+", so old price = new price ÷ "+m+": "+ans+" = "+O+", so it was €"+O+".",null,"",{t:"which",down:down,d:d,now:S});
+  }
+
+  var MAKERS={
+    pop:[qFracPct,qFracPct,qDecPct,qPctDec,qPctFrac,qGrid,qGrid,qOrder,qOrder],
+    of:[qPctOf,qPctOf,qPctOf,qBuild,qBuild,qAsPct,qAsPct,qSwap],
+    sale:[qSale,qSale,qSale,qIncrease,qIncrease,qMult,qChange,qChange,qBest],
+    back:[qRevDown,qRevDown,qRevUp,qRevUp,qRevPart,qRevPart,qWhich],
+    mixed:[qFracPct,qDecPct,qPctDec,qPctFrac,qGrid,qOrder,qPctOf,qBuild,qAsPct,qSwap,qSale,qIncrease,qMult,qChange,qBest,qRevDown,qRevUp,qRevPart,qWhich]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="sale"||m==="back"||m==="mixed")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="pop"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="pop"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
