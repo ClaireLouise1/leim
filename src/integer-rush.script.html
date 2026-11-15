@@ -1,0 +1,213 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function nz(a,b){var n;do{n=ri(a,b);}while(n===0);return n;}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var M="−";
+  function f(n){return n<0?M+Math.abs(n):String(n);}          // −5
+  function p(n){return n<0?"("+f(n)+")":f(n);}                // (−5)
+  function u(n,unit){ // number with unit
+    if(unit==="€")return (n<0?M:"")+"€"+Math.abs(n);
+    if(unit==="floor")return "Floor "+f(n);
+    return f(n)+unit;}
+  // 3 distinct wrong answers from slips, padded with near misses
+  function wrongs(ans,c,fmt){
+    fmt=fmt||f;var seen={},out=[];seen[fmt(ans)]=1;
+    c.concat([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10]).forEach(function(x){
+      if(typeof x!=="number"||!isFinite(x)||Math.round(x)!==x)return;
+      var s=fmt(x);if(!seen[s]&&out.length<3){seen[s]=1;out.push(s);}});
+    return out;}
+  function Q(en,frame,ans,c,why,fmt,html){fmt=fmt||f;
+    return {en:en,frame:frame,html:html||"",answer:fmt(ans),wrong:wrongs(ans,c,fmt),why:why,review:(frame||en)+" = "+fmt(ans)};}
+
+  /* ---------- Integer sums ---------- */
+  function qAdd(){
+    var a=nz(-15,15),b=nz(-12,12),plus=Math.random()<.5,ans,fr,why;
+    if(plus){ans=a+b;fr=f(a)+" + "+p(b);
+      why=b<0?"Adding a negative is the same as subtracting: "+f(a)+" − "+Math.abs(b)+".":(a<0?"Start at "+f(a)+" and hop "+b+" to the right.":"");
+      return Q("Work it out",fr,ans,[-ans,a-b,(a<0?-1:1)*(Math.abs(a)+Math.abs(b))],why);}
+    ans=a-b;fr=f(a)+" − "+p(b);
+    why=b<0?"Two minus signs side by side make +: "+f(a)+" + "+Math.abs(b)+".":"Start at "+f(a)+" and hop "+b+" to the left.";
+    return Q("Work it out",fr,ans,[-ans,a+b,-(a+b)],why);
+  }
+  function lineSVG(s){
+    var w=560,x0=20,step=(w-40)/20,h=70,o='<svg viewBox="0 0 '+w+' '+h+'" width="100%" style="max-width:560px" role="img" aria-label="Number line from minus 10 to 10 with a dot at '+s+'">';
+    o+='<line x1="10" y1="40" x2="'+(w-10)+'" y2="40" stroke="#1B2430" stroke-width="2"/>';
+    for(var n=-10;n<=10;n++){var x=x0+(n+10)*step;
+      o+='<line x1="'+x+'" y1="'+(n===0?32:35)+'" x2="'+x+'" y2="'+(n===0?48:45)+'" stroke="#1B2430" stroke-width="'+(n===0?2.5:1.5)+'"/>';
+      if(n%2===0)o+='<text x="'+x+'" y="64" font-size="13" text-anchor="middle" fill="#5B6470" font-family="Inter,sans-serif">'+f(n)+'</text>';}
+    var sx=x0+(s+10)*step;o+='<circle cx="'+sx+'" cy="40" r="8" fill="#F6CF5A" stroke="#1B2430" stroke-width="2"/><text x="'+sx+'" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">start</text>';
+    return o+'</svg>';}
+  function qHop(){
+    var s,m,right,ans;do{s=ri(-8,8);m=ri(3,9);right=Math.random()<.5;ans=right?s+m:s-m;}while(ans<-10||ans>10||ans===0);
+    return Q("Start at "+f(s)+". Hop "+m+" to the "+(right?"right":"left")+". Where do you land?","",ans,[right?s-m:s+m,-ans,ans+(right?-1:1)],
+      right?"Right means bigger: "+f(s)+" + "+m+" = "+f(ans)+".":"Left means smaller: "+f(s)+" − "+m+" = "+f(ans)+".",f,lineSVG(s));
+  }
+
+  /* ---------- × and ÷ ---------- */
+  function big(){var n=ri(2,12);return Math.random()<.6?-n:n;}
+  function qMul(){
+    var a=big(),b=big();if(a>0&&b>0)a=-a;var ans=a*b;
+    var why=(a<0&&b<0)?"Same signs (− and −) give a positive answer.":"Different signs give a negative answer.";
+    return Q("Work it out",p(a)+" × "+p(b),ans,[-ans,a+b,(a<0?a-1:a+1)*b],why);
+  }
+  function qDiv(){
+    var a=big(),b=big();if(a>0&&b>0)b=-b;var prod=a*b,ans=a;
+    var why=(prod<0)!==(b<0)?"Different signs give a negative answer.":"Same signs give a positive answer.";
+    return Q("Work it out",f(prod)+" ÷ "+p(b),ans,[-ans,b,prod-b,-b],why);
+  }
+  function qMul3(){
+    var a=nz(-5,5),b=nz(-4,4),c=nz(-3,3);var negs=(a<0)+(b<0)+(c<0);if(negs===0){a=-Math.abs(a);negs=1;}
+    var ans=a*b*c;
+    return Q("Work it out",p(a)+" × "+p(b)+" × "+p(c),ans,[-ans,a+b+c,a*b+c],"Count the minus signs: "+negs+" is "+(negs%2?"odd, so the answer is negative.":"even, so the answer is positive."));
+  }
+  function qSq(){
+    var a=ri(2,9);
+    return Q("Work it out","("+M+a+")²",a*a,[-a*a,-2*a,2*a],"(−"+a+")² = (−"+a+") × (−"+a+"): same signs, so positive.");
+  }
+
+  /* ---------- BIMDAS ---------- */
+  function qBim(){
+    var t=ri(1,12),a,b,c,d,ans,fr,c2,why;
+    switch(t){
+      case 1:a=ri(2,12);b=ri(2,9);c=ri(2,9);ans=a+b*c;fr=a+" + "+b+" × "+c;c2=[(a+b)*c,a+b+c];why="× before +: "+b+" × "+c+" = "+(b*c)+", then add "+a+".";break;
+      case 2:a=ri(10,30);b=ri(2,6);c=ri(2,6);ans=a-b*c;fr=a+" − "+b+" × "+c;c2=[(a-b)*c,a-b-c];why="× before −: "+b+" × "+c+" = "+(b*c)+", then "+a+" − "+(b*c)+".";break;
+      case 3:a=ri(2,9);b=ri(2,9);c=ri(2,6);ans=(a+b)*c;fr="("+a+" + "+b+") × "+c;c2=[a+b*c,a*c+b];why="Brackets first: "+a+" + "+b+" = "+(a+b)+", then × "+c+".";break;
+      case 4:a=ri(2,6);b=ri(2,6);c=ri(2,6);d=ri(2,6);ans=a*b+c*d;fr=a+" × "+b+" + "+c+" × "+d;c2=[(a*b+c)*d,a*(b+c)*d];why="Do both × first: "+(a*b)+" + "+(c*d)+".";break;
+      case 5:c=ri(2,6);b=c*ri(2,6);a=ri(b+1,b+20);ans=a-b/c;fr=a+" − "+b+" ÷ "+c;c2=[(a-b)/c,a-b+c,(a-b)*c];why="÷ before −: "+b+" ÷ "+c+" = "+(b/c)+".";break;
+      case 6:a=ri(2,12);b=ri(2,6);ans=a+b*b;fr=a+" + "+b+"²";c2=[(a+b)*(a+b),a+2*b];why="Indices before +: "+b+"² = "+(b*b)+".";break;
+      case 7:c=ri(2,5);b=ri(2,5);ans=c*b*b;fr=c+" × "+b+"²";c2=[(c*b)*(c*b),c*b*2];why="Indices before ×: "+b+"² = "+(b*b)+", then × "+c+".";break;
+      case 8:b=ri(2,5);c=ri(2,5);var k=ri(2,6)*c;a=b*k;ans=k*c;fr=a+" ÷ "+b+" × "+c;c2=[a/(b*c),a/b+c];why="÷ and × are equal partners: go left to right. "+a+" ÷ "+b+" = "+k+", then × "+c+".";break;
+      case 9:a=ri(10,20);b=ri(5,9);c=ri(1,4);ans=a-(b-c);fr=a+" − ("+b+" − "+c+")";c2=[a-b-c,a+b-c];why="Brackets first: "+b+" − "+c+" = "+(b-c)+".";break;
+      case 10:a=ri(2,9);b=ri(2,5);c=ri(2,6);ans=a+b*(-c);fr=a+" + "+b+" × ("+M+c+")";c2=[(a+b)*(-c),-ans,a+b-c];why="× first: "+b+" × (−"+c+") = −"+(b*c)+", then "+a+" − "+(b*c)+".";break;
+      case 11:c=ri(2,5);var s=c*ri(2,5);a=ri(1,s-1);b=s-a;ans=s/c;fr="("+a+" + "+b+") ÷ "+c;c2=[a+b/c,s*c];why="Brackets first: "+s+" ÷ "+c+".";break;
+      default:a=ri(15,30);b=ri(2,4);c=ri(2,4);d=ri(1,5);ans=a-b*c+d;fr=a+" − "+b+" × "+c+" + "+d;c2=[a-(b*c+d),(a-b)*c+d];why="× first, then + and − left to right: "+a+" − "+(b*c)+" + "+d+".";
+    }
+    return Q("Work it out (BIMDAS)",fr,ans,c2,why);
+  }
+  function qBrackets(){
+    var a=ri(2,6),b=ri(2,6),c=ri(2,6),target=(a+b)*c;if(target===a+b*c)return qBim();
+    var right="("+a+" + "+b+") × "+c,ws=[a+" + ("+b+" × "+c+")",a+" + "+b+" × "+c,"("+a+" × "+c+") + "+b];
+    return {en:"Which one equals "+target+"?",frame:"",answer:right,wrong:ws.filter(function(x){return x!==right;}).slice(0,3),why:"Brackets first: "+(a+b)+" × "+c+" = "+target+". Without brackets, × goes first: "+a+" + "+(b*c)+" = "+(a+b*c)+".",review:"Equals "+target+": "+right};
+  }
+  function qProp(){
+    var t=ri(1,3),a=ri(2,9),b=ri(2,9),c=ri(2,9),fr,ans;
+    if(t===1){fr=a+" × ("+b+" + "+c+") = "+a+" × "+b+" + "+a+" × "+c;ans="Distributive";}
+    else if(t===2){fr=f(a)+" + ("+M+b+") = ("+M+b+") + "+a;ans="Commutative";}
+    else{fr="("+a+" × "+b+") × "+c+" = "+a+" × ("+b+" × "+c+")";ans="Associative";}
+    var all=["Distributive","Commutative","Associative","BIMDAS"];
+    var why={Distributive:"Distributive: multiply everything inside the brackets.",Commutative:"Commutative: you can swap the order for + and ×.",Associative:"Associative: you can change the grouping for + and ×."}[ans];
+    return {en:"Which law does this show?",frame:fr,answer:ans,wrong:all.filter(function(x){return x!==ans;}),why:why,review:fr+": "+ans};
+  }
+
+  /* ---------- Real life & ordering ---------- */
+  var TOWNS=["Mullingar","Birr","Cavan","Athlone","Carlow","Letterkenny","Tullamore","Roscommon"];
+  function qReal(){
+    var t=ri(1,6),a,b,ans;
+    if(t===1){a=ri(-9,-1);b=ri(3,12);ans=a+b;if(ans===0)ans=a+(++b);
+      return Q("At 6 a.m. it was "+u(a," °C")+" in "+rnd(TOWNS)+". By noon it had risen by "+b+" degrees. What was the temperature at noon?","",ans,[a-b,-ans,-(a-b)],"Rising means add: "+f(a)+" + "+b+" = "+f(ans)+".",function(n){return u(n," °C");});}
+    if(t===2){a=ri(1,6);b=ri(a+2,a+11);ans=a-b;
+      return Q("It was "+a+" °C at 9 p.m. Overnight the temperature fell by "+b+" degrees. What was it in the morning?","",ans,[-ans,a+b,-(a+b)],"Falling means subtract: "+a+" − "+b+" = "+f(ans)+".",function(n){return u(n," °C");});}
+    if(t===3){a=ri(1,9);b=-ri(1,8);ans=a-b;
+      return Q("The warmest place in Ireland was "+a+" °C and the coldest was "+u(b," °C")+". What is the difference between them?","",ans,[a+b,-ans,-(a+b)],"Difference = "+a+" − ("+f(b)+") = "+a+" + "+Math.abs(b)+" = "+ans+". Count from "+f(b)+" up to 0, then on to "+a+".",function(n){return n+" degrees";});}
+    if(t===4){a=ri(10,60);b=ri(a+5,a+60);ans=a-b;
+      return Q("Ciara has €"+a+" in her account. She pays a bill of €"+b+". What is her new balance?","",ans,[-ans,a+b,-(a+b)],"€"+a+" − €"+b+" = "+u(ans,"€")+": she is overdrawn.",function(n){return u(n,"€");});}
+    if(t===5){a=ri(0,4);b=ri(a+1,a+5);ans=a-b;
+      return Q("Tom gets into the lift at floor "+a+" and goes down "+b+" floors. Which floor is he on now? (0 is the ground floor.)","",ans,[-ans,a+b,ans-1],a+" − "+b+" = "+f(ans)+": below the ground floor.",function(n){return u(n,"floor");});}
+    a=-ri(12,30);b=ri(3,11);ans=a+b;
+    return Q("A diver is "+Math.abs(a)+" m below sea level ("+f(a)+" m). She swims up "+b+" m. Where is she now?","",ans,[a-b,-ans,-(a-b)],"Up means add: "+f(a)+" + "+b+" = "+f(ans)+".",function(n){return f(n)+" m";});
+  }
+  function qOrder(){
+    var s={};while(Object.keys(s).length<4)s[nz(-12,12)]=1;
+    var ns=Object.keys(s).map(Number);if(ns.every(function(x){return x>0;}))ns[0]=-ns[0];
+    var small=Math.random()<.5,ans=small?Math.min.apply(0,ns):Math.max.apply(0,ns);
+    return {en:"Which is the "+(small?"smallest":"biggest")+"?",frame:"",answer:f(ans),wrong:ns.filter(function(x){return x!==ans;}).map(f),
+      why:small?"On the number line, the smallest is furthest to the left.":"On the number line, the biggest is furthest to the right.",
+      review:(small?"Smallest":"Biggest")+" of "+ns.map(f).join(", ")+": "+f(ans)};
+  }
+  function qTrue(){
+    var a=ri(2,9),b=ri(a+1,12);
+    var right=M+a+" > "+M+b,ws=[M+b+" > "+M+a,M+a+" < "+M+b,"0 < "+M+a];
+    return {en:"Which is true?",frame:"",answer:right,wrong:ws,why:"−"+a+" is to the right of −"+b+" on the number line, so −"+a+" is bigger.",review:"True: "+right};
+  }
+
+  var MAKERS={
+    sums:[qAdd,qAdd,qAdd,qHop,qHop],
+    muldiv:[qMul,qMul,qDiv,qDiv,qMul3,qSq],
+    bimdas:[qBim,qBim,qBim,qBim,qBrackets,qProp],
+    real:[qReal,qReal,qReal,qOrder,qTrue,qHop],
+    mixed:[qAdd,qAdd,qHop,qMul,qDiv,qMul3,qSq,qBim,qBim,qBrackets,qProp,qReal,qReal,qOrder,qTrue]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="real")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:2200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>

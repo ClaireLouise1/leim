@@ -1,0 +1,152 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Integer Rush</h1>
+        <p>60 seconds. Negative numbers, the signs rules and BIMDAS: the small slips that cost marks all over the Maths paper. Is <b>−3 − 5</b> equal to <b>−2</b> or <b>−8</b>? Is <b>2 + 3 × 4</b> equal to <b>20</b> or <b>14</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your rush</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sums"><div><b>Integer sums</b><span>+ and − with negative numbers, and number-line hops</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="muldiv"><div><b>× and ÷ with negatives</b><span>Same signs give +, different signs give −</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="bimdas"><div><b>Order of operations</b><span>BIMDAS: brackets, indices, × ÷, then + −</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Real life &amp; the number line</b><span>Temperatures, bank balances, lifts, and which is bigger?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator!</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1a, N.1b, N.1c, U.1, U.2 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another rush</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Integers and the order of operations</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these. Each line goes down by one step.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td>3 × 2 = 6</td><td>3 × (−2) = −6</td></tr>
+            <tr><td>2 × 2 = 4</td><td>2 × (−2) = −4</td></tr>
+            <tr><td>1 × 2 = 2</td><td>1 × (−2) = −2</td></tr>
+            <tr><td>0 × 2 = 0</td><td>0 × (−2) = 0</td></tr>
+            <tr><td>−1 × 2 = <b>?</b></td><td>−1 × (−2) = <b>?</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">The answers on the left go down by 2 each time. On the right they go <b>up</b> by 2. What comes next in each column?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Left: −1 × 2 = <b>−2</b>. Right: −1 × (−2) = <b>2</b>. Keep the pattern going and a negative times a negative has to come out <b>positive</b>. That's where the signs rule comes from: it isn't magic, it's the pattern.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Integers and the number line</h3>
+        <p><b>Integers</b> are the whole numbers, positive and negative, and zero: … −3, −2, −1, 0, 1, 2, 3 … (the set ℤ). <b>Natural numbers</b> are the counting numbers 1, 2, 3 … (the set ℕ). On a number line, numbers get <b>bigger to the right</b>. So −2 is bigger than −8, even though 8 looks bigger: −2 &gt; −8.</p>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> the coldest temperature is the <b>smallest</b> number. −8 °C is colder than −2 °C, so −8 &lt; −2.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Adding and subtracting</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Rule</th><th>Example</th><th>Think…</th></tr></thead>
+          <tbody>
+            <tr><td><b>Adding</b> a positive: move right</td><td>−5 + 8 = <b>3</b></td><td>Start at −5, hop 8 to the right</td></tr>
+            <tr><td><b>Subtracting</b> a positive: move left</td><td>2 − 7 = <b>−5</b></td><td>Start at 2, hop 7 to the left</td></tr>
+            <tr><td>Two minus signs side by side become <b>+</b></td><td>4 − (−3) = 4 + 3 = <b>7</b></td><td>Taking away a debt is like being given money</td></tr>
+            <tr><td>A plus and a minus become <b>−</b></td><td>6 + (−9) = 6 − 9 = <b>−3</b></td><td>Adding a debt takes money away</td></tr>
+            <tr><td>Both negative: add the sizes, keep the −</td><td>−4 − 6 = <b>−10</b></td><td>Owe 4, then owe 6 more</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Multiplying and dividing</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Signs</th><th>Answer</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Same signs: + and +, or − and −</td><td><b>Positive</b></td><td>(−6) × (−3) = 18 · (−20) ÷ (−4) = 5</td></tr>
+            <tr><td>Different signs: one + and one −</td><td><b>Negative</b></td><td>(−6) × 3 = −18 · 20 ÷ (−4) = −5</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">More than two numbers? Count the minus signs: an <b>even</b> number of them gives a positive answer, an <b>odd</b> number gives a negative one. (−2) × (−3) × (−1) = <b>−6</b> (three minus signs).</p>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> these rules are for × and ÷ only. (−3) + (−5) is <b>−8</b>, not +8. And squaring a negative gives a positive: (−4)² = (−4) × (−4) = <b>16</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The order of operations: BIMDAS</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td style="width:60px"><b>B</b></td><td><b>Brackets</b> first</td><td>(2 + 3) × 4 = 5 × 4 = 20</td></tr>
+            <tr><td><b>I</b></td><td><b>Indices</b> (powers and roots)</td><td>2 × 3² = 2 × 9 = 18, not 6² = 36</td></tr>
+            <tr><td><b>M D</b></td><td><b>× and ÷</b>, working left to right</td><td>12 ÷ 3 × 2 = 4 × 2 = 8</td></tr>
+            <tr><td><b>A S</b></td><td><b>+ and −</b>, working left to right</td><td>10 − 4 + 3 = 6 + 3 = 9</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">So 2 + 3 × 4 = 2 + 12 = <b>14</b>. If you just go left to right you get 20, which is wrong. × and ÷ are equal partners, and so are + and −: whichever comes first, reading left to right, goes first.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Three laws you can use to make sums easier</h3>
+        <ul>
+          <li><b>Commutative:</b> the order doesn't matter for + and ×. 7 + (−2) = (−2) + 7 · 4 × 25 = 25 × 4. (Not for − or ÷: 5 − 2 ≠ 2 − 5.)</li>
+          <li><b>Associative:</b> how you group doesn't matter for + and ×. (2 × 5) × 9 = 2 × (5 × 9) = 90.</li>
+          <li><b>Distributive:</b> multiply everything inside the brackets. 3 × (40 + 2) = 3 × 40 + 3 × 2 = 126. Handy for mental maths: 7 × 99 = 7 × 100 − 7 × 1 = 693.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Integers and BIMDAS rarely get a whole question to themselves. They are <b>inside almost every question</b> on the paper: temperatures and bank balances, substituting into a formula, solving equations, coordinates and slopes. One sign slip early on can carry right through a question.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show every step.</b> Examiners give part marks for correct work, so a right method with one slip can still earn marks. A wrong answer on its own earns nothing.</li>
+            <li><b>Put negatives in brackets</b> when you substitute: if x = −3, then x² = (−3)² = 9, not −9.</li>
+            <li><b>On the calculator</b>, use the (−) key for a negative number and type the brackets in. Then check the answer is sensible: a temperature drop should give a lower number.</li>
+            <li><b>Write the units</b> (°C, €, m) and answer the question asked: "how much colder?" wants a difference, not the new temperature.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The coldest night.</b> One night the temperature in Mullingar was −6 °C and in Kinsale it was 3 °C.<br>(a) How many degrees warmer was it in Kinsale?<br>(b) By morning the Mullingar temperature had risen by 4 degrees. What was it in the morning?
+              <details><summary>Show the worked answer</summary><p>(a) 3 − (−6) = 3 + 6 = <b>9 degrees</b> warmer. (Count on the number line: from −6 up to 0 is 6, then 0 up to 3 is 3 more.)<br>(b) −6 + 4 = <b>−2 °C</b>. Check: rising means a bigger number, and −2 is bigger than −6. ✓</p></details></li>
+            <li><b>Finish the calculation.</b> Aoife says 20 − 8 ÷ 4 × 2 = 6. Show that she is wrong and find the right answer.
+              <details><summary>Show the worked answer</summary><p>Aoife went left to right with the subtraction first: 20 − 8 = 12, 12 ÷ 4 = 3, 3 × 2 = 6. But ÷ and × come before −.<br>8 ÷ 4 = 2, then 2 × 2 = 4, then 20 − 4 = <b>16</b>.</p></details></li>
+            <li><b>Substitute.</b> Find the value of 2a² − 3b when a = −3 and b = −5.
+              <details><summary>Show the worked answer</summary><p>2(−3)² − 3(−5) = 2(9) − (−15) = 18 + 15 = <b>33</b>.<br>Two places to slip: (−3)² is +9, and taking away −15 is the same as adding 15.</p></details></li>
+            <li><b>Brackets.</b> Put one pair of brackets into 4 + 6 × 5 − 2 so that the answer is 48.
+              <details><summary>Show the worked answer</summary><p>Try the brackets in different places: 4 + 6 × (5 − 2) = 4 + 18 = 22 ✗ · 4 + (6 × 5 − 2) = 4 + 28 = 32 ✗ · (4 + 6) × 5 − 2 = 50 − 2 = 48 ✓<br>Answer: <b>(4 + 6) × 5 − 2 = 48</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/integers-order-of-operations-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Integers &amp; Order of Operations Teacher Pack (€5)</a>: Human Number Line, Find Your Match mingle, Integer Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
