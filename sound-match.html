@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alphabet, sounds and spelling: play Sound Match | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: match Spanish sounds to spellings (j, g, c, z, ll, ñ, rr), the alphabet and spelling out names, accents and ¿ ¡, plus a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.scard{display:inline-block;font-size:clamp(34px,8vw,48px);font-weight:800;letter-spacing:.01em;background:var(--cream);border:2px solid var(--cream-line);border-radius:16px;padding:10px 26px;margin-top:4px}
+.scard mark{background:var(--sun);color:var(--ink);border-radius:6px;padding:0 4px}
+.frame.spell{font-size:clamp(20px,5vw,27px);font-weight:700;color:var(--green);letter-spacing:0}
+.choices.one{grid-template-columns:1fr}.choices.one .choice{font-size:16px;padding:14px 12px;min-height:0;text-align:left}
+.bonus{text-align:center;font-weight:800;color:var(--green);min-height:22px;margin-top:12px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Sound Match</h1>
+        <p>Match the sound to the spelling. Why does <b>gente</b> sound like <b>jamón</b>? Is it <b>jóven</b> or <b>joven</b>? Can you catch a name when it's spelled out letter by letter, like in the Listening paper? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sound"><div><b>Sound Match</b><span>Which word has the same sound? g in gente = j in jamón. +3 bonus for a streak of 5</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="abc"><div><b>Alphabet &amp; spelling out</b><span>jota, hache, uve, i griega… read a name spelled letter by letter</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="write"><div><b>Spot the spelling</b><span>Accents, capitals, ¿ ¡ and tú / tu, sí / si, qué / que</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: sounds &amp; spelling 🔊</b><span id="listenNote">Hear the letters, pick the name. Hear the word: pero or perro?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. Press 🔊 to hear the Spanish.</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.9, 2.1, 2.4 (2017 spec, exams 2027–2028) · 2.1, 2.5 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+        <div class="bonus" id="bonus" aria-live="polite"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The alphabet, sounds and spelling</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Say these out loud: <b>gato · guapo · gorra</b> and then <b>gente · girasol · gimnasio</b>. What happens to the <b>g</b>? Now try <b>casa · cosa · cuna</b> and <b>cine · cena · cielo</b>.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The letter after <b>g</b> or <b>c</b> decides the sound. Before <b>a, o, u</b>: hard, like English (<b>g</b>ato, <b>c</b>asa). Before <b>e, i</b>: soft. <b>ge, gi</b> sound like the Spanish <b>j</b>, the "ch" in <i>loch</i> (<b>ge</b>nte = <b>j</b>amón). <b>ce, ci</b> sound like <b>z</b>, the "th" in <i>think</i> in most of Spain (<b>ci</b>ne = <b>z</b>umo). To keep the hard sound before e and i, Spanish adds a silent <b>u</b>: <b>gue, gui</b> (guitarra) and <b>que, qui</b> (queso).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The sounds that catch people out</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spelling</th><th>Sounds like…</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><b>j</b> · <b>ge, gi</b></td><td>"ch" in Scottish or Irish <i>loch</i></td><td>jamón, joven, gente, girasol</td></tr>
+            <tr><td><b>ga, go, gu</b> · <b>gue, gui</b></td><td>"g" in <i>go</i> (u silent in gue / gui)</td><td>gato, gol, guerra, guitarra · pin<b>güi</b>no: ü = you hear the u</td></tr>
+            <tr><td><b>ca, co, cu</b> · <b>que, qui</b> · k</td><td>"k" in <i>kite</i></td><td>casa, queso, química, kilo</td></tr>
+            <tr><td><b>z</b> · <b>ce, ci</b></td><td>"th" in <i>think</i> (most of Spain); "s" in Latin America and the Canaries</td><td>zapato, zumo, cine, cena</td></tr>
+            <tr><td><b>h</b></td><td>nothing: it's silent</td><td>hola, hermano, hora, helado</td></tr>
+            <tr><td><b>ll</b> · <b>y</b></td><td>"y" in <i>yes</i></td><td>llave, lluvia, calle · yo, playa</td></tr>
+            <tr><td><b>ñ</b></td><td>"ny" in <i>canyon</i></td><td>niño, España, mañana</td></tr>
+            <tr><td><b>rr</b> · r at the start</td><td>a rolled r</td><td>perro, arroz · rojo, ratón</td></tr>
+            <tr><td><b>b</b> · <b>v</b></td><td>the same sound, a soft "b"</td><td>vaca, boca, verde, bien</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:14px"><b>Watch out:</b> one <b>r</b> or two can change the word: <b>pero</b> (but) / <b>perro</b> (dog), <b>caro</b> (expensive) / <b>carro</b> (cart). Vowels are short and always the same: <b>a</b> "ah", <b>e</b> "eh", <b>i</b> "ee", <b>o</b> "oh", <b>u</b> "oo".</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">El alfabeto: the letter names</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>A <b>a</b> · B <b>be</b> · C <b>ce</b> · D <b>de</b> · E <b>e</b> · F <b>efe</b> · G <b>ge</b></td></tr>
+            <tr><td>H <b>hache</b> · I <b>i</b> · J <b>jota</b> · K <b>ka</b> · L <b>ele</b> · M <b>eme</b> · N <b>ene</b></td></tr>
+            <tr><td>Ñ <b>eñe</b> · O <b>o</b> · P <b>pe</b> · Q <b>cu</b> · R <b>erre</b> · S <b>ese</b> · T <b>te</b></td></tr>
+            <tr><td>U <b>u</b> · V <b>uve</b> · W <b>uve doble</b> · X <b>equis</b> · Y <b>ye</b> (or <b>i griega</b>) · Z <b>zeta</b></td></tr>
+          </tbody></table></div>
+        <ul style="margin-top:10px">
+          <li><b>¿Cómo se escribe?</b> How do you spell it? <b>¿Cómo se escribe tu apellido?</b> How do you spell your surname?</li>
+          <li><b>Se escribe</b> jota, o, ese, e con tilde: José. <b>con tilde</b> = with an accent. Two l's: <b>dos eles</b> or <b>doble ele</b>.</li>
+          <li>Easy to mix up: <b>ge</b> (G) and <b>jota</b> (J) · <b>e</b> (E) and <b>i</b> (I) · <b>be</b> (B) and <b>uve</b> (V) · <b>hache</b> (H).</li>
+        </ul>
+        <p>The Spanish alphabet has <b>27 letters</b>: the extra one is <b>ñ</b>. Since 2010, the Real Academia Española no longer counts <b>ch</b> and <b>ll</b> as separate letters: they're pairs of letters.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Accents: when do you write one?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>The word ends in…</th><th>Stress falls on…</th><th>No accent needed</th></tr></thead>
+          <tbody>
+            <tr><td>a vowel, <b>n</b> or <b>s</b></td><td>the second-last syllable</td><td>ca-sa, ha-blan, li-bros, jo-ven, e-xa-men</td></tr>
+            <tr><td>any other consonant</td><td>the last syllable</td><td>ha-blar, ciu-dad, es-pa-ñol</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">If a word breaks the rule, it needs a written accent to show the stress: <b>canción, café, inglés, jamón, árbol, lápiz, fútbol</b>. Words stressed on the third-last syllable always have one: <b>música, teléfono, miércoles, química</b>. When a word grows, the accent can come or go: <b>joven → jóvenes</b>, <b>examen → exámenes</b>, but <b>canción → canciones</b>, <b>inglés → ingleses</b>.</p>
+        <div class="table-wrap" style="margin-top:10px"><table>
+          <thead><tr><th>With an accent</th><th>Without</th></tr></thead>
+          <tbody>
+            <tr><td><b>tú</b> you · <b>él</b> he · <b>mí</b> me · <b>sí</b> yes</td><td><b>tu</b> your · <b>el</b> the · <b>mi</b> my · <b>si</b> if</td></tr>
+            <tr><td><b>¿Qué? ¿Cómo? ¿Dónde? ¿Cuándo? ¿Cuántos? ¿Por qué?</b> (questions)</td><td>que (that) · como (I eat / like) · donde (where, not a question) · <b>porque</b> (because)</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Spain and Ireland: different writing habits</h3>
+        <ul>
+          <li>Questions and exclamations open upside down: <b>¿Cómo estás?</b> <b>¡Qué bien!</b></li>
+          <li><b>No capitals</b> for days, months, languages and nationalities: <i>el lunes, en mayo, hablo inglés, soy irlandesa</i>. Countries and towns do have capitals: <i>España, Sevilla, Irlanda</i>.</li>
+          <li>On a computer or phone, hold down <b>n</b> for <b>ñ</b> and a vowel for <b>á é í ó ú</b>.</li>
+        </ul>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> in the Writing section, a missing accent can change the word (<b>papá</b> is "dad", <b>papa</b> is "potato"; <b>está</b> is "is", <b>esta</b> is "this"), so read your answer back once just for accents, ñ and ¿ ¡. In Listening, names, streets and emails are sometimes spelled out: write the letters down as you hear them, and remember <b>jota</b> = J, <b>ge</b> = G, <b>i</b> = I, <b>e</b> = E.</div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/alphabet-sounds-spelling-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/cJXmr" target="_blank" rel="noopener">Alphabet, Sounds &amp; Spelling Teacher Pack (€5)</a>: Spell It Out info gap, Spelling Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function uniq3(correct,cands){
+    var seen={},out=[];seen[correct]=1;
+    cands.forEach(function(c){if(c!=null&&c!==""&&!seen[c]&&out.length<3){seen[c]=1;out.push(c);}});
+    return out;
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+
+  /* ---------- Sounds: which sounds does a word contain? ---------- */
+  function plain(w){return w.toLowerCase().replace(/[á]/g,"a").replace(/[é]/g,"e").replace(/[í]/g,"i").replace(/[ó]/g,"o").replace(/[ú]/g,"u");}
+  function sounds(word){
+    var w=plain(word),s={};
+    if(/j/.test(w)||/g[ei]/.test(w))s.J=1;
+    if(/g[aouürl]/.test(w))s.G=1;
+    if(/c(?![eih])/.test(w)||/qu/.test(w)||/k/.test(w))s.K=1;
+    if(/z/.test(w)||/c[ei]/.test(w))s.TH=1;
+    if(/ll/.test(w)||/y[aeiou]/.test(w)||/^hi[e]/.test(w))s.Y=1;
+    if(/ñ/.test(w))s.NY=1;
+    if(/rr/.test(w)||/^r/.test(w)||/[nls]r/.test(w))s.RR=1;
+    if(/ch/.test(w))s.CH=1;
+    if(/[bv]/.test(w))s.B=1;
+    if(/(^|[^c])h/.test(w))s.H=1;
+    return s;
+  }
+  /* word, bold letters, sound group */
+  var POOL=[
+    ["jamón","j","J"],["jardín","j","J"],["gente","g","J"],["girasol","g","J"],["joven","j","J"],["gimnasio","g","J"],["julio","j","J"],["jirafa","j","J"],["general","g","J"],["ojo","j","J"],
+    ["casa","c","K"],["cosa","c","K"],["queso","qu","K"],["quince","qu","K"],["kilo","k","K"],["comer","c","K"],["cuaderno","c","K"],["química","qu","K"],["kiwi","k","K"],
+    ["zapato","z","TH"],["cine","c","TH"],["cena","c","TH"],["zumo","z","TH"],["cielo","c","TH"],["cero","c","TH"],["azul","z","TH"],["lápiz","z","TH"],
+    ["gato","g","G"],["gol","g","G"],["guapo","g","G"],["guitarra","gu","G"],["guerra","gu","G"],["amigo","g","G"],["lago","g","G"],["gorra","g","G"],["grande","g","G"],
+    ["llave","ll","Y"],["lluvia","ll","Y"],["yo","y","Y"],["ayer","y","Y"],["playa","y","Y"],["calle","ll","Y"],["pollo","ll","Y"],["desayuno","y","Y"],
+    ["niño","ñ","NY"],["España","ñ","NY"],["mañana","ñ","NY"],["señor","ñ","NY"],["montaña","ñ","NY"],["baño","ñ","NY"],["año","ñ","NY"],
+    ["perro","rr","RR"],["rojo","r","RR"],["ratón","r","RR"],["arroz","rr","RR"],["radio","r","RR"],["correr","rr","RR"],["tierra","rr","RR"],
+    ["chico","ch","CH"],["coche","ch","CH"],["leche","ch","CH"],["mucho","ch","CH"],["noche","ch","CH"],["chocolate","ch","CH"],
+    ["vaca","v","B"],["ventana","v","B"],["boca","b","B"],["bien","b","B"],["barco","b","B"],["verde","v","B"],["vaso","v","B"],["bueno","b","B"],
+    ["hola","h","H"],["hermano","h","H"],["hora","h","H"],["hotel","h","H"],["hoy","h","H"],["helado","h","H"]
+  ];
+  var CONF={J:["G","H","CH"],G:["J","H"],K:["TH","CH"],TH:["K"],Y:["NY","J"],NY:["Y"],RR:["G","K"],CH:["J","K"],B:["K","G"]};
+  var DESC={J:"the “ch” in loch",G:"the “g” in go",K:"the “k” in kite",TH:"the “th” in think",Y:"the “y” in yes",NY:"the “ny” in canyon",RR:"a rolled r",CH:"the “ch” in chip",B:"the “b” in bat",H:"nothing: it's silent"};
+  var EXTRA_DESC=["the “h” in hat","the “v” in van","the “j” in jam","the “s” in sun","the “g” in gem"];
+  var NOT_WRONG={J:["the “h” in hat"],TH:["the “s” in sun"],Y:["the “j” in jam"]};
+  function cardHTML(w,hi){
+    var i=w.indexOf(hi);
+    return "<span class='scard'>"+esc(w.slice(0,i))+"<mark>"+esc(hi)+"</mark>"+esc(w.slice(i+hi.length))+"</span>";
+  }
+  function inGroup(g){return POOL.filter(function(p){return p[2]===g;});}
+  function qSameSound(){
+    var g=rnd(["J","J","K","TH","TH","G","G","Y","NY","RR","CH","B"]),grp=inGroup(g),p=rnd(grp);
+    var others=grp.filter(function(x){return x[0]!==p[0];});
+    var diff=others.filter(function(x){return x[1]!==p[1];});
+    var a=rnd(diff.length&&Math.random()<.75?diff:others);
+    var bad=POOL.filter(function(x){return !sounds(x[0])[g];});
+    var conf=shuffle(bad.filter(function(x){return CONF[g].indexOf(x[2])>=0;}));
+    var w=uniq3(a[0],conf.slice(0,2).concat(shuffle(bad)).map(function(x){return x[0];}));
+    return {en:"Which word has the same sound as the bold letters?",frame:"",html:cardHTML(p[0],p[1]),answer:a[0],wrong:w,
+      review:p[0]+" ("+p[1]+") = the same sound as "+a[0]+": "+DESC[g],speak:p[0]};
+  }
+  function qSoundEN(){
+    var p=rnd(POOL),g=p[2],ans=DESC[g];
+    var c=Object.keys(DESC).filter(function(k){return k!==g;}).map(function(k){return DESC[k];}).concat(EXTRA_DESC);
+    c=c.filter(function(d){return (NOT_WRONG[g]||[]).indexOf(d)<0;});
+    if(g==="H")c.unshift("the “h” in hat");
+    if(g==="B")c.unshift("the “v” in van");
+    if(g==="J")c.unshift("the “g” in go");
+    if(g==="TH")c.unshift("the “k” in kite");
+    if(g==="Y")c.unshift("the “ny” in canyon");
+    return {en:"In most of Spain, the bold letters sound like…",frame:"",html:cardHTML(p[0],p[1]),answer:ans,wrong:uniq3(ans,[c[0]].concat(shuffle(c.slice(1)))),
+      review:p[0]+" ("+p[1]+") = "+ans,speak:p[0]};
+  }
+
+  /* ---------- Alphabet ---------- */
+  var LETTERS={A:"a",B:"be",C:"ce",D:"de",E:"e",F:"efe",G:"ge",H:"hache",I:"i",J:"jota",K:"ka",L:"ele",M:"eme",N:"ene","Ñ":"eñe",O:"o",P:"pe",Q:"cu",R:"erre",S:"ese",T:"te",U:"u",V:"uve",W:"uve doble",X:"equis",Y:"ye",Z:"zeta"};
+  var LCONF={A:["E","H","I"],B:["V","P","D"],C:["S","Z","K"],D:["T","B","E"],E:["I","A","Y"],F:["S","H","E"],G:["J","H","Y"],H:["J","G","A"],I:["E","Y","J"],J:["G","H","Y"],K:["Q","C","H"],L:["R","Y","N"],M:["N","Ñ","L"],N:["M","Ñ","L"],"Ñ":["N","M","Y"],O:["U","A","Q"],P:["B","T","V"],Q:["K","C","U"],R:["L","S","E"],S:["C","Z","X"],T:["D","P","Z"],U:["V","O","Q"],V:["B","W","U"],W:["V","U","B"],X:["S","Z","J"],Y:["I","J","L"],Z:["S","C","X"]};
+  var KEYS=Object.keys(LETTERS);
+  var HARD=["G","J","H","E","I","V","B","Y","Q","Z","C","Ñ","R","K","W","X","A"];
+  function nameOf(L){return L==="Y"?"ye (i griega)":LETTERS[L];}
+  function qLetterWhich(){
+    var L=rnd(HARD.concat(KEYS)),c=LCONF[L].concat(shuffle(KEYS.slice()));
+    return {en:"Which letter is this?",frame:"“"+nameOf(L)+"”",answer:L,wrong:uniq3(L,c),review:nameOf(L)+" = "+L,speak:LETTERS[L]};
+  }
+  function qLetterSay(){
+    var L=rnd(HARD.concat(KEYS)),ans=nameOf(L),c=LCONF[L].map(nameOf).concat(shuffle(KEYS.slice()).map(nameOf));
+    if(L==="J")c.unshift("ge");if(L==="G")c.unshift("jota");if(L==="H")c.unshift("ache");if(L==="E")c.unshift("i");if(L==="I")c.unshift("e");
+    return {en:"How do you say this letter in Spanish?",frame:L,answer:ans,wrong:uniq3(ans,c),review:L+" = "+ans,speak:LETTERS[L]};
+  }
+  var ACC={"á":"a","é":"e","í":"i","ó":"o","ú":"u"};
+  /* letter names for a word: José -> jota · o · ese · e con tilde */
+  function spellOut(w){
+    var out=[];
+    for(var i=0;i<w.length;i++){
+      var ch=w.charAt(i),lo=ch.toLowerCase();
+      if(ACC[lo])out.push(ACC[lo]+" con tilde");
+      else if(lo==="ü")out.push("u con diéresis");
+      else if(lo===" ")continue;
+      else out.push(LETTERS[lo.toUpperCase()]);
+    }
+    return out;
+  }
+  var SWAPS=[["j","g"],["g","j"],["h",""],["v","b"],["b","v"],["z","s"],["s","z"],["c","z"],["z","c"],["c","k"],["ll","y"],["y","ll"],["ñ","n"],["á","a"],["é","e"],["í","i"],["ó","o"],["ú","u"],["i","e"],["e","i"],["qu","k"],["rr","r"],["r","rr"],["a","á"],["o","ó"]];
+  function variants(word){
+    var res={},lw=word.toLowerCase();
+    SWAPS.forEach(function(sw){
+      var from=sw[0],to=sw[1],idx=lw.indexOf(from);
+      while(idx>=0){
+        var rep=to;
+        var v=word.slice(0,idx)+rep+word.slice(idx+from.length);
+        if(idx===0&&word.charAt(0)!==word.charAt(0).toLowerCase())v=v.charAt(0).toUpperCase()+v.slice(1);
+        if(v!==word&&v.length>1)res[v]=1;
+        idx=lw.indexOf(from,idx+1);
+      }
+    });
+    return Object.keys(res);
+  }
+  var NAMES=["José","Javier","Jiménez","Gómez","Begoña","Sevilla","Zaragoza","Valencia","Gijón","Jaén","Lucía","Sofía","Hugo","Guillermo","Yolanda","Álvaro","Ibiza","Cádiz","Bilbao","Vigo","Herrera","Núñez","Niamh","Aoife","Seán","Ciarán","Cork","Vázquez","Inés","Raúl","Gerardo","Jorge","Rocío","Higuera","Villa"];
+  function qSpellName(){
+    var n=rnd(NAMES),sp=spellOut(n);
+    return {en:"¿Cómo se escribe? Which name is spelled out?",frame:sp.join(" · "),answer:n,wrong:uniq3(n,shuffle(variants(n))),review:sp.join(", ")+" = "+n,speak:sp.join(", ")};
+  }
+
+  /* ---------- Spelling bank: correct, English, wrong spellings ---------- */
+  var SPELL=[
+    ["cabeza","head",["cabesa","caveza","kabeza","cabéza"]],["zapato","shoe",["sapato","zapatto","capato","zapáto"]],
+    ["jamón","ham",["jamon","hamón","gamón","jámon"]],["gente","people",["jente","hente","guente"]],
+    ["guitarra","guitar",["gitarra","guitara","güitarra","jitarra"]],["hermano","brother",["ermano","hermanno","jermano"]],
+    ["hola","hello",["ola","jola","holla"]],["huevo","egg",["uevo","huebo","güevo"]],
+    ["llave","key",["yave","lave","llabe"]],["lluvia","rain",["yuvia","lluvía","lubia"]],
+    ["playa","beach",["plaia","plalla","plaja"]],["niño","child",["ninio","nino","nyño"]],
+    ["España","Spain",["Espania","Espana","españa","Espanya"]],["mañana","tomorrow",["manyana","mañanna","mañána","manana"]],
+    ["perro","dog",["pero","perrro","pérro"]],["queso","cheese",["keso","cueso","qeso"]],
+    ["química","chemistry",["kímica","quimica","químika","cuímica"]],["cine","cinema",["sine","zine","cíne","kine"]],
+    ["ciudad","city",["siudad","ziudad","ciudád","ciudat"]],["cereza","cherry",["sereza","zereza","ceresa","cerésa"]],
+    ["zumo","juice",["sumo","cumo","zúmo"]],["vaca","cow",["baca","vacca","vaka"]],
+    ["bien","well",["vien","bíen","bienn"]],["vivir","to live",["bibir","vibir","bivir","vivír"]],
+    ["chocolate","chocolate",["chocolatte","xocolate","shocolate","chócolate"]],["coche","car",["coshe","cotche","cóche"]],
+    ["leche","milk",["letche","leshe","léche"]],["joven","young",["jóven","hoven","goven","joben"]],
+    ["jóvenes","young people",["jovenes","jovénes","hóvenes","jóbenes"]],["canción","song",["cancion","canzión","cánción","cansión"]],
+    ["canciones","songs",["canciónes","cancíones","canziones","cansiones"]],["inglés","English",["ingles","Inglés","ingléz","íngles"]],
+    ["miércoles","Wednesday",["miercoles","Miércoles","miércolez","miérkoles"]],["lápiz","pencil",["lapiz","lápis","lapíz"]],
+    ["árbol","tree",["arbol","arból","hárbol","árvol"]],["música","music",["musica","músika","musíca","múzica"]],
+    ["café","coffee",["cafe","cáfe","kafé","caffé"]],["teléfono","phone",["telefono","telephono","teléphono","telefóno"]],
+    ["fútbol","football",["futbol","fúbol","fúttbol","futból"]],["girasol","sunflower",["jirasol","guirasol","hirasol"]],
+    ["pingüino","penguin",["pinguino","pingüíno","pinwino"]],["guerra","war",["gerra","güerra","jerra","guera"]],
+    ["arroz","rice",["aroz","arros","árroz"]],["calle","street",["caye","cale","callé"]],
+    ["desayuno","breakfast",["desalluno","desayúno","dezayuno","desaiuno"]],["zanahoria","carrot",["sanahoria","zanaoria","zanahória","canahoria"]],
+    ["hamburguesa","burger",["amburguesa","hamburgesa","hamburgüesa","jamburguesa"]],["equipo","team",["ekipo","ecuipo","equípo"]],
+    ["examen","exam",["exámen","eksamen","exsamen","examén"]],["exámenes","exams",["examenes","exámen","exsámenes","examénes"]],
+    ["helado","ice cream",["elado","jelado","helàdo","heládo"]],["jirafa","giraffe",["girafa","jiraffa","hirafa"]]
+  ];
+  function qSpell(){
+    var s=rnd(SPELL);
+    return {en:"Which is spelled correctly?",frame:s[1],answer:s[0],wrong:uniq3(s[0],shuffle(s[2].slice())),review:s[1]+" = "+s[0],speak:s[0]};
+  }
+  function qSpellWord(){
+    var s=rnd(SPELL),sp=spellOut(s[0]);
+    var w=s[2].filter(function(x){return x.toLowerCase()!==s[0].toLowerCase()&&spellOut(x).join()!==sp.join();});
+    return {en:"Which word is spelled out? ("+s[1]+")",frame:sp.join(" · "),answer:s[0],wrong:uniq3(s[0],shuffle(w).concat(shuffle(variants(s[0])))),review:sp.join(", ")+" = "+s[0],speak:sp.join(", ")};
+  }
+  /* tú / tu, sí / si, qué / que … */
+  var MINI=[
+    ["Yes, a little.","¿Hablas español? — ___, un poco.","Sí",["Si","Se","Sé"]],
+    ["If it rains, I stay at home.","___ llueve, me quedo en casa.","Si",["Sí","Se","Sé"]],
+    ["You are my best friend.","___ eres mi mejor amigo.","Tú",["Tu","Te","Ti"]],
+    ["Your brother is tall.","___ hermano es alto.","Tu",["Tú","Te","Ti"]],
+    ["He lives in Cork.","___ vive en Cork.","Él",["El","Lo","Le"]],
+    ["The bus is late.","___ autobús llega tarde.","El",["Él","La","Lo"]],
+    ["My house is small.","___ casa es pequeña.","Mi",["Mí","Me","Mis"]],
+    ["Is it for me?","¿Es para ___?","mí",["mi","me","yo"]],
+    ["What's your name?","¿___ te llamas?","Cómo",["Como","Qué","Cuál"]],
+    ["I eat at two.","___ a las dos.","Como",["Cómo","Coma","Comó"]],
+    ["Where do you live?","¿___ vives?","Dónde",["Donde","Adónde","Dondé"]],
+    ["The town where I live is small.","El pueblo ___ vivo es pequeño.","donde",["dónde","que","cuando"]],
+    ["What time is it?","¿___ hora es?","Qué",["Que","Cuál","Cuánta"]],
+    ["I think that it's true.","Creo ___ es verdad.","que",["qué","quien","cuál"]],
+    ["When is your birthday?","¿___ es tu cumpleaños?","Cuándo",["Cuando","Cuánto","Cúando"]],
+    ["Why are you laughing?","¿___ te ríes?","Por qué",["Porque","Porqué","Por que"]],
+    ["Because I'm happy.","___ estoy contento.","Porque",["Por qué","Porqué","Por que"]],
+    ["How many brothers and sisters do you have?","¿___ hermanos tienes?","Cuántos",["Cuantos","Cuántas","Cuánto"]],
+    ["My dad is from Madrid.","Mi ___ es de Madrid.","papá",["papa","pápa","papà"]],
+    ["Where is the station?","¿Dónde ___ la estación?","está",["esta","ésta","es"]]
+  ];
+  function qMini(){
+    var m=rnd(MINI);
+    return {en:m[0],frame:m[1],answer:m[2],wrong:uniq3(m[2],shuffle(m[3].slice())),review:m[0]+" = "+m[1].replace("___",m[2]),speak:m[1].replace("___",m[2])};
+  }
+  /* Which is written correctly? accents, capitals, ¿ ¡ */
+  var CORRECT=[
+    ["Soy irlandesa y hablo inglés.",["Soy Irlandesa y hablo Inglés.","Soy irlandesa y hablo ingles.","Soy irlandesa y hablo Inglés."]],
+    ["Mi cumpleaños es el tres de mayo.",["Mi cumpleaños es el tres de Mayo.","Mi cumpleanos es el tres de mayo.","Mi cumpleaños és el tres de mayo."]],
+    ["¡Qué bien!",["Qué bien!","¡Que bien!","!Qué bien¡"]],
+    ["¿Dónde está la estación?",["Dónde está la estación?","¿Donde esta la estación?","¿Dónde está la estacion?"]],
+    ["Vivo en España, en Sevilla.",["Vivo en españa, en Sevilla.","Vivo en Espana, en Sevilla.","Vivo en España, en sevilla."]],
+    ["El lunes tengo clase de música.",["El Lunes tengo clase de música.","El lunes tengo clase de musica.","El lunes tengo clase de Música."]],
+    ["Tengo dos exámenes el miércoles.",["Tengo dos examenes el miércoles.","Tengo dos exámenes el Miércoles.","Tengo dos exámenes el miercoles."]],
+    ["Me llamo Begoña y soy de Bilbao.",["Me llamo Begona y soy de Bilbao.","me llamo Begoña y soy de Bilbao.","Me llamo Begoña y soy de bilbao."]],
+    ["Mis amigos son jóvenes.",["Mis amigos son jovenes.","Mis amigos son jóvenés.","Mis amigos son hóvenes."]],
+    ["Hay muchas canciones en inglés.",["Hay muchas canciónes en inglés.","Hay muchas canciones en Inglés.","Hay muchas canciones en ingles."]],
+    ["¿Cuántos años tienes?",["¿Cuantos años tienes?","Cuántos años tienes?","¿Cuántos anos tienes?"]],
+    ["Mi hermano es muy joven.",["Mi hermano es muy jóven.","Mi hermano es muy hoven.","Mi Hermano es muy joven."]],
+    ["En julio voy a Francia con mi familia.",["En Julio voy a Francia con mi familia.","En julio voy a francia con mi familia.","En julio voy a Fráncia con mi familia."]],
+    ["Mañana tengo un examen de español.",["Mañana tengo un examen de Español.","Manana tengo un examen de español.","Mañana tengo un exámen de español."]]
+  ];
+  function qCorrect(){
+    var c=rnd(CORRECT);
+    return {en:"Which one is written correctly?",frame:"",answer:c[0],wrong:uniq3(c[0],shuffle(c[1].slice())),review:"Correct: "+c[0]+" = accents, capitals and ¿ ¡ all right",speak:c[0],long:true};
+  }
+
+  /* ---------- Listening ---------- */
+  function hear(q){q.listen=true;q.en="🔊 "+q.en;q.frame="";q.html="";return q;}
+  function lName(){var q=qSpellName();q.en="Listen: which name is spelled out?";return hear(q);}
+  function lWord(){var q=qSpellWord();q.en="Listen: which word is spelled out?";return hear(q);}
+  function lLetter(){var L=rnd(HARD),q={en:"Listen: which letter do you hear?",answer:L,wrong:uniq3(L,LCONF[L].concat(shuffle(KEYS.slice()))),review:nameOf(L)+" = "+L,speak:LETTERS[L]};return hear(q);}
+  var PAIRS=[[["pero","but"],["perro","dog"]],[["caro","expensive"],["carro","cart"]],[["casa","house"],["caza","hunting"]],[["papa","potato"],["papá","dad"]],[["esta","this"],["está","is"]],[["hablo","I speak"],["habló","he spoke"]],[["polo","pole"],["pollo","chicken"]],[["pelo","hair"],["pero","but"]]];
+  function lab(x){return x[0]+" ("+x[1]+")";}
+  function lPair(){
+    var p=rnd(PAIRS),i=Math.random()<.5?0:1,a=p[i],b=p[1-i];
+    var others=shuffle(PAIRS.filter(function(x){return x!==p;})).map(function(x){return x[Math.random()<.5?0:1];}).filter(function(x){return x[0]!==a[0]&&x[0]!==b[0];});
+    return hear({en:"Listen: which word do you hear?",answer:lab(a),wrong:uniq3(lab(a),[lab(b)].concat(others.map(lab))),review:"🔊 "+a[0]+" ("+a[1]+"), not "+b[0]+" ("+b[1]+")",speak:a[0]});
+  }
+
+  var MAKERS={
+    sound:[qSameSound,qSameSound,qSameSound,qSoundEN,qSoundEN],
+    abc:[qLetterWhich,qLetterSay,qSpellName,qSpellName,qSpellWord],
+    write:[qSpell,qSpell,qMini,qMini,qCorrect],
+    listen:[lName,lName,lWord,lLetter,lPair,lPair],
+    mixed:[qSameSound,qSoundEN,qLetterWhich,qLetterSay,qSpellName,qSpellWord,qSpell,qMini,qCorrect]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    if(!synth)return;
+    var v=synth.getVoices()||[];
+    voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;
+    var b=document.getElementById("listenMode");
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the letters, pick the name. Hear the word: pero or perro?";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t,slow){
+    if(!synth||!voice)return;
+    synth.cancel();var u=new SpeechSynthesisUtterance(t);u.voice=voice;u.lang=voice.lang;u.rate=slow?.7:.85;synth.speak(u);
+  }
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="listen")?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";$("bonus").textContent="";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;
+    $("en").textContent=q.en;
+    $("frame").className="frame"+(q.frame&&q.frame.indexOf(" · ")>0?" spell":"");
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"").replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak&&voice&&(q.listen||!q.frame||q.frame.indexOf("___")<0)){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent=q.listen?"🔊 Play again":"🔊 Hear it";
+      b.onclick=function(){speak(q.speak,q.listen);};sb.appendChild(b);
+    }
+    if(q.listen)setTimeout(function(){speak(q.speak);},150);
+    var box=$("choices");box.innerHTML="";box.className="choices"+(q.long?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sound"&&streak%5===0){score+=3;$("bonus").textContent="+3 bonus! Five sounds matched in a row.";}
+      else $("bonus").textContent="";}
+    else{
+      streak=0;btn.classList.add("wrong");$("bonus").textContent="";
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:f});
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:(current.listen?1900:1500));
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=26?"¡Increíble! That's exam-ready.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        var parts=m.review.split(" = ");
+        html+="<li>"+esc(parts[0])+" = <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={sounds:sounds,spellOut:spellOut,variants:variants,MAKERS:MAKERS,POOL:POOL};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
