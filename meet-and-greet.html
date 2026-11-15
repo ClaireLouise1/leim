@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greetings, introductions &amp; classroom Spanish: play Meet &amp; Greet | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: greetings, introductions and classroom Spanish. Build a conversation line by line, sort tú or usted, pick buenos días, buenas tardes or buenas noches, and learn the phrases you need in class. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Meet &amp; Greet</h1>
+        <p>Greetings, introductions and classroom Spanish. Build a conversation line by line: say hello to a new classmate, meet your Spanish host family, survive a Spanish class. Then sort <b>tú or usted?</b>, pick the right greeting for the time of day, and learn the phrases that save you in class. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="meet"><div><b>Meet &amp; Greet</b><span>Build a conversation line by line: a new classmate 😊, your host family 👔 or a Spanish class 📚. +3 for every finished chat</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="register"><div><b>Tú or usted?</b><span>Friendly or polite? Morning, afternoon or night? Pick the reply, Encantado or Encantada</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="class"><div><b>Classroom Spanish</b><span>What do you say when you don't understand? What does the teacher want? Classroom things</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: meet &amp; greet 🔊</b><span id="listenNote">Hear short conversations and pick what they said</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.2, 1.9, 1.12, 1.15, 2.3 (2017 spec, exams 2027–2028) · 1.1, 1.7, 1.8, 2.3 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="chat" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Greetings, introductions &amp; classroom Spanish</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>To a friend</th><th>To an adult you don't know</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>¿Cómo <b>estás</b>?</td><td>¿Cómo <b>está</b> usted?</td><td>How are you?</td></tr>
+            <tr><td>¿Cómo <b>te llamas</b>?</td><td>¿Cómo <b>se llama</b> usted?</td><td>What's your name?</td></tr>
+            <tr><td>¿De dónde <b>eres</b>?</td><td>¿De dónde <b>es</b> usted?</td><td>Where are you from?</td></tr>
+          </tbody></table></div>
+        <p>Look at the verbs in the second column. Have you seen those forms before? Who do they usually mean? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Spanish has two ways to say "you" to one person. <b>Tú</b> is friendly: friends, family, people your age, children, pets. <b>Usted</b> is polite: adults you don't know, older people, officials, formal emails. <b>Usted</b> uses the <b>él / ella</b> form of the verb (<em>está, se llama, es, tiene, puede</em>), because it began as a title, like "Your Honour". Write it <b>Ud.</b> for short. Not sure? Use <b>usted</b> with adults: it's never rude.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Hello and goodbye</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th><th>When?</th></tr></thead>
+          <tbody>
+            <tr><td><b>Buenos días</b></td><td>Good morning</td><td>until lunch (about 2 pm in Spain)</td></tr>
+            <tr><td><b>Buenas tardes</b></td><td>Good afternoon / evening</td><td>after lunch until it gets dark</td></tr>
+            <tr><td><b>Buenas noches</b></td><td>Good evening / good night</td><td>at night: hello <em>and</em> goodbye</td></tr>
+            <tr><td>Hola · ¿Qué tal? · Buenas</td><td>Hi · How are things? · Hiya</td><td>any time, informal</td></tr>
+            <tr><td>Adiós · Hasta luego · Hasta mañana · Hasta pronto · Nos vemos</td><td>Bye · See you later · See you tomorrow · See you soon · See you</td><td>saying goodbye</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Watch out:</b> <em>buen<b>os</b> días</em> (día is masculine) but <em>buen<b>as</b> tardes, buen<b>as</b> noches</em> (tarde and noche are feminine). Always plural: not <em>buen día</em> in Spain.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">How are you? Who are you?</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>¿Qué tal? · ¿Cómo estás?</td><td>Fenomenal 😀 · Muy bien, gracias 🙂 · Regular 😐 · Fatal 😩 · Estoy cansado/a 😴 · ¿Y tú?</td></tr>
+            <tr><td>¿Cómo te llamas?</td><td><b>Me llamo</b> Ciara. · <b>Soy</b> Ciara.</td></tr>
+            <tr><td>¿Cuántos años tienes?</td><td><b>Tengo</b> trece años. (never <em>soy</em> trece!)</td></tr>
+            <tr><td>¿De dónde eres?</td><td><b>Soy de</b> Cork. <b>Soy</b> irlandés / irlandesa.</td></tr>
+            <tr><td>¿Dónde vives?</td><td><b>Vivo en</b> Douglas, cerca de Cork.</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Introducing people</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>To…</th><th>Say…</th></tr></thead>
+          <tbody>
+            <tr><td>introduce someone</td><td><b>Te presento a</b> mi amigo Pablo. (to a friend) · <b>Le presento a</b> mi madre. (polite) · <b>Este es</b> mi hermano · <b>Esta es</b> mi amiga · <b>Estos son</b> mis padres</td></tr>
+            <tr><td>reply</td><td><b>Mucho gusto.</b> (Nice to meet you: anyone says it) · <b>Encantado</b> (if you're a boy) · <b>Encantada</b> (if you're a girl) · <b>Igualmente.</b> (Likewise)</td></tr>
+            <tr><td>welcome someone</td><td>¡Bienvenido! (a boy) · ¡Bienvenida! (a girl) · ¡Bienvenidos! (a group) · ¡Bienvenidas! (all girls)</td></tr>
+            <tr><td>be polite</td><td>Por favor · Gracias / Muchas gracias · De nada · Lo siento (I'm sorry) · No pasa nada (It's OK) · Perdona (to a friend) / Perdone (polite): Excuse me</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Classroom Spanish</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>You say</th><th>The teacher says (to the class)</th></tr></thead>
+          <tbody>
+            <tr><td>No entiendo. (I don't understand)</td><td>Abrid / Cerrad los libros. (Open / Close your books)</td></tr>
+            <tr><td>¿Puede repetir, por favor? (Can you repeat?)</td><td>Escuchad. · Mirad la pizarra. (Listen · Look at the board)</td></tr>
+            <tr><td>¿Puede hablar más despacio? (more slowly)</td><td>Sentaos. · Levantaos. (Sit down · Stand up)</td></tr>
+            <tr><td>¿Cómo se dice "pen" en español?</td><td>Repetid. · Leed el texto. (Repeat · Read the text)</td></tr>
+            <tr><td>¿Qué significa "pizarra"?</td><td>Trabajad en parejas. (Work in pairs)</td></tr>
+            <tr><td>¿Cómo se escribe? (How do you spell it?)</td><td>Sacad los cuadernos. (Take out your copybooks)</td></tr>
+            <tr><td>¿Puedo ir al baño? (Can I go to the toilet?)</td><td>Escribid la fecha. (Write the date)</td></tr>
+            <tr><td>Lo siento, no lo sé. · Tengo una pregunta. · He olvidado mis deberes.</td><td>Levantad la mano. · Silencio, por favor. (Put up your hand · Quiet, please)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">The teacher's instructions end in <b>-d</b> (<em>abrid, escuchad, mirad</em>) because they're for <b>vosotros</b>: the whole class. To one student: <em>abre, escucha, mira</em>.</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> in Spain, when you're introduced, friends and family usually greet with <b>dos besos</b> (two kisses, one on each cheek). Formal meetings: a handshake. Adults will often say <b>tú</b> to you because you're young, but you say <b>usted</b> to them until they say <em>¡Tutéame!</em> (Call me tú!). In many Spanish secondary schools, students say <b>tú</b> to their teachers and call them by first name: in the exam, <b>usted</b> is always safe. <b>Irish link:</b> Irish and English don't have a polite "you"; Irish has <em>tú</em> (one person) and <em>sibh</em> (more than one), just like Spanish <em>tú</em> and <em>vosotros</em>. <em>Dia duit · Dia is Muire duit · Conas atá tú?</em> = <em>Hola · Hola · ¿Cómo estás?</em></div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b>, short meetings and introductions are a favourite opener: catch the <b>name</b> (it's often spelled out), the <b>age</b> (<em>tengo trece</em> or <em>tengo treinta</em>?), where they're <b>from</b> and how they <b>feel</b>. <em>Usted</em>, <em>señor</em>, <em>señora</em> and <em>buenos días</em> tell you it's a formal situation, like a hotel or a shop. In <b>Writing</b>, start a note or email to a friend with <em>¡Hola, Pablo! ¿Qué tal?</em> and introduce yourself in three lines: <em>Me llamo Ciara, tengo catorce años y soy de Cork. Vivo con mi familia en Douglas. Soy simpática y hablo inglés e irlandés.</em> Finish with <em>¡Hasta pronto!</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/greetings-and-classroom-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/4zsFW" target="_blank" rel="noopener">Greetings &amp; Classroom Spanish Teacher Pack (€5)</a>: Welcome Party mingle, Greetings Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+  function fixQ(x){return {who:x[4]||"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};}
+  /* 4 forms of an adjective: [m sg, f sg, m pl, f pl] */
+  function forms(stem){return [stem+"o",stem+"a",stem+"os",stem+"as"];}
+  function agree(stem,i){var f=forms(stem);return {answer:f[i],wrong:f.filter(function(x,j){return j!==i;})};}
+
+  /* ---------- Data ---------- */
+  var ME_F=["Aoife","Ciara","Niamh","Sophie","Róisín"],ME_M=["Cian","Seán","Darragh","Jack","Oisín"];
+  var ES_F=["Lucía","Marta","Elena","Sara","Carmen"],ES_M=["Pablo","Diego","Javier","Hugo","Álvaro"];
+  var SURN=["García","López","Martín","Ruiz","Sánchez","Moreno"];
+  var CITIES=[["Sevilla","Seville"],["Madrid","Madrid"],["Valencia","Valencia"],["Bilbao","Bilbao"],["Málaga","Málaga"],["Salamanca","Salamanca"]];
+  var TOD=[["días","Good morning","🌅","Buenos"],["tardes","Good afternoon","☀️","Buenas"],["noches","Good evening","🌙","Buenas"]];
+  var PAGES=[["doce","12"],["quince","15"],["veinte","20"],["treinta","30"],["cuarenta","40"]];
+  var WORDS=[["pencil","el lápiz"],["rubber","la goma"],["copybook","el cuaderno"],["ruler","la regla"],["schoolbag","la mochila"],["scissors","las tijeras"]];
+  var MEANS=[["la pizarra","the board"],["la tiza","chalk"],["el estuche","pencil case"],["la papelera","the bin"],["el sacapuntas","pencil sharpener"]];
+
+  /* ---------- Meet & Greet chats (line by line) ---------- */
+  var SCEN=[
+    {id:"new",icon:"😊",title:function(c){return "First day: meeting "+c.friend;},tag:"Informal · tú",slots:[
+      function(c){var r=Math.random(),l="¡Hola! Soy "+c.me+". ¿Cómo te llamas?",e="Hi! I'm "+c.me+". What's your name?";
+        if(r<.4)return {from:"me",who:"👋",frame:"¡Hola! Soy "+c.me+". ¿Cómo te ___?",en:e,answer:"llamas",wrong:["llamo","llamar","llamé"],line:l};
+        if(r<.7)return {from:"me",who:"👋",frame:"¡Hola! ___ "+c.me+". ¿Cómo te llamas?",en:e,answer:"Soy",wrong:["Estoy","Es","Eres"],line:l};
+        return {from:"me",who:"👋",frame:"¡___! Soy "+c.me+". ¿Cómo te llamas?",en:e,answer:"Hola",wrong:["Adiós","Hasta luego","De nada"],line:l};},
+      function(c){var r=Math.random();
+        if(r<.4)return {from:"them",frame:"Me ___ "+c.friend+". Mucho gusto.",en:"My name is "+c.friend+". Nice to meet you.",answer:"llamo",wrong:["llamas","llama","llamar"],line:"Me llamo "+c.friend+". Mucho gusto."};
+        if(r<.7)return {from:"them",frame:"Me llamo "+c.friend+". Mucho ___.",en:"My name is "+c.friend+". Nice to meet you.",answer:"gusto",wrong:["gusta","gustos","gustar"],line:"Me llamo "+c.friend+". Mucho gusto."};
+        var a=agree("Encantad",c.fF?1:0);
+        return {from:"them",frame:"Me llamo "+c.friend+". ¡___!",en:"My name is "+c.friend+". Pleased to meet you! ("+c.friend+" is a "+(c.fF?"girl":"boy")+")",answer:a.answer,wrong:a.wrong,line:"Me llamo "+c.friend+". ¡"+a.answer+"!"};},
+      function(c){var r=Math.random(),l="Igualmente. ¿Cómo estás?";
+        if(r<.5)return {from:"me",frame:"___. ¿Cómo estás?",en:"Likewise. How are you?",answer:"Igualmente",wrong:["Igualdad","Iguales","Igualar"],line:l};
+        return {from:"me",frame:"Igualmente. ¿Cómo ___?",en:"Likewise. How are you? (to a friend)",answer:"estás",wrong:["estoy","eres","está"],line:l};},
+      function(c){var r=Math.random(),l="Muy bien, gracias. ¿Y tú?";
+        if(r<.5)return {from:"them",who:"🙂",frame:"Muy bien, ___. ¿Y tú?",en:"Very well, thanks. And you?",answer:"gracias",wrong:["gracia","de nada","por favor"],line:l};
+        return {from:"them",who:"🙂",frame:"Muy bien, gracias. ¿Y ___?",en:"Very well, thanks. And you?",answer:"tú",wrong:["ti","te","tu"],line:l};},
+      function(c){var r=Math.random(),l="Bien. ¿De dónde eres?";
+        if(r<.5)return {from:"me",frame:"Bien. ¿De dónde ___?",en:"Fine. Where are you from?",answer:"eres",wrong:["estás","es","soy"],line:l};
+        return {from:"me",frame:"Bien. ¿De ___ eres?",en:"Fine. Where are you from?",answer:"dónde",wrong:["donde","qué","cuándo"],line:l};},
+      function(c){var r=Math.random(),ct=c.city,l="Soy de "+ct[0]+", en España. ¿Y tú?";
+        if(r<.5)return {from:"them",who:"🇪🇸",frame:"Soy ___ "+ct[0]+", en España. ¿Y tú?",en:"I'm from "+ct[1]+", in Spain. And you?",answer:"de",wrong:["en","a","por"],line:l};
+        return {from:"them",who:"🇪🇸",frame:"___ de "+ct[0]+", en España. ¿Y tú?",en:"I'm from "+ct[1]+", in Spain. And you?",answer:"Soy",wrong:["Estoy","Es","Eres"],line:l};},
+      function(c){var r=Math.random();
+        if(r<.5){var a={answer:c.mF?"irlandesa":"irlandés",wrong:c.mF?["irlandés","irlandeses","irlandesas"]:["irlandesa","irlandeses","irlandesas"]};
+          return {from:"me",who:"🇮🇪",frame:"Soy ___, de Cork. ¿Cuántos años tienes?",en:"I'm Irish, from Cork. How old are you? (you're a "+(c.mF?"girl":"boy")+")",answer:a.answer,wrong:a.wrong,line:"Soy "+a.answer+", de Cork. ¿Cuántos años tienes?"};}
+        return {from:"me",who:"🇮🇪",frame:"Soy de Cork. ¿Cuántos años ___?",en:"I'm from Cork. How old are you?",answer:"tienes",wrong:["eres","tiene","tengo"],line:"Soy de Cork. ¿Cuántos años tienes?"};},
+      function(c){var r=Math.random(),l="Tengo trece años. ¡Uy, la clase! ¡Hasta luego!";
+        if(r<.5)return {from:"them",who:"🔔",frame:"___ trece años. ¡Uy, la clase! ¡Hasta luego!",en:"I'm thirteen. Oops, class! See you later!",answer:"Tengo",wrong:["Soy","Estoy","Tiene"],line:l};
+        return {from:"them",who:"🔔",frame:"Tengo trece años. ¡Uy, la clase! ¡Hasta ___!",en:"I'm thirteen. Oops, class! See you later!",answer:"luego",wrong:["lejos","largo","lento"],line:l};}
+    ]},
+    {id:"host",icon:"👔",title:function(c){return "Meeting your host family: Señora "+c.sur;},tag:"Formal · usted",slots:[
+      function(c){var t=c.tod,r=Math.random(),l=t[3]+" "+t[0]+", señora "+c.sur+".",e=t[1]+", Mrs "+c.sur+".";
+        if(r<.5)return {from:"me",who:t[2],frame:"___ "+t[0]+", señora "+c.sur+".",en:e,answer:t[3],wrong:t[3]==="Buenos"?["Buenas","Bueno","Buen"]:["Buenos","Buena","Buen"],line:l};
+        var w={"días":["día","tardes","noches"],"tardes":["tarde","días","noche"],"noches":["noche","días","tarde"]}[t[0]];
+        return {from:"me",who:t[2],frame:t[3]+" ___, señora "+c.sur+".",en:e,answer:t[0],wrong:w,line:l};},
+      function(c){var r=Math.random(),ct=c.city;
+        if(r<.5){var a=agree("Bienvenid",c.mF?1:0);
+          return {from:"them",frame:"¡Hola, "+c.me+"! ¡___ a "+ct[0]+"!",en:"Hello, "+c.me+"! Welcome to "+ct[1]+"! (you're a "+(c.mF?"girl":"boy")+")",answer:a.answer,wrong:a.wrong,line:"¡Hola, "+c.me+"! ¡"+a.answer+" a "+ct[0]+"!"};}
+        var b=c.mF?"Bienvenida":"Bienvenido";
+        return {from:"them",frame:"¡Hola, "+c.me+"! ¡"+b+" ___ "+ct[0]+"!",en:"Hello, "+c.me+"! Welcome to "+ct[1]+"!",answer:"a",wrong:["en","de","por"],line:"¡Hola, "+c.me+"! ¡"+b+" a "+ct[0]+"!"};},
+      function(c){var r=Math.random(),l="Muchas gracias. ¿Cómo está usted?";
+        if(r<.4)return {from:"me",frame:"Muchas gracias. ¿Cómo ___ usted?",en:"Thank you very much. How are you? (polite)",answer:"está",wrong:["estás","estoy","es"],line:l};
+        if(r<.7)return {from:"me",frame:"Muchas gracias. ¿Cómo está ___?",en:"Thank you very much. How are you? (polite)",answer:"usted",wrong:["tú","ti","te"],line:l};
+        return {from:"me",frame:"___ gracias. ¿Cómo está usted?",en:"Thank you very much. How are you? (polite)",answer:"Muchas",wrong:["Muchos","Mucho","Mucha"],line:l};},
+      function(c){var r=Math.random(),h=c.hus;
+        if(r<.5)return {from:"them",who:"👨",frame:"Muy bien, gracias. Mira, te ___ a mi marido, "+h+".",en:"Very well, thanks. Look, this is my husband, "+h+".",answer:"presento",wrong:["presentas","presenta","presenté"],line:"Muy bien, gracias. Mira, te presento a mi marido, "+h+"."};
+        return {from:"them",who:"👨",frame:"Muy bien, gracias. Mira, ___ es mi marido, "+h+".",en:"Very well, thanks. Look, this is my husband, "+h+".",answer:"este",wrong:["esta","estos","estas"],line:"Muy bien, gracias. Mira, este es mi marido, "+h+"."};},
+      function(c){var r=Math.random();
+        if(r<.5)return {from:"me",who:"🤝",frame:"Mucho ___, señor "+c.sur+".",en:"Nice to meet you, Mr "+c.sur+".",answer:"gusto",wrong:["gusta","gustos","gustar"],line:"Mucho gusto, señor "+c.sur+"."};
+        var a=agree("Encantad",c.mF?1:0);
+        return {from:"me",who:"🤝",frame:"___ de conocerle, señor "+c.sur+".",en:"Pleased to meet you, Mr "+c.sur+". (you're a "+(c.mF?"girl":"boy")+")",answer:a.answer,wrong:a.wrong,line:a.answer+" de conocerle, señor "+c.sur+"."};},
+      function(c){var r=Math.random(),l="Igualmente. ¿Qué tal el viaje?";
+        if(r<.5)return {from:"them",who:"✈️",frame:"___. ¿Qué tal el viaje?",en:"Likewise. How was the journey?",answer:"Igualmente",wrong:["Igualdad","Iguales","Igualar"],line:l};
+        return {from:"them",who:"✈️",frame:"Igualmente. ¿Qué tal el ___?",en:"Likewise. How was the journey?",answer:"viaje",wrong:["viajo","viajar","viajé"],line:l};},
+      function(c){var r=Math.random(),cs=c.mF?"cansada":"cansado";
+        if(r<.5){var a=agree("cansad",c.mF?1:0);
+          return {from:"me",who:"😴",frame:"Muy bien, pero estoy un poco ___.",en:"Very good, but I'm a bit tired. (you're a "+(c.mF?"girl":"boy")+")",answer:a.answer,wrong:a.wrong,line:"Muy bien, pero estoy un poco "+a.answer+"."};}
+        return {from:"me",who:"😴",frame:"Muy bien, pero ___ un poco "+cs+".",en:"Very good, but I'm a bit tired.",answer:"estoy",wrong:["soy","está","estás"],line:"Muy bien, pero estoy un poco "+cs+"."};},
+      function(c){var r=Math.random(),l="¡Pobre! Pasa, pasa. Estás en tu casa.";
+        if(r<.5)return {from:"them",who:"🏠",frame:"¡Pobre! Pasa, pasa. Estás en tu ___.",en:"Poor thing! Come in, come in. Make yourself at home.",answer:"casa",wrong:["cosa","caso","cama"],line:l};
+        return {from:"them",who:"🏠",frame:"¡Pobre! Pasa, pasa. ___ en tu casa.",en:"Poor thing! Come in, come in. Make yourself at home.",answer:"Estás",wrong:["Eres","Estoy","Es"],line:l};}
+    ]},
+    {id:"class",icon:"📚",title:function(c){return "Spanish class with Profesora "+c.sur;},tag:"Classroom Spanish",slots:[
+      function(c){var r=Math.random();
+        if(r<.5)return {from:"them",who:"📖",frame:"Buenos días, chicos. ___ los libros, por favor.",en:"Good morning, everyone. Open your books, please.",answer:"Abrid",wrong:["Abro","Abrí","Abrió"],line:"Buenos días, chicos. Abrid los libros, por favor."};
+        return {from:"them",who:"🪑",frame:"Buenos días, chicos. ___, por favor.",en:"Good morning, everyone. Sit down, please.",answer:"Sentaos",wrong:["Sentamos","Sentí","Sentó"],line:"Buenos días, chicos. Sentaos, por favor."};},
+      function(c){var p=c.page;
+        return {from:"them",who:"📄",frame:"Página ___, ejercicio tres.",en:"Page "+p[1]+", exercise three.",answer:p[0],wrong:others(PAGES,p,3).map(function(x){return x[0];}),line:"Página "+p[0]+", ejercicio tres."};},
+      function(c){var r=Math.random();
+        if(r<.5)return {from:"me",who:"🤔",frame:"Perdone, profesora. No ___.",en:"Excuse me, Miss. I don't understand.",answer:"entiendo",wrong:["entiendes","entiende","entender"],line:"Perdone, profesora. No entiendo."};
+        return {from:"me",who:"🙉",frame:"Perdone, profesora. ¿Puede ___, por favor?",en:"Excuse me, Miss. Can you repeat that, please?",answer:"repetir",wrong:["repito","repite","repetí"],line:"Perdone, profesora. ¿Puede repetir, por favor?"};},
+      function(c){var r=Math.random(),p=c.page[0];
+        if(r<.5)return {from:"them",who:"👥",frame:"Claro. Página "+p+", ejercicio tres. Trabajad en ___.",en:"Of course. Page "+c.page[1]+", exercise three. Work in pairs.",answer:"parejas",wrong:["padres","peras","parques"],line:"Claro. Página "+p+", ejercicio tres. Trabajad en parejas."};
+        return {from:"them",who:"👀",frame:"Claro. Página "+p+". ___ la pizarra.",en:"Of course. Page "+c.page[1]+". Look at the board.",answer:"Mirad",wrong:["Miro","Miré","Miró"],line:"Claro. Página "+p+". Mirad la pizarra."};},
+      function(c){var w=c.word;
+        return {from:"me",who:"✏️",frame:"Profesora, ¿cómo se ___ \""+w[0]+"\" en español?",en:"Miss, how do you say \""+w[0]+"\" in Spanish?",answer:"dice",wrong:["dices","digo","dijo"],line:"Profesora, ¿cómo se dice \""+w[0]+"\" en español?"};},
+      function(c){var w=c.word;
+        return {from:"them",who:"💡",frame:"Se dice \"___\".",en:"You say \""+w[1]+"\". (= "+w[0]+")",answer:w[1],wrong:others(WORDS,w,3).map(function(x){return x[1];}),line:"Se dice \""+w[1]+"\"."};},
+      function(c){var m=c.mean;
+        return {from:"me",who:"📖",frame:"Gracias. ¿Y qué ___ \""+m[0]+"\"?",en:"Thanks. And what does \""+m[0]+"\" mean?",answer:"significa",wrong:["significo","significan","significó"],line:"Gracias. ¿Y qué significa \""+m[0]+"\"?"};},
+      function(c){var m=c.mean;
+        return {from:"them",who:"🙂",frame:"Significa \"___\". ¡Muy bien!",en:"It means \""+m[1]+"\". Very good!",answer:m[1],wrong:others(MEANS,m,3).map(function(x){return x[1];}),line:"Significa \""+m[1]+"\". ¡Muy bien!"};}
+    ]}
+  ];
+  var pc=null,lastScen=null;
+  function makeCtx(){var mF=Math.random()<.5,fF=Math.random()<.5;
+    return {me:rnd(mF?ME_F:ME_M),mF:mF,friend:rnd(fF?ES_F:ES_M),fF:fF,sur:rnd(SURN),hus:rnd(["Antonio","José","Luis","Manuel"]),city:rnd(CITIES),tod:rnd(TOD),page:rnd(PAGES),word:rnd(WORDS),mean:rnd(MEANS)};}
+  function newCard(){var s;do{s=rnd(SCEN);}while(s===lastScen&&SCEN.length>1);lastScen=s;
+    pc=makeCtx();pc.scen=s;pc.lines=[];pc.slot=0;pc.sent=false;}
+  function lineQ(s,c,i){var q=s.slots[i](c);q.review=q.line+" = "+q.en.replace(/ \((you're|[A-ZÁÉÍÓÚ][a-záéíóú]+ is) a (girl|boy)\)$/,"");q.who=q.who||"";return q;}
+  function qCard(){if(!pc||pc.sent)newCard();var q=lineQ(pc.scen,pc,pc.slot);q.card=1;return q;}
+  function qLine(){var s=rnd(SCEN),c=makeCtx();return lineQ(s,c,Math.floor(Math.random()*s.slots.length));}
+
+  /* ---------- Tú or usted? ---------- */
+  var TU=["😊 Tú","👔 Usted"],TUS=["friendly","polite"];
+  var REG=[
+    ["¿Cómo estás?",0,"estás = tú"],["¿Cómo está usted?",1,"está usted"],["¿Cómo te llamas?",0,"te llamas = tú"],["¿Cómo se llama usted?",1,"se llama usted"],
+    ["¿De dónde eres?",0,"eres = tú"],["¿De dónde es usted?",1,"es usted"],["¿Cuántos años tienes?",0,"tienes = tú"],["Perdone, ¿tiene hora?",1,"perdone + tiene"],
+    ["Oye, ¿tienes un boli?",0,"oye + tienes"],["¿Puede repetir, por favor?",1,"puede = usted"],["¿Puedes repetir?",0,"puedes = tú"],["Encantada de conocerte.",0,"conocerte = tú"],
+    ["Encantada de conocerle.",1,"conocerle = usted"],["Muy bien, ¿y tú?",0,"¿y tú?"],["Muy bien, ¿y usted?",1,"¿y usted?"],["¿Habla usted inglés?",1,"habla usted"],
+    ["¿Hablas inglés?",0,"hablas = tú"],["Perdona, ¿dónde está el baño?",0,"perdona = tú"],["Perdone, ¿dónde está la estación?",1,"perdone = usted"],["¿Vives cerca de aquí?",0,"vives = tú"],
+    ["¿Vive usted cerca de aquí?",1,"vive usted"],["Te presento a mi hermano.",0,"te presento = tú"],["Le presento a mi hermano.",1,"le presento = usted"]
+  ];
+  function qReg(spoken){var s=rnd(REG);
+    return {fixed:1,tm:1,smalls:TUS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"💬",en:spoken?"Listen. Tú (friendly) or usted (polite)?":"Tú (friendly) or usted (polite)?",frame:spoken?"":s[0],answer:TU[s[1]],wrong:TU.filter(function(x,i){return i!==s[1];}),opts:TU,review:s[0]+" = "+noEmoji(TU[s[1]])+" ("+s[2]+")"};}
+  function gReg(){return qReg(false);}
+  var WHO=[["👫","your best friend",0],["👴","an elderly man in the street",1],["🏫","the head teacher of your exchange school",1],["🧒","your little cousin",0],["🩺","a doctor you've never met",1],
+    ["🐶","your friend's dog",0],["🧑‍🎓","a new classmate your age",0],["👮","a police officer",1],["🏨","a hotel receptionist, in a formal email",1],["👵","your host family's grandmother",1],["🧑","your Spanish penpal",0],["👩‍💼","a shop manager you're writing to about a job",1]];
+  function qWho(){var w=rnd(WHO);
+    return {fixed:1,tm:1,smalls:TUS,who:w[0],en:"You're talking to "+w[1]+".",frame:"Tú or usted?",answer:TU[w[2]],wrong:TU.filter(function(x,i){return i!==w[2];}),opts:TU,review:"To "+w[1]+": "+noEmoji(TU[w[2]])};}
+  var TG=["🌅 Buenos días","☀️ Buenas tardes","🌙 Buenas noches"],TGS=["morning","afternoon","night"];
+  var TIMES=[["08:00","on the way to school",0],["09:30","meeting the head teacher",0],["11:00","going into a shop",0],["10:15","arriving at the airport",0],
+    ["16:00","after lunch",1],["17:30","arriving at your football club",1],["18:00","phoning a hotel",1],["15:30","meeting your host family after school",1],
+    ["22:30","before going to bed",2],["23:00","leaving a party",2],["22:00","arriving at a late dinner",2]];
+  function qTod(){var t=rnd(TIMES);
+    return {fixed:1,tm:1,smalls:TGS,who:"🕘",en:t[1],frame:t[0],answer:TG[t[2]],wrong:TG.filter(function(x,i){return i!==t[2];}),opts:TG,review:t[0]+", "+t[1]+": "+noEmoji(TG[t[2]])};}
+  var AGR=[
+    ["Pablo meets Ana. He says: \"¡___!\"","Encantad",0,"Pleased to meet you!"],["Sara meets Diego. She says: \"¡___!\"","Encantad",1,"Pleased to meet you!"],
+    ["Aoife arrives in Spain: \"¡___, Aoife!\"","Bienvenid",1,"Welcome, Aoife!"],["Cian arrives in Spain: \"¡___, Cian!\"","Bienvenid",0,"Welcome, Cian!"],
+    ["A group of boys and girls arrives: \"¡___, chicos!\"","Bienvenid",2,"Welcome, everyone!"],["Three girls arrive: \"¡___, chicas!\"","Bienvenid",3,"Welcome, girls!"],
+    ["Lucía says: \"Estoy muy ___.\" (tired)","cansad",1,"I'm very tired."],["Javier says: \"Estoy muy ___.\" (tired)","cansad",0,"I'm very tired."],
+    ["Niamh says: \"Soy ___.\" (Irish)","IRL",1,"I'm Irish."],["Darragh says: \"Soy ___.\" (Irish)","IRL",0,"I'm Irish."]
+  ];
+  function qAgr(){var a=rnd(AGR),f=a[1]==="IRL"?["irlandés","irlandesa","irlandeses","irlandesas"]:forms(a[1]),ans=f[a[2]];
+    var line=a[0].replace(/^.*?: "/,"").replace(/" ?(\(.*\))?$/,"").replace("___",ans);
+    return {who:"",en:a[3],frame:a[0],answer:ans,wrong:f.filter(function(x){return x!==ans;}),review:line+" = "+a[3]};}
+  var REPLY=[
+    ["¿Qué tal?","Muy bien, gracias.",["De nada.","Me llamo Ana.","Hasta luego."]],
+    ["Mucho gusto.","Igualmente.",["De nada.","Lo siento.","No entiendo."]],
+    ["Muchas gracias.","De nada.",["Igualmente.","Mucho gusto.","Hasta mañana."]],
+    ["¿Cómo te llamas?","Me llamo Diego.",["Tengo trece años.","Soy de Madrid.","Muy bien, gracias."]],
+    ["¿De dónde eres?","Soy de Galway.",["Me llamo Cian.","Tengo catorce años.","De nada."]],
+    ["¿Cuántos años tienes?","Tengo catorce años.",["Soy de Cork.","Estoy bien.","Me llamo Sara."]],
+    ["Te presento a mi hermana, Laura.","¡Hola, Laura! Mucho gusto.",["De nada, Laura.","Lo siento, Laura.","Adiós, Laura."]],
+    ["Lo siento, llego tarde.","No pasa nada.",["Igualmente.","Mucho gusto.","De nada."]],
+    ["¡Hasta mañana!","¡Adiós! Hasta mañana.",["¡Buenos días!","Mucho gusto.","Muy bien, gracias."]],
+    ["¿Cómo está usted?","Muy bien, gracias. ¿Y usted?",["Me llamo Ana.","De nada.","Tengo quince años."]],
+    ["¿Hablas español?","Sí, un poco.",["Sí, soy irlandés.","Tengo doce años.","Hasta luego."]],
+    ["¿Dónde vives?","Vivo en Douglas, cerca de Cork.",["Soy irlandesa.","Tengo trece años.","Me llamo Ciara."]]
+  ];
+  function qReply(){var x=rnd(REPLY);return {who:"💬",en:"What's the best reply?",frame:x[0],answer:x[1],wrong:x[2].slice(),review:x[0]+" → "+x[1]};}
+  var GREET=[["Hola","Hello"],["Adiós","Goodbye"],["Hasta luego","See you later"],["Hasta mañana","See you tomorrow"],["Hasta pronto","See you soon"],["Buenos días","Good morning"],["Buenas tardes","Good afternoon"],["Buenas noches","Good night"],
+    ["¿Qué tal?","How are things?"],["Mucho gusto","Nice to meet you"],["Igualmente","Likewise"],["Bienvenido","Welcome"],["Lo siento","I'm sorry"],["De nada","You're welcome"],["Por favor","Please"],["Perdone","Excuse me (polite)"],
+    ["Te presento a…","This is… (introducing someone)"],["¿Cómo estás?","How are you?"],["Fatal","Awful"],["Regular","So-so"],["Fenomenal","Great"],["No pasa nada","It's OK / No problem"]];
+  function qGreet(){var g=rnd(GREET),w=others(GREET,g,3);
+    if(Math.random()<.5)return {who:"👋",en:"What does it mean?",frame:g[0],answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};
+    return {who:"👋",en:"How do you say it in Spanish? ("+g[1]+")",frame:"___",answer:g[0],wrong:w.map(function(x){return x[0];}),review:g[1]+" = "+g[0]};}
+  var PRES=[["___ es mi amigo, Cian.","This is my friend, Cian.",0],["___ es mi amiga, Sara.","This is my friend, Sara.",1],["___ son mis padres.","These are my parents.",2],["___ son mis hermanas, Ana y Lola.","These are my sisters, Ana and Lola.",3],
+    ["___ es mi profesora de español.","This is my Spanish teacher (a woman).",1],["___ es mi hermano pequeño.","This is my little brother.",0],["___ son mis abuelos.","These are my grandparents.",2],["___ son mis amigas del instituto.","These are my (girl) friends from school.",3]];
+  var ESTE=["Este","Esta","Estos","Estas"];
+  function qPres(){var p=rnd(PRES);return {who:"👉",en:p[1],frame:p[0],answer:ESTE[p[2]],wrong:ESTE.filter(function(x,i){return i!==p[2];}),review:p[0].replace("___",ESTE[p[2]])+" = "+p[1]};}
+  var FEEL=[["😀","Fenomenal."],["🙂","Muy bien, gracias."],["😐","Regular."],["😩","Fatal."],["😴","Estoy cansado."],["🤒","Estoy enfermo."]];
+  function qFeel(){var f=rnd(FEEL);return {who:f[0],en:"¿Qué tal? Pick the answer that matches the face.",frame:"¿Qué tal?",answer:f[1],wrong:others(FEEL,f,3).map(function(x){return x[1];}),review:f[0]+" ¿Qué tal? → "+f[1]};}
+  var FIXR=[
+    ["¿Cómo ___ usted?","How are you? (polite)","está",["estás","eres","es"],"👔"],
+    ["Me ___ Ciara.","My name is Ciara.","llamo",["llamas","llama","soy"],"🙋"],
+    ["___ catorce años.","I'm fourteen.","Tengo",["Soy","Estoy","Tiene"],"🎂"],
+    ["Buenas ___, señor Ruiz.","Good afternoon, Mr Ruiz.","tardes",["tarde","días","día"],"☀️"],
+    ["___ días, señora.","Good morning, madam.","Buenos",["Buenas","Bueno","Buena"],"🌅"],
+    ["Te ___ a mi amigo Hugo.","This is my friend Hugo. (introducing)","presento",["presentas","presentes","presenta"],"🤝"],
+    ["¿De dónde ___ usted?","Where are you from? (polite)","es",["eres","está","estás"],"👔"],
+    ["Hasta ___, profesor.","See you tomorrow, sir.","mañana",["mañanas","mano","manzana"],"👋"]
+  ];
+  function qFixR(){return fixQ(rnd(FIXR));}
+
+  /* ---------- Classroom Spanish ---------- */
+  var STU=[["¿Puede repetir, por favor?","Can you repeat that, please?"],["No entiendo.","I don't understand."],["¿Cómo se dice \"pen\" en español?","How do you say \"pen\" in Spanish?"],["¿Qué significa \"pizarra\"?","What does \"pizarra\" mean?"],
+    ["¿Puedo ir al baño?","Can I go to the toilet?"],["¿Puede hablar más despacio?","Can you speak more slowly?"],["¿Cómo se escribe?","How do you spell it?"],["Lo siento, no lo sé.","Sorry, I don't know."],
+    ["He olvidado mis deberes.","I've forgotten my homework."],["¿Puedo abrir la ventana?","Can I open the window?"],["¿En qué página estamos?","What page are we on?"],["Tengo una pregunta.","I have a question."],["Perdone, llego tarde.","Sorry I'm late."]];
+  function qStu(){var s=rnd(STU),w=others(STU,s,3);
+    if(Math.random()<.5)return {who:"🙋",en:"What does it mean?",frame:s[0],answer:s[1],wrong:w.map(function(x){return x[1];}),review:s[0]+" = "+s[1]};
+    return {who:"🙋",en:"How do you say it? ("+s[1]+")",frame:"___",answer:s[0],wrong:w.map(function(x){return x[0];}),review:s[1]+" = "+s[0]};}
+  /* situations: [emoji, situation, answer index in STU, group] — wrong answers come from other groups */
+  var SIT=[["🙉","You didn't hear what the teacher said.",0,"a"],["🤔","You don't understand the exercise.",1,"a"],["🐢","The teacher is speaking too fast.",5,"a"],
+    ["✏️","You want to know how to say \"pen\" in Spanish.",2,"b"],["📖","You want to know what \"pizarra\" means.",3,"b"],["🔤","You want the teacher to spell a word.",6,"b"],
+    ["🚻","You need the toilet.",4,"c"],["🥵","The classroom is far too hot.",9,"c"],["🏃","You arrive in class after the bell.",12,"d"],
+    ["📒","You left your homework at home.",8,"d"],["🤷","The teacher asks you a question and you have no idea.",7,"e"],["✋","You want to ask something.",11,"e"],["📄","You've lost your place in the book.",10,"f"]];
+  function qSit(){var s=rnd(SIT),pool=SIT.filter(function(x){return x[3]!==s[3];}),w=shuffle(pool).slice(0,3);
+    return {who:s[0],en:s[1],frame:"What do you say?",answer:STU[s[2]][0],wrong:w.map(function(x){return STU[x[2]][0];}),review:s[1]+" → "+STU[s[2]][0]};}
+  var TEACH=[["Abrid los libros.","📖 Open your books"],["Cerrad los libros.","📕 Close your books"],["Escuchad.","👂 Listen"],["Mirad la pizarra.","👀 Look at the board"],["Sentaos.","🪑 Sit down"],["Levantaos.","🧍 Stand up"],
+    ["Repetid.","🔁 Repeat"],["Trabajad en parejas.","👥 Work in pairs"],["Escribid la fecha.","✍️ Write the date"],["Silencio, por favor.","🤫 Quiet, please"],["Sacad los cuadernos.","📒 Take out your copybooks"],
+    ["Leed el texto.","📰 Read the text"],["Levantad la mano.","✋ Put up your hand"],["Apagad los móviles.","📵 Turn off your phones"]];
+  function qTeach(spoken){var t=rnd(TEACH),w=others(TEACH,t,3);
+    return {listen:spoken?1:0,speak:spoken?t[0]:"",who:spoken?"":"👩‍🏫",en:spoken?"Listen. What does the teacher want you to do?":"What does the teacher want you to do?",frame:spoken?"":t[0],answer:t[1],wrong:w.map(function(x){return x[1];}),review:t[0]+" = "+noEmoji(t[1])};}
+  function gTeach(){return qTeach(false);}
+  var FIXC=[
+    ["___ los libros, por favor.","Open your books, please. (to the class)","Abrid",["Abro","Abrí","Abrió"],"📖"],
+    ["¿Cómo se ___ \"pencil\" en español?","How do you say \"pencil\" in Spanish?","dice",["dices","digo","dijo"],"✏️"],
+    ["¿Qué ___ \"la tiza\"?","What does \"la tiza\" mean?","significa",["significan","significo","significó"],"📖"],
+    ["No ___ la pregunta.","I don't understand the question.","entiendo",["entiendes","entiende","entender"],"🤔"],
+    ["¿___ ir al baño, por favor?","Can I go to the toilet, please?","Puedo",["Puedes","Pude","Poder"],"🚻"],
+    ["¿Puede hablar más ___?","Can you speak more slowly?","despacio",["rápido","alto","tarde"],"🐢"],
+    ["¿Cómo se ___ tu apellido?","How do you spell your surname?","escribe",["escribo","escribes","escribió"],"🔤"],
+    ["He ___ mis deberes.","I've forgotten my homework.","olvidado",["olvido","olvidé","olvidar"],"📒"],
+    ["Lo siento, no lo ___.","Sorry, I don't know.","sé",["se","sabes","sabe"],"🤷"],
+    ["Trabajad en ___.","Work in pairs.","parejas",["padres","peras","parques"],"👥"]
+  ];
+  function qFixC(){return fixQ(rnd(FIXC));}
+  var OBJ=[["✏️","lápiz","m","pencil"],["🖊️","bolígrafo","m","pen"],["📒","cuaderno","m","copybook"],["📏","regla","f","ruler"],["🎒","mochila","f","schoolbag"],["📚","libro","m","book"],
+    ["💻","ordenador","m","computer"],["🪟","ventana","f","window"],["🚪","puerta","f","door"],["🪑","silla","f","chair"],["🗓️","calendario","m","calendar"],["🖍️","pizarra","f","board"]];
+  function qObj(){var o=rnd(OBJ),r=Math.random();
+    if(r<.5){var w=others(OBJ,o,3);return {who:o[0],en:"What is it in Spanish?",frame:"___",answer:(o[2]==="m"?"el ":"la ")+o[1],wrong:w.map(function(x){return (x[2]==="m"?"el ":"la ")+x[1];}),review:o[0]+" = "+(o[2]==="m"?"el ":"la ")+o[1]+" ("+o[3]+")"};}
+    var ans=o[2]==="m"?"el":"la";
+    return {who:o[0],en:"el or la? ("+o[3]+")",frame:"___ "+o[1],answer:ans,wrong:o[2]==="m"?["la","los","las"]:["el","los","las"],review:ans+" "+o[1]+" = the "+o[3]};}
+  /* the 🖍️ board emoji is a stand-in; keep it out of picture questions */
+  OBJ=OBJ.filter(function(o){return o[1]!=="pizarra";});
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Me llamo Lucía y tengo trece años.","My name is Lucía and I'm thirteen.",["My name is Lucía and I'm twelve.","My name is Laura and I'm thirteen.","My sister is Lucía and she's thirteen."]],
+    ["Soy de Valencia, pero vivo en Madrid.","I'm from Valencia, but I live in Madrid.",["I'm from Madrid, but I live in Valencia.","I'm from Valencia and I live there.","I'm going to Valencia, then Madrid."]],
+    ["Buenas tardes, señor Ruiz. ¿Cómo está usted?","Good afternoon, Mr Ruiz. How are you?",["Good morning, Mr Ruiz. How are you?","Good afternoon, Mrs Ruiz. How are you?","Good afternoon, Mr Ruiz. Where are you?"]],
+    ["Te presento a mi hermano, Pablo.","This is my brother, Pablo.",["This is my friend, Pablo.","This is my cousin, Pablo.","This is my father, Pablo."]],
+    ["Perdone, ¿puede repetir, por favor?","Excuse me, can you repeat that, please?",["Excuse me, can you speak more slowly, please?","Excuse me, can I go to the toilet, please?","Sorry, I don't understand."]],
+    ["Abrid los libros en la página doce.","Open your books at page twelve.",["Close your books at page twelve.","Open your books at page two.","Open your copybooks at page twelve."]],
+    ["¡Hasta mañana! Nos vemos en clase.","See you tomorrow! See you in class.",["See you later! See you in class.","See you tomorrow! See you at the park.","Good morning! See you in class."]],
+    ["Estoy fatal, tengo un examen hoy.","I feel awful, I have an exam today.",["I feel great, I have an exam today.","I feel awful, I have an exam tomorrow.","I'm fine, I had an exam today."]],
+    ["Mucho gusto, Ana. Soy el padre de Javier.","Nice to meet you, Ana. I'm Javier's father.",["Nice to meet you, Ana. I'm Javier's brother.","Nice to meet you, Ana. I'm Javier's teacher.","Goodbye, Ana. I'm Javier's father."]],
+    ["¿Cómo se dice \"ruler\" en español?","How do you say \"ruler\" in Spanish?",["What does \"ruler\" mean?","How do you spell \"ruler\"?","How do you say \"rubber\" in Spanish?"]],
+    ["Bienvenidos a Sevilla, chicos.","Welcome to Seville, everyone.",["Goodbye from Seville, everyone.","Welcome to Valencia, everyone.","Welcome back to Seville, everyone."]],
+    ["Lo siento, llego tarde. El autobús no ha venido.","Sorry I'm late. The bus didn't come.",["Sorry I'm late. The train didn't come.","Sorry, I can't come. The bus is late.","Thanks for waiting. The bus was early."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+  var AGES=[["once","11"],["doce","12"],["trece","13"],["catorce","14"],["quince","15"],["dieciséis","16"],["diecisiete","17"]];
+  function lAge(){var a=rnd(AGES),n=rnd(ES_F.concat(ES_M)),sp="Hola, me llamo "+n+" y tengo "+a[0]+" años.";
+    return {listen:1,speak:sp,en:"Listen. How old are they?",answer:a[1],wrong:others(AGES,a,3).map(function(x){return x[1];}),review:sp+" = "+a[1]+" years old"};}
+  var LTOD=[["Buenos días, chicos. ¿Qué tal el fin de semana?",0],["Buenos días. Un café con leche, por favor.",0],["Buenas tardes. Hotel Sol, ¿dígame?",1],["Buenas tardes, señora. ¿Qué tal la comida?",1],
+    ["Buenas noches, mamá. Me voy a la cama.",2],["Buenas noches a todos. ¡Hasta mañana!",2]];
+  function lTod(){var t=rnd(LTOD);
+    return {fixed:1,tm:1,smalls:TGS,listen:1,speak:t[0],en:"Listen. What time of day is it?",answer:TG[t[1]],wrong:TG.filter(function(x,i){return i!==t[1];}),opts:TG,review:t[0]+" = "+TGS[t[1]]};}
+  function lGreet(){var g=rnd(GREET.filter(function(x){return x[0].indexOf("…")<0;})),w=others(GREET,g,3);
+    return {listen:1,speak:g[0],en:"Listen. What does it mean?",answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};}
+  function lReg(){return qReg(true);}
+  function lTeach(){return qTeach(true);}
+
+  var MAKERS={
+    meet:[qCard],
+    register:[gReg,gReg,qWho,qWho,qTod,qTod,qAgr,qReply,qReply,qGreet,qPres,qFeel,qFixR,qFixR],
+    "class":[qStu,qStu,qSit,qSit,qSit,gTeach,gTeach,qFixC,qFixC,qObj,qObj],
+    listen:[lFix,lFix,lFix,lAge,lTod,lGreet,lReg,lTeach],
+    mixed:[qLine,qLine,gReg,qWho,qTod,qAgr,qReply,qGreet,qPres,qFixR,qStu,qSit,gTeach,qFixC,qObj]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear short conversations and pick what they said (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Chat drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function drawCard(flash){
+    var el=$("card");if(mode!=="meet"||!pc){el.hidden=true;return;}
+    var n=pc.scen.slots.length;
+    el.hidden=false;el.className="chat"+(pc.sent?" done":"");
+    var h="<div class='top'><span>"+pc.scen.icon+" "+esc(pc.scen.title(pc))+"</span><small>"+esc(pc.scen.tag)+" · "+Math.min(pc.slot+1,n)+"/"+n+"</small></div><div class='msgs' id='msgs'>";
+    pc.lines.forEach(function(l){h+="<div class='b "+l.from+"'>"+esc(l.text)+"</div>";});
+    if(!pc.sent&&current&&current.card)h+="<div class='b "+current.from+" typing'>…</div>";
+    h+="</div>";
+    if(flash)h+="<div class='flash'>"+pc.scen.icon+" ¡Muy bien! +3</div>";
+    el.innerHTML=h;var m=$("msgs");if(m)m.scrollTop=m.scrollHeight;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="meet"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?q.opts.length-1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.lines.push({from:current.from,text:current.line});
+      pc.slot++;
+      if(pc.slot>=pc.scen.slots.length){pc.sent=true;score+=3;cards++;flash=true;}
+      current.card=0;drawCard(flash);
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:(flash?1500:500)):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! You'd charm any Spanish class.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="meet"?", "+cards+" chat"+(cards===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SCEN:SCEN,lineQ:lineQ,makeCtx:makeCtx};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
