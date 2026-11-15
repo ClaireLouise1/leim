@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather &amp; seasons: play Forecast Match | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: weather and seasons. Match the forecast to the weather card, hace, está or hay, temperatures, seasons and months, forecast words, and yesterday, today or tomorrow. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.fc{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(180deg,#E6F0FA,#fff);border:1px solid var(--line);border-radius:14px;padding:10px 22px;min-width:150px;color:var(--ink)}
+.fc b{font-size:15px;font-weight:800;letter-spacing:.02em}
+.fc i{font-style:normal;font-size:52px;line-height:1.1}
+.fc span{font-size:22px;font-weight:800}
+.choices.cards .choice{padding:6px}
+.choices.cards .fc{min-width:0;width:100%;padding:6px 4px;border:0;background:transparent}
+.choices.cards .fc b{font-size:12px}.choices.cards .fc i{font-size:38px}.choices.cards .fc span{font-size:17px}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.big-e{font-size:64px;line-height:1}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.choices.cards .fc i{font-size:30px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Forecast Match</h1>
+        <p>Weather and seasons. Read the forecast and pick the right weather card! Then <b>hace</b>, <b>está</b> or <b>hay</b>, temperatures, seasons and months, forecast words like <b>lloverá</b>, and yesterday, today or tomorrow. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="match"><div><b>Forecast Match</b><span>Match forecasts to weather cards; hace, está or hay; temperatures</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="seasons"><div><b>Seasons &amp; forecasts</b><span>Seasons and months, forecast words, yesterday, today or tomorrow?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening forecast 🔊</b><span id="listenNote">Hear the forecast and find the card; weather sentences</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.1, 1.3, 3.1 (2017 spec, exams 2027–2028) · 1.3, 1.4, 3.1 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Weather &amp; seasons</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: hace, está or hay?</h3>
+        <ul>
+          <li><b>Hace</b> sol. <b>Hace</b> viento. <b>Hace</b> frío. <span style="color:var(--muted)">(It's sunny. It's windy. It's cold.)</span></li>
+          <li><b>Está</b> nublado. <b>Está</b> despejado. <span style="color:var(--muted)">(It's cloudy. The sky is clear.)</span></li>
+          <li><b>Hay</b> niebla. <b>Hay</b> tormenta. <b>Hay</b> nubes. <span style="color:var(--muted)">(It's foggy. There's a storm. There are clouds.)</span></li>
+          <li><b>Llueve.</b> <b>Nieva.</b> <span style="color:var(--muted)">(It's raining. It's snowing.)</span></li>
+        </ul>
+        <p>Look at the word after each verb. Which ones are nouns (things), which are adjectives (describing words), and which need no extra verb at all? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Hace</b> + a noun: <em>hace sol, hace viento, hace calor, hace frío, hace buen / mal tiempo</em> (literally "it makes sun"). <b>Está</b> + an adjective: <em>está nublado, está despejado</em>. <b>Hay</b> + a noun you can see: <em>hay niebla, hay tormenta, hay nubes</em>. <b>Llueve</b> and <b>nieva</b> are verbs on their own: no <em>hace</em>! (<em>Hace llueve</em> is wrong.) In English we say "it's" for all of them, so Spanish learners mix them up: it's a favourite exam trap.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The weather</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Spanish</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>☀️</td><td>Hace sol · Hace calor</td><td>It's sunny · It's hot</td></tr>
+            <tr><td>☁️</td><td>Está nublado · Hay nubes</td><td>It's cloudy · There are clouds</td></tr>
+            <tr><td>🌧️</td><td>Llueve · Está lloviendo</td><td>It rains · It's raining (right now)</td></tr>
+            <tr><td>🌨️</td><td>Nieva · Está nevando</td><td>It snows · It's snowing (right now)</td></tr>
+            <tr><td>💨</td><td>Hace viento</td><td>It's windy</td></tr>
+            <tr><td>⛈️</td><td>Hay tormenta</td><td>There's a storm</td></tr>
+            <tr><td>🌫️</td><td>Hay niebla</td><td>It's foggy</td></tr>
+            <tr><td>🥶</td><td>Hace frío · Hace fresco</td><td>It's cold · It's cool</td></tr>
+            <tr><td>😎</td><td>Hace buen tiempo · Hace mal tiempo</td><td>The weather's nice · The weather's bad</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>¿Qué tiempo hace?</b> = What's the weather like? Add <b>mucho</b> for "very": <em>hace <b>mucho</b> calor</em>, <em>llueve <b>mucho</b></em> (not <em>muy</em>: <em>muy</em> goes with adjectives, <em>está <b>muy</b> nublado</em>).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Temperatures</h3>
+        <p><b>Hace 25 grados</b> (It's 25 degrees) · <b>Hace un grado</b> · <b>Hace 3 grados bajo cero</b> (minus 3) · <b>La temperatura máxima es de 30 grados</b> (the high is 30) · <b>la mínima</b> (the low). Spain and Ireland both use Celsius.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Seasons and months</h3>
+        <p><b>la primavera</b> 🌸 spring · <b>el verano</b> ☀️ summer · <b>el otoño</b> 🍂 autumn · <b>el invierno</b> ⛄ winter. <em><b>En</b> invierno hace frío. <b>En</b> verano hace calor. Mi estación favorita es <b>la</b> primavera.</em></p>
+        <p style="margin-top:8px">The months have no capital letter: <em>enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre</em>. <em><b>En</b> julio hace mucho calor.</em></p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Yesterday, today, tomorrow</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>⏪ Yesterday (past)</th><th>▶ Today (present)</th><th>⏩ Tomorrow (future)</th></tr></thead>
+          <tbody>
+            <tr><td>Hizo sol</td><td>Hace sol</td><td>Va a hacer sol · Hará sol</td></tr>
+            <tr><td>Llovió</td><td>Llueve</td><td>Va a llover · Lloverá</td></tr>
+            <tr><td>Nevó</td><td>Nieva</td><td>Va a nevar · Nevará</td></tr>
+            <tr><td>Estuvo nublado</td><td>Está nublado</td><td>Va a estar nublado · Estará nublado</td></tr>
+            <tr><td>Hubo tormenta</td><td>Hay tormenta</td><td>Va a haber tormenta · Habrá tormenta</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:12px"><b>Forecast words:</b> weather forecasts (<b>el pronóstico</b>, <b>el tiempo</b>) use the simple future: <b>lloverá</b> (it will rain), <b>habrá</b> (there will be), <b>las temperaturas subirán / bajarán</b> (will rise / drop). You only need to <em>recognise</em> these. Also: <b>cielo despejado</b> (clear skies), <b>cielo nuboso</b> (cloudy skies), <b>chubascos</b> (showers), <b>nevadas</b> (snowfall), <b>viento fuerte</b> (strong wind), <b>una ola de calor</b> (a heatwave), <b>en el norte / el sur / el este / el oeste / el centro</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">What do you do when…?</h3>
+        <p><b>Cuando hace sol</b>, voy a la playa. · <b>Cuando llueve</b>, me quedo en casa y veo películas. · <b>Cuando nieva</b>, hago un muñeco de nieve. · <b>Cuando hace frío</b>, me pongo un abrigo. · <b>Si hace buen tiempo</b>, vamos al parque.</p>
+
+        <div class="note" style="margin-top:12px"><b>Culture:</b> Spain has very different weather in different places. The <b>north</b> (Galicia, Asturias, the Basque Country) is green and rainy, a bit like Ireland. The <b>south</b> (Andalucía) is very hot in summer: over 40 degrees in Seville or Córdoba is normal in July, so people rest in the afternoon and go out late in the evening. The <b>centre</b> (Madrid) is cold in winter and very hot in summer. And in South America it's the other way round: in <b>Argentina</b> and <b>Chile</b>, December is summer, so Christmas is often at the beach! Compare: what's the weather like where you live in each season?</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Reading</b>, weather maps and forecasts come up: match the symbols, look for <b>where</b> (norte, sur, costa, sierra), <b>when</b> (por la mañana, por la tarde, mañana) and the <b>temperature</b>. In <b>Listening</b>, catch the numbers (veinte vs treinta), <b>bajo cero</b>, and whether it's yesterday, today or tomorrow (<em>llovió / llueve / va a llover</em>). In <b>Writing</b>, a postcard or email often asks about the weather: use two tenses and a <em>cuando</em> sentence: <em>Hoy hace sol y hace mucho calor: ¡treinta grados! Ayer llovió un poco, pero mañana va a hacer buen tiempo. Cuando hace calor, voy a la playa con mi familia.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/weather-and-seasons-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/sSkEa" target="_blank" rel="noopener">Weather &amp; Seasons Teacher Pack (€5)</a>: Weather Map info gap, Weather Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rt(a,b){var t=ri(a,b);return (t>1&&t%10===1)?t+1:t;} /* avoid 21, 31: veintiún / treinta y un */
+
+  /* ---------- Weather cards ---------- */
+  /* key, present, English, emoji, min temp, max temp */
+  var W=[["sol","hace sol","sunny","☀️",18,36],["nubes","está nublado","cloudy","☁️",8,20],["lluvia","llueve","raining","🌧️",6,16],
+    ["nieve","nieva","snowing","🌨️",-6,1],["viento","hace viento","windy","💨",5,15],["tormenta","hay tormenta","stormy","⛈️",14,26],["niebla","hay niebla","foggy","🌫️",3,12]];
+  var CITIES=["Madrid","Sevilla","Barcelona","Bilbao","Valencia","Granada","Santiago","Málaga","Salamanca","Zaragoza"];
+  function tempES(t){if(t<0)return "hace "+(t===-1?"un grado":(-t)+" grados")+" bajo cero";if(t===0)return "hace cero grados";return "hace "+(t===1?"un grado":t+" grados");}
+  function tempEN(t){return (t<0?"minus "+(-t):t)+"°";}
+  function cardKey(c,w,t){return "C|"+c+"|"+w+"|"+t;}
+  function cardParts(k){var s=k.split("|");return {c:s[1],w:W[+s[2]],t:+s[3]};}
+  function cardEN(k){var p=cardParts(k);return p.c+": "+p.w[2]+", "+tempEN(p.t);}
+  function cardHTML(k){var p=cardParts(k);return "<div class='fc' aria-hidden='true'><b>"+p.c+"</b><i>"+p.w[3]+"</i><span>"+(p.t<0?"−"+(-p.t):p.t)+"°</span></div>";}
+  function pickCard(){var w=Math.floor(Math.random()*W.length);return {c:rnd(CITIES),w:w,t:rt(W[w][4],W[w][5])};}
+  function cardSent(s,withCity){var x=W[s.w][1]+" y "+tempES(s.t)+".";return withCity?"En "+s.c+" "+x:cap(x);}
+  function wrongCards(s){var out=[],ws=shuffle(W.map(function(x,i){return i;}).filter(function(i){return i!==s.w;}));
+    var w=W[s.w];
+    var far=[];for(var t=w[4];t<=w[5];t++)if(Math.abs(t-s.t)>=8&&!(t>1&&t%10===1))far.push(t);
+    if(Math.random()<.5&&far.length)out.push({c:s.c,w:s.w,t:rnd(far)});
+    ws.slice(0,3-out.length).forEach(function(i){out.push({c:s.c,w:i,t:rt(W[i][4],W[i][5])});});
+    return out;}
+  function key(s){return cardKey(s.c,s.w,s.t);}
+  /* look at the card, pick the sentence */
+  function qCard(){var s=pickCard(),k=key(s);
+    return {card:k,en:"¿Qué tiempo hace en "+s.c+"?",frame:"",answer:cardSent(s,false),
+      wrong:wrongCards(s).map(function(w){return cardSent(w,false);}),review:cardSent(s,true)+" = "+cardEN(k)};}
+  /* read (or hear) the forecast, pick the card */
+  function qFind(spoken){var s=pickCard(),k=key(s),t=cardSent(s,true);
+    return {kind:"cards",en:spoken?"Listen. Which card?":"Which weather card is it?",frame:spoken?"":t,speak:spoken?t:"",listen:spoken?1:0,
+      answer:k,wrong:wrongCards(s).map(key),review:t+" = "+cardEN(k)};}
+  function gFind(){return qFind(false);}
+  function lFind(){return qFind(true);}
+  /* symbol -> phrase */
+  var SYM=[["Hace sol","It's sunny","☀️"],["Está nublado","It's cloudy","☁️"],["Llueve","It's raining","🌧️"],["Nieva","It's snowing","🌨️"],["Hace viento","It's windy","💨"],["Hay tormenta","There's a storm","⛈️"],["Hay niebla","It's foggy","🌫️"],["Hace calor","It's hot","🥵"],["Hace frío","It's cold","🥶"],["Hace buen tiempo","The weather's nice","😎"],["Hace mal tiempo","The weather's bad","☔"]];
+  function qSym(){var s=rnd(SYM),w=others(SYM,s,3);
+    if(Math.random()<.6)return {who:"<span class='big-e'>"+s[2]+"</span>",html:1,en:"¿Qué tiempo hace?",frame:"",answer:s[0],wrong:w.map(function(x){return x[0];}),review:s[2]+" "+s[0]+" = "+s[1]};
+    return {who:"",en:"What does it mean?",frame:s[0]+".",answer:s[2]+" "+s[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:s[0]+" = "+s[1]};}
+  /* hace, está or hay? */
+  var VB=[["sol","Hace","It's sunny."],["viento","Hace","It's windy."],["calor","Hace","It's hot."],["frío","Hace","It's cold."],["buen tiempo","Hace","The weather's nice."],["mal tiempo","Hace","The weather's bad."],["fresco","Hace","It's cool."],
+    ["nublado","Está","It's cloudy."],["despejado","Está","The sky is clear."],["muy nublado","Está","It's very cloudy."],
+    ["niebla","Hay","It's foggy."],["tormenta","Hay","There's a storm."],["nubes","Hay","There are clouds."],["mucha niebla","Hay","It's very foggy."]];
+  function qVerb(){var v=rnd(VB);return {who:"",en:v[2],frame:"___ "+v[0]+".",answer:v[1],wrong:["Hace","Está","Hay","Es"].filter(function(x){return x!==v[1];}),review:v[1]+" "+v[0]+". = "+v[2]+" (hace / está / hay)"};}
+  /* temperatures */
+  function qTemp(){var t=rnd([-8,-5,-3,-2,-1,1,2,4,7,12,15,18,24,27,30,33,35,38]);
+    var forms=function(x){return cap(tempES(x))+".";};
+    var w=[];var cand=[t+10,t-10,-t,t+20,t-20,t+5,t-5,t+3].filter(function(x){return !(x>1&&x%10===1);}).filter(function(x){return x!==t&&x>=-12&&x<=45;});
+    shuffle(cand).forEach(function(x){if(w.length<3&&w.indexOf(forms(x))<0)w.push(forms(x));});
+    return {who:"🌡️",en:"How do you say it?",frame:(t<0?"−"+(-t):t)+"°C",answer:forms(t),wrong:w,review:forms(t)+" = "+tempEN(t)+"C"};}
+
+  /* ---------- Seasons & forecasts ---------- */
+  var SEAS=[["la primavera","spring","🌸"],["el verano","summer","☀️"],["el otoño","autumn","🍂"],["el invierno","winter","⛄"]];
+  var MONTHS=[["enero",3],["febrero",3],["abril",0],["mayo",0],["julio",1],["agosto",1],["octubre",2],["noviembre",2]];
+  function qMonth(){var m=rnd(MONTHS),s=SEAS[m[1]];return {who:"🗓️",en:"In Spain, which season is it?",frame:"Estamos en "+m[0]+". Es…",answer:s[0],wrong:SEAS.filter(function(x){return x!==s;}).map(function(x){return x[0];}),review:"En España, "+m[0]+" = "+s[0]+" ("+s[1]+")"};}
+  function qSeason(){var s=rnd(SEAS),w=others(SEAS,s,3);
+    if(Math.random()<.5)return {who:s[2],en:s[1],frame:"How do you say it in Spanish?",answer:s[0],wrong:w.map(function(x){return x[0];}),review:s[1]+" = "+s[0]};
+    return {who:"",en:"What is it in English?",frame:cap(s[0]),answer:s[2]+" "+s[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:cap(s[0])+" = "+s[1]};}
+  var FIXS=[
+    ["En invierno hace mucho ___.","In winter it's very cold.","frío",["calor","sol","nublado"]],
+    ["En verano hace ___ y voy a la playa.","In summer it's hot and I go to the beach.","calor",["frío","nieva","llueve"]],
+    ["Mi estación favorita es ___ primavera.","My favourite season is spring.","la",["el","los","las"]],
+    ["Me gusta el otoño ___ los colores son bonitos.","I like autumn because the colours are pretty.","porque",["pero","cuando","y"]],
+    ["En Irlanda llueve ___ menudo.","In Ireland it rains often.","a",["de","en","por"]],
+    ["Cuando llueve, me quedo en ___.","When it rains, I stay at home.","casa",["la playa","el parque","la piscina"]],
+    ["Cuando hace sol, voy ___ playa.","When it's sunny, I go to the beach.","a la",["al","a el","en el"]],
+    ["Hoy hace ___ tiempo: hace sol y calor.","Today the weather is nice: it's sunny and hot.","buen",["bueno","mal","malo"]],
+    ["Hace ___ tiempo: llueve y hace viento.","The weather is bad: it's raining and windy.","mal",["malo","buen","bueno"]],
+    ["Hoy ___ nublado.","Today it's cloudy.","está",["hace","hay","es"]],
+    ["En la sierra hay mucha ___ en invierno.","In the mountains there is a lot of snow in winter.","nieve",["nieva","nevar","nevó"]],
+    ["¿Qué tiempo ___ hoy?","What's the weather like today?","hace",["está","hay","es"]],
+    ["Hace ___ calor en Sevilla en julio.","It's very hot in Seville in July.","mucho",["muy","mucha","muchos"]],
+    ["Ayer ___ mucho.","Yesterday it rained a lot.","llovió",["llueve","va a llover","lloverá"]],
+    ["Ayer ___ frío.","Yesterday it was cold.","hizo",["hace","hició","va a hacer"]],
+    ["Mañana va a ___.","Tomorrow it's going to snow.","nevar",["nieva","nevó","nieve"]],
+    ["Mañana va a ___ sol.","Tomorrow it's going to be sunny.","hacer",["hace","hizo","haber"]],
+    ["En diciembre, ___ Argentina es verano.","In December, it's summer in Argentina.","en",["a","de","por"]],
+    ["Hace dos grados bajo ___.","It's two degrees below zero.","cero",["nada","frío","uno"]],
+    ["Cuando nieva, hago un muñeco de ___.","When it snows, I make a snowman.","nieve",["nieva","lluvia","sol"]]
+  ];
+  function fixQ(x){return {who:"",en:x[1],frame:x[0],answer:x[2],wrong:x[3].slice(),review:x[0].replace("___",x[2])+" = "+x[1]};}
+  function qFixS(){return fixQ(rnd(FIXS));}
+  /* yesterday, today or tomorrow? */
+  var TM=["⏪ Yesterday","▶ Today","⏩ Tomorrow"],TMS=["past","present","future"];
+  var WHEN=[
+    ["Llovió mucho.",0,"llovió = it rained"],["Hizo mucho calor.",0,"hizo = it was"],["Nevó en la sierra.",0,"nevó = it snowed"],["Hubo una tormenta.",0,"hubo = there was"],["Estuvo nublado todo el día.",0,"estuvo = it was"],["Hizo un día precioso.",0,"hizo"],
+    ["Hace mucho viento.",1,"hace = it is"],["Llueve un poco.",1,"llueve = it's raining"],["Hay niebla en la costa.",1,"hay = there is"],["Está despejado.",1,"está = it is"],["Nieva en Madrid.",1,"nieva = it's snowing"],["Está lloviendo.",1,"está lloviendo = it's raining now"],
+    ["Va a llover.",2,"va a llover = it's going to rain"],["Lloverá en el norte.",2,"lloverá = it will rain"],["Va a hacer sol.",2,"va a hacer"],["Habrá niebla por la mañana.",2,"habrá = there will be"],["Las temperaturas van a bajar.",2,"van a bajar"],["Nevará en los Pirineos.",2,"nevará = it will snow"]
+  ];
+  function qWhen(spoken){var s=rnd(WHEN);
+    return {fixed:1,tm:1,smalls:TMS,listen:spoken?1:0,speak:spoken?s[0]:"",who:spoken?"":"🗓️",en:spoken?"Listen. Yesterday, today or tomorrow?":"Yesterday, today or tomorrow?",frame:spoken?"":s[0],answer:TM[s[1]],wrong:TM.filter(function(x,i){return i!==s[1];}),opts:TM,review:s[0]+" = "+TM[s[1]].replace(/^\S+ /,"")+" ("+s[2]+")"};}
+  function gWhen(){return qWhen(false);}
+  function lWhen(){return qWhen(true);}
+  /* forecast words + when... sentences */
+  var FW=[["Lloverá en el norte.","It will rain in the north."],["Habrá niebla por la mañana.","There will be fog in the morning."],["Cielo despejado en el sur.","Clear skies in the south."],["Chubascos por la tarde.","Showers in the afternoon."],
+    ["Las temperaturas van a subir.","Temperatures are going to rise."],["Las temperaturas bajarán.","Temperatures will drop."],["Nevadas en la sierra.","Snowfall in the mountains."],["Cielo nuboso en el centro.","Cloudy skies in the centre."],
+    ["Temperaturas altas en Andalucía.","High temperatures in Andalusia."],["Viento fuerte en la costa.","Strong wind on the coast."],["La máxima será de 25 grados.","The high will be 25 degrees."],["Ola de calor en el sur.","Heatwave in the south."],
+    ["Hace un día precioso.","It's a beautiful day."],["Hace un frío horrible.","It's horribly cold."]];
+  var ACT=[["Cuando hace sol, voy a la playa.","When it's sunny, I go to the beach."],["Cuando llueve, veo películas en casa.","When it rains, I watch films at home."],["Cuando nieva, hago un muñeco de nieve.","When it snows, I make a snowman."],["Cuando hace frío, me pongo un abrigo.","When it's cold, I put on a coat."],["Cuando hace calor, voy a la piscina.","When it's hot, I go to the pool."],["Cuando hace viento, no salgo en bici.","When it's windy, I don't go out on my bike."]];
+  function qFW(){var x=rnd(FW);return {who:"📺",en:"Weather forecast. What does it mean?",frame:x[0],answer:x[1],wrong:others(FW,x,3).map(function(y){return y[1];}),review:x[0]+" = "+x[1],listen:1};}
+  function qAct(){var x=rnd(ACT);return {who:"",en:"What does it mean?",frame:x[0],answer:x[1],wrong:others(ACT,x,3).map(function(y){return y[1];}),review:x[0]+" = "+x[1],listen:1};}
+
+  /* ---------- Listening ---------- */
+  var LFIX=[
+    ["Hoy en Madrid hace sol y hace veinticinco grados.","Today in Madrid it's sunny and 25 degrees.",["Today in Madrid it's cloudy and 25 degrees.","Today in Madrid it's sunny and 35 degrees.","Tomorrow in Madrid it's going to be sunny and 25 degrees."]],
+    ["En el norte va a llover por la tarde.","In the north it's going to rain in the afternoon.",["In the south it's going to rain in the afternoon.","In the north it's going to rain in the morning.","In the north it rained in the afternoon."]],
+    ["Mi estación favorita es el otoño porque no hace mucho calor.","My favourite season is autumn because it isn't very hot.",["My favourite season is spring because it isn't very hot.","My favourite season is autumn because it's very hot.","I don't like autumn because it isn't very hot."]],
+    ["En invierno nieva mucho en mi pueblo.","In winter it snows a lot in my town.",["In winter it rains a lot in my town.","In spring it snows a lot in my town.","In winter it snows a little in my town."]],
+    ["Ayer hizo mucho viento y no salí.","Yesterday it was very windy and I didn't go out.",["Yesterday it was very cold and I didn't go out.","Today it's very windy and I'm not going out.","Yesterday it was very windy and I went out."]],
+    ["Mañana habrá niebla en la costa.","Tomorrow there will be fog on the coast.",["Tomorrow there will be snow on the coast.","Today there is fog on the coast.","Tomorrow there will be fog in the mountains."]],
+    ["En Irlanda llueve mucho, pero no hace mucho frío.","In Ireland it rains a lot, but it isn't very cold.",["In Ireland it rains a lot, and it's very cold.","In Ireland it doesn't rain much, but it isn't very cold.","In Spain it rains a lot, but it isn't very cold."]],
+    ["Cuando hace buen tiempo, voy a la playa con mis amigos.","When the weather is nice, I go to the beach with my friends.",["When the weather is bad, I go to the beach with my friends.","When the weather is nice, I go to the park with my friends.","When the weather is nice, I go to the beach with my family."]],
+    ["Hace tres grados bajo cero y está nevando.","It's minus 3 degrees and it's snowing.",["It's 3 degrees and it's raining.","It's minus 13 degrees and it's snowing.","It's minus 3 degrees and it's sunny."]],
+    ["En verano la temperatura máxima es de treinta y ocho grados.","In summer the high is 38 degrees.",["In summer the high is 28 degrees.","In winter the high is 38 degrees.","In summer the low is 38 degrees."]],
+    ["Las temperaturas van a bajar el fin de semana.","Temperatures are going to drop at the weekend.",["Temperatures are going to rise at the weekend.","Temperatures dropped at the weekend.","Temperatures are going to drop on Monday."]],
+    ["En Argentina, en diciembre hace calor porque es verano.","In Argentina, it's hot in December because it's summer.",["In Argentina, it's cold in December because it's winter.","In Spain, it's hot in December because it's summer.","In Argentina, it's hot in July because it's summer."]]
+  ];
+  function lFix(){var x=rnd(LFIX);return {listen:1,speak:x[0],en:"Listen. What did they say?",answer:x[1],wrong:x[2].slice(),review:x[0]+" = "+x[1]};}
+
+  var MAKERS={
+    match:[qCard,qCard,gFind,gFind,qSym,qVerb,qVerb,qTemp],
+    seasons:[qMonth,qSeason,qFixS,qFixS,gWhen,gWhen,qFW,qAct],
+    listen:[lFind,lFind,lFind,lFix,lFix,lWhen],
+    mixed:[qCard,gFind,qSym,qVerb,qTemp,qMonth,qFixS,gWhen,qFW,qAct]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the forecast and find the card; weather sentences (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function label(f){return f.indexOf("C|")===0?cardEN(f):f;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.tm?2:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length)&&tries<30);
+    last=q.review;current=q;
+    if(q.card)$("who").innerHTML=cardHTML(q.card);else if(q.html)$("who").innerHTML=q.who;else $("who").textContent=q.speak?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.kind==="cards")box.className="choices cards";
+    else if(q.tm)box.className="choices three";
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.kind==="cards")b.innerHTML=cardHTML(f);
+      else if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";
+      else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+label(f));
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?f.replace(/^\S+ /,""):label(f),listen:!!(current.listen||current.kind==="cards"||!!current.card)});
+    }
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?900:400):(current.speak?2600:1900);
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! Weather champion.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,W:W,cardEN:cardEN};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
