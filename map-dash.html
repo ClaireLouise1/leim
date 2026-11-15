@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Directions and getting around in Spanish: play Map Dash | Léim</title>
+<meta name="description" content="Free Junior Cycle Spanish game: directions and getting around. Follow Spanish directions on a town map, sigue or siga (tú or usted), al or a la, signs at the station, transport and buying a ticket. With a Listening mode. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .who{font-size:44px;line-height:1}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600;margin-top:6px}
+.prompt .frame{font-size:clamp(21px,5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:16px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:60px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.choices.long .choice{font-size:15px;font-weight:600}
+.choices.one{grid-template-columns:1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.three .choice{min-height:84px;font-size:17px;line-height:1.25}
+.choices.three.two{grid-template-columns:1fr 1fr}
+.choices.three .choice small{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+
+.chat{position:relative;background:#EEF3F0;border:1px solid var(--line);border-radius:16px;margin:0 auto 18px;max-width:460px;overflow:hidden;box-shadow:0 4px 14px rgba(27,36,48,.08)}
+.chat .top{display:flex;justify-content:space-between;align-items:center;background:var(--night);color:#fff;padding:9px 14px;font-weight:700;font-size:15px}
+.chat .top small{color:var(--sun);font-weight:700;font-size:12px}
+.chat .msgs{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;min-height:110px;max-height:260px;overflow-y:auto}
+.chat .b{max-width:82%;padding:7px 11px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.chat .b.me{align-self:flex-end;background:#D7F0DF;border-bottom-right-radius:4px}
+.chat .b.them{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.chat .b.typing{color:var(--muted);font-weight:700;letter-spacing:.15em}
+.chat.done{outline:3px solid var(--green)}
+.chat .flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--green);background:rgba(255,255,255,.88)}
+@media (max-width:420px){.panel{padding:20px}.choice{font-size:16px;padding:14px 8px}.choices.long .choice{font-size:14px}.choices.three .choice{font-size:15px;padding:10px 4px}.chat .b{font-size:13.5px}}
+.chat.map svg{display:block;width:100%;height:auto;background:#E3EDE2}
+.frame.longf{font-size:clamp(18px,4.4vw,22px)}
+.sign{display:inline-block;font-weight:800;letter-spacing:.06em;padding:12px 22px;border-radius:10px;border:4px solid #fff;outline:3px solid var(--night);background:#1F5FA8;color:#fff;margin-top:8px}
+.sign.red{background:#C0392B}.sign.green{background:var(--green)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-spanish.html#games" aria-current="page">Free games</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Spanish · Free game</span>
+        <h1 style="margin-top:12px">Map Dash</h1>
+        <p>Directions and getting around in Spanish. You're standing at 📍 on a map of a Spanish town: read (or hear) the directions and find where you end up, or pick the right directions to a place. Then <b>sigue / siga</b> (tú or usted?), <b>al</b> or <b>a la</b>, the signs at a Spanish station, transport and buying a ticket. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your game</h2>
+        <div class="modes">
+          <button class="mode" data-mode="dash"><div><b>Map Dash 🗺️</b><span>Follow the directions on the town map, find the way to a place, what's opposite? 4 stops per map, +3 for every finished map</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="dirs"><div><b>Directions &amp; signs</b><span>Direction phrases, tú or usted? (sigue / siga), primera, segunda, tercera, al / a la / del, signs at the station and in the street</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="travel"><div><b>Getting around</b><span>Transport (en autobús, a pie), buying a ticket, at the station, which sentence has no mistakes?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen" id="listenMode"><div><b>Listening: Map Dash 🔊</b><span id="listenNote">Hear the directions and find the place</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the number keys (1–4).</p>
+        <span class="lo">Junior Cycle Spanish learning outcomes: 1.3, 1.5, 1.11 (2017 spec, exams 2027–2028) · 1.4, 1.10, 1.16 (2025 spec, 1st years from Sept 2026)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="chat map" id="card" hidden></div>
+        <div class="prompt" aria-live="polite"><div class="who" id="who"></div><div class="en" id="en"></div><div class="frame" id="frame"></div><div id="sayBox"></div></div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another game</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Directions and getting around</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>To a friend (tú)</th><th>To an adult you don't know (usted)</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>Sig<b>ue</b> todo recto.</td><td>Sig<b>a</b> todo recto.</td><td>Go straight on.</td></tr>
+            <tr><td>Gir<b>a</b> a la derecha.</td><td>Gir<b>e</b> a la derecha.</td><td>Turn right.</td></tr>
+            <tr><td>Tom<b>a</b> la primera calle.</td><td>Tom<b>e</b> la primera calle.</td><td>Take the first street.</td></tr>
+            <tr><td>Cruz<b>a</b> la plaza.</td><td>Cruc<b>e</b> la plaza.</td><td>Cross the square.</td></tr>
+          </tbody></table></div>
+        <p>Look at the endings. What happens to the last vowel when you speak politely? Why does <em>cruza</em> become <em>cruce</em>? Think about it, then check.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">1. For <b>tú</b>, the order looks just like the "he / she" form of the present: <em>él sigue → ¡sigue!, él gira → ¡gira!</em> 2. For <b>usted</b>, the vowel <b>swaps</b>: -ar verbs take <b>-e</b> (gire, tome, cruce, baje) and -er / -ir verbs take <b>-a</b> (coja from <em>coger</em>, suba from <em>subir</em>). <em>Seguir</em> keeps its e → i change: <em>sigue / siga</em>. 3. <em>Cruzar</em> changes z → <b>c</b> before e (<em>cruce</em>), just as <em>coger</em> becomes <em>coja</em> to keep the sound. 4. Use <b>usted</b> with a stranger, a police officer or an older person: <em>Perdone, ¿para ir a la estación?</em></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Asking the way</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Spanish</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>Perdone, ¿dónde está <b>la</b> estación?</td><td>Excuse me, where is the station?</td></tr>
+            <tr><td>¿Para ir <b>al</b> museo, por favor?</td><td>How do I get to the museum, please?</td></tr>
+            <tr><td>¿Por dónde se va <b>a la</b> playa?</td><td>Which way is it to the beach?</td></tr>
+            <tr><td>¿Hay un banco por aquí?</td><td>Is there a bank near here?</td></tr>
+            <tr><td>¿Está lejos? · ¿Está cerca?</td><td>Is it far? · Is it near?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><b>Watch out:</b> <em>a + el = <b>al</b></em> (al museo) and <em>de + el = <b>del</b></em> (enfrente del cine), but <em>a la</em> and <em>de la</em> never join. Use <b>está</b> for where a place is (<em>¿Dónde está la farmacia?</em>) and <b>hay</b> for "is there a…?" (<em>¿Hay una farmacia por aquí?</em>).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Understanding the answer</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Which way</th><th>Where exactly</th><th>How far</th></tr></thead>
+          <tbody>
+            <tr><td>todo recto (straight on)</td><td>enfrente de (opposite)</td><td>Está cerca. (It's near.)</td></tr>
+            <tr><td>a la derecha (on the right)</td><td>al lado de (next to)</td><td>Está lejos. (It's far.)</td></tr>
+            <tr><td>a la izquierda (on the left)</td><td>entre… y… (between… and…)</td><td>Está a cinco minutos andando. (5 minutes' walk)</td></tr>
+            <tr><td>la primera / segunda / tercera calle</td><td>en la esquina (on the corner)</td><td>Está a dos kilómetros. (2 km away)</td></tr>
+            <tr><td>hasta el final de la calle (to the end of the street)</td><td>detrás de · delante de (behind · in front of)</td><td>Está aquí mismo. (It's right here.)</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px"><em>Primera, segunda, tercera</em> agree with <b>la calle</b>. Listen out for <em>cruza</em> (cross), <em>pasa los semáforos</em> (go past the traffic lights), <em>en la rotonda</em> (at the roundabout), <em>sube / baja la calle</em> (go up / down the street).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Getting around</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Transport</th><th>At the station</th><th>English</th></tr></thead>
+          <tbody>
+            <tr><td>Voy <b>en</b> autobús / tren / metro / coche / bici.</td><td>Un billete de ida, por favor.</td><td>A single ticket, please.</td></tr>
+            <tr><td>Voy <b>a pie</b> (or <em>andando</em>).</td><td>Un billete de ida y vuelta.</td><td>A return ticket.</td></tr>
+            <tr><td>Cojo el autobús número tres.</td><td>¿A qué hora sale el próximo tren?</td><td>What time does the next train leave?</td></tr>
+            <tr><td>Me bajo en la próxima parada.</td><td>¿De qué andén sale?</td><td>Which platform does it leave from?</td></tr>
+            <tr><td>Hay que cambiar en Zaragoza.</td><td>¿Cuánto tarda el viaje?</td><td>How long does the journey take?</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:8px">It's always <b>en</b> + transport, except <b>a pie</b> (on foot). At the station look for: <em>SALIDAS</em> (departures), <em>LLEGADAS</em> (arrivals), <em>TAQUILLA</em> (ticket office), <em>ANDÉN</em> (platform), <em>CONSIGNA</em> (left luggage), <em>SALA DE ESPERA</em> (waiting room). In the street: <em>PARADA DE AUTOBÚS</em>, <em>PASO DE PEATONES</em> (pedestrian crossing), <em>CALLE PEATONAL</em> (pedestrian street), <em>PROHIBIDO APARCAR</em> (no parking), <em>OBRAS</em> (roadworks), <em>DESVÍO</em> (diversion).</p>
+        <div class="note" style="margin-top:12px"><b>Culture:</b> most Spanish towns have a <em>plaza Mayor</em> (main square) and a <em>casco antiguo</em> (old town) with narrow pedestrian streets. Spain's fast trains are called the <b>AVE</b> (Madrid to Seville in about two and a half hours), run by <b>Renfe</b>. Big cities like Madrid, Barcelona, Valencia, Bilbao and Sevilla have a <em>metro</em>. <b>Irish link:</b> <em>ar dheis</em> (on the right), <em>ar chlé</em> (on the left), <em>díreach ar aghaidh</em> (straight ahead): just like Spanish, Irish says "on the" side, <em>a la derecha</em>.</div>
+
+        <div class="note" style="margin-top:18px"><b>Exam tip:</b> In <b>Listening</b>, directions are short and fast: write <b>R / L / ↑</b> and the number of the street (<b>1ª, 2ª, 3ª</b>) as you hear them, and wait for the last detail (<em>está enfrente del banco</em>). Station announcements test <b>times</b>, <b>platforms</b> and <b>delays</b> (<em>con veinte minutos de retraso</em>). In <b>Reading</b>, signs and notices come up: learn the station and street signs above. In <b>Writing</b>, tell a visitor how to get to your house: <em>Coge el autobús número 208 en el centro y bájate en la segunda parada. Mi casa está enfrente del parque.</em></div>
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/directions-and-getting-around-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+<p style="text-align:center;font-size:14px;margin-top:6px" id="teacherLine"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/N61yF" target="_blank" rel="noopener">Directions &amp; Getting Around Teacher Pack (€5)</a>: Lost in Valdeluna map info gap, Directions Dominoes, poster and worksheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Want more practice like this?</h2>
+      <p>Join the waitlist (parents and teachers) and get <em>50 Phrases That Score Marks</em> free.</p>
+    </div>
+    <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function others(list,x,n){return shuffle(list.filter(function(y){return y!==x;})).slice(0,n);}
+  function noEmoji(s){return s.replace(/^\S+\s/,"");}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+  /* ---------- Places: [Spanish with article, English, emoji] ---------- */
+  var P=[
+    ["el banco","bank","🏦"],["el museo","museum","🏛️"],["la estación","train station","🚉"],["la farmacia","chemist's","💊"],
+    ["el supermercado","supermarket","🛒"],["el cine","cinema","🎬"],["la piscina","swimming pool","🏊"],["el hospital","hospital","🏥"],
+    ["la biblioteca","library","📚"],["el parque","park","🌳"],["la iglesia","church","⛪"],["el mercado","market","🧺"],
+    ["el hotel","hotel","🏨"],["el castillo","castle","🏰"],["el ayuntamiento","town hall","🏢"],["el polideportivo","sports centre","🏀"],
+    ["la comisaría","police station","🚓"],["la panadería","bakery","🥖"],["el estadio","stadium","🏟️"],["la oficina de turismo","tourist office","ℹ️"]
+  ];
+  function pName(p){return p[2]+" "+p[0];}
+  function toP(p){return p[0].indexOf("el ")===0?"al "+p[0].slice(3):"a "+p[0];}
+  function deP(p){return p[0].indexOf("el ")===0?"del "+p[0].slice(3):"de "+p[0];}
+  var TOWNS=["Villasol","Puertomar","Valdeluna","Fuenteclara"];
+
+  /* ---------- The map: 13 places. x = at the end of a side street, m = on the main street, e = end of the main street ---------- */
+  var ORD=["primera","segunda","tercera"],ORDEN=["first","second","third"];
+  var SL=[
+    {id:"R1",k:"x",o:0,s:"derecha",x:326,y:223},{id:"L1",k:"x",o:0,s:"izquierda",x:2,y:223},
+    {id:"R2",k:"x",o:1,s:"derecha",x:326,y:143},{id:"L2",k:"x",o:1,s:"izquierda",x:2,y:143},
+    {id:"R3",k:"x",o:2,s:"derecha",x:326,y:63},{id:"L3",k:"x",o:2,s:"izquierda",x:2,y:63},
+    {id:"MR0",k:"m",o:0,s:"derecha",x:220,y:270,op:"ML0"},{id:"ML0",k:"m",o:0,s:"izquierda",x:108,y:270,op:"MR0"},
+    {id:"MR1",k:"m",o:1,s:"derecha",x:220,y:184,op:"ML1"},{id:"ML1",k:"m",o:1,s:"izquierda",x:108,y:184,op:"MR1"},
+    {id:"MR2",k:"m",o:2,s:"derecha",x:220,y:103,op:"ML2"},{id:"ML2",k:"m",o:2,s:"izquierda",x:108,y:103,op:"MR2"},
+    {id:"E",k:"e",x:150,y:2,w:100}
+  ];
+  function slotById(id){return SL.filter(function(s){return s.id===id;})[0];}
+  function EN(s){return s==="derecha"?"right":"left";}
+  /* directions (never name the place) — reg 0 = tú, 1 = usted; v = variant */
+  function dirFor(sl,reg,v){
+    var u=reg===1,o=sl.o,s=sl.s;
+    if(sl.k==="x"){v=v%3;var O=ORD[o],OE=ORDEN[o],S=EN(s);
+      if(v===0)return [(u?"Tome":"Toma")+" la "+O+" calle a la "+s+". Está al final de la calle.","Take the "+OE+" street on the "+S+". It's at the end of the street."];
+      if(v===1)return [(u?"Siga":"Sigue")+" todo recto y "+(u?"gire":"gira")+" a la "+s+" en la "+O+" calle. Está al final.","Go straight on and turn "+S+" at the "+OE+" street. It's at the end."];
+      return [(u?"Coja":"Coge")+" la "+O+" a la "+s+" y "+(u?"siga":"sigue")+" hasta el final de la calle.","Take the "+OE+" on the "+S+" and go to the end of the street."];}
+    if(sl.k==="m"){v=v%2;var S2=EN(s);
+      if(o===0)return v===0?["Está muy cerca, a la "+s+", antes de la primera calle.","It's very close, on the "+S2+", before the first street."]
+        :[(u?"Siga":"Sigue")+" todo recto unos metros. Está a la "+s+", antes de la primera calle.","Go straight on for a few metres. It's on the "+S2+", before the first street."];
+      if(o===1)return v===0?[(u?"Siga":"Sigue")+" todo recto y "+(u?"cruce":"cruza")+" la primera calle. Está a la "+s+", antes de la segunda.","Go straight on and cross the first street. It's on the "+S2+", before the second."]
+        :[(u?"Cruce":"Cruza")+" la primera calle. Está a la "+s+", antes de la segunda calle.","Cross the first street. It's on the "+S2+", before the second street."];
+      return v===0?[(u?"Siga":"Sigue")+" todo recto y "+(u?"cruce":"cruza")+" dos calles. Está a la "+s+", antes de la tercera.","Go straight on and cross two streets. It's on the "+S2+", before the third."]
+        :[(u?"Cruce":"Cruza")+" la primera y la segunda calle. Está a la "+s+", antes de la tercera calle.","Cross the first and the second street. It's on the "+S2+", before the third street."];}
+    v=v%2;
+    return v===0?[(u?"Siga":"Sigue")+" todo recto hasta el final de la calle.","Go straight on to the end of the street."]
+      :[(u?"Siga":"Sigue")+" todo recto y "+(u?"cruce":"cruza")+" las tres calles. Está al final.","Go straight on and cross all three streets. It's at the end."];
+  }
+  function newMap(){var ps=shuffle(P.slice()).slice(0,SL.length),m={town:rnd(TOWNS),at:{}};SL.forEach(function(s,i){m.at[s.id]=ps[i];});return m;}
+  /* wrong slots that are easy to mix up: same street other side, same side other street, same kind */
+  function nearSlots(sl,n){
+    var a=SL.filter(function(x){return x!==sl&&x.k===sl.k&&(x.o===sl.o||x.s===sl.s);}),b=SL.filter(function(x){return x!==sl&&a.indexOf(x)<0;});
+    return shuffle(a).concat(shuffle(b)).slice(0,n);}
+  var WHOS=[["🧑","A friend tells you (tú):"],["👮","A police officer tells you (usted):"],["👵","An older lady tells you (usted):"],["🧒","Your Spanish exchange partner says (tú):"]];
+  /* kinds: 0 = directions → which place?  1 = which directions?  2 = what's opposite? */
+  function mapQ(m,sl,kind,listen){
+    var p=m.at[sl.id],wh=rnd(WHOS),reg=wh[1].indexOf("usted")>0?1:0,v=Math.floor(Math.random()*6),d=dirFor(sl,reg,v);
+    if(kind===2&&sl.op){var os=slotById(sl.op),op=m.at[os.id],w=SL.filter(function(x){return x!==os&&x!==sl;}).map(function(x){return m.at[x.id];});
+      return {mapCtx:m,ansSlot:os.id,target:sl.id,who:"🔎",en:"Look at the map. What is opposite the "+p[1]+"?",frame:"¿Qué hay enfrente "+deP(p)+"?",answer:pName(op),wrong:shuffle(w).slice(0,3).map(pName),review:"Enfrente "+deP(p)+" está "+op[0]+"."+(p[0].indexOf("el ")===0?" (de + el = del)":"")};}
+    if(kind===1){var ws=nearSlots(sl,3);
+      return {mapCtx:m,ansSlot:sl.id,target:sl.id,who:"🎯",en:"You're at 📍 and you want to go to the "+p[1]+" "+p[2]+". Which directions are right?",frame:"¿Para ir "+toP(p)+"?",answer:d[0],wrong:ws.map(function(x){return dirFor(x,reg,v)[0];}),review:"¿Para ir "+toP(p)+"? → "+d[0]+" = "+d[1]};}
+    var ws2=nearSlots(sl,3);
+    var q={mapCtx:m,ansSlot:sl.id,answer:pName(p),wrong:ws2.map(function(x){return pName(m.at[x.id]);}),review:d[0]+" = "+d[1]+" → "+p[0]+" ("+p[1]+")"};
+    if(listen){q.listen=1;q.speak=d[0];q.en="You're at 📍. Listen to the directions. Where do you arrive?";}
+    else{q.who=wh[0];q.en=wh[1]+" You're at 📍. Where do you arrive?";q.frame=d[0];}
+    return q;}
+
+  /* ---------- Map Dash rounds: 4 stops on one map, +3 per finished map ---------- */
+  var pc=null;
+  function newRound(){pc={map:newMap(),n:0,used:[],done:false};}
+  function qDash(){if(!pc||pc.done||pc.used.length>SL.length-2)newRound();
+    var free=SL.filter(function(s){return pc.used.indexOf(s.id)<0;}),r=Math.random(),kind=r<.5?0:r<.82?1:2;
+    if(kind===2)free=free.filter(function(s){return s.op&&pc.used.indexOf(s.op)<0;})||free;
+    if(!free.length){free=SL.filter(function(s){return pc.used.indexOf(s.id)<0;});kind=0;}
+    var sl=rnd(free);pc.used.push(sl.id);if(kind===2)pc.used.push(sl.op);
+    var q=mapQ(pc.map,sl,kind,false);q.card=1;return q;}
+  function qMapOne(){var m=newMap(),sl=rnd(SL),r=Math.random(),kind=r<.55?0:r<.85?1:2;if(kind===2&&!sl.op)kind=0;return mapQ(m,sl,kind,false);}
+  function lMap(){var m=newMap(),sl=rnd(SL);return mapQ(m,sl,0,true);}
+
+  /* ---------- Directions & signs ---------- */
+  var DIR=[["Sigue todo recto.","Go straight on."],["Gira a la derecha.","Turn right."],["Gira a la izquierda.","Turn left."],["Toma la primera calle a la derecha.","Take the first street on the right."],
+    ["Toma la segunda a la izquierda.","Take the second on the left."],["Cruza la plaza.","Cross the square."],["Cruza el puente.","Cross the bridge."],["Sigue hasta el final de la calle.","Go to the end of the street."],
+    ["Está en la esquina.","It's on the corner."],["Está enfrente del banco.","It's opposite the bank."],["Está al lado de la iglesia.","It's next to the church."],["Está entre el cine y el hotel.","It's between the cinema and the hotel."],
+    ["Está detrás del museo.","It's behind the museum."],["Está cerca.","It's near."],["Está bastante lejos.","It's quite far."],["Está a cinco minutos andando.","It's five minutes' walk away."],
+    ["Pasa los semáforos.","Go past the traffic lights."],["Baja la calle.","Go down the street."],["Sube la calle.","Go up the street."],["En la rotonda, gira a la derecha.","At the roundabout, turn right."],
+    ["¿Por dónde se va a la estación?","Which way is it to the station?"],["¿Dónde está el museo, por favor?","Where is the museum, please?"],["¿Hay un banco por aquí?","Is there a bank near here?"],["Perdone, ¿para ir al centro?","Excuse me, how do I get to the centre?"],
+    ["Está aquí mismo.","It's right here."],["Está delante del ayuntamiento.","It's in front of the town hall."]];
+  function qDir(){var g=rnd(DIR),w=others(DIR,g,3);
+    if(Math.random()<.6)return {who:"🧭",en:"What does it mean?",frame:g[0],answer:g[1],wrong:w.map(function(x){return x[1];}),review:g[0]+" = "+g[1]};
+    return {who:"🧭",en:"How do you say it in Spanish? ("+g[1]+")",frame:"___",answer:g[0],wrong:w.map(function(x){return x[0];}),review:g[1]+" = "+g[0]};}
+  /* tú or usted? */
+  var TU=["😊 Tú","👔 Usted"],TUS=["a friend","polite"];
+  var TUL=[["Sigue todo recto.",0,"Go straight on."],["Siga todo recto.",1,"Go straight on."],["Gira a la izquierda.",0,"Turn left."],["Gire a la izquierda.",1,"Turn left."],
+    ["Toma la segunda calle.",0,"Take the second street."],["Tome la segunda calle.",1,"Take the second street."],["Cruza la plaza.",0,"Cross the square."],["Cruce la plaza.",1,"Cross the square."],
+    ["Coge el autobús número cinco.",0,"Take the number 5 bus."],["Coja el autobús número cinco.",1,"Take the number 5 bus."],["Baja la calle hasta el río.",0,"Go down the street to the river."],["Baje la calle hasta el río.",1,"Go down the street to the river."],
+    ["Perdona, ¿sabes dónde está el cine?",0,"Excuse me, do you know where the cinema is?"],["Perdone, ¿sabe dónde está el cine?",1,"Excuse me, do you know where the cinema is?"],
+    ["Oye, ¿hay una farmacia por aquí?",0,"Hey, is there a chemist's near here?"],["Oiga, ¿hay una farmacia por aquí?",1,"Excuse me, is there a chemist's near here?"],["Pasa los semáforos.",0,"Go past the traffic lights."],["Pase los semáforos.",1,"Go past the traffic lights."]];
+  function qTu(){var s=rnd(TUL);return {fixed:1,tm:1,smalls:TUS,who:"🗣️",en:s[2]+" Who is speaking to whom?",frame:s[0],answer:TU[s[1]],wrong:TU.filter(function(x,i){return i!==s[1];}),opts:TU,review:s[0]+" = "+s[2]+" ("+(s[1]?"usted, polite":"tú, to a friend")+")"};}
+  /* command forms: [frame, answer, 3 wrong, English] */
+  var CMD=[["(to a friend) ___ todo recto.","Sigue",["Siga","Seguir","Sigo"],"Go straight on."],["(to a stranger) ___ todo recto, por favor.","Siga",["Sigue","Seguir","Sigues"],"Go straight on, please."],
+    ["(to a friend) ___ a la derecha en la plaza.","Gira",["Gire","Girar","Giras"],"Turn right at the square."],["(to a stranger) ___ a la izquierda en el banco.","Gire",["Gira","Girar","Giro"],"Turn left at the bank."],
+    ["(to a friend) ___ la tercera calle.","Toma",["Tome","Tomar","Tomo"],"Take the third street."],["(to a stranger) ___ el puente.","Cruce",["Cruza","Cruze","Cruzar"],"Cross the bridge."],
+    ["(to a friend) ___ el metro, es más rápido.","Coge",["Coja","Coger","Cojo"],"Take the underground, it's quicker."],["(to a stranger) ___ en la próxima parada.","Bájese",["Bájate","Bajar","Bajo"],"Get off at the next stop."],
+    ["Toma la ___ calle a la derecha.","segunda",["segundo","segundas","dos"],"Take the second street on the right."],["Gira a la izquierda en la ___ calle.","primera",["primero","primer","una"],"Turn left at the first street."],
+    ["Toma la ___ a la izquierda.","tercera",["tercero","tercer","tres"],"Take the third on the left."],["Está a la ___, al lado del cine.","derecha",["derecho","derechos","directa"],"It's on the right, next to the cinema."]];
+  function qCmd(){var s=rnd(CMD);return {who:"✍️",en:s[3],frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1]).replace(/^\(.*?\) /,"")+" = "+s[3]};}
+  /* al / a la / del / de la */
+  function qAl(){var p=rnd(P),el=p[0].indexOf("el ")===0;
+    if(Math.random()<.5){var a=el?"al":"a la";return {who:p[2],en:"How do I get to the "+p[1]+"?",frame:"¿Para ir ___ "+p[0].replace(/^(el|la) /,"")+"?",answer:a,wrong:["al","a la","a el","a los"].filter(function(x){return x!==a;}).slice(0,3),review:"¿Para ir "+toP(p)+"?"+(el?" (a + el = al)":"")};}
+    var d=el?"del":"de la";return {who:p[2],en:"It's opposite the "+p[1]+".",frame:"Está enfrente ___ "+p[0].replace(/^(el|la) /,"")+".",answer:d,wrong:["del","de la","de el","de los"].filter(function(x){return x!==d;}).slice(0,3),review:"Está enfrente "+deP(p)+"."+(el?" (de + el = del)":"")};}
+  /* places on the map */
+  function qPlace(){var p=rnd(P),w=others(P,p,3);
+    if(Math.random()<.5)return {who:p[2],en:"How do you say it in Spanish? (the "+p[1]+")",frame:"___",answer:p[0],wrong:w.map(function(x){return x[0];}),review:"the "+p[1]+" = "+p[0]};
+    return {who:"",en:"What is it in English?",frame:cap(p[0]),answer:p[2]+" "+p[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:cap(p[0])+" = the "+p[1]};}
+  /* signs: [sign, English, colour] */
+  var SIGNS=[["SALIDAS","departures",""],["LLEGADAS","arrivals",""],["TAQUILLA","ticket office",""],["ANDÉN 4","platform 4",""],["CONSIGNA","left luggage",""],
+    ["SALA DE ESPERA","waiting room",""],["PARADA DE AUTOBÚS","bus stop",""],["PASO DE PEATONES","pedestrian crossing",""],["PROHIBIDO APARCAR","no parking","red"],["CALLE PEATONAL","pedestrian street","green"],
+    ["OBRAS","roadworks","red"],["DESVÍO","diversion","red"],["CENTRO CIUDAD","town centre","green"],["OFICINA DE TURISMO","tourist office","green"],["ESTACIÓN DE AUTOBUSES","bus station",""],["APARCAMIENTO","car park",""]];
+  function qSign(){var s=rnd(SIGNS);return {sign:s,en:"You see this sign in Spain. What does it mean?",frame:"",answer:s[1],wrong:others(SIGNS,s,3).map(function(x){return x[1];}),review:s[0]+" = "+s[1]};}
+
+  /* ---------- Getting around ---------- */
+  var TR=[["en autobús","by bus","🚌"],["en tren","by train","🚆"],["en metro","by underground","🚇"],["en coche","by car","🚗"],["en bici","by bike","🚲"],["a pie","on foot","🚶"],
+    ["en avión","by plane","✈️"],["en barco","by boat","⛴️"],["en taxi","by taxi","🚕"],["en moto","by motorbike","🏍️"],["en tranvía","by tram","🚊"]];
+  var TRS=[["Voy al instituto ___.","I go to school"],["Mis padres van al trabajo ___.","My parents go to work"],["Vamos a la playa ___.","We go to the beach"],["Mi hermana va al centro ___.","My sister goes into town"]];
+  function qTr(){var t=rnd(TR),w=others(TR,t,3),s=rnd(TRS);
+    if(Math.random()<.6)return {who:t[2],en:s[1]+" "+t[1]+".",frame:s[0],answer:t[0],wrong:w.map(function(x){return x[0];}),review:s[0].replace("___",t[0])+" = "+s[1]+" "+t[1]+"."};
+    return {who:"",en:"What does it mean?",frame:"Voy "+t[0]+".",answer:t[2]+" "+t[1],wrong:w.map(function(x){return x[2]+" "+x[1];}),review:"Voy "+t[0]+". = I go "+t[1]+"."};}
+  var TK=[["Quisiera un billete de ida y ___ para Madrid.","vuelta",["venida","llegada","salida"],"I'd like a return ticket to Madrid."],
+    ["¿A qué hora ___ el próximo tren para Sevilla?","sale",["sales","salen","salir"],"What time does the next train to Seville leave?"],
+    ["¿De qué ___ sale el tren?","andén",["billete","taquilla","asiento"],"Which platform does the train leave from?"],
+    ["¿Cuánto ___ el viaje?","tarda",["tardas","tardo","tardan"],"How long does the journey take?"],
+    ["Un billete ___ ida, por favor.","de",["a","en","por"],"A single ticket, please."],
+    ["¿___ que cambiar de tren?","Hay",["Es","Está","Tiene"],"Do you have to change trains?"],
+    ["Para ir al centro, tienes que ___ el autobús número tres.","coger",["coges","coge","cojo"],"To get to the centre, you have to take the number 3 bus."],
+    ["Me bajo en la ___ parada.","próxima",["próximo","próximas","proxima"],"I'm getting off at the next stop."],
+    ["¿Cuánto ___ un billete sencillo?","cuesta",["cuestan","costa","coste"],"How much is a single ticket?"],
+    ["¿Está ___ la estación?","lejos",["lejo","largo","lejano"],"Is the station far?"],
+    ["Está a diez minutos ___.","andando",["andar","anda","andado"],"It's ten minutes' walk."],
+    ["Voy al instituto ___ pie.","a",["en","por","de"],"I walk to school."],
+    ["Voy ___ tren porque es más rápido.","en",["a","de","con"],"I go by train because it's quicker."]];
+  function qTk(){var s=rnd(TK);return {who:"🎫",en:s[3],frame:s[0],answer:s[1],wrong:s[2].slice(),review:s[0].replace("___",s[1])+" = "+s[3]};}
+  var ANN=[["El próximo tren para Valencia sale a las diez y cuarto.","The next train to Valencia leaves at quarter past ten."],["El autobús número doce va al aeropuerto.","The number 12 bus goes to the airport."],
+    ["El tren de Sevilla llega con quince minutos de retraso.","The train from Seville is arriving fifteen minutes late."],["Un billete de ida y vuelta cuesta veinte euros.","A return ticket costs twenty euros."],
+    ["Hay que cambiar de tren en Zaragoza.","You have to change trains in Zaragoza."],["El viaje dura dos horas y media.","The journey takes two and a half hours."],
+    ["La estación está a cinco minutos andando.","The station is five minutes' walk away."],["El tren para Málaga sale del andén tres.","The train to Málaga leaves from platform three."],
+    ["El metro cierra a la una y media.","The underground closes at half past one."],["Los domingos no hay autobuses.","There are no buses on Sundays."],
+    ["La parada de autobús está enfrente del hotel.","The bus stop is opposite the hotel."],["El tren no para en Toledo.","The train doesn't stop in Toledo."]];
+  function qAnn(){var g=rnd(ANN);return {who:"📢",en:"What does it mean?",frame:g[0],answer:g[1],wrong:others(ANN,g,3).map(function(x){return x[1];}),review:g[0]+" = "+g[1]};}
+  var SLIP=[
+    ["Voy al instituto a pie.",["Voy al instituto en pie.","Voy a el instituto a pie.","Voy al instituto a pies."],"I walk to school."],
+    ["¿Para ir a la estación, por favor?",["¿Para ir al estación, por favor?","¿Para ir a el estación, por favor?","¿Por ir a la estación, por favor?"],"How do I get to the station, please?"],
+    ["Toma la segunda calle a la izquierda.",["Toma el segundo calle a la izquierda.","Toma la segundo calle a la izquierda.","Toma la segunda calle a izquierda."],"Take the second street on the left."],
+    ["El banco está enfrente del cine.",["El banco está enfrente de el cine.","El banco es enfrente del cine.","El banco hay enfrente del cine."],"The bank is opposite the cinema."],
+    ["Perdone, ¿dónde está la farmacia?",["Perdone, ¿dónde es la farmacia?","Perdone, ¿dónde está el farmacia?","Perdone, ¿donde está la farmacia?"],"Excuse me, where is the chemist's?"],
+    ["Siga todo recto y gire a la derecha.",["Siga todo recto y gira a la derecha.","Sigue todo recto y gire a la derecha.","Siga todo recto y gire a la derecho."],"Go straight on and turn right. (polite)"],
+    ["Quisiera un billete de ida y vuelta.",["Quisiera un billete de ida y vuelto.","Quisiera una billete de ida y vuelta.","Quisiero un billete de ida y vuelta."],"I'd like a return ticket."],
+    ["Voy en tren porque es más rápido.",["Voy a tren porque es más rápido.","Voy en tren porque está más rápido.","Voy en tren porque es más rápida."],"I go by train because it's quicker."],
+    ["La estación está bastante lejos.",["La estación es bastante lejos.","La estación está bastante lejo.","El estación está bastante lejos."],"The station is quite far."],
+    ["¿Hay un supermercado por aquí?",["¿Está un supermercado por aquí?","¿Hay un supermercado para aquí?","¿Hay una supermercado por aquí?"],"Is there a supermarket near here?"],
+    ["Cruce la plaza, por favor.",["Cruze la plaza, por favor.","Cruza la plaza, por favor, señora.","Cruce el plaza, por favor."],"Cross the square, please. (polite)"]];
+  function qSlip(){var s=rnd(SLIP);return {who:"🔍",en:s[2]+" Which sentence has no mistakes?",frame:"",answer:s[0],wrong:s[1].slice(),review:s[0]+" = "+s[2]};}
+
+  /* ---------- Listening ---------- */
+  function lDir(){var g=rnd(DIR);return {listen:1,speak:g[0],en:"Listen. What does it mean?",answer:g[1],wrong:others(DIR,g,3).map(function(x){return x[1];}),review:g[0]+" = "+g[1]};}
+  function lTr(){var t=rnd(TR),s="Voy "+t[0]+".";return {listen:1,speak:s,en:"Listen. How do they travel?",answer:t[2]+" "+t[1],wrong:others(TR,t,3).map(function(x){return x[2]+" "+x[1];}),review:s+" = I go "+t[1]+"."};}
+  function lAnn(){var g=rnd(ANN);return {listen:1,speak:g[0],en:"Listen to the announcement. What did you hear?",answer:g[1],wrong:others(ANN,g,3).map(function(x){return x[1];}),review:g[0]+" = "+g[1]};}
+  function lPlace(){var p=rnd(P),s="¿Dónde está "+p[0]+"?";return {listen:1,speak:s,en:"Listen. Where do they want to go?",answer:p[2]+" "+p[1],wrong:others(P,p,3).map(function(x){return x[2]+" "+x[1];}),review:s+" = Where is the "+p[1]+"?"};}
+  function lTu(){var s=rnd(TUL);return {fixed:1,tm:1,smalls:TUS,listen:1,speak:s[0],en:"Listen. Tú or usted?",answer:TU[s[1]],wrong:TU.filter(function(x,i){return i!==s[1];}),opts:TU,review:s[0]+" = "+s[2]+" ("+(s[1]?"usted, polite":"tú, to a friend")+")"};}
+
+  var MAKERS={
+    dash:[qDash],
+    dirs:[qDir,qDir,qDir,qTu,qTu,qTu,qCmd,qCmd,qCmd,qAl,qAl,qPlace,qSign,qSign,qSign],
+    travel:[qTr,qTr,qTr,qTk,qTk,qTk,qTk,qAnn,qAnn,qSlip,qSlip,qSlip],
+    listen:[lMap,lMap,lMap,lMap,lMap,lDir,lDir,lTr,lAnn,lAnn,lPlace,lTu],
+    mixed:[qMapOne,qMapOne,qMapOne,qDir,qTu,qCmd,qAl,qSign,qTr,qTk,qAnn,qSlip]
+  };
+
+  /* ---------- Speech (browser's built-in Spanish voice) ---------- */
+  var synth=window.speechSynthesis,voice=null;
+  function findVoice(){
+    var b=document.getElementById("listenMode");
+    if(synth){var v=synth.getVoices()||[];voice=v.filter(function(x){return /^es[-_]ES/i.test(x.lang);})[0]||v.filter(function(x){return /^es/i.test(x.lang);})[0]||null;}
+    if(voice){b.disabled=false;document.getElementById("listenNote").textContent="Hear the directions and find the place on the map (90 seconds)";}
+    else{b.disabled=true;document.getElementById("listenNote").textContent="Needs a Spanish voice on this device or browser (try Chrome, Safari or Edge)";}
+  }
+  if(synth){findVoice();synth.onvoiceschanged=findVoice;setTimeout(findVoice,800);}else findVoice();
+  function speak(t){if(!synth||!voice)return;synth.cancel();var u=new SpeechSynthesisUtterance(t.replace(/—/g,""));u.voice=voice;u.lang=voice.lang;u.rate=.88;synth.speak(u);}
+
+  /* ---------- Map drawing ---------- */
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function mapSVG(m,target,hi,hiOk){
+    var h="<svg viewBox='0 0 400 340' role='img' aria-label='Town map'>";
+    h+="<rect width='400' height='340' fill='#E3EDE2'/>";
+    [245,165,85].forEach(function(y){h+="<rect x='74' y='"+(y-13)+"' width='252' height='26' fill='#C9CFD6'/><line x1='78' y1='"+y+"' x2='322' y2='"+y+"' stroke='#fff' stroke-width='1.5' stroke-dasharray='7 6'/>";});
+    h+="<rect x='185' y='46' width='30' height='294' fill='#C9CFD6'/><line x1='200' y1='50' x2='200' y2='340' stroke='#fff' stroke-width='1.5' stroke-dasharray='7 6'/>";
+    [[245,"1ª"],[165,"2ª"],[85,"3ª"]].forEach(function(a){h+="<text x='247' y='"+(a[0]+4)+"' font-size='10' font-weight='700' fill='#5B6573'>"+a[1]+" calle</text>";});
+    h+="<text x='200' y='336' font-size='22' text-anchor='middle'>📍</text><text x='176' y='332' font-size='10' font-weight='800' text-anchor='end' fill='#1B2430'>Estás aquí</text>";
+    SL.forEach(function(s){var p=m.at[s.id],w=s.w||72,cx=s.x+w/2,cls=s.id===hi?(hiOk?"ok":"no"):s.id===target?"tg":"";
+      var fill=cls==="ok"?"#CDEBD8":cls==="no"?"#FBE9E8":"#fff",st=cls==="ok"?"#2E7D57":cls==="no"?"#D9534F":cls==="tg"?"#F2C230":"#9AA5B1",sw=cls?3.5:1.2;
+      h+="<rect x='"+s.x+"' y='"+s.y+"' width='"+w+"' height='44' rx='8' fill='"+fill+"' stroke='"+st+"' stroke-width='"+sw+"'/>";
+      h+="<text x='"+cx+"' y='"+(s.y+23)+"' font-size='17' text-anchor='middle'>"+p[2]+"</text>";
+      var nm=p[0],long=nm.length>13;
+      h+="<text x='"+cx+"' y='"+(s.y+38)+"' font-size='9.5' font-weight='700' fill='#1B2430' text-anchor='middle'"+(long?" textLength='"+(w-6)+"' lengthAdjust='spacingAndGlyphs'":"")+">"+esc(nm)+"</text>";});
+    return h+"</svg>";}
+  function drawCard(flash){
+    var el=$("card"),q=current;if(!q||!q.mapCtx){el.hidden=true;return;}
+    var m=q.mapCtx,round=mode==="dash"&&pc&&pc.map===m;
+    el.hidden=false;el.className="chat map"+(round&&pc.done?" done":"");
+    var h="<div class='top'><span>🗺️ "+esc(m.town)+"</span><small>"+(round?"Stop "+Math.min(pc.n+(locked?0:1),4)+"/4":"Town map")+"</small></div>";
+    h+=mapSVG(m,locked?null:(q.target||null),locked?q.ansSlot:null,true);
+    if(flash)h+="<div class='flash'>🗺️ ¡Has llegado! +3</div>";
+    el.innerHTML=h;
+  }
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current=null,locked,mistakes,asked,cards,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(p){$(p).hidden=(p!==id);});}
+  function start(m){
+    mode=m;LEN=m==="listen"?90:m==="dash"?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;cards=0;pc=null;current=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function bad(q){return q.wrong.length<(q.tm?q.opts.length-1:3)||q.wrong.indexOf(q.answer)>=0||new Set(q.wrong).size<q.wrong.length;}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while(!q.card&&(q.review===last||bad(q))&&tries<30);
+    last=q.review;current=q;
+    drawCard(false);
+    $("who").textContent=q.speak||q.sign?"":(q.who||"");
+    $("en").textContent=q.en||"";
+    $("frame").innerHTML=q.speak?"🔊":q.sign?"<span class='sign "+q.sign[2]+"'>"+esc(q.sign[0])+"</span>":esc(q.frame).replace("___","<span class='gap'>&nbsp;?&nbsp;</span>");
+    $("frame").className="frame"+(q.frame&&q.frame.length>40?" longf":"");
+    var sb=$("sayBox");sb.innerHTML="";
+    if(q.speak){
+      var b=document.createElement("button");b.className="say";b.type="button";b.textContent="🔊 Play again";
+      b.onclick=function(){speak(q.speak);};sb.appendChild(b);
+      setTimeout(function(){speak(q.speak);},150);
+    }
+    var box=$("choices");box.innerHTML="";
+    var opts=q.fixed?q.opts.slice():shuffle([q.answer].concat(q.wrong));
+    if(q.tm)box.className="choices three"+(opts.length===2?" two":"");
+    else{var longish=q.speak||opts.some(function(x){return x.length>18;});
+      box.className="choices"+(longish?" long":"")+(opts.some(function(x){return x.length>34;})?" one":"");}
+    opts.forEach(function(f,i){
+      var b=document.createElement("button");b.className="choice";
+      if(q.tm)b.innerHTML=esc(f)+"<small>"+q.smalls[i]+"</small>";else b.textContent=f;
+      b.dataset.v=f;b.setAttribute("aria-label","Option "+(i+1)+": "+f);
+      b.onclick=function(){pick(b,f);};box.appendChild(b);
+    });
+  }
+  function reveal(){if(current.speak)$("frame").innerHTML="<span style='font-size:.75em'>"+esc(current.speak)+"</span>";}
+  function pick(btn,f){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=f===current.answer,flash=false;current.wasOk=ok;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.dataset.v===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:current.tm?noEmoji(f):f,listen:!!current.listen});
+    }
+    if(current.card&&pc){
+      pc.n++;
+      if(pc.n>=4){pc.done=true;score+=3;cards++;flash=true;}
+    }
+    drawCard(flash);
+    reveal();
+    $("score").textContent=score;$("streak").textContent=streak;
+    var wait=ok?(current.speak?1100:(flash?1600:(current.mapCtx?800:500))):(current.speak?2800:(current.mapCtx?2400:1900));
+    setTimeout(function(){if(left>0)next();},wait);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;if(synth)synth.cancel();
+    $("final").textContent=score;
+    var msg=score>=28?"¡Increíble! You'd never get lost in Spain.":score>=16?"¡Muy bien! Great work.":score>=8?"¡Bien! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered"+(mode==="dash"?", "+cards+" map"+(cards===1?"":"s")+" finished":"")+")";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        if(m.listen&&m.review.indexOf(" = ")>0){var parts=m.review.split(" = ");
+          html+="<li>"+esc(parts[0])+" <span style='color:var(--muted)'>→</span> <span class='fix'>"+esc(parts.slice(1).join(" = "))+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";}
+        else html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span></li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. ¡Perfecto!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){if(!b.disabled)start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={makers:MAKERS,SL:SL,dirFor:dirFor,newMap:newMap,mapQ:mapQ,mapSVG:mapSVG};
+})();
+</script>
+
+<script src="site.js"></script>
+</body>
+</html>
