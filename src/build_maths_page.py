@@ -14,7 +14,8 @@ signup = T[T.index('<div class="signup" id="join">'):T.index('</section>', T.ind
 foot = T[T.index("</main>"):]
 
 DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the number line, with an Exam corner of exam-style questions.",
-        "prime-smash.html": "spot the primes, factor trees, products of primes, HCF and LCM, with an Exam corner of exam-style questions."}
+        "prime-smash.html": "spot the primes, factor trees, products of primes, HCF and LCM, with an Exam corner of exam-style questions.",
+        "fraction-match.html": "fraction pictures, simplest form, mixed numbers, +, −, × and ÷ with fractions and fractions of amounts, with an Exam corner of exam-style questions."}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]
@@ -82,6 +83,7 @@ main = f'''<main id="main">
     <div class="grid">
       <a class="card" href="https://payhip.com/b/ptUyN" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Integers &amp; Order of Operations Teacher Pack · €5</h3><p>Human Number Line, Find Your Match mingle, Integer Dominoes, BIMDAS poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/UCG1v" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Factors, Multiples &amp; Primes Teacher Pack · €5</h3><p>Sieve of Eratosthenes, Number Detective line-up, HCF &amp; LCM Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
+      <a class="card" href="https://payhip.com/b/ILfgV" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Fractions Teacher Pack · €5</h3><p>Fraction Wall, Find Your Match cards, Fraction Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
     </div>
   </div>
 </section>

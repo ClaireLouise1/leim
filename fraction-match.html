@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fractions: play Fraction Match | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: fraction pictures, equivalent fractions, simplifying, mixed numbers, and adding, subtracting, multiplying and dividing fractions, with an Exam corner. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="junior-cycle-spanish.html">JC Spanish</a>
+      <a href="junior-cycle-maths.html">JC Maths</a>
+      <a href="index.html#games" aria-current="page">Free games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a href="about.html">About</a>
+      <a class="btn" href="junior-cycle-spanish.html#join">Get the free guide</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Fraction Match</h1>
+        <p>60 seconds. Match the picture to the fraction, simplify, then race through +, −, × and ÷. Is 3/4 bigger than 5/8? (Yes: 6/8 beats 5/8.) What's 2/3 of €45? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="picture"><div><b>Picture match</b><span>Bars, pizzas, grids and number lines: what fraction is it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="equiv"><div><b>Equivalent &amp; simplify</b><span>Simplest form, missing numbers, mixed numbers, which is bigger</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="addsub"><div><b>Add &amp; subtract</b><span>Common denominators and mixed numbers</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="muldiv"><div><b>Multiply, divide &amp; "of"</b><span>Keep, change, flip, fractions of amounts and real-life problems</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Picture match, every 5 in a row gives you 3 bonus seconds. Mixed numbers are written like 2 1/3 (two and a third).</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1a, N.1b, N.2a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Fractions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>All of these bars have the same amount shaded.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="1 of 2 parts shaded"><rect x="0" y="0" width="120" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="120" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>1/2</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="2 of 4 parts shaded"><rect x="0" y="0" width="60" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="60" y="0" width="60" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="60" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="180" y="0" width="60" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>2/4</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="3 of 6 parts shaded"><rect x="0" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="40" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="80" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="160" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="200" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>3/6</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="4 of 8 parts shaded"><rect x="0" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="30" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="60" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="90" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="150" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="180" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="210" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>4/8</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">Look at the top and bottom numbers as you go down. What happens to both of them? Would 5/9 belong in this list? What about 5/10?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Each time, the top and the bottom are <b>multiplied by the same number</b> (1/2 → 2/4 is × 2, 1/2 → 3/6 is × 3). The pieces get smaller, but there are more of them, so the amount stays the same. These are <b>equivalent fractions</b>. 5/10 belongs (× 5); 5/9 doesn't: 9 is not 5 × 2.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Word</th><th>Means</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><b>Numerator</b></td><td>the top: how many parts you have</td><td>the 3 in 3/4</td></tr>
+            <tr><td><b>Denominator</b></td><td>the bottom: how many equal parts make a whole</td><td>the 4 in 3/4</td></tr>
+            <tr><td><b>Simplest form</b></td><td>top and bottom have no common factor except 1</td><td>12/18 = 2/3 (÷ 6, the HCF)</td></tr>
+            <tr><td><b>Improper fraction</b></td><td>top bigger than the bottom</td><td>7/3</td></tr>
+            <tr><td><b>Mixed number</b></td><td>a whole number and a fraction</td><td>2 1/3 (= 7/3)</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:10px"><b>Mixed ↔ improper:</b> 2 1/3 → 2 × 3 + 1 = 7, so <b>7/3</b>. And back: 17/5 → 17 ÷ 5 = 3 remainder 2, so <b>3 2/5</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Comparing fractions</h3>
+        <p>Change them to the same denominator, then compare the tops. Which is bigger, 3/4 or 5/8? 3/4 = 6/8, and 6/8 is bigger than 5/8, so <b>3/4</b>. For a list, use the LCM of all the bottoms (for 2/3, 3/5, 7/12 and 5/8 that's 120).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Add and subtract: same bottom first</h3>
+        <ul>
+          <li><b>Same denominator:</b> add the tops, keep the bottom. 2/9 + 5/9 = 7/9.</li>
+          <li><b>Different denominators:</b> change both to the LCM of the bottoms. 1/3 + 1/4 = 4/12 + 3/12 = <b>7/12</b>.</li>
+          <li><b>Mixed numbers:</b> add the wholes, then the fractions: 2 1/3 + 1 3/4 = 3 + 4/12 + 9/12 = 3 + 13/12 = <b>4 1/12</b>. If a subtraction won't go (3 1/5 − 1 3/5), change both to improper fractions first: 16/5 − 8/5 = 8/5 = <b>1 3/5</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Never add the bottoms.</b> 1/2 + 1/3 is not 2/5 (2/5 is smaller than 1/2, so it can't be right). It's 3/6 + 2/6 = <b>5/6</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Multiply and divide: no common denominator needed</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><b>Multiply</b></td><td>tops × tops, bottoms × bottoms</td><td>2/3 × 3/5 = 6/15 = <b>2/5</b></td></tr>
+            <tr><td><b>Divide</b></td><td>keep, change, flip: keep the first, change ÷ to ×, flip the second</td><td>3/4 ÷ 1/2 = 3/4 × 2/1 = 6/4 = <b>1 1/2</b></td></tr>
+            <tr><td><b>Mixed numbers</b></td><td>change to improper fractions first</td><td>1 1/2 × 2 2/3 = 3/2 × 8/3 = 24/6 = <b>4</b></td></tr>
+            <tr><td><b>"Of"</b></td><td>means ×: divide by the bottom, times by the top</td><td>3/5 of 40 = 40 ÷ 5 × 3 = <b>24</b></td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:10px"><b>Sense check:</b> multiplying by a fraction smaller than 1 makes a number <b>smaller</b>; dividing by it makes it <b>bigger</b> (how many halves in 3? 6).</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Fractions rarely get a question to themselves: they run through the whole paper. Expect them in <b>Number</b> questions (mixed numbers, fractions of amounts, "what fraction of the class…"), in <b>money</b> and <b>ratio</b> problems, in <b>probability</b> (answers are often fractions in simplest form), and in <b>algebra</b> (equations with fractions in them). No calculator is allowed on some questions, so you need the methods by hand.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the common denominator</b> (4/12 + 9/12), not just the answer. A correct method with one slip still earns part marks.</li>
+            <li><b>Finish the job:</b> "simplest form" or "as a mixed number" means exactly that. 10/12 isn't finished; 5/6 is.</li>
+            <li><b>Read "of what is left" carefully</b>: the second fraction is of the remainder, not of the original amount.</li>
+            <li><b>Answer the question asked.</b> 5 ÷ 2/3 = 7 1/2, but if the question asks how many <b>full</b> batches, the answer is <b>7</b>.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Mixed numbers.</b> Work out (a) 2 1/3 + 1 3/4 and (b) 3 1/2 − 1 4/5. Give each answer as a mixed number.
+              <details><summary>Show the worked answer</summary><p>(a) Wholes: 2 + 1 = 3. Fractions: 1/3 + 3/4 = 4/12 + 9/12 = 13/12 = 1 1/12. Total: 3 + 1 1/12 = <b>4 1/12</b>.<br>(b) 1/2 − 4/5 won't go, so use improper fractions: 7/2 − 9/5 = 35/10 − 18/10 = 17/10 = <b>1 7/10</b>.</p></details></li>
+            <li><b>Getting to school.</b> A school has 840 students. 3/7 of them come by bus. 1/4 of the rest walk. (a) How many students walk? (b) What fraction of the whole school walks? Give your answer in its simplest form.
+              <details><summary>Show the worked answer</summary><p>(a) 3/7 of 840 = 840 ÷ 7 × 3 = 360 by bus. The rest: 840 − 360 = 480. 1/4 of 480 = <b>120 walk</b>.<br>(b) 120/840: divide top and bottom by 120 (the HCF) → <b>1/7</b>.</p></details></li>
+            <li><b>Baking.</b> One batch of scones uses 2/3 of a cup of flour. Niamh has 5 cups of flour. How many full batches can she make?
+              <details><summary>Show the worked answer</summary><p>5 ÷ 2/3 = 5/1 × 3/2 = 15/2 = 7 1/2. She can't make half a batch count, so <b>7 full batches</b>. (Check: 7 × 2/3 = 14/3 = 4 2/3 cups, and 5 − 4 2/3 = 1/3 cup left over, not enough for another.)</p></details></li>
+            <li><b>Order them.</b> Write these fractions in order, starting with the smallest: 3/5, 2/3, 7/12, 5/8.
+              <details><summary>Show the worked answer</summary><p>The LCM of 5, 3, 12 and 8 is 120. 3/5 = 72/120, 2/3 = 80/120, 7/12 = 70/120, 5/8 = 75/120.<br>Smallest first: <b>7/12, 3/5, 5/8, 2/3</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/fractions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/ILfgV" target="_blank" rel="noopener">Fractions Teacher Pack (€5)</a>: Fraction Wall, Find Your Match cards, Fraction Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+  function lcm(a,b){return a/gcd(a,b)*b;}
+  /* fractions are [top, bottom], bottom > 0 */
+  function F(n,d){if(d<0){n=-n;d=-d;}var g=gcd(n,d)||1;return [n/g,d/g];}
+  function add(a,b){return F(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);}
+  function sub(a,b){return F(a[0]*b[1]-b[0]*a[1],a[1]*b[1]);}
+  function mul(a,b){return F(a[0]*b[0],a[1]*b[1]);}
+  function dvd(a,b){return F(a[0]*b[1],a[1]*b[0]);}
+  function eq(a,b){return a[0]*b[1]===b[0]*a[1];}
+  function raw(f){return f[1]===1?String(f[0]):f[0]+"/"+f[1];}            // as written, e.g. 6/8
+  function fs(f){return raw(F(f[0],f[1]));}                                  // simplest, improper allowed
+  function mx(f){f=F(f[0],f[1]);if(f[1]===1)return String(f[0]);var w=Math.floor(f[0]/f[1]),r=f[0]-w*f[1];return (w?w+" ":"")+r+"/"+f[1];} // mixed number
+  function M(w,n,d){return [w*d+n,d];}                                       // mixed → improper (not reduced)
+  // 3 distinct wrong options whose VALUE is different from the answer (so an equivalent fraction can never be marked wrong)
+  function fwrongs(ans,slips,fmt){
+    var seen={},out=[];seen[fmt(ans)]=1;
+    var pads=[[ans[0]+1,ans[1]],[ans[0]-1,ans[1]],[ans[0],ans[1]+1],[ans[0]+ans[1],ans[1]],[ans[0]*2,ans[1]],[ans[0]+2,ans[1]],[ans[0],ans[1]+2],[1,3],[2,3],[1,4],[3,4],[2,5],[1,6]];
+    slips.concat(pads).forEach(function(x){
+      if(!x||!isFinite(x[0])||!isFinite(x[1])||x[1]<=0||x[0]<=0||Math.round(x[0])!==x[0]||Math.round(x[1])!==x[1])return;
+      if(eq(x,ans))return;if(fmt===raw&&ans[0]<ans[1]&&x[0]>=x[1])return;var s=fmt(x);if(!seen[s]&&out.length<3){seen[s]=1;out.push(s);}});
+    return out;}
+  function QF(en,frame,ans,slips,why,fmt,html){fmt=fmt||mx;
+    return {en:en,frame:frame,html:html||"",answer:fmt(ans),wrong:fwrongs(ans,slips,fmt),why:why,review:(frame?en+" "+frame:en)+" → "+fmt(ans),val:ans};}
+  // whole-number answers
+  function wrongs(ans,c){var seen={},out=[];seen[ans]=1;
+    c.concat([ans+1,ans-1,ans+2,ans-2,ans+10,ans*2]).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||Math.round(x)!==x||x<2)return;if(!seen[x]&&out.length<3){seen[x]=1;out.push(String(x));}});return out;}
+  function Q(en,frame,ans,c,why,html,unit){unit=unit||"";var o={en:en,frame:frame,html:html||"",answer:ans+unit,wrong:wrongs(ans,c).map(function(x){return x+unit;}),why:why,review:(frame?en+" "+frame:en)+" → "+ans+unit,num:ans};return o;}
+  function C(en,frame,ans,pool,why,review,html){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans)};}
+
+  /* ---------- pictures ---------- */
+  var GREEN="#2E7D57",SOFT="#E7F3EC",INK="#1B2430",YEL="#F6CF5A";
+  function cells(d,k){var a=[];for(var i=0;i<d;i++)a.push(i<k);return Math.random()<.5?a:shuffle(a);}
+  function barSVG(d,k){var w=300/d,s=cells(d,k),o='<svg viewBox="-4 -4 308 68" width="100%" style="max-width:320px" role="img" aria-label="A bar split into '+d+' equal parts">';
+    for(var i=0;i<d;i++)o+='<rect class="pc" data-on="'+(s[i]?1:0)+'" x="'+(i*w).toFixed(2)+'" y="0" width="'+w.toFixed(2)+'" height="60" fill="'+(s[i]?GREEN:"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';
+    return o+'</svg>';}
+  function pieSVG(d,k){var s=cells(d,k),o='<svg viewBox="-4 -4 168 168" width="100%" style="max-width:170px" role="img" aria-label="A circle split into '+d+' equal slices">';
+    for(var i=0;i<d;i++){var a1=2*Math.PI*i/d-Math.PI/2,a2=2*Math.PI*(i+1)/d-Math.PI/2;
+      var x1=80+80*Math.cos(a1),y1=80+80*Math.sin(a1),x2=80+80*Math.cos(a2),y2=80+80*Math.sin(a2);
+      o+='<path class="pc" data-on="'+(s[i]?1:0)+'" d="M80 80 L'+x1.toFixed(2)+' '+y1.toFixed(2)+' A80 80 0 0 1 '+x2.toFixed(2)+' '+y2.toFixed(2)+' Z" fill="'+(s[i]?GREEN:"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';}
+    return o+'</svg>';}
+  function gridSVG(r,c,k){var s=cells(r*c,k),w=40,o='<svg viewBox="-4 -4 '+(c*w+8)+' '+(r*w+8)+'" width="100%" style="max-width:'+Math.min(300,c*w+8)+'px" role="img" aria-label="A grid of '+(r*c)+' equal squares">';
+    for(var i=0;i<r*c;i++)o+='<rect class="pc" data-on="'+(s[i]?1:0)+'" x="'+(i%c)*w+'" y="'+Math.floor(i/c)*w+'" width="'+w+'" height="'+w+'" fill="'+(s[i]?GREEN:"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';
+    return o+'</svg>';}
+  function lineSVG(d,k,units){var L=300/units,o='<svg viewBox="-20 -34 340 84" width="100%" style="max-width:340px" role="img" aria-label="A number line from 0 to '+units+'" data-d="'+d+'" data-k="'+k+'">';
+    o+='<line x1="0" y1="20" x2="300" y2="20" stroke="'+INK+'" stroke-width="2.5"/>';
+    for(var i=0;i<=d*units;i++){var x=(i*L/d).toFixed(2),big=i%d===0;o+='<line x1="'+x+'" y1="'+(big?6:12)+'" x2="'+x+'" y2="'+(big?34:28)+'" stroke="'+INK+'" stroke-width="'+(big?2.5:1.5)+'"/>';
+      if(big)o+='<text x="'+x+'" y="50" font-size="16" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+(i/d)+'</text>';}
+    var ax=(k*L/d).toFixed(2);o+='<path d="M'+ax+' 4 l-9 -16 h18 z" fill="'+YEL+'" stroke="'+INK+'" stroke-width="2"/>';
+    return o+'</svg>';}
+  function pic(d,k){
+    if(d===12&&Math.random()<.5)return gridSVG(3,4,k);
+    if((d===6||d===8||d===10)&&Math.random()<.35)return gridSVG(2,d/2,k);
+    return Math.random()<.5?barSVG(d,k):pieSVG(d,k);}
+
+  /* ---------- Picture match ---------- */
+  function qShaded(){
+    var d=rnd([3,4,5,6,7,8,9,10,12]),k=ri(1,d-1),a=[k,d];
+    return QF("What fraction of the shape is shaded?","",a,[[d-k,d],[k,d-k],[d,k],[k,d+1],[k+1,d]],k+" of the "+d+" equal parts "+(k===1?"is":"are")+" shaded, so "+k+"/"+d+" (the bottom number is how many parts in total).",raw,pic(d,k));
+  }
+  function qShadedSimplest(){
+    var b=rnd([[1,2],[1,3],[2,3],[1,4],[3,4],[2,5],[3,5],[1,6],[5,6]]),m=rnd([2,3,4].filter(function(x){return b[1]*x<=12;})),d=b[1]*m,k=b[0]*m;
+    var o=QF("What fraction is shaded? Give it in its simplest form.","",b,[[d-k,d],[k,d-k],[b[0],b[1]+1],[b[0]+1,b[1]],[d-k,d].map(function(x,i){return i?x/gcd(d-k,d):x/gcd(d-k,d);})],k+"/"+d+" shaded. Divide top and bottom by "+m+": "+k+"/"+d+" = "+raw(b)+".",raw,pic(d,k));
+    o.raw=[k,d];return o;
+  }
+  function qLine(){
+    var d=rnd([2,3,4,5,6,8,10]),units=rnd([1,1,2]),k;do{k=ri(1,d*units-1);}while(k%d===0);
+    var a=F(k,d),fmt=units===2&&Math.random()<.5?mx:fs;
+    return QF("What number is the yellow arrow pointing to?","",a,[[k,d*units],[k+1,d],[k-1,d],[k,d+1],[d,k]],"Each whole is cut into "+d+" equal jumps. The arrow is "+k+" jumps from 0, so "+k+"/"+d+(gcd(k,d)>1||k>d?" = "+mx(a):"")+".",fmt,lineSVG(d,k,units));
+  }
+  function qPicEquiv(){
+    var b=rnd([[1,2],[1,3],[2,3],[1,4],[3,4],[2,5],[3,5]]),m=rnd([2,3].filter(function(x){return b[1]*x<=12;})),d=b[1]*m,k=b[0]*m;
+    var pool=[];[[b[0],b[1]+1],[b[0]+1,b[1]],[b[1]-b[0],b[1]],[b[0]+1,b[1]+1],[k,d+2],[k+1,d+1]].forEach(function(x){if(x[0]>0&&x[0]<x[1]&&!eq(x,b))pool.push(raw(x));});
+    var e=[b[0]*rnd([2,3,4,5].filter(function(x){return x!==m;})),0];e[1]=e[0]/b[0]*b[1];
+    var o=C("Which fraction is the same size as the shaded part?","",raw(e),pool,"Shaded: "+k+"/"+d+" = "+raw(b)+" = "+raw(e)+". Equivalent fractions: multiply or divide top and bottom by the same number.","Shaded "+k+"/"+d+" = "+raw(e),pic(d,k));
+    o.raw=[k,d];o.val=e;return o;
+  }
+
+  /* ---------- Equivalent & simplify ---------- */
+  function qSimplify(){
+    var b=rnd([[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,6],[5,6],[3,7],[2,7],[3,8],[5,8],[7,8],[4,9],[7,10],[5,12]]),m=rnd([2,3,4,5,6,8]),n=b[0]*m,d=b[1]*m;
+    var g=gcd(n,d),hf=[n/2,d/2];
+    return QF("Write in its simplest form:",n+"/"+d,b,[(g>2&&n%2===0&&d%2===0)?hf:null,[b[0],b[1]+1],[b[0]+1,b[1]],[n-m,d-m],[b[1],b[0]]],"The HCF of "+n+" and "+d+" is "+g+": "+n+" ÷ "+g+" = "+b[0]+" and "+d+" ÷ "+g+" = "+b[1]+". Divide by the HCF to finish in one step.",raw);
+  }
+  function qMissing(){
+    var b=rnd([[1,2],[2,3],[3,4],[2,5],[3,5],[4,5],[5,6],[3,8],[5,8],[7,10],[1,3],[1,4]]),m=ri(2,9),top=Math.random()<.6;
+    var fr=top?b[0]+"/"+b[1]+" = ?/"+(b[1]*m):b[0]+"/"+b[1]+" = "+(b[0]*m)+"/?",ans=top?b[0]*m:b[1]*m;
+    return Q("Fill in the missing number.",fr,ans,top?[b[0]+m,b[1]*m-b[1]+b[0],b[0]*(m+1)]:[b[1]+m,b[1]*m+b[0],b[1]*(m-1)],"× "+m+" on the bottom means × "+m+" on the top: "+b[0]+"/"+b[1]+" = "+(b[0]*m)+"/"+(b[1]*m)+".");
+  }
+  function qWhichEquiv(){
+    var b=rnd([[1,2],[2,3],[3,4],[2,5],[3,5],[1,3],[1,4],[5,6]]),m=ri(2,6),e=[b[0]*m,b[1]*m];
+    var pool=[[b[0]+m,b[1]+m],[b[0]*m,b[1]+m],[b[0]+1,b[1]+1],[b[0]*m+1,b[1]*m],[b[1],b[0]*m+1],[b[0]*m,b[1]*m+1]].filter(function(x){return x[0]>0&&!eq(x,b);}).map(raw);
+    var o=C("Which fraction is equal to "+raw(b)+"?","",raw(e),pool,raw(b)+" = "+raw(e)+" (× "+m+" top and bottom). Adding the same number to the top and bottom does NOT give an equal fraction.","Equal to "+raw(b)+": "+raw(e));
+    o.val=b;return o;
+  }
+  function qBiggest(){
+    var L=rnd([[[1,2],[2,5],[3,8],[4,9]],[[3,4],[2,3],[5,8],[7,12]],[[2,3],[3,5],[5,9],[7,12]],[[5,6],[4,5],[3,4],[7,10]],[[3,5],[4,7],[5,9],[1,2]],[[7,8],[5,6],[4,5],[3,4]],[[2,3],[5,8],[3,5],[7,12]],[[3,10],[1,4],[2,9],[1,5]]]);
+    var big=Math.random()<.6,s=L.slice().sort(function(a,b){return a[0]*b[1]-b[0]*a[1];}),ans=big?s[3]:s[0],d=L.reduce(function(x,f){return lcm(x,f[1]);},1);
+    var o=C("Which fraction is the "+(big?"biggest":"smallest")+"?","",raw(ans),L.filter(function(f){return f!==ans;}).map(raw),"Change them all to "+d+"ths: "+L.map(function(f){return raw(f)+" = "+(f[0]*d/f[1])+"/"+d;}).join(", ")+".",(big?"Biggest":"Smallest")+": "+raw(ans)+" (from "+L.map(raw).join(", ")+")");
+    o.list=L;o.big=big;return o;
+  }
+  function qToMixed(){
+    var d=rnd([2,3,4,5,6,8]),w=ri(1,5),r=ri(1,d-1);while(gcd(r,d)>1)r=ri(1,d-1);var n=w*d+r;
+    return QF("Write as a mixed number:",n+"/"+d,[n,d],[[w*d,d+r],[M(w+1,r,d)[0],d],[M(w,r+1,d)[0],d],[M(r,w,d)[0],d],[M(w-1,r,d)[0],d]],n+" ÷ "+d+" = "+w+" remainder "+r+", so "+w+" "+r+"/"+d+".",mx);
+  }
+  function qToImproper(){
+    var d=rnd([2,3,4,5,6,8]),w=ri(1,5),r=ri(1,d-1);while(gcd(r,d)>1)r=ri(1,d-1);var n=w*d+r;
+    return QF("Write as an improper fraction:",w+" "+r+"/"+d,[n,d],[[w+r,d],[w*r+d,d],[w*d,d],[n,w*d],[n+d,d]],w+" × "+d+" = "+(w*d)+", plus "+r+" = "+n+". So "+n+"/"+d+".",raw);
+  }
+
+  /* ---------- Add & subtract ---------- */
+  var PR=[[2,3],[3,4],[2,5],[3,8],[4,6],[2,6],[3,5],[4,5],[6,8],[3,9],[4,10],[5,6],[6,9],[4,12],[3,12],[2,4],[5,10],[2,8]];
+  function nonZero(){return rnd(PR);}
+  function frac(d){var n;do{n=ri(1,d-1);}while(gcd(n,d)>1&&Math.random()<.85);return [n,d];}
+  function cop(d){var n;do{n=ri(1,d-1);}while(gcd(n,d)>1);return n;}
+  function qAddSame(){
+    var d=rnd([5,7,8,9,10,11,12]),a=ri(1,d-2),b=ri(1,d-a-1),s=F(a+b,d);
+    return QF("Work out:",a+"/"+d+" + "+b+"/"+d,s,[[a+b,2*d],[a*b,d],[a+b+1,d]],"Same bottom number: add the tops, keep the bottom. "+(a+b)+"/"+d+(gcd(a+b,d)>1?" = "+fs(s):"")+".",fs);
+  }
+  function qAdd(){
+    var p=nonZero(),x=frac(p[0]),y=frac(p[1]),s=add(x,y),D=lcm(x[1],y[1]);
+    return QF("Work out (simplest form):",raw(x)+" + "+raw(y),s,[[x[0]+y[0],x[1]+y[1]],[x[0]+y[0],D],[x[0]*y[0],x[1]*y[1]],[x[0]+y[0],x[1]*y[1]]],"Common denominator "+D+": "+(x[0]*D/x[1])+"/"+D+" + "+(y[0]*D/y[1])+"/"+D+" = "+(x[0]*D/x[1]+y[0]*D/y[1])+"/"+D+((x[0]*D/x[1]+y[0]*D/y[1])+"/"+D!==mx(s)?" = "+mx(s):"")+". Never add the bottoms!",mx);
+  }
+  function qSub(){
+    var p=nonZero(),x=frac(p[0]),y=frac(p[1]);if(x[0]*y[1]<y[0]*x[1]){var t=x;x=y;y=t;}if(eq(x,y))x=[x[1]-1,x[1]];if(eq(x,y)||x[0]*y[1]<=y[0]*x[1])return qAdd();
+    var s=sub(x,y),D=lcm(x[1],y[1]),top=x[0]*D/x[1]-y[0]*D/y[1];
+    return QF("Work out (simplest form):",raw(x)+" − "+raw(y),s,[[Math.abs(x[0]-y[0])||1,Math.abs(x[1]-y[1])||1],[Math.abs(x[0]-y[0])||1,D],[x[0]*D/x[1]+y[0]*D/y[1],D]],"Common denominator "+D+": "+(x[0]*D/x[1])+"/"+D+" − "+(y[0]*D/y[1])+"/"+D+" = "+top+"/"+D+(gcd(top,D)>1?" = "+fs(s):"")+".",mx);
+  }
+  function qMixedAdd(){
+    var d1=rnd([2,3,4,5,6]),d2=rnd([2,3,4,6,8].filter(function(x){return x!==d1;})),w1=ri(1,4),w2=ri(1,3),n1=cop(d1),n2=cop(d2);
+    var a=M(w1,n1,d1),b=M(w2,n2,d2),s=add(a,b);
+    return QF("Work out:",mx(a)+" + "+mx(b),s,[[(w1+w2)*(d1+d2)+n1+n2,d1+d2],M(w1+w2,(n1*d2+n2*d1)%(d1*d2),d1*d2),add(s,[-1,1]),add(s,[1,1]),add([w1+w2,1],[n1+n2,d1*d2])],"Wholes: "+w1+" + "+w2+" = "+(w1+w2)+". Fractions: "+n1+"/"+d1+" + "+n2+"/"+d2+" = "+mx(add([n1,d1],[n2,d2]))+". Total "+mx(s)+".",mx);
+  }
+  function qMixedSub(){
+    var d=rnd([3,4,5,6,8]),w1=ri(3,6),w2=ri(1,w1-1),n1=cop(d),n2=cop(d),a=M(w1,n1,d),b=M(w2,n2,d),s=sub(a,b);if(s[0]<=0)return qMixedAdd();
+    var slip=n1<n2?M(w1-w2,n2-n1,d):M(w1-w2-1,n1-n2,d);
+    return QF("Work out:",mx(a)+" − "+mx(b),s,[slip,add(s,[1,1]),sub(s,[1,1]),add(s,[1,d])],n1<n2?"You can't take "+n2+"/"+d+" from "+n1+"/"+d+": change to improper fractions. "+a[0]+"/"+d+" − "+b[0]+"/"+d+" = "+s[0]*(d/s[1])+"/"+d+" = "+mx(s)+".":"Wholes: "+w1+" − "+w2+" = "+(w1-w2)+". Fractions: "+n1+"/"+d+" − "+n2+"/"+d+". Answer "+mx(s)+".",mx);
+  }
+
+  /* ---------- Multiply & divide ---------- */
+  function qMul(){
+    var x=frac(rnd([2,3,4,5,6,7,8,9])),y=frac(rnd([2,3,4,5,6,8,10])),p=mul(x,y);
+    return QF("Work out (simplest form):",raw(x)+" × "+raw(y),p,[[x[0]*y[1],x[1]*y[0]],[x[0]+y[0],x[1]+y[1]],[x[0]*y[0],x[1]+y[1]],[x[0]*y[0],x[1]*y[1]+1]],"Multiply the tops and multiply the bottoms: "+(x[0]*y[0])+"/"+(x[1]*y[1])+(gcd(x[0]*y[0],x[1]*y[1])>1?" = "+fs(p):"")+". No common denominator needed.",mx);
+  }
+  function qDiv(){
+    var x=frac(rnd([2,3,4,5,6,8])),y=frac(rnd([2,3,4,5,6,9])),q=dvd(x,y);
+    return QF("Work out:",raw(x)+" ÷ "+raw(y),q,[mul(x,y),dvd(y,x),[x[0]*y[0],x[1]*y[1]],F(x[1]*y[0],x[0]*y[1])],"Keep, change, flip: "+raw(x)+" × "+y[1]+"/"+y[0]+" = "+(x[0]*y[1])+"/"+(x[1]*y[0])+(F(x[0]*y[1],x[1]*y[0])[1]!==x[1]*y[0]||q[0]>q[1]?" = "+mx(q):"")+".",mx);
+  }
+  function qOf(){
+    var d=rnd([3,4,5,6,8,10]),n=ri(1,d-1),m=ri(2,12),Q0=d*m,a=n*m;
+    var things=rnd([["€",""],["","students"],["","km"],["","g of flour"],["","minutes"]]);
+    var o=Q("Work out:",n+"/"+d+" of "+(things[0]?things[0]+Q0:Q0+" "+things[1]),a,[m,Q0/n|0,Q0-a,n*d],Q0+" ÷ "+d+" = "+m+" (that's 1/"+d+"), then × "+n+" = "+a+". Divide by the bottom, times by the top.");
+    if(things[0]){o.answer=things[0]+a;o.wrong=o.wrong.map(function(x){return things[0]+x;});o.review=o.en+" "+o.frame+" → "+o.answer;}
+    else{o.answer=a+" "+things[1];o.wrong=o.wrong.map(function(x){return x+" "+things[1];});o.review=o.en+" "+o.frame+" → "+o.answer;}
+    o.of=[n,d,Q0];return o;
+  }
+  function qMixedMul(){
+    var w=ri(1,3),d=rnd([2,3,4,5]),n=cop(d),a=M(w,n,d),b=[ri(2,6),1];if(Math.random()<.5)b=frac(rnd([2,3,4,5]));
+    var p=mul(a,b);
+    return QF("Work out:",mx(a)+" × "+mx(b),p,[F(w*b[0],b[1]).map(function(v,i){return i?v:v;}),add(mul([w,1],b),[n,d]),mul([w*d+n,d+1],b),add(p,[1,1])],"Change to improper first: "+raw(a)+" × "+raw(b)+" = "+(a[0]*b[0])+"/"+(a[1]*b[1])+" = "+mx(p)+". (Don't just multiply the wholes.)",mx);
+  }
+  function qMixedDiv(){
+    var d=rnd([2,3,4,5]),w=ri(1,3),n=cop(d),a=M(w,n,d),y=frac(rnd([2,3,4,5,6])),q=dvd(a,y);
+    return QF("Work out:",mx(a)+" ÷ "+raw(y),q,[mul(a,y),dvd(y,a),add(dvd([w,1],y),[n,d]),add(q,[1,1])],"Improper first: "+raw(a)+" ÷ "+raw(y)+" = "+raw(a)+" × "+y[1]+"/"+y[0]+" = "+(a[0]*y[1])+"/"+(a[1]*y[0])+" = "+mx(q)+".",mx);
+  }
+
+  /* ---------- Real life ---------- */
+  function qPieces(){
+    var u=rnd([[1,2],[1,3],[1,4],[3,4],[2,3],[2,5],[1,5]]),k=ri(3,12),tot=F(u[0]*k,u[1]);if(tot[1]!==1)return qPieces();
+    var t=rnd([["A ribbon "+tot[0]+" m long is cut into pieces "+raw(u)+" m long. How many pieces?"," pieces"],["A jug holds "+tot[0]+" litres. How many "+raw(u)+"-litre glasses can it fill?"," glasses"]]);
+    var o=Q(t[0],"",k,[Math.round(tot[0]*u[0]/u[1])||2,tot[0]*u[1],tot[0]+u[1]],tot[0]+" ÷ "+raw(u)+" = "+tot[0]+" × "+u[1]+"/"+u[0]+" = "+k+".","",t[1]);
+    o.pieces=[tot[0],u];return o;
+  }
+  function qRest(){
+    var a=rnd([[1,3],[1,4],[2,5],[1,2],[3,8],[1,6]]),b=rnd([[1,2],[1,3],[1,4],[2,3],[3,4]]),D=a[1]*b[1]*ri(2,6),left1=D-D*a[0]/a[1],ans=left1*b[0]/b[1];
+    if(ans!==Math.round(ans)||left1!==Math.round(left1))return qRest();
+    var o=Q("Aoife has €"+D+". She spends "+raw(a)+" of it on a phone case, then "+raw(b)+" of what is left on a game. How much does the game cost?","",ans,[D*b[0]/b[1],left1,D-D*a[0]/a[1]-ans,D*a[0]/a[1]],raw(a)+" of €"+D+" = €"+(D*a[0]/a[1])+", so €"+left1+" is left. "+raw(b)+" of €"+left1+" = €"+ans+". \"Of what is left\" means use €"+left1+", not €"+D+".");
+    o.answer="€"+ans;o.wrong=o.wrong.map(function(x){return "€"+x;});o.review="€"+D+", spends "+raw(a)+", then "+raw(b)+" of the rest → €"+ans;o.rest=[D,a,b];return o;
+  }
+  function qWhole(){
+    var d=rnd([3,4,5,8,10]),n=cop(d),m=ri(2,9),part=n*m,whole=d*m;
+    var o=Q(n+"/"+d+" of the class walk to school. That's "+part+" students. How many are in the class?","",whole,[part*n,part+d,Math.round(part*n/d)||3,part*d],(n===1?"If 1/"+d+" = "+part+", then ":"If "+n+"/"+d+" = "+part+", then 1/"+d+" = "+part+" ÷ "+n+" = "+m+", so ")+d+"/"+d+" = "+m+" × "+d+" = "+whole+".","", " students");
+    o.whole=[n,d,part];return o;
+  }
+
+  var MAKERS={
+    picture:[qShaded,qShaded,qShadedSimplest,qLine,qLine,qPicEquiv],
+    equiv:[qSimplify,qSimplify,qMissing,qWhichEquiv,qBiggest,qToMixed,qToImproper],
+    addsub:[qAddSame,qAdd,qAdd,qSub,qSub,qMixedAdd,qMixedSub],
+    muldiv:[qMul,qMul,qDiv,qDiv,qOf,qMixedMul,qMixedDiv,qPieces,qRest,qWhole],
+    mixed:[qShaded,qLine,qPicEquiv,qSimplify,qMissing,qBiggest,qToMixed,qToImproper,qAdd,qSub,qMixedAdd,qMixedSub,qMul,qDiv,qOf,qMixedMul,qPieces,qRest,qWhole]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="addsub"||m==="muldiv"||m==="mixed")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="picture"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="picture"&&streak%5===0?700:350):2600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Fraction Match</h1>
+        <p>60 seconds. Match the picture to the fraction, simplify, then race through +, −, × and ÷. Is 3/4 bigger than 5/8? (Yes: 6/8 beats 5/8.) What's 2/3 of €45? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="picture"><div><b>Picture match</b><span>Bars, pizzas, grids and number lines: what fraction is it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="equiv"><div><b>Equivalent &amp; simplify</b><span>Simplest form, missing numbers, mixed numbers, which is bigger</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="addsub"><div><b>Add &amp; subtract</b><span>Common denominators and mixed numbers</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="muldiv"><div><b>Multiply, divide &amp; "of"</b><span>Keep, change, flip, fractions of amounts and real-life problems</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Picture match, every 5 in a row gives you 3 bonus seconds. Mixed numbers are written like 2 1/3 (two and a third).</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1a, N.1b, N.2a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Fractions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>All of these bars have the same amount shaded.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="1 of 2 parts shaded"><rect x="0" y="0" width="120" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="120" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>1/2</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="2 of 4 parts shaded"><rect x="0" y="0" width="60" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="60" y="0" width="60" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="60" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="180" y="0" width="60" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>2/4</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="3 of 6 parts shaded"><rect x="0" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="40" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="80" y="0" width="40" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="160" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="200" y="0" width="40" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>3/6</b></td></tr>
+            <tr><td><svg viewBox="-2 -2 244 28" style="width:100%;max-width:240px;display:block" aria-label="4 of 8 parts shaded"><rect x="0" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="30" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="60" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="90" y="0" width="30" height="24" fill="#2E7D57" stroke="#1B2430" stroke-width="2"/><rect x="120" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="150" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="180" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="210" y="0" width="30" height="24" fill="#fff" stroke="#1B2430" stroke-width="2"/></svg></td><td><b>4/8</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">Look at the top and bottom numbers as you go down. What happens to both of them? Would 5/9 belong in this list? What about 5/10?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Each time, the top and the bottom are <b>multiplied by the same number</b> (1/2 → 2/4 is × 2, 1/2 → 3/6 is × 3). The pieces get smaller, but there are more of them, so the amount stays the same. These are <b>equivalent fractions</b>. 5/10 belongs (× 5); 5/9 doesn't: 9 is not 5 × 2.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Word</th><th>Means</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><b>Numerator</b></td><td>the top: how many parts you have</td><td>the 3 in 3/4</td></tr>
+            <tr><td><b>Denominator</b></td><td>the bottom: how many equal parts make a whole</td><td>the 4 in 3/4</td></tr>
+            <tr><td><b>Simplest form</b></td><td>top and bottom have no common factor except 1</td><td>12/18 = 2/3 (÷ 6, the HCF)</td></tr>
+            <tr><td><b>Improper fraction</b></td><td>top bigger than the bottom</td><td>7/3</td></tr>
+            <tr><td><b>Mixed number</b></td><td>a whole number and a fraction</td><td>2 1/3 (= 7/3)</td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:10px"><b>Mixed ↔ improper:</b> 2 1/3 → 2 × 3 + 1 = 7, so <b>7/3</b>. And back: 17/5 → 17 ÷ 5 = 3 remainder 2, so <b>3 2/5</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Comparing fractions</h3>
+        <p>Change them to the same denominator, then compare the tops. Which is bigger, 3/4 or 5/8? 3/4 = 6/8, and 6/8 is bigger than 5/8, so <b>3/4</b>. For a list, use the LCM of all the bottoms (for 2/3, 3/5, 7/12 and 5/8 that's 120).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Add and subtract: same bottom first</h3>
+        <ul>
+          <li><b>Same denominator:</b> add the tops, keep the bottom. 2/9 + 5/9 = 7/9.</li>
+          <li><b>Different denominators:</b> change both to the LCM of the bottoms. 1/3 + 1/4 = 4/12 + 3/12 = <b>7/12</b>.</li>
+          <li><b>Mixed numbers:</b> add the wholes, then the fractions: 2 1/3 + 1 3/4 = 3 + 4/12 + 9/12 = 3 + 13/12 = <b>4 1/12</b>. If a subtraction won't go (3 1/5 − 1 3/5), change both to improper fractions first: 16/5 − 8/5 = 8/5 = <b>1 3/5</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Never add the bottoms.</b> 1/2 + 1/3 is not 2/5 (2/5 is smaller than 1/2, so it can't be right). It's 3/6 + 2/6 = <b>5/6</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Multiply and divide: no common denominator needed</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><b>Multiply</b></td><td>tops × tops, bottoms × bottoms</td><td>2/3 × 3/5 = 6/15 = <b>2/5</b></td></tr>
+            <tr><td><b>Divide</b></td><td>keep, change, flip: keep the first, change ÷ to ×, flip the second</td><td>3/4 ÷ 1/2 = 3/4 × 2/1 = 6/4 = <b>1 1/2</b></td></tr>
+            <tr><td><b>Mixed numbers</b></td><td>change to improper fractions first</td><td>1 1/2 × 2 2/3 = 3/2 × 8/3 = 24/6 = <b>4</b></td></tr>
+            <tr><td><b>"Of"</b></td><td>means ×: divide by the bottom, times by the top</td><td>3/5 of 40 = 40 ÷ 5 × 3 = <b>24</b></td></tr>
+          </tbody></table></div>
+        <div class="note" style="margin-top:10px"><b>Sense check:</b> multiplying by a fraction smaller than 1 makes a number <b>smaller</b>; dividing by it makes it <b>bigger</b> (how many halves in 3? 6).</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Fractions rarely get a question to themselves: they run through the whole paper. Expect them in <b>Number</b> questions (mixed numbers, fractions of amounts, "what fraction of the class…"), in <b>money</b> and <b>ratio</b> problems, in <b>probability</b> (answers are often fractions in simplest form), and in <b>algebra</b> (equations with fractions in them). No calculator is allowed on some questions, so you need the methods by hand.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the common denominator</b> (4/12 + 9/12), not just the answer. A correct method with one slip still earns part marks.</li>
+            <li><b>Finish the job:</b> "simplest form" or "as a mixed number" means exactly that. 10/12 isn't finished; 5/6 is.</li>
+            <li><b>Read "of what is left" carefully</b>: the second fraction is of the remainder, not of the original amount.</li>
+            <li><b>Answer the question asked.</b> 5 ÷ 2/3 = 7 1/2, but if the question asks how many <b>full</b> batches, the answer is <b>7</b>.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Mixed numbers.</b> Work out (a) 2 1/3 + 1 3/4 and (b) 3 1/2 − 1 4/5. Give each answer as a mixed number.
+              <details><summary>Show the worked answer</summary><p>(a) Wholes: 2 + 1 = 3. Fractions: 1/3 + 3/4 = 4/12 + 9/12 = 13/12 = 1 1/12. Total: 3 + 1 1/12 = <b>4 1/12</b>.<br>(b) 1/2 − 4/5 won't go, so use improper fractions: 7/2 − 9/5 = 35/10 − 18/10 = 17/10 = <b>1 7/10</b>.</p></details></li>
+            <li><b>Getting to school.</b> A school has 840 students. 3/7 of them come by bus. 1/4 of the rest walk. (a) How many students walk? (b) What fraction of the whole school walks? Give your answer in its simplest form.
+              <details><summary>Show the worked answer</summary><p>(a) 3/7 of 840 = 840 ÷ 7 × 3 = 360 by bus. The rest: 840 − 360 = 480. 1/4 of 480 = <b>120 walk</b>.<br>(b) 120/840: divide top and bottom by 120 (the HCF) → <b>1/7</b>.</p></details></li>
+            <li><b>Baking.</b> One batch of scones uses 2/3 of a cup of flour. Niamh has 5 cups of flour. How many full batches can she make?
+              <details><summary>Show the worked answer</summary><p>5 ÷ 2/3 = 5/1 × 3/2 = 15/2 = 7 1/2. She can't make half a batch count, so <b>7 full batches</b>. (Check: 7 × 2/3 = 14/3 = 4 2/3 cups, and 5 − 4 2/3 = 1/3 cup left over, not enough for another.)</p></details></li>
+            <li><b>Order them.</b> Write these fractions in order, starting with the smallest: 3/5, 2/3, 7/12, 5/8.
+              <details><summary>Show the worked answer</summary><p>The LCM of 5, 3, 12 and 8 is 120. 3/5 = 72/120, 2/3 = 80/120, 7/12 = 70/120, 5/8 = 75/120.<br>Smallest first: <b>7/12, 3/5, 5/8, 2/3</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/fractions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/ILfgV" target="_blank" rel="noopener">Fractions Teacher Pack (€5)</a>: Fraction Wall, Find Your Match cards, Fraction Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
