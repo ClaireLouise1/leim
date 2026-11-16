@@ -1,0 +1,134 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Spin &amp; Predict</h1>
+        <p>Place events on the probability scale, work out the chance of a colour on a spinner or a counter from a bag, then list sample spaces and read two-way tables and tree diagrams like the ones in the exam. Is rolling a prime number likely or even chance? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spin"><div><b>Spin &amp; Predict</b><span>Impossible, unlikely, even chance, likely or certain? Place it on the scale</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="chance"><div><b>What are the chances?</b><span>Dice, number cards, bags of counters, spinners and "not"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="space"><div><b>Sample spaces</b><span>List every outcome, find the missing one, read a tree diagram</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="table"><div><b>Tables &amp; trees</b><span>Two dice, a spinner and a die: count the cells, find the probability</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: give fractions in their simplest form. You can also answer with the keys 1, 2, 3 and 4. In Spin &amp; Predict, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: SP.1a, SP.2a, SP.2b (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Probability: chance &amp; sample spaces</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Work out each pair of probabilities, then add them.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Roll a fair die: P(a 6) = 1/6 · P(not a 6) = 5/6</li>
+          <li class="note">A bag of 3 red and 7 blue counters: P(red) = 3/10 · P(not red) = 7/10</li>
+          <li class="note">A spinner with 8 equal sectors, 5 of them green: P(green) = 5/8 · P(not green) = 3/8</li>
+        </ul>
+        <p style="margin-top:10px">What do you get every time? Why must that be true?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every pair adds up to <b>1</b>. Something either happens or it doesn't, and one of the two is certain. So <b>P(not A) = 1 − P(A)</b>. If the chance of rain is 0.3, the chance of no rain is 1 − 0.3 = 0.7.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The probability scale</h3>
+        <p>A probability is a number from <b>0</b> to <b>1</b>. You can write it as a fraction, a decimal or a percentage: 1/4 = 0.25 = 25%. Nothing can have a probability below 0 or above 1.</p>
+        <svg viewBox="-24 0 368 90" width="100%" style="max-width:460px;display:block;margin:10px auto" role="img" aria-label="A probability scale: 0 impossible, below one half unlikely, one half even chance, above one half likely, 1 certain">
+          <line x1="20" y1="40" x2="300" y2="40" stroke="#1B2430" stroke-width="3"/>
+          <g font-family="Inter,sans-serif" text-anchor="middle" fill="#1B2430">
+            <line x1="20" y1="32" x2="20" y2="48" stroke="#1B2430" stroke-width="2"/><line x1="160" y1="32" x2="160" y2="48" stroke="#1B2430" stroke-width="2"/><line x1="300" y1="32" x2="300" y2="48" stroke="#1B2430" stroke-width="2"/>
+            <text x="20" y="24" font-size="14" font-weight="800">0</text><text x="160" y="24" font-size="14" font-weight="800">1/2</text><text x="300" y="24" font-size="14" font-weight="800">1</text>
+            <text x="22" y="68" font-size="11" font-weight="700">Impossible</text><text x="90" y="68" font-size="11" font-weight="700" fill="#2E7D57">Unlikely</text><text x="160" y="68" font-size="11" font-weight="700">Even chance</text><text x="230" y="68" font-size="11" font-weight="700" fill="#2E7D57">Likely</text><text x="296" y="68" font-size="11" font-weight="700">Certain</text>
+          </g></svg>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Equally likely outcomes</h3>
+        <p>When every outcome has the same chance (a fair die, a fair coin, a spinner with <b>equal</b> sectors, a counter picked at random):</p>
+        <div class="note" style="text-align:center;font-size:18px"><b>P(event) = number of outcomes that fit ÷ total number of outcomes</b></div>
+        <ul style="margin-top:10px">
+          <li>Roll a fair die. P(a prime number): the primes are 2, 3, 5, so P = <b>3/6 = 1/2</b>.</li>
+          <li>A bag has 2 red, 5 blue and 3 green counters. P(red or green) = (2 + 3) ÷ 10 = <b>5/10 = 1/2</b>.</li>
+          <li>Letters of MALLOW on cards: P(L) = <b>2/6 = 1/3</b> (count the repeated L twice).</li>
+        </ul>
+        <p>Always divide by the <b>total</b>. 2 red and 8 blue gives P(red) = 2/10, not 2/8.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Sample spaces: list every outcome</h3>
+        <p>The <b>sample space</b> is the list of every possible outcome. Work in order so you don't miss any.</p>
+        <div class="note"><b>Listing.</b> Toss two coins: {HH, HT, TH, TT}. HT and TH are <b>different</b> outcomes, so there are 4, not 3.</div>
+        <div class="note" style="margin-top:8px"><b>Two-way table.</b> Roll two dice and add: 6 rows × 6 columns = 36 equally likely cells. A total of 7 is in 6 cells, so P(total 7) = 6/36 = 1/6.</div>
+        <div class="note" style="margin-top:8px"><b>Tree diagram.</b> Toss a coin, then spin a spinner with 3 equal sectors (R, B, G). The coin gives 2 branches, each splits into 3: 6 outcomes: HR, HB, HG, TR, TB, TG. P(H and G) = 1/6.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Probability comes up <b>every year</b>, often as the first question on the paper. Expect to place events on a <b>probability scale</b>, find simple probabilities from a <b>bag, spinner, die or cards</b>, <b>list a sample space</b>, and fill in or read a <b>two-way table</b> or a <b>tree diagram</b>.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write it as a probability.</b> "3 out of 8" or "3 : 5" are not probabilities; write <b>3/8</b> (or 0.375 or 37.5%).</li>
+            <li><b>Divide by the total</b>, not by "the rest". 3 red and 5 blue: P(red) = 3/8.</li>
+            <li><b>List in order</b> so nothing is missed or written twice. HT and TH both count.</li>
+            <li><b>Fill in the whole table</b> before you count, then count cells, not numbers.</li>
+            <li><b>Check it's between 0 and 1.</b> An answer like 8/5 is always wrong.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>A bag of sweets.</b> A bag has 4 red, 6 blue and 2 white sweets. One is taken at random. (a) Find P(red). (b) Find P(not blue). (c) Is picking a white sweet unlikely, even chance or likely? (d) How many extra red sweets must be added to make P(red) = 1/2?
+              <details><summary>Show the worked answer</summary><p>(a) 12 sweets, 4 red: <b>4/12 = 1/3</b>.<br>(b) Not blue = 4 + 2 = 6: <b>6/12 = 1/2</b>.<br>(c) P(white) = 2/12 = 1/6, less than 1/2: <b>unlikely</b>.<br>(d) Try adding red ones: +2 gives 6/14, +4 gives 8/16 = 1/2 ✓. So <b>4</b> extra red sweets.</p></details></li>
+            <li><b>Two dice.</b> A red die and a blue die are rolled and the scores are added. (a) Draw a two-way table of all the totals. (b) How many outcomes are there? (c) Find P(total = 8). (d) Find P(total of 10 or more). (e) Which total is most likely?
+              <details><summary>Show the worked answer</summary><p>(a) Rows 1–6 (red), columns 1–6 (blue), each cell = row + column.<br>(b) 6 × 6 = <b>36</b>.<br>(c) Totals of 8: 2+6, 3+5, 4+4, 5+3, 6+2: <b>5/36</b>.<br>(d) 10, 11 or 12: 3 + 2 + 1 = 6 cells: <b>6/36 = 1/6</b>.<br>(e) <b>7</b>: it's in 6 cells, more than any other total.</p></details></li>
+            <li><b>A tree diagram.</b> Cian tosses a fair coin and then spins a fair spinner numbered 1, 2, 3. (a) Draw a tree diagram and list the sample space. (b) Find P(a head and a 3). (c) Find P(a tail and an odd number). (d) Find P(the spinner shows 2).
+              <details><summary>Show the worked answer</summary><p>(a) H1, H2, H3, T1, T2, T3 (<b>6</b> outcomes).<br>(b) 1 of 6: <b>1/6</b>.<br>(c) T1 and T3: <b>2/6 = 1/3</b>.<br>(d) H2 and T2: <b>2/6 = 1/3</b> (the same as spinning the spinner on its own).</p></details></li>
+            <li><b>True or false?</b> (a) Niamh says "the probability that it rains tomorrow is 0.3 and the probability that it doesn't is 0.6". Explain why she must be wrong. (b) Darragh says "rolling a 6 is less likely than rolling a 1, because 6 is a big number". Is he right? (c) Put these on a 0–1 scale: A: rolling an even number, B: rolling a 7, C: picking a red counter from a bag of 9 red and 1 blue.
+              <details><summary>Show the worked answer</summary><p>(a) 0.3 + 0.6 = 0.9. It either rains or it doesn't, so the two must add to <b>1</b>: P(no rain) = 0.7.<br>(b) <b>No.</b> On a fair die every number has the same probability, 1/6.<br>(c) B = 0 (impossible), A = 1/2 (even chance), C = 9/10 (very likely, close to 1).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/probability-chance-sample-spaces-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Probability Teacher Pack (€5)</a>: Probability Line-Up, Fair Game? cards, Probability Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
