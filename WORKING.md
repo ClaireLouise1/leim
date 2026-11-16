@@ -11,4 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-(nobody)
+- 16 Nov 07:50 · Maths Order 13 Geometry 1 (Angle Chase) · maths-a
