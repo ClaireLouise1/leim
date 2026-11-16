@@ -10,3 +10,6 @@ Claire-Louise has more than one Payhip store: **Léim** (payhip.com/Leim), **Spr
 (Rule added 15 Nov 2026 after 21 Léim products were created in the Spraoi Learning store by mistake.)
 
 The full Léim job list lives in the claude.ai project "LEIM REVISION" (claude/leim-todo.md).
+
+## ⚠ More than one chat can work on Léim at once — claim your job first
+Before starting ANY job (a Maths topic, a Payhip change, a page edit), read **WORKING.md** in this repo and follow its rules: claim the job with a pushed commit before you start, pick a different job if another chat has claimed it, and remove your line when you finish. (Rule added 16 Nov 2026 after two chats nearly built the same Maths topic.)
