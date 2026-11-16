@@ -1,0 +1,347 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // angle answer in degrees: slips first, then pads; only whole numbers 1–359, never equal to the answer
+  function QA(en,frame,ans,slips,why,html,data){
+    var pads=[180-ans,ans+10,ans-10,360-ans,ans+20,ans-20,90-ans,ans+5,ans-5,ans+30],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<1||x>359||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x+"°");}});
+    return {en:en,frame:frame,html:html||"",answer:ans+"°",wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans+"°",data:data||{}};}
+  // whole-number answer (no degrees sign)
+  function Q(en,frame,ans,slips,why,html,data){
+    var pads=[ans+10,ans-10,ans*2,ans+90,ans-90,ans+30],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<1||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(String(x));}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+
+  /* ---------- geometry drawing ---------- */
+  // Angles are measured anticlockwise from "east" (maths convention); y goes UP in our coordinates, the SVG flips it.
+  function rad(a){return a*Math.PI/180;}
+  function pt(v,a,r){return [v[0]+r*Math.cos(rad(a)),v[1]+r*Math.sin(rad(a))];}
+  function ang(v,p){return (Math.atan2(p[1]-v[1],p[0]-v[0])*180/Math.PI+360)%360;}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+  function G(){return {lines:[],marks:[],ticks:[],tris:[],names:[]};}
+  function L(g,a,b,grp){g.lines.push({a:a,b:b,g:grp||0});}
+  // mark the angle at v that starts at direction a1 and turns anticlockwise by sw degrees
+  function M(g,v,a1,sw,lab){g.marks.push({v:v,a1:a1,sw:sw,lab:String(lab)});}
+  // mark the (non-reflex) angle at v between the rays v→u and v→w
+  function MB(g,v,u,w,lab){var a1=ang(v,u),a2=ang(v,w),sw=(a2-a1+360)%360;if(sw>180){a1=a2;sw=360-sw;}M(g,v,a1,sw,lab);}
+  function T(g,a,b,n){g.ticks.push({a:a,b:b,n:n||1});}
+  var INK="#1B2430",GRN="#2E7D5B",RED="#D9534F";
+  function f(n){return Math.round(n*100)/100;}
+  function render(g,label,box){
+    var P=[],out=[],gx0=Infinity,gx1=-Infinity,gy0=Infinity,gy1=-Infinity;
+    function S(p){return f(p[0])+","+f(-p[1]);}
+    g.lines.forEach(function(l){P.push(l.a,l.b);[l.a,l.b].forEach(function(p){gx0=Math.min(gx0,p[0]);gx1=Math.max(gx1,p[0]);gy0=Math.min(gy0,p[1]);gy1=Math.max(gy1,p[1]);});});
+    // k = screen pixels per unit: text, arcs and strokes are sized in screen pixels so every diagram reads the same
+    box=box||[320,230];var k=Math.min(box[0]/(gx1-gx0+70),box[1]/(gy1-gy0+70),1.5),u=1/k,sw=f(2.4*u);
+    g.tris.forEach(function(t){out.push('<polygon class="tri" data-pts="'+t.map(S).join(" ")+'" points="'+t.map(S).join(" ")+'" fill="#E8F2EC" stroke="none"/>');});
+    g.lines.forEach(function(l){out.push('<line class="ln"'+(l.g?' data-g="'+l.g+'"':'')+' x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+INK+'" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      if(l.g){var d=ang(l.a,l.b),m=pt(l.a,d,dist(l.a,l.b)*0.84);for(var n=0;n<l.g;n++){var c=pt(m,d,(n*7-((l.g-1)*3.5))*u);
+        out.push('<path class="par" d="M'+S(pt(c,d+150,8*u))+' L'+S(c)+' L'+S(pt(c,d-150,8*u))+'" fill="none" stroke="'+GRN+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"/>');}}});
+    g.ticks.forEach(function(t){var m=[(t.a[0]+t.b[0])/2,(t.a[1]+t.b[1])/2],d=ang(t.a,t.b);for(var n=0;n<t.n;n++){var c=pt(m,d,(n-(t.n-1)/2)*6*u),e1=pt(c,d+90,7*u),e2=pt(c,d-90,7*u);
+      out.push('<line class="tick" data-a="'+S(t.a)+'" data-b="'+S(t.b)+'" data-n="'+t.n+'" x1="'+f(e1[0])+'" y1="'+f(-e1[1])+'" x2="'+f(e2[0])+'" y2="'+f(-e2[1])+'" stroke="'+RED+'" stroke-width="'+sw+'" stroke-linecap="round"/>');}});
+    g.marks.forEach(function(m){
+      var r=(m.sw<35?40:m.sw<60?32:m.sw<110?26:22)*u,isRt=m.lab==="rt",lab=isRt?"":m.lab,bis=m.a1+m.sw/2,
+        p=pt(m.v,m.a1,40),q=pt(m.v,m.a1+m.sw,40),o='<g class="am" data-v="'+S(m.v)+'" data-p="'+S(p)+'" data-q="'+S(q)+'" data-r="'+(m.sw>180?1:0)+'" data-l="'+(isRt?"rt":lab)+'">';
+      if(isRt){var s=13*u,c1=pt(m.v,m.a1,s),c3=pt(m.v,m.a1+90,s),c2=[c1[0]+c3[0]-m.v[0],c1[1]+c3[1]-m.v[1]];
+        o+='<path d="M'+S(c1)+' L'+S(c2)+' L'+S(c3)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}
+      else{var s1=pt(m.v,m.a1,r),e1=pt(m.v,m.a1+m.sw,r),unk=/^[a-z?]$/.test(lab);
+        o+='<path d="M'+S(s1)+' A'+f(r)+' '+f(r)+' 0 '+(m.sw>180?1:0)+' 0 '+S(e1)+'" fill="none" stroke="'+(unk?RED:GRN)+'" stroke-width="'+f(2.2*u)+'"/>';
+        var tp=pt(m.v,bis,r+(lab.length>2?17:13)*u);P.push([tp[0]-15*u,tp[1]-10*u],[tp[0]+15*u,tp[1]+10*u]);
+        o+='<text class="al" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(15*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk?' font-style="italic"':'')+'>'+(unk?lab:lab+"°")+'</text>';}
+      out.push(o+'</g>');});
+    g.names.forEach(function(n){var tp=n.p;P.push([tp[0]-10*u,tp[1]-10*u],[tp[0]+10*u,tp[1]+10*u]);out.push('<text x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="700" fill="#5B6472">'+n.t+'</text>');});
+    var x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;P.forEach(function(p){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1]);});
+    x0-=8*u;x1+=8*u;y0-=8*u;y1+=8*u;var W=x1-x0,H=y1-y0;
+    return '<svg viewBox="'+f(x0)+' '+f(-y1)+' '+f(W)+' '+f(H)+'" width="'+Math.round(W*k)+'" height="'+Math.round(H*k)+'" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="'+(label||"Angle diagram")+'">'+out.join("")+'</svg>';}
+
+  /* ---------- the facts ---------- */
+  var R={str:"Angles on a straight line add to 180°",pt:"Angles at a point add to 360°",vo:"Vertically opposite angles are equal",tri:"Angles in a triangle add to 180°",
+    iso:"Base angles of an isosceles triangle are equal",ext:"An exterior angle = the sum of the two interior opposite angles",alt:"Alternate angles are equal",
+    cor:"Corresponding angles are equal",coi:"Co-interior angles add to 180°"};
+  var RK=Object.keys(R);
+  function splitInto(total,k,lo,hi){var p;do{p=[];var s=0;for(var i=0;i<k-1;i++){var x=ri(lo,hi);p.push(x);s+=x;}p.push(total-s);}while(p[k-1]<lo||p[k-1]>hi);return p;}
+  function rot(){return rnd([0,0,0,0,15,-15,25,-25,90]);}
+
+  /* straight line: 2 or 3 angles, one is x */
+  function dStraight(k){
+    var g=G(),r0=rot(),parts=splitInto(180,k,28,140),v=[0,0],c=0,xi=ri(0,k-1);
+    L(g,pt(v,r0,115),pt(v,r0+180,115));
+    parts.forEach(function(a,i){if(i)L(g,v,pt(v,r0+c,100));M(g,v,r0+c,a,i===xi?"x":a);c+=a;});
+    var known=parts.filter(function(a,i){return i!==xi;}),s=known.reduce(function(a,b){return a+b;},0);
+    return {g:g,ans:parts[xi],reason:"str",slips:[360-s,s,180-known[0]],why:R.str+": x = 180° − "+(known.length>1?"("+known.join("° + ")+"°)":known[0]+"°")+" = "+parts[xi]+"°."};}
+  /* angles at a point */
+  function dPoint(){
+    var g=G(),k=rnd([3,3,4]),parts,v=[0,0],c=rot(),xi=ri(0,k-1);
+    do{parts=splitInto(360,k,k===3?62:45,k===3?170:150);}while(k===4&&(Math.abs(parts[0]+parts[1]-180)<8||Math.abs(parts[1]+parts[2]-180)<8)); // no two rays in a straight line
+    parts.forEach(function(a,i){L(g,v,pt(v,c,100));M(g,v,c,a,i===xi?"x":a);c+=a;});
+    var known=parts.filter(function(a,i){return i!==xi;}),s=known.reduce(function(a,b){return a+b;},0);
+    return {g:g,ans:parts[xi],reason:"pt",slips:[Math.abs(180-s),s,360-known[0]],why:R.pt+": x = 360° − ("+known.join("° + ")+"°) = "+parts[xi]+"°."};}
+  /* two lines crossing */
+  function dCross(){
+    var g=G(),r0=rnd([0,10,-10,20,-20]),a,v=[0,0];do{a=ri(30,150);}while(Math.abs(a-90)<8);
+    L(g,pt(v,r0,110),pt(v,r0+180,110));L(g,pt(v,r0+a,110),pt(v,r0+a+180,110));
+    var st=[r0,r0+a,r0+180,r0+180+a],val=[a,180-a,a,180-a],i=ri(0,3),j;do{j=ri(0,3);}while(j===i);
+    M(g,v,st[i],val[i],val[i]);M(g,v,st[j],val[j],"x");
+    var vo=(j-i+4)%4===2;
+    return {g:g,ans:val[j],reason:vo?"vo":"str",slips:[vo?180-val[i]:val[i],360-val[i]],why:vo?R.vo+": x = "+val[i]+"°.":R.str+": x = 180° − "+val[i]+"° = "+val[j]+"°."};}
+  /* a triangle with angles A at P0, B at P1, C at P2 (base P0P1) */
+  function tri(A,B,base){
+    var P0=[0,0],P1=[base||200,0],d=(base||200)*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),t=rnd([0,0,0,8,-8,180]);
+    if(t){var c=[(P0[0]+P1[0]+P2[0])/3,(P0[1]+P1[1]+P2[1])/3];[P0,P1,P2].forEach(function(p){var r=dist(c,p),a0=ang(c,p),q=pt(c,a0+t,r);p[0]=q[0];p[1]=q[1];});}
+    return [P0,P1,P2];}
+  function triG(Ps){var g=G();g.tris.push(Ps);L(g,Ps[0],Ps[1]);L(g,Ps[1],Ps[2]);L(g,Ps[2],Ps[0]);return g;}
+  function dTri(){
+    var A,B;do{A=ri(25,115);B=ri(25,115);}while(A+B>155);var C=180-A-B,Ps=tri(A,B),g=triG(Ps),angs=[A,B,C],xi=ri(0,2);
+    for(var i=0;i<3;i++)MB(g,Ps[i],Ps[(i+1)%3],Ps[(i+2)%3],i===xi?"x":angs[i]);
+    var known=angs.filter(function(a,i){return i!==xi;});
+    return {g:g,ans:angs[xi],reason:"tri",slips:[360-known[0]-known[1],known[0]+known[1],180-known[0]],why:R.tri+": x = 180° − ("+known[0]+"° + "+known[1]+"°) = "+angs[xi]+"°."};}
+  function dRight(){
+    var B=ri(20,70),C=90-B,sw=Math.random()<.5,Ps=tri(90,sw?C:B),g=triG(Ps);
+    // right angle at P0; angle at P1 is (sw?C:B)
+    var a1=sw?C:B,a2=180-90-a1,ask=Math.random()<.5;
+    MB(g,Ps[0],Ps[1],Ps[2],"rt");MB(g,Ps[1],Ps[2],Ps[0],ask?"x":a1);MB(g,Ps[2],Ps[0],Ps[1],ask?a2:"x");
+    var ans=ask?a1:a2,giv=ask?a2:a1;
+    return {g:g,ans:ans,reason:"tri",slips:[180-giv,90+giv,giv],why:"The square means 90°. "+R.tri+": x = 180° − (90° + "+giv+"°) = "+ans+"°."};}
+  function dIso(kind){ // kind: "apex" (find a base angle), "base" (find the apex), "other" (find the other base angle)
+    var t=2*ri(12,70),b=(180-t)/2,Ps=tri(b,b),g=triG(Ps);T(g,Ps[0],Ps[2]);T(g,Ps[1],Ps[2]);
+    var left=Math.random()<.5;
+    if(kind==="apex"){MB(g,Ps[2],Ps[0],Ps[1],t===90?"rt":t);MB(g,Ps[left?0:1],Ps[left?1:0],Ps[2],"x");
+      return {g:g,ans:b,reason:"iso+tri",slips:[180-t,t,90-t>0?90-t:180-2*t],why:"The two base angles are equal (isosceles), so each is (180° − "+t+"°) ÷ 2 = "+b+"°."};}
+    if(kind==="base"){MB(g,Ps[left?0:1],Ps[left?1:0],Ps[2],b);MB(g,Ps[2],Ps[0],Ps[1],"x");
+      return {g:g,ans:t,reason:"iso+tri",slips:[180-b,b,180-3*b>0?180-3*b:90-b],why:"Both base angles are "+b+"° (isosceles), so x = 180° − 2 × "+b+"° = "+t+"°."};}
+    MB(g,Ps[0],Ps[1],Ps[2],left?b:"x");MB(g,Ps[1],Ps[2],Ps[0],left?"x":b);
+    return {g:g,ans:b,reason:"iso",slips:[180-2*b,180-b,t+b<360?t:90],why:R.iso+" (the dashes show the two equal sides): x = "+b+"°."};}
+  function dEqui(){
+    var Ps=tri(60,60,170),g=triG(Ps);T(g,Ps[0],Ps[1]);T(g,Ps[1],Ps[2]);T(g,Ps[2],Ps[0]);var i=ri(0,2);
+    MB(g,Ps[i],Ps[(i+1)%3],Ps[(i+2)%3],"x");
+    return {g:g,ans:60,reason:"equi",slips:[180,90,45],why:"All three sides are equal, so all three angles are equal: 180° ÷ 3 = 60°."};}
+  /* triangle with the base extended past P1: exterior angle at P1 */
+  function extTri(A,B){
+    var C=180-A-B,P0=[0,0],P1=[170,0],d=170*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),P3=[250,0];
+    if(Math.random()<.5){[P0,P1,P2,P3].forEach(function(p){p[0]=-p[0];});}
+    var g=G();g.tris.push([P0,P1,P2]);L(g,P0,P3);L(g,P1,P2);L(g,P2,P0);return {g:g,P:[P0,P1,P2,P3],C:C};}
+  function dExt(kind){
+    var A,B;do{A=ri(25,95);B=ri(35,130);}while(A+B>160||180-B<40);var e=extTri(A,B),g=e.g,P=e.P,C=e.C,X=180-B;
+    if(kind==="find"){MB(g,P[0],P[1],P[2],A);MB(g,P[2],P[0],P[1],C);MB(g,P[1],P[3],P[2],"x");
+      return {g:g,ans:X,reason:"ext",slips:[180-A-C>0?180-A-C:A,180-A,360-X],why:R.ext+": x = "+A+"° + "+C+"° = "+X+"°."};}
+    var top=Math.random()<.5;
+    MB(g,P[1],P[3],P[2],X);if(top){MB(g,P[0],P[1],P[2],A);MB(g,P[2],P[0],P[1],"x");}else{MB(g,P[0],P[1],P[2],"x");MB(g,P[2],P[0],P[1],C);}
+    var ans=top?C:A,giv=top?A:C;
+    return {g:g,ans:ans,reason:"ext",slips:[X+giv<360?X+giv:180-giv,180-X,180-giv],why:R.ext+": "+X+"° = "+giv+"° + x, so x = "+X+"° − "+giv+"° = "+ans+"°."};}
+  /* two parallel lines cut by a transversal: sectors s0..s3 at the top (V1) and bottom (V2) crossings */
+  function parG(a){
+    var g=G(),h=60,dx=h/Math.tan(rad(a)),V1=[dx,h],V2=[-dx,-h],lo=Math.min(V1[0],V2[0])-95,hi=Math.max(V1[0],V2[0])+95;
+    L(g,[lo,h],[hi,h],1);L(g,[lo,-h],[hi,-h],1);L(g,pt(V2,a+180,52),pt(V1,a,52));
+    return {g:g,V:[V1,V2],st:[0,a,180,180+a],val:[a,180-a,a,180-a]};}
+  // relation between sector i at vertex p and sector j at vertex q (0 = top, 1 = bottom)
+  function parRel(p,i,q,j){
+    if(p===q){var d=(j-i+4)%4;return d===2?"vo":d?"str":null;}
+    var ii=p===0?i:j,jj=p===0?j:i; // ii at the top, jj at the bottom
+    if(ii===jj)return "cor";
+    if((ii===2&&jj===0)||(ii===3&&jj===1))return "alt";
+    if((ii===3&&jj===0)||(ii===2&&jj===1))return "coi";
+    return null;}
+  function dPar(){
+    var a;do{a=ri(35,145);}while(Math.abs(a-90)<10);var P=parG(a),g=P.g,p,i,q,j,rel;
+    do{p=ri(0,1);i=ri(0,3);q=Math.random()<.75?1-p:p;j=ri(0,3);rel=(p===q&&i===j)?null:parRel(p,i,q,j);}while(!rel);
+    M(g,P.V[p],P.st[i],P.val[i],P.val[i]);M(g,P.V[q],P.st[j],P.val[j],"x");
+    var eq=rel==="cor"||rel==="alt"||rel==="vo";
+    return {g:g,ans:P.val[j],reason:rel,slips:[eq?180-P.val[i]:P.val[i],360-P.val[i]],why:R[rel]+(eq?": x = "+P.val[i]+"°.":": x = 180° − "+P.val[i]+"° = "+P.val[j]+"°.")};}
+
+  /* ---------- two-step chases (the middle angle is called y, or y and z) ---------- */
+  function dPar2(){
+    var a;do{a=ri(35,145);}while(Math.abs(a-90)<10);var P=parG(a),g=P.g,p=ri(0,1),q=1-p,i=ri(0,3),j;
+    do{j=ri(0,3);}while(j===i||parRel(p,i,q,j));
+    M(g,P.V[p],P.st[i],P.val[i],P.val[i]);M(g,P.V[q],P.st[i],P.val[i],"y");M(g,P.V[q],P.st[j],P.val[j],"x");
+    var vo=(j-i+4)%4===2;
+    return {g:g,ans:P.val[j],slips:[vo?180-P.val[i]:P.val[i],360-P.val[i]],
+      why:"y = "+P.val[i]+"° (corresponding angles). Then "+(vo?"x = y = "+P.val[j]+"° (vertically opposite).":"x = 180° − "+P.val[i]+"° = "+P.val[j]+"° (straight line).")};}
+  function dIsoExt(){
+    var t=2*ri(12,70),b=(180-t)/2,X=180-b,P0=[0,0],P1=[170,0],d=85/Math.cos(rad(b)),P2=pt(P0,b,d),P3=[250,0];
+    if(Math.random()<.5)[P0,P1,P2,P3].forEach(function(p){p[0]=-p[0];});
+    var g=G();g.tris.push([P0,P1,P2]);L(g,P0,P3);L(g,P1,P2);L(g,P2,P0);T(g,P0,P2);T(g,P1,P2);
+    MB(g,P2,P0,P1,t);MB(g,P1,P2,P0,"y");MB(g,P1,P3,P2,"x");
+    return {g:g,ans:X,slips:[b,180-t,t+b<360?t+b:90],why:"y = (180° − "+t+"°) ÷ 2 = "+b+"° (isosceles: equal base angles). Then x = 180° − "+b+"° = "+X+"° (straight line)."};}
+  function dTwoExt(){
+    var A,B;do{A=ri(35,110);B=ri(35,110);}while(A+B>150);var C=180-A-B,P0=[0,0],P1=[170,0],d=170*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),Pl=[-80,0],Pr=[250,0];
+    var g=G();g.tris.push([P0,P1,P2]);L(g,Pl,Pr);L(g,P1,P2);L(g,P2,P0);
+    MB(g,P0,Pl,P2,180-A);MB(g,P1,Pr,P2,180-B);MB(g,P0,P1,P2,"y");MB(g,P1,P2,P0,"z");MB(g,P2,P0,P1,"x");
+    return {g:g,ans:C,slips:[A+B,180-A,180-B],
+      why:"y = 180° − "+(180-A)+"° = "+A+"° and z = 180° − "+(180-B)+"° = "+B+"° (straight line). Then x = 180° − ("+A+"° + "+B+"°) = "+C+"° (triangle)."};}
+  function dParTri(){
+    var A,B;do{A=ri(35,80);B=ri(35,80);}while(A+B>145);var C=180-A-B,Lp=[0,0],Rp=[180,0],d=180*Math.sin(rad(B))/Math.sin(rad(A+B)),Tp=pt(Lp,A,d),h=Tp[1];
+    var g=G();g.tris.push([Lp,Rp,Tp]);L(g,[-70,0],[250,0],1);L(g,[Tp[0]-110,h],[Tp[0]+110,h],1);L(g,Lp,Tp);L(g,Rp,Tp);
+    var left=Math.random()<.5;
+    if(left){MB(g,Tp,[Tp[0]-100,h],Lp,A);MB(g,Lp,Rp,Tp,"y");MB(g,Rp,Tp,Lp,B);}
+    else{MB(g,Tp,[Tp[0]+100,h],Rp,B);MB(g,Rp,Tp,Lp,"y");MB(g,Lp,Rp,Tp,A);}
+    MB(g,Tp,Lp,Rp,"x");
+    var y=left?A:B;
+    return {g:g,ans:C,slips:[180-y,A+B,180-(left?B:A)],why:"y = "+y+"° (alternate angles). Then x = 180° − ("+A+"° + "+B+"°) = "+C+"° (angles in a triangle)."};}
+
+  /* ---------- question makers ---------- */
+  function find(d,t,en){var q=QA(en||"Find the size of the angle x.","",d.ans,d.slips,d.why,render(d.g),{t:t,reason:d.reason});q.review=d.why;return q;}
+  function qStraight(){return find(dStraight(rnd([2,2,3])),"straight");}
+  function qPoint(){return find(dPoint(),"point");}
+  function qCross(){return find(dCross(),"cross");}
+  function qTri(){return find(dTri(),"tri");}
+  function qRight(){return find(dRight(),"right");}
+  function qIso(){return find(dIso(rnd(["apex","base","other"])),"iso");}
+  function qEqui(){return find(dEqui(),"equi");}
+  function qExt(){return find(dExt(rnd(["find","back"])),"ext");}
+  function qPar(){return find(dPar(),"par");}
+  function qPar2(){return find(dPar2(),"par2","Find x. (Find y first.)");}
+  function qIsoExt(){return find(dIsoExt(),"isoext","Find x. (Find y first.)");}
+  function qTwoExt(){return find(dTwoExt(),"twoext","Find x. (Find y and z first.)");}
+  function qParTri(){return find(dParTri(),"partri","Find x. (Find y first.)");}
+  // name the reason: the ONE fact that gives x straight away
+  function qReason(){
+    var d=rnd([function(){return dStraight(2);},dPoint,dCross,dCross,dTri,function(){return dIso("other");},function(){return dExt("find");},dPar,dPar,dPar,dPar])();
+    var a=R[d.reason];
+    return C("x = "+d.ans+"°. Which fact gives this straight away?","",a,RK.filter(function(k){return k!==d.reason;}).map(function(k){return R[k];}),
+      d.why,"x = "+d.ans+"° → "+a,render(d.g),{t:"reason",reason:d.reason,x:d.ans});}
+  // pick the right reason AND number together
+  function qBoth(){
+    var d=rnd([dCross,dPar,dPar,function(){return dExt("find");},function(){return dIso("other");}])(),a=d.ans+"° ("+R[d.reason].toLowerCase()+")";
+    var other=d.reason==="str"||d.reason==="coi"?"vo":d.reason==="ext"?"tri":d.reason==="iso"?"tri":"str",alt=180-d.ans,pool=[];
+    if(alt!==d.ans)pool.push(alt+"° ("+R[d.reason].toLowerCase()+")",d.ans+"° ("+R[other].toLowerCase()+")",alt+"° ("+R[other].toLowerCase()+")");
+    else pool.push((d.ans+10)+"° ("+R[d.reason].toLowerCase()+")",d.ans+"° ("+R[other].toLowerCase()+")",(d.ans-10)+"° ("+R[other].toLowerCase()+")");
+    return C("Find x and give the reason.","",a,pool,d.why,"x → "+a,render(d.g),{t:"both",reason:d.reason,x:d.ans});}
+
+  /* ---------- angle words ---------- */
+  var TYPES=["Acute","Right angle","Obtuse","Straight angle","Reflex"];
+  function tName(n){return n<90?"Acute":n===90?"Right angle":n<180?"Obtuse":n===180?"Straight angle":"Reflex";}
+  function oneAngle(n){var g=G(),r0=rnd([0,0,10,-10,20]),v=[0,0];L(g,v,pt(v,r0,100));L(g,v,pt(v,r0+n,100));M(g,v,r0,n,n===90?"rt":n);return render(g,"An angle of "+n+" degrees");}
+  function qType(){
+    var k=ri(0,4),n=[ri(10,85),90,ri(95,175),180,ri(190,345)][k],t=TYPES[k];
+    var why={Acute:"Acute: less than 90°.","Right angle":"A right angle is exactly 90° (often shown with a little square).",Obtuse:"Obtuse: between 90° and 180°.","Straight angle":"A straight angle is exactly 180°: a straight line.",Reflex:"Reflex: more than 180° but less than 360°."}[t];
+    return C("What type of angle is this?","",t,TYPES.filter(function(x){return x!==t;}),why,n+"° → "+t,n===180?render((function(){var g=G();L(g,[-100,0],[100,0]);M(g,[0,0],0,180,180);return g;})(),"A straight angle"):oneAngle(n),{t:"type",n:n});}
+  function qTriKind(){
+    var k=ri(0,2),A,B,Cc;
+    if(k===1){A=90;B=ri(15,75);}else if(k===0){do{A=ri(40,89);B=ri(40,89);}while(180-A-B>=90||180-A-B<20);}else{A=ri(95,150);B=ri(10,180-A-10);}
+    Cc=180-A-B;var s=shuffle([A,B,Cc]),a=["Acute-angled triangle","Right-angled triangle","Obtuse-angled triangle"][k];
+    return C("A triangle has angles of "+s[0]+"°, "+s[1]+"° and "+s[2]+"°. What kind of triangle is it?","",a,["Acute-angled triangle","Right-angled triangle","Obtuse-angled triangle","It can't be a triangle"],
+      "Look at the BIGGEST angle: less than 90° → acute-angled; exactly 90° → right-angled; more than 90° → obtuse-angled. (The angles add to 180°, so it is a triangle.)",s.join("°, ")+"° → "+a,"",{t:"trikind",angs:s});}
+  function qTriSides(){
+    var k=ri(0,2),s,a;
+    if(k===0){do{s=[ri(4,12),ri(4,12),ri(4,12)];}while(new Set(s).size<3||s.some(function(x,i){return x>=s[(i+1)%3]+s[(i+2)%3];})||isPy(s));a="Scalene";}
+    else if(k===1){var e=ri(5,12),o;do{o=ri(3,2*e-1);}while(o===e);s=shuffle([e,e,o]);a="Isosceles";}
+    else{var q=ri(4,12);s=[q,q,q];a="Equilateral";}
+    var pool=a==="Equilateral"?["Scalene","Right-angled","It can't be a triangle"]:a==="Isosceles"?["Scalene","Equilateral","It can't be a triangle"]:["Isosceles","Equilateral","It can't be a triangle"];
+    return C("A triangle has sides of "+s[0]+" cm, "+s[1]+" cm and "+s[2]+" cm. What type of triangle is it?","",a,pool,
+      "Scalene: all three sides different. Isosceles: two sides equal. Equilateral: all three sides equal.",s.join(" cm, ")+" cm → "+a,"",{t:"trisides",s:s});}
+  function isPy(s){var t=s.slice().sort(function(a,b){return a-b;});return t[0]*t[0]+t[1]*t[1]===t[2]*t[2];}
+  function qCould(){
+    var A=ri(20,120),B=ri(20,Math.min(140,170-A)),good=[A,B,180-A-B],bads=[];
+    [10,-10,20,-20,90,180].forEach(function(dd){var c=180-A-B+dd;if(c>0)bads.push([A,B,c]);});
+    var J=function(x){return shuffle(x.slice()).join("°, ")+"°";};
+    return C("Which set of three angles could be the angles of a triangle?","",J(good),shuffle(bads).slice(0,3).map(J),
+      "The three angles of a triangle always add up to 180°. Only one set does: "+good[0]+" + "+good[1]+" + "+good[2]+" = 180.","Could be a triangle → "+good.join("°, ")+"°","",{t:"could"});}
+  var WORDS=[["Two lines in the same plane that never meet, however far you extend them","Parallel lines","line"],["Two lines that meet at a right angle","Perpendicular lines","line"],
+    ["A line that cuts across two or more other lines","Transversal","line"],["A piece of a line with an end point at each end","Line segment","line"],["Starts at a point and goes on forever in one direction","Ray","line"],
+    ["The point where the two arms of an angle meet","Vertex","line"],["An angle of more than 180° but less than 360°","Reflex","angle"],["An angle of less than 90°","Acute","angle"],
+    ["An angle between 90° and 180°","Obtuse","angle"],["An angle of exactly 90°","Right angle","angle"],["A triangle with all three sides different lengths","Scalene triangle","tri"],
+    ["A triangle with all three sides the same length","Equilateral triangle","tri"],["A triangle with two sides the same length","Isosceles triangle","tri"],["A triangle with one angle of 90°","Right-angled triangle","tri"],
+    ["Two angles opposite each other where two lines cross","Vertically opposite angles","pair"],["Angles in a \"Z\" shape between two parallel lines","Alternate angles","pair"],["Angles in matching positions at each parallel line (an \"F\" shape)","Corresponding angles","pair"],
+    ["The angle between one side of a triangle and the next side extended","Exterior angle","pair"]];
+  function qWord(){
+    var w=rnd(WORDS),pool=WORDS.filter(function(x){return x[2]===w[2]&&x[1]!==w[1];}).map(function(x){return x[1];});
+    if(w[1]==="Isosceles triangle")pool=pool.filter(function(x){return x!=="Equilateral triangle";});
+    if(w[1]==="Equilateral triangle")pool=pool.filter(function(x){return x!=="Isosceles triangle";});
+    if(w[1]==="Vertex")pool=["Ray","Line segment","Transversal"];
+    if(pool.length<3)pool=pool.concat(["Ray","Transversal","Line segment"].filter(function(x){return x!==w[1];}));
+    return C("Which word matches this?",w[0]+".",w[1],pool,w[0]+": "+w[1].toLowerCase()+".",w[0]+" → "+w[1],"",{t:"word",def:w[0]});}
+  function qVertex(){
+    var ls=shuffle("ABCDEFGHKLMNPQRSTXYZ".split("")).slice(0,3),nm="∠"+ls.join("");
+    return C("The angle "+nm+" is written with three letters. Which point is the vertex (the corner)?","",ls[1],[ls[0],ls[2],"All three"],
+      "In "+nm+" the middle letter is always the vertex: "+ls[1]+". The arms go from "+ls[1]+" to "+ls[0]+" and from "+ls[1]+" to "+ls[2]+".",nm+": vertex → "+ls[1],"",{t:"vertex",nm:nm});}
+  var FACTS=[["How many degrees are in a full turn (angles at a point)?",360,[180,90,270]],["How many degrees are in a straight angle?",180,[90,360,100]],
+    ["How many degrees are in a right angle?",90,[180,100,45]],["The three angles of any triangle add up to how many degrees?",180,[360,90,270]],
+    ["How many degrees is each angle of an equilateral triangle?",60,[90,180,45]]];
+  function qFact(){var x=rnd(FACTS);return Q(x[0],"",x[1],x[2],x[0].replace(/\?$/,"")+": "+x[1]+"°.","",{t:"fact"});}
+
+  var MAKERS={
+    chase:[qStraight,qStraight,qPoint,qCross,qCross,qTri,qTri,qRight,qIso,qIso,qEqui,qExt,qExt,qPar,qPar,qPar,qPar],
+    reason:[qReason,qReason,qReason,qReason,qBoth],
+    words:[qType,qType,qTriKind,qTriSides,qCould,qWord,qWord,qWord,qVertex,qFact],
+    steps:[qPar2,qPar2,qIsoExt,qTwoExt,qParTri,qIso],
+    mixed:[qStraight,qPoint,qCross,qTri,qRight,qIso,qEqui,qExt,qPar,qPar,qReason,qReason,qBoth,qType,qTriKind,qTriSides,qCould,qWord,qVertex,qPar2,qIsoExt,qTwoExt,qParTri]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="chase")?60:(m==="steps"?90:75);score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="chase"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="chase"&&streak%5===0?700:350):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why&&m.why!==m.review?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,draw:{G:G,L:L,M:M,MB:MB,T:T,pt:pt,render:render}};
+})();
+</script>

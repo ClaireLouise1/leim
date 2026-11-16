@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angle Chase: Lines, Angles &amp; Triangles Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: find missing angles and name the reason. Straight lines, vertically opposite, triangles, isosceles, exterior angles and parallel lines, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Angle Chase</h1>
+        <p>Find the missing angle, then name the fact that proves it. Straight lines, angles at a point, vertically opposite angles, triangles, isosceles triangles, exterior angles and parallel lines: chase every angle round the diagram. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="chase"><div><b>Angle Chase</b><span>Find the missing angle x in the diagram</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="reason"><div><b>Name the reason</b><span>Which angle fact proves it? The part that wins the marks</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>Angle words</b><span>Acute, obtuse, reflex, scalene, isosceles, parallel, transversal, vertex…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="steps"><div><b>Two-step chase</b><span>Find y first, then x: parallel lines, triangles and exterior angles</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Angle Chase, every 5 in a row gives you 3 bonus seconds. The diagrams are drawn to scale, but in the exam they usually aren't: use the facts, not a protractor.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.3b, GT.3c (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Lines, angles &amp; triangles</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Draw any triangle on paper: long and thin, fat, or with one big angle. Colour the three corners, tear them off and put the three points together, side by side.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">What shape do the three corners make when you line them up?</li>
+          <li class="note">Does it matter what triangle you started with?</li>
+          <li class="note">So what must the three angles of every triangle add up to?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The three corners always fit together to make a <b>straight line</b>, and a straight angle is <b>180°</b>. So the three angles of <b>any</b> triangle add up to <b>180°</b>. If you know two of them, you can always find the third: 180° minus the other two.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Angle words</h3>
+        <div class="note"><b>Acute:</b> less than 90°. <b>Right angle:</b> exactly 90° (marked with a little square). <b>Obtuse:</b> between 90° and 180°. <b>Straight angle:</b> exactly 180°. <b>Reflex:</b> more than 180° but less than 360°.</div>
+        <div class="note" style="margin-top:8px"><b>Naming an angle:</b> ∠ABC means the angle at <b>B</b>: the middle letter is always the <b>vertex</b> (the corner where the two arms meet).</div>
+        <div class="note" style="margin-top:8px"><b>Lines:</b> a <b>line segment</b> has two end points; a <b>ray</b> starts at a point and goes on forever one way. <b>Parallel</b> lines never meet (marked with matching arrows). <b>Perpendicular</b> lines meet at 90°. A <b>transversal</b> is a line that cuts across two or more lines.</div>
+        <div class="note" style="margin-top:8px"><b>Triangles by sides:</b> <b>scalene</b> (all sides different), <b>isosceles</b> (two sides equal, marked with dashes), <b>equilateral</b> (all three equal, so every angle is 60°). <b>By angles:</b> look at the biggest angle: <b>acute-angled</b> (all less than 90°), <b>right-angled</b> (one is 90°), <b>obtuse-angled</b> (one is more than 90°).</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The angle facts (learn these, with their names)</h3>
+        <div class="figs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px">
+          <div class="note"><!--FIG:straight--><svg viewBox="-109.82 -83.54 219.64 93.36" width="179" height="76" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="a and b on a straight line"><line class="ln" x1="-100" y1="0" x2="100" y2="0" stroke="#1B2430" stroke-width="2.95" stroke-linecap="round"/><line class="ln" x1="0" y1="0" x2="51.62" y2="-73.72" stroke="#1B2430" stroke-width="2.95" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="40,0" data-q="22.94,-32.77" data-r="0" data-l="a"><path d="M39.27,0 A39.27 39.27 0 0 0 22.53,-32.17" fill="none" stroke="#D9534F" stroke-width="2.7"/><text class="al" x="48.99" y="-19.36" text-anchor="middle" font-size="18.41" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="0,0" data-p="22.94,-32.77" data-q="-40,0" data-r="0" data-l="b"><path d="M15.49,-22.12 A27 27 0 0 0 -27,0" fill="none" stroke="#D9534F" stroke-width="2.7"/><text class="al" x="-19.83" y="-31.96" text-anchor="middle" font-size="18.41" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Angles on a straight line add to 180°.</b> a + b = 180°</div>
+          <div class="note"><!--FIG:point--><svg viewBox="-76.43 -70.59 167.07 161.23" width="124" height="120" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="a, b and c at a point"><line class="ln" x1="0" y1="0" x2="79.87" y2="-29.07" stroke="#1B2430" stroke-width="3.23" stroke-linecap="round"/><line class="ln" x1="0" y1="0" x2="-65.11" y2="-54.64" stroke="#1B2430" stroke-width="3.23" stroke-linecap="round"/><line class="ln" x1="0" y1="0" x2="-29.07" y2="79.87" stroke="#1B2430" stroke-width="3.23" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="37.59,-13.68" data-q="-30.64,-25.71" data-r="0" data-l="a"><path d="M27.82,-10.12 A29.6 29.6 0 0 0 -22.68,-19.03" fill="none" stroke="#D9534F" stroke-width="2.96"/><text class="al" x="8.18" y="-39.65" text-anchor="middle" font-size="20.18" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="0,0" data-p="-30.64,-25.71" data-q="-13.68,37.59" data-r="0" data-l="b"><path d="M-22.68,-19.03 A29.6 29.6 0 0 0 -10.12,27.82" fill="none" stroke="#D9534F" stroke-width="2.96"/><text class="al" x="-45.49" y="18.92" text-anchor="middle" font-size="20.18" font-weight="800" fill="#D9534F" font-style="italic">b</text></g><g class="am" data-v="0,0" data-p="-13.68,37.59" data-q="37.59,-13.68" data-r="0" data-l="c"><path d="M-10.12,27.82 A29.6 29.6 0 0 0 27.82,-10.12" fill="none" stroke="#D9534F" stroke-width="2.96"/><text class="al" x="33.3" y="40.03" text-anchor="middle" font-size="20.18" font-weight="800" fill="#D9534F" font-style="italic">c</text></g></svg><!--/FIG--><b>Angles at a point add to 360°.</b> a + b + c = 360°</div>
+          <div class="note"><!--FIG:vo--><svg viewBox="-101.77 -93.05 203.53 186.1" width="146" height="134" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="vertically opposite angles a and b"><line class="ln" x1="90.63" y1="-42.26" x2="-90.63" y2="42.26" stroke="#1B2430" stroke-width="3.34" stroke-linecap="round"/><line class="ln" x1="-57.36" y1="-81.92" x2="57.36" y2="81.92" stroke="#1B2430" stroke-width="3.34" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="36.25,-16.9" data-q="-22.94,-32.77" data-r="0" data-l="a"><path d="M32.8,-15.29 A36.19 36.19 0 0 0 -20.76,-29.64" fill="none" stroke="#D9534F" stroke-width="3.06"/><text class="al" x="14.05" y="-45.47" text-anchor="middle" font-size="20.88" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="0,0" data-p="-36.25,16.9" data-q="22.94,32.77" data-r="0" data-l="b"><path d="M-32.8,15.29 A36.19 36.19 0 0 0 20.76,29.64" fill="none" stroke="#D9534F" stroke-width="3.06"/><text class="al" x="-14.05" y="59.39" text-anchor="middle" font-size="20.88" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Vertically opposite angles are equal</b> (Theorem 1). a = b</div>
+          <div class="note"><!--FIG:tri--><svg viewBox="-10.94 -170.69 191.88 181.63" width="140" height="133" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="triangle with angles a, b and c"><polygon class="tri" data-pts="0,0 170,0 111.86,-159.75" points="0,0 170,0 111.86,-159.75" fill="#E8F2EC" stroke="none"/><line class="ln" x1="0" y1="0" x2="170" y2="0" stroke="#1B2430" stroke-width="3.28" stroke-linecap="round"/><line class="ln" x1="170" y1="0" x2="111.86" y2="-159.75" stroke="#1B2430" stroke-width="3.28" stroke-linecap="round"/><line class="ln" x1="111.86" y1="-159.75" x2="0" y2="0" stroke="#1B2430" stroke-width="3.28" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="40,0" data-q="22.94,-32.77" data-r="0" data-l="a"><path d="M43.76,0 A43.76 43.76 0 0 0 25.1,-35.85" fill="none" stroke="#D9534F" stroke-width="3.01"/><text class="al" x="54.59" y="-21.58" text-anchor="middle" font-size="20.51" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="170,0" data-p="156.32,-37.59" data-q="130,0" data-r="0" data-l="b"><path d="M157.84,-33.41 A35.56 35.56 0 0 0 134.44,0" fill="none" stroke="#D9534F" stroke-width="3.01"/><text class="al" x="126.31" y="-23.75" text-anchor="middle" font-size="20.51" font-weight="800" fill="#D9534F" font-style="italic">b</text></g><g class="am" data-v="111.86,-159.75" data-p="88.91,-126.98" data-q="125.54,-122.16" data-r="0" data-l="c"><path d="M86.76,-123.9 A43.76 43.76 0 0 0 126.82,-118.63" fill="none" stroke="#D9534F" stroke-width="3.01"/><text class="al" x="103.82" y="-91.9" text-anchor="middle" font-size="20.51" font-weight="800" fill="#D9534F" font-style="italic">c</text></g></svg><!--/FIG--><b>Angles in a triangle add to 180°</b> (Theorem 4). a + b + c = 180°</div>
+          <div class="note"><!--FIG:iso--><svg viewBox="-13.45 -199.09 176.91 212.54" width="105" height="126" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="isosceles triangle with base angles a and b"><polygon class="tri" data-pts="0,0 150,0 75,-185.63" points="0,0 150,0 75,-185.63" fill="#E8F2EC" stroke="none"/><line class="ln" x1="0" y1="0" x2="150" y2="0" stroke="#1B2430" stroke-width="4.04" stroke-linecap="round"/><line class="ln" x1="150" y1="0" x2="75" y2="-185.63" stroke="#1B2430" stroke-width="4.04" stroke-linecap="round"/><line class="ln" x1="75" y1="-185.63" x2="0" y2="0" stroke="#1B2430" stroke-width="4.04" stroke-linecap="round"/><line class="tick" data-a="0,0" data-b="75,-185.63" data-n="1" x1="26.58" y1="-97.23" x2="48.42" y2="-88.41" stroke="#D9534F" stroke-width="4.04" stroke-linecap="round"/><line class="tick" data-a="150,0" data-b="75,-185.63" data-n="1" x1="101.58" y1="-88.41" x2="123.42" y2="-97.23" stroke="#D9534F" stroke-width="4.04" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="40,0" data-q="14.98,-37.09" data-r="0" data-l="a"><path d="M43.73,0 A43.73 43.73 0 0 0 16.38,-40.54" fill="none" stroke="#D9534F" stroke-width="3.7"/><text class="al" x="54.38" y="-28.27" text-anchor="middle" font-size="25.23" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="150,0" data-p="135.02,-37.09" data-q="110,0" data-r="0" data-l="b"><path d="M133.62,-40.54 A43.73 43.73 0 0 0 106.27,0" fill="none" stroke="#D9534F" stroke-width="3.7"/><text class="al" x="95.62" y="-28.27" text-anchor="middle" font-size="25.23" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Base angles of an isosceles triangle are equal</b> (Theorem 2). a = b. It works backwards too: two equal angles mean two equal sides.</div>
+          <div class="note"><!--FIG:ext--><svg viewBox="-10.17 -138.75 255.33 148.92" width="201" height="117" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="exterior angle e with interior opposite angles a and b"><polygon class="tri" data-pts="0,0 150,0 90.04,-128.59" points="0,0 150,0 90.04,-128.59" fill="#E8F2EC" stroke="none"/><line class="ln" x1="0" y1="0" x2="235" y2="0" stroke="#1B2430" stroke-width="3.05" stroke-linecap="round"/><line class="ln" x1="150" y1="0" x2="90.04" y2="-128.59" stroke="#1B2430" stroke-width="3.05" stroke-linecap="round"/><line class="ln" x1="90.04" y1="-128.59" x2="0" y2="0" stroke="#1B2430" stroke-width="3.05" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="40,0" data-q="22.94,-32.77" data-r="0" data-l="a"><path d="M40.67,0 A40.67 40.67 0 0 0 23.33,-33.31" fill="none" stroke="#D9534F" stroke-width="2.8"/><text class="al" x="50.73" y="-20.05" text-anchor="middle" font-size="19.06" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="90.04,-128.59" data-p="67.1,-95.82" data-q="106.94,-92.34" data-r="0" data-l="b"><path d="M71.09,-101.52 A33.04 33.04 0 0 0 104,-98.64" fill="none" stroke="#D9534F" stroke-width="2.8"/><text class="al" x="85.72" y="-72.86" text-anchor="middle" font-size="19.06" font-weight="800" fill="#D9534F" font-style="italic">b</text></g><g class="am" data-v="150,0" data-p="190,0" data-q="133.1,-36.25" data-r="0" data-l="e"><path d="M177.96,0 A27.96 27.96 0 0 0 138.18,-25.34" fill="none" stroke="#D9534F" stroke-width="2.8"/><text class="al" x="173.9" y="-31.16" text-anchor="middle" font-size="19.06" font-weight="800" fill="#D9534F" font-style="italic">e</text></g></svg><!--/FIG--><b>An exterior angle = the sum of the two interior opposite angles</b> (Theorem 6). e = a + b</div>
+          <div class="note"><!--FIG:alt--><svg viewBox="-151.67 -111.4 303.33 222.8" width="208" height="153" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="alternate angles a and b"><line class="ln" data-g="1" x1="-140" y1="-60" x2="140" y2="-60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,-65.83 L95.2,-60 L85.1,-54.17" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" data-g="1" x1="-140" y1="60" x2="140" y2="60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,54.17 L95.2,60 L85.1,65.83" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" x1="-53.03" y1="99.73" x2="53.03" y2="-99.73" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><g class="am" data-v="31.9,-60" data-p="13.12,-24.68" data-q="71.9,-60" data-r="0" data-l="a"><path d="M16.84,-31.67 A32.08 32.08 0 0 0 63.99,-60" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="58.19" y="-8.96" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="-31.9,60" data-p="-13.12,24.68" data-q="-71.9,60" data-r="0" data-l="b"><path d="M-16.84,31.67 A32.08 32.08 0 0 0 -63.99,60" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="-58.19" y="23.54" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Alternate angles are equal</b> (Theorem 3). Between the parallel lines, on opposite sides of the transversal. a = b</div>
+          <div class="note"><!--FIG:cor--><svg viewBox="-151.67 -115.54 303.33 226.94" width="208" height="156" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="corresponding angles a and b"><line class="ln" data-g="1" x1="-140" y1="-60" x2="140" y2="-60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,-65.83 L95.2,-60 L85.1,-54.17" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" data-g="1" x1="-140" y1="60" x2="140" y2="60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,54.17 L95.2,60 L85.1,65.83" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" x1="-53.03" y1="99.73" x2="53.03" y2="-99.73" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><g class="am" data-v="31.9,-60" data-p="71.9,-60" data-q="50.68,-95.32" data-r="0" data-l="a"><path d="M69.82,-60 A37.92 37.92 0 0 0 49.7,-93.48" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="80.65" y="-82" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="-31.9,60" data-p="8.1,60" data-q="-13.12,24.68" data-r="0" data-l="b"><path d="M6.01,60 A37.92 37.92 0 0 0 -14.1,26.52" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="16.85" y="38" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Corresponding angles are equal</b> (Theorem 5). In the same position at each parallel line. a = b</div>
+          <div class="note"><!--FIG:coi--><svg viewBox="-151.67 -111.4 303.33 222.8" width="208" height="153" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="co-interior angles a and b"><line class="ln" data-g="1" x1="-140" y1="-60" x2="140" y2="-60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,-65.83 L95.2,-60 L85.1,-54.17" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" data-g="1" x1="-140" y1="60" x2="140" y2="60" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><path class="par" d="M85.1,54.17 L95.2,60 L85.1,65.83" fill="none" stroke="#2E7D5B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" x1="-53.03" y1="99.73" x2="53.03" y2="-99.73" stroke="#1B2430" stroke-width="3.5" stroke-linecap="round"/><g class="am" data-v="31.9,-60" data-p="13.12,-24.68" data-q="71.9,-60" data-r="0" data-l="a"><path d="M16.84,-31.67 A32.08 32.08 0 0 0 63.99,-60" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="58.19" y="-8.96" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="-31.9,60" data-p="8.1,60" data-q="-13.12,24.68" data-r="0" data-l="b"><path d="M6.01,60 A37.92 37.92 0 0 0 -14.1,26.52" fill="none" stroke="#D9534F" stroke-width="3.21"/><text class="al" x="16.85" y="38" text-anchor="middle" font-size="21.88" font-weight="800" fill="#D9534F" font-style="italic">b</text></g></svg><!--/FIG--><b>Co-interior angles add to 180°.</b> Between the parallel lines, on the same side of the transversal. a + b = 180° (this follows from corresponding angles and a straight line).</div>
+        </div>
+        <p style="margin-top:10px">You might hear "Z angles" for alternate and "F angles" for corresponding. They help you <b>spot</b> them, but in the exam always write the proper name: <b>alternate</b>, <b>corresponding</b>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How to chase an angle</h3>
+        <ol>
+          <li>Mark every angle you know on the diagram.</li>
+          <li>Look for a fact that links an angle you <b>know</b> to one you <b>don't</b>: a straight line, a crossing, a triangle, equal sides, parallel arrows.</li>
+          <li>Write each step on its own line with the reason in brackets: <b>y = 180° − 72° = 108° (straight line)</b>.</li>
+          <li>Keep going until you reach the angle you were asked for. Check: do the angles in each triangle add to 180°? Does the answer look the right size?</li>
+        </ol>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Angle facts are on the course for both Higher and Ordinary level, and they lead into the later geometry topics (constructions, theorems, congruent and similar triangles, trigonometry). Expect to <b>find missing angles</b> in diagrams with crossing lines, triangles and parallel lines, and to <b>give a reason</b> for each one.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>The reason is part of the answer.</b> When the question says "give a reason" or "justify", the number on its own doesn't earn full marks. Write the fact: "alternate angles", "angles in a triangle add to 180°".</li>
+            <li><b>Use the proper names.</b> "Z angles" and "F angles" aren't accepted as reasons.</li>
+            <li><b>Show each step.</b> If you make a slip early on, clear working means you can still get marks for the later steps.</li>
+            <li><b>Don't measure.</b> Exam diagrams are usually not drawn to scale. Work it out from the facts.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Crossing lines.</b> Two straight lines cross. One of the angles is 58°. Find the angles a, b and c, giving a reason for each.
+              <!--FIG:ex1--><svg viewBox="-114.34 -118.57 228.67 237.13" width="167" height="173" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Two lines crossing: 58 degrees, a, b and c"><line class="ln" x1="103.37" y1="-37.62" x2="-103.37" y2="37.62" stroke="#1B2430" stroke-width="3.29" stroke-linecap="round"/><line class="ln" x1="22.87" y1="-107.6" x2="-22.87" y2="107.6" stroke="#1B2430" stroke-width="3.29" stroke-linecap="round"/><g class="am" data-v="0,0" data-p="37.59,-13.68" data-q="8.32,-39.13" data-r="0" data-l="58"><path d="M41.23,-15.01 A43.88 43.88 0 0 0 9.12,-42.92" fill="none" stroke="#2E7D5B" stroke-width="3.02"/><text class="al" x="40.48" y="-39.71" text-anchor="middle" font-size="20.57" font-weight="800" fill="#1B2430">58°</text></g><g class="am" data-v="0,0" data-p="8.32,-39.13" data-q="-37.59,13.68" data-r="0" data-l="a"><path d="M6.27,-29.51 A30.16 30.16 0 0 0 -28.35,10.32" fill="none" stroke="#D9534F" stroke-width="3.02"/><text class="al" x="-36.22" y="-24.63" text-anchor="middle" font-size="20.57" font-weight="800" fill="#D9534F" font-style="italic">a</text></g><g class="am" data-v="0,0" data-p="-37.59,13.68" data-q="-8.32,39.13" data-r="0" data-l="b"><path d="M-41.23,15.01 A43.88 43.88 0 0 0 -9.12,42.92" fill="none" stroke="#D9534F" stroke-width="3.02"/><text class="al" x="-40.48" y="53.42" text-anchor="middle" font-size="20.57" font-weight="800" fill="#D9534F" font-style="italic">b</text></g><g class="am" data-v="0,0" data-p="-8.32,39.13" data-q="37.59,-13.68" data-r="0" data-l="c"><path d="M-6.27,29.51 A30.16 30.16 0 0 0 28.35,-10.32" fill="none" stroke="#D9534F" stroke-width="3.02"/><text class="al" x="36.22" y="38.34" text-anchor="middle" font-size="20.57" font-weight="800" fill="#D9534F" font-style="italic">c</text></g></svg><!--/FIG-->
+              <details><summary>Show the worked answer</summary><p>a = 180° − 58° = <b>122°</b> (angles on a straight line).<br>b = <b>58°</b> (vertically opposite angles are equal).<br>c = <b>122°</b> (vertically opposite to a; or 180° − 58° on a straight line).<br>Check: 58 + 122 + 58 + 122 = 360 ✓ (angles at a point).</p></details></li>
+            <li><b>Parallel lines.</b> The two lines with arrows are parallel. Find p, q and r, giving a reason for each.
+              <!--FIG:ex2--><svg viewBox="-150 -110.78 300 221.57" width="240" height="177" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Parallel lines: 65 degrees, p, q and r"><line class="ln" data-g="1" x1="-140" y1="-60" x2="140" y2="-60" stroke="#1B2430" stroke-width="3" stroke-linecap="round"/><path class="par" d="M86.54,-65 L95.2,-60 L86.54,-55" fill="none" stroke="#2E7D5B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" data-g="1" x1="-140" y1="60" x2="140" y2="60" stroke="#1B2430" stroke-width="3" stroke-linecap="round"/><path class="par" d="M86.54,55 L95.2,60 L86.54,65" fill="none" stroke="#2E7D5B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><line class="ln" x1="-47" y1="100.78" x2="47" y2="-100.78" stroke="#1B2430" stroke-width="3" stroke-linecap="round"/><g class="am" data-v="27.98,-60" data-p="67.98,-60" data-q="44.88,-96.25" data-r="0" data-l="65"><path d="M60.48,-60 A32.5 32.5 0 0 0 41.71,-89.46" fill="none" stroke="#2E7D5B" stroke-width="2.75"/><text class="al" x="69.09" y="-79.94" text-anchor="middle" font-size="18.75" font-weight="800" fill="#1B2430">65°</text></g><g class="am" data-v="-27.98,60" data-p="12.02,60" data-q="-11.07,23.75" data-r="0" data-l="p"><path d="M4.52,60 A32.5 32.5 0 0 0 -14.24,30.54" fill="none" stroke="#D9534F" stroke-width="2.75"/><text class="al" x="13.14" y="40.06" text-anchor="middle" font-size="18.75" font-weight="800" fill="#D9534F" font-style="italic">p</text></g><g class="am" data-v="27.98,-60" data-p="11.07,-23.75" data-q="67.98,-60" data-r="0" data-l="q"><path d="M16.36,-35.08 A27.5 27.5 0 0 0 55.48,-60" fill="none" stroke="#D9534F" stroke-width="2.75"/><text class="al" x="51.49" y="-16.85" text-anchor="middle" font-size="18.75" font-weight="800" fill="#D9534F" font-style="italic">q</text></g><g class="am" data-v="-27.98,60" data-p="-11.07,23.75" data-q="-67.98,60" data-r="0" data-l="r"><path d="M-16.36,35.08 A27.5 27.5 0 0 0 -55.48,60" fill="none" stroke="#D9534F" stroke-width="2.75"/><text class="al" x="-51.49" y="29.35" text-anchor="middle" font-size="18.75" font-weight="800" fill="#D9534F" font-style="italic">r</text></g></svg><!--/FIG-->
+              <details><summary>Show the worked answer</summary><p>p = <b>65°</b> (corresponding angles are equal).<br>q = 180° − 65° = <b>115°</b> (angles on a straight line).<br>r = <b>115°</b> (alternate angles: r and q are between the parallel lines, on opposite sides of the transversal).<br>Check: p + r = 65 + 115 = 180 ✓ (co-interior angles).</p></details></li>
+            <li><b>An isosceles triangle.</b> In the triangle ABC, |AB| = |AC| and ∠BAC = 40°. The side BC is extended to D. (a) Find x, the size of ∠ABC. (b) Find y, the size of ∠ACD. Give a reason for each step.
+              <!--FIG:ex3--><svg viewBox="-37.89 -245.95 296.78 285.84" width="224" height="215" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Isosceles triangle ABC with angle A 40 degrees"><polygon class="tri" data-pts="0,0 150,0 75,-206.06" points="0,0 150,0 75,-206.06" fill="#E8F2EC" stroke="none"/><line class="ln" x1="0" y1="0" x2="235" y2="0" stroke="#1B2430" stroke-width="3.19" stroke-linecap="round"/><line class="ln" x1="150" y1="0" x2="75" y2="-206.06" stroke="#1B2430" stroke-width="3.19" stroke-linecap="round"/><line class="ln" x1="75" y1="-206.06" x2="0" y2="0" stroke="#1B2430" stroke-width="3.19" stroke-linecap="round"/><line class="tick" data-a="0,0" data-b="75,-206.06" data-n="1" x1="28.77" y1="-106.21" x2="46.23" y2="-99.85" stroke="#D9534F" stroke-width="3.19" stroke-linecap="round"/><line class="tick" data-a="150,0" data-b="75,-206.06" data-n="1" x1="103.77" y1="-99.85" x2="121.23" y2="-106.21" stroke="#D9534F" stroke-width="3.19" stroke-linecap="round"/><g class="am" data-v="75,-206.06" data-p="61.32,-168.47" data-q="88.68,-168.47" data-r="0" data-l="40"><path d="M60.47,-166.15 A42.47 42.47 0 0 0 89.53,-166.15" fill="none" stroke="#2E7D5B" stroke-width="2.92"/><text class="al" x="75" y="-139.7" text-anchor="middle" font-size="19.91" font-weight="800" fill="#1B2430">40°</text></g><g class="am" data-v="0,0" data-p="40,0" data-q="13.68,-37.59" data-r="0" data-l="x"><path d="M34.51,0 A34.51 34.51 0 0 0 11.8,-32.43" fill="none" stroke="#D9534F" stroke-width="2.92"/><text class="al" x="42.4" y="-23.05" text-anchor="middle" font-size="19.91" font-weight="800" fill="#D9534F" font-style="italic">x</text></g><g class="am" data-v="150,0" data-p="190,0" data-q="136.32,-37.59" data-r="0" data-l="y"><path d="M179.2,0 A29.2 29.2 0 0 0 140.01,-27.44" fill="none" stroke="#D9534F" stroke-width="2.92"/><text class="al" x="176.64" y="-31.42" text-anchor="middle" font-size="19.91" font-weight="800" fill="#D9534F" font-style="italic">y</text></g><text x="75" y="-215.42" text-anchor="middle" font-size="18.58" font-weight="700" fill="#5B6472">A</text><text x="-14" y="14.64" text-anchor="middle" font-size="18.58" font-weight="700" fill="#5B6472">B</text><text x="150" y="22.64" text-anchor="middle" font-size="18.58" font-weight="700" fill="#5B6472">C</text><text x="235" y="22.64" text-anchor="middle" font-size="18.58" font-weight="700" fill="#5B6472">D</text></svg><!--/FIG-->
+              <details><summary>Show the worked answer</summary><p>(a) |AB| = |AC|, so ∠ABC = ∠ACB (base angles of an isosceles triangle). The angles add to 180°: 180° − 40° = 140°, and 140° ÷ 2 = <b>70°</b>. So x = 70°.<br>(b) y = 180° − 70° = <b>110°</b> (angles on a straight line at C). Or: y = 40° + 70° = 110° (exterior angle = sum of the two interior opposite angles) ✓.</p></details></li>
+            <li><b>Two ways.</b> In the triangle PQR, ∠QPR = 48° and ∠PQR = 67°. QR is extended to S. (a) Find w, the size of ∠PRS, using the exterior angle theorem. (b) Find w a different way, to check your answer. (c) Is the triangle acute-angled, right-angled or obtuse-angled? Explain.
+              <!--FIG:ex4--><svg viewBox="-35.81 -217.43 302.62 255.23" width="250" height="211" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Triangle PQR with QR extended to S"><polygon class="tri" data-pts="0,0 160,0 76.24,-179.62" points="0,0 160,0 76.24,-179.62" fill="#E8F2EC" stroke="none"/><line class="ln" x1="0" y1="0" x2="245" y2="0" stroke="#1B2430" stroke-width="2.91" stroke-linecap="round"/><line class="ln" x1="160" y1="0" x2="76.24" y2="-179.62" stroke="#1B2430" stroke-width="2.91" stroke-linecap="round"/><line class="ln" x1="76.24" y1="-179.62" x2="0" y2="0" stroke="#1B2430" stroke-width="2.91" stroke-linecap="round"/><g class="am" data-v="76.24,-179.62" data-p="60.61,-142.8" data-q="93.15,-143.37" data-r="0" data-l="48"><path d="M61.09,-143.93 A38.77 38.77 0 0 0 92.63,-144.48" fill="none" stroke="#2E7D5B" stroke-width="2.67"/><text class="al" x="77.19" y="-119.05" text-anchor="middle" font-size="18.17" font-weight="800" fill="#1B2430">48°</text></g><g class="am" data-v="0,0" data-p="40,0" data-q="15.63,-36.82" data-r="0" data-l="67"><path d="M31.5,0 A31.5 31.5 0 0 0 12.31,-29" fill="none" stroke="#2E7D5B" stroke-width="2.67"/><text class="al" x="39.4" y="-20.02" text-anchor="middle" font-size="18.17" font-weight="800" fill="#1B2430">67°</text></g><g class="am" data-v="160,0" data-p="200,0" data-q="143.1,-36.25" data-r="0" data-l="w"><path d="M186.65,0 A26.65 26.65 0 0 0 148.74,-24.16" fill="none" stroke="#D9534F" stroke-width="2.67"/><text class="al" x="182.78" y="-29.71" text-anchor="middle" font-size="18.17" font-weight="800" fill="#D9534F" font-style="italic">w</text></g><text x="76.24" y="-189.56" text-anchor="middle" font-size="16.96" font-weight="700" fill="#5B6472">P</text><text x="-14" y="14.06" text-anchor="middle" font-size="16.96" font-weight="700" fill="#5B6472">Q</text><text x="160" y="22.06" text-anchor="middle" font-size="16.96" font-weight="700" fill="#5B6472">R</text><text x="245" y="22.06" text-anchor="middle" font-size="16.96" font-weight="700" fill="#5B6472">S</text></svg><!--/FIG-->
+              <details><summary>Show the worked answer</summary><p>(a) w = 48° + 67° = <b>115°</b> (an exterior angle equals the sum of the two interior opposite angles).<br>(b) ∠PRQ = 180° − (48° + 67°) = 65° (angles in a triangle), then w = 180° − 65° = <b>115°</b> (straight line) ✓.<br>(c) The angles are 48°, 67° and 65°. All are less than 90°, so it is <b>acute-angled</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/lines-angles-triangles-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Lines, Angles &amp; Triangles Teacher Pack (€5)</a>: Angle Chase relay cards, Angle Sort, Angle Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // angle answer in degrees: slips first, then pads; only whole numbers 1–359, never equal to the answer
+  function QA(en,frame,ans,slips,why,html,data){
+    var pads=[180-ans,ans+10,ans-10,360-ans,ans+20,ans-20,90-ans,ans+5,ans-5,ans+30],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<1||x>359||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x+"°");}});
+    return {en:en,frame:frame,html:html||"",answer:ans+"°",wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans+"°",data:data||{}};}
+  // whole-number answer (no degrees sign)
+  function Q(en,frame,ans,slips,why,html,data){
+    var pads=[ans+10,ans-10,ans*2,ans+90,ans-90,ans+30],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<1||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(String(x));}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+
+  /* ---------- geometry drawing ---------- */
+  // Angles are measured anticlockwise from "east" (maths convention); y goes UP in our coordinates, the SVG flips it.
+  function rad(a){return a*Math.PI/180;}
+  function pt(v,a,r){return [v[0]+r*Math.cos(rad(a)),v[1]+r*Math.sin(rad(a))];}
+  function ang(v,p){return (Math.atan2(p[1]-v[1],p[0]-v[0])*180/Math.PI+360)%360;}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+  function G(){return {lines:[],marks:[],ticks:[],tris:[],names:[]};}
+  function L(g,a,b,grp){g.lines.push({a:a,b:b,g:grp||0});}
+  // mark the angle at v that starts at direction a1 and turns anticlockwise by sw degrees
+  function M(g,v,a1,sw,lab){g.marks.push({v:v,a1:a1,sw:sw,lab:String(lab)});}
+  // mark the (non-reflex) angle at v between the rays v→u and v→w
+  function MB(g,v,u,w,lab){var a1=ang(v,u),a2=ang(v,w),sw=(a2-a1+360)%360;if(sw>180){a1=a2;sw=360-sw;}M(g,v,a1,sw,lab);}
+  function T(g,a,b,n){g.ticks.push({a:a,b:b,n:n||1});}
+  var INK="#1B2430",GRN="#2E7D5B",RED="#D9534F";
+  function f(n){return Math.round(n*100)/100;}
+  function render(g,label,box){
+    var P=[],out=[],gx0=Infinity,gx1=-Infinity,gy0=Infinity,gy1=-Infinity;
+    function S(p){return f(p[0])+","+f(-p[1]);}
+    g.lines.forEach(function(l){P.push(l.a,l.b);[l.a,l.b].forEach(function(p){gx0=Math.min(gx0,p[0]);gx1=Math.max(gx1,p[0]);gy0=Math.min(gy0,p[1]);gy1=Math.max(gy1,p[1]);});});
+    // k = screen pixels per unit: text, arcs and strokes are sized in screen pixels so every diagram reads the same
+    box=box||[320,230];var k=Math.min(box[0]/(gx1-gx0+70),box[1]/(gy1-gy0+70),1.5),u=1/k,sw=f(2.4*u);
+    g.tris.forEach(function(t){out.push('<polygon class="tri" data-pts="'+t.map(S).join(" ")+'" points="'+t.map(S).join(" ")+'" fill="#E8F2EC" stroke="none"/>');});
+    g.lines.forEach(function(l){out.push('<line class="ln"'+(l.g?' data-g="'+l.g+'"':'')+' x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+INK+'" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      if(l.g){var d=ang(l.a,l.b),m=pt(l.a,d,dist(l.a,l.b)*0.84);for(var n=0;n<l.g;n++){var c=pt(m,d,(n*7-((l.g-1)*3.5))*u);
+        out.push('<path class="par" d="M'+S(pt(c,d+150,8*u))+' L'+S(c)+' L'+S(pt(c,d-150,8*u))+'" fill="none" stroke="'+GRN+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"/>');}}});
+    g.ticks.forEach(function(t){var m=[(t.a[0]+t.b[0])/2,(t.a[1]+t.b[1])/2],d=ang(t.a,t.b);for(var n=0;n<t.n;n++){var c=pt(m,d,(n-(t.n-1)/2)*6*u),e1=pt(c,d+90,7*u),e2=pt(c,d-90,7*u);
+      out.push('<line class="tick" data-a="'+S(t.a)+'" data-b="'+S(t.b)+'" data-n="'+t.n+'" x1="'+f(e1[0])+'" y1="'+f(-e1[1])+'" x2="'+f(e2[0])+'" y2="'+f(-e2[1])+'" stroke="'+RED+'" stroke-width="'+sw+'" stroke-linecap="round"/>');}});
+    g.marks.forEach(function(m){
+      var r=(m.sw<35?40:m.sw<60?32:m.sw<110?26:22)*u,isRt=m.lab==="rt",lab=isRt?"":m.lab,bis=m.a1+m.sw/2,
+        p=pt(m.v,m.a1,40),q=pt(m.v,m.a1+m.sw,40),o='<g class="am" data-v="'+S(m.v)+'" data-p="'+S(p)+'" data-q="'+S(q)+'" data-r="'+(m.sw>180?1:0)+'" data-l="'+(isRt?"rt":lab)+'">';
+      if(isRt){var s=13*u,c1=pt(m.v,m.a1,s),c3=pt(m.v,m.a1+90,s),c2=[c1[0]+c3[0]-m.v[0],c1[1]+c3[1]-m.v[1]];
+        o+='<path d="M'+S(c1)+' L'+S(c2)+' L'+S(c3)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}
+      else{var s1=pt(m.v,m.a1,r),e1=pt(m.v,m.a1+m.sw,r),unk=/^[a-z?]$/.test(lab);
+        o+='<path d="M'+S(s1)+' A'+f(r)+' '+f(r)+' 0 '+(m.sw>180?1:0)+' 0 '+S(e1)+'" fill="none" stroke="'+(unk?RED:GRN)+'" stroke-width="'+f(2.2*u)+'"/>';
+        var tp=pt(m.v,bis,r+(lab.length>2?17:13)*u);P.push([tp[0]-15*u,tp[1]-10*u],[tp[0]+15*u,tp[1]+10*u]);
+        o+='<text class="al" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(15*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk?' font-style="italic"':'')+'>'+(unk?lab:lab+"°")+'</text>';}
+      out.push(o+'</g>');});
+    g.names.forEach(function(n){var tp=n.p;P.push([tp[0]-10*u,tp[1]-10*u],[tp[0]+10*u,tp[1]+10*u]);out.push('<text x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="700" fill="#5B6472">'+n.t+'</text>');});
+    var x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;P.forEach(function(p){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1]);});
+    x0-=8*u;x1+=8*u;y0-=8*u;y1+=8*u;var W=x1-x0,H=y1-y0;
+    return '<svg viewBox="'+f(x0)+' '+f(-y1)+' '+f(W)+' '+f(H)+'" width="'+Math.round(W*k)+'" height="'+Math.round(H*k)+'" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="'+(label||"Angle diagram")+'">'+out.join("")+'</svg>';}
+
+  /* ---------- the facts ---------- */
+  var R={str:"Angles on a straight line add to 180°",pt:"Angles at a point add to 360°",vo:"Vertically opposite angles are equal",tri:"Angles in a triangle add to 180°",
+    iso:"Base angles of an isosceles triangle are equal",ext:"An exterior angle = the sum of the two interior opposite angles",alt:"Alternate angles are equal",
+    cor:"Corresponding angles are equal",coi:"Co-interior angles add to 180°"};
+  var RK=Object.keys(R);
+  function splitInto(total,k,lo,hi){var p;do{p=[];var s=0;for(var i=0;i<k-1;i++){var x=ri(lo,hi);p.push(x);s+=x;}p.push(total-s);}while(p[k-1]<lo||p[k-1]>hi);return p;}
+  function rot(){return rnd([0,0,0,0,15,-15,25,-25,90]);}
+
+  /* straight line: 2 or 3 angles, one is x */
+  function dStraight(k){
+    var g=G(),r0=rot(),parts=splitInto(180,k,28,140),v=[0,0],c=0,xi=ri(0,k-1);
+    L(g,pt(v,r0,115),pt(v,r0+180,115));
+    parts.forEach(function(a,i){if(i)L(g,v,pt(v,r0+c,100));M(g,v,r0+c,a,i===xi?"x":a);c+=a;});
+    var known=parts.filter(function(a,i){return i!==xi;}),s=known.reduce(function(a,b){return a+b;},0);
+    return {g:g,ans:parts[xi],reason:"str",slips:[360-s,s,180-known[0]],why:R.str+": x = 180° − "+(known.length>1?"("+known.join("° + ")+"°)":known[0]+"°")+" = "+parts[xi]+"°."};}
+  /* angles at a point */
+  function dPoint(){
+    var g=G(),k=rnd([3,3,4]),parts,v=[0,0],c=rot(),xi=ri(0,k-1);
+    do{parts=splitInto(360,k,k===3?62:45,k===3?170:150);}while(k===4&&(Math.abs(parts[0]+parts[1]-180)<8||Math.abs(parts[1]+parts[2]-180)<8)); // no two rays in a straight line
+    parts.forEach(function(a,i){L(g,v,pt(v,c,100));M(g,v,c,a,i===xi?"x":a);c+=a;});
+    var known=parts.filter(function(a,i){return i!==xi;}),s=known.reduce(function(a,b){return a+b;},0);
+    return {g:g,ans:parts[xi],reason:"pt",slips:[Math.abs(180-s),s,360-known[0]],why:R.pt+": x = 360° − ("+known.join("° + ")+"°) = "+parts[xi]+"°."};}
+  /* two lines crossing */
+  function dCross(){
+    var g=G(),r0=rnd([0,10,-10,20,-20]),a,v=[0,0];do{a=ri(30,150);}while(Math.abs(a-90)<8);
+    L(g,pt(v,r0,110),pt(v,r0+180,110));L(g,pt(v,r0+a,110),pt(v,r0+a+180,110));
+    var st=[r0,r0+a,r0+180,r0+180+a],val=[a,180-a,a,180-a],i=ri(0,3),j;do{j=ri(0,3);}while(j===i);
+    M(g,v,st[i],val[i],val[i]);M(g,v,st[j],val[j],"x");
+    var vo=(j-i+4)%4===2;
+    return {g:g,ans:val[j],reason:vo?"vo":"str",slips:[vo?180-val[i]:val[i],360-val[i]],why:vo?R.vo+": x = "+val[i]+"°.":R.str+": x = 180° − "+val[i]+"° = "+val[j]+"°."};}
+  /* a triangle with angles A at P0, B at P1, C at P2 (base P0P1) */
+  function tri(A,B,base){
+    var P0=[0,0],P1=[base||200,0],d=(base||200)*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),t=rnd([0,0,0,8,-8,180]);
+    if(t){var c=[(P0[0]+P1[0]+P2[0])/3,(P0[1]+P1[1]+P2[1])/3];[P0,P1,P2].forEach(function(p){var r=dist(c,p),a0=ang(c,p),q=pt(c,a0+t,r);p[0]=q[0];p[1]=q[1];});}
+    return [P0,P1,P2];}
+  function triG(Ps){var g=G();g.tris.push(Ps);L(g,Ps[0],Ps[1]);L(g,Ps[1],Ps[2]);L(g,Ps[2],Ps[0]);return g;}
+  function dTri(){
+    var A,B;do{A=ri(25,115);B=ri(25,115);}while(A+B>155);var C=180-A-B,Ps=tri(A,B),g=triG(Ps),angs=[A,B,C],xi=ri(0,2);
+    for(var i=0;i<3;i++)MB(g,Ps[i],Ps[(i+1)%3],Ps[(i+2)%3],i===xi?"x":angs[i]);
+    var known=angs.filter(function(a,i){return i!==xi;});
+    return {g:g,ans:angs[xi],reason:"tri",slips:[360-known[0]-known[1],known[0]+known[1],180-known[0]],why:R.tri+": x = 180° − ("+known[0]+"° + "+known[1]+"°) = "+angs[xi]+"°."};}
+  function dRight(){
+    var B=ri(20,70),C=90-B,sw=Math.random()<.5,Ps=tri(90,sw?C:B),g=triG(Ps);
+    // right angle at P0; angle at P1 is (sw?C:B)
+    var a1=sw?C:B,a2=180-90-a1,ask=Math.random()<.5;
+    MB(g,Ps[0],Ps[1],Ps[2],"rt");MB(g,Ps[1],Ps[2],Ps[0],ask?"x":a1);MB(g,Ps[2],Ps[0],Ps[1],ask?a2:"x");
+    var ans=ask?a1:a2,giv=ask?a2:a1;
+    return {g:g,ans:ans,reason:"tri",slips:[180-giv,90+giv,giv],why:"The square means 90°. "+R.tri+": x = 180° − (90° + "+giv+"°) = "+ans+"°."};}
+  function dIso(kind){ // kind: "apex" (find a base angle), "base" (find the apex), "other" (find the other base angle)
+    var t=2*ri(12,70),b=(180-t)/2,Ps=tri(b,b),g=triG(Ps);T(g,Ps[0],Ps[2]);T(g,Ps[1],Ps[2]);
+    var left=Math.random()<.5;
+    if(kind==="apex"){MB(g,Ps[2],Ps[0],Ps[1],t===90?"rt":t);MB(g,Ps[left?0:1],Ps[left?1:0],Ps[2],"x");
+      return {g:g,ans:b,reason:"iso+tri",slips:[180-t,t,90-t>0?90-t:180-2*t],why:"The two base angles are equal (isosceles), so each is (180° − "+t+"°) ÷ 2 = "+b+"°."};}
+    if(kind==="base"){MB(g,Ps[left?0:1],Ps[left?1:0],Ps[2],b);MB(g,Ps[2],Ps[0],Ps[1],"x");
+      return {g:g,ans:t,reason:"iso+tri",slips:[180-b,b,180-3*b>0?180-3*b:90-b],why:"Both base angles are "+b+"° (isosceles), so x = 180° − 2 × "+b+"° = "+t+"°."};}
+    MB(g,Ps[0],Ps[1],Ps[2],left?b:"x");MB(g,Ps[1],Ps[2],Ps[0],left?"x":b);
+    return {g:g,ans:b,reason:"iso",slips:[180-2*b,180-b,t+b<360?t:90],why:R.iso+" (the dashes show the two equal sides): x = "+b+"°."};}
+  function dEqui(){
+    var Ps=tri(60,60,170),g=triG(Ps);T(g,Ps[0],Ps[1]);T(g,Ps[1],Ps[2]);T(g,Ps[2],Ps[0]);var i=ri(0,2);
+    MB(g,Ps[i],Ps[(i+1)%3],Ps[(i+2)%3],"x");
+    return {g:g,ans:60,reason:"equi",slips:[180,90,45],why:"All three sides are equal, so all three angles are equal: 180° ÷ 3 = 60°."};}
+  /* triangle with the base extended past P1: exterior angle at P1 */
+  function extTri(A,B){
+    var C=180-A-B,P0=[0,0],P1=[170,0],d=170*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),P3=[250,0];
+    if(Math.random()<.5){[P0,P1,P2,P3].forEach(function(p){p[0]=-p[0];});}
+    var g=G();g.tris.push([P0,P1,P2]);L(g,P0,P3);L(g,P1,P2);L(g,P2,P0);return {g:g,P:[P0,P1,P2,P3],C:C};}
+  function dExt(kind){
+    var A,B;do{A=ri(25,95);B=ri(35,130);}while(A+B>160||180-B<40);var e=extTri(A,B),g=e.g,P=e.P,C=e.C,X=180-B;
+    if(kind==="find"){MB(g,P[0],P[1],P[2],A);MB(g,P[2],P[0],P[1],C);MB(g,P[1],P[3],P[2],"x");
+      return {g:g,ans:X,reason:"ext",slips:[180-A-C>0?180-A-C:A,180-A,360-X],why:R.ext+": x = "+A+"° + "+C+"° = "+X+"°."};}
+    var top=Math.random()<.5;
+    MB(g,P[1],P[3],P[2],X);if(top){MB(g,P[0],P[1],P[2],A);MB(g,P[2],P[0],P[1],"x");}else{MB(g,P[0],P[1],P[2],"x");MB(g,P[2],P[0],P[1],C);}
+    var ans=top?C:A,giv=top?A:C;
+    return {g:g,ans:ans,reason:"ext",slips:[X+giv<360?X+giv:180-giv,180-X,180-giv],why:R.ext+": "+X+"° = "+giv+"° + x, so x = "+X+"° − "+giv+"° = "+ans+"°."};}
+  /* two parallel lines cut by a transversal: sectors s0..s3 at the top (V1) and bottom (V2) crossings */
+  function parG(a){
+    var g=G(),h=60,dx=h/Math.tan(rad(a)),V1=[dx,h],V2=[-dx,-h],lo=Math.min(V1[0],V2[0])-95,hi=Math.max(V1[0],V2[0])+95;
+    L(g,[lo,h],[hi,h],1);L(g,[lo,-h],[hi,-h],1);L(g,pt(V2,a+180,52),pt(V1,a,52));
+    return {g:g,V:[V1,V2],st:[0,a,180,180+a],val:[a,180-a,a,180-a]};}
+  // relation between sector i at vertex p and sector j at vertex q (0 = top, 1 = bottom)
+  function parRel(p,i,q,j){
+    if(p===q){var d=(j-i+4)%4;return d===2?"vo":d?"str":null;}
+    var ii=p===0?i:j,jj=p===0?j:i; // ii at the top, jj at the bottom
+    if(ii===jj)return "cor";
+    if((ii===2&&jj===0)||(ii===3&&jj===1))return "alt";
+    if((ii===3&&jj===0)||(ii===2&&jj===1))return "coi";
+    return null;}
+  function dPar(){
+    var a;do{a=ri(35,145);}while(Math.abs(a-90)<10);var P=parG(a),g=P.g,p,i,q,j,rel;
+    do{p=ri(0,1);i=ri(0,3);q=Math.random()<.75?1-p:p;j=ri(0,3);rel=(p===q&&i===j)?null:parRel(p,i,q,j);}while(!rel);
+    M(g,P.V[p],P.st[i],P.val[i],P.val[i]);M(g,P.V[q],P.st[j],P.val[j],"x");
+    var eq=rel==="cor"||rel==="alt"||rel==="vo";
+    return {g:g,ans:P.val[j],reason:rel,slips:[eq?180-P.val[i]:P.val[i],360-P.val[i]],why:R[rel]+(eq?": x = "+P.val[i]+"°.":": x = 180° − "+P.val[i]+"° = "+P.val[j]+"°.")};}
+
+  /* ---------- two-step chases (the middle angle is called y, or y and z) ---------- */
+  function dPar2(){
+    var a;do{a=ri(35,145);}while(Math.abs(a-90)<10);var P=parG(a),g=P.g,p=ri(0,1),q=1-p,i=ri(0,3),j;
+    do{j=ri(0,3);}while(j===i||parRel(p,i,q,j));
+    M(g,P.V[p],P.st[i],P.val[i],P.val[i]);M(g,P.V[q],P.st[i],P.val[i],"y");M(g,P.V[q],P.st[j],P.val[j],"x");
+    var vo=(j-i+4)%4===2;
+    return {g:g,ans:P.val[j],slips:[vo?180-P.val[i]:P.val[i],360-P.val[i]],
+      why:"y = "+P.val[i]+"° (corresponding angles). Then "+(vo?"x = y = "+P.val[j]+"° (vertically opposite).":"x = 180° − "+P.val[i]+"° = "+P.val[j]+"° (straight line).")};}
+  function dIsoExt(){
+    var t=2*ri(12,70),b=(180-t)/2,X=180-b,P0=[0,0],P1=[170,0],d=85/Math.cos(rad(b)),P2=pt(P0,b,d),P3=[250,0];
+    if(Math.random()<.5)[P0,P1,P2,P3].forEach(function(p){p[0]=-p[0];});
+    var g=G();g.tris.push([P0,P1,P2]);L(g,P0,P3);L(g,P1,P2);L(g,P2,P0);T(g,P0,P2);T(g,P1,P2);
+    MB(g,P2,P0,P1,t);MB(g,P1,P2,P0,"y");MB(g,P1,P3,P2,"x");
+    return {g:g,ans:X,slips:[b,180-t,t+b<360?t+b:90],why:"y = (180° − "+t+"°) ÷ 2 = "+b+"° (isosceles: equal base angles). Then x = 180° − "+b+"° = "+X+"° (straight line)."};}
+  function dTwoExt(){
+    var A,B;do{A=ri(35,110);B=ri(35,110);}while(A+B>150);var C=180-A-B,P0=[0,0],P1=[170,0],d=170*Math.sin(rad(B))/Math.sin(rad(A+B)),P2=pt(P0,A,d),Pl=[-80,0],Pr=[250,0];
+    var g=G();g.tris.push([P0,P1,P2]);L(g,Pl,Pr);L(g,P1,P2);L(g,P2,P0);
+    MB(g,P0,Pl,P2,180-A);MB(g,P1,Pr,P2,180-B);MB(g,P0,P1,P2,"y");MB(g,P1,P2,P0,"z");MB(g,P2,P0,P1,"x");
+    return {g:g,ans:C,slips:[A+B,180-A,180-B],
+      why:"y = 180° − "+(180-A)+"° = "+A+"° and z = 180° − "+(180-B)+"° = "+B+"° (straight line). Then x = 180° − ("+A+"° + "+B+"°) = "+C+"° (triangle)."};}
+  function dParTri(){
+    var A,B;do{A=ri(35,80);B=ri(35,80);}while(A+B>145);var C=180-A-B,Lp=[0,0],Rp=[180,0],d=180*Math.sin(rad(B))/Math.sin(rad(A+B)),Tp=pt(Lp,A,d),h=Tp[1];
+    var g=G();g.tris.push([Lp,Rp,Tp]);L(g,[-70,0],[250,0],1);L(g,[Tp[0]-110,h],[Tp[0]+110,h],1);L(g,Lp,Tp);L(g,Rp,Tp);
+    var left=Math.random()<.5;
+    if(left){MB(g,Tp,[Tp[0]-100,h],Lp,A);MB(g,Lp,Rp,Tp,"y");MB(g,Rp,Tp,Lp,B);}
+    else{MB(g,Tp,[Tp[0]+100,h],Rp,B);MB(g,Rp,Tp,Lp,"y");MB(g,Lp,Rp,Tp,A);}
+    MB(g,Tp,Lp,Rp,"x");
+    var y=left?A:B;
+    return {g:g,ans:C,slips:[180-y,A+B,180-(left?B:A)],why:"y = "+y+"° (alternate angles). Then x = 180° − ("+A+"° + "+B+"°) = "+C+"° (angles in a triangle)."};}
+
+  /* ---------- question makers ---------- */
+  function find(d,t,en){var q=QA(en||"Find the size of the angle x.","",d.ans,d.slips,d.why,render(d.g),{t:t,reason:d.reason});q.review=d.why;return q;}
+  function qStraight(){return find(dStraight(rnd([2,2,3])),"straight");}
+  function qPoint(){return find(dPoint(),"point");}
+  function qCross(){return find(dCross(),"cross");}
+  function qTri(){return find(dTri(),"tri");}
+  function qRight(){return find(dRight(),"right");}
+  function qIso(){return find(dIso(rnd(["apex","base","other"])),"iso");}
+  function qEqui(){return find(dEqui(),"equi");}
+  function qExt(){return find(dExt(rnd(["find","back"])),"ext");}
+  function qPar(){return find(dPar(),"par");}
+  function qPar2(){return find(dPar2(),"par2","Find x. (Find y first.)");}
+  function qIsoExt(){return find(dIsoExt(),"isoext","Find x. (Find y first.)");}
+  function qTwoExt(){return find(dTwoExt(),"twoext","Find x. (Find y and z first.)");}
+  function qParTri(){return find(dParTri(),"partri","Find x. (Find y first.)");}
+  // name the reason: the ONE fact that gives x straight away
+  function qReason(){
+    var d=rnd([function(){return dStraight(2);},dPoint,dCross,dCross,dTri,function(){return dIso("other");},function(){return dExt("find");},dPar,dPar,dPar,dPar])();
+    var a=R[d.reason];
+    return C("x = "+d.ans+"°. Which fact gives this straight away?","",a,RK.filter(function(k){return k!==d.reason;}).map(function(k){return R[k];}),
+      d.why,"x = "+d.ans+"° → "+a,render(d.g),{t:"reason",reason:d.reason,x:d.ans});}
+  // pick the right reason AND number together
+  function qBoth(){
+    var d=rnd([dCross,dPar,dPar,function(){return dExt("find");},function(){return dIso("other");}])(),a=d.ans+"° ("+R[d.reason].toLowerCase()+")";
+    var other=d.reason==="str"||d.reason==="coi"?"vo":d.reason==="ext"?"tri":d.reason==="iso"?"tri":"str",alt=180-d.ans,pool=[];
+    if(alt!==d.ans)pool.push(alt+"° ("+R[d.reason].toLowerCase()+")",d.ans+"° ("+R[other].toLowerCase()+")",alt+"° ("+R[other].toLowerCase()+")");
+    else pool.push((d.ans+10)+"° ("+R[d.reason].toLowerCase()+")",d.ans+"° ("+R[other].toLowerCase()+")",(d.ans-10)+"° ("+R[other].toLowerCase()+")");
+    return C("Find x and give the reason.","",a,pool,d.why,"x → "+a,render(d.g),{t:"both",reason:d.reason,x:d.ans});}
+
+  /* ---------- angle words ---------- */
+  var TYPES=["Acute","Right angle","Obtuse","Straight angle","Reflex"];
+  function tName(n){return n<90?"Acute":n===90?"Right angle":n<180?"Obtuse":n===180?"Straight angle":"Reflex";}
+  function oneAngle(n){var g=G(),r0=rnd([0,0,10,-10,20]),v=[0,0];L(g,v,pt(v,r0,100));L(g,v,pt(v,r0+n,100));M(g,v,r0,n,n===90?"rt":n);return render(g,"An angle of "+n+" degrees");}
+  function qType(){
+    var k=ri(0,4),n=[ri(10,85),90,ri(95,175),180,ri(190,345)][k],t=TYPES[k];
+    var why={Acute:"Acute: less than 90°.","Right angle":"A right angle is exactly 90° (often shown with a little square).",Obtuse:"Obtuse: between 90° and 180°.","Straight angle":"A straight angle is exactly 180°: a straight line.",Reflex:"Reflex: more than 180° but less than 360°."}[t];
+    return C("What type of angle is this?","",t,TYPES.filter(function(x){return x!==t;}),why,n+"° → "+t,n===180?render((function(){var g=G();L(g,[-100,0],[100,0]);M(g,[0,0],0,180,180);return g;})(),"A straight angle"):oneAngle(n),{t:"type",n:n});}
+  function qTriKind(){
+    var k=ri(0,2),A,B,Cc;
+    if(k===1){A=90;B=ri(15,75);}else if(k===0){do{A=ri(40,89);B=ri(40,89);}while(180-A-B>=90||180-A-B<20);}else{A=ri(95,150);B=ri(10,180-A-10);}
+    Cc=180-A-B;var s=shuffle([A,B,Cc]),a=["Acute-angled triangle","Right-angled triangle","Obtuse-angled triangle"][k];
+    return C("A triangle has angles of "+s[0]+"°, "+s[1]+"° and "+s[2]+"°. What kind of triangle is it?","",a,["Acute-angled triangle","Right-angled triangle","Obtuse-angled triangle","It can't be a triangle"],
+      "Look at the BIGGEST angle: less than 90° → acute-angled; exactly 90° → right-angled; more than 90° → obtuse-angled. (The angles add to 180°, so it is a triangle.)",s.join("°, ")+"° → "+a,"",{t:"trikind",angs:s});}
+  function qTriSides(){
+    var k=ri(0,2),s,a;
+    if(k===0){do{s=[ri(4,12),ri(4,12),ri(4,12)];}while(new Set(s).size<3||s.some(function(x,i){return x>=s[(i+1)%3]+s[(i+2)%3];})||isPy(s));a="Scalene";}
+    else if(k===1){var e=ri(5,12),o;do{o=ri(3,2*e-1);}while(o===e);s=shuffle([e,e,o]);a="Isosceles";}
+    else{var q=ri(4,12);s=[q,q,q];a="Equilateral";}
+    var pool=a==="Equilateral"?["Scalene","Right-angled","It can't be a triangle"]:a==="Isosceles"?["Scalene","Equilateral","It can't be a triangle"]:["Isosceles","Equilateral","It can't be a triangle"];
+    return C("A triangle has sides of "+s[0]+" cm, "+s[1]+" cm and "+s[2]+" cm. What type of triangle is it?","",a,pool,
+      "Scalene: all three sides different. Isosceles: two sides equal. Equilateral: all three sides equal.",s.join(" cm, ")+" cm → "+a,"",{t:"trisides",s:s});}
+  function isPy(s){var t=s.slice().sort(function(a,b){return a-b;});return t[0]*t[0]+t[1]*t[1]===t[2]*t[2];}
+  function qCould(){
+    var A=ri(20,120),B=ri(20,Math.min(140,170-A)),good=[A,B,180-A-B],bads=[];
+    [10,-10,20,-20,90,180].forEach(function(dd){var c=180-A-B+dd;if(c>0)bads.push([A,B,c]);});
+    var J=function(x){return shuffle(x.slice()).join("°, ")+"°";};
+    return C("Which set of three angles could be the angles of a triangle?","",J(good),shuffle(bads).slice(0,3).map(J),
+      "The three angles of a triangle always add up to 180°. Only one set does: "+good[0]+" + "+good[1]+" + "+good[2]+" = 180.","Could be a triangle → "+good.join("°, ")+"°","",{t:"could"});}
+  var WORDS=[["Two lines in the same plane that never meet, however far you extend them","Parallel lines","line"],["Two lines that meet at a right angle","Perpendicular lines","line"],
+    ["A line that cuts across two or more other lines","Transversal","line"],["A piece of a line with an end point at each end","Line segment","line"],["Starts at a point and goes on forever in one direction","Ray","line"],
+    ["The point where the two arms of an angle meet","Vertex","line"],["An angle of more than 180° but less than 360°","Reflex","angle"],["An angle of less than 90°","Acute","angle"],
+    ["An angle between 90° and 180°","Obtuse","angle"],["An angle of exactly 90°","Right angle","angle"],["A triangle with all three sides different lengths","Scalene triangle","tri"],
+    ["A triangle with all three sides the same length","Equilateral triangle","tri"],["A triangle with two sides the same length","Isosceles triangle","tri"],["A triangle with one angle of 90°","Right-angled triangle","tri"],
+    ["Two angles opposite each other where two lines cross","Vertically opposite angles","pair"],["Angles in a \"Z\" shape between two parallel lines","Alternate angles","pair"],["Angles in matching positions at each parallel line (an \"F\" shape)","Corresponding angles","pair"],
+    ["The angle between one side of a triangle and the next side extended","Exterior angle","pair"]];
+  function qWord(){
+    var w=rnd(WORDS),pool=WORDS.filter(function(x){return x[2]===w[2]&&x[1]!==w[1];}).map(function(x){return x[1];});
+    if(w[1]==="Isosceles triangle")pool=pool.filter(function(x){return x!=="Equilateral triangle";});
+    if(w[1]==="Equilateral triangle")pool=pool.filter(function(x){return x!=="Isosceles triangle";});
+    if(w[1]==="Vertex")pool=["Ray","Line segment","Transversal"];
+    if(pool.length<3)pool=pool.concat(["Ray","Transversal","Line segment"].filter(function(x){return x!==w[1];}));
+    return C("Which word matches this?",w[0]+".",w[1],pool,w[0]+": "+w[1].toLowerCase()+".",w[0]+" → "+w[1],"",{t:"word",def:w[0]});}
+  function qVertex(){
+    var ls=shuffle("ABCDEFGHKLMNPQRSTXYZ".split("")).slice(0,3),nm="∠"+ls.join("");
+    return C("The angle "+nm+" is written with three letters. Which point is the vertex (the corner)?","",ls[1],[ls[0],ls[2],"All three"],
+      "In "+nm+" the middle letter is always the vertex: "+ls[1]+". The arms go from "+ls[1]+" to "+ls[0]+" and from "+ls[1]+" to "+ls[2]+".",nm+": vertex → "+ls[1],"",{t:"vertex",nm:nm});}
+  var FACTS=[["How many degrees are in a full turn (angles at a point)?",360,[180,90,270]],["How many degrees are in a straight angle?",180,[90,360,100]],
+    ["How many degrees are in a right angle?",90,[180,100,45]],["The three angles of any triangle add up to how many degrees?",180,[360,90,270]],
+    ["How many degrees is each angle of an equilateral triangle?",60,[90,180,45]]];
+  function qFact(){var x=rnd(FACTS);return Q(x[0],"",x[1],x[2],x[0].replace(/\?$/,"")+": "+x[1]+"°.","",{t:"fact"});}
+
+  var MAKERS={
+    chase:[qStraight,qStraight,qPoint,qCross,qCross,qTri,qTri,qRight,qIso,qIso,qEqui,qExt,qExt,qPar,qPar,qPar,qPar],
+    reason:[qReason,qReason,qReason,qReason,qBoth],
+    words:[qType,qType,qTriKind,qTriSides,qCould,qWord,qWord,qWord,qVertex,qFact],
+    steps:[qPar2,qPar2,qIsoExt,qTwoExt,qParTri,qIso],
+    mixed:[qStraight,qPoint,qCross,qTri,qRight,qIso,qEqui,qExt,qPar,qPar,qReason,qReason,qBoth,qType,qTriKind,qTriSides,qCould,qWord,qVertex,qPar2,qIsoExt,qTwoExt,qParTri]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="chase")?60:(m==="steps"?90:75);score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="chase"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="chase"&&streak%5===0?700:350):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why&&m.why!==m.review?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,draw:{G:G,L:L,M:M,MB:MB,T:T,pt:pt,render:render}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
