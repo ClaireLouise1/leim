@@ -1,0 +1,161 @@
+<main id="main">
+<style>
+.cs .new{stroke-dasharray:1;stroke-dashoffset:1;animation:csdraw .9s ease-out forwards}
+.cs .am.new path{stroke-dasharray:1;stroke-dashoffset:1;animation:csdraw .9s ease-out forwards}
+.cs .newt{animation:csfade .6s ease-out both .5s}
+@keyframes csdraw{to{stroke-dashoffset:0}}@keyframes csfade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.cs .new,.cs .am.new path,.cs .newt{animation:none;stroke-dashoffset:0;opacity:1}}
+.viewer{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px}
+.viewer select{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.viewer .vfig{min-height:200px;display:flex;align-items:center;justify-content:center;margin-top:10px}
+.viewer .vtxt{min-height:66px;background:var(--cream,#FFF8E6);border-radius:10px;padding:10px 12px;margin-top:6px}
+.viewer .vbtn{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.clist{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px}
+.clist li{background:var(--mist,#F3F6F9);border-radius:10px;padding:8px 10px;font-size:15px}
+.clist b{color:var(--green,#2E7D5B)}
+.hl{display:inline-block;background:#FDE8E7;color:#B23B37;border-radius:99px;padding:1px 8px;font-size:12px;font-weight:800;margin-left:4px}
+.prompt .frame svg{max-height:290px;width:auto}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Construction Steps</h1>
+        <p>Watch each construction being drawn, one step at a time, and pick the step that comes next. Bisectors, perpendiculars, parallel lines, equal parts, angles and triangles (SSS, SAS, ASA, RHS): all 15 Junior Cycle constructions. Stuck? The rules and a step-by-step viewer are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="steps"><div><b>Construction Steps</b><span>The drawing so far is on screen: what's the next step?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="name"><div><b>Name it</b><span>Which of the 15 constructions is this?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tools"><div><b>Tools &amp; rules</b><span>Compass or protractor? SSS, SAS, ASA or RHS? Can it be a triangle?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="numbers"><div><b>Check the numbers</b><span>Half an angle, the midpoint, equal parts, the third angle, the right compass width</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Construction Steps, every 5 in a row gives you 3 bonus seconds. The newest step is drawn in red.</p>
+        <span class="lo">Junior Cycle Maths learning outcome: GT.3a (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Constructions</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Draw a line segment [AB] and construct its perpendicular bisector (the steps are in the viewer below). Now pick any point on the bisector, call it X, and measure |XA| and |XB|. Try two more points.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">What do you notice about |XA| and |XB|, wherever X is on the line?</li>
+          <li class="note">The arcs you drew from A and B had the same radius. How does that explain where C and D are?</li>
+          <li class="note">So why does the construction need the compass to be more than half of |AB|?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every point on the perpendicular bisector is the <b>same distance from A as from B</b>. C and D are on arcs of the same radius from A and from B, so each of them is that same distance from both ends, and the line through them is the bisector. If the compass is open to <b>half</b> of |AB| or less, the two arcs never meet, so you need <b>more than half</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The tools</h3>
+        <div class="note"><b>Compass:</b> draws circles and arcs, and copies a length. <b>Straight edge:</b> draws straight lines (a ruler you don't measure with). <b>Ruler:</b> measures lengths. <b>Protractor:</b> measures and draws angles. <b>Set square:</b> draws right angles and parallel lines.</div>
+        <div class="note" style="margin-top:8px"><b>Constructions 1 and 2</b> (the bisector of an angle and the perpendicular bisector of a line segment) must be done with a <b>compass and straight edge only</b>: no protractor, no measuring.</div>
+        <div class="note" style="margin-top:8px"><b>Golden rules:</b> use a sharp pencil · <b>leave every construction arc showing</b> (it's your proof, and it earns marks) · label every point · set the compass carefully against the ruler, starting at 0 · keep the compass width the same when the step says so.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Watch each construction, step by step</h3>
+        <p>Pick a construction, then tap <b>Next step</b>. The newest part is drawn in red.</p>
+        <div class="viewer" id="viewer">
+          <label for="vsel" class="small" style="font-weight:700">Construction</label>
+          <select id="vsel"></select>
+          <div class="vfig" id="vsvg"></div>
+          <div class="vtxt" id="vtxt" aria-live="polite"></div>
+          <div class="vbtn"><button class="btn ghost" id="vprev" style="color:var(--ink);border-color:var(--line)">← Back</button><button class="btn" id="vnext">Next step →</button></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The 15 Junior Cycle constructions</h3>
+        <ul class="clist">
+          <li><b>1.</b> Bisector of an angle (compass and straight edge only)</li>
+          <li><b>2.</b> Perpendicular bisector of a line segment (compass and straight edge only)</li>
+          <li><b>3.</b> Line perpendicular to l, through a point not on l <span class="hl">HL only</span></li>
+          <li><b>4.</b> Line perpendicular to l, through a point on l</li>
+          <li><b>5.</b> Line parallel to l, through a given point</li>
+          <li><b>6.</b> Dividing a line segment into 2 or 3 equal parts, without measuring</li>
+          <li><b>7.</b> Dividing a line segment into any number of equal parts, without measuring <span class="hl">HL only</span></li>
+          <li><b>8.</b> Line segment of a given length on a given ray</li>
+          <li><b>9.</b> Angle of a given size with a given ray as one arm</li>
+          <li><b>10.</b> Triangle, given three sides (SSS)</li>
+          <li><b>11.</b> Triangle, given two sides and the angle between them (SAS)</li>
+          <li><b>12.</b> Triangle, given two angles and the side between them (ASA)</li>
+          <li><b>13.</b> Right-angled triangle, given the hypotenuse and one other side (RHS)</li>
+          <li><b>14.</b> Right-angled triangle, given one side and one of the acute angles</li>
+          <li><b>15.</b> Rectangle, given the side lengths</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Triangles: which data?</h3>
+        <div class="note"><b>SSS:</b> all three sides. Draw one side, then an arc from each end with the other two lengths. <b>SAS:</b> two sides and the angle <b>between</b> them. <b>ASA:</b> two angles and the side <b>between</b> them. <b>RHS:</b> a right angle, the hypotenuse and one other side.</div>
+        <div class="note" style="margin-top:8px"><b>Can it be a triangle?</b> The two shorter sides must add up to <b>more</b> than the longest side. With 3 cm, 4 cm and 8 cm the arcs never meet (3 + 4 = 7, less than 8). And always sketch the triangle first, with the measurements on it, before you construct it.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Constructions are on the course for both Higher and Ordinary level (constructions 3 and 7 are Higher level only). Expect a part of a geometry question that asks you to <b>construct</b> something accurately in the space given, and sometimes to measure a length or angle on your construction or explain why it works.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Leave all your construction arcs showing.</b> If the examiner can't see the arcs, it looks measured, not constructed.</li>
+            <li><b>Be accurate.</b> Lengths and angles are checked against the true values, so small errors can cost marks. Use a sharp pencil and set the compass against the ruler.</li>
+            <li><b>Use the right instruments.</b> "Using only a compass and straight edge" means no protractor and no measuring.</li>
+            <li><b>Label the points</b> the question names, and finish the job: join up the triangle, draw the final line.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Do each one on paper with a compass, ruler and protractor first.</p>
+          <ol class="eq">
+            <li><b>Perpendicular bisector.</b> Draw a line segment [AB] of length 9 cm. Using only a compass and straight edge, construct the perpendicular bisector of [AB]. Label the point where it meets [AB] as M. What should |AM| be? Measure to check.
+              <details><summary>Show the worked answer</summary><!--FIG:ex1--><svg class="cs" data-u="22" viewBox="-45.77 -124.95 289.54 249.9" width="228" height="197" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Perpendicular bisector of a 9 cm line segment"><line class="sg" data-s="1" data-a="0,0" data-b="198,0" x1="0" y1="0" x2="198" y2="0" stroke="#1B2430" stroke-width="2.92" stroke-linecap="round"/><line class="sg" data-s="1" data-a="99,107.31" data-b="99,-107.31" x1="99" y1="-107.31" x2="99" y2="107.31" stroke="#1B2430" stroke-width="2.92" stroke-linecap="round"/><path class="arc" data-s="1" data-c="0,0" data-r="132" data-a1="25.41" data-a2="57.41" d="M119.23,-56.64 A132 132 0 0 0 71.1,-111.22" fill="none" stroke="#2E7D5B" stroke-width="2.42" stroke-linecap="round"/><path class="arc" data-s="1" data-c="0,0" data-r="132" data-a1="302.59" data-a2="334.59" d="M71.1,111.22 A132 132 0 0 0 119.23,56.64" fill="none" stroke="#2E7D5B" stroke-width="2.42" stroke-linecap="round"/><path class="arc" data-s="1" data-c="198,0" data-r="132" data-a1="122.59" data-a2="154.59" d="M126.9,-111.22 A132 132 0 0 0 78.77,-56.64" fill="none" stroke="#2E7D5B" stroke-width="2.42" stroke-linecap="round"/><path class="arc" data-s="1" data-c="198,0" data-r="132" data-a1="205.41" data-a2="237.41" d="M78.77,56.64 A132 132 0 0 0 126.9,111.22" fill="none" stroke="#2E7D5B" stroke-width="2.42" stroke-linecap="round"/><path class="rt" data-s="1" data-v="99,0" data-a1="0" d="M114.26,0 L114.26,-15.26 L99,-15.26" fill="none" stroke="#2E7D5B" stroke-width="2.42"/><g class="pn" data-s="1" data-p="0,0" data-n="A"><circle cx="0" cy="0" r="3.81" fill="#1B2430"/><text x="-19.07" y="6.36" text-anchor="middle" font-size="17.8" font-weight="800" fill="#3E4A59">A</text></g><g class="pn" data-s="1" data-p="198,0" data-n="B"><circle cx="198" cy="0" r="3.81" fill="#1B2430"/><text x="217.07" y="6.36" text-anchor="middle" font-size="17.8" font-weight="800" fill="#3E4A59">B</text></g><g class="pn" data-s="1" data-p="99,87.31" data-n="C"><circle cx="99" cy="-87.31" r="3.81" fill="#1B2430"/><text x="114.62" y="-91.89" text-anchor="middle" font-size="17.8" font-weight="800" fill="#3E4A59">C</text></g><g class="pn" data-s="1" data-p="99,-87.31" data-n="D"><circle cx="99" cy="87.31" r="3.81" fill="#1B2430"/><text x="114.62" y="104.61" text-anchor="middle" font-size="17.8" font-weight="800" fill="#3E4A59">D</text></g><g class="pn" data-s="1" data-p="99,0" data-n="M"><circle cx="99" cy="0" r="3.81" fill="#1B2430"/><text x="85.51" y="-7.13" text-anchor="middle" font-size="17.8" font-weight="800" fill="#3E4A59">M</text></g><text class="len" data-s="1" data-a="0,0" data-b="198,0" x="99" y="21.61" text-anchor="middle" font-size="16.53" font-weight="700" fill="#5B6472">9 cm</text></svg><!--/FIG--><p>Open the compass to more than 4.5 cm (say 6 cm). With the point on A, draw arcs above and below [AB]; do the same from B with the same width. Join the two crossing points. Leave all the arcs showing. M is the midpoint, so |AM| = 9 ÷ 2 = <b>4.5 cm</b>.</p></details></li>
+            <li><b>A triangle (SAS).</b> Construct the triangle PQR with |PQ| = 8 cm, |PR| = 6 cm and ∠QPR = 55°. Then measure |QR|, correct to one decimal place.
+              <details><summary>Show the worked answer</summary><!--FIG:ex2--><svg class="cs" data-u="22" viewBox="-31.17 -150.06 238.33 178.49" width="260" height="195" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="Triangle PQR: 8 cm, 55 degrees, 6 cm"><polygon class="fl" points="0,0 176,0 75.71,-108.13" fill="#E8F2EC" stroke="none"/><line class="sg" data-s="1" data-a="0,0" data-b="176,0" x1="0" y1="0" x2="176" y2="0" stroke="#1B2430" stroke-width="2.11" stroke-linecap="round"/><line class="sg" data-s="1" data-a="0,0" data-b="98.66,140.89" x1="0" y1="0" x2="98.66" y2="-140.89" stroke="#1B2430" stroke-width="2.11" stroke-linecap="round"/><line class="sg" data-s="1" data-a="75.71,108.13" data-b="176,0" x1="75.71" y1="-108.13" x2="176" y2="0" stroke="#1B2430" stroke-width="2.11" stroke-linecap="round"/><path class="arc" data-s="1" data-c="0,0" data-r="132" data-a1="42" data-a2="68" d="M98.1,-88.33 A132 132 0 0 0 49.45,-122.39" fill="none" stroke="#2E7D5B" stroke-width="1.74" stroke-linecap="round"/><g class="am" data-s="1" data-v="0,0" data-a1="0" data-sw="55" data-l="55°"><path d="M27.51,0 A27.51 27.51 0 0 0 15.78,-22.53" fill="none" stroke="#2E7D5B" stroke-width="1.83"/><text x="37.41" y="-14.89" text-anchor="middle" font-size="12.84" font-weight="800" fill="#1B2430">55°</text></g><g class="pn" data-s="1" data-p="0,0" data-n="P"><circle cx="0" cy="0" r="2.75" fill="#1B2430"/><text x="-11.91" y="11.46" text-anchor="middle" font-size="12.84" font-weight="800" fill="#3E4A59">P</text></g><g class="pn" data-s="1" data-p="176,0" data-n="Q"><circle cx="176" cy="0" r="2.75" fill="#1B2430"/><text x="187.91" y="11.46" text-anchor="middle" font-size="12.84" font-weight="800" fill="#3E4A59">Q</text></g><g class="pn" data-s="1" data-p="75.71,108.13" data-n="R"><circle cx="75.71" cy="-108.13" r="2.75" fill="#1B2430"/><text x="64.45" y="-111.43" text-anchor="middle" font-size="12.84" font-weight="800" fill="#3E4A59">R</text></g><text class="len" data-s="1" data-a="0,0" data-b="176,0" x="88" y="15.59" text-anchor="middle" font-size="11.92" font-weight="700" fill="#5B6472">8 cm</text><text class="len" data-s="1" data-a="0,0" data-b="75.71,108.13" x="19" y="-62.68" text-anchor="middle" font-size="11.92" font-weight="700" fill="#5B6472">6 cm</text></svg><!--/FIG--><p>Sketch it first. Draw [PQ] 8 cm long. At P, use a protractor to draw an angle of 55° with [PQ] as one arm. Set the compass to 6 cm, put the point on P and mark R on the new arm. Join R to Q. |QR| should measure about <b>6.7 cm</b> (anything from 6.6 cm to 6.8 cm shows an accurate construction).</p></details></li>
+            <li><b>Equal parts.</b> Draw a line segment [CD] of length 10 cm. Without measuring, divide [CD] into three equal parts. Show all your construction lines. How long should each part be?
+              <details><summary>Show the worked answer</summary><!--FIG:ex3--><svg class="cs" data-u="22" viewBox="-33.93 -127.25 287.85 157.22" width="298" height="163" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="A 10 cm line segment divided into three equal parts"><line class="sg" data-s="1" data-a="0,0" data-b="220,0" x1="0" y1="0" x2="220" y2="0" stroke="#1B2430" stroke-width="2.22" stroke-linecap="round"/><line class="sg" data-s="1" data-a="0,0" data-b="167.93,117.58" x1="0" y1="0" x2="167.93" y2="-117.58" stroke="#1B2430" stroke-width="2.22" stroke-linecap="round"/><line class="sg" data-s="1" data-a="135.16,94.64" data-b="220,0" x1="135.16" y1="-94.64" x2="220" y2="0" stroke="#1B2430" stroke-width="2.22" stroke-linecap="round"/><line class="sg" data-s="1" data-a="45.05,31.55" data-b="81.34,-8.94" x1="45.05" y1="-31.55" x2="81.34" y2="8.94" stroke="#1B2430" stroke-width="2.22" stroke-linecap="round"/><line class="sg" data-s="1" data-a="90.11,63.09" data-b="154.68,-8.94" x1="90.11" y1="-63.09" x2="154.68" y2="8.94" stroke="#1B2430" stroke-width="2.22" stroke-linecap="round"/><path class="arc" data-s="1" data-c="0,0" data-r="55" data-a1="25" data-a2="45" d="M49.85,-23.24 A55 55 0 0 0 38.89,-38.89" fill="none" stroke="#2E7D5B" stroke-width="1.84" stroke-linecap="round"/><path class="arc" data-s="1" data-c="45.05,31.55" data-r="55" data-a1="25" data-a2="45" d="M94.9,-54.79 A55 55 0 0 0 83.94,-70.44" fill="none" stroke="#2E7D5B" stroke-width="1.84" stroke-linecap="round"/><path class="arc" data-s="1" data-c="90.11,63.09" data-r="55" data-a1="25" data-a2="45" d="M139.95,-86.34 A55 55 0 0 0 129,-101.98" fill="none" stroke="#2E7D5B" stroke-width="1.84" stroke-linecap="round"/><g class="pn" data-s="1" data-p="0,0" data-n="C"><circle cx="0" cy="0" r="2.9" fill="#1B2430"/><text x="-13.63" y="9.79" text-anchor="middle" font-size="13.53" font-weight="800" fill="#3E4A59">C</text></g><g class="pn" data-s="1" data-p="220,0" data-n="D"><circle cx="220" cy="0" r="2.9" fill="#1B2430"/><text x="233.63" y="9.79" text-anchor="middle" font-size="13.53" font-weight="800" fill="#3E4A59">D</text></g><circle class="dt" data-s="1" data-p="45.05,31.55" cx="45.05" cy="-31.55" r="3.87" fill="#1B2430"/><circle class="dt" data-s="1" data-p="90.11,63.09" cx="90.11" cy="-63.09" r="3.87" fill="#1B2430"/><circle class="dt" data-s="1" data-p="135.16,94.64" cx="135.16" cy="-94.64" r="3.87" fill="#1B2430"/><circle class="dt" data-s="1" data-p="73.33,0" cx="73.33" cy="0" r="3.87" fill="#1B2430"/><circle class="dt" data-s="1" data-p="146.67,0" cx="146.67" cy="0" r="3.87" fill="#1B2430"/><text class="len" data-s="1" data-a="0,0" data-b="220,0" x="110" y="16.43" text-anchor="middle" font-size="12.57" font-weight="700" fill="#5B6472">10 cm</text></svg><!--/FIG--><p>Draw a ray from C at an acute angle to [CD]. With any compass width, step off 3 equal marks along the ray from C. Join the third mark to D. Through the other two marks draw lines parallel to that join. They cut [CD] into three equal parts, each 10 ÷ 3 ≈ <b>3.3 cm</b>.</p></details></li>
+            <li><b>Bisect an angle.</b> (a) Draw an angle ∠XYZ of 70°. (b) Using only a compass and straight edge, construct the bisector of ∠XYZ. (c) What size should each half be? Measure to check. (d) Explain why the bisector cuts the angle exactly in half.
+              <details><summary>Show the worked answer</summary><!--FIG:ex4--><svg class="cs" data-u="22" viewBox="-32.64 -166.57 203.23 201.87" width="207" height="206" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="The bisector of a 70 degree angle"><line class="sg" data-s="1" data-a="0,0" data-b="51.3,140.95" x1="0" y1="0" x2="51.3" y2="-140.95" stroke="#1B2430" stroke-width="2.26" stroke-linecap="round"/><line class="sg" data-s="1" data-a="0,0" data-b="150,0" x1="0" y1="0" x2="150" y2="0" stroke="#1B2430" stroke-width="2.26" stroke-linecap="round"/><line class="sg" data-s="1" data-a="0,0" data-b="143.35,100.38" x1="0" y1="0" x2="143.35" y2="-100.38" stroke="#1B2430" stroke-width="2.26" stroke-linecap="round"/><path class="arc" data-s="1" data-c="0,0" data-r="70" data-a1="-12" data-a2="82" d="M68.47,14.55 A70 70 0 0 0 9.74,-69.32" fill="none" stroke="#2E7D5B" stroke-width="1.86" stroke-linecap="round"/><path class="arc" data-s="1" data-c="23.94,65.78" data-r="62" data-a1="336.64" data-a2="372.64" d="M80.86,-41.2 A62 62 0 0 0 84.44,-79.35" fill="none" stroke="#2E7D5B" stroke-width="1.86" stroke-linecap="round"/><path class="arc" data-s="1" data-c="70,0" data-r="62" data-a1="57.36" data-a2="93.36" d="M103.44,-52.21 A62 62 0 0 0 66.37,-61.89" fill="none" stroke="#2E7D5B" stroke-width="1.86" stroke-linecap="round"/><g class="am" data-s="1" data-v="0,0" data-a1="0" data-sw="35" data-l="35°"><path d="M41.18,0 A41.18 41.18 0 0 0 33.73,-23.62" fill="none" stroke="#2E7D5B" stroke-width="1.96"/><text x="54.24" y="-12.2" text-anchor="middle" font-size="13.73" font-weight="800" fill="#1B2430">35°</text></g><g class="am" data-s="1" data-v="0,0" data-a1="35" data-sw="35" data-l="35°"><path d="M33.73,-23.62 A41.18 41.18 0 0 0 14.08,-38.7" fill="none" stroke="#2E7D5B" stroke-width="1.96"/><text x="34.62" y="-40.21" text-anchor="middle" font-size="13.73" font-weight="800" fill="#1B2430">35°</text></g><g class="pn" data-s="1" data-p="51.3,140.95" data-n="X"><circle cx="51.3" cy="-140.95" r="2.94" fill="#1B2430"/><text x="37.48" y="-141.08" text-anchor="middle" font-size="13.73" font-weight="800" fill="#3E4A59">X</text></g><g class="pn" data-s="1" data-p="0,0" data-n="Y"><circle cx="0" cy="0" r="2.94" fill="#1B2430"/><text x="-12.05" y="13.34" text-anchor="middle" font-size="13.73" font-weight="800" fill="#3E4A59">Y</text></g><g class="pn" data-s="1" data-p="150,0" data-n="Z"><circle cx="150" cy="0" r="2.94" fill="#1B2430"/><text x="150" y="19.61" text-anchor="middle" font-size="13.73" font-weight="800" fill="#3E4A59">Z</text></g></svg><!--/FIG--><p>(a) Use a protractor, starting at 0° on [YZ. (b) Compass point on Y: an arc crossing both arms. From each crossing point, with the same width, draw arcs that cross inside the angle. Join Y to that crossing point. (c) 70° ÷ 2 = <b>35°</b>. (d) The two triangles formed have all three sides equal (two equal radii from Y, two equal arcs and the shared side), so they are congruent and the two angles at Y are equal.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/constructions-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Constructions Teacher Pack (€5)</a>: Step Sort cards, Construction Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

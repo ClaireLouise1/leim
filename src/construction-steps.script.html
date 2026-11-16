@@ -1,0 +1,382 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function num(n){var r=Math.round(n*100)/100;return String(r);}
+  // an answer with a unit ("cm" or "°"): slips first, then pads; positive, never equal to the answer
+  function QU(en,frame,ans,unit,slips,why,html,data){
+    var sp=unit==="°"?"":" ",pads=unit==="°"?[ans+10,ans-10,180-ans,ans*2,ans+5,90-ans]:[ans+1,ans-1,ans*2,ans/2,ans+0.5,ans-0.5],seen={},w=[];seen[num(ans)]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<=0||(unit==="°"&&(x>=360||x!==Math.round(x))))return;var s=num(x);if(!seen[s]&&w.length<3){seen[s]=1;w.push(s+sp+unit);}});
+    return {en:en,frame:frame,html:html||"",answer:num(ans)+sp+unit,wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans)+sp+unit,data:data||{}};}
+  // seeded random (for the step viewer and the printed diagrams, so they're always the same)
+  function withSeed(seed,fn){var old=Math.random,a=seed>>>0;Math.random=function(){a=(a+0x6D2B79F5)>>>0;var t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};
+    try{return fn();}finally{Math.random=old;}}
+
+  /* ---------- geometry ---------- */
+  // y goes UP in our coordinates (the SVG flips it); angles anticlockwise from "east"
+  function rad(a){return a*Math.PI/180;}
+  function pt(v,a,r){return [v[0]+r*Math.cos(rad(a)),v[1]+r*Math.sin(rad(a))];}
+  function ang(v,p){return (Math.atan2(p[1]-v[1],p[0]-v[0])*180/Math.PI+360)%360;}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+  // the two crossing points of circles (c1,r1) and (c2,r2): [left of c1→c2, right of c1→c2]
+  function cc(c1,r1,c2,r2){var d=dist(c1,c2),a=(r1*r1-r2*r2+d*d)/(2*d),h=Math.sqrt(Math.max(0,r1*r1-a*a)),ux=(c2[0]-c1[0])/d,uy=(c2[1]-c1[1])/d,m=[c1[0]+a*ux,c1[1]+a*uy];
+    return [[m[0]-h*uy,m[1]+h*ux],[m[0]+h*uy,m[1]-h*ux]];}
+  var U=22; // drawing units per cm
+  // elements
+  function S(a,b){return {t:"s",a:a,b:b};}                       // line segment
+  function A(c,r,a1,a2){return {t:"a",c:c,r:r,a1:a1,a2:a2};}       // arc, anticlockwise from a1 to a2
+  function AR(c,X,span){var a=ang(c,X);return A(c,dist(c,X),a-span,a+span);} // short arc through X
+  function N(p,s,dir){return {t:"n",p:p,s:s,dir:dir};}             // named point
+  function M(v,a1,sw,lab){return {t:"m",v:v,a1:a1,sw:sw,lab:lab};} // angle mark
+  function RT(v,a1){return {t:"r",v:v,a1:a1};}                     // right-angle square
+  function LEN(a,b,s,side){return {t:"l",a:a,b:b,s:s,side:side||-1};}
+  function W(a,b,s){return {t:"w",a:a,b:b,s:s||"compass width"};}  // compass-width bar
+  function PRO(c,r,a0){return {t:"p",c:c,r:r,a0:a0};}              // protractor
+  function DOT(p){return {t:"d",p:p};}
+  function FILL(ps){return {t:"f",pts:ps};}
+  var INK="#1B2430",GRN="#2E7D5B",RED="#D9534F",GREY="#7A8594";
+  function f(n){return Math.round(n*100)/100;}
+  function D(p){return f(p[0])+","+f(p[1]);}
+  /* draw: list of [element, step]; the elements of step `nw` are red and animated */
+  function render(list,label,box,nw){
+    var P=[],out=[[],[],[],[],[],[]],gx0=Infinity,gx1=-Infinity,gy0=Infinity,gy1=-Infinity;
+    function grow(p){gx0=Math.min(gx0,p[0]);gx1=Math.max(gx1,p[0]);gy0=Math.min(gy0,p[1]);gy1=Math.max(gy1,p[1]);}
+    list.forEach(function(x){var e=x[0];
+      if(e.t==="s"||e.t==="w"||e.t==="l"){grow(e.a);grow(e.b);}
+      else if(e.t==="a"){for(var i=0;i<=8;i++)grow(pt(e.c,e.a1+(e.a2-e.a1)*i/8,e.r));}
+      else if(e.t==="p"){for(var j=0;j<=8;j++)grow(pt(e.c,e.a0+180*j/8,e.r));grow(e.c);}
+      else if(e.t==="n"||e.t==="d")grow(e.p);else if(e.t==="m"||e.t==="r")grow(e.v);else if(e.t==="f")e.pts.forEach(grow);});
+    if(!isFinite(gx0))return "";
+    box=box||[320,240];var k=Math.min(box[0]/(gx1-gx0+70),box[1]/(gy1-gy0+70),1.4),u=1/k,sw=f(2.3*u);
+    function Sx(p){return f(p[0])+","+f(-p[1]);}
+    function col(isNew,base){return isNew?RED:base;}
+    list.forEach(function(x){var e=x[0],s=x[1],nw2=(s===nw&&nw>0),cls=nw2?" new":"",pl=nw2?' pathLength="1"':"",ds=' data-s="'+s+'"';
+      if(e.t==="f")out[0].push('<polygon class="fl" points="'+e.pts.map(Sx).join(" ")+'" fill="#E8F2EC" stroke="none"/>');
+      else if(e.t==="p"){var p0=pt(e.c,e.a0,e.r),p1=pt(e.c,e.a0+180,e.r),tk="";
+        for(var d=10;d<180;d+=10){var q1=pt(e.c,e.a0+d,e.r),q2=pt(e.c,e.a0+d,e.r-(d%30?6:11)*u);tk+='<line x1="'+f(q1[0])+'" y1="'+f(-q1[1])+'" x2="'+f(q2[0])+'" y2="'+f(-q2[1])+'" stroke="#7FA7D9" stroke-width="'+f(1.2*u)+'"/>';}
+        out[0].push('<g class="pro'+cls+'"'+ds+' data-c="'+D(e.c)+'" data-r="'+f(e.r)+'" data-a0="'+f(e.a0)+'"><path d="M'+Sx(p0)+' A'+f(e.r)+' '+f(e.r)+' 0 0 0 '+Sx(p1)+' Z" fill="#EAF2FB" fill-opacity=".85" stroke="#7FA7D9" stroke-width="'+f(1.6*u)+'"/>'+tk+'</g>');}
+      else if(e.t==="s")out[1].push('<line class="sg'+cls+'"'+ds+pl+' data-a="'+D(e.a)+'" data-b="'+D(e.b)+'" x1="'+f(e.a[0])+'" y1="'+f(-e.a[1])+'" x2="'+f(e.b[0])+'" y2="'+f(-e.b[1])+'" stroke="'+col(nw2,INK)+'" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      else if(e.t==="w"){var o=pt(e.a,ang(e.a,e.b)+90,0),m=[(e.a[0]+e.b[0])/2,(e.a[1]+e.b[1])/2],tp=pt(m,ang(e.a,e.b)-90,14*u);
+        out[1].push('<g class="cw'+cls+'"'+ds+' data-a="'+D(e.a)+'" data-b="'+D(e.b)+'"><line x1="'+f(e.a[0])+'" y1="'+f(-e.a[1])+'" x2="'+f(e.b[0])+'" y2="'+f(-e.b[1])+'" stroke="'+col(nw2,"#8A6D1F")+'" stroke-width="'+f(2*u)+'" stroke-dasharray="'+f(5*u)+' '+f(4*u)+'"/>'+
+          [e.a,e.b].map(function(q){return '<circle cx="'+f(q[0])+'" cy="'+f(-q[1])+'" r="'+f(3*u)+'" fill="'+col(nw2,"#8A6D1F")+'"/>';}).join("")+
+          '<text x="'+f(tp[0])+'" y="'+f(-tp[1]+4*u)+'" text-anchor="middle" font-size="'+f(12*u)+'" font-weight="700" fill="'+col(nw2,"#8A6D1F")+'">'+e.s+'</text></g>');P.push([tp[0]-40*u,tp[1]-8*u],[tp[0]+40*u,tp[1]+8*u]);void o;}
+      else if(e.t==="a"){var s1=pt(e.c,e.a1,e.r),s2=pt(e.c,e.a2,e.r),lg=(e.a2-e.a1)>180?1:0;
+        out[2].push('<path class="arc'+cls+'"'+ds+pl+' data-c="'+D(e.c)+'" data-r="'+f(e.r)+'" data-a1="'+f(e.a1)+'" data-a2="'+f(e.a2)+'" d="M'+Sx(s1)+' A'+f(e.r)+' '+f(e.r)+' 0 '+lg+' 0 '+Sx(s2)+'" fill="none" stroke="'+col(nw2,GRN)+'" stroke-width="'+f(1.9*u)+'" stroke-linecap="round"/>');}
+      else if(e.t==="m"){var r=(e.sw<40?42:30)*u,a1=pt(e.v,e.a1,r),a2=pt(e.v,e.a1+e.sw,r),lp=pt(e.v,e.a1+e.sw/2,r+16*u);P.push([lp[0]-16*u,lp[1]-9*u],[lp[0]+16*u,lp[1]+9*u]);
+        out[3].push('<g class="am'+cls+'"'+ds+' data-v="'+D(e.v)+'" data-a1="'+f(e.a1)+'" data-sw="'+f(e.sw)+'" data-l="'+e.lab+'"><path'+pl+' d="M'+Sx(a1)+' A'+f(r)+' '+f(r)+' 0 0 0 '+Sx(a2)+'" fill="none" stroke="'+col(nw2,GRN)+'" stroke-width="'+f(2*u)+'"/><text x="'+f(lp[0])+'" y="'+f(-lp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="800" fill="'+col(nw2,INK)+'">'+e.lab+'</text></g>');}
+      else if(e.t==="r"){var q=12*u,c1=pt(e.v,e.a1,q),c3=pt(e.v,e.a1+90,q),c2=[c1[0]+c3[0]-e.v[0],c1[1]+c3[1]-e.v[1]];
+        out[3].push('<path class="rt'+cls+'"'+ds+' data-v="'+D(e.v)+'" data-a1="'+f(e.a1)+'" d="M'+Sx(c1)+' L'+Sx(c2)+' L'+Sx(c3)+'" fill="none" stroke="'+col(nw2,GRN)+'" stroke-width="'+f(1.9*u)+'"/>');}
+      else if(e.t==="d")out[4].push('<circle class="dt'+(nw2?" newt":"")+'"'+ds+' data-p="'+D(e.p)+'" cx="'+f(e.p[0])+'" cy="'+f(-e.p[1])+'" r="'+f(4*u)+'" fill="'+col(nw2,INK)+'"/>');
+      else if(e.t==="n"){var tq=pt(e.p,e.dir,15*u);P.push([tq[0]-11*u,tq[1]-11*u],[tq[0]+11*u,tq[1]+11*u]);
+        out[4].push('<g class="pn'+(nw2?" newt":"")+'"'+ds+' data-p="'+D(e.p)+'" data-n="'+e.s+'"><circle cx="'+f(e.p[0])+'" cy="'+f(-e.p[1])+'" r="'+f(3*u)+'" fill="'+col(nw2,INK)+'"/><text x="'+f(tq[0])+'" y="'+f(-tq[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="800" fill="'+col(nw2,"#3E4A59")+'">'+e.s+'</text></g>');}
+      else if(e.t==="l"){var mm=[(e.a[0]+e.b[0])/2,(e.a[1]+e.b[1])/2],dd=ang(e.a,e.b),tl=pt(mm,dd+90*e.side,(12+16*Math.abs(Math.sin(rad(dd))))*u);P.push([tl[0]-24*u,tl[1]-9*u],[tl[0]+24*u,tl[1]+9*u]);
+        out[5].push('<text class="len'+(nw2?" newt":"")+'"'+ds+' data-a="'+D(e.a)+'" data-b="'+D(e.b)+'" x="'+f(tl[0])+'" y="'+f(-tl[1]+5*u)+'" text-anchor="middle" font-size="'+f(13*u)+'" font-weight="700" fill="'+col(nw2,"#5B6472")+'">'+e.s+'</text>');}
+    });
+    P.forEach(grow);gx0-=10*u;gx1+=10*u;gy0-=10*u;gy1+=10*u;var Wd=gx1-gx0,Ht=gy1-gy0;
+    return '<svg class="cs" data-u="'+U+'" viewBox="'+f(gx0)+' '+f(-gy1)+' '+f(Wd)+' '+f(Ht)+'" width="'+Math.round(Wd*k)+'" height="'+Math.round(Ht*k)+'" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="'+(label||"Construction")+'">'+out.map(function(x){return x.join("");}).join("")+'</svg>';}
+
+  /* ---------- the 15 constructions ----------
+     Each builder returns {k, start (what you're given), title (the task), given: [elements], steps: [{tx, els}], mist: [wrong steps]} */
+  var NAMES={1:"Bisector of an angle",2:"Perpendicular bisector of a line segment",3:"Perpendicular to a line, from a point not on it",
+    4:"Perpendicular to a line, at a point on it",5:"Line parallel to a line, through a point",6:"Dividing a line segment into 2 or 3 equal parts",
+    7:"Dividing a line segment into any number of equal parts",8:"Line segment of a given length on a ray",9:"Angle of a given size on a ray",
+    10:"Triangle: three sides (SSS)",11:"Triangle: two sides and the angle between them (SAS)",12:"Triangle: two angles and the side between them (ASA)",
+    13:"Right-angled triangle: the hypotenuse and one other side",14:"Right-angled triangle: one side and one acute angle",15:"Rectangle: given the side lengths"};
+  var HL={3:1,7:1};
+  var SUB=["","₁","₂","₃","₄","₅","₆","₇"];
+  function c1(){
+    var th=ri(50,125),r0=rnd([0,0,10,-10,20]),B=[0,0],Ap=pt(B,r0+th,150),Cp=pt(B,r0,150),R=70,Dp=pt(B,r0+th,R),Ep=pt(B,r0,R),
+      r2=Math.max(62,Math.round(dist(Dp,Ep)*0.75)),X=cc(Dp,r2,Ep,r2),F=dist(X[0],B)>dist(X[1],B)?X[0]:X[1],h=r0+th/2;
+    return {k:1,start:"You're given the angle ∠ABC.",title:"Construct the bisector of ∠ABC, using only a compass and straight edge.",
+      given:[S(B,Ap),S(B,Cp),N(Ap,"A",r0+th+90),N(B,"B",h+180),N(Cp,"C",r0-90)],
+      steps:[{tx:"Put the compass point on B and draw an arc that crosses both arms. Call the crossing points D and E.",els:[A(B,R,r0-12,r0+th+12),N(Dp,"D",r0+th+90),N(Ep,"E",r0-90)]},
+        {tx:"Put the compass point on D, then on E, and draw two arcs with the same compass width. They cross inside the angle at F.",els:[AR(Dp,F,18),AR(Ep,F,18),N(F,"F",h+90)]},
+        {tx:"Draw a line from B through F. It bisects ∠ABC: it cuts the angle exactly in half.",els:[S(B,pt(B,h,Math.max(175,dist(B,F)+25)))]}],
+      mist:["Measure ∠ABC with a protractor and mark half of it.","Change the compass width between the arc from D and the arc from E.","Rub out all the arcs so the drawing looks neat.","Join D to E and mark the middle of [DE] with a ruler."]};}
+  function c2(){
+    var L=ri(150,200),r0=rnd([0,0,0,10,-10]),O=[0,0],Ap=pt(O,r0+180,L/2),Bp=pt(O,r0,L/2),r=Math.round(L*0.7),X=cc(Ap,r,Bp,r),Cp=X[0],Dp=X[1],off=pt(Ap,r0-90,30);
+    return {k:2,start:"You're given the line segment [AB].",title:"Construct the perpendicular bisector of [AB], using only a compass and straight edge.",
+      given:[S(Ap,Bp),N(Ap,"A",r0+180),N(Bp,"B",r0)],
+      steps:[{tx:"Open the compass to more than half the length of [AB].",els:[W(pt(off,r0+180,r),off)]},
+        {tx:"With the compass point on A, and then on B (same width), draw arcs above and below [AB]. They cross at C and D.",els:[AR(Ap,Cp,16),AR(Ap,Dp,16),AR(Bp,Cp,16),AR(Bp,Dp,16),N(Cp,"C",r0+90+35),N(Dp,"D",r0-90+35)]},
+        {tx:"Draw the line through C and D. It's the perpendicular bisector of [AB].",els:[S(pt(Cp,r0+90,22),pt(Dp,r0-90,22)),RT(O,r0),N(O,"M",r0-45)]}],
+      mist:["Open the compass to less than half the length of [AB].","Measure [AB] with a ruler and mark the midpoint.","Change the compass width before drawing the arcs from B.","Draw a line from A to C."]};}
+  function c3(){
+    var px=ri(-40,40),h=ri(72,100),Pp=[px,h],R=Math.round(h*1.4),dx=Math.sqrt(R*R-h*h),Ap=[px-dx,0],Bp=[px+dx,0],Qp=[px,-h],l0=[-170,0],l1=[170,0];
+    return {k:3,start:"You're given the line l and a point P that is NOT on l.",title:"Construct the line through P that is perpendicular to l. (Higher level)",
+      given:[S(l0,l1),N(l1,"l",30),N(Pp,"P",0)],
+      steps:[{tx:"Put the compass point on P and draw an arc that cuts l in two places, A and B.",els:[A(Pp,R,ang(Pp,Ap)-12,ang(Pp,Bp)+12),N(Ap,"A",150),N(Bp,"B",30)]},
+        {tx:"With the compass point on A, and then on B (same width), draw arcs on the other side of l from P. They cross at Q.",els:[AR(Ap,Qp,16),AR(Bp,Qp,16),N(Qp,"Q",0)]},
+        {tx:"Draw the line through P and Q. It's perpendicular to l.",els:[S(pt(Pp,90,22),pt(Qp,270,22)),RT([px,0],0)]}],
+      mist:["Draw a line straight down from P by eye.","Draw an arc from P that doesn't reach the line l.","Join P to A.","Measure the middle of l with a ruler and join P to it."]};}
+  function c4(){
+    var px=ri(-40,40),Pp=[px,0],r=ri(45,55),Ap=[px-r,0],Bp=[px+r,0],r2=Math.round(r*1.7),Qp=[px,Math.sqrt(r2*r2-r*r)],l0=[-170,0],l1=[170,0];
+    return {k:4,start:"You're given the line l and a point P that is ON l.",title:"Construct the line through P that is perpendicular to l.",
+      given:[S(l0,l1),N(l1,"l",30),N(Pp,"P",-90)],
+      steps:[{tx:"Put the compass point on P and draw arcs that cross l on each side of P, at A and B.",els:[AR(Pp,Ap,14),AR(Pp,Bp,14),N(Ap,"A",-100),N(Bp,"B",-80)]},
+        {tx:"Open the compass wider. With the point on A, and then on B (same width), draw arcs above l that cross at Q.",els:[AR(Ap,Qp,15),AR(Bp,Qp,15),N(Qp,"Q",0)]},
+        {tx:"Draw the line through P and Q. It's perpendicular to l at P.",els:[S(Pp,pt(Qp,90,28)),RT(Pp,0)]}],
+      mist:["Keep the compass at the same width as the first arcs for the arcs from A and B.","Draw the arcs from A and B below l, very close to P.","Join A to Q.","Draw a line from P to any point above l."]};}
+  function c5(){
+    var qx=ri(-60,-20),Q=[qx,0],t=ri(55,72),Pp=pt(Q,t,105),r=45,R=pt(Q,0,r),Sp=pt(Q,t,r),T=pt(Pp,t,r),Up=pt(Pp,0,r),l0=[-170,0],l1=[170,0];
+    return {k:5,start:"You're given the line l and a point P that is not on l.",title:"Construct the line through P that is parallel to l.",
+      given:[S(l0,l1),N(l1,"l",30),N(Pp,"P",t+90)],
+      steps:[{tx:"Draw a line through P that crosses l. Call the crossing point Q.",els:[S(pt(Q,t+180,35),pt(Q,t,180)),N(Q,"Q",t+120)]},
+        {tx:"Put the compass point on Q and draw an arc that crosses l at R and the line QP at S.",els:[A(Q,r,-12,t+12),N(R,"R",-60),N(Sp,"S",t+90)]},
+        {tx:"Keep the same compass width. Put the point on P and draw an arc that crosses the line QP above P, at T.",els:[A(Pp,r,-12,t+12),N(T,"T",t+90)]},
+        {tx:"Set the compass to the distance from R to S. Put the point on T and draw an arc that crosses the last arc at U.",els:[AR(T,Up,18),N(Up,"U",-60)]},
+        {tx:"Draw the line through P and U. It's parallel to l (corresponding angles are equal).",els:[S(pt(Pp,180,130),pt(Pp,0,175))]}],
+      mist:["Draw the line through P by eye, keeping it level with l.","Change the compass width before drawing the arc from P.","Draw the line through P and S.","Put the compass point on R and draw an arc through P."]};}
+  function divide(n){
+    var L=220,Ap=[0,0],Bp=[L,0],ph=ri(28,40),s=Math.round(170/n),Cs=[],els=[],nm=[];
+    for(var i=1;i<=n;i++){Cs.push(pt(Ap,ph,i*s));}
+    Cs.forEach(function(c,i){els.push(AR(i?Cs[i-1]:Ap,c,10));nm.push(N(c,"C"+SUB[i+1],ph+90));});
+    var par=[];for(var j=0;j<n-1;j++){var X=[L*(j+1)/n,0];par.push(S(Cs[j],pt(X,ang(Cs[n-1],Bp),12)),DOT(X));}
+    var k=n<=3?6:7,last="C"+SUB[n];
+    return {k:k,n:n,start:"You're given the line segment [AB].",title:"Divide [AB] into "+n+" equal parts without measuring it."+(k===7?" (Higher level)":""),
+      given:[S(Ap,Bp),N(Ap,"A",200),N(Bp,"B",-20)],
+      steps:[{tx:"Draw a ray from A at an acute angle to [AB].",els:[S(Ap,pt(Ap,ph,n*s+40))]},
+        {tx:"Set the compass to any width. Starting at A, step off "+n+" equal marks along the ray: "+Cs.map(function(c,i){return "C"+SUB[i+1];}).join(", ")+".",els:els.concat(nm)},
+        {tx:"Join the last mark, "+last+", to B.",els:[S(Cs[n-1],Bp)]},
+        {tx:"Through each of the other marks, draw a line parallel to "+last+"B. They cut [AB] into "+n+" equal parts.",els:par}],
+      mist:["Measure [AB] with a ruler and divide its length by "+n+".","Change the compass width for each mark along the ray.","Join C₁ to B.","Through each mark, draw a line perpendicular to [AB]."]};}
+  function c6(){return divide(rnd([2,3,3]));}
+  function c7(){return divide(ri(4,6));}
+  function c8(){
+    var L=rnd([4,4.5,5,5.5,6,6.5,7,7.5,8]),Ap=[0,0],Bp=[L*U,0],end=[L*U+70,0],w0=[0,34];
+    return {k:8,len:L,start:"You're given a ray that starts at A.",title:"Construct a line segment [AB] of length "+num(L)+" cm on the ray.",
+      given:[S(Ap,end),N(Ap,"A",200)],
+      steps:[{tx:"Open the compass to "+num(L)+" cm, using a ruler to set it.",els:[W(w0,[L*U,34],num(L)+" cm")]},
+        {tx:"Put the compass point on A and draw an arc that crosses the ray. Call this point B.",els:[AR(Ap,Bp,12),N(Bp,"B",-60)]},
+        {tx:"Label the segment: |AB| = "+num(L)+" cm. That's the line segment you were asked for.",els:[LEN(Ap,Bp,num(L)+" cm",-1)]}],
+      mist:["Put the compass point on the far end of the ray.","Set the compass using the 1 cm mark of the ruler as the start.","Draw a circle around A with any width.","Measure "+num(L)+" cm from the end of the ray."]};}
+  function c9(){
+    var d;do{d=ri(25,155);}while(Math.abs(d-90)<6);var Ap=[0,0],Bp=[170,0],R=85,Xd=pt(Ap,d,R);
+    return {k:9,deg:d,start:"You're given the ray [AB.",title:"Construct an angle of "+d+"° with [AB as one arm, at A.",
+      given:[S(Ap,Bp),N(Ap,"A",225),N(Bp,"B",-30)],
+      steps:[{tx:"Put the centre of the protractor on A, with its base line along [AB.",els:[PRO(Ap,R,0)]},
+        {tx:"Read the scale that starts at 0° on [AB, and mark a dot at "+d+"°.",els:[DOT(Xd)]},
+        {tx:"Take the protractor away. Draw a ray from A through the dot, and label the angle "+d+"°.",els:[S(Ap,pt(Ap,d,165)),M(Ap,0,d,d+"°")]}],
+      mist:["Read the other scale and mark a dot at "+(180-d)+"°.","Put the centre of the protractor on B.","Draw the ray from B through the dot.","Mark the dot at "+d+" mm along [AB."]};}
+  function triSides(){var a,b,c,ok;do{b=ri(6,9);c=ri(4,8);a=ri(4,8);ok=a+c>b+1&&a+b>c+1&&b+c>a+1&&a!==c&&a!==b&&b!==c;
+      if(ok){var cosA=(b*b+c*c-a*a)/(2*b*c),cosB=(b*b+a*a-c*c)/(2*b*a),Aa=Math.acos(cosA)*180/Math.PI,Bb=Math.acos(cosB)*180/Math.PI;ok=Aa>28&&Bb>28&&180-Aa-Bb>28&&180-Aa-Bb<115;}}while(!ok);return [b,c,a];} // |AB|,|AC|,|BC|
+  function c10(){
+    var s=triSides(),ab=s[0],ac=s[1],bc=s[2],Ap=[0,0],Bp=[ab*U,0],Cp=cc(Ap,ac*U,Bp,bc*U)[0];
+    return {k:10,start:"Nothing is drawn yet.",title:"Construct the triangle ABC with |AB| = "+ab+" cm, |AC| = "+ac+" cm and |BC| = "+bc+" cm.",given:[],
+      steps:[{tx:"Draw [AB], "+ab+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",210),N(Bp,"B",-30),LEN(Ap,Bp,ab+" cm",-1)]},
+        {tx:"Set the compass to "+ac+" cm and draw an arc from A. Then set it to "+bc+" cm and draw an arc from B. The arcs cross at C.",els:[AR(Ap,Cp,15),AR(Bp,Cp,15),N(Cp,"C",90)]},
+        {tx:"Join C to A and C to B.",els:[S(Ap,Cp),S(Bp,Cp),FILL([Ap,Bp,Cp]),LEN(Ap,Cp,ac+" cm",1),LEN(Bp,Cp,bc+" cm",-1)]}],
+      mist:["Draw both arcs with the compass set to "+ab+" cm.","Use a protractor to draw an angle of 60° at A.","Set the compass to "+bc+" cm for the arc from A.","Draw [AB] "+(ab+ac)+" cm long."]};}
+  function c11(){
+    var ab=ri(6,9),al=ri(35,110),ac=ri(4,8),Ap=[0,0],Bp=[ab*U,0],Cp=pt(Ap,al,ac*U);
+    return {k:11,start:"Nothing is drawn yet.",title:"Construct the triangle ABC with |AB| = "+ab+" cm, ∠BAC = "+al+"° and |AC| = "+ac+" cm.",given:[],
+      steps:[{tx:"Draw [AB], "+ab+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",210),N(Bp,"B",-30),LEN(Ap,Bp,ab+" cm",-1)]},
+        {tx:"At A, use a protractor to draw an angle of "+al+"° with [AB] as one arm.",els:[S(Ap,pt(Ap,al,ac*U+45)),M(Ap,0,al,al+"°")]},
+        {tx:"Set the compass to "+ac+" cm. Put the point on A and draw an arc that crosses the new arm at C.",els:[AR(Ap,Cp,13),N(Cp,"C",al+90)]},
+        {tx:"Join C to B.",els:[S(Cp,Bp),FILL([Ap,Bp,Cp]),LEN(Ap,Cp,ac+" cm",1)]}],
+      mist:["At B, draw an angle of "+al+"° with [AB] as one arm.","Set the compass to "+ab+" cm for the arc on the new arm.","Draw an angle of "+(180-al)+"° at A.","Join C to the middle of [AB]."]};}
+  function c12(){
+    var ab=ri(6,9),al,be;do{al=ri(35,85);be=ri(35,85);}while(al+be>140||al===be);var Ap=[0,0],Bp=[ab*U,0],d=ab*U*Math.sin(rad(be))/Math.sin(rad(al+be)),Cp=pt(Ap,al,d);
+    return {k:12,start:"Nothing is drawn yet.",title:"Construct the triangle ABC with |AB| = "+ab+" cm, ∠CAB = "+al+"° and ∠ABC = "+be+"°.",given:[],
+      steps:[{tx:"Draw [AB], "+ab+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",210),N(Bp,"B",-30),LEN(Ap,Bp,ab+" cm",-1)]},
+        {tx:"With a protractor, draw an angle of "+al+"° at A and an angle of "+be+"° at B, on the same side of [AB].",els:[S(Ap,pt(Ap,al,d+40)),S(Bp,pt(Bp,180-be,dist(Bp,Cp)+40)),M(Ap,0,al,al+"°"),M(Bp,180-be,be,be+"°")]},
+        {tx:"The two new arms cross at C. Label C: that's the triangle ABC.",els:[N(Cp,"C",(360-be+al)/2),FILL([Ap,Bp,Cp])]}],
+      mist:["Draw the two angles on opposite sides of [AB].","Draw the "+be+"° angle at A and the "+al+"° angle at B.","Draw both angles at A.","Set the compass to "+ab+" cm and draw an arc from B."]};}
+  function c13(){
+    var s=ri(4,7),h=s+ri(2,4),H=Math.sqrt(h*h-s*s)*U,Ap=[0,0],Bp=[s*U,0],Cp=[0,H];
+    return {k:13,start:"Nothing is drawn yet.",title:"Construct the right-angled triangle ABC with the right angle at A, |AB| = "+s+" cm and the hypotenuse |BC| = "+h+" cm.",given:[],
+      steps:[{tx:"Draw [AB], "+s+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",225),N(Bp,"B",-30),LEN(Ap,Bp,s+" cm",-1)]},
+        {tx:"At A, construct a line perpendicular to [AB] (a right angle).",els:[S(Ap,[0,H+45]),RT(Ap,0)]},
+        {tx:"Set the compass to "+h+" cm. Put the point on B and draw an arc that crosses the perpendicular at C.",els:[AR(Bp,Cp,13),N(Cp,"C",180)]},
+        {tx:"Join B to C. [BC] is the hypotenuse.",els:[S(Bp,Cp),FILL([Ap,Bp,Cp]),LEN(Bp,Cp,h+" cm",-1)]}],
+      mist:["Put the compass point on A for the "+h+" cm arc.","Set the compass to "+s+" cm for the arc from B.","Construct the right angle at B.","Draw a line from B at 45° to [AB]."]};}
+  function c14(){
+    var s=ri(5,8),be=ri(30,55),Ap=[0,0],Bp=[s*U,0],H=s*U*Math.tan(rad(be)),Cp=[0,H];
+    return {k:14,start:"Nothing is drawn yet.",title:"Construct the right-angled triangle ABC with the right angle at A, |AB| = "+s+" cm and ∠ABC = "+be+"°.",given:[],
+      steps:[{tx:"Draw [AB], "+s+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",225),N(Bp,"B",-30),LEN(Ap,Bp,s+" cm",-1)]},
+        {tx:"At A, construct a line perpendicular to [AB]. At B, use a protractor to draw an angle of "+be+"°.",els:[S(Ap,[0,H+40]),RT(Ap,0),S(Bp,pt(Bp,180-be,dist(Bp,Cp)+40)),M(Bp,180-be,be,be+"°")]},
+        {tx:"The two new lines cross at C. Label C: that's the triangle ABC.",els:[N(Cp,"C",180),FILL([Ap,Bp,Cp])]}],
+      mist:["Draw the "+be+"° angle at A.","Construct the perpendicular at B.","Draw an angle of "+(90-be)+"° at B.","Set the compass to "+s+" cm and draw an arc from B."]};}
+  function c15(){
+    var w=ri(6,9),h=ri(3,5),Ap=[0,0],Bp=[w*U,0],Dp=[0,h*U],Cp=[w*U,h*U];
+    return {k:15,start:"Nothing is drawn yet.",title:"Construct the rectangle ABCD with |AB| = "+w+" cm and |BC| = "+h+" cm.",given:[],
+      steps:[{tx:"Draw [AB], "+w+" cm long, with a ruler.",els:[S(Ap,Bp),N(Ap,"A",225),N(Bp,"B",-45),LEN(Ap,Bp,w+" cm",-1)]},
+        {tx:"Construct a line perpendicular to [AB] at A, and another at B.",els:[S(Ap,[0,h*U+40]),S(Bp,[w*U,h*U+40]),RT(Ap,0),RT(Bp,90)]},
+        {tx:"Set the compass to "+h+" cm. From A and from B, draw arcs that cross the perpendiculars at D and C.",els:[AR(Ap,Dp,12),AR(Bp,Cp,12),N(Dp,"D",180),N(Cp,"C",0)]},
+        {tx:"Join D to C. ABCD is the rectangle.",els:[S(Dp,Cp),FILL([Ap,Bp,Cp,Dp]),LEN(Bp,Cp,h+" cm",-1)]}],
+      mist:["Set the compass to "+w+" cm for the arcs from A and B.","Draw the perpendiculars at the midpoint of [AB].","Join A to C.","Draw a line from A at 45° to [AB]."]};}
+  var BUILD={1:c1,2:c2,3:c3,4:c4,5:c5,6:c6,7:c7,8:c8,9:c9,10:c10,11:c11,12:c12,13:c13,14:c14,15:c15};
+  // all the elements up to and including step j (step 0 = what you're given)
+  function upto(con,j){var l=con.given.map(function(e){return [e,0];});for(var i=0;i<j;i++)con.steps[i].els.forEach(function(e){l.push([e,i+1]);});return l;}
+  function draw(con,j,box,anim){return render(upto(con,j),NAMES[con.k],box,anim===false?-1:j);}
+
+  /* ---------- question makers ---------- */
+  var KS=[1,1,2,2,3,4,4,5,5,6,6,7,8,9,9,10,10,11,11,12,12,13,14,15,15];
+  function qStep(kk){
+    var con=BUILD[kk||rnd(KS)](),j=ri(0,con.steps.length-1),ans=con.steps[j].tx,
+    // two typical mistakes first, so there is always a tempting wrong step; then the other steps
+    pool=shuffle(con.mist.slice()).slice(0,2).concat(shuffle(con.steps.filter(function(s,i){return i!==j;}).map(function(s){return s.tx;}))).concat(con.mist);
+    var q=C(con.title,"",ans,[],"Step "+(j+1)+" of "+con.steps.length+": "+ans,"",draw(con,j),{t:"step",k:con.k,j:j,n:con.n,full:draw(con,con.steps.length,null,false)});
+    var seen={},w=[];seen[ans]=1;pool.forEach(function(x){if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});q.wrong=w;
+    q.frame=j===0?"What's the first step?":(j===1?"Step 1 is done (in red).":"Steps 1–"+j+" are done (the newest is in red).")+" What's the next step?";
+    q.review=con.title+" Step "+(j+1)+": "+ans;return q;}
+  function qName(){
+    var k=rnd([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]),con=BUILD[k](),ans=NAMES[k],
+      pool=Object.keys(NAMES).filter(function(x){x=+x;return x!==k&&!((k===6&&x===7)||(k===7&&x===6));}).map(function(x){return NAMES[x];});
+    return C("Which construction is this?","",ans,pool,"This is construction "+k+": "+ans.toLowerCase()+(HL[k]?" (Higher level only).":"."),"Construction "+k+" → "+ans,draw(con,con.steps.length,null,false),{t:"name",k:k,n:con.n});}
+  var DESC=[[1,"Cuts an angle exactly in half"],[2,"Cuts a line segment in half, at right angles"],[3,"Draws a line from a point P to the line l, meeting l at 90° (P is not on l)"],
+    [4,"Draws a line at 90° to l through a point P that is on l"],[5,"Draws a line through P that never meets the line l"],[6,"Splits [AB] into 3 equal parts without measuring"],
+    [7,"Splits [AB] into 7 equal parts without measuring"],[8,"Marks off a segment exactly 6 cm long from the start of a ray"],[9,"Draws an angle of 40° with a given ray as one arm"],
+    [10,"Draws a triangle when you know all three sides"],[11,"Draws a triangle from two sides and the angle between them"],[12,"Draws a triangle from two angles and the side between them"],
+    [13,"Draws a right-angled triangle from the hypotenuse and one other side"],[14,"Draws a right-angled triangle from one side and an acute angle"],[15,"Draws a rectangle from its length and width"]];
+  function qDesc(){
+    var d=rnd(DESC),k=d[0],pool=Object.keys(NAMES).filter(function(x){x=+x;return x!==k&&!((k===6&&x===7)||(k===7&&x===6)||(k===2&&x===6));}).map(function(x){return NAMES[x];});
+    return C("Which construction does this?",d[1]+".",NAMES[k],pool,d[1]+": construction "+k+", "+NAMES[k].toLowerCase()+".",d[1]+" → "+NAMES[k],"",{t:"desc",k:k,desc:d[1]});}
+  /* tools, rules and words */
+  var TOOLS=[
+    ["Which instruments are you allowed to use to construct the bisector of an angle (construction 1)?","A compass and a straight edge only",["A protractor and a ruler","A ruler and a set square","Any instruments you like"],"Constructions 1 and 2 must be done with a compass and straight edge only: no protractor, no measuring."],
+    ["Which instruments are you allowed to use to construct the perpendicular bisector of a line segment (construction 2)?","A compass and a straight edge only",["A protractor and a ruler","A ruler only: measure the middle","Any instruments you like"],"Constructions 1 and 2 must be done with a compass and straight edge only: no protractor, no measuring."],
+    ["In the exam, what should you do with your construction arcs?","Leave them showing: they're part of the answer",["Rub them out so the drawing looks neat","Go over them in pen","Keep only the last arc"],"Always leave the construction arcs showing. They prove you constructed it and didn't just measure."],
+    ["To construct the perpendicular bisector of [AB], how wide must the compass be?","More than half of |AB|",["Exactly half of |AB|","Less than half of |AB|","Exactly 1 cm"],"The arcs from A and B only cross if the compass is opened to MORE than half of |AB|."],
+    ["Which constructions are on the Higher level course only?","Constructions 3 and 7",["Constructions 1 and 2","Constructions 10 and 11","None: they're all on both levels"],"Junior Cycle students learn constructions 1–15. Construction 3 (perpendicular from a point not on the line) and construction 7 (any number of equal parts) are Higher level only."],
+    ["You're given two sides of a triangle and the angle between them. Which triangle construction is this?","SAS",["SSS","ASA","RHS"],"Side, Angle, Side: two sides and the angle between them (the included angle)."],
+    ["You're given all three sides of a triangle. Which triangle construction is this?","SSS",["SAS","ASA","RHS"],"Side, Side, Side: all three sides."],
+    ["You're given two angles of a triangle and the side between them. Which triangle construction is this?","ASA",["SSS","SAS","RHS"],"Angle, Side, Angle: two angles and the side between them."],
+    ["You're given a right angle, the hypotenuse and one other side. Which triangle construction is this?","RHS",["SSS","SAS","ASA"],"Right angle, Hypotenuse, Side."],
+    ["Every point on the perpendicular bisector of [AB] is…","The same distance from A as from B",["Closer to A than to B","On the line AB","At 90° to A"],"Any point on the perpendicular bisector of [AB] is equidistant (the same distance) from A and B."],
+    ["What does the bisector of an angle do?","Cuts the angle into two equal angles",["Makes a right angle with one arm","Doubles the angle","Cuts the opposite side in half"],"Bisect = cut into two equal parts. The bisector of an angle splits it into two equal angles."],
+    ["In the angle bisector construction, why must the arcs from D and E use the same compass width?","So the point where they cross is the same distance from D and E",["So the arcs are easier to see","So the angle comes out at 90°","It doesn't matter: any widths work"],"Equal widths make F the same distance from D and E, so BF splits the angle into two equal halves."],
+    ["When you draw an angle with a protractor, which scale do you read?","The one that starts at 0° on the arm you're drawing from",["Always the outer scale","Always the inner scale","The one that gives the bigger number"],"Start at 0° on the arm you have, and count round. Reading the wrong scale gives 180° minus the angle you wanted."],
+    ["What does \"bisect\" mean?","Cut into two equal parts",["Cut at right angles","Cut into three equal parts","Draw a line parallel"],"Bi = two, sect = cut: cut into two equal parts."],
+    ["The perpendicular bisector of [AB] meets [AB] at what angle?","90°",["45°","180°","60°"],"Perpendicular means at right angles: 90°."],
+    ["In the SAS triangle construction, which angle are you given?","The angle between the two given sides",["Any angle of the triangle","The angle opposite the longest side","The right angle"],"In SAS the A is in the middle: the angle is between the two sides (the included angle)."],
+    ["To split [AB] into 5 equal parts without measuring, what do you do first?","Draw a ray from A at an acute angle to [AB]",["Measure [AB] and divide by 5","Construct the perpendicular bisector of [AB]","Draw a circle around A"],"Draw a ray from A, step off 5 equal marks with the compass, join the last mark to B, then draw parallel lines through the other marks."],
+    ["In the \"equal parts\" construction, the lines through the marks must be…","Parallel to the line from the last mark to B",["Perpendicular to [AB]","Parallel to [AB]","Any lines through the marks"],"The lines through the marks are parallel to the line joining the last mark to B. Parallel lines that cut off equal parts on one line cut off equal parts on any other (Theorem 11)."],
+    ["In construction 4, after the arcs from P cross l at A and B, what must you do before drawing the next arcs?","Open the compass wider",["Keep exactly the same width","Close the compass a little","Measure |AB| with a ruler"],"With the same width the arcs from A and B would just meet at P. Open the compass wider so they cross above l."],
+    ["What is the hypotenuse of a right-angled triangle?","The side opposite the right angle",["The shortest side","The side next to the right angle","The base of the triangle"],"The hypotenuse is opposite the right angle. It's always the longest side."]];
+  function qTool(){var t=rnd(TOOLS);return C(t[0],"",t[1],t[2],t[3],t[0]+" → "+t[1],"",{t:"tool"});}
+  function qCan(){
+    var a,b,c,yes=Math.random()<.5;
+    if(yes){do{a=ri(3,10);b=ri(3,10);c=ri(3,10);}while(!(a+b>c&&a+c>b&&b+c>a));}
+    else{a=ri(2,6);b=ri(2,7);c=a+b+rnd([0,0,1,2,3]);}
+    var s=shuffle([a,b,c]),mx=Math.max(a,b,c),others=[a,b,c].sort(function(x,y){return x-y;}).slice(0,2);
+    return C("Can you construct a triangle with sides of "+s[0]+" cm, "+s[1]+" cm and "+s[2]+" cm?","",yes?"Yes":"No",["Yes","No","Only at Higher level","Only with a protractor"],
+      yes?"Yes: the two shorter sides ("+others[0]+" + "+others[1]+" = "+(others[0]+others[1])+") add to more than the longest ("+mx+"), so the arcs cross.":
+          "No: the two shorter sides add to "+(others[0]+others[1])+" cm, which isn't more than "+mx+" cm, so the arcs never cross.",s.join(", ")+" cm → "+(yes?"Yes":"No"),"",{t:"can",s:s});}
+  function qNotThird(){
+    var a=ri(3,8),b=ri(3,9),lo=Math.abs(a-b),hi=a+b,ok=[],bad=[];for(var x=1;x<=hi+4;x++){if(x>lo&&x<hi)ok.push(x);else bad.push(x);}
+    var ans=rnd(bad.filter(function(x){return x>=2;})),pool=shuffle(ok).slice(0,3).map(function(x){return x+" cm";});
+    return C("Two sides of a triangle are "+a+" cm and "+b+" cm. Which of these can the third side NOT be?","",ans+" cm",pool,
+      "The third side must be less than "+a+" + "+b+" = "+hi+" cm and more than "+Math.max(a,b)+" − "+Math.min(a,b)+" = "+lo+" cm. "+ans+" cm breaks this rule.",a+" cm and "+b+" cm: the third side can't be → "+ans+" cm","",{t:"third",a:a,b:b});}
+  /* numbers */
+  function nBisect(){var a=2*ri(15,80);return QU("You bisect an angle of "+a+"°. What size is each of the two new angles?","",a/2,"°",[a,180-a/2,90-a/2,a*2],"Bisect = cut in half: "+a+"° ÷ 2 = "+(a/2)+"°.","",{t:"bisect",a:a});}
+  function nBisectBack(){var h=ri(15,80);return QU("The bisector of ∠ABC makes an angle of "+h+"° with the arm [BA]. What size is ∠ABC?","",2*h,"°",[h,180-h,90-h,h+90],"The bisector cuts ∠ABC into two equal halves of "+h+"°, so ∠ABC = 2 × "+h+"° = "+(2*h)+"°.","",{t:"bisectback",h:h});}
+  function nHalf(){var L=rnd([5,6,7,8,9,10,11,12,13,7.5,8.5,9.5,10.5]);return QU("The perpendicular bisector of [AB] meets it at M. |AB| = "+num(L)+" cm. What is |AM|?","",L/2,"cm",[L,L/4,L/2+1,L-1],"M is the midpoint, so |AM| = "+num(L)+" ÷ 2 = "+num(L/2)+" cm.","",{t:"half",L:L});}
+  function nEqui(){var d=rnd([4,5,5.5,6,6.5,7,7.5,8,9]);return QU("The point C is on the perpendicular bisector of [AB], and |CA| = "+num(d)+" cm. What is |CB|?","",d,"cm",[d/2,2*d,d+1],"Every point on the perpendicular bisector is the same distance from A and B, so |CB| = |CA| = "+num(d)+" cm.","",{t:"equi",d:d});}
+  function nParts(){var n=ri(2,6),each=rnd([2,2.5,3,3.5,4,4.5,5]),L=n*each;if(L>18){each=2;L=2*n;}
+    return QU("You divide a line segment of "+num(L)+" cm into "+n+" equal parts without measuring. How long should each part be?","",each,"cm",[L-n,L/2,each+1,n],num(L)+" ÷ "+n+" = "+num(each)+" cm.","",{t:"parts",L:L,n:n});}
+  function nMarks(){var n=ri(2,7);return C("You want to divide [AB] into "+n+" equal parts without measuring. How many equal steps do you mark along the ray from A?","",String(n),[String(n-1),String(n+1),String(2*n)],"One step for each part: "+n+" equal steps, then join the last mark to B.",n+" parts → "+n+" steps","",{t:"marks",n:n});}
+  function nWidth(){var L=ri(6,12),h=L/2,ans=h+rnd([1,1.5,2,2.5]),pool=[h,h-1,h-1.5,h-2].filter(function(x){return x>0;}).map(function(x){return num(x)+" cm";});
+    return C("|AB| = "+L+" cm. Which compass width will work for constructing the perpendicular bisector of [AB]?","",num(ans)+" cm",pool,"Half of "+L+" cm is "+num(h)+" cm. The compass must be MORE than half, or the arcs won't cross: only "+num(ans)+" cm works.",L+" cm: compass width → "+num(ans)+" cm","",{t:"width",L:L});}
+  function nThird(){var a,b;do{a=ri(30,85);b=ri(30,85);}while(a+b>150);return QU("You construct a triangle ABC (ASA) with ∠CAB = "+a+"° and ∠ABC = "+b+"°. What size should ∠ACB be when you measure it?","",180-a-b,"°",[a+b,180-a,360-a-b,90-a-b>0?90-a-b:a],"The angles of a triangle add to 180°: 180° − ("+a+"° + "+b+"°) = "+(180-a-b)+"°.","",{t:"third3",a:a,b:b});}
+  function nScale(){var d;do{d=ri(20,160);}while(Math.abs(d-90)<6);return QU("Ella wants an angle of "+d+"° but reads the wrong scale on the protractor. What angle does she draw?","",180-d,"°",[d,90-d>0?90-d:d+90,360-d],"The two scales add to 180°: reading the wrong one gives 180° − "+d+"° = "+(180-d)+"°.","",{t:"scale",d:d});}
+  function nHyp(){var s=ri(4,7),h=s+ri(2,4);return QU("You construct a right-angled triangle with a side of "+s+" cm and a hypotenuse of "+h+" cm. After drawing the "+s+" cm side and the right angle, what do you set the compass to for the arc from B?","",h,"cm",[s,h-s,h+s,h/2],"The arc from B is the hypotenuse, so set the compass to "+h+" cm.","",{t:"hyp",s:s,h:h});}
+  function nRect(){var w=ri(5,10),h=ri(2,6);if(h===w)h=w-1;return QU("You construct the rectangle ABCD with |AB| = "+w+" cm and |BC| = "+h+" cm. What is its perimeter?","",2*(w+h),"cm",[w+h,w*h,2*w+h],"Perimeter = "+w+" + "+h+" + "+w+" + "+h+" = "+(2*(w+h))+" cm.","",{t:"rect",w:w,h:h});}
+  function nPerp(){return QU("You construct a line perpendicular to l. What angle does it make with l?","",90,"°",[180,45,60],"Perpendicular lines meet at 90°.","",{t:"perp"});}
+
+  var MAKERS={
+    steps:[qStep],
+    name:[qName,qName,qName,qDesc,qDesc],
+    tools:[qTool,qTool,qTool,qTool,qCan,qNotThird],
+    numbers:[nBisect,nBisectBack,nHalf,nEqui,nParts,nMarks,nWidth,nThird,nScale,nHyp,nRect,nPerp],
+    mixed:[qStep,qStep,qStep,qName,qDesc,qTool,qTool,qCan,qNotThird,nBisect,nBisectBack,nHalf,nEqui,nParts,nWidth,nThird,nScale,nHyp]
+  };
+
+  /* ---------- step viewer (rules section) ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var vcon=null,vj=0;
+  function vshow(){if(!$("vsvg"))return;var n=vcon.steps.length;
+    $("vsvg").innerHTML=draw(vcon,vj,[340,250]);
+    $("vtxt").innerHTML=vj===0?"<b>Start.</b> "+vcon.start+" <i>"+vcon.title+"</i>":"<b>Step "+vj+" of "+n+".</b> "+vcon.steps[vj-1].tx;
+    $("vprev").disabled=vj===0;$("vnext").textContent=vj===n?"Start again ↺":"Next step →";}
+  function vload(){var k=+$("vsel").value;vcon=withSeed(1400+k,function(){return BUILD[k]();});vj=0;vshow();}
+  if($("vsel")&&$("vsel").tagName==="SELECT"){
+    $("vsel").innerHTML=Object.keys(NAMES).map(function(k){return '<option value="'+k+'">'+k+". "+NAMES[k]+(HL[k]?" (HL only)":"")+'</option>';}).join("");
+    $("vsel").onchange=vload;$("vprev").onclick=function(){if(vj>0){vj--;vshow();}};
+    $("vnext").onclick=function(){vj=vj===vcon.steps.length?0:vj+1;vshow();};vload();}
+
+  /* ---------- Game loop ---------- */
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="steps")?90:75;score=0;streak=0;best=0;left=DUR;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="steps"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="steps"&&streak%5===0?700:450):3800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! You know your constructions.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why&&m.why!==m.review&&m.why.indexOf(m.review)<0?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  if($("again")&&$("again").tagName){$("again").onclick=function(){start(mode);};$("menu").onclick=function(){show("start");};}
+  document.addEventListener("keydown",function(e){
+    if(!$("play")||$("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,BUILD:BUILD,NAMES:NAMES,HL:HL,draw:draw,render:render,upto:upto,withSeed:withSeed,
+    el:{S:S,A:A,AR:AR,N:N,M:M,RT:RT,LEN:LEN,W:W,PRO:PRO,DOT:DOT,FILL:FILL,pt:pt,cc:cc,dist:dist,ang:ang,U:U}};
+})();
+</script>
