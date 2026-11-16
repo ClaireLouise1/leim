@@ -1,0 +1,160 @@
+<main id="main">
+<style>.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:360px;margin:6px auto 0;font-size:17px}.steps p{margin:4px 0}.area-note{display:grid;gap:8px;grid-template-columns:1fr}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Bracket Blaster</h1>
+        <p>60 seconds. Blast the brackets away: multiply out, expand double brackets with the area model, square a bracket without losing the middle term, and spot the slip in someone else's working. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="blast"><div><b>Bracket Blaster</b><span>One bracket: 3(x − 4), −2(x + 5), x(x + 3), 3x × 4x, then expand and simplify 3(x + 2) − 2(x − 1)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="double"><div><b>Double brackets</b><span>(x + 3)(x − 5) with the area model, the missing middle term, (2x + 1)(x − 4), rectangle areas</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="square"><div><b>Squares &amp; special products</b><span>(x + 4)², (2x − 3)², (x + 7)(x − 7), and a Higher Level bracket with three terms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Spot the slip</b><span>Is the working right? Which line has the mistake? Put a negative number into the brackets</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Bracket Blaster, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.3a, AF.3b (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Expanding &amp; simplifying</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are some double brackets, multiplied out. Look at the numbers in the brackets and the numbers in the answer:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">(x + 2)(x + 3) = x² + <b>5</b>x + <b>6</b></li>
+          <li class="note">(x + 4)(x + 1) = x² + <b>5</b>x + <b>4</b></li>
+          <li class="note">(x + 5)(x + 2) = x² + <b>7</b>x + <b>10</b></li>
+          <li class="note">(x + 6)(x − 2) = x² + <b>4</b>x <b>− 12</b></li>
+        </ul>
+        <p style="margin-top:10px">Where do the middle number and the last number come from? Can you write (x + 7)(x + 3) straight away? And what about (x + 3)²: is it x² + 9?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The <b>last number</b> is the two numbers <b>multiplied</b> (2 × 3 = 6, 6 × −2 = −12). The <b>middle number</b> is the two numbers <b>added</b> (2 + 3 = 5, 6 + −2 = 4). So (x + 7)(x + 3) = x² + 10x + 21. And (x + 3)² = (x + 3)(x + 3) = x² + 6x + 9, <b>not</b> x² + 9: the middle term 6x is the one people forget. Check with x = 1: (1 + 3)² = 16, and 1 + 6 + 9 = 16 ✓, but 1 + 9 = 10 ✗.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Multiplying terms</h3>
+        <ul>
+          <li>Numbers × numbers, letters × letters: 3x × 4x = <b>12x²</b>; 2a × 5b = <b>10ab</b>; −2x × 3 = <b>−6x</b>.</li>
+          <li>A letter times itself makes a power: x × x = x², x² × x = x³ (add the powers: 2 + 1 = 3).</li>
+          <li>Signs: same signs give <b>+</b>, different signs give <b>−</b>: (−3) × (−4) = +12.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">One bracket: multiply EVERY term inside</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>3(x − 4)</b> = 3 × x + 3 × (−4) = <b>3x − 12</b>. Not 3x − 4: the 3 multiplies both terms.</li>
+          <li class="note"><b>−2(x − 5)</b> = −2x + 10. Minus × minus = plus.</li>
+          <li class="note"><b>x(x + 3)</b> = <b>x² + 3x</b>. <b>2x(3x − 1)</b> = <b>6x² − 2x</b>.</li>
+          <li class="note"><b>−(x − 6)</b> = <b>−x + 6</b>. A minus in front of a bracket changes the sign of every term inside.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Expand, then simplify</h3>
+        <p>Expand each bracket first, then collect like terms.</p>
+        <div class="note"><b>3(x + 2) − 2(x − 4)</b><br>= 3x + 6 − 2x + 8 &nbsp;&nbsp;(−2 × −4 = +8)<br>= <b>x + 14</b></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Double brackets: every term × every term</h3>
+        <p>Draw a box (the <b>area model</b>): one bracket along the top, the other down the side. Fill each box with row × column, then add the boxes.</p>
+        <div class="note" style="overflow-x:auto">
+          <svg viewBox="0 0 250 160" width="100%" style="max-width:300px;display:block;margin:0 auto" role="img" aria-label="Area model for (x + 3)(x − 5): boxes x², −5x, 3x, −15">
+            <g font-family="Inter,sans-serif" font-weight="700" font-size="17" fill="#1B2430" text-anchor="middle">
+              <text x="107" y="23">x</text><text x="193" y="23">−5</text>
+              <text x="52" y="69" text-anchor="end">x</text><text x="52" y="127" text-anchor="end">+3</text>
+              <rect x="64" y="34" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="150" y="34" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/>
+              <rect x="64" y="92" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/><rect x="150" y="92" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/>
+              <text x="107" y="69">x²</text><text x="193" y="69">−5x</text><text x="107" y="127">3x</text><text x="193" y="127">−15</text>
+            </g>
+          </svg>
+          <p style="margin-top:6px;text-align:center"><b>(x + 3)(x − 5)</b> = x² − 5x + 3x − 15 = <b>x² − 2x − 15</b></p>
+        </div>
+        <ul style="margin-top:10px">
+          <li>With letters in both brackets: (2x + 1)(x − 4) = 2x² − 8x + x − 4 = <b>2x² − 7x − 4</b>.</li>
+          <li>Different letters: (a + 2)(b − 3) = <b>ab − 3a + 2b − 6</b>. No like terms, so 4 terms stay.</li>
+          <li>The area of a rectangle with sides (x + 5) and (x + 2) is (x + 5)(x + 2) = <b>x² + 7x + 10</b>.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Squares and special products</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>(x + 4)²</b> = (x + 4)(x + 4) = x² + 4x + 4x + 16 = <b>x² + 8x + 16</b>.</li>
+          <li class="note"><b>(x − 3)²</b> = x² − 3x − 3x + 9 = <b>x² − 6x + 9</b>. The last term is +9: (−3) × (−3).</li>
+          <li class="note"><b>(2x + 5)²</b> = 4x² + 10x + 10x + 25 = <b>4x² + 20x + 25</b>.</li>
+          <li class="note"><b>(x + 7)(x − 7)</b> = x² − 7x + 7x − 49 = <b>x² − 49</b>. The middle terms cancel: a <b>difference of two squares</b>.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Higher Level:</b> a bracket with three terms works the same way. (x + 2)(x² − x + 3) = x³ − x² + 3x + 2x² − 2x + 6 = <b>x³ + x² + x + 6</b>. Each term of the first bracket multiplies all three terms of the second.</div>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> 3(x + 4) = 3x + 4 (the 3 must multiply both), −2(x − 5) = −2x − 10 (minus × minus = plus), and (x + 3)² = x² + 9 (the middle term is missing). <b>Check with a number:</b> put x = 1 into the question and into your answer. They must give the same value.</div>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Factorising (putting the brackets back) comes later, in Algebra 3. Dividing and algebraic fractions come in Algebra 4.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>"Expand and simplify" is one of the most common short parts in the paper, often as a first part worth a few easy marks. Expanding also turns up inside bigger questions: the area of a rectangle with sides like (x + 5) and (x − 2), showing two expressions are equal, and as the first step in solving equations. A sign slip early on carries through the whole question.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Multiply every term in the bracket</b>, not just the first one.</li>
+            <li><b>Watch the sign in front of the bracket</b>: −3(x − 2) = −3x + 6.</li>
+            <li><b>Write (x + 3)² as (x + 3)(x + 3)</b> before you start. It stops you writing x² + 9.</li>
+            <li><b>Show the line before you collect</b> (all four terms of a double bracket): it can earn marks even if you slip later.</li>
+            <li><b>Check with x = 1 or x = 2</b>: the question and your answer must give the same number.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Expand and simplify.</b> (a) 4(2x − 3) − 3(x − 5) &nbsp;(b) (x + 4)(x − 6) &nbsp;(c) <i>Higher Level:</i> (x + 2)(x² − x + 3)
+              <details><summary>Show the worked answer</summary><p>(a) 8x − 12 − 3x + 15 = <b>5x + 3</b> (−3 × −5 = +15).<br>(b) x² − 6x + 4x − 24 = <b>x² − 2x − 24</b>.<br>(c) x³ − x² + 3x + 2x² − 2x + 6 = <b>x³ + x² + x + 6</b>.</p></details></li>
+            <li><b>The patio.</b> A rectangular patio is 2x + 3 metres long and x − 1 metres wide. (a) Write the area of the patio without brackets. (b) Write the perimeter in its simplest form. (c) Find the area when x = 5, using both the bracket form and your answer to (a).
+              <details><summary>Show the worked answer</summary><p>(a) (2x + 3)(x − 1) = 2x² − 2x + 3x − 3 = <b>2x² + x − 3</b> m².<br>(b) 2(2x + 3) + 2(x − 1) = 4x + 6 + 2x − 2 = <b>6x + 4</b> m.<br>(c) Brackets: (13)(4) = 52. From (a): 2(25) + 5 − 3 = 52. Both give <b>52 m²</b> ✓.</p></details></li>
+            <li><b>Consecutive squares.</b> (a) Show that (n + 1)² − n² = 2n + 1. (b) Use this to work out 51² − 50² without a calculator.
+              <details><summary>Show the worked answer</summary><p>(a) (n + 1)² = (n + 1)(n + 1) = n² + 2n + 1. Take away n²: n² + 2n + 1 − n² = <b>2n + 1</b> ✓.<br>(b) Here n = 50, so 51² − 50² = 2(50) + 1 = <b>101</b>.</p></details></li>
+            <li><b>Spot the mistake.</b> Seán wrote (x − 3)² = x² − 9. (a) Show that he is wrong by putting in x = 5. (b) Write the correct expansion.
+              <details><summary>Show the worked answer</summary><p>(a) (5 − 3)² = 2² = 4, but 5² − 9 = 16. They aren't equal, so he is wrong.<br>(b) (x − 3)(x − 3) = x² − 3x − 3x + 9 = <b>x² − 6x + 9</b>. Check: 25 − 30 + 9 = 4 ✓.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/algebra-expanding-simplifying-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Algebra: Expanding &amp; Simplifying Teacher Pack (€5)</a>: Area Model Match cards, Bracket Relay, Expanding Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

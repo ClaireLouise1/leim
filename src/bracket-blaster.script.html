@@ -1,0 +1,329 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));} // standard order (highest power first)
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  /* Bracket Blaster: expansions are written in standard order (highest power first), so no positive-first swap */
+  function fmtStd(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));}
+  /* ---------- multiplying terms: a key is letters with powers, e.g. "x²", "ab", "a²b" ---------- */
+  var SUPS={"²":2,"³":3,"⁴":4,"⁵":5},SUPC=["","","²","³","⁴","⁵"];
+  function kp(k){var p={},i=0;while(i<k.length){var L=k[i];i++;var e=1;if(i<k.length&&SUPS[k[i]]){e=SUPS[k[i]];i++;}p[L]=(p[L]||0)+e;}return p;}
+  function kstr(p){return Object.keys(p).sort().map(function(L){return L+SUPC[p[L]];}).join("");}
+  function kmul(a,b){var p=kp(a),q=kp(b);for(var L in q)p[L]=(p[L]||0)+q[L];return kstr(p);}
+  function mul(A,B){var m={};for(var a in A)for(var b in B){if(!A[a]||!B[b])continue;var k=kmul(a,b);m[k]=(m[k]||0)+A[a]*B[b];}return m;}
+  function T1(c,k){var m={};m[k]=c;return m;}
+  function lin(v,a,b){var m={};m[v]=a;m[""]=b;return m;}            // a·v + b
+  function inner(m){return fmtStd(m);}
+  function brk(c,k,m){ // c·k outside a bracket: "3(x − 4)", "−(x + 2)", "2x(x − 5)"
+    var out=k===""?(c===1?"":c===-1?M:num(c)):tm(c,k,true);return out+"("+inner(m)+")";}
+  function sq(m){return "("+inner(m)+")²";}
+  function pr(A,B){return "("+inner(A)+")("+inner(B)+")";}
+  function cnt(m){return keys(m).length;}
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás"];
+  var INK="#1B2430",YEL="#F6CF5A";
+  var V1=["x","x","x","a","n","y","t","p"];
+
+  /* ---------- area-model picture: rows × columns, each cell = row term × column term ---------- */
+  function areaSVG(rows,cols,show){ // rows/cols: [[coef,key],…]; show: function(i,j) → "text" | "?" | ""
+    var cw=86,rh=58,L=64,Tp=34,W=L+cw*cols.length+6,H=Tp+rh*rows.length+6,o="";
+    function txt(x,y,s,cls,extra,fill,size){return '<text class="'+cls+'" '+(extra||"")+' x="'+x+'" y="'+y+'" font-size="'+(size||17)+'" font-weight="700" text-anchor="middle" fill="'+(fill||INK)+'" font-family="Inter,sans-serif">'+s+'</text>';}
+    cols.forEach(function(c,j){o+=txt(L+cw*j+cw/2,Tp-11,tm(c[0],c[1],true),"ch",'data-t="'+tm(c[0],c[1],true)+'"');});
+    rows.forEach(function(r,i){o+=txt(L-12,Tp+rh*i+rh/2+6,tm(r[0],r[1],true),"rh",'data-t="'+tm(r[0],r[1],true)+'"',INK).replace('text-anchor="middle"','text-anchor="end"');
+      cols.forEach(function(c,j){var s=show(i,j),q=s==="?";
+        o+='<rect x="'+(L+cw*j)+'" y="'+(Tp+rh*i)+'" width="'+cw+'" height="'+rh+'" fill="'+(q?YEL:(i+j)%2?"#E9F5EE":"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';
+        if(s)o+=txt(L+cw*j+cw/2,Tp+rh*i+rh/2+6,s,"cell",'data-i="'+i+'" data-j="'+j+'"',INK,q?22:16);});});
+    return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:'+Math.min(340,Math.round(W*1.4))+'px" role="img" aria-label="Area model: rows '+rows.map(function(r){return tm(r[0],r[1],true);}).join(", ")+'; columns '+cols.map(function(c){return tm(c[0],c[1],true);}).join(", ")+'">'+o+'</svg>';}
+  function terms(m){return keys(m).map(function(k){return [m[k],k];});}
+  function rectSVG(l,w){ // rectangle with length and width labels (expression strings)
+    var T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+INK+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg viewBox="0 0 320 135" width="100%" style="max-width:320px" role="img" data-shape="rect" aria-label="Rectangle with length '+l+' and width '+w+'"><rect x="70" y="30" width="180" height="90" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(160,22,l,0)+T(62,80,w,1,"end")+'</svg>';}
+
+  /* ---------- Bracket Blaster (one bracket) ---------- */
+  function qSingle(){
+    var v=rnd(V1),k=Math.random()<.4?-ri(1,6):ri(2,8),a=ri(1,5),b=nz(-9,9),In=lin(v,a,b),ans=mul(T1(k,""),In);
+    var first={},sgn={};first[v]=k*a;first[""]=b;sgn[v]=k*a;sgn[""]=-k*b;var add={};add[v]=k+a;add[""]=k+b;
+    return P("Expand:",brk(k,"",In),ans,[first,sgn,k>0?add:null],
+      "Multiply EVERY term inside by "+num(k)+": "+num(k)+" × "+tm(a,v,true)+" = "+tm(k*a,v,true)+" and "+num(k)+" × "+br(b)+" = "+num(k*b)+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qVarOut(){
+    var v=rnd(V1),c=Math.random()<.3?-ri(1,3):ri(1,4),a=ri(1,4),b=nz(-9,9),In=lin(v,a,b),ans=mul(T1(c,v),In);
+    var noPow={};noPow[v]=c*a+c*b;var forget={};forget[v+"²"]=c*a;forget[""]=b;var plus1={};plus1[v+"²"]=c*a;plus1[v]=c+b;
+    return P("Expand:",brk(c,v,In),ans,[noPow,forget,plus1],
+      tm(c,v,true)+" × "+tm(a,v,true)+" = "+tm(c*a,v+"²",true)+" (letter × same letter = squared) and "+tm(c,v,true)+" × "+br(b)+" = "+tm(c*b,v,true)+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qMulTerms(){
+    var f=ri(0,3),v=rnd(["x","a","y","n"]),p=nz(-6,6),q=ri(2,7),A,B,why;
+    if(f===0){A=[p,v];B=[q,v];}else if(f===1){var w=rnd([["a","b"],["x","y"],["m","n"],["p","q"]]);A=[p,w[0]];B=[q,w[1]];}
+    else if(f===2){A=[p,v+"²"];B=[q,v];}else{A=[p,v];B=[q,""];}
+    var ans=mul(T1(A[0],A[1]),T1(B[0],B[1])),k=keys(ans)[0],slips=[];
+    var s1={};s1[f===0?v:f===1?A[1]:f===2?v+"²":v+"²"]=p*q;slips.push(s1);                     // forgot the power / letters
+    var s2={};s2[k]=p+q;slips.push(s2);                                           // added the numbers
+    var s3={};s3[k]=-p*q;slips.push(s3);                                          // sign slip
+    if(f===2){var s4={};s4[v+"²"]=p*q;slips.push(s4);}
+    return P("Multiply:",tm(A[0],A[1],true)+" × "+tm(B[0],B[1],true),ans,slips,
+      "Numbers × numbers: "+num(p)+" × "+q+" = "+num(p*q)+". Letters × letters"+(f===3?" (there's only one letter here)":"")+": "+(f===2?v+"² × "+v+" = "+v+"³ (add the powers: 2 + 1)":f===0?v+" × "+v+" = "+v+"²":f===1?A[1]+" × "+B[1]+" = "+A[1]+B[1]:v)+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qMinus(){
+    var v=rnd(V1),p=ri(3,9),a=ri(1,p-1),b=nz(-9,9),c=Math.random()<.5?ri(1,9):0,In=lin(v,a,b);
+    var lead={};lead[v]=p;if(c)lead[""]=c;
+    var ans=plus(lead,times(In,-1)),slip=plus(lead,{});slip[v]=p-a;slip[""]=(c||0)+b;
+    var frame=fmtList(terms(lead))+" "+M+" ("+inner(In)+")";
+    return P("Expand and simplify:",frame,ans,[slip,plus(lead,In)],
+      "A minus in front of a bracket changes the sign of EVERY term inside: "+M+"("+inner(In)+") = "+fmtStd(times(In,-1))+". Then collect: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qTwoBr(){
+    var v=rnd(V1),k1=ri(2,6),k2=nz(-5,5),a1=ri(1,3),b1=nz(-8,8),a2=ri(1,3),b2=nz(-8,8),t=0;
+    while((k1*a1+k2*a2===0||k1*b1+k2*b2===0||k2===1)&&t<30){k2=nz(-5,5);b2=nz(-8,8);t++;}
+    var I1=lin(v,a1,b1),I2=lin(v,a2,b2),E1=mul(T1(k1,""),I1),E2=mul(T1(k2,""),I2),ans=plus(E1,E2);
+    if(cnt(ans)<2)return qTwoBr();
+    var frame=brk(k1,"",I1)+(k2<0?" "+M+" ":" + ")+brk(Math.abs(k2),"",I2);
+    var slip=plus(E1,{});slip[v]=(slip[v]||0)+k2*a2;slip[""]=(slip[""]||0)-k2*b2;           // sign slip on the last term
+    var slip2=plus(E1,I2);if(k2<0)slip2=plus(E1,times(I2,-1));slip2=plus(slip2,{});                    // only the first term multiplied
+    var slip3=plus(E1,{});slip3[v]+=k2*a2;slip3[""]+=b2;
+    return P("Expand and simplify:",frame,ans,[slip,slip3,slip2],
+      "Expand each bracket: "+fmtStd(E1)+" and "+fmtStd(E2)+". Collect like terms: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qArea1(){
+    var v=rnd(["x","a","n"]),k=Math.random()<.5?[ri(2,7),""]:[ri(1,3),v],a=ri(1,3),b=nz(-9,9),In=lin(v,a,b),ans=mul(T1(k[0],k[1]),In);
+    var hideAll=Math.random()<.5,cols=terms(In);
+    var html=areaSVG([k],cols,function(i,j){return hideAll?"?":j===0?tm(ans[kmul(k[1],v)],kmul(k[1],v),true):"?";});
+    var noMul={};noMul[kmul(k[1],v)]=ans[kmul(k[1],v)];noMul[""]=b;if(k[1]){noMul={};noMul[v+"²"]=k[0]*a;noMul[""]=b;}
+    var forget={};forget[k[1]||v]=k[0]*a+k[0]*b;
+    return P("The area model shows this. Write it without brackets.",brk(k[0],k[1],In),ans,[noMul,forget,mul(T1(k[0],k[1]),lin(v,a,-b))],
+      "Multiply the side by each column: "+tm(k[0],k[1],true)+" × "+tm(a,v,true)+" = "+tm(k[0]*a,kmul(k[1],v),true)+", "+tm(k[0],k[1],true)+" × "+br(b)+" = "+tm(k[0]*b,k[1],true)+". Add the boxes: "+fmtStd(ans)+".",html,{t:"area",ask:"all",after:true});
+  }
+
+  /* ---------- Double brackets ---------- */
+  function qDouble(){
+    var v=rnd(V1),a=nz(-9,9),b=nz(-9,9);if(a+b===0)b=b>0?b+1:b-1;if(b===0)b=2;
+    var A=lin(v,1,a),B=lin(v,1,b),ans=mul(A,B),sv=v+"²";
+    var s1={};s1[sv]=1;s1[""]=a*b;var s2={};s2[sv]=1;s2[v]=a*b;s2[""]=a+b;var s3={};s3[sv]=1;s3[v]=a+b;s3[""]=-a*b;var s4={};s4[sv]=1;s4[v]=a-b;s4[""]=a*b;
+    return P("Expand and simplify:",pr(A,B),ans,[s1,s2,s3,s4],
+      "Every term × every term: "+v+" × "+v+" = "+sv+", "+v+" × "+br(b)+" = "+tm(b,v,true)+", "+num(a)+" × "+v+" = "+tm(a,v,true)+", "+num(a)+" × "+br(b)+" = "+num(a*b)+". Middle terms: "+tm(a,v,true)+" "+(b<0?M+" "+tm(-b,v,true):"+ "+tm(b,v,true))+" = "+tm(a+b,v,true)+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qDouble2(){
+    var v=rnd(V1),p=ri(1,3),q=ri(1,3);if(p===1&&q===1)p=2;var a=nz(-7,7),b=nz(-7,7),t=0;
+    while(p*b+q*a===0&&t<20){b=nz(-7,7);t++;}if(p*b+q*a===0)return qDouble2();
+    var A=lin(v,p,a),B=lin(v,q,b),ans=mul(A,B),sv=v+"²";
+    var s1={};s1[sv]=p*q;s1[""]=a*b;var s2={};s2[sv]=p+q;s2[v]=p*b+q*a;s2[""]=a*b;var s3={};s3[sv]=p*q;s3[v]=p*b+q*a;s3[""]=a+b;var s4={};s4[sv]=p*q;s4[v]=a+b;s4[""]=a*b;
+    return P("Expand and simplify:",pr(A,B),ans,[s1,s2,s3,s4],
+      "Every term × every term: "+tm(p,v,true)+" × "+tm(q,v,true)+" = "+tm(p*q,sv,true)+", "+tm(p,v,true)+" × "+br(b)+" = "+tm(p*b,v,true)+", "+num(a)+" × "+tm(q,v,true)+" = "+tm(a*q,v,true)+", "+num(a)+" × "+br(b)+" = "+num(a*b)+". Middle terms: "+tm(p*b+q*a,v,true)+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qGrid(){
+    var v="x",p=ri(1,3),q=ri(1,2),a=nz(-9,9),b=nz(-9,9),A=lin(v,p,a),B=lin(v,q,b),rows=terms(A),cols=terms(B),hi=ri(0,1),hj=ri(0,1);
+    var cell=mul(T1(rows[hi][0],rows[hi][1]),T1(cols[hj][0],cols[hj][1])),k=keys(cell)[0];
+    var html=areaSVG(rows,cols,function(i,j){if(i===hi&&j===hj)return "?";var c=mul(T1(rows[i][0],rows[i][1]),T1(cols[j][0],cols[j][1]));return fmtStd(c);});
+    var slips=[];var s1={};s1[k]=-cell[k];slips.push(s1);var s2={};s2[k]=rows[hi][0]+cols[hj][0];slips.push(s2);
+    var s3={};s3[k===""?"x":k==="x"?(rows[hi][1]===""&&cols[hj][1]===""?"x":"x²"):"x"]=cell[k];slips.push(s3);
+    return P("This area model shows the expression below. What goes in the yellow box?","("+inner(A)+")("+inner(B)+")",cell,slips,
+      "The yellow box is its row × its column: "+tm(rows[hi][0],rows[hi][1],true)+" × "+tm(cols[hj][0],cols[hj][1],true)+" = "+fmtStd(cell)+".",html,{t:"cell",i:hi,j:hj,after:true});
+  }
+  function qMiddle(){
+    var v="x",a=nz(-9,9),b=nz(-9,9);if(a+b===0)b=b>0?b+1:b-1;if(b===0)b=3;
+    var ans=mul(lin(v,1,a),lin(v,1,b)),frame="("+inner(lin(v,1,a))+")("+inner(lin(v,1,b))+") = x² + □x "+(a*b<0?M+" "+(-a*b):"+ "+a*b);
+    return QN("What number goes in the box?",frame,a+b,[a*b,a-b,b-a,-(a+b)],
+      "The x terms come from the outside and inside pairs: "+tm(b,"x",true)+" and "+tm(a,"x",true)+". "+num(a)+" + "+br(b)+" = "+num(a+b)+", so □ = "+num(a+b)+".","",{t:"middle"});
+  }
+  function qLetters(){
+    var P2=rnd([["a","b"],["x","y"],["m","n"],["p","q"]]),a=nz(-7,7),b=nz(-7,7),A=lin(P2[0],1,a),B=lin(P2[1],1,b),ans=mul(A,B);
+    var s1={};s1[P2[0]+P2[1]]=1;s1[""]=a*b;var s2=mul(A,lin(P2[1],1,-b));var s3={};s3[P2[0]+P2[1]]=1;s3[P2[0]]=a;s3[P2[1]]=b;s3[""]=a*b;
+    return P("Expand:",pr(A,B),ans,[s1,s2,s3],
+      "Every term × every term: "+P2[0]+P2[1]+", "+tm(b,P2[0],true)+", "+tm(a,P2[1],true)+", "+num(a*b)+". There are no like terms to collect, so the answer has 4 terms: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qRectArea(){
+    var v="x",a=ri(1,9),b=nz(-4,9),p=ri(1,3),t=0;while(b===a&&t<9){b=nz(-4,9);t++;}
+    var L=lin(v,p,a),W=lin(v,1,b),ans=mul(L,W),per=plus(times(L,2),times(W,2));
+    var s1={};s1[v+"²"]=p;s1[""]=a*b;var s2=plus(L,W);
+    return P("Write the area of this rectangle in its simplest form (no brackets).","",ans,[s1,s2,per,mul(L,lin(v,1,-b))],
+      "Area = length × width = ("+inner(L)+")("+inner(W)+") = "+fmtStd(ans)+". (Adding the sides gives the perimeter, not the area.)",rectSVG(inner(L),inner(W)),{t:"rect"});
+  }
+
+  /* ---------- Squares & special products ---------- */
+  function qSq(){
+    var v=rnd(V1),a=nz(-9,9),A=lin(v,1,a),ans=mul(A,A),sv=v+"²";
+    var s1={};s1[sv]=1;s1[""]=a*a;var s2={};s2[sv]=1;s2[v]=a;s2[""]=a*a;var s3={};s3[sv]=1;s3[v]=2*a;s3[""]=2*a;var s4={};s4[sv]=1;s4[""]=-a*a;
+    return P("Expand and simplify:",sq(A),ans,[s1,s2,s3,a<0?s4:null],
+      sq(A)+" means ("+inner(A)+")("+inner(A)+"), not "+sv+" "+(a<0?M:"+")+" "+a*a+". Every term × every term: "+sv+" "+(a<0?M:"+")+" "+tm(Math.abs(a),v,true)+" "+(a<0?M:"+")+" "+tm(Math.abs(a),v,true)+" + "+a*a+" = "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qSq2(){
+    var v=rnd(V1),p=ri(2,4),a=nz(-7,7),A=lin(v,p,a),ans=mul(A,A),sv=v+"²";
+    var s1={};s1[sv]=p*p;s1[""]=a*a;var s2={};s2[sv]=p;s2[v]=2*p*a;s2[""]=a*a;var s3={};s3[sv]=p*p;s3[v]=p*a;s3[""]=a*a;var s4={};s4[sv]=2*p;s4[v]=2*p*a;s4[""]=a*a;
+    return P("Expand and simplify:",sq(A),ans,[s1,s2,s3,s4],
+      "("+inner(A)+")("+inner(A)+"): "+tm(p,v,true)+" × "+tm(p,v,true)+" = "+tm(p*p,sv,true)+", two middle terms of "+tm(p*a,v,true)+" make "+tm(2*p*a,v,true)+", and "+br(a)+"² = "+a*a+". Answer: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+  function qDiff(){
+    var v=rnd(V1),p=Math.random()<.7?1:ri(2,3),a=ri(1,9),A=lin(v,p,a),B=lin(v,p,-a);if(Math.random()<.5){var t=A;A=B;B=t;}
+    var ans=mul(A,B),sv=v+"²";
+    var s1={};s1[sv]=p*p;s1[""]=a*a;var s2={};s2[sv]=p*p;s2[v]=-2*p*a;s2[""]=-a*a;var s3={};s3[sv]=p;s3[""]=-a*a;var s4={};s4[sv]=p*p;s4[""]=-2*a;
+    return P("Expand and simplify:",pr(A,B),ans,[s1,s2,p>1?s3:null,s4],
+      "Every term × every term: the middle terms are "+tm(p*a,v,true)+" and "+tm(-p*a,v,true)+", and they cancel out. "+tm(p*p,sv,true)+" "+M+" "+a*a+" = "+fmtStd(ans)+". (A difference of two squares.)","",{t:"exp"});
+  }
+  function qWhichSq(){
+    var v="x",a=nz(-9,9),A=lin(v,1,a),ans=pr(A,A);
+    var pool=["x² "+(a<0?M:"+")+" "+a*a,"x² "+M+" "+a*a,pr(A,lin(v,1,-a)),"x² "+(a<0?M+" ":"+ ")+tm(Math.abs(a),"x",true)+" + "+a*a,"2x "+(a<0?M+" ":"+ ")+Math.abs(2*a)];
+    return C("Which of these is equal to "+sq(A)+"?","",ans,pool,
+      sq(A)+" = ("+inner(A)+")("+inner(A)+") = "+fmtStd(mul(A,A))+". It is NOT x² "+(a<0?M:"+")+" "+a*a+": that loses the two middle terms.",null,"",{t:"equal",target:sq(A)});
+  }
+  function qTri(){
+    var v="x",a=nz(-5,5),b=nz(-5,5),c=nz(-6,6),A=lin(v,1,a),B={};B["x²"]=1;B["x"]=b;B[""]=c;var ans=mul(A,B);
+    if(cnt(ans)<3)return qTri();
+    var s1={};s1["x³"]=1;s1[""]=a*c;var s2=plus(mul(T1(1,"x"),B),T1(a,""));var s3=mul(A,{"x²":1,"x":-b,"":c});
+    return P("Higher Level: expand and simplify:","("+inner(A)+")("+inner(B)+")",ans,[s1,s2,s3],
+      "Multiply each term of the first bracket by all three terms of the second: x("+inner(B)+") = "+fmtStd(mul(T1(1,"x"),B))+" and "+num(a)+"("+inner(B)+") = "+fmtStd(mul(T1(a,""),B))+". Collect like terms: "+fmtStd(ans)+".","",{t:"exp"});
+  }
+
+  /* ---------- Spot the slip ---------- */
+  function qClaim(){
+    var nm=rnd(NAMES),he=(nm==="Ciara"||nm==="Aoife"||nm==="Zara"||nm==="Emma")?"she":"he",v="x",T=ri(0,6),lhs,R,right,a=ri(2,7),b=ri(2,9),c=ri(2,6),alts=[];
+    if(T===0){if(b===a)b=a+1;lhs=brk(a,"",lin(v,1,b));R=lin(v,a,b);alts=[lin(v,a,a*b),lin(v,a,a+b),lin(v,1,a*b)];}
+    else if(T===1){lhs=brk(-a,"",lin(v,1,-b));R=lin(v,-a,-a*b);alts=[lin(v,-a,a*b),lin(v,a,-a*b),lin(v,-a,b)];}
+    else if(T===2){var A=lin(v,1,b);lhs=sq(A);R={"x²":1,"":b*b};alts=[mul(A,A),{"x²":1,"x":b,"":b*b},{"x²":2,"":2*b}];}
+    else if(T===3){if(c===b)c=b+1;var A1=lin(v,1,b),B1=lin(v,1,c);lhs=pr(A1,B1);R=mul(A1,B1);alts=[{"x²":1,"":b*c},{"x²":1,"x":b*c,"":b+c},{"x²":1,"x":b+c,"":-b*c}];}
+    else if(T===4){lhs=brk(1,"x",lin(v,1,b));R={"x²":1,"x":b};alts=[{"x²":1,"":b},{"x":1+b},{"x²":1,"x":-b}];}
+    else if(T===5){if(c===a)c=a+1;var I=lin(v,1,-c);lhs=a+" "+M+" ("+inner(I)+")";R={"":a-c,"x":-1};alts=[{"":a+c,"x":-1},{"":a-c,"x":1},{"":a+c,"x":1}];}
+    else{var A2=lin(v,1,b),B2=lin(v,1,-b);lhs=pr(A2,B2);R=mul(A2,B2);alts=[{"x²":1,"":b*b},{"x²":1,"x":-2*b,"":-b*b},{"x²":2,"":-b*b}];}
+    var truth=null;if(T===0||T===1||T===2||T===5){truth=T===0?lin(v,a,a*b):T===1?lin(v,-a,a*b):T===2?mul(lin(v,1,b),lin(v,1,b)):{"":a+c,"x":-1};}
+    right=!truth;var rhs=fmtStd(R),ans=right?"Right":"Wrong: it should be "+fmtStd(truth);
+    var pool=(right?[]:["Right"]).concat(alts.filter(function(m){return fmtStd(m)!==rhs&&(!truth||fmtStd(m)!==fmtStd(truth));}).map(function(m){return "Wrong: it should be "+fmtStd(m);}));
+    return C(nm+" writes: "+lhs+" = "+rhs+". Is "+he+" right?","",ans,pool,
+      right?lhs+" really does equal "+rhs+": every term inside was multiplied, with the right signs.":
+        (T===0?"The "+a+" multiplies BOTH terms: "+a+" × "+b+" = "+a*b+".":T===1?"The "+M+a+" multiplies both terms, and "+M+a+" × "+M+b+" = +"+a*b+".":T===2?sq(lin(v,1,b))+" = ("+inner(lin(v,1,b))+")("+inner(lin(v,1,b))+"): don't forget the middle terms, "+tm(2*b,"x",true)+".":"The minus changes the sign of every term in the bracket: "+M+"("+inner(lin(v,1,-c))+") = "+M+"x + "+c+".")+" Answer: "+fmtStd(truth)+".",
+      lhs+" = "+rhs+"? → "+ans,"",{t:"claim",lhs:lhs,rhs:rhs});
+  }
+  function qLine(){
+    var v="x",k1=ri(2,5),a=nz(-7,7),k2=ri(2,5),b=nz(-7,7),t=0;while((k1===k2)&&t<9){k2=ri(2,5);t++;}
+    var nm=rnd(NAMES),I1=lin(v,1,a),I2=lin(v,1,b),frame=brk(k1,"",I1)+" "+M+" "+brk(k2,"",I2);
+    var e1=[[k1,v],[k1*a,""],[-k2,v],[-k2*b,""]],bad=ri(0,3);
+    var l1=e1.map(function(x){return x.slice();});
+    if(bad===1)l1[3][0]=-l1[3][0];                       // sign slip with the minus outside the second bracket
+    var l2=[[l1[0][0],v],[l1[2][0],v],[l1[1][0],""],[l1[3][0],""]];
+    if(bad===2)l2[3][0]=-l2[3][0];                       // a term changed sign when it moved
+    var m3=mapOf(l2);if(bad===3)m3[v]=-m3[v];          // collected wrongly
+    if(bad===3&&m3[v]===0)return qLine();
+    if(keys(mapOf(l2)).length<1)return qLine();
+    var L3=fmtStd(m3);if(L3==="0")return qLine();
+    var lines=[fmtList(l1),fmtList(l2),L3];
+    var html='<div class="steps">'+lines.map(function(s,i){return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> '+s+'</p>';}).join("")+'</div>';
+    var ans=bad===0?"No mistake":"Line "+bad;
+    return C(nm+" expanded and simplified this. Which line has the first mistake?",frame,ans,["Line 1","Line 2","Line 3","No mistake"].filter(function(x){return x!==ans;}),
+      "Correct working: "+fmtList(e1)+" → "+fmtList([[k1,v],[-k2,v],[k1*a,""],[-k2*b,""]])+" → "+fmtStd(mapOf(e1))+"."+(bad===1?" Line 1: "+M+k2+" × "+br(b)+" = "+num(-k2*b)+".":bad===2?" Line 2: a term changed its sign when it moved. Each term keeps its own sign.":bad===3?" Line 3: the "+v+" terms were collected wrongly.":" Every line is right."),
+      frame+": "+ans,html,{t:"line",frame:frame,after:true});
+  }
+  function qSubBr(){
+    var v="x",a=nz(-6,6),b=nz(-6,6),x=-ri(1,5),A=lin(v,1,a),B=lin(v,1,b),ans=(x+a)*(x+b),sqr=Math.random()<.3;
+    if(sqr){B=A;b=a;ans=(x+a)*(x+a);}
+    var frame=sqr?sq(A):pr(A,B);
+    return QN("Find the value when "+v+" = "+num(x)+":",frame,ans,[(x+a)+(x+b),-ans,sqr?x*x+a*a:x*x+a*b,(Math.abs(x)+a)*(Math.abs(x)+b)],
+      "Put "+num(x)+" in each bracket: ("+num(x)+(a<0?" "+M+" "+(-a):" + "+a)+") = "+num(x+a)+(sqr?"; squared: "+br(x+a)+"² = "+ans+".":" and ("+num(x)+(b<0?" "+M+" "+(-b):" + "+b)+") = "+num(x+b)+". Multiply: "+br(x+a)+" × "+br(x+b)+" = "+num(ans)+"."),"",{t:"sub",vals:[[v,x]]});
+  }
+
+  var MAKERS={
+    blast:[qSingle,qSingle,qSingle,qVarOut,qVarOut,qMulTerms,qMulTerms,qMinus,qTwoBr,qTwoBr,qArea1],
+    double:[qDouble,qDouble,qDouble,qDouble2,qDouble2,qGrid,qMiddle,qLetters,qRectArea],
+    square:[qSq,qSq,qSq,qSq2,qDiff,qDiff,qWhichSq,qTri],
+    slip:[qClaim,qClaim,qClaim,qLine,qLine,qSubBr],
+    mixed:[qSingle,qVarOut,qMulTerms,qMinus,qTwoBr,qArea1,qDouble,qDouble2,qGrid,qMiddle,qLetters,qRectArea,qSq,qSq2,qDiff,qWhichSq,qTri,qClaim,qLine,qSubBr]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="blast"||m==="double")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="blast"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="blast"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
