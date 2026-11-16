@@ -11,4 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-(nobody)
+- 2026-11-16 19:10 · Maths Order 15 Algebra 2 (Bracket Blaster) · maths-a
