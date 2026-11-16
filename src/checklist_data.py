@@ -49,7 +49,7 @@ MATHS = [
   ("1st year","Summer","Statistics 1: questions, data & tables","SP.3a, SP.3b, SP.3c","Data Detective","data-detective.html","statistics-questions-data-tables"),
   ("1st year","Summer","Geometry 1: lines, angles & triangles","GT.3b, GT.3c","Angle Chase","angle-chase.html","lines-angles-triangles"),
   ("1st year","Summer","Constructions","GT.3a","Construction Steps","construction-steps.html","constructions"),
-  ("2nd year","Autumn","Algebra 2: expanding & simplifying","AF.3a, AF.3b","Bracket Blaster","",""),
+  ("2nd year","Autumn","Algebra 2: expanding & simplifying","AF.3a, AF.3b","Bracket Blaster","bracket-blaster.html","algebra-expanding-simplifying"),
   ("2nd year","Autumn","Linear equations","AF.2c, AF.4, U.3","Balance It","",""),
   ("2nd year","Autumn","Indices & standard form","N.1c, N.1f","Power Up","",""),
   ("2nd year","Autumn","Money 1: bills, VAT, profit & loss","N.2c","Shop Keeper","",""),
