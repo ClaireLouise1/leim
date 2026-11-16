@@ -23,7 +23,8 @@ DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the 
         "share-it-out.html": "sharing money in a ratio (bar models), simplifying ratios, recipes and the unitary method, map scales, best buys and absolute v relative comparison, with an Exam corner of exam-style questions.",
         "like-term-sweep.html": "collecting like terms (with x² and minus signs), algebra tiles, writing expressions from words, substituting negative numbers and spotting equal expressions, with an Exam corner of exam-style questions.",
         "pattern-builder.html": "matchstick and tile patterns, the common difference, the general term Tₙ, far-away terms, tables and graphs, start value and rate of change, with an Exam corner of exam-style questions.",
-        "clock-dash.html": "the 24-hour clock, reading clock faces, time differences by counting on, metric units of length, mass and capacity, hours and minutes as decimals, and Cork bus timetables, with an Exam corner of exam-style questions."}
+        "clock-dash.html": "the 24-hour clock, reading clock faces, time differences by counting on, metric units of length, mass and capacity, hours and minutes as decimals, and Cork bus timetables, with an Exam corner of exam-style questions.",
+        "spin-and-predict.html": "the probability scale, equally likely outcomes with dice, cards, counters and spinners, P(not A), listing sample spaces, two-way tables and tree diagrams, with an Exam corner of exam-style questions."}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]
@@ -99,6 +100,7 @@ main = f'''<main id="main">
       <a class="card" href="https://payhip.com/b/JjUGh" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Variables &amp; Expressions Teacher Pack · €5</h3><p>Think of a Number, Algebra Tiles Match cards, Algebra Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/TqQer" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Linear Patterns &amp; Sequences Teacher Pack · €5</h3><p>Build It matchstick task, Pattern Detectives cards, Pattern Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/BEKe8" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Units, Time &amp; Timetables Teacher Pack · €5</h3><p>Unit Line-Up cards, Timetable Swap A/B, Time Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
+      <a class="card" href="https://payhip.com/b/JEfN5" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Probability Teacher Pack · €5</h3><p>Probability Line-Up cards, Fair Game? two-dice cards, Probability Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
     </div>
   </div>
 </section>
