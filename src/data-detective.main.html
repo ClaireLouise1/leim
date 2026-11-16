@@ -1,0 +1,146 @@
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Data Detective</h1>
+        <p>Sort data into the four types, spot the biased survey question and the unfair sample, read tally marks and frequency tables, and plan a statistical investigation like the one in your CBA. Is the time to run 100 m counted or measured? Is "Don't you agree…?" a fair question? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="detective"><div><b>Data Detective</b><span>Nominal, ordinal, discrete or continuous? Sort the data</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fair"><div><b>Fair or biased?</b><span>Leading questions, good samples, population v sample, census, primary v secondary</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tally"><div><b>Tally &amp; tables</b><span>Count the answers, read tally marks, fill in frequency tables, group the data</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="plan"><div><b>Plan the investigation</b><span>The four stages, the best way to collect data, good answer boxes</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Data Detective, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: SP.3a, SP.3b, SP.3c (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Statistics: questions, data &amp; tables</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at the answers in each list. Could a person have an answer <b>in between</b> two of them?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Number of brothers and sisters: 0, 1, 2, 3, 2, 1</li>
+          <li class="note">Height: 1.52 m, 1.61 m, 1.48 m, 1.57 m</li>
+          <li class="note">Goals scored in a match: 0, 3, 1, 2</li>
+          <li class="note">Time to run 100 m: 13.2 s, 14.05 s, 12.87 s</li>
+        </ul>
+        <p style="margin-top:10px">Which lists can only be whole numbers? Which could be 1.555 m or 13.4172 s? What is the difference in how the data were got?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Nobody has 2.5 brothers and you can't score 1.5 goals: those answers are <b>counted</b>, so they are <b>discrete</b>. Height and time are <b>measured</b>, so any value in a range is possible (a better stopwatch just gives more decimal places): they are <b>continuous</b>. Ask yourself: <b>did I count it or measure it?</b></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The four types of data</h3>
+        <div class="note"><b>Categorical (words or categories)</b><br><b>Nominal:</b> no natural order. Favourite sport, eye colour, county, how you travel to school.<br><b>Ordinal:</b> a natural order. T-shirt size (S, M, L), mild / medium / hot, strongly agree → strongly disagree, star ratings.</div>
+        <div class="note" style="margin-top:8px"><b>Numerical (numbers)</b><br><b>Discrete:</b> counted, only certain values. Number of siblings, goals, text messages.<br><b>Continuous:</b> measured, any value in a range. Height, mass, time, temperature, distance.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Asking a statistical question</h3>
+        <p>A <b>statistical question</b> expects the answers to <b>vary</b>, so you need to collect data to answer it. "How many hours of sleep do students in my class get?" is statistical. "How tall am I?" or "What time does school start?" have one fixed answer, so they are not.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Population, sample and census</h3>
+        <ul>
+          <li>The <b>population</b> is everyone (or everything) you want to know about: all 650 students in the school.</li>
+          <li>A <b>sample</b> is the smaller group you actually ask: 40 of those students.</li>
+          <li>A <b>census</b> collects data from <b>every</b> member of the population. (Ireland's Census asks every household.)</li>
+          <li>A <b>random sample</b> gives everyone the same chance of being picked: names out of a hat, a random number generator, every 10th name on the full list.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Bias: keep it fair</h3>
+        <div class="note"><b>Biased sample.</b> Asking only one kind of person. To find out how much exercise 2nd years do, asking the basketball team, or people coming out of the gym, gives results that are too high.</div>
+        <div class="note" style="margin-top:8px"><b>Leading question.</b> A question that pushes people towards an answer: "Don't you agree that homework is a waste of time?", "Surely…", "Everyone knows…", "How much do you love…?". Fair version: "How do you feel about the amount of homework you get?"</div>
+        <div class="note" style="margin-top:8px"><b>Answer boxes.</b> For "How many books did you read last year?": <b>0–2 · 3–5 · 6–8 · 9 or more</b>. No overlaps (0–2, 2–4 puts 2 in two boxes), no gaps, and every answer has a box, including 0 and big numbers.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Collecting the data</h3>
+        <ul>
+          <li><b>Primary data:</b> you collect it yourself. <b>Secondary data:</b> someone else already collected it (Met Éireann, the CSO, a website, a newspaper).</li>
+          <li><b>Survey / questionnaire:</b> ask people. <b>Observation:</b> watch and count (cars passing the gate). <b>Experiment:</b> change one thing and measure what happens (paper planes with bigger wings). <b>Existing data:</b> look it up.</li>
+        </ul>
+        <div class="note" style="margin-top:8px"><b>The four stages of a statistical investigation:</b> 1. Pose a question → 2. Collect the data → 3. Analyse the data (tables, charts) → 4. Interpret the results (answer your question, and say what limits your answer). This is exactly what you do in CBA 2.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Tally marks and frequency tables</h3>
+        <p>Go through the raw data <b>once</b>, making a tally mark for each answer (cross it off so it isn't counted twice). Every fifth mark goes across the other four, so you can count in fives. The <b>frequency</b> is how many times each answer comes up. The frequencies add up to the total number asked.</p>
+        <table style="border-collapse:collapse;margin:8px auto;font-size:16px;min-width:0;width:auto">
+          <tr><th style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0">Transport</th><th style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0">Tally</th><th style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0">Frequency</th></tr>
+          <tr><td style="border:1px solid #D1D5DB;padding:5px 12px">Walk</td><td style="border:1px solid #D1D5DB;padding:5px 12px;letter-spacing:2px"><span style="text-decoration:line-through;text-decoration-color:#D9534F;text-decoration-thickness:2px">||||</span> ||</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">7</td></tr>
+          <tr><td style="border:1px solid #D1D5DB;padding:5px 12px">Bus</td><td style="border:1px solid #D1D5DB;padding:5px 12px;letter-spacing:2px"><span style="text-decoration:line-through;text-decoration-color:#D9534F;text-decoration-thickness:2px">||||</span> <span style="text-decoration:line-through;text-decoration-color:#D9534F;text-decoration-thickness:2px">||||</span> |</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">11</td></tr>
+          <tr><td style="border:1px solid #D1D5DB;padding:5px 12px">Car</td><td style="border:1px solid #D1D5DB;padding:5px 12px;letter-spacing:2px">||||</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">4</td></tr>
+          <tr><td style="border:1px solid #D1D5DB;padding:5px 12px"><b>Total</b></td><td style="border:1px solid #D1D5DB;padding:5px 12px"></td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center"><b>22</b></td></tr>
+        </table>
+        <p>With lots of different numbers, <b>group</b> them in classes of equal width: 0–9, 10–19, 20–29… Each value goes in exactly one class (27 goes in 20–29).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>This is the start of every statistics question, and it is what <b>CBA 2 (the Statistical Investigation)</b> is built on. Expect to <b>name the type of data</b>, say whether a <b>sample or question is biased</b> and how to fix it, <b>fill in a frequency table</b> from raw data, and <b>suggest a question</b> or a way to collect data for an investigation. (Charts and averages come later, in Statistics 2.)</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use both words.</b> "Categorical" alone is half an answer: say <b>categorical nominal</b> or <b>categorical ordinal</b>, <b>numerical discrete</b> or <b>numerical continuous</b>.</li>
+            <li><b>Give a reason.</b> "Biased" earns little on its own; say <b>who is left out</b> ("only asks people at the gym, who probably exercise more").</li>
+            <li><b>Check the total.</b> The frequencies must add up to the number of people asked.</li>
+            <li><b>Make questions answerable.</b> A fair, clear question with answer boxes that don't overlap and include every answer.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Name the data.</b> Say what type of data each gives: (a) the number of goals in each match, (b) each student's favourite type of music, (c) the time each student takes to solve a puzzle, (d) the size of pizza each customer orders (small, medium, large).
+              <details><summary>Show the worked answer</summary><p>(a) <b>Numerical discrete</b> (counted). (b) <b>Categorical nominal</b> (no order). (c) <b>Numerical continuous</b> (measured). (d) <b>Categorical ordinal</b> (small → medium → large).</p></details></li>
+            <li><b>A cycle lane survey.</b> Cork City Council wants to know what adults in the city think of a new cycle lane. A worker asks 50 people cycling in the lane one morning. (a) What is the population? (b) Explain why the sample is biased. (c) Describe a better way to choose the sample. (d) Rewrite this question so it is fair: "Isn't the new cycle lane a great idea?"
+              <details><summary>Show the worked answer</summary><p>(a) <b>All adults living in Cork city.</b><br>(b) People cycling in the lane are likely to <b>like it</b>; drivers, walkers and people who don't use it are left out.<br>(c) Pick adults <b>at random from a list of everyone in the city</b>, at different times and places, and ask more of them.<br>(d) For example: "<b>What do you think of the new cycle lane?</b>" with boxes from "very good" to "very poor".</p></details></li>
+            <li><b>Tally it up.</b> 20 students said how they travel to school: W, B, B, C, W, B, Bi, W, B, C, B, W, B, Bi, B, W, C, B, W, B (W = walk, B = bus, C = car, Bi = bike). (a) Make a frequency table with a tally column. (b) What fraction of the students take the bus? (c) What type of data is this?
+              <details><summary>Show the worked answer</summary><p>(a) Walk 6, Bus 9, Car 3, Bike 2 (total 20 ✓).<br>(b) <b>9/20</b>.<br>(c) <b>Categorical nominal</b>.</p></details></li>
+            <li><b>Plan an investigation.</b> Saoirse thinks students who play sport sleep longer than students who don't. (a) Write a statistical question she could investigate. (b) What data should she collect, and what type is each? (c) How could she choose a fair sample from her school of 600? (d) Name one stage that comes after collecting the data.
+              <details><summary>Show the worked answer</summary><p>(a) For example: "<b>Do students in my school who play sport sleep longer on school nights than students who don't?</b>"<br>(b) Whether each student plays sport (<b>categorical nominal</b>: yes / no) and how long they slept (<b>numerical continuous</b>).<br>(c) A <b>random sample</b>, e.g. 60 names picked with a random number generator from the full school list, with every year group included.<br>(d) <b>Analyse the data</b> (tables and charts), then <b>interpret the results</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/statistics-questions-data-tables-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Statistics Teacher Pack (€5)</a>: Data Sort cards, Fix the Survey, Class Survey, Data Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

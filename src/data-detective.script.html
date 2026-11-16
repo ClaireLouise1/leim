@@ -1,0 +1,322 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}
+  function F(n,d){var g=gcd(n,d);return [n/g,d/g];}
+  function fstr(f){f=F(f[0],f[1]);return f[0]===0?"0":f[0]===f[1]?"1":f[0]+"/"+f[1];}
+  function fval(f){return f[0]/f[1];}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // whole-number answer: slips first, then near misses; never negative, never equal to the answer
+  function Q(en,frame,ans,slips,why,html,data){
+    var pads=[ans+1,ans-1,ans+2,ans-2,ans+3,ans*2],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<0||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(String(x));}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  // fraction answer: wrong options are dropped if EQUAL IN VALUE to the answer or outside 0–1
+  function QF(en,frame,ans,slips,why,html,data){
+    var a=F(ans[0],ans[1]),pads=[[a[0]+1,a[1]],[a[0]-1,a[1]],[a[0],a[1]+1],[a[0],a[1]-1],[a[1]-a[0],a[1]],[a[0]+2,a[1]],[a[0],a[1]+2],[a[0]+1,a[1]+2]],seen={},w=[];
+    seen[fval(a).toFixed(9)]=1;
+    slips.concat(pads).forEach(function(f){if(!f||f[1]<=0||f[0]<=0||f[0]>=f[1]||f[0]!==Math.round(f[0])||f[1]!==Math.round(f[1]))return;
+      var k=fval(f).toFixed(9);if(!seen[k]&&w.length<3){seen[k]=1;w.push(fstr(f));}});
+    return {en:en,frame:frame,html:html||"",answer:fstr(a),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+fstr(a),data:data||{}};}
+
+  /* ---------- types of data ---------- */
+  var NOM="Categorical nominal",ORD="Categorical ordinal",DIS="Numerical discrete",CON="Numerical continuous",TYPES=[NOM,ORD,DIS,CON];
+  var WHY={};
+  WHY[NOM]="Categorical nominal: the answers are words (categories) with no natural order.";
+  WHY[ORD]="Categorical ordinal: the answers are categories that have a natural order (small → large, never → always).";
+  WHY[DIS]="Numerical discrete: the answers are COUNTED, so only certain values (whole numbers) are possible.";
+  WHY[CON]="Numerical continuous: the answers are MEASURED, so any value in a range is possible (1.62 m, 13.47 s).";
+  var VARS={};
+  VARS[NOM]=["the favourite sport of each student in 1st year","the colour of each car in the school car park","the county each player on a GAA panel was born in",
+    "how each student travels to school (walk, bus, car or bike)","the type of pet each family in the class owns","the eye colour of each student in a class",
+    "each student's favourite school subject","the brand of each phone in the class","the language each student studies (French, German or Spanish)",
+    "whether or not each student has a part-time job (yes or no)","the flavour of crisps each student prefers","the type of tree in each garden on a road"];
+  VARS[ORD]=["the T-shirt size each student orders (S, M, L or XL)","each student's Junior Cycle grade in Maths (Distinction, Higher Merit, Merit…)",
+    "how much each student agrees with \"School should start at 10 a.m.\" (strongly agree to strongly disagree)","the star rating (1 to 5 stars) each customer gives a café",
+    "the finishing position of each runner in a race (1st, 2nd, 3rd…)","the year each student is in (1st, 2nd or 3rd year)",
+    "how spicy each person likes their curry (mild, medium or hot)","how often each student reads for fun (never, sometimes, often or always)",
+    "the size of coffee each customer buys (small, medium or large)"];
+  VARS[DIS]=["the number of brothers and sisters each student has","the number of goals scored in each match of a season","the number of text messages each student sent yesterday",
+    "the number of cars passing the school gate each minute","the number of people living in each house on a street","the number of points a team scores in each GAA match",
+    "the number of letters in each student's first name","the number of books each student read over the summer","the number of days each student was absent last term",
+    "the number of correct answers each student got in a 20-question quiz"];
+  VARS[CON]=["the height of each student in a class","the mass of each newborn baby in a hospital","the time each runner takes to finish a 100 m race",
+    "the time each student takes to travel to school","the length of each student's foot","the temperature in Cork at noon each day in June",
+    "the arm span of each student","the amount of rain that falls in Galway each day","the distance each student lives from school",
+    "the time each student spends on homework each night","the mass of each apple in a box","how far each student can throw a ball"];
+  function typeOf(v){for(var i=0;i<4;i++)if(VARS[TYPES[i]].indexOf(v)>=0)return TYPES[i];}
+  function qType(){
+    var t=rnd(TYPES),v=rnd(VARS[t]);
+    return C("What type of data is this?",cap(v)+".",t,TYPES.filter(function(x){return x!==t;}),WHY[t],cap(v)+" → "+t,"",{t:"type"});}
+  function qWhich(){
+    var k=ri(0,5),en,pick,others,why;
+    if(k===0){pick=rnd(VARS[DIS].concat(VARS[CON]));others=shuffle(VARS[NOM].concat(VARS[ORD])).slice(0,3);en="Which of these gives NUMERICAL data?";why="Numerical data are numbers (counted or measured). The other three give words or categories.";}
+    else if(k===1){pick=rnd(VARS[NOM].concat(VARS[ORD]));others=shuffle(VARS[DIS].concat(VARS[CON])).slice(0,3);en="Which of these gives CATEGORICAL data?";why="Categorical data are words or categories. The other three give numbers.";}
+    else{var t=TYPES[k-2];pick=rnd(VARS[t]);others=[];TYPES.forEach(function(x){if(x!==t)others.push(rnd(VARS[x]));});en="Which of these gives "+t.toUpperCase()+" data?";why=WHY[t];}
+    return C(en,"",cap(pick),others.map(cap),why,en+" → "+cap(pick),"",{t:"which"});}
+  var VALS={};
+  VALS[NOM]=[["Hurling","Soccer","Rugby","Camogie","Gaelic football"],["Red","Blue","Silver","Black","White"],["Walk","Bus","Car","Bike"],["Cork","Kerry","Limerick","Clare","Waterford"],["Dog","Cat","Rabbit","Goldfish"]];
+  VALS[ORD]=[["Small","Medium","Large"],["Mild","Medium","Hot"],["Never","Sometimes","Often","Always"],["Strongly agree","Agree","Disagree","Strongly disagree"],["Distinction","Higher Merit","Merit","Achieved"]];
+  function sampleVals(t){
+    var n=ri(5,6),o=[];
+    if(t===NOM||t===ORD){var s=rnd(VALS[t]);for(var i=0;i<n;i++)o.push(rnd(s));while(new Set(o).size<2)o[0]=rnd(s);return o;}
+    if(t===DIS){var top=rnd([4,6,10,25]);for(var j=0;j<n;j++)o.push(String(ri(0,top)));return o;}
+    var u=rnd([["m",1.4,1.8,2],["kg",2.6,4.4,2],["s",11,16,2],["°C",12,21,1],["cm",21,27,1]]);
+    for(var k=0;k<n;k++){var x=(u[1]+Math.random()*(u[2]-u[1])).toFixed(u[3]);if(x.slice(-1)==="0")x=x.slice(0,-1)+ri(1,9);o.push(x+" "+u[0]);}
+    return o;}
+  function qValues(){
+    var t=rnd(TYPES),v=sampleVals(t);
+    return C("Here are some answers from a survey. What type of data are they?",v.join(", "),t,TYPES.filter(function(x){return x!==t;}),
+      WHY[t]+(t===CON?" The decimals show these were measured.":t===DIS?" No decimals: these were counted.":""),v.join(", ")+" → "+t,"",{t:"values"});}
+
+  /* ---------- fair or biased ---------- */
+  var FAIRQ=["What is your favourite sport?","How many hours of sleep did you get last night?","How do you usually travel to school?","Which school subject do you like most?",
+    "How many pieces of fruit did you eat yesterday?","What do you think of the new canteen menu?","How many minutes do you spend on homework on a school night?","Which county were you born in?"];
+  var LEADQ=["Don't you agree that homework is a waste of time?","Most students love the new canteen. Do you like it too?","Wouldn't a longer lunch break be great?",
+    "Do you agree that soccer is more exciting than boring old rugby?","Surely you think phones should be allowed in class?","Isn't Cork the best county in Ireland?",
+    "Everyone knows fizzy drinks are bad for you. How many do you drink a day?","How much do you love the new school uniform?"];
+  function qLeading(){
+    if(Math.random()<.5){var a=rnd(LEADQ);
+      return C("Which survey question is BIASED (it pushes people towards an answer)?","",a,shuffle(FAIRQ.slice()).slice(0,3),
+        "A leading question tells people what to think (\"Don't you agree…\", \"Surely…\", \"Everyone knows…\"). Fair questions are neutral.","Biased question → "+a,"",{t:"lead",want:"biased"});}
+    var f=rnd(FAIRQ);
+    return C("Which survey question is FAIR (it doesn't push people towards an answer)?","",f,shuffle(LEADQ.slice()).slice(0,3),
+      "A fair question is neutral. The others lead people (\"Don't you agree…\", \"Wouldn't…\", \"Isn't…\") or use loaded words like \"love\" or \"boring\".","Fair question → "+f,"",{t:"lead",want:"fair"});}
+  var SCEN=[
+    ["Ciara","how many hours of exercise 2nd years in her school do each week","30 2nd years picked at random from the full 2nd-year class lists",
+      ["the 2nd years on the school basketball team","her own group of friends","the first 30 2nd years coming out of the gym","2nd years who answer a poll on the sports club's Instagram page"]],
+    ["Eoin","how students in his school travel to school","every 10th name on the full school roll",
+      ["the students waiting at the bus stop after school","the students in his own class","the students who leave bikes in the bike shed","students he meets in the school car park at 8:45"]],
+    ["Niamh","how much time 1st years spend on their phones each day","40 1st years picked by drawing names out of a hat with every 1st-year name in it",
+      ["the 1st years in the computer club","1st years who volunteer to answer at lunchtime","the 1st years in her group chat","1st years who are in the library at lunchtime"]],
+    ["Cork City Council","what adults in Cork city think of a new cycle lane","300 adults picked at random from the list of everyone living in the city",
+      ["people cycling in the new lane","members of a Cork cycling club","drivers stuck in traffic beside the lane","the first 20 people who reply on the council's Facebook page"]],
+    ["Darragh","the favourite type of music of students in his school","10 students picked at random from every year group",
+      ["the students at the school's trad session","the members of the school choir","the students in his own year only","his teammates on the hurling team"]],
+    ["Saoirse","how many books students in her school read over the summer","50 students picked at random from the whole school with a random number generator",
+      ["students in the library at lunchtime","the members of the book club","the students in her English class","students who return a questionnaire left in the library"]]];
+  function qSample(){
+    var s=rnd(SCEN);
+    return C(s[0]+" wants to find out "+s[1]+". Which sample is best?","",cap(s[2]),s[3].map(cap),
+      "A good sample is picked at random from the WHOLE population, so everyone has the same chance of being picked. The others only ask one kind of person, so the results are biased.",
+      s[0]+": best sample → "+s[2],"",{t:"sample"});}
+  var POPS=[["Eoin","students in his school","students","how they travel to school","he",["the students who walk to school","Eoin's own class"]],
+    ["A café owner","customers on her loyalty list","customers","what they think of a new menu","she",["the customers who order coffee","the café staff"]],
+    ["Aoife","members of her GAA club","members","how many hours they train each week","she",["the club's under-14 team","the club coaches"]],
+    ["A cinema manager","people who bought tickets last month","people","how they rate the cinema","he",["the people who bought popcorn","the cinema staff"]]];
+  function qPop(){
+    var p=rnd(POPS),N=ri(12,90)*10,n=rnd([20,25,30,40,50,60]),popQ=Math.random()<.5,
+      A="All "+N+" "+p[1],B="The "+n+" "+p[2]+" "+p[4]+" asked";
+    return C(p[0]+" asks "+n+" of the "+N+" "+p[1]+" "+p[3]+". What is the "+(popQ?"POPULATION":"SAMPLE")+"?","",popQ?A:B,[popQ?B:A,cap(p[5][0]),cap(p[5][1])],
+      "The population is EVERYONE you want to know about ("+N+" "+p[2]+"). The sample is the smaller group you actually ask ("+n+").",
+      p[0]+": "+(popQ?"population":"sample")+" → "+(popQ?A:B),"",{t:"pop",popQ:popQ,N:N,n:n});}
+  var STATQ=["How many hours of sleep do students in my class get on a school night?","What is the most popular sport among 1st years in my school?",
+    "How long does it take students in my year to travel to school?","How many pets do families on my road have?","How tall are the students in my class?",
+    "How much pocket money do 2nd years in my school get each week?"];
+  var NONSTATQ=["How tall am I?","What time does school start on Monday?","How many students are in my class?","What is the capital of Ireland?",
+    "How many days are in March?","What was my score in yesterday's Maths test?","How old is my brother?"];
+  function qStatQ(){
+    var a=rnd(STATQ);
+    return C("Which of these is a STATISTICAL question (one where you'd expect the answers to vary)?","",a,shuffle(NONSTATQ.slice()).slice(0,3),
+      "A statistical question needs data from lots of people or things, and the answers will vary. The others have one fixed answer you can just look up or measure once.",
+      "Statistical question → "+a,"",{t:"statq"});}
+  var PRIM=["A questionnaire you hand out to your class","Timing your friends running 100 m","Counting the cars that pass the school gate","Measuring the height of every student in your class","Asking people at the bus stop how long they waited"];
+  var SECD=["Rainfall figures downloaded from Met Éireann","County populations from the CSO website","Last season's League of Ireland results from a sports website","House prices from a newspaper article","Exam results published on the Department of Education website"];
+  function qSource(){
+    var pr=Math.random()<.5,a=rnd(pr?PRIM:SECD);
+    return C("Which of these is "+(pr?"PRIMARY data (you collect it yourself)":"SECONDARY data (someone else collected it)")+"?","",a,shuffle((pr?SECD:PRIM).slice()).slice(0,3),
+      "Primary data: you collect it yourself (survey, count, measure). Secondary data: already collected by someone else (Met Éireann, the CSO, a website, a newspaper).",
+      (pr?"Primary":"Secondary")+" data → "+a,"",{t:"source",want:pr?"primary":"secondary"});}
+  function qCensus(){
+    var N=ri(30,95)*10,n=rnd([20,30,40,50]),c=rnd([["a school","students"],["a sports club","members"],["a village","adults"]]);
+    var a="Asking every one of the "+N+" "+c[1]+" in "+c[0];
+    return C("Which of these is a CENSUS?","",a,["Asking "+n+" "+c[1]+" picked at random","Asking the first "+n+" "+c[1]+" you meet","Asking the "+c[1]+" who reply to an online poll"],
+      "A census collects data from EVERY member of the population (Ireland's census asks every household). A sample asks only some of them.","Census → "+a,"",{t:"census",N:N});}
+
+  /* ---------- tally & tables ---------- */
+  var INK="#1B2430";
+  function tallySVG(n){ // every stroke is <line class="tk">
+    var g=Math.ceil(n/5),W=24+g*52,o='<svg viewBox="0 0 '+W+' 70" width="100%" style="max-width:'+Math.min(380,Math.round(W*1.5))+'px" role="img" aria-label="Tally marks">';
+    for(var i=0;i<g;i++){var x0=14+i*52,k=Math.min(5,n-i*5);
+      for(var j=0;j<Math.min(4,k);j++)o+='<line class="tk" x1="'+(x0+j*10)+'" y1="12" x2="'+(x0+j*10)+'" y2="58" stroke="'+INK+'" stroke-width="3.5" stroke-linecap="round"/>';
+      if(k===5)o+='<line class="tk" x1="'+(x0-6)+'" y1="50" x2="'+(x0+36)+'" y2="20" stroke="#D9534F" stroke-width="3.5" stroke-linecap="round"/>';}
+    return o+'</svg>';}
+  function freqHTML(head,cats,fs,hide){ // <table class="ftab">: first column category, second frequency
+    var td='style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center"',hl='style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center;background:#FFF4CC"',
+      th='style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0;font-size:14px;background:#E8F2EC;color:#1B2430"';
+    var o='<table class="ftab" style="border-collapse:collapse;margin:0 auto 10px;font-size:16px;font-weight:700;min-width:0;width:auto"><tr><th '+th+'>'+head+'</th><th '+th+'>Frequency</th></tr>';
+    cats.forEach(function(c,i){var h=hide===i;o+='<tr><td '+td+'>'+c+'</td><td '+(h?hl:td)+'>'+(h?"?":fs[i])+'</td></tr>';});
+    return o+'</table>';}
+  var SURVEYS=[["How students travel to school","Transport",["Walk","Bus","Car","Bike"],"students","said"],["Favourite sport of 1st years","Sport",["Hurling","Soccer","Rugby","Camogie","Gaelic football"],"1st years","said"],
+    ["Pets owned by a class","Pet",["Dog","Cat","Rabbit","Goldfish"],"students","said"],["Favourite crisp flavour","Flavour",["Cheese & onion","Salt & vinegar","Plain","Smoky bacon"],"students","said"],
+    ["Colour of cars in a car park","Colour",["Silver","Black","White","Red","Blue"],"cars","were"]];
+  function survey(k){var s=rnd(SURVEYS),cats=s[2].slice(0,k||s[2].length),fs;do{fs=cats.map(function(){return ri(1,12);});}while(new Set(fs).size<2);return {s:s,cats:cats,fs:fs,N:fs.reduce(function(a,b){return a+b;},0)};}
+  function qCount(){
+    var s=rnd(SURVEYS),n=ri(14,20),list=[];for(var i=0;i<n;i++)list.push(rnd(s[2]));
+    var c=rnd(list),cnt=list.filter(function(x){return x===c;}).length;
+    return Q(s[0]+": here are the results for "+n+" "+s[3]+". How many "+s[3]+" "+s[4]+" "+c+"?",list.join(", "),cnt,[cnt+1,cnt-1,n-cnt],
+      "Go through the list once and tally each answer as you go (cross it off so you don't count it twice). "+c+": "+cnt+".","",{t:"count",c:c});}
+  function qTally(){
+    var n=ri(3,24),g=Math.floor(n/5),r=n%5;
+    return Q("What frequency do these tally marks show?","",n,[g*4+r,g+r,n+g,g*6+r].filter(function(x){return x!==n;}),
+      "Each gate (four lines with one across) is 5. "+g+" × 5"+(r?" + "+r:"")+" = "+n+".",tallySVG(n),{t:"tally"});}
+  function qTotal(){
+    var v=survey();
+    return Q(v.s[0]+". How many "+v.s[3]+" are in the survey altogether?","",v.N,[v.cats.length,Math.max.apply(null,v.fs),v.N-v.fs[0]],
+      "Add the frequencies: "+v.fs.join(" + ")+" = "+v.N+".",freqHTML(v.s[1],v.cats,v.fs),{t:"total"});}
+  function qMore(){
+    var v=survey(),i,j;do{i=ri(0,v.cats.length-1);j=ri(0,v.cats.length-1);}while(v.fs[i]<=v.fs[j]);
+    var d=v.fs[i]-v.fs[j];
+    return Q(v.s[0]+". How many more "+v.s[3]+" "+v.s[4]+" "+v.cats[i]+" than "+v.cats[j]+"?","",d,[v.fs[i]+v.fs[j],v.fs[i],v.fs[j]],
+      v.cats[i]+" "+v.fs[i]+" − "+v.cats[j]+" "+v.fs[j]+" = "+d+".",freqHTML(v.s[1],v.cats,v.fs),{t:"more",a:v.cats[i],b:v.cats[j]});}
+  function qMissingF(){
+    var v=survey(),h=ri(0,v.cats.length-1),rest=v.N-v.fs[h];
+    return Q(v.s[0]+": "+v.N+" "+v.s[3]+" were asked. What number goes in the yellow box?","",v.fs[h],[rest,v.N-rest+1,Math.round(v.N/v.cats.length)],
+      "The frequencies must add up to "+v.N+". The others add to "+rest+", so "+v.N+" − "+rest+" = "+v.fs[h]+".",freqHTML(v.s[1],v.cats,v.fs,h),{t:"missing",N:v.N});}
+  function qFrac(){
+    var v=survey(),i=ri(0,v.cats.length-1);
+    if(v.fs[i]===v.N)return qFrac();
+    var p=[v.fs[i],v.N];
+    return QF(v.s[0]+". What fraction of the "+v.s[3]+" "+v.s[4]+" "+v.cats[i]+"? (Simplest form.)","",p,[[v.fs[i],v.N-v.fs[i]],[v.N-v.fs[i],v.N],[1,v.cats.length],[v.fs[i]+1,v.N],[v.fs[i]-1,v.N],[v.fs[i],v.N+v.fs[i]]],
+      v.cats[i]+": "+v.fs[i]+" out of a total of "+v.N+" = "+v.fs[i]+"/"+v.N+(gcd(v.fs[i],v.N)>1?" = "+fstr(p):"")+". Divide by the TOTAL, not the rest.",freqHTML(v.s[1],v.cats,v.fs),{t:"frac",c:v.cats[i]});}
+  function qPopular(){
+    var v,top,least=Math.random()<.35;
+    do{v=survey();top=least?Math.min.apply(null,v.fs):Math.max.apply(null,v.fs);}while(v.fs.filter(function(f){return f===top;}).length>1);
+    var a=v.cats[v.fs.indexOf(top)];
+    return C(v.s[0]+". Which answer came up "+(least?"LEAST":"MOST")+" often?","",a,v.cats.filter(function(c){return c!==a;}),
+      "Look down the frequency column for the "+(least?"smallest":"biggest")+" number: "+top+" ("+a+").",v.s[0]+": "+(least?"least":"most")+" often → "+a,freqHTML(v.s[1],v.cats,v.fs),{t:"popular",least:least});}
+  function classes(w,k){var o=[];for(var i=0;i<k;i++)o.push([i*w,(i+1)*w-1]);return o;}
+  function clab(c){return c[0]+"–"+c[1];}
+  function qClass(){
+    var w=rnd([5,10]),cs=classes(w,5),x=ri(0,5*w-1),c=cs.filter(function(c){return x>=c[0]&&x<=c[1];})[0],ctx=rnd(["sent "+x+" text messages yesterday","read "+x+" books last year","got "+x+" marks in a quiz","spent "+x+" minutes on the bus"]);
+    return C("A student "+ctx+". The results are grouped in classes "+cs.map(clab).join(", ")+". Which class does "+x+" go in?","",clab(c),cs.filter(function(z){return z!==c;}).map(clab),
+      "The class "+clab(c)+" holds every whole number from "+c[0]+" up to "+c[1]+", and "+x+" is one of them.","Which class for "+x+"? → "+clab(c),"",{t:"class",x:x});}
+  function qClassCount(){
+    var w=10,cs=classes(w,5),n=ri(12,16),list=[];for(var i=0;i<n;i++)list.push(ri(0,49));
+    var c=rnd(cs),cnt=list.filter(function(x){return x>=c[0]&&x<=c[1];}).length;
+    return Q("Here are the numbers of minutes "+n+" students spent on homework last night. How many go in the class "+clab(c)+"?",list.join(", "),cnt,[cnt+1,cnt-1,n-cnt,5],
+      "Count every value from "+c[0]+" to "+c[1]+" (both included): "+(list.filter(function(x){return x>=c[0]&&x<=c[1];}).join(", ")||"none")+". That's "+cnt+".","",{t:"classcount",lo:c[0],hi:c[1]});}
+
+  /* ---------- plan the investigation ---------- */
+  var STEPS=["Pose a question","Collect the data","Analyse the data","Interpret the results"];
+  var STAGE=[["Aoife decides to find out how long 1st years spend on homework.",0],["Cian writes the question \"Do 3rd years sleep less than 1st years?\"",0],
+    ["Niamh wonders whether students who walk to school get more exercise.",0],["Aoife hands out a questionnaire to 30 students picked at random.",1],
+    ["Cian times 20 students running 100 m.",1],["Niamh counts the cars passing the school gate for 20 minutes.",1],["Aoife draws a bar chart of her results.",2],
+    ["Cian draws a pie chart showing how students travel to school.",2],["Aoife writes: \"Most 1st years spend less than an hour on homework.\"",3],
+    ["Cian says his results answer his question, but warns that he only asked 20 students.",3]];
+  function qStage(){
+    var s=rnd(STAGE),a=STEPS[s[1]];
+    return C("A statistical investigation has four stages. Which stage is this?",s[0],a,STEPS.filter(function(x){return x!==a;}),
+      "The four stages, in order: pose a question → collect the data → analyse the data (tables, charts) → interpret the results (answer the question).",s[0]+" → "+a,"",{t:"stage"});}
+  function qNext(){
+    var i=ri(0,3);
+    if(i===0)return C("In a statistical investigation, what do you do FIRST?","",STEPS[0],STEPS.slice(1),"Always start with the question: it decides what data you need and who to ask.","First stage → "+STEPS[0],"",{t:"next",i:-1});
+    return C("In a statistical investigation, which stage comes straight after \""+STEPS[i-1]+"\"?","",STEPS[i],STEPS.filter(function(x,j){return j!==i;}),
+      "Pose a question → collect the data → analyse the data → interpret the results.","After \""+STEPS[i-1]+"\" → "+STEPS[i],"",{t:"next",i:i-1});}
+  var METH=["A survey (questionnaire)","Observation (watch and count)","An experiment","Existing data (a website or database)"];
+  var MCTX=[["the favourite type of music of 1st years",0],["how students feel about a new school rule",0],["what time students go to bed on a school night",0],
+    ["how many cars pass the school gate between 8:30 and 9:00",1],["how many people take the stairs instead of the lift in a shopping centre",1],["the colours of the cars in the school car park",1],
+    ["whether a paper plane flies further with bigger wings",2],["whether plants grow taller with plant food",2],["how quickly students can catch a falling ruler",2],
+    ["the rainfall in Cork each month for the last 10 years",3],["the population of each county in Ireland",3],["house prices in Galway over the last 5 years",3]];
+  function qMethod(){
+    var m=rnd(MCTX),a=METH[m[1]];
+    return C("What is the best way to collect data on "+m[0]+"?","",a,METH.filter(function(x){return x!==a;}),
+      "Ask people → survey. Watch and count → observation. Change something and measure what happens → experiment. Already recorded by someone else → existing data.","Data on "+m[0]+" → "+a,"",{t:"method"});}
+  var BOXQ=["How many pieces of fruit did you eat last week?","How many times did you go swimming last month?","How many books did you read last year?","How many text messages did you send yesterday?"];
+  function qBoxes(){
+    var w=rnd([2,3,5]),r=function(a,b){return a+"–"+b;};
+    var good=[r(0,w-1),r(w,2*w-1),r(2*w,3*w-1),3*w+" or more"],
+      over=[r(0,w),r(w,2*w),r(2*w,3*w),3*w+" or more"],
+      gap=[r(0,w-1),r(w+1,2*w),r(2*w+1,3*w),3*w+1+" or more"],
+      notop=[r(0,w-1),r(w,2*w-1),r(2*w,3*w-1),r(3*w,4*w-1)],
+      nozero=[r(1,w),r(w+1,2*w),r(2*w+1,3*w),3*w+1+" or more"];
+    var J=function(b){return b.join(" · ");};
+    return C("A survey asks: \""+rnd(BOXQ)+"\" Which set of answer boxes is best?","",J(good),[J(over),J(gap),J(notop),J(nozero)],
+      "Good answer boxes don't overlap, leave no gaps, and cover every possible answer, including 0 and big numbers (\"or more\"). Only "+J(good)+" does all three.",
+      "Best answer boxes → "+J(good),"",{t:"boxes"});}
+
+  var MAKERS={
+    detective:[qType,qType,qType,qWhich,qWhich,qValues],
+    fair:[qLeading,qLeading,qSample,qSample,qPop,qStatQ,qSource,qCensus],
+    tally:[qCount,qTally,qTotal,qMore,qMissingF,qFrac,qPopular,qClass,qClassCount],
+    plan:[qStage,qStage,qNext,qMethod,qMethod,qBoxes,qBoxes,qStatQ,qLeading],
+    mixed:[qType,qWhich,qValues,qLeading,qSample,qPop,qStatQ,qSource,qCensus,qCount,qTally,qTotal,qMore,qMissingF,qFrac,qPopular,qClass,qClassCount,qStage,qNext,qMethod,qBoxes]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="detective")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="detective"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="detective"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
