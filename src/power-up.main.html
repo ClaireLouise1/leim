@@ -1,0 +1,164 @@
+<main id="main">
+<style>.ix sup{font-size:.62em;font-weight:800}.prompt .ix{font-size:1.15em}.wk{font-variant-numeric:tabular-nums;line-height:1.7}.wk .r{color:var(--muted);font-size:15px}.laws{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.laws .note b.lw{display:block;font-size:19px;margin-bottom:2px}.hlt{display:inline-block;background:var(--night);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Power Up</h1>
+        <p>60 seconds. Work out powers and square roots, use the laws of indices, put BIMDAS in the right order and race through standard form. Higher Level? There's a round for zero, negative and fractional indices too. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="power"><div><b>Power Up</b><span>2⁵, (−3)² v −3², write 81 as a power of 3, which is bigger, square roots and BIMDAS with indices</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="laws"><div><b>Index laws</b><span>x³ × x⁴, 5⁹ ÷ 5³, (2³)⁴, 3x² × 4x⁵, find n, and "which one is true?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sf"><div><b>Standard form</b><span>45,000 = 4.5 × 10⁴ and back, which is in standard form, which is biggest, × and ÷ in standard form</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level powers</b><span>a⁰ = 1, 2⁻³, 27 to the power 2/3, (2x³)², 2ˣ = 1/8 and small numbers like 0.0004</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Power Up, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1c, N.1f (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Indices &amp; standard form</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Write each one out in full and count the factors:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">2³ × 2⁴ = (2 × 2 × 2) × (2 × 2 × 2 × 2) = 2<sup>?</sup></li>
+          <li class="note">3² × 3⁵ = (3 × 3) × (3 × 3 × 3 × 3 × 3) = 3<sup>?</sup></li>
+          <li class="note">x⁴ × x² = (x × x × x × x) × (x × x) = x<sup>?</sup></li>
+          <li class="note">2⁶ ÷ 2² = (2 × 2 × 2 × 2 × 2 × 2) ÷ (2 × 2) = 2<sup>?</sup></li>
+        </ul>
+        <p style="margin-top:10px">What happens to the indices when you multiply? And when you divide? Could you have got the answer without writing it all out?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">2⁷, 3⁷, x⁶ and 2⁴. When you <b>multiply</b> powers of the same number you <b>add</b> the indices (3 + 4 = 7). When you <b>divide</b>, the 2s cancel in pairs, so you <b>subtract</b> (6 − 2 = 4). These are the laws of indices, and they only work when the base is the same.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Index notation</h3>
+        <p>In 2⁵, 2 is the <b>base</b> and 5 is the <b>index</b> (or power). It means five 2s multiplied: 2⁵ = 2 × 2 × 2 × 2 × 2 = <b>32</b>, not 2 × 5 = 10.</p>
+        <ul>
+          <li>Squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144. Cubes: 1, 8, 27, 64, 125.</li>
+          <li>Powers of 10: 10³ = 1,000 (3 zeros), 10⁶ = 1,000,000 (6 zeros).</li>
+          <li><b>Minus signs:</b> (−3)² = (−3) × (−3) = 9, but −3² = −(3 × 3) = −9. The index only belongs to what it touches. (−2)³ = −8: an odd number of minuses gives a minus.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Square roots</h3>
+        <p>√49 = 7 because 7 × 7 = 49. A power of ½ means the same thing: 49<sup>½</sup> = √49 = 7.</p>
+        <ul>
+          <li>Not a perfect square? Find the squares either side: 7² = 49 and 8² = 64, so √50 is between 7 and 8 (just above 7).</li>
+          <li>√(36 + 64) = √100 = 10. It is <b>not</b> √36 + √64 = 14: do the inside first.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">BIMDAS with indices</h3>
+        <p><b>B</b>rackets, then <b>I</b>ndices (and roots), then <b>D</b>ivide/<b>M</b>ultiply, then <b>A</b>dd/<b>S</b>ubtract.</p>
+        <div class="note wk"><b>5 + 3² × 2</b><br>= 5 + 9 × 2 &nbsp;<span class="r">(indices)</span><br>= 5 + 18 &nbsp;<span class="r">(multiply)</span><br>= <b>23</b> &nbsp;<span class="r">(not 8² × 2 = 128)</span></div>
+        <p style="margin-top:8px">4 × 2³ = 4 × 8 = 32, not 8³. And (2 + 3)² = 5² = 25, not 4 + 9.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The laws of indices</h3>
+        <div class="laws">
+          <div class="note"><b class="lw">a<sup>p</sup> × a<sup>q</sup> = a<sup>p+q</sup></b>Multiply: <b>add</b> the indices.<br>x³ × x⁵ = x⁸</div>
+          <div class="note"><b class="lw">a<sup>p</sup> ÷ a<sup>q</sup> = a<sup>p−q</sup></b>Divide: <b>subtract</b> the indices.<br>5⁹ ÷ 5³ = 5⁶</div>
+          <div class="note"><b class="lw">(a<sup>p</sup>)<sup>q</sup> = a<sup>pq</sup></b>Power of a power: <b>multiply</b>.<br>(2³)⁴ = 2¹²</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Numbers in front: deal with them separately. 3x² × 4x⁵ = 12x⁷ (3 × 4 = 12, 2 + 5 = 7). 12x⁷ ÷ 3x² = 4x⁵.</li>
+          <li>Different letters: one at a time. 2x²y × 3xy³ = 6x³y⁴.</li>
+          <li>The base never changes: 2³ × 2⁴ = 2⁷, not 4⁷.</li>
+          <li>Adding is different: x³ + x⁴ can't be made into one term. And 2³ × 5² has different bases, so just work it out: 8 × 25 = 200.</li>
+          <li>Find n: 2ⁿ × 2³ = 2¹⁰ means n + 3 = 10, so n = 7.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Zero, negative and fractional indices <span class="hlt">Higher Level</span></h3>
+        <ul>
+          <li><b>a⁰ = 1.</b> Why? 5³ ÷ 5³ = 1, and by the law it's 5⁰. (Any number except 0.)</li>
+          <li><b>a⁻ⁿ = 1/aⁿ.</b> 2⁻³ = 1/2³ = 1/8. A negative index means "one over"; it does <b>not</b> make the answer negative.</li>
+          <li><b>Fractional indices:</b> the bottom is the root, the top is the power. 8<sup>1/3</sup> = cube root of 8 = 2. 27<sup>2/3</sup> = (cube root of 27)² = 3² = 9. Take the root first: the numbers stay small.</li>
+          <li><b>Brackets:</b> everything inside gets the power. (2x³)² = 2²x⁶ = 4x⁶ (not 2x⁶). (2/3)² = 4/9.</li>
+          <li><b>Solving:</b> make the bases the same. 2ˣ = 1/8 = 2⁻³, so x = −3. 9ˣ = 3 = 9<sup>1/2</sup>, so x = ½.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Standard form</h3>
+        <p>A number in standard form is <b>a × 10ⁿ</b>, where a is between 1 and 10 (1 is allowed, 10 isn't) and n is a whole number.</p>
+        <div class="note wk"><b>45,000</b> → put the point after the first digit: 4.5<br>The point moved 4 places → <b>4.5 × 10⁴</b><br>Back again: 3.07 × 10⁵ → move the point 5 places right → <b>307,000</b></div>
+        <ul style="margin-top:10px">
+          <li>Not standard form: 45 × 10³ (45 is too big), 0.45 × 10⁵ (0.45 is too small).</li>
+          <li><b>Comparing:</b> look at the power of 10 first. 1.2 × 10⁵ is bigger than 9.8 × 10⁴.</li>
+          <li><b>Multiplying and dividing:</b> numbers first, then the laws of indices, then tidy up. (4 × 10³) × (5 × 10²) = 20 × 10⁵ = <b>2 × 10⁶</b>. (8 × 10⁹) ÷ (2 × 10³) = 4 × 10⁶.</li>
+          <li><b>Small numbers</b> <span class="hlt">Higher Level</span>: a negative index. 0.00036 = 3.6 × 10⁻⁴ (the point moved 4 places to the right).</li>
+          <li><b>Calculator:</b> very big or very small answers may appear in standard form, sometimes shown like 2.4E9. Write it properly: 2.4 × 10⁹.</li>
+        </ul>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Simplifying surds like √12 = 2√3 comes later in Junior Cycle Maths (Higher Level).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Indices turn up as short parts ("write as a single power", "find n", "evaluate without a calculator") and inside bigger questions: algebra, patterns that double, and areas and volumes with squares and cubes. Standard form usually comes with a real-life context, such as distances in space, populations or computer storage, and often with a calculator step.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the law you used:</b> write 2⁵ × 2³ = 2⁵⁺³ = 2⁸, not just the answer.</li>
+            <li><b>Check the form asked for:</b> "as a power of 2", "in standard form", "as a fraction". 20 × 10⁵ is the right value but not standard form.</li>
+            <li><b>Watch the minus signs:</b> (−2)⁴ and −2⁴ are different, and 2⁻³ is not negative.</li>
+            <li><b>Calculator answers:</b> copy standard form properly with × 10 and the index.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Powers of 2.</b> (a) Write 2⁵ × 2³ as a single power of 2. (b) Hence write (2⁵ × 2³) ÷ 2⁶ as a power of 2 and work out its value. (c) Find n if 3ⁿ × 3² = 3⁹.
+              <details><summary>Show the worked answer</summary><p>(a) Add the indices: 2⁵⁺³ = <b>2⁸</b>.<br>(b) 2⁸ ÷ 2⁶ = 2⁸⁻⁶ = 2² = <b>4</b>.<br>(c) n + 2 = 9, so <b>n = 7</b>. Check: 3⁷ × 3² = 3⁹ ✓</p></details></li>
+            <li><b>Light from the Sun.</b> The Sun is about 150,000,000 km from the Earth. Light travels about 300,000 km every second. (a) Write both numbers in standard form. (b) How many seconds does light take to reach the Earth? Give your answer in standard form, then in minutes and seconds.
+              <details><summary>Show the worked answer</summary><p>(a) 150,000,000 = <b>1.5 × 10⁸</b>; 300,000 = <b>3 × 10⁵</b>.<br>(b) (1.5 × 10⁸) ÷ (3 × 10⁵): 1.5 ÷ 3 = 0.5 and 10⁸ ÷ 10⁵ = 10³, so 0.5 × 10³ = <b>5 × 10² seconds</b> (500 s). 500 ÷ 60 = 8 remainder 20, so <b>8 minutes 20 seconds</b>.</p></details></li>
+            <li><b>No calculator.</b> Work out (a) −2⁴ (b) (−2)⁴ (c) 3 + 2³ × 5 (d) √(6² + 8²). (e) Cian says √(6² + 8²) = 6 + 8 = 14. Explain his mistake.
+              <details><summary>Show the worked answer</summary><p>(a) −(2 × 2 × 2 × 2) = <b>−16</b>. (b) (−2) × (−2) × (−2) × (−2) = <b>16</b>.<br>(c) Indices, then ×, then +: 3 + 8 × 5 = 3 + 40 = <b>43</b>.<br>(d) √(36 + 64) = √100 = <b>10</b>.<br>(e) The square root of a sum is not the sum of the square roots: the inside of the bracket must be worked out first (36 + 64 = 100).</p></details></li>
+            <li><b>Higher Level.</b> (a) Work out 27<sup>2/3</sup>. (b) Write 2⁻³ as a fraction. (c) Simplify (2x³)² × x⁻⁴. (d) Solve 2ˣ = 1/16. (e) Write 0.00052 in standard form.
+              <details><summary>Show the worked answer</summary><p>(a) Cube root of 27 = 3, then 3² = <b>9</b>.<br>(b) 1/2³ = <b>1/8</b>.<br>(c) (2x³)² = 4x⁶, then 4x⁶ × x⁻⁴ = <b>4x²</b>.<br>(d) 1/16 = 2⁻⁴, so <b>x = −4</b>.<br>(e) Move the point 4 places to the right: <b>5.2 × 10⁻⁴</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/indices-standard-form-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Indices &amp; Standard Form Teacher Pack (€5)</a>: Index Law Match cards, Standard Form Line-Up, Index Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

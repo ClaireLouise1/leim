@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Power Up: Indices &amp; Standard Form Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: powers, square roots, the laws of indices, BIMDAS and standard form, plus a Higher Level round on zero, negative and fractional indices, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ix sup{font-size:.62em;font-weight:800}.prompt .ix{font-size:1.15em}.wk{font-variant-numeric:tabular-nums;line-height:1.7}.wk .r{color:var(--muted);font-size:15px}.laws{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.laws .note b.lw{display:block;font-size:19px;margin-bottom:2px}.hlt{display:inline-block;background:var(--night);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Power Up</h1>
+        <p>60 seconds. Work out powers and square roots, use the laws of indices, put BIMDAS in the right order and race through standard form. Higher Level? There's a round for zero, negative and fractional indices too. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="power"><div><b>Power Up</b><span>2⁵, (−3)² v −3², write 81 as a power of 3, which is bigger, square roots and BIMDAS with indices</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="laws"><div><b>Index laws</b><span>x³ × x⁴, 5⁹ ÷ 5³, (2³)⁴, 3x² × 4x⁵, find n, and "which one is true?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sf"><div><b>Standard form</b><span>45,000 = 4.5 × 10⁴ and back, which is in standard form, which is biggest, × and ÷ in standard form</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level powers</b><span>a⁰ = 1, 2⁻³, 27 to the power 2/3, (2x³)², 2ˣ = 1/8 and small numbers like 0.0004</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Power Up, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1c, N.1f (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Indices &amp; standard form</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Write each one out in full and count the factors:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">2³ × 2⁴ = (2 × 2 × 2) × (2 × 2 × 2 × 2) = 2<sup>?</sup></li>
+          <li class="note">3² × 3⁵ = (3 × 3) × (3 × 3 × 3 × 3 × 3) = 3<sup>?</sup></li>
+          <li class="note">x⁴ × x² = (x × x × x × x) × (x × x) = x<sup>?</sup></li>
+          <li class="note">2⁶ ÷ 2² = (2 × 2 × 2 × 2 × 2 × 2) ÷ (2 × 2) = 2<sup>?</sup></li>
+        </ul>
+        <p style="margin-top:10px">What happens to the indices when you multiply? And when you divide? Could you have got the answer without writing it all out?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">2⁷, 3⁷, x⁶ and 2⁴. When you <b>multiply</b> powers of the same number you <b>add</b> the indices (3 + 4 = 7). When you <b>divide</b>, the 2s cancel in pairs, so you <b>subtract</b> (6 − 2 = 4). These are the laws of indices, and they only work when the base is the same.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Index notation</h3>
+        <p>In 2⁵, 2 is the <b>base</b> and 5 is the <b>index</b> (or power). It means five 2s multiplied: 2⁵ = 2 × 2 × 2 × 2 × 2 = <b>32</b>, not 2 × 5 = 10.</p>
+        <ul>
+          <li>Squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144. Cubes: 1, 8, 27, 64, 125.</li>
+          <li>Powers of 10: 10³ = 1,000 (3 zeros), 10⁶ = 1,000,000 (6 zeros).</li>
+          <li><b>Minus signs:</b> (−3)² = (−3) × (−3) = 9, but −3² = −(3 × 3) = −9. The index only belongs to what it touches. (−2)³ = −8: an odd number of minuses gives a minus.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Square roots</h3>
+        <p>√49 = 7 because 7 × 7 = 49. A power of ½ means the same thing: 49<sup>½</sup> = √49 = 7.</p>
+        <ul>
+          <li>Not a perfect square? Find the squares either side: 7² = 49 and 8² = 64, so √50 is between 7 and 8 (just above 7).</li>
+          <li>√(36 + 64) = √100 = 10. It is <b>not</b> √36 + √64 = 14: do the inside first.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">BIMDAS with indices</h3>
+        <p><b>B</b>rackets, then <b>I</b>ndices (and roots), then <b>D</b>ivide/<b>M</b>ultiply, then <b>A</b>dd/<b>S</b>ubtract.</p>
+        <div class="note wk"><b>5 + 3² × 2</b><br>= 5 + 9 × 2 &nbsp;<span class="r">(indices)</span><br>= 5 + 18 &nbsp;<span class="r">(multiply)</span><br>= <b>23</b> &nbsp;<span class="r">(not 8² × 2 = 128)</span></div>
+        <p style="margin-top:8px">4 × 2³ = 4 × 8 = 32, not 8³. And (2 + 3)² = 5² = 25, not 4 + 9.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The laws of indices</h3>
+        <div class="laws">
+          <div class="note"><b class="lw">a<sup>p</sup> × a<sup>q</sup> = a<sup>p+q</sup></b>Multiply: <b>add</b> the indices.<br>x³ × x⁵ = x⁸</div>
+          <div class="note"><b class="lw">a<sup>p</sup> ÷ a<sup>q</sup> = a<sup>p−q</sup></b>Divide: <b>subtract</b> the indices.<br>5⁹ ÷ 5³ = 5⁶</div>
+          <div class="note"><b class="lw">(a<sup>p</sup>)<sup>q</sup> = a<sup>pq</sup></b>Power of a power: <b>multiply</b>.<br>(2³)⁴ = 2¹²</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Numbers in front: deal with them separately. 3x² × 4x⁵ = 12x⁷ (3 × 4 = 12, 2 + 5 = 7). 12x⁷ ÷ 3x² = 4x⁵.</li>
+          <li>Different letters: one at a time. 2x²y × 3xy³ = 6x³y⁴.</li>
+          <li>The base never changes: 2³ × 2⁴ = 2⁷, not 4⁷.</li>
+          <li>Adding is different: x³ + x⁴ can't be made into one term. And 2³ × 5² has different bases, so just work it out: 8 × 25 = 200.</li>
+          <li>Find n: 2ⁿ × 2³ = 2¹⁰ means n + 3 = 10, so n = 7.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Zero, negative and fractional indices <span class="hlt">Higher Level</span></h3>
+        <ul>
+          <li><b>a⁰ = 1.</b> Why? 5³ ÷ 5³ = 1, and by the law it's 5⁰. (Any number except 0.)</li>
+          <li><b>a⁻ⁿ = 1/aⁿ.</b> 2⁻³ = 1/2³ = 1/8. A negative index means "one over"; it does <b>not</b> make the answer negative.</li>
+          <li><b>Fractional indices:</b> the bottom is the root, the top is the power. 8<sup>1/3</sup> = cube root of 8 = 2. 27<sup>2/3</sup> = (cube root of 27)² = 3² = 9. Take the root first: the numbers stay small.</li>
+          <li><b>Brackets:</b> everything inside gets the power. (2x³)² = 2²x⁶ = 4x⁶ (not 2x⁶). (2/3)² = 4/9.</li>
+          <li><b>Solving:</b> make the bases the same. 2ˣ = 1/8 = 2⁻³, so x = −3. 9ˣ = 3 = 9<sup>1/2</sup>, so x = ½.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Standard form</h3>
+        <p>A number in standard form is <b>a × 10ⁿ</b>, where a is between 1 and 10 (1 is allowed, 10 isn't) and n is a whole number.</p>
+        <div class="note wk"><b>45,000</b> → put the point after the first digit: 4.5<br>The point moved 4 places → <b>4.5 × 10⁴</b><br>Back again: 3.07 × 10⁵ → move the point 5 places right → <b>307,000</b></div>
+        <ul style="margin-top:10px">
+          <li>Not standard form: 45 × 10³ (45 is too big), 0.45 × 10⁵ (0.45 is too small).</li>
+          <li><b>Comparing:</b> look at the power of 10 first. 1.2 × 10⁵ is bigger than 9.8 × 10⁴.</li>
+          <li><b>Multiplying and dividing:</b> numbers first, then the laws of indices, then tidy up. (4 × 10³) × (5 × 10²) = 20 × 10⁵ = <b>2 × 10⁶</b>. (8 × 10⁹) ÷ (2 × 10³) = 4 × 10⁶.</li>
+          <li><b>Small numbers</b> <span class="hlt">Higher Level</span>: a negative index. 0.00036 = 3.6 × 10⁻⁴ (the point moved 4 places to the right).</li>
+          <li><b>Calculator:</b> very big or very small answers may appear in standard form, sometimes shown like 2.4E9. Write it properly: 2.4 × 10⁹.</li>
+        </ul>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Simplifying surds like √12 = 2√3 comes later in Junior Cycle Maths (Higher Level).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Indices turn up as short parts ("write as a single power", "find n", "evaluate without a calculator") and inside bigger questions: algebra, patterns that double, and areas and volumes with squares and cubes. Standard form usually comes with a real-life context, such as distances in space, populations or computer storage, and often with a calculator step.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the law you used:</b> write 2⁵ × 2³ = 2⁵⁺³ = 2⁸, not just the answer.</li>
+            <li><b>Check the form asked for:</b> "as a power of 2", "in standard form", "as a fraction". 20 × 10⁵ is the right value but not standard form.</li>
+            <li><b>Watch the minus signs:</b> (−2)⁴ and −2⁴ are different, and 2⁻³ is not negative.</li>
+            <li><b>Calculator answers:</b> copy standard form properly with × 10 and the index.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Powers of 2.</b> (a) Write 2⁵ × 2³ as a single power of 2. (b) Hence write (2⁵ × 2³) ÷ 2⁶ as a power of 2 and work out its value. (c) Find n if 3ⁿ × 3² = 3⁹.
+              <details><summary>Show the worked answer</summary><p>(a) Add the indices: 2⁵⁺³ = <b>2⁸</b>.<br>(b) 2⁸ ÷ 2⁶ = 2⁸⁻⁶ = 2² = <b>4</b>.<br>(c) n + 2 = 9, so <b>n = 7</b>. Check: 3⁷ × 3² = 3⁹ ✓</p></details></li>
+            <li><b>Light from the Sun.</b> The Sun is about 150,000,000 km from the Earth. Light travels about 300,000 km every second. (a) Write both numbers in standard form. (b) How many seconds does light take to reach the Earth? Give your answer in standard form, then in minutes and seconds.
+              <details><summary>Show the worked answer</summary><p>(a) 150,000,000 = <b>1.5 × 10⁸</b>; 300,000 = <b>3 × 10⁵</b>.<br>(b) (1.5 × 10⁸) ÷ (3 × 10⁵): 1.5 ÷ 3 = 0.5 and 10⁸ ÷ 10⁵ = 10³, so 0.5 × 10³ = <b>5 × 10² seconds</b> (500 s). 500 ÷ 60 = 8 remainder 20, so <b>8 minutes 20 seconds</b>.</p></details></li>
+            <li><b>No calculator.</b> Work out (a) −2⁴ (b) (−2)⁴ (c) 3 + 2³ × 5 (d) √(6² + 8²). (e) Cian says √(6² + 8²) = 6 + 8 = 14. Explain his mistake.
+              <details><summary>Show the worked answer</summary><p>(a) −(2 × 2 × 2 × 2) = <b>−16</b>. (b) (−2) × (−2) × (−2) × (−2) = <b>16</b>.<br>(c) Indices, then ×, then +: 3 + 8 × 5 = 3 + 40 = <b>43</b>.<br>(d) √(36 + 64) = √100 = <b>10</b>.<br>(e) The square root of a sum is not the sum of the square roots: the inside of the bracket must be worked out first (36 + 64 = 100).</p></details></li>
+            <li><b>Higher Level.</b> (a) Work out 27<sup>2/3</sup>. (b) Write 2⁻³ as a fraction. (c) Simplify (2x³)² × x⁻⁴. (d) Solve 2ˣ = 1/16. (e) Write 0.00052 in standard form.
+              <details><summary>Show the worked answer</summary><p>(a) Cube root of 27 = 3, then 3² = <b>9</b>.<br>(b) 1/2³ = <b>1/8</b>.<br>(c) (2x³)² = 4x⁶, then 4x⁶ × x⁻⁴ = <b>4x²</b>.<br>(d) 1/16 = 2⁻⁴, so <b>x = −4</b>.<br>(e) Move the point 4 places to the right: <b>5.2 × 10⁻⁴</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/indices-standard-form-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Indices &amp; Standard Form Teacher Pack (€5)</a>: Index Law Match cards, Standard Form Line-Up, Index Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function commas(n){var s=String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g,",");return n<0?M+s:s;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+  var SUPD="⁰¹²³⁴⁵⁶⁷⁸⁹";
+  function sup(n){return String(n).replace(/-/g,"⁻").replace(/\d/g,function(d){return SUPD[+d];});}
+  function pw(b,e){var bs=typeof b==="string"?b:(b<0?"("+num(b)+")":String(b));return e===1?bs:bs+sup(e);}
+  function ix(b,top){return '<span class="ix">'+b+'<sup>'+top+'</sup></span>';}   // fractional index, shown as HTML
+  /* ---------- exact values as fractions [n,d] ---------- */
+  function F(n,d){d=d||1;if(n===0)return [0,1];if(d<0){n=-n;d=-d;}var g=gcd(n,d)||1;return [n/g,d/g];}
+  function fk(f){return f[0]+"/"+f[1];}
+  function fs(f){return f[1]===1?commas(f[0]):num(f[0])+"/"+f[1];}
+  function ipow(b,e){var r=1;for(var i=0;i<e;i++)r*=b;return r;}
+  function fpow(b,e){return e>=0?F(ipow(b,e),1):F(1,ipow(b,-e));}
+  /* value question: wrong options never EQUAL IN VALUE to the answer */
+  function QV(en,frame,f,slips,why,html,data){
+    if(typeof f==="number")f=F(f,1);
+    var seen={},out=[];seen[fk(f)]=1;
+    var pads=f[1]===1?[f[0]+1,f[0]-1,f[0]*2,-f[0],f[0]+10,f[0]*10]:[F(f[1],f[0]),F(-f[0],f[1]),F(f[0]+1,f[1]),F(f[0],f[1]+1)];
+    slips.concat(shuffle(pads)).forEach(function(x){if(x==null)return;if(typeof x==="number"){if(!isFinite(x)||x!==Math.round(x))return;x=F(x,1);}
+      if(!isFinite(x[0])||!isFinite(x[1])||x[1]===0)return;x=F(x[0],x[1]);var k=fk(x);if(seen[k]||out.length>=3)return;seen[k]=1;out.push(fs(x));});
+    var A=fs(f);return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:data&&data.rv?en+" "+data.rv:en)+" → "+A,data:data||{}};}
+  /* option question: each option is [text, key]; wrong options never share the answer's key */
+  function QO(en,frame,a,cands,why,html,data){
+    var seen={},ks={},out=[];seen[a[0]]=1;ks[a[1]]=1;
+    cands.forEach(function(c){if(!c||out.length>=3)return;if(/NaN|undefined|Infinity/.test(c[0]))return;if(seen[c[0]]||ks[c[1]])return;seen[c[0]]=1;ks[c[1]]=1;out.push(c[0]);});
+    return {en:en,frame:frame,html:html||"",answer:a[0],wrong:out,why:why,review:(frame?en+" "+frame:data&&data.rv?en+" "+data.rv:en)+" → "+a[0],data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás","Niamh","Cian"];
+
+  /* ---------- powers of whole numbers: key = smallest base, so 9⁴ and 3⁸ share a key ---------- */
+  var ROOT={4:[2,2],8:[2,3],9:[3,2],16:[2,4],25:[5,2],27:[3,3],32:[2,5],36:[6,2],49:[7,2],64:[2,6],81:[3,4],100:[10,2]};
+  function bk(b,e){var r=ROOT[b]||[b,1];return "p"+r[0]+"^"+(r[1]*e);}
+  function PO(b,e){return [pw(b,e),bk(b,e)];}
+  /* ---------- algebraic terms: coefficient and letters with powers, e.g. 12x³y² ---------- */
+  function tstr(c,ex){var L=Object.keys(ex).filter(function(k){return ex[k]!==0;}).sort();
+    if(!L.length)return num(c);
+    var s=c===1?"":c===-1?M:num(c);L.forEach(function(k){s+=pw(k,ex[k]);});return s;}
+  function tkey(c,ex){var L=Object.keys(ex).filter(function(k){return ex[k]!==0;}).sort();return "t"+c+"|"+L.map(function(k){return k+ex[k];}).join(",");}
+  function TO(c,ex){return [tstr(c,ex),tkey(c,ex)];}
+  function E1(v,e){var o={};o[v]=e;return o;}
+  var LET=["x","x","a","y","n","p","k"];
+
+  /* ================= Power Up: index form, roots, order of operations ================= */
+  function qVal(){
+    var f=ri(0,5),b,n;
+    if(f===0){b=10;n=ri(2,6);
+      return QV("Work out:",pw(10,n),ipow(10,n),[10*n,ipow(10,n-1),ipow(10,n+1),n*n],"10"+sup(n)+" means 1 followed by "+n+" zeros: "+commas(ipow(10,n))+".","",{t:"eval"});}
+    if(f===1){var b2=rnd([2,3]),n2=b2===2?rnd([3,5,7]):3,v=ipow(-b2,n2);
+      return QV("Work out:",pw(-b2,n2),v,[-v,b2*n2,-b2*n2,ipow(-b2,n2-1)],"An odd number of minus signs multiplied together gives a minus: "+pw(-b2,n2)+" = "+commas(v)+".","",{t:"eval"});}
+    if(f===2){var c=ri(2,9),sq=c*c,neg=Math.random()<0.5;
+      if(neg)return QV("Work out:",M+pw(c,2),-sq,[sq,-2*c,2*c],"The index belongs to the "+c+" only: "+M+"("+c+" × "+c+") = "+num(-sq)+". Compare "+pw(-c,2)+" = "+sq+".","",{t:"eval"});
+      return QV("Work out:",pw(-c,2),sq,[-sq,-2*c,2*c],"The bracket is squared: ("+num(-c)+") × ("+num(-c)+") = "+sq+". A minus times a minus is a plus.","",{t:"eval"});}
+    var P=[[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,10],[3,2],[3,3],[3,4],[3,5],[4,2],[4,3],[4,4],[5,2],[5,3],[5,4],[6,2],[6,3],[7,2],[7,3],[8,2],[8,3],[9,2],[9,3],[11,2],[12,2],[15,2],[20,2],[1,6]];
+    var p=rnd(P);b=p[0];n=p[1];var val=ipow(b,n);
+    return QV("Work out:",pw(b,n),val,[b*n,ipow(n,b)!==val?ipow(n,b):null,ipow(b,n-1),b+n,ipow(b,n+1)],
+      pw(b,n)+" means "+Array(n+1).join(b+" × ").slice(0,-3)+" = "+commas(val)+" (not "+b+" × "+n+").","",{t:"eval"});
+  }
+  function qPowerOf(){
+    var P=[[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],[2,10],[3,2],[3,3],[3,4],[3,5],[5,2],[5,3],[5,4],[10,3],[10,4],[10,5],[10,6],[7,2],[7,3],[6,3],[4,3],[4,4]];
+    var p=rnd(P),b=p[0],k=p[1],N=ipow(b,k);
+    return QO("Write "+commas(N)+" as a power of "+b+":","",PO(b,k),shuffle([PO(b,k-1),PO(b,k+1),PO(k,b),PO(b,k+2),PO(b,k-2)]),
+      commas(N)+" = "+Array(k+1).join(b+" × ").slice(0,-3)+", which is "+b+" multiplied "+k+" times: "+pw(b,k)+".","",{t:"pow",n:N,b:b,rv:commas(N)});
+  }
+  function qBig(){
+    var P=[[2,5],[5,2],[3,4],[4,3],[2,6],[6,2],[2,4],[3,3],[10,2],[2,7],[7,2],[5,3],[3,5],[9,2],[2,8],[4,4],[8,2],[6,3],[3,2],[2,3]];
+    var pick=[],vals={};shuffle(P.slice()).forEach(function(p){var v=ipow(p[0],p[1]);if(pick.length<4&&!vals[v]){vals[v]=1;pick.push(p);}});
+    var small=Math.random()<0.4,best=pick[0];pick.forEach(function(p){var v=ipow(p[0],p[1]),w=ipow(best[0],best[1]);if(small?v<w:v>w)best=p;});
+    var ans=pw(best[0],best[1]);
+    return C("Which of these is the "+(small?"smallest":"biggest")+"?","",ans,pick.filter(function(p){return p!==best;}).map(function(p){return pw(p[0],p[1]);}),
+      "Work each one out: "+pick.map(function(p){return pw(p[0],p[1])+" = "+ipow(p[0],p[1]);}).join(", ")+".",null,"",{t:small?"small":"big",rv:pick.map(function(p){return pw(p[0],p[1]);}).join(", ")});
+  }
+  function qRoot(){
+    var f=ri(0,2),k;
+    if(f===0){k=rnd([2,3,4,5,6,7,8,9,10,11,12,13,14,15,20,30,40,50,60,70,80,90]);var n=k*k;
+      return QV("Work out:","√"+commas(n),k,[k+1,k-1,n%2===0?n/2:null,2*k],"√"+commas(n)+" is the number that multiplies by itself to give "+commas(n)+": "+k+" × "+k+" = "+commas(n)+".","",{t:"eval"});}
+    if(f===1){k=ri(2,12);var n1=k*k;
+      return QV("Work out:","",k,[n1%2===0?n1/2:null,k+1,k-1,n1,2*k],"A power of ½ means the square root: "+n1+"^½ = √"+n1+" = "+k+".",ix(n1,"1/2"),{t:"eval",rv:n1+"^(1/2)"});}
+    var s=ri(3,12),N2=ri(s*s+1,s*s+2*s);
+    return C("√"+N2+" lies between which two whole numbers?","",s+" and "+(s+1),[(s-1)+" and "+s,(s+1)+" and "+(s+2),(Math.floor(N2/2)-1)+" and "+Math.floor(N2/2),(s+2)+" and "+(s+3),(s-2)+" and "+(s-1)],
+      s+"² = "+s*s+" and "+(s+1)+"² = "+(s+1)*(s+1)+". "+N2+" is between them, so √"+N2+" is between "+s+" and "+(s+1)+".",null,"",{t:"between",n:N2});
+  }
+  function qOrder(){
+    var f=ri(0,4),a,b,c,v,fr,why,sl;
+    if(f===0){a=ri(1,9);b=ri(2,5);c=ri(2,4);fr=a+" + "+pw(b,2)+" × "+c;v=a+b*b*c;sl=[ipow(a+b,2)*c,a+2*b*c,(a+b*b)*c];why="Indices first: "+pw(b,2)+" = "+b*b+". Then × : "+b*b+" × "+c+" = "+b*b*c+". Then + : "+a+" + "+b*b*c+" = "+v+".";}
+    else if(f===1){a=ri(2,5);b=ri(2,3);fr=a+" × "+pw(b,3);v=a*b*b*b;sl=[ipow(a*b,3),a*3*b,a*b*3];why="Indices before ×: "+pw(b,3)+" = "+b*b*b+", then "+a+" × "+b*b*b+" = "+v+". Not ("+a+" × "+b+")³.";}
+    else if(f===2){a=ri(1,6);b=ri(1,6);fr="("+a+" + "+b+")"+sup(2);v=(a+b)*(a+b);sl=[a*a+b*b,2*(a+b),a+b*b];why="Brackets first: "+a+" + "+b+" = "+(a+b)+", then "+pw(a+b,2)+" = "+v+". (Not "+pw(a,2)+" + "+pw(b,2)+" = "+(a*a+b*b)+".)";}
+    else if(f===3){a=ri(3,9);b=ri(2,5);c=ri(2,6);fr=pw(a,2)+" "+M+" "+b+" × "+c;v=a*a-b*c;sl=[(a*a-b)*c,2*a-b*c,a*a+b*c];why="Indices, then ×, then −: "+a*a+" "+M+" "+b*c+" = "+num(v)+".";}
+    else{c=rnd([[3,4,5],[6,8,10],[5,12,13],[8,15,17]]);fr="√("+pw(c[0],2)+" + "+pw(c[1],2)+")";v=c[2];sl=[c[0]+c[1],c[0]*c[0]+c[1]*c[1],c[2]+1];why="Inside the bracket first: "+c[0]*c[0]+" + "+c[1]*c[1]+" = "+c[2]*c[2]+". Then √"+c[2]*c[2]+" = "+c[2]+". (√ of a sum is NOT the sum of the roots.)";}
+    return QV("Work out (BIMDAS):",fr,v,sl,why,"",{t:"eval"});
+  }
+
+  /* ================= Index laws ================= */
+  function pq(){var p,q;do{p=ri(2,9);q=ri(2,7);}while(p===q||p+q===p*q);return [p,q];}
+  function qMul(){
+    var f=ri(0,3),p_=pq(),p=p_[0],q=p_[1];
+    if(f===0){var b=rnd([2,3,5,6,7,10]);
+      return QO("Write as a single power:",pw(b,p)+" × "+pw(b,q),PO(b,p+q),[PO(b,p*q),PO(b*b,p+q),PO(b*b,p*q),PO(b,p+q+1),PO(b,Math.abs(p-q)),PO(b,p+q-1),PO(2*b,p+q)],
+        "Same base, multiplying: ADD the indices. "+pw(b,p)+" × "+pw(b,q)+" = "+pw(b,p+q)+". The base stays "+b+".","",{t:"simp"});}
+    var v=rnd(LET);
+    if(f===1)return QO("Simplify:",pw(v,p)+" × "+pw(v,q),TO(1,E1(v,p+q)),[TO(1,E1(v,p*q)),TO(2,E1(v,p+q)),TO(1,E1(v,p+q+1)),TO(2,E1(v,p*q)),TO(1,E1(v,p+q-1))],
+        "Multiplying: add the indices. "+pw(v,p)+" × "+pw(v,q)+" = "+pw(v,p+q)+".","",{t:"simp"});
+    var a=ri(2,6),c=ri(2,5);
+    if(f===2){p=ri(1,5);q=ri(2,5);
+      return QO("Simplify:",tstr(a,E1(v,p))+" × "+tstr(c,E1(v,q)),TO(a*c,E1(v,p+q)),[TO(a+c,E1(v,p+q)),TO(a*c,E1(v,p*q)),TO(a+c,E1(v,p*q)),TO(a*c,E1(v,p+q+1)),TO(a*c,E1(v,p+q-1)),TO(a+c,E1(v,p+q+1)),TO(a*c+a,E1(v,p+q))],
+        "Multiply the numbers ("+a+" × "+c+" = "+a*c+"), add the indices ("+p+" + "+q+" = "+(p+q)+"): "+tstr(a*c,E1(v,p+q))+".","",{t:"simp"});}
+    var e1=ri(1,4),e2=ri(1,3),e3=ri(1,3),e4=ri(1,4),A={x:e1,y:e2},B={x:e3,y:e4};
+    return QO("Simplify:",tstr(a,A)+" × "+tstr(c,B),TO(a*c,{x:e1+e3,y:e2+e4}),[TO(a+c,{x:e1+e3,y:e2+e4}),TO(a*c,{x:e1*e3,y:e2*e4}),TO(a*c,{x:e1+e3,y:e2*e4}),TO(a*c,{x:e1+e3+e2+e4}),TO(a+c,{x:e1*e3,y:e2*e4}),TO(a*c,{x:e1+e3+1,y:e2+e4}),TO(a*c,{x:e1+e3,y:e2+e4+1})],
+      "Numbers: "+a+" × "+c+" = "+a*c+". x: "+e1+" + "+e3+" = "+(e1+e3)+". y: "+e2+" + "+e4+" = "+(e2+e4)+".","",{t:"simp"});
+  }
+  function qDiv(){
+    var f=ri(0,2),p,q;do{p=ri(4,12);q=ri(2,p-1);}while(p-q===p/q||p-q===1);
+    if(f===0){var b=rnd([2,3,5,7,10]);
+      return QO("Write as a single power:",pw(b,p)+" ÷ "+pw(b,q),PO(b,p-q),[p%q===0?PO(b,p/q):null,PO(b,p+q),["1"+sup(p-q),"one"],PO(b,p-q+1),PO(b,p-q-1)],
+        "Same base, dividing: SUBTRACT the indices. "+p+" "+M+" "+q+" = "+(p-q)+", so "+pw(b,p-q)+".","",{t:"simp"});}
+    var v=rnd(LET);
+    if(f===1)return QO("Simplify:",pw(v,p)+" ÷ "+pw(v,q),TO(1,E1(v,p-q)),[p%q===0?TO(1,E1(v,p/q)):null,TO(1,E1(v,p+q)),TO(1,E1(v,p-q+1)),TO(1,E1(v,p-q-1)),TO(-1,E1(v,p-q))],
+        "Dividing: subtract the indices. "+pw(v,p)+" ÷ "+pw(v,q)+" = "+pw(v,p-q)+".","",{t:"simp"});
+    var c=ri(2,6),k=ri(2,6),a=c*k;
+    return QO("Simplify:",tstr(a,E1(v,p))+" ÷ "+tstr(c,E1(v,q)),TO(k,E1(v,p-q)),[TO(a-c,E1(v,p-q)),TO(k,E1(v,p+q)),p%q===0?TO(k,E1(v,p/q)):null,TO(a,E1(v,p-q)),TO(k,E1(v,p-q+1))],
+      "Divide the numbers ("+a+" ÷ "+c+" = "+k+"), subtract the indices ("+p+" "+M+" "+q+" = "+(p-q)+"): "+tstr(k,E1(v,p-q))+".","",{t:"simp"});
+  }
+  function qPow(){
+    var p_=pq(),p=Math.min(p_[0],6),q=Math.min(p_[1],5);if(p===q||p+q===p*q){p=3;q=4;}
+    if(Math.random()<0.5){var b=rnd([2,3,5,7,10]);
+      return QO("Write as a single power:","("+pw(b,p)+")"+sup(q),PO(b,p*q),[PO(b,p+q),PO(b*q,p),PO(b,p*q+1),PO(b,ipow(p,q)<60?ipow(p,q):p*q+2)],
+        "A power of a power: MULTIPLY the indices. "+p+" × "+q+" = "+p*q+", so "+pw(b,p*q)+".","",{t:"simp"});}
+    var v=rnd(LET);
+    return QO("Simplify:","("+pw(v,p)+")"+sup(q),TO(1,E1(v,p*q)),[TO(1,E1(v,p+q)),TO(q,E1(v,p)),TO(q,E1(v,p*q)),TO(1,E1(v,p*q+1))],
+      "Multiply the indices: ("+pw(v,p)+")"+sup(q)+" = "+pw(v,p*q)+".","",{t:"simp"});
+  }
+  function qCombo(){
+    var p,q,r,b=rnd([2,3,5,10]),v=rnd(LET),useL=Math.random()<0.5;
+    do{p=ri(2,7);q=ri(2,7);r=ri(2,9);}while(p+q-r<2||p+q-r===p*q-r||r===p+q);
+    var base=useL?v:b,n=p+q-r,sl=[p*q-r,p+q+r,(p+q)%r===0?(p+q)/r:null,n+1,n-1];
+    var fr="("+pw(base,p)+" × "+pw(base,q)+") ÷ "+pw(base,r);
+    var mk=function(e){return useL?TO(1,E1(v,e)):PO(b,e);};
+    return QO(useL?"Simplify:":"Write as a single power:",fr,mk(n),sl.map(function(e){return e&&e>0&&e!==n?mk(e):null;}),
+      "Top: "+p+" + "+q+" = "+(p+q)+". Then divide: "+(p+q)+" "+M+" "+r+" = "+n+". Answer "+pw(base,n)+".","",{t:"simp"});
+  }
+  function qEvalLaw(){
+    var b=rnd([2,3,5,10]),d=b===2?ri(2,6):b===10?ri(2,5):ri(2,3),q=ri(3,9),p=q+d,f=ri(0,1);
+    if(f===0)return QV("Work out (no calculator):",pw(b,p)+" ÷ "+pw(b,q),ipow(b,d),[ipow(b,d+1),p%q===0?ipow(b,p/q):null,d,b*d],
+      "Subtract the indices first: "+pw(b,p)+" ÷ "+pw(b,q)+" = "+pw(b,d)+" = "+commas(ipow(b,d))+".","",{t:"eval"});
+    var x=ri(1,d-1),y=d-x;
+    return QV("Work out (no calculator):",pw(b,x)+" × "+pw(b,y),ipow(b,d),[ipow(b,x*y),ipow(b*b,d),b*d,ipow(b,d+1)],
+      "Add the indices: "+pw(b,x)+" × "+pw(b,y)+" = "+pw(b,d)+" = "+commas(ipow(b,d))+".","",{t:"eval"});
+  }
+  function qFindN(){
+    var f=ri(0,3),b=rnd([2,3,5,7]),q=ri(2,6),n=ri(2,8),N="n",nn="ⁿ";
+    if(f===0)return QV("Find n:",pw(b,"")+nn+" × "+pw(b,q)+" = "+pw(b,n+q),n,[n+2*q,(n+q)/q,n+q,q],"Multiplying adds the indices: n + "+q+" = "+(n+q), "",{t:"findn"});
+    if(f===1){var m=ri(2,4);return QV("Find n:","("+b+nn+")"+sup(m)+" = "+pw(b,n*m),n,[n*m-m,n*m+m,n*m,n+1],"A power of a power multiplies: "+m+"n = "+n*m+", so n = "+n+".","",{t:"findn"});}
+    if(f===2){var r=ri(2,5);return QV("Find n:",pw(b,n+r)+" ÷ "+b+nn+" = "+pw(b,r),n,[n+2*r,r,n+r,n-1],"Dividing subtracts: "+(n+r)+" "+M+" n = "+r+", so n = "+n+".","",{t:"findn"});}
+    var P=[[2,5],[2,6],[3,4],[2,7],[3,3],[5,3],[2,8],[10,4],[10,6],[7,2]],pp=rnd(P);
+    return QV("Find n:",pp[0]+nn+" = "+commas(ipow(pp[0],pp[1])),pp[1],[ipow(pp[0],pp[1])/pp[0],pp[1]+1,pp[1]-1],commas(ipow(pp[0],pp[1]))+" = "+pw(pp[0],pp[1])+", so n = "+pp[1]+".","",{t:"findn"});
+  }
+  function qClaim(){
+    var p,q;do{p=ri(2,6);q=ri(2,5);}while(p===q||p+q===p*q||p-q===p/q||p<=q);
+    var v=rnd(["a","x","y"]),b=rnd([2,3,5]);
+    var T=[pw(v,p)+" × "+pw(v,q)+" = "+pw(v,p+q),"("+pw(v,p)+")"+sup(q)+" = "+pw(v,p*q),pw(v,p)+" ÷ "+pw(v,q)+" = "+pw(v,p-q),pw(b,p)+" × "+pw(b,q)+" = "+pw(b,p+q)];
+    var Fz=[pw(v,p)+" × "+pw(v,q)+" = "+pw(v,p*q),"("+pw(v,p)+")"+sup(q)+" = "+pw(v,p+q),pw(v,p)+" + "+pw(v,q)+" = "+pw(v,p+q),pw(b,p)+" × "+pw(b,q)+" = "+pw(b*b,p+q),
+      p%q===0?pw(v,p)+" ÷ "+pw(v,q)+" = "+pw(v,p/q):pw(v,p)+" ÷ "+pw(v,q)+" = "+pw(v,p+q),"(2"+v+")"+sup(q)+" = 2"+pw(v,q)];
+    if(b!==2)Fz.push(pw(b,2)+" = "+(2*b));
+    var ans=rnd(T);
+    return C("Which ONE of these is true?","",ans,Fz,
+      "The laws: multiply → add indices; divide → subtract; power of a power → multiply. You can't add "+pw(v,p)+" + "+pw(v,q)+" into one term, and a bracket squares the number too.",
+      "True: "+ans,"",{t:"claim"});
+  }
+
+  /* ================= Higher Level: zero, negative and fractional indices, (ab)ʳ ================= */
+  var HL="Higher Level: ";
+  function qZero(){
+    var f=ri(0,3),b=rnd([2,3,5,7,9,10,12,25,100]);
+    if(f===0)return QV(HL+"work out:",pw(b,0),1,[0,b,-1],"Anything (except 0) to the power 0 is 1: "+pw(b,0)+" = 1.","",{t:"eval"});
+    if(f===1){var c=ri(2,9);return QV(HL+"work out:",c+" × "+pw(b,0),c,[0,c*b,1],pw(b,0)+" = 1, so "+c+" × 1 = "+c+".","",{t:"eval"});}
+    if(f===2){var e=ri(1,2);return QV(HL+"work out:",pw(b>12?3:b,0)+" + "+pw(b>12?3:b,e),1+ipow(b>12?3:b,e),[ipow(b>12?3:b,e),ipow(b>12?3:b,e)+(b>12?3:b),0],"The power 0 gives 1, so this is 1 + "+ipow(b>12?3:b,e)+".","",{t:"eval"});}
+    var p=ri(2,7);return QV(HL+"work out:",pw(b>12?5:b,p)+" ÷ "+pw(b>12?5:b,p),1,[0,b>12?5:b,p],"Subtract the indices: "+p+" "+M+" "+p+" = 0, and anything to the power 0 is 1.","",{t:"eval"});
+  }
+  function qNegI(){
+    var f=ri(0,2);
+    if(f===0){var P=[[2,1],[2,2],[2,3],[2,4],[2,5],[3,1],[3,2],[3,3],[4,2],[5,1],[5,2],[10,1],[10,2],[10,3],[6,2]],p=rnd(P),b=p[0],n=p[1];
+      return QV(HL+"work out:",pw(b,-n),fpow(b,-n),[-ipow(b,n),-b*n,F(1,b*n),ipow(b,n)],
+        "A negative index means 1 over: "+pw(b,-n)+" = 1/"+pw(b,n)+" = 1/"+ipow(b,n)+". It is never negative.","",{t:"eval"});}
+    if(f===1){var b1=rnd([2,3,5]),q=ri(3,6),p1=ri(1,q-1),d=p1-q;
+      return QV(HL+"work out:",pw(b1,p1)+" ÷ "+pw(b1,q),fpow(b1,d),[ipow(b1,q-p1),-ipow(b1,q-p1),F(1,b1*(q-p1))],
+        "Subtract: "+p1+" "+M+" "+q+" = "+num(d)+", so "+pw(b1,d)+" = 1/"+ipow(b1,-d)+".","",{t:"eval"});}
+    var b2=rnd([2,3]),m=ri(2,4),k=ri(1,m-1);
+    return QV(HL+"work out:",pw(b2,-k)+" × "+pw(b2,m),ipow(b2,m-k),[ipow(b2,m+k),fpow(b2,-k-m),ipow(b2,-k*m<0?k*m:1)],
+      "Add the indices: "+num(-k)+" + "+m+" = "+(m-k)+", so "+pw(b2,m-k)+" = "+ipow(b2,m-k)+".","",{t:"eval"});
+  }
+  function qFracI(){
+    var R=[[4,2,2],[9,3,2],[16,4,2],[25,5,2],[36,6,2],[49,7,2],[64,8,2],[100,10,2],[8,2,3],[27,3,3],[64,4,3],[125,5,3],[1000,10,3],[16,2,4],[81,3,4],[32,2,5]];
+    var r=rnd(R),a=r[0],root=r[1],q=r[2],p=rnd([1,1,2,3]),neg=Math.random()<0.25;if(gcd(p,q)>1)p=1;
+    if(p>1&&ipow(root,p)>1000)p=1;var v=neg?F(1,ipow(root,p)):F(ipow(root,p),1),top=(neg?M:"")+p+"/"+q;
+    return QV(HL+"work out:","",v,[neg?-ipow(root,p):F(1,ipow(root,p)),root,ipow(root,p+1),(a*p)%q===0?(neg?-1:1)*a*p/q:null,neg?ipow(root,p):-ipow(root,p)],
+      "The bottom of the index is the root, the top is the power: "+(q===2?"√":q===3?"cube root of ":q+"th root of ")+a+" = "+root+(p>1?", then "+pw(root,p)+" = "+ipow(root,p):"")+(neg?". The minus means 1 over: 1/"+ipow(root,p):"")+".",
+      ix(a,top),{t:"eval",rv:a+"^("+top+")"});
+  }
+  function qAB(){
+    var f=ri(0,2);
+    if(f===0){var k=ri(2,5),p=ri(2,5),q=ri(2,3),v=rnd(LET);if(p===q)p=q+1;if(ipow(k,q)>64)k=2;
+      return QO(HL+"simplify:","("+tstr(k,E1(v,p))+")"+sup(q),TO(ipow(k,q),E1(v,p*q)),[TO(k,E1(v,p*q)),TO(ipow(k,q),E1(v,p+q)),TO(k*q,E1(v,p*q)),TO(k,E1(v,p+q)),TO(ipow(k,q),E1(v,p*q+1)),TO(k*q,E1(v,p+q)),TO(ipow(k,q),E1(v,ipow(p,q)))],
+        "Everything inside the bracket gets the power: "+k+sup(q)+" = "+ipow(k,q)+" and "+pw(v,p*q)+".","",{t:"simp"});}
+    if(f===1){var a,c,n=ri(2,3);do{a=ri(1,3);c=rnd(n===3?[2,3,4,5]:[2,3,4,5,7]);}while(gcd(a,c)!==1||a>=c);
+      return QV(HL+"work out:","("+a+"/"+c+")"+sup(n),F(ipow(a,n),ipow(c,n)),[F(a*n,c*n),F(ipow(a,n),c),F(a,ipow(c,n)),F(a*n,c),F(ipow(a,n),c*n),F(a,c*n),F(ipow(a,n)+1,ipow(c,n))],
+        "Both the top and the bottom get the power: "+pw(a,n)+"/"+pw(c,n)+" = "+ipow(a,n)+"/"+ipow(c,n)+".","",{t:"eval"});}
+    var k2=ri(2,3),p2=ri(3,5),m=ri(1,p2*2-1);
+    return QO(HL+"simplify:","("+tstr(k2,E1("x",p2))+")"+sup(2)+" × "+pw("x",-m),TO(k2*k2,E1("x",2*p2-m)),[TO(k2*k2,E1("x",2*p2+m)),TO(2*k2,E1("x",2*p2-m)),TO(k2*k2,E1("x",p2+2-m)),TO(k2,E1("x",2*p2-m))],
+      "("+tstr(k2,E1("x",p2))+")² = "+tstr(k2*k2,E1("x",2*p2))+". Then add the indices: "+2*p2+" + ("+num(-m)+") = "+(2*p2-m)+".","",{t:"simp"});
+  }
+  function qWriteAs(){
+    var f=ri(0,2);
+    if(f===0){var P=[[2,3],[2,4],[2,5],[3,2],[3,3],[5,2],[10,2],[10,3]],p=rnd(P),b=p[0],n=p[1];
+      return QO(HL+"write 1/"+commas(ipow(b,n))+" as a power of "+b+":","",[pw(b,-n),"v"+fk(fpow(b,-n))],[[pw(b,n),"v"+fk(fpow(b,n))],[pw(-b,n),"v"+fk(fpow(-b,n))],[pw(b,-n-1),"v"+fk(fpow(b,-n-1))],[pw(b,1-n),"v"+fk(fpow(b,1-n))],[pw(-n,b),"v"+fk(fpow(-n,b))]],
+        "1 over a power is a negative index: 1/"+pw(b,n)+" = "+pw(b,-n)+".","",{t:"pow",n:"1/"+ipow(b,n),b:b,rv:"1/"+commas(ipow(b,n))});}
+    var v=rnd(["x","a","y"]),n2=ri(2,6);
+    if(f===1)return QO(HL+"write with a negative index:","1/"+pw(v,n2),TO(1,E1(v,-n2)),[TO(-1,E1(v,n2)),TO(1,E1(v,n2)),TO(-n2,E1(v,1)),TO(1,E1(v,1-n2))],
+      "1/"+pw(v,n2)+" = "+pw(v,-n2)+": the minus in the index means 'one over', not a negative number.","",{t:"simp"});
+    return C(HL+"which of these equals "+pw(v,-n2)+"?","",["1/"+pw(v,n2)][0],[M+pw(v,n2),M+n2+v,"1/"+n2+v,pw(v,n2)],
+      pw(v,-n2)+" = 1/"+pw(v,n2)+".",pw(v,-n2)+" = 1/"+pw(v,n2),"",{t:"equiv",x:pw(v,-n2)});
+  }
+  function qSolveX(){
+    var P=[[2,F(1,8),"−3"],[2,F(1,4),"−2"],[2,F(1,16),"−4"],[3,F(1,9),"−2"],[3,F(1,27),"−3"],[5,F(1,25),"−2"],[10,F(1,100),"−2"],[9,F(3,1),"1/2"],[4,F(2,1),"1/2"],[25,F(5,1),"1/2"],[8,F(2,1),"1/3"],[27,F(3,1),"1/3"],[4,F(8,1),"3/2"],[8,F(4,1),"2/3"],[2,F(1,1),"0"],[7,F(1,1),"0"],[2,F(32,1),"5"],[3,F(81,1),"4"]];
+    var p=rnd(P),ans=p[2],v=ans==="0"?F(0,1):/\//.test(ans)?F(+ans.replace(M,"-").split("/")[0],+ans.split("/")[1]):F(+ans.replace(M,"-"),1);
+    var nm=v[0]>0?v:[-v[0],v[1]];
+    return QV(HL+"solve for x:",p[0]+"ˣ = "+fs(p[1]),v,[F(-v[0],v[1]),F(v[1],v[0]||1),v[0]===0?1:null,F(v[0]*2,v[1]),F(p[1][0]===1?-p[1][1]:p[1][0],1)],
+      "Write both sides as powers of the same base, then the indices must be equal: "+p[0]+"ˣ = "+fs(p[1])+" gives x = "+ans+".","",{t:"solvex"});
+  }
+
+  /* ================= Standard form ================= */
+  function mant(D,k){var s=String(D);if(!k)return s;while(s.length<=k)s="0"+s;return s.slice(0,s.length-k)+"."+s.slice(s.length-k);}
+  function sfS(D,k,e){return mant(D,k)+" × 10"+sup(e);}
+  function sfV(D,k,e){return e-k>=0?F(D*ipow(10,e-k),1):F(D,ipow(10,k-e));}
+  function ordS(D,k,e){var s=e-k;if(s>=0)return commas(D*ipow(10,s));var t=String(D);while(t.length<=-s)t="0"+t;return t.slice(0,t.length+s)+"."+t.slice(t.length+s);}
+  function rD(){var k=ri(0,2),D;do{D=k===0?ri(1,9):k===1?ri(11,99):ri(101,999);}while(D%10===0);return [D,k];}
+  function SV(D,k,e){return [sfS(D,k,e),"v"+fk(sfV(D,k,e))];}
+  function NSF(s){return [s,"n"+s];}
+  function bigM(D,k){return k>0?mant(D,k-1):String(D*10);}   // the front number × 10 (10 or more)   // not standard form (may equal the value) — never the answer
+  function qToSF(small){
+    var dk=rD(),D=dk[0],k=dk[1],e=small?-ri(1,5):ri(3,9),o=ordS(D,k,e);
+    var ctx=small?"":rnd(["","","",""]);
+    var cands=[SV(D,k,e-1),SV(D,k,e+1),NSF(bigM(D,k)+" × 10"+sup(e-1)),NSF(mant(D,k+1)+" × 10"+sup(e+1)),SV(D,k,-e),SV(D,k,e+2)];
+    return QO((small?HL:"")+(small?"write in standard form:":"Write in standard form:"),o,SV(D,k,e),shuffle(cands),
+      "Move the decimal point so the number is between 1 and 10: "+mant(D,k)+". It moved "+Math.abs(e)+" place"+(Math.abs(e)>1?"s":"")+(e>0?" (a big number: positive index)":" (a small number: negative index)")+", so "+sfS(D,k,e)+".","",{t:"sf"});
+  }
+  function qFromSF(small){
+    var dk=rD(),D=dk[0],k=dk[1],e=small?-ri(1,4):ri(2,7);
+    var O=function(d,kk,ee){return [ordS(d,kk,ee),"v"+fk(sfV(d,kk,ee))];};
+    return QO((small?HL+"write":"Write")+" as an ordinary number:",sfS(D,k,e),O(D,k,e),[O(D,k,e+1),O(D,k,e-1),O(D,k,-e),O(D,0,e),O(D,k,e+2),O(D,k,e-2)],
+      "× 10"+sup(e)+" moves the decimal point "+Math.abs(e)+" place"+(Math.abs(e)>1?"s":"")+" to the "+(e>0?"right":"left")+": "+ordS(D,k,e)+".","",{t:"fromsf"});
+  }
+  function qIsSF(){
+    var dk=rD(),D=dk[0],k=dk[1],e=ri(2,8);
+    var bad=[bigM(D,k)+" × 10"+sup(e-1),"0."+String(D)+" × 10"+sup(e+1),mant(D,k)+" × 100"+sup(e),mant(D,k)+" × 5"+sup(e),String(D*10+ri(1,9))+" × 10"+sup(e)];
+    return C("Which ONE of these is written in standard form?","",sfS(D,k,e),bad,
+      "Standard form is a × 10ⁿ with a between 1 and 10 (1 is allowed, 10 is not) and n a whole number.",null,"",{t:"issf"});
+  }
+  function qBigSF(){
+    var used={},list=[],small=Math.random()<0.35;
+    while(list.length<4){var dk=rD(),e=ri(3,7);if(list.length===1&&!used["e"+(list[0][2]+1)]){e=list[0][2]+1;dk=[ri(1,3),0];}
+      var v=fk(sfV(dk[0],dk[1],e));if(used[v])continue;used[v]=1;list.push([dk[0],dk[1],e]);}
+    var best=list[0];list.forEach(function(t){var a=sfV(t[0],t[1],t[2]),b=sfV(best[0],best[1],best[2]);if(small?a[0]*b[1]<b[0]*a[1]:a[0]*b[1]>b[0]*a[1])best=t;});
+    return C("Which of these is the "+(small?"smallest":"biggest")+"?","",sfS(best[0],best[1],best[2]),list.filter(function(t){return t!==best;}).map(function(t){return sfS(t[0],t[1],t[2]);}),
+      "Compare the powers of 10 first (the bigger index wins), then the front numbers.",null,"",{t:small?"small":"big",rv:list.map(function(t){return sfS(t[0],t[1],t[2]);}).join(", ")});
+  }
+  function qMulSF(){
+    var a=ri(2,9),b=ri(2,9),p=ri(2,6),q=ri(2,6);
+    if(Math.random()<0.6){var c=a*b,ans,cands;
+      var r=c>=10?[c,1,p+q+1]:[c,0,p+q];if(c>=10&&c%10===0)r=[c/10,0,p+q+1];
+      cands=[c>=10?NSF(c+" × 10"+sup(p+q)):null,SV(r[0],r[1],p*q),SV(a+b>=10?a+b:a+b,a+b>=10?1:0,a+b>=10?p+q+1:p+q),SV(r[0],r[1],r[2]+1),SV(r[0],r[1],r[2]-1),SV(r[0],r[1],p+q+2)];
+      return QO("Work out. Give your answer in standard form:","("+a+" × 10"+sup(p)+") × ("+b+" × 10"+sup(q)+")",SV(r[0],r[1],r[2]),cands,
+        "Numbers: "+a+" × "+b+" = "+c+". Powers: add the indices, "+p+" + "+q+" = "+(p+q)+". "+(c>=10?c+" × 10"+sup(p+q)+" isn't standard form yet: "+c+" = "+mant(r[0],r[1])+" × 10, so ":"")+sfS(r[0],r[1],r[2])+".","",{t:"sfcalc"});}
+    var k=ri(2,4),bb=ri(2,4),aa=bb*k;p=ri(5,9);q=ri(2,p-2);
+    return QO("Work out. Give your answer in standard form:","("+aa+" × 10"+sup(p)+") ÷ ("+bb+" × 10"+sup(q)+")",SV(k,0,p-q),[SV(k,0,p+q),SV(aa-bb>=10?aa-bb:aa-bb,0,p-q),SV(k,0,p-q+1),p%q===0?SV(k,0,p/q):null,SV(k,0,p-q-1)],
+      "Numbers: "+aa+" ÷ "+bb+" = "+k+". Powers: subtract the indices, "+p+" "+M+" "+q+" = "+(p-q)+". Answer "+sfS(k,0,p-q)+".","",{t:"sfcalc"});
+  }
+  function qCtx(){
+    var C2=[["The Earth is about 150,000,000 km from the Sun.",15,1,8],["Light travels about 300,000 km in one second.",3,0,5],["Croke Park holds 82,300 people.",823,2,4],["A cinema sold 1,250,000 tickets in a year.",125,2,6],["A new phone has 256,000,000,000 bytes of storage.",256,2,11],["A school's solar panels made 48,000 kWh of electricity last year.",48,1,4]];
+    var c=rnd(C2),D=c[1],k=c[2],e=c[3];
+    return QO(c[0]+" Write the number in standard form.","",SV(D,k,e),shuffle([SV(D,k,e-1),SV(D,k,e+1),NSF(bigM(D,k)+" × 10"+sup(e-1)),SV(D,k,e-2),NSF(String(D)+" × 10"+sup(e-k))]),
+      "Put the point after the first digit: "+mant(D,k)+". Count the places it moves: "+e+". So "+sfS(D,k,e)+".","",{t:"sf",rv:c[0]});
+  }
+  function qToSFs(){return qToSF(true);}
+  function qFromSFs(){return qFromSF(true);}
+  function qToSFb(){return qToSF(false);}
+  function qFromSFb(){return qFromSF(false);}
+
+  var MAKERS={
+    power:[qVal,qVal,qVal,qPowerOf,qBig,qRoot,qRoot,qOrder,qOrder],
+    laws:[qMul,qMul,qDiv,qDiv,qPow,qPow,qCombo,qEvalLaw,qFindN,qClaim],
+    sf:[qToSFb,qToSFb,qFromSFb,qFromSFb,qIsSF,qBigSF,qMulSF,qMulSF,qCtx],
+    hl:[qZero,qNegI,qNegI,qFracI,qFracI,qAB,qWriteAs,qSolveX,qToSFs,qFromSFs],
+    mixed:[qVal,qPowerOf,qBig,qRoot,qOrder,qMul,qDiv,qPow,qCombo,qEvalLaw,qFindN,qClaim,qToSFb,qFromSFb,qIsSF,qBigSF,qMulSF,qCtx,qZero,qNegI,qFracI,qAB]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="power"||m==="laws")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="power"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="power"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
