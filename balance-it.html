@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balance It: Linear Equations Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: solve linear equations by keeping the scales level. One and two steps, letters on both sides, brackets, fractions, word problems and spot-the-slip, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:360px;margin:6px auto 0;font-size:17px}.steps p{margin:4px 0}.wk{font-variant-numeric:tabular-nums;line-height:1.7}.wk .r{color:var(--muted);font-size:15px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Balance It</h1>
+        <p>60 seconds. Keep the scales level: whatever you do to one side, do to the other. Solve one-step and two-step equations, letters on both sides, brackets, fractions and word problems, and spot the slip in someone else's working. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="balance"><div><b>Balance It</b><span>Balance-scale pictures, x + 7 = 12, 4x = −20, 3x + 5 = 26, and "what do you get if you do this to both sides?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="both"><div><b>Letters on both sides</b><span>5x + 3 = 2x + 18, brackets like 3(x − 4) = 2(x + 1), and scales with bags on both sides</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="frac"><div><b>Fractions</b><span>x/4 + 3 = 7, (x + 2)/5 = 3, x/2 + x/3 = 10, and the number that clears the fractions</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>From words</b><span>"I think of a number…", which equation matches, rectangles, triangles, ages and tickets</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="check"><div><b>Check &amp; fix</b><span>Which line has the first mistake? Is the answer right? Substitute to check</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Balance It, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.2c, AF.4, U.3 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Linear equations</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>An equation is like a balance: the two sides weigh the same. Each bag holds x counters. Here are some scales, and a move made to each one:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">3 bags + 2 counters = 14 counters. Take <b>2 counters off both sides</b> → 3 bags = 12 counters.</li>
+          <li class="note">3 bags = 12 counters. Split <b>both sides into 3 equal groups</b> → 1 bag = 4 counters.</li>
+          <li class="note">5 bags + 1 counter = 2 bags + 10 counters. Take <b>2 bags off both sides</b> → 3 bags + 1 = 10.</li>
+          <li class="note">3 bags + 2 counters = 14 counters. Take 2 counters off <b>the left only</b> → 3 bags = 14 counters?</li>
+        </ul>
+        <p style="margin-top:10px">Which move doesn't keep the scales level? What's the one rule every move has to follow?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The last one tips the scales: 12 ≠ 14. The rule is <b>do the same thing to both sides</b>. Then the two sides stay equal, and "=" still means "has the same value as". In algebra: 3x + 2 = 14 → 3x = 12 → x = 4. Check: 3(4) + 2 = 14 ✓.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Undo, in reverse order</h3>
+        <p>To get x on its own, undo what was done to it, the last thing first. Use the <b>opposite</b> operation on both sides.</p>
+        <div class="note wk"><b>4x − 7 = 21</b><br>4x = 28 &nbsp;<span class="r">(add 7 to both sides)</span><br>x = 7 &nbsp;<span class="r">(divide both sides by 4)</span><br>Check: 4(7) − 7 = 21 ✓</div>
+        <ul style="margin-top:10px">
+          <li>+ undoes −, × undoes ÷. x + 9 = 4 → x = −5. &nbsp;−3x = 12 → x = −4. &nbsp;x/5 = 6 → x = 30.</li>
+          <li>Answers can be negative. That's fine: just check them.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Letters on both sides</h3>
+        <p>Move the x terms to one side and the numbers to the other (do the same to both sides each time).</p>
+        <div class="note wk"><b>5x + 3 = 2x + 18</b><br>3x + 3 = 18 &nbsp;<span class="r">(subtract 2x from both sides)</span><br>3x = 15 &nbsp;<span class="r">(subtract 3 from both sides)</span><br>x = 5 &nbsp;<span class="r">(divide by 3)</span>. Check: 28 = 28 ✓</div>
+        <p style="margin-top:8px">Shortcut you'll see in class: a term that <b>moves across the =</b> changes its sign (+2x on the right becomes −2x on the left). It's the same as doing it to both sides.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Brackets: expand first</h3>
+        <div class="note wk"><b>3(x − 4) = 2(x + 1)</b><br>3x − 12 = 2x + 2 &nbsp;<span class="r">(multiply out: every term)</span><br>x − 12 = 2 &nbsp;<span class="r">(subtract 2x)</span><br>x = 14 &nbsp;<span class="r">(add 12)</span>. Check: 3(10) = 30 and 2(15) = 30 ✓</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Fractions: clear them first</h3>
+        <p>Multiply <b>every term</b> on both sides by the lowest common multiple (LCM) of the bottom numbers.</p>
+        <div class="note wk"><b>x/2 + x/3 = 10</b> &nbsp;<span class="r">(LCM of 2 and 3 is 6)</span><br>3x + 2x = 60 &nbsp;<span class="r">(× 6: 6 × x/2 = 3x, 6 × x/3 = 2x, 6 × 10 = 60)</span><br>5x = 60, so x = 12. Check: 6 + 4 = 10 ✓</div>
+        <ul style="margin-top:10px">
+          <li>(x + 2)/5 = 3 → x + 2 = 15 → x = 13. Keep the top in a bracket when you multiply.</li>
+          <li>(x + 1)/3 = (x − 1)/2 → cross-multiply: 2(x + 1) = 3(x − 1) → 2x + 2 = 3x − 3 → x = 5.</li>
+          <li>The classic slip: multiplying the fractions but <b>forgetting the number on its own</b> (the 10 must become 60).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Forming equations from words</h3>
+        <ol>
+          <li><b>Say what x stands for</b> ("Let x = the price of one child's ticket").</li>
+          <li><b>Write the other amounts using x</b> (an adult ticket costs €6 more: x + 6).</li>
+          <li><b>Find the two things that are equal</b> and write the equation.</li>
+          <li><b>Solve, then answer the question in words</b>, with units.</li>
+        </ol>
+        <div class="note wk">"I think of a number, multiply it by 4 and add 7. The answer is 31."<br>4x + 7 = 31 → 4x = 24 → x = <b>6</b>. Check in the words: 6 × 4 + 7 = 31 ✓</div>
+        <ul style="margin-top:10px">
+          <li>Three consecutive numbers: n, n + 1, n + 2.</li>
+          <li>Angles in a triangle add to 180°; a perimeter adds all the sides.</li>
+          <li>"5 more than" → + 5; "3 times as many" → 3x; "the same as" → =.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Always check</h3>
+        <p>Put your answer back into the <b>original</b> equation. Both sides must give the same number. If they don't, look for a sign slip or a term you forgot to multiply.</p>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Two equations at once (simultaneous equations), equations with x², and inequalities (&lt;, &gt;) come later in Junior Cycle Maths.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Solving a linear equation is one of the most common parts on the paper, and it hides inside bigger questions too: a perimeter or angle question, a word problem about prices or ages, the last step of a pattern or a graph question. Many questions say "write an equation" first: that line earns marks on its own.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show every step</b>, one line each. Method marks are given for correct steps even if the final answer slips.</li>
+            <li><b>Do the same to both sides</b>, and to <b>every</b> term (fractions: the whole number too).</li>
+            <li><b>Watch the signs</b> when you expand a bracket or move a term across the =.</li>
+            <li><b>Word problems:</b> say what x is, write the equation, solve, then answer in words with units.</li>
+            <li><b>Check</b> by putting your answer back in. It takes 20 seconds and catches most slips.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Solve.</b> (a) 5x − 7 = 2x + 11 &nbsp;(b) 4(x − 3) = 2(x + 5) &nbsp;(c) (x + 5)/4 + (x − 1)/2 = 6
+              <details><summary>Show the worked answer</summary><p>(a) 3x − 7 = 11 → 3x = 18 → <b>x = 6</b>. Check: 23 = 23 ✓<br>(b) 4x − 12 = 2x + 10 → 2x = 22 → <b>x = 11</b>. Check: 4(8) = 32, 2(16) = 32 ✓<br>(c) Multiply every term by 4: (x + 5) + 2(x − 1) = 24 → x + 5 + 2x − 2 = 24 → 3x + 3 = 24 → 3x = 21 → <b>x = 7</b>. Check: 12/4 + 6/2 = 3 + 3 = 6 ✓</p></details></li>
+            <li><b>The triangle.</b> An isosceles triangle has sides of x + 4 cm, x + 4 cm and 2x − 1 cm. Its perimeter is 39 cm. (a) Write an equation in x. (b) Solve it. (c) Find the length of each side.
+              <details><summary>Show the worked answer</summary><p>(a) (x + 4) + (x + 4) + (2x − 1) = 39, so <b>4x + 7 = 39</b>.<br>(b) 4x = 32 → <b>x = 8</b>.<br>(c) <b>12 cm, 12 cm and 15 cm</b>. Check: 12 + 12 + 15 = 39 ✓</p></details></li>
+            <li><b>Cinema tickets.</b> A family buys 2 adult tickets and 3 child tickets for €62. An adult ticket costs €6 more than a child ticket. Let x = the price of a child ticket. (a) Write an expression for the price of an adult ticket. (b) Write an equation and solve it. (c) How much is each ticket?
+              <details><summary>Show the worked answer</summary><p>(a) <b>x + 6</b>.<br>(b) 2(x + 6) + 3x = 62 → 2x + 12 + 3x = 62 → 5x + 12 = 62 → 5x = 50 → <b>x = 10</b>.<br>(c) Child <b>€10</b>, adult <b>€16</b>. Check: 2(16) + 3(10) = 32 + 30 = 62 ✓</p></details></li>
+            <li><b>Spot the mistake.</b> Niamh solved 3(x − 2) = x + 8 like this. Line 1: 3x − 2 = x + 8. Line 2: 2x = 10. Line 3: x = 5. (a) Show that x = 5 is not the solution. (b) Which line has the mistake? (c) Solve the equation correctly.
+              <details><summary>Show the worked answer</summary><p>(a) 3(5 − 2) = 9, but 5 + 8 = 13. 9 ≠ 13, so x = 5 is wrong.<br>(b) <b>Line 1</b>: the 3 must multiply both terms: 3(x − 2) = 3x − 6.<br>(c) 3x − 6 = x + 8 → 2x = 14 → <b>x = 7</b>. Check: 3(5) = 15 and 7 + 8 = 15 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/linear-equations-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Linear Equations Teacher Pack (€5)</a>: Word-to-Equation Match cards, Equation Relay, Equation Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));} // standard order (highest power first)
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  /* Bracket Blaster: expansions are written in standard order (highest power first), so no positive-first swap */
+  function fmtStd(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));}
+  /* ---------- multiplying terms: a key is letters with powers, e.g. "x²", "ab", "a²b" ---------- */
+  var SUPS={"²":2,"³":3,"⁴":4,"⁵":5},SUPC=["","","²","³","⁴","⁵"];
+  function kp(k){var p={},i=0;while(i<k.length){var L=k[i];i++;var e=1;if(i<k.length&&SUPS[k[i]]){e=SUPS[k[i]];i++;}p[L]=(p[L]||0)+e;}return p;}
+  function kstr(p){return Object.keys(p).sort().map(function(L){return L+SUPC[p[L]];}).join("");}
+  function kmul(a,b){var p=kp(a),q=kp(b);for(var L in q)p[L]=(p[L]||0)+q[L];return kstr(p);}
+  function mul(A,B){var m={};for(var a in A)for(var b in B){if(!A[a]||!B[b])continue;var k=kmul(a,b);m[k]=(m[k]||0)+A[a]*B[b];}return m;}
+  function T1(c,k){var m={};m[k]=c;return m;}
+  function lin(v,a,b){var m={};m[v]=a;m[""]=b;return m;}            // a·v + b
+  function inner(m){return fmtStd(m);}
+  function brk(c,k,m){ // c·k outside a bracket: "3(x − 4)", "−(x + 2)", "2x(x − 5)"
+    var out=k===""?(c===1?"":c===-1?M:num(c)):tm(c,k,true);return out+"("+inner(m)+")";}
+  function sq(m){return "("+inner(m)+")²";}
+  function pr(A,B){return "("+inner(A)+")("+inner(B)+")";}
+  function cnt(m){return keys(m).length;}
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás"];
+  var INK="#1B2430",YEL="#F6CF5A";
+  var V1=["x","x","x","a","n","y","t","p"];
+
+  function terms(m){return keys(m).map(function(k){return [m[k],k];});}
+  function rectSVG(l,w){ // rectangle with length and width labels (expression strings)
+    var T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+INK+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg viewBox="0 0 320 135" width="100%" style="max-width:320px" role="img" data-shape="rect" aria-label="Rectangle with length '+l+' and width '+w+'"><rect x="70" y="30" width="180" height="90" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(160,22,l,0)+T(62,80,w,1,"end")+'</svg>';}
+
+
+  /* ================= Balance It: linear equations ================= */
+  function X(a,b){return lin("x",a,b);}
+  function S(m){return typeof m==="string"?m:fmtStd(m);}
+  function eqs(L,R){return S(L)+" = "+S(R);}
+  function solve(L,R){var a=(L.x||0)-(R.x||0),b=(R[""]||0)-(L[""]||0);return a===0?null:b/a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+  function lcm(a,b){return a/gcd(a,b)*b;}
+  function sgn(n){return n<0?" "+M+" "+(-n):" + "+n;}   // " + 5" / " − 5"
+  function frac(top,d){return (/[+−]/.test(top.slice(1))?"("+top+")":top)+"/"+d;}
+  function isInt(v){return v!==null&&isFinite(v)&&v===Math.round(v);}
+  function she(nm){return /^(Ciara|Aoife|Zara|Emma|Niamh|Áine|Ella|Saoirse)$/.test(nm)?"she":"he";}
+  var GIRLS=["Ciara","Aoife","Zara","Emma","Niamh","Áine","Ella","Saoirse"],BOYS=["Liam","Jack","Oisín","Tomás","Cian","Max","Seán","Darragh"];
+
+  /* ---------- balance picture: bags of x counters and single counters on a level see-saw ---------- */
+  function balSVG(kL,mL,kR,mR){
+    var o="",PL=190;
+    function pan(side,k,m,cx){
+      var rows=Math.ceil(m/6),s="";
+      for(var i=0;i<m;i++){var r=Math.floor(i/6),c=i%6,inRow=Math.min(6,m-r*6),x0=cx-(inRow*21-3)/2+c*21,y=PL-21*(r+1);
+        s+='<g class="one" data-side="'+side+'"><rect x="'+x0+'" y="'+y+'" width="18" height="18" rx="3" fill="#E9F5EE" stroke="'+INK+'" stroke-width="1.6"/><text x="'+(x0+9)+'" y="'+(y+13.5)+'" font-size="11" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">1</text></g>';}
+      for(var j=0;j<k;j++){var bx=cx-(k*32-4)/2+j*32,by=PL-21*rows-40;
+        s+='<g class="bag" data-side="'+side+'"><path d="M'+(bx+4)+' '+(by+8)+' Q'+(bx+14)+' '+(by-1)+' '+(bx+24)+' '+(by+8)+' L'+(bx+28)+' '+(by+36)+' L'+bx+' '+(by+36)+' Z" fill="'+YEL+'" stroke="'+INK+'" stroke-width="2"/><text x="'+(bx+14)+'" y="'+(by+28)+'" font-size="16" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">x</text></g>';}
+      return s;}
+    o+=pan("L",kL,mL,85)+pan("R",kR,mR,255);
+    o+='<rect x="8" y="'+PL+'" width="324" height="8" rx="3" fill="'+INK+'"/><path d="M170 '+(PL+8)+' L150 '+(PL+38)+' L190 '+(PL+38)+' Z" fill="#2E7D5B"/>';
+    var top=Math.min(PL-21*Math.ceil(mL/6)-(kL?42:0),PL-21*Math.ceil(mR/6)-(kR?42:0))-8;
+    return '<svg viewBox="0 '+top+' 340 '+(PL+42-top)+'" width="100%" style="max-width:340px" role="img" data-shape="balance" aria-label="Balanced scales: left '+kL+' bags and '+mL+' counters, right '+kR+' bags and '+mR+' counters">'+o+'</svg>';}
+
+  /* ---------- Balance It: picture, one-step, two-step, "do this to both sides" ---------- */
+  function qBal(){
+    var k,x,m,n,t=0;do{k=ri(1,4);x=ri(1,6);m=ri(0,8);n=k*x+m;t++;}while((n>20||(m===0&&k===1))&&t<50);
+    if(n>20){k=2;x=3;m=4;n=10;}
+    var L=X(k,m),R=X(0,n);
+    return QN("The scales balance. Each bag holds the same number of counters, x. Find x.",eqs(L,R),x,[n-m,n+m,k?Math.round((n+m)/k):null,n-m-k],
+      (m?"Take "+m+" counter"+(m>1?"s":"")+" off BOTH sides: "+tm(k,"x",true)+" = "+(n-m)+". ":"")+(k>1?"Share between "+k+" bags: x = "+(n-m)+" ÷ "+k+" = "+x+".":"So x = "+x+"."),balSVG(k,m,0,n),{t:"bal"});
+  }
+  function qOne(){
+    var f=ri(0,4),x=nz(-9,12),a,L,R,why;
+    if(f===0){a=ri(2,15);L=X(1,a);R=X(0,x+a);why="Subtract "+a+" from both sides: x = "+num(x+a)+" "+M+" "+a+" = "+num(x)+".";}
+    else if(f===1){a=ri(2,15);L=X(1,-a);R=X(0,x-a);why="Add "+a+" to both sides: x = "+num(x-a)+" + "+a+" = "+num(x)+".";}
+    else if(f===2){a=nz(-9,9);if(a===1||a===-1)a=3;L=X(a,0);R=X(0,a*x);why="Divide both sides by "+num(a)+": x = "+num(a*x)+" ÷ "+br(a)+" = "+num(x)+".";}
+    else if(f===3){a=ri(2,6);var y=nz(-6,9);x=a*y;
+      return QN("Solve:",frac("x",a)+" = "+num(y),x,[y+a,y-a,Math.round(y/a)],"Multiply both sides by "+a+": x = "+num(y)+" × "+a+" = "+num(x)+".","",{t:"solve"});}
+    else{a=ri(2,15);var fr=num(a)+" + x";
+      return QN("Solve:",fr+" = "+num(x+a),x,[x+2*a,-x],"Subtract "+a+" from both sides: x = "+num(x+a)+" "+M+" "+a+" = "+num(x)+".","",{t:"solve"});}
+    return QN("Solve:",eqs(L,R),x,[f<2?R[""]+(f===0?a:-a):R[""]-a,f===2?a*x*a:null,-x],why,"",{t:"solve"});
+  }
+  function qTwo(){
+    var f=ri(0,2),a=ri(2,9),x=nz(-8,10),b=ri(1,15),L,R,c,why;
+    if(f===0){c=a*x+b;L=X(a,b);why="Subtract "+b+" from both sides: "+tm(a,"x",true)+" = "+num(c-b)+". Divide by "+a+": x = "+num(x)+".";
+      return QN("Solve:",eqs(L,X(0,c)),x,[(c+b)/a,c-b-a,Math.round(c/a)-b,c-b],why,"",{t:"solve"});}
+    if(f===1){c=a*x-b;L=X(a,-b);why="Add "+b+" to both sides: "+tm(a,"x",true)+" = "+num(c+b)+". Divide by "+a+": x = "+num(x)+".";
+      return QN("Solve:",eqs(L,X(0,c)),x,[(c-b)/a,c+b-a,c+b],why,"",{t:"solve"});}
+    c=b-a*x;var fr=fmtList([[b,""],[-a,"x"]]);
+    why="Subtract "+b+" from both sides: "+M+tm(a,"x",true)+" = "+num(c-b)+". Divide by "+num(-a)+": x = "+num(x)+".";
+    return QN("Solve:",fr+" = "+num(c),x,[-x,(c+b)/a,(b-c)],why,"",{t:"solve"});
+  }
+  function qDoBoth(){
+    var f=ri(0,3),a=ri(2,7),x=nz(-6,9),b=nz(-12,12),eq,op,ans,pool,why;
+    if(f===0){var c=a*x+b;eq=eqs(X(a,b),X(0,c));
+      op=b>0?"Subtract "+b+" from both sides.":"Add "+(-b)+" to both sides.";
+      ans=eqs(X(a,0),X(0,c-b));
+      pool=[eqs(X(a,0),X(0,c+b)),eqs(X(a,0),X(0,c)),eqs(X(a,b),X(0,c-b))];
+      why=(b>0?"Taking "+b+" away":"Adding "+(-b))+" on BOTH sides keeps it balanced and leaves "+tm(a,"x",true)+" on its own: "+ans+".";}
+    else if(f===1){var c1=a*x;eq=eqs(X(a,0),X(0,c1));op="Divide both sides by "+a+".";ans=eqs(X(1,0),X(0,x));
+      pool=[eqs(X(1,0),X(0,c1-a)),eqs(X(1,0),X(0,c1*a)),eqs(X(a,0),X(0,x)),eqs(X(1,0),X(0,-x))];
+      why=tm(a,"x",true)+" ÷ "+a+" = x and "+num(c1)+" ÷ "+a+" = "+num(x)+". Answer: "+ans+".";}
+    else if(f===2){var y=nz(-6,9);eq=frac("x",a)+" = "+num(y);op="Multiply both sides by "+a+".";ans=eqs(X(1,0),X(0,a*y));
+      pool=[eqs(X(1,0),X(0,y+a)),eqs(X(1,0),X(0,y)),eqs(X(a,0),X(0,y)),eqs(X(1,0),X(0,a*y+1))];
+      why=frac("x",a)+" × "+a+" = x and "+num(y)+" × "+a+" = "+num(a*y)+". Answer: "+ans+".";}
+    else{var c2=ri(1,a-1),d=a*x+b-c2*x;eq=eqs(X(a,b),X(c2,d));op="Subtract "+tm(c2,"x",true)+" from both sides.";ans=eqs(X(a-c2,b),X(0,d));
+      pool=[eqs(X(a+c2,b),X(0,d)),eqs(X(a-c2,b),X(c2,d)),eqs(X(a,b),X(0,d)),eqs(X(a-c2,b),X(-c2,d)),eqs(X(a-c2,0),X(0,d))];
+      why="Take "+tm(c2,"x",true)+" from BOTH sides: "+tm(a,"x",true)+" "+M+" "+tm(c2,"x",true)+" = "+tm(a-c2,"x",true)+", and the x terms on the right are gone. Answer: "+ans+".";}
+    return C(op+" Which equation do you get?",eq,ans,pool.filter(function(s){return s!==ans;}),why,eq+" → "+op+" → "+ans,"",{t:"op",op:op,after:true});
+  }
+
+  /* ---------- Letters on both sides & brackets ---------- */
+  function qBoth(){
+    var a,c,t=0;do{a=ri(1,9);c=ri(1,9);t++;}while(a===c);var x=nz(-8,9),b=nz(-12,12),d=a*x+b-c*x;
+    var L=X(a,b),R=X(c,d);
+    return QN("Solve:",eqs(L,R),x,[(d-b)/(a+c),(d+b)/(a-c),(b-d)/(a-c)===x?null:(b-d)/(a-c),-x],
+      "Get the x terms on one side and the numbers on the other: "+tm(a,"x",true)+" "+M+" "+tm(c,"x",true)+" = "+num(d)+" "+M+" "+br(b)+", so "+tm(a-c,"x",true)+" = "+num(d-b)+" and x = "+num(x)+".","",{t:"solve"});
+  }
+  function qBrk(){
+    var f=ri(0,2),x=nz(-7,9),k=ri(2,6),a=nz(-7,7);
+    if(f===0){var c=k*(x+a),frame=brk(k,"",X(1,a))+" = "+num(c);
+      return QN("Solve:",frame,x,[c-a,(c-a)/k,c/k+a],"Expand: "+fmtStd(X(k,k*a))+" = "+num(c)+". "+(k*a>0?"Subtract "+k*a:"Add "+(-k*a))+": "+tm(k,"x",true)+" = "+num(c-k*a)+". Divide by "+k+": x = "+num(x)+". (Or divide both sides by "+k+" first: x"+sgn(a)+" = "+num(c/k)+".)","",{t:"solve"});}
+    if(f===1){var m,b,t=0;do{m=ri(1,6);b=nz(-8,8);t++;}while((m===k||(m*(x+b)-k*x)%k!==0||(m*(x+b)-k*x)/k===0)&&t<200);
+      if(t>=200)return qBrk();var a2=(m*(x+b)-k*x)/k;
+      var frame2=brk(k,"",X(1,a2))+" = "+brk(m,"",X(1,b));
+      return QN("Solve:",frame2,x,[(m*b-a2)/(k-m),(b-a2)/(k-m),-x],"Expand both sides: "+fmtStd(X(k,k*a2))+" = "+fmtStd(X(m,m*b))+". Collect: "+tm(k-m,"x",true)+" = "+num(m*b-k*a2)+", so x = "+num(x)+".","",{t:"solve"});}
+    var j=nz(-9,9),c3=ri(1,9),t3=0;while(c3===k&&t3<9){c3=ri(1,9);t3++;}if(c3===k)c3=k+1;
+    var d=k*(x+a)+j-c3*x,frame3=brk(k,"",X(1,a))+sgn(j)+" = "+fmtStd(X(c3,d));
+    return QN("Solve:",frame3,x,[(d-a-j)/(k-c3),(d-k*a+j)/(k-c3),-x],"Expand: "+fmtStd(X(k,k*a+j))+" = "+fmtStd(X(c3,d))+". Collect: "+tm(k-c3,"x",true)+" = "+num(d-k*a-j)+", so x = "+num(x)+".","",{t:"solve"});
+  }
+  function qBal2(){
+    var kL,kR,x,mL,mR,t=0;do{kL=ri(2,4);kR=ri(1,kL-1);x=ri(1,6);mL=ri(0,8);mR=(kL-kR)*x+mL;t++;}while(mR>18&&t<50);
+    if(mR>18){kL=3;kR=1;x=2;mL=3;mR=7;}
+    return QN("The scales balance. Each bag holds x counters. Find x.",eqs(X(kL,mL),X(kR,mR)),x,[mR-mL,Math.round((mR-mL)/kL),(mR+mL)/(kL-kR),mR-mL-kR],
+      "Take "+kR+" bag"+(kR>1?"s":"")+" off BOTH sides: "+fmtStd(X(kL-kR,mL))+" = "+mR+"."+(mL?" Take "+mL+" counter"+(mL>1?"s":"")+" off both sides: "+tm(kL-kR,"x",true)+" = "+(mR-mL)+".":"")+" So x = "+x+".",balSVG(kL,mL,kR,mR),{t:"bal"});
+  }
+
+  /* ---------- Fractions ---------- */
+  function qF1(){var a=ri(2,6),y=nz(-5,8),x=a*y,b=nz(-9,9),c=y+b;
+    return QN("Solve:",frac("x",a)+sgn(b)+" = "+num(c),x,[Math.round((c-b)/a),a*c-b,a*c,a*(c+b)],
+      (b>0?"Subtract "+b:"Add "+(-b))+" from both sides: "+frac("x",a)+" = "+num(y)+". Multiply by "+a+": x = "+num(x)+".","",{t:"solve"});}
+  function qF2(){var a=ri(2,7),c=nz(-5,8),b=nz(-9,9),x=a*c-b;
+    return QN("Solve:",frac(fmtStd(X(1,b)),a)+" = "+num(c),x,[a*c+b,c-b,Math.round(c/a)-b],
+      "Multiply both sides by "+a+": "+fmtStd(X(1,b))+" = "+num(a*c)+". "+(b>0?"Subtract "+b:"Add "+(-b))+": x = "+num(x)+".","",{t:"solve"});}
+  function qF3(){var a,b,t=0;do{a=ri(2,6);b=ri(2,6);t++;}while(a===b);var L=lcm(a,b),x=L*nz(-3,4),c=x/a+x/b,sub=Math.random()<.3&&x/a-x/b!==0;
+    if(sub)c=x/a-x/b;
+    var frame=frac("x",a)+(sub?" "+M+" ":" + ")+frac("x",b)+" = "+num(c);
+    return QN("Solve:",frame,x,[c*(a+b),c*a*b,Math.round(c*L/(sub?1:2)),x+L],
+      "Multiply every term by "+L+" (the LCM of "+a+" and "+b+"): "+tm(L/a,"x",true)+(sub?" "+M+" ":" + ")+tm(L/b,"x",true)+" = "+num(c*L)+", so "+tm(sub?L/a-L/b:L/a+L/b,"x",true)+" = "+num(c*L)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qF4(){var p,q,t=0;do{p=ri(2,5);q=ri(2,6);t++;}while(p===q);var x=nz(-6,9),m=nz(-3,4),a=p*m-x,b=q*m-x;
+    if(a===0||b===0)return qF4();
+    return QN("Solve:",frac(fmtStd(X(1,a)),p)+" = "+frac(fmtStd(X(1,b)),q),x,[(p*b-q*a)/(p-q),(b-a),(p*a-q*b)/(q-p),-x],
+      "Cross-multiply (multiply both sides by "+p+" × "+q+"): "+q+"("+fmtStd(X(1,a))+") = "+p+"("+fmtStd(X(1,b))+"), so "+fmtStd(X(q,q*a))+" = "+fmtStd(X(p,p*b))+". Collect: "+tm(q-p,"x",true)+" = "+num(p*b-q*a)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qF5(){var a=ri(2,5),d=ri(2,6),x,b,t=0;do{x=nz(-5,8);b=nz(-9,9);t++;}while(((a*x+b)%d!==0||a*x+b===0)&&t<300);if(t>=300)return qF5();var c=(a*x+b)/d;
+    return QN("Solve:",frac(fmtStd(X(a,b)),d)+" = "+num(c),x,[(c-b)/a,(c*d+b)/a,c*d-b],
+      "Multiply both sides by "+d+": "+fmtStd(X(a,b))+" = "+num(c*d)+". Then "+tm(a,"x",true)+" = "+num(c*d-b)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qLCD(){var a,b,t=0;do{a=ri(2,8);b=ri(2,9);t++;}while(a===b||a*b>60);var L=lcm(a,b),c=nz(-5,9),s1=nz(-5,5),s2=nz(-5,5);
+    var frame=frac(fmtStd(X(1,s1)),a)+(Math.random()<.5?" + ":" "+M+" ")+frac(fmtStd(X(1,s2)),b)+" = "+num(c);
+    return QN("To clear the fractions, what is the smallest number you can multiply every term by?",frame,L,[a*b===L?null:a*b,a+b,Math.max(a,b),c],
+      "Use the lowest common multiple of the bottom numbers "+a+" and "+b+": "+L+". Multiply EVERY term by "+L+" — the "+num(c)+" on the right too.","",{t:"lcd"});}
+
+  /* ---------- From words ---------- */
+  function thinkT(){ // returns {s, L, R} sentence + equation (x = the number)
+    var f=ri(0,4),x=ri(2,15),a=ri(2,6),b=ri(1,12),c,d;
+    if(f===0)return {s:"I think of a number. I multiply it by "+a+" and add "+b+". The answer is "+(a*x+b)+".",L:X(a,b),R:X(0,a*x+b),x:x,str:eqs(X(a,b),X(0,a*x+b)),wr:[eqs(X(a,-b),X(0,a*x+b)),brk(a,"",X(1,b))+" = "+(a*x+b),eqs(X(a,0),X(0,a*x+2*b)),eqs(X(b,a),X(0,a*x+b))]};
+    if(f===1){if(a*x-b<=0)b=1;return {s:"I think of a number. I multiply it by "+a+" and subtract "+b+". The answer is "+(a*x-b)+".",L:X(a,-b),R:X(0,a*x-b),x:x,str:eqs(X(a,-b),X(0,a*x-b)),wr:[eqs(X(a,b),X(0,a*x-b)),brk(a,"",X(1,-b))+" = "+(a*x-b),eqs(X(1,-b*a),X(0,a*x-b)),fmtList([[b,""],[-a,"x"]])+" = "+(a*x-b)]};}
+    if(f===2)return {s:"I think of a number. I add "+b+", then multiply the result by "+a+". The answer is "+(a*(x+b))+".",L:X(a,a*b),R:X(0,a*(x+b)),x:x,str:brk(a,"",X(1,b))+" = "+(a*(x+b)),wr:[eqs(X(a,b),X(0,a*(x+b))),brk(b,"",X(1,a))+" = "+(a*(x+b)),eqs(X(1,a*b),X(0,a*(x+b))),frac(fmtStd(X(1,b)),a)+" = "+(a*(x+b)),eqs(X(a,0),X(0,a*(x+b)+b))]};
+    if(f===3){do{c=ri(2,6);}while(c===a);d=a*x+b-c*x;if(d<=0)return thinkT();
+      return {s:"I think of a number. If I multiply it by "+a+" and add "+b+", I get the same answer as when I multiply it by "+c+" and add "+d+".",L:X(a,b),R:X(c,d),x:x,str:eqs(X(a,b),X(c,d)),wr:[eqs(X(a,d),X(c,b)),eqs(X(a+c,b),X(0,d)),eqs(X(a,b),X(0,c*d)),eqs(X(a,b+d),X(c,0))]};}
+    x=a*ri(1,6);return {s:"I think of a number. I divide it by "+a+", then add "+b+". The answer is "+(x/a+b)+".",L:null,x:x,str:frac("x",a)+" + "+b+" = "+(x/a+b),wr:[frac(fmtStd(X(1,b)),a)+" = "+(x/a+b),eqs(X(a,b),X(0,x/a+b)),frac("x",b)+" + "+a+" = "+(x/a+b),frac("x",a)+" = "+(x/a+b)+" + "+b]};
+  }
+  function qThink(){var T=thinkT();
+    return QN(T.s+" What is my number?","",T.x,[Math.round(T.x*1.5),T.x+2],"Write it as an equation: "+T.str+". Solve it: the number is "+T.x+". Check it in the sentence!","",{t:"think"});}
+  function solveStr(s){ // solve a simple equation string made by thinkT (linear, maybe one bracket or /a)
+    var sides=s.split(" = ").map(function(z){return z.replace(/−/g,"-");});
+    function val(e,x){return Function("x","return "+e.replace(/(\d)\(/g,"$1*(").replace(/(\d)x/g,"$1*x"))(x);}
+    var f0=val(sides[0],0)-val(sides[1],0),f1=val(sides[0],1)-val(sides[1],1);if(f1===f0)return null;return -f0/(f1-f0);}
+  function qForm(){var T=thinkT();
+    var pool=T.wr.filter(function(w){var v=solveStr(w);return w!==T.str&&(v===null||Math.abs(v-T.x)>1e-9);});
+    return C(T.s+" Which equation matches?","",T.str,pool,"Follow the sentence step by step with x for the number: "+T.str+". (It gives x = "+T.x+".)",T.s+" → "+T.str,"",{t:"form"});}
+  function qCtx(){
+    var f=ri(0,5),x,why,html="",en,a,S2;
+    if(f===0){x=ri(3,15);a=ri(1,9);S2=2*(x+a)+2*x;en="A rectangle is (x + "+a+") cm long and x cm wide. Its perimeter is "+S2+" cm. Find x.";html=rectSVG("x + "+a,"x");
+      why="Perimeter = all four sides: 2(x + "+a+") + 2x = "+S2+", so 4x + "+2*a+" = "+S2+", 4x = "+(S2-2*a)+" and x = "+x+".";
+      return QN(en,"",x,[(S2-a)/4,(S2-2*a)/2,S2/4-a,x+a],why,html,{t:"ctx",f:0});}
+    if(f===1){var k=ri(2,4);x=ri(15,40);a=180-(k+2)*x;if(a<=0||a>60)return qCtx();en="The angles of a triangle are x°, "+k+"x° and (x + "+a+")°. Find x.";
+      why="The angles of a triangle add to 180°: x + "+k+"x + x + "+a+" = 180, so "+(k+2)+"x = "+(180-a)+" and x = "+x+".";
+      return QN(en,"",x,[(180-a)/(k+1),180/(k+2),(180+a)/(k+2)],why,"",{t:"ctx",f:1});}
+    if(f===2){x=ri(5,40);S2=3*x+3;en="Three consecutive whole numbers add up to "+S2+". What is the smallest one?";
+      why="Call them n, n + 1 and n + 2: 3n + 3 = "+S2+", so 3n = "+(S2-3)+" and n = "+x+". (Check: "+x+" + "+(x+1)+" + "+(x+2)+" = "+S2+".)";
+      return QN(en,"",x,[S2/3,x+1,x+2,(S2-1)/3],why,"",{t:"ctx",f:2});}
+    if(f===3){var g=rnd(GIRLS),bo=rnd(BOYS);x=ri(4,14);a=ri(2,9);S2=2*x+a;en=g+" is "+a+" years older than her brother "+bo+". Their ages add up to "+S2+". How old is "+bo+"?";
+      why="Call "+bo+"'s age x. Then "+g+" is x + "+a+": x + x + "+a+" = "+S2+", so 2x = "+(S2-a)+" and x = "+x+". ("+g+" is "+(x+a)+".)";
+      return QN(en,"",x,[x+a,S2-a,(S2+a)/2],why,"",{t:"ctx",f:3});}
+    if(f===4){var n=ri(2,6);x=ri(6,14);a=ri(2,8);S2=n*x+a;en=n+" cinema tickets and a €"+a+" popcorn cost €"+S2+" altogether. How much is one ticket, in euro?";
+      why="Call one ticket €x: "+n+"x + "+a+" = "+S2+", so "+n+"x = "+(S2-a)+" and x = "+x+".";
+      return QN(en,"",x,[(S2+a)/n,S2/n,S2-a],why,"",{t:"ctx",f:4});}
+    var g2=rnd(GIRLS),b2=rnd(BOYS),k2=ri(2,5);x=ri(4,20);S2=(k2+1)*x;en=g2+" has "+k2+" times as many stickers as "+b2+". Together they have "+S2+". How many has "+b2+"?";
+    why="Call "+b2+"'s stickers x. "+g2+" has "+k2+"x: x + "+k2+"x = "+S2+", so "+(k2+1)+"x = "+S2+" and x = "+x+".";
+    return QN(en,"",x,[S2/k2,k2*x,S2-k2],why,"",{t:"ctx",f:5});
+  }
+
+  /* ---------- Check & fix ---------- */
+  function randEq(){ // a linear equation with whole-number solution: {s, x}
+    var f=ri(0,2),x=nz(-6,9);
+    if(f===0){var a,c,t=0;do{a=ri(1,7);c=ri(1,7);t++;}while(a===c);var b=nz(-9,9),d=a*x+b-c*x;return {s:eqs(X(a,b),X(c,d)),x:x};}
+    if(f===1){var k=ri(2,5),p=nz(-6,6);return {s:brk(k,"",X(1,p))+" = "+num(k*(x+p)),x:x};}
+    var k2=ri(2,4),p2=nz(-5,5),c2=ri(1,5);if(c2===k2)c2=k2+1;var d2=k2*(x+p2)-c2*x;return {s:brk(k2,"",X(1,p2))+" = "+fmtStd(X(c2,d2)),x:x};
+  }
+  function qCheck(){var E=randEq();
+    return QN("Which value of x makes this true? Substitute to check.",E.s,E.x,[E.x+1,E.x-1,-E.x,E.x+3],
+      "Put x = "+num(E.x)+" into both sides: they give the same number, so x = "+num(E.x)+" is the solution.","",{t:"solve"});}
+  function qClaim(){var E=randEq(),nm=rnd(GIRLS.concat(BOYS)),right=Math.random()<.45,v=right?E.x:E.x+rnd([-2,-1,1,2]);
+    function w(z){return "Wrong: x = "+num(z);}
+    var ans=right?"Right":w(E.x),pool=right?[E.x+1,E.x-1,E.x+2].map(w):["Right"].concat([E.x+3,E.x-3,-E.x].filter(function(z){return z!==E.x&&z!==v;}).map(w));
+    return C(nm+" says the solution of "+E.s+" is x = "+num(v)+". Is "+she(nm)+" right?","",ans,pool,
+      "Substitute or solve: the solution is x = "+num(E.x)+"."+(right?" "+nm+" is right.":" "+nm+" is wrong."),E.s+" : x = "+num(v)+"? → "+ans,"",{t:"claim",eq:E.s,v:v});}
+  function qLine(){
+    var k=ri(2,5),c,t=0;do{c=ri(1,6);t++;}while(c===k);var x=nz(-6,8),a=nz(-6,6),d=k*(x+a)-c*x,bad=ri(0,4);
+    var frame=brk(k,"",X(1,a))+" = "+fmtStd(X(c,d));
+    var L1A=X(k,k*a);if(bad===1)L1A=X(k,a);                 // forgot to multiply the second term
+    var mv=-c,rr=d-L1A[""];if(bad===2){if(Math.random()<.5)mv=c;else rr=d+L1A[""];} // a term moved without changing sign
+    var cf=k+mv;if(cf===0)return qLine();
+    var rv=rr;if(bad===3)rv=rr+cf*rnd([-1,1]);             // arithmetic slip
+    if(rv%cf!==0)return qLine();if(bad===4&&Math.abs(cf)<2)return qLine();var xv=rv/cf;if(bad===4)xv=rv-cf;
+    if(bad>0&&xv===x)return qLine();if(bad===4&&rv/cf===xv)return qLine();
+    var right2=d===0?[[-L1A[""],""]]:[[d,""],[-L1A[""],""]];if(bad===2&&rr!==d-L1A[""])right2=d===0?[[L1A[""],""]]:[[d,""],[L1A[""],""]];
+    var lines=[eqs(L1A,X(c,d)),fmtList([[k,"x"],[mv,"x"]])+" = "+fmtList(right2),fmtList([[cf,"x"]])+" = "+num(rv),"x = "+num(xv)];
+    var html='<div class="steps">'+lines.map(function(s,i){return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> '+s+'</p>';}).join("")+'</div>';
+    var nm=rnd(GIRLS.concat(BOYS)),ans=bad===0?"No mistake":"Line "+bad;
+    return C(nm+" solved this. Which line has the first mistake?",frame,ans,["Line 1","Line 2","Line 3","Line 4","No mistake"].filter(function(s){return s!==ans;}),
+      "Correct working: "+fmtStd(X(k,k*a))+" = "+fmtStd(X(c,d))+" → "+tm(k-c,"x",true)+" = "+num(d-k*a)+" → x = "+num(x)+"."+(bad===1?" Line 1: "+k+" must multiply BOTH terms in the bracket.":bad===2?" Line 2: a term that moves across the = changes its sign.":bad===3?" Line 3: the numbers were added up wrongly.":bad===4?" Line 4: to undo × "+br(cf)+", DIVIDE by "+br(cf)+".":" Every line is right."),
+      frame+": "+ans,html,{t:"line",after:true});
+  }
+
+  var MAKERS={
+    balance:[qBal,qBal,qOne,qOne,qTwo,qTwo,qTwo,qDoBoth],
+    both:[qBoth,qBoth,qBoth,qBrk,qBrk,qBrk,qBal2],
+    frac:[qF1,qF2,qF3,qF4,qF5,qLCD],
+    words:[qThink,qThink,qForm,qForm,qCtx,qCtx,qCtx],
+    check:[qLine,qLine,qDoBoth,qCheck,qClaim,qClaim],
+    mixed:[qBal,qOne,qTwo,qDoBoth,qBoth,qBrk,qBal2,qF1,qF2,qF3,qF4,qF5,qLCD,qThink,qForm,qCtx,qLine,qCheck,qClaim]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="balance"||m==="both")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="balance"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="balance"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

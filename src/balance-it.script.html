@@ -1,0 +1,342 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));} // standard order (highest power first)
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  /* Bracket Blaster: expansions are written in standard order (highest power first), so no positive-first swap */
+  function fmtStd(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));}
+  /* ---------- multiplying terms: a key is letters with powers, e.g. "x²", "ab", "a²b" ---------- */
+  var SUPS={"²":2,"³":3,"⁴":4,"⁵":5},SUPC=["","","²","³","⁴","⁵"];
+  function kp(k){var p={},i=0;while(i<k.length){var L=k[i];i++;var e=1;if(i<k.length&&SUPS[k[i]]){e=SUPS[k[i]];i++;}p[L]=(p[L]||0)+e;}return p;}
+  function kstr(p){return Object.keys(p).sort().map(function(L){return L+SUPC[p[L]];}).join("");}
+  function kmul(a,b){var p=kp(a),q=kp(b);for(var L in q)p[L]=(p[L]||0)+q[L];return kstr(p);}
+  function mul(A,B){var m={};for(var a in A)for(var b in B){if(!A[a]||!B[b])continue;var k=kmul(a,b);m[k]=(m[k]||0)+A[a]*B[b];}return m;}
+  function T1(c,k){var m={};m[k]=c;return m;}
+  function lin(v,a,b){var m={};m[v]=a;m[""]=b;return m;}            // a·v + b
+  function inner(m){return fmtStd(m);}
+  function brk(c,k,m){ // c·k outside a bracket: "3(x − 4)", "−(x + 2)", "2x(x − 5)"
+    var out=k===""?(c===1?"":c===-1?M:num(c)):tm(c,k,true);return out+"("+inner(m)+")";}
+  function sq(m){return "("+inner(m)+")²";}
+  function pr(A,B){return "("+inner(A)+")("+inner(B)+")";}
+  function cnt(m){return keys(m).length;}
+  var NAMES=["Ciara","Liam","Aoife","Jack","Zara","Oisín","Emma","Tomás"];
+  var INK="#1B2430",YEL="#F6CF5A";
+  var V1=["x","x","x","a","n","y","t","p"];
+
+  function terms(m){return keys(m).map(function(k){return [m[k],k];});}
+  function rectSVG(l,w){ // rectangle with length and width labels (expression strings)
+    var T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+INK+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg viewBox="0 0 320 135" width="100%" style="max-width:320px" role="img" data-shape="rect" aria-label="Rectangle with length '+l+' and width '+w+'"><rect x="70" y="30" width="180" height="90" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(160,22,l,0)+T(62,80,w,1,"end")+'</svg>';}
+
+
+  /* ================= Balance It: linear equations ================= */
+  function X(a,b){return lin("x",a,b);}
+  function S(m){return typeof m==="string"?m:fmtStd(m);}
+  function eqs(L,R){return S(L)+" = "+S(R);}
+  function solve(L,R){var a=(L.x||0)-(R.x||0),b=(R[""]||0)-(L[""]||0);return a===0?null:b/a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
+  function lcm(a,b){return a/gcd(a,b)*b;}
+  function sgn(n){return n<0?" "+M+" "+(-n):" + "+n;}   // " + 5" / " − 5"
+  function frac(top,d){return (/[+−]/.test(top.slice(1))?"("+top+")":top)+"/"+d;}
+  function isInt(v){return v!==null&&isFinite(v)&&v===Math.round(v);}
+  function she(nm){return /^(Ciara|Aoife|Zara|Emma|Niamh|Áine|Ella|Saoirse)$/.test(nm)?"she":"he";}
+  var GIRLS=["Ciara","Aoife","Zara","Emma","Niamh","Áine","Ella","Saoirse"],BOYS=["Liam","Jack","Oisín","Tomás","Cian","Max","Seán","Darragh"];
+
+  /* ---------- balance picture: bags of x counters and single counters on a level see-saw ---------- */
+  function balSVG(kL,mL,kR,mR){
+    var o="",PL=190;
+    function pan(side,k,m,cx){
+      var rows=Math.ceil(m/6),s="";
+      for(var i=0;i<m;i++){var r=Math.floor(i/6),c=i%6,inRow=Math.min(6,m-r*6),x0=cx-(inRow*21-3)/2+c*21,y=PL-21*(r+1);
+        s+='<g class="one" data-side="'+side+'"><rect x="'+x0+'" y="'+y+'" width="18" height="18" rx="3" fill="#E9F5EE" stroke="'+INK+'" stroke-width="1.6"/><text x="'+(x0+9)+'" y="'+(y+13.5)+'" font-size="11" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">1</text></g>';}
+      for(var j=0;j<k;j++){var bx=cx-(k*32-4)/2+j*32,by=PL-21*rows-40;
+        s+='<g class="bag" data-side="'+side+'"><path d="M'+(bx+4)+' '+(by+8)+' Q'+(bx+14)+' '+(by-1)+' '+(bx+24)+' '+(by+8)+' L'+(bx+28)+' '+(by+36)+' L'+bx+' '+(by+36)+' Z" fill="'+YEL+'" stroke="'+INK+'" stroke-width="2"/><text x="'+(bx+14)+'" y="'+(by+28)+'" font-size="16" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">x</text></g>';}
+      return s;}
+    o+=pan("L",kL,mL,85)+pan("R",kR,mR,255);
+    o+='<rect x="8" y="'+PL+'" width="324" height="8" rx="3" fill="'+INK+'"/><path d="M170 '+(PL+8)+' L150 '+(PL+38)+' L190 '+(PL+38)+' Z" fill="#2E7D5B"/>';
+    var top=Math.min(PL-21*Math.ceil(mL/6)-(kL?42:0),PL-21*Math.ceil(mR/6)-(kR?42:0))-8;
+    return '<svg viewBox="0 '+top+' 340 '+(PL+42-top)+'" width="100%" style="max-width:340px" role="img" data-shape="balance" aria-label="Balanced scales: left '+kL+' bags and '+mL+' counters, right '+kR+' bags and '+mR+' counters">'+o+'</svg>';}
+
+  /* ---------- Balance It: picture, one-step, two-step, "do this to both sides" ---------- */
+  function qBal(){
+    var k,x,m,n,t=0;do{k=ri(1,4);x=ri(1,6);m=ri(0,8);n=k*x+m;t++;}while((n>20||(m===0&&k===1))&&t<50);
+    if(n>20){k=2;x=3;m=4;n=10;}
+    var L=X(k,m),R=X(0,n);
+    return QN("The scales balance. Each bag holds the same number of counters, x. Find x.",eqs(L,R),x,[n-m,n+m,k?Math.round((n+m)/k):null,n-m-k],
+      (m?"Take "+m+" counter"+(m>1?"s":"")+" off BOTH sides: "+tm(k,"x",true)+" = "+(n-m)+". ":"")+(k>1?"Share between "+k+" bags: x = "+(n-m)+" ÷ "+k+" = "+x+".":"So x = "+x+"."),balSVG(k,m,0,n),{t:"bal"});
+  }
+  function qOne(){
+    var f=ri(0,4),x=nz(-9,12),a,L,R,why;
+    if(f===0){a=ri(2,15);L=X(1,a);R=X(0,x+a);why="Subtract "+a+" from both sides: x = "+num(x+a)+" "+M+" "+a+" = "+num(x)+".";}
+    else if(f===1){a=ri(2,15);L=X(1,-a);R=X(0,x-a);why="Add "+a+" to both sides: x = "+num(x-a)+" + "+a+" = "+num(x)+".";}
+    else if(f===2){a=nz(-9,9);if(a===1||a===-1)a=3;L=X(a,0);R=X(0,a*x);why="Divide both sides by "+num(a)+": x = "+num(a*x)+" ÷ "+br(a)+" = "+num(x)+".";}
+    else if(f===3){a=ri(2,6);var y=nz(-6,9);x=a*y;
+      return QN("Solve:",frac("x",a)+" = "+num(y),x,[y+a,y-a,Math.round(y/a)],"Multiply both sides by "+a+": x = "+num(y)+" × "+a+" = "+num(x)+".","",{t:"solve"});}
+    else{a=ri(2,15);var fr=num(a)+" + x";
+      return QN("Solve:",fr+" = "+num(x+a),x,[x+2*a,-x],"Subtract "+a+" from both sides: x = "+num(x+a)+" "+M+" "+a+" = "+num(x)+".","",{t:"solve"});}
+    return QN("Solve:",eqs(L,R),x,[f<2?R[""]+(f===0?a:-a):R[""]-a,f===2?a*x*a:null,-x],why,"",{t:"solve"});
+  }
+  function qTwo(){
+    var f=ri(0,2),a=ri(2,9),x=nz(-8,10),b=ri(1,15),L,R,c,why;
+    if(f===0){c=a*x+b;L=X(a,b);why="Subtract "+b+" from both sides: "+tm(a,"x",true)+" = "+num(c-b)+". Divide by "+a+": x = "+num(x)+".";
+      return QN("Solve:",eqs(L,X(0,c)),x,[(c+b)/a,c-b-a,Math.round(c/a)-b,c-b],why,"",{t:"solve"});}
+    if(f===1){c=a*x-b;L=X(a,-b);why="Add "+b+" to both sides: "+tm(a,"x",true)+" = "+num(c+b)+". Divide by "+a+": x = "+num(x)+".";
+      return QN("Solve:",eqs(L,X(0,c)),x,[(c-b)/a,c+b-a,c+b],why,"",{t:"solve"});}
+    c=b-a*x;var fr=fmtList([[b,""],[-a,"x"]]);
+    why="Subtract "+b+" from both sides: "+M+tm(a,"x",true)+" = "+num(c-b)+". Divide by "+num(-a)+": x = "+num(x)+".";
+    return QN("Solve:",fr+" = "+num(c),x,[-x,(c+b)/a,(b-c)],why,"",{t:"solve"});
+  }
+  function qDoBoth(){
+    var f=ri(0,3),a=ri(2,7),x=nz(-6,9),b=nz(-12,12),eq,op,ans,pool,why;
+    if(f===0){var c=a*x+b;eq=eqs(X(a,b),X(0,c));
+      op=b>0?"Subtract "+b+" from both sides.":"Add "+(-b)+" to both sides.";
+      ans=eqs(X(a,0),X(0,c-b));
+      pool=[eqs(X(a,0),X(0,c+b)),eqs(X(a,0),X(0,c)),eqs(X(a,b),X(0,c-b))];
+      why=(b>0?"Taking "+b+" away":"Adding "+(-b))+" on BOTH sides keeps it balanced and leaves "+tm(a,"x",true)+" on its own: "+ans+".";}
+    else if(f===1){var c1=a*x;eq=eqs(X(a,0),X(0,c1));op="Divide both sides by "+a+".";ans=eqs(X(1,0),X(0,x));
+      pool=[eqs(X(1,0),X(0,c1-a)),eqs(X(1,0),X(0,c1*a)),eqs(X(a,0),X(0,x)),eqs(X(1,0),X(0,-x))];
+      why=tm(a,"x",true)+" ÷ "+a+" = x and "+num(c1)+" ÷ "+a+" = "+num(x)+". Answer: "+ans+".";}
+    else if(f===2){var y=nz(-6,9);eq=frac("x",a)+" = "+num(y);op="Multiply both sides by "+a+".";ans=eqs(X(1,0),X(0,a*y));
+      pool=[eqs(X(1,0),X(0,y+a)),eqs(X(1,0),X(0,y)),eqs(X(a,0),X(0,y)),eqs(X(1,0),X(0,a*y+1))];
+      why=frac("x",a)+" × "+a+" = x and "+num(y)+" × "+a+" = "+num(a*y)+". Answer: "+ans+".";}
+    else{var c2=ri(1,a-1),d=a*x+b-c2*x;eq=eqs(X(a,b),X(c2,d));op="Subtract "+tm(c2,"x",true)+" from both sides.";ans=eqs(X(a-c2,b),X(0,d));
+      pool=[eqs(X(a+c2,b),X(0,d)),eqs(X(a-c2,b),X(c2,d)),eqs(X(a,b),X(0,d)),eqs(X(a-c2,b),X(-c2,d)),eqs(X(a-c2,0),X(0,d))];
+      why="Take "+tm(c2,"x",true)+" from BOTH sides: "+tm(a,"x",true)+" "+M+" "+tm(c2,"x",true)+" = "+tm(a-c2,"x",true)+", and the x terms on the right are gone. Answer: "+ans+".";}
+    return C(op+" Which equation do you get?",eq,ans,pool.filter(function(s){return s!==ans;}),why,eq+" → "+op+" → "+ans,"",{t:"op",op:op,after:true});
+  }
+
+  /* ---------- Letters on both sides & brackets ---------- */
+  function qBoth(){
+    var a,c,t=0;do{a=ri(1,9);c=ri(1,9);t++;}while(a===c);var x=nz(-8,9),b=nz(-12,12),d=a*x+b-c*x;
+    var L=X(a,b),R=X(c,d);
+    return QN("Solve:",eqs(L,R),x,[(d-b)/(a+c),(d+b)/(a-c),(b-d)/(a-c)===x?null:(b-d)/(a-c),-x],
+      "Get the x terms on one side and the numbers on the other: "+tm(a,"x",true)+" "+M+" "+tm(c,"x",true)+" = "+num(d)+" "+M+" "+br(b)+", so "+tm(a-c,"x",true)+" = "+num(d-b)+" and x = "+num(x)+".","",{t:"solve"});
+  }
+  function qBrk(){
+    var f=ri(0,2),x=nz(-7,9),k=ri(2,6),a=nz(-7,7);
+    if(f===0){var c=k*(x+a),frame=brk(k,"",X(1,a))+" = "+num(c);
+      return QN("Solve:",frame,x,[c-a,(c-a)/k,c/k+a],"Expand: "+fmtStd(X(k,k*a))+" = "+num(c)+". "+(k*a>0?"Subtract "+k*a:"Add "+(-k*a))+": "+tm(k,"x",true)+" = "+num(c-k*a)+". Divide by "+k+": x = "+num(x)+". (Or divide both sides by "+k+" first: x"+sgn(a)+" = "+num(c/k)+".)","",{t:"solve"});}
+    if(f===1){var m,b,t=0;do{m=ri(1,6);b=nz(-8,8);t++;}while((m===k||(m*(x+b)-k*x)%k!==0||(m*(x+b)-k*x)/k===0)&&t<200);
+      if(t>=200)return qBrk();var a2=(m*(x+b)-k*x)/k;
+      var frame2=brk(k,"",X(1,a2))+" = "+brk(m,"",X(1,b));
+      return QN("Solve:",frame2,x,[(m*b-a2)/(k-m),(b-a2)/(k-m),-x],"Expand both sides: "+fmtStd(X(k,k*a2))+" = "+fmtStd(X(m,m*b))+". Collect: "+tm(k-m,"x",true)+" = "+num(m*b-k*a2)+", so x = "+num(x)+".","",{t:"solve"});}
+    var j=nz(-9,9),c3=ri(1,9),t3=0;while(c3===k&&t3<9){c3=ri(1,9);t3++;}if(c3===k)c3=k+1;
+    var d=k*(x+a)+j-c3*x,frame3=brk(k,"",X(1,a))+sgn(j)+" = "+fmtStd(X(c3,d));
+    return QN("Solve:",frame3,x,[(d-a-j)/(k-c3),(d-k*a+j)/(k-c3),-x],"Expand: "+fmtStd(X(k,k*a+j))+" = "+fmtStd(X(c3,d))+". Collect: "+tm(k-c3,"x",true)+" = "+num(d-k*a-j)+", so x = "+num(x)+".","",{t:"solve"});
+  }
+  function qBal2(){
+    var kL,kR,x,mL,mR,t=0;do{kL=ri(2,4);kR=ri(1,kL-1);x=ri(1,6);mL=ri(0,8);mR=(kL-kR)*x+mL;t++;}while(mR>18&&t<50);
+    if(mR>18){kL=3;kR=1;x=2;mL=3;mR=7;}
+    return QN("The scales balance. Each bag holds x counters. Find x.",eqs(X(kL,mL),X(kR,mR)),x,[mR-mL,Math.round((mR-mL)/kL),(mR+mL)/(kL-kR),mR-mL-kR],
+      "Take "+kR+" bag"+(kR>1?"s":"")+" off BOTH sides: "+fmtStd(X(kL-kR,mL))+" = "+mR+"."+(mL?" Take "+mL+" counter"+(mL>1?"s":"")+" off both sides: "+tm(kL-kR,"x",true)+" = "+(mR-mL)+".":"")+" So x = "+x+".",balSVG(kL,mL,kR,mR),{t:"bal"});
+  }
+
+  /* ---------- Fractions ---------- */
+  function qF1(){var a=ri(2,6),y=nz(-5,8),x=a*y,b=nz(-9,9),c=y+b;
+    return QN("Solve:",frac("x",a)+sgn(b)+" = "+num(c),x,[Math.round((c-b)/a),a*c-b,a*c,a*(c+b)],
+      (b>0?"Subtract "+b:"Add "+(-b))+" from both sides: "+frac("x",a)+" = "+num(y)+". Multiply by "+a+": x = "+num(x)+".","",{t:"solve"});}
+  function qF2(){var a=ri(2,7),c=nz(-5,8),b=nz(-9,9),x=a*c-b;
+    return QN("Solve:",frac(fmtStd(X(1,b)),a)+" = "+num(c),x,[a*c+b,c-b,Math.round(c/a)-b],
+      "Multiply both sides by "+a+": "+fmtStd(X(1,b))+" = "+num(a*c)+". "+(b>0?"Subtract "+b:"Add "+(-b))+": x = "+num(x)+".","",{t:"solve"});}
+  function qF3(){var a,b,t=0;do{a=ri(2,6);b=ri(2,6);t++;}while(a===b);var L=lcm(a,b),x=L*nz(-3,4),c=x/a+x/b,sub=Math.random()<.3&&x/a-x/b!==0;
+    if(sub)c=x/a-x/b;
+    var frame=frac("x",a)+(sub?" "+M+" ":" + ")+frac("x",b)+" = "+num(c);
+    return QN("Solve:",frame,x,[c*(a+b),c*a*b,Math.round(c*L/(sub?1:2)),x+L],
+      "Multiply every term by "+L+" (the LCM of "+a+" and "+b+"): "+tm(L/a,"x",true)+(sub?" "+M+" ":" + ")+tm(L/b,"x",true)+" = "+num(c*L)+", so "+tm(sub?L/a-L/b:L/a+L/b,"x",true)+" = "+num(c*L)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qF4(){var p,q,t=0;do{p=ri(2,5);q=ri(2,6);t++;}while(p===q);var x=nz(-6,9),m=nz(-3,4),a=p*m-x,b=q*m-x;
+    if(a===0||b===0)return qF4();
+    return QN("Solve:",frac(fmtStd(X(1,a)),p)+" = "+frac(fmtStd(X(1,b)),q),x,[(p*b-q*a)/(p-q),(b-a),(p*a-q*b)/(q-p),-x],
+      "Cross-multiply (multiply both sides by "+p+" × "+q+"): "+q+"("+fmtStd(X(1,a))+") = "+p+"("+fmtStd(X(1,b))+"), so "+fmtStd(X(q,q*a))+" = "+fmtStd(X(p,p*b))+". Collect: "+tm(q-p,"x",true)+" = "+num(p*b-q*a)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qF5(){var a=ri(2,5),d=ri(2,6),x,b,t=0;do{x=nz(-5,8);b=nz(-9,9);t++;}while(((a*x+b)%d!==0||a*x+b===0)&&t<300);if(t>=300)return qF5();var c=(a*x+b)/d;
+    return QN("Solve:",frac(fmtStd(X(a,b)),d)+" = "+num(c),x,[(c-b)/a,(c*d+b)/a,c*d-b],
+      "Multiply both sides by "+d+": "+fmtStd(X(a,b))+" = "+num(c*d)+". Then "+tm(a,"x",true)+" = "+num(c*d-b)+" and x = "+num(x)+".","",{t:"solve"});}
+  function qLCD(){var a,b,t=0;do{a=ri(2,8);b=ri(2,9);t++;}while(a===b||a*b>60);var L=lcm(a,b),c=nz(-5,9),s1=nz(-5,5),s2=nz(-5,5);
+    var frame=frac(fmtStd(X(1,s1)),a)+(Math.random()<.5?" + ":" "+M+" ")+frac(fmtStd(X(1,s2)),b)+" = "+num(c);
+    return QN("To clear the fractions, what is the smallest number you can multiply every term by?",frame,L,[a*b===L?null:a*b,a+b,Math.max(a,b),c],
+      "Use the lowest common multiple of the bottom numbers "+a+" and "+b+": "+L+". Multiply EVERY term by "+L+" — the "+num(c)+" on the right too.","",{t:"lcd"});}
+
+  /* ---------- From words ---------- */
+  function thinkT(){ // returns {s, L, R} sentence + equation (x = the number)
+    var f=ri(0,4),x=ri(2,15),a=ri(2,6),b=ri(1,12),c,d;
+    if(f===0)return {s:"I think of a number. I multiply it by "+a+" and add "+b+". The answer is "+(a*x+b)+".",L:X(a,b),R:X(0,a*x+b),x:x,str:eqs(X(a,b),X(0,a*x+b)),wr:[eqs(X(a,-b),X(0,a*x+b)),brk(a,"",X(1,b))+" = "+(a*x+b),eqs(X(a,0),X(0,a*x+2*b)),eqs(X(b,a),X(0,a*x+b))]};
+    if(f===1){if(a*x-b<=0)b=1;return {s:"I think of a number. I multiply it by "+a+" and subtract "+b+". The answer is "+(a*x-b)+".",L:X(a,-b),R:X(0,a*x-b),x:x,str:eqs(X(a,-b),X(0,a*x-b)),wr:[eqs(X(a,b),X(0,a*x-b)),brk(a,"",X(1,-b))+" = "+(a*x-b),eqs(X(1,-b*a),X(0,a*x-b)),fmtList([[b,""],[-a,"x"]])+" = "+(a*x-b)]};}
+    if(f===2)return {s:"I think of a number. I add "+b+", then multiply the result by "+a+". The answer is "+(a*(x+b))+".",L:X(a,a*b),R:X(0,a*(x+b)),x:x,str:brk(a,"",X(1,b))+" = "+(a*(x+b)),wr:[eqs(X(a,b),X(0,a*(x+b))),brk(b,"",X(1,a))+" = "+(a*(x+b)),eqs(X(1,a*b),X(0,a*(x+b))),frac(fmtStd(X(1,b)),a)+" = "+(a*(x+b)),eqs(X(a,0),X(0,a*(x+b)+b))]};
+    if(f===3){do{c=ri(2,6);}while(c===a);d=a*x+b-c*x;if(d<=0)return thinkT();
+      return {s:"I think of a number. If I multiply it by "+a+" and add "+b+", I get the same answer as when I multiply it by "+c+" and add "+d+".",L:X(a,b),R:X(c,d),x:x,str:eqs(X(a,b),X(c,d)),wr:[eqs(X(a,d),X(c,b)),eqs(X(a+c,b),X(0,d)),eqs(X(a,b),X(0,c*d)),eqs(X(a,b+d),X(c,0))]};}
+    x=a*ri(1,6);return {s:"I think of a number. I divide it by "+a+", then add "+b+". The answer is "+(x/a+b)+".",L:null,x:x,str:frac("x",a)+" + "+b+" = "+(x/a+b),wr:[frac(fmtStd(X(1,b)),a)+" = "+(x/a+b),eqs(X(a,b),X(0,x/a+b)),frac("x",b)+" + "+a+" = "+(x/a+b),frac("x",a)+" = "+(x/a+b)+" + "+b]};
+  }
+  function qThink(){var T=thinkT();
+    return QN(T.s+" What is my number?","",T.x,[Math.round(T.x*1.5),T.x+2],"Write it as an equation: "+T.str+". Solve it: the number is "+T.x+". Check it in the sentence!","",{t:"think"});}
+  function solveStr(s){ // solve a simple equation string made by thinkT (linear, maybe one bracket or /a)
+    var sides=s.split(" = ").map(function(z){return z.replace(/−/g,"-");});
+    function val(e,x){return Function("x","return "+e.replace(/(\d)\(/g,"$1*(").replace(/(\d)x/g,"$1*x"))(x);}
+    var f0=val(sides[0],0)-val(sides[1],0),f1=val(sides[0],1)-val(sides[1],1);if(f1===f0)return null;return -f0/(f1-f0);}
+  function qForm(){var T=thinkT();
+    var pool=T.wr.filter(function(w){var v=solveStr(w);return w!==T.str&&(v===null||Math.abs(v-T.x)>1e-9);});
+    return C(T.s+" Which equation matches?","",T.str,pool,"Follow the sentence step by step with x for the number: "+T.str+". (It gives x = "+T.x+".)",T.s+" → "+T.str,"",{t:"form"});}
+  function qCtx(){
+    var f=ri(0,5),x,why,html="",en,a,S2;
+    if(f===0){x=ri(3,15);a=ri(1,9);S2=2*(x+a)+2*x;en="A rectangle is (x + "+a+") cm long and x cm wide. Its perimeter is "+S2+" cm. Find x.";html=rectSVG("x + "+a,"x");
+      why="Perimeter = all four sides: 2(x + "+a+") + 2x = "+S2+", so 4x + "+2*a+" = "+S2+", 4x = "+(S2-2*a)+" and x = "+x+".";
+      return QN(en,"",x,[(S2-a)/4,(S2-2*a)/2,S2/4-a,x+a],why,html,{t:"ctx",f:0});}
+    if(f===1){var k=ri(2,4);x=ri(15,40);a=180-(k+2)*x;if(a<=0||a>60)return qCtx();en="The angles of a triangle are x°, "+k+"x° and (x + "+a+")°. Find x.";
+      why="The angles of a triangle add to 180°: x + "+k+"x + x + "+a+" = 180, so "+(k+2)+"x = "+(180-a)+" and x = "+x+".";
+      return QN(en,"",x,[(180-a)/(k+1),180/(k+2),(180+a)/(k+2)],why,"",{t:"ctx",f:1});}
+    if(f===2){x=ri(5,40);S2=3*x+3;en="Three consecutive whole numbers add up to "+S2+". What is the smallest one?";
+      why="Call them n, n + 1 and n + 2: 3n + 3 = "+S2+", so 3n = "+(S2-3)+" and n = "+x+". (Check: "+x+" + "+(x+1)+" + "+(x+2)+" = "+S2+".)";
+      return QN(en,"",x,[S2/3,x+1,x+2,(S2-1)/3],why,"",{t:"ctx",f:2});}
+    if(f===3){var g=rnd(GIRLS),bo=rnd(BOYS);x=ri(4,14);a=ri(2,9);S2=2*x+a;en=g+" is "+a+" years older than her brother "+bo+". Their ages add up to "+S2+". How old is "+bo+"?";
+      why="Call "+bo+"'s age x. Then "+g+" is x + "+a+": x + x + "+a+" = "+S2+", so 2x = "+(S2-a)+" and x = "+x+". ("+g+" is "+(x+a)+".)";
+      return QN(en,"",x,[x+a,S2-a,(S2+a)/2],why,"",{t:"ctx",f:3});}
+    if(f===4){var n=ri(2,6);x=ri(6,14);a=ri(2,8);S2=n*x+a;en=n+" cinema tickets and a €"+a+" popcorn cost €"+S2+" altogether. How much is one ticket, in euro?";
+      why="Call one ticket €x: "+n+"x + "+a+" = "+S2+", so "+n+"x = "+(S2-a)+" and x = "+x+".";
+      return QN(en,"",x,[(S2+a)/n,S2/n,S2-a],why,"",{t:"ctx",f:4});}
+    var g2=rnd(GIRLS),b2=rnd(BOYS),k2=ri(2,5);x=ri(4,20);S2=(k2+1)*x;en=g2+" has "+k2+" times as many stickers as "+b2+". Together they have "+S2+". How many has "+b2+"?";
+    why="Call "+b2+"'s stickers x. "+g2+" has "+k2+"x: x + "+k2+"x = "+S2+", so "+(k2+1)+"x = "+S2+" and x = "+x+".";
+    return QN(en,"",x,[S2/k2,k2*x,S2-k2],why,"",{t:"ctx",f:5});
+  }
+
+  /* ---------- Check & fix ---------- */
+  function randEq(){ // a linear equation with whole-number solution: {s, x}
+    var f=ri(0,2),x=nz(-6,9);
+    if(f===0){var a,c,t=0;do{a=ri(1,7);c=ri(1,7);t++;}while(a===c);var b=nz(-9,9),d=a*x+b-c*x;return {s:eqs(X(a,b),X(c,d)),x:x};}
+    if(f===1){var k=ri(2,5),p=nz(-6,6);return {s:brk(k,"",X(1,p))+" = "+num(k*(x+p)),x:x};}
+    var k2=ri(2,4),p2=nz(-5,5),c2=ri(1,5);if(c2===k2)c2=k2+1;var d2=k2*(x+p2)-c2*x;return {s:brk(k2,"",X(1,p2))+" = "+fmtStd(X(c2,d2)),x:x};
+  }
+  function qCheck(){var E=randEq();
+    return QN("Which value of x makes this true? Substitute to check.",E.s,E.x,[E.x+1,E.x-1,-E.x,E.x+3],
+      "Put x = "+num(E.x)+" into both sides: they give the same number, so x = "+num(E.x)+" is the solution.","",{t:"solve"});}
+  function qClaim(){var E=randEq(),nm=rnd(GIRLS.concat(BOYS)),right=Math.random()<.45,v=right?E.x:E.x+rnd([-2,-1,1,2]);
+    function w(z){return "Wrong: x = "+num(z);}
+    var ans=right?"Right":w(E.x),pool=right?[E.x+1,E.x-1,E.x+2].map(w):["Right"].concat([E.x+3,E.x-3,-E.x].filter(function(z){return z!==E.x&&z!==v;}).map(w));
+    return C(nm+" says the solution of "+E.s+" is x = "+num(v)+". Is "+she(nm)+" right?","",ans,pool,
+      "Substitute or solve: the solution is x = "+num(E.x)+"."+(right?" "+nm+" is right.":" "+nm+" is wrong."),E.s+" : x = "+num(v)+"? → "+ans,"",{t:"claim",eq:E.s,v:v});}
+  function qLine(){
+    var k=ri(2,5),c,t=0;do{c=ri(1,6);t++;}while(c===k);var x=nz(-6,8),a=nz(-6,6),d=k*(x+a)-c*x,bad=ri(0,4);
+    var frame=brk(k,"",X(1,a))+" = "+fmtStd(X(c,d));
+    var L1A=X(k,k*a);if(bad===1)L1A=X(k,a);                 // forgot to multiply the second term
+    var mv=-c,rr=d-L1A[""];if(bad===2){if(Math.random()<.5)mv=c;else rr=d+L1A[""];} // a term moved without changing sign
+    var cf=k+mv;if(cf===0)return qLine();
+    var rv=rr;if(bad===3)rv=rr+cf*rnd([-1,1]);             // arithmetic slip
+    if(rv%cf!==0)return qLine();if(bad===4&&Math.abs(cf)<2)return qLine();var xv=rv/cf;if(bad===4)xv=rv-cf;
+    if(bad>0&&xv===x)return qLine();if(bad===4&&rv/cf===xv)return qLine();
+    var right2=d===0?[[-L1A[""],""]]:[[d,""],[-L1A[""],""]];if(bad===2&&rr!==d-L1A[""])right2=d===0?[[L1A[""],""]]:[[d,""],[L1A[""],""]];
+    var lines=[eqs(L1A,X(c,d)),fmtList([[k,"x"],[mv,"x"]])+" = "+fmtList(right2),fmtList([[cf,"x"]])+" = "+num(rv),"x = "+num(xv)];
+    var html='<div class="steps">'+lines.map(function(s,i){return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> '+s+'</p>';}).join("")+'</div>';
+    var nm=rnd(GIRLS.concat(BOYS)),ans=bad===0?"No mistake":"Line "+bad;
+    return C(nm+" solved this. Which line has the first mistake?",frame,ans,["Line 1","Line 2","Line 3","Line 4","No mistake"].filter(function(s){return s!==ans;}),
+      "Correct working: "+fmtStd(X(k,k*a))+" = "+fmtStd(X(c,d))+" → "+tm(k-c,"x",true)+" = "+num(d-k*a)+" → x = "+num(x)+"."+(bad===1?" Line 1: "+k+" must multiply BOTH terms in the bracket.":bad===2?" Line 2: a term that moves across the = changes its sign.":bad===3?" Line 3: the numbers were added up wrongly.":bad===4?" Line 4: to undo × "+br(cf)+", DIVIDE by "+br(cf)+".":" Every line is right."),
+      frame+": "+ans,html,{t:"line",after:true});
+  }
+
+  var MAKERS={
+    balance:[qBal,qBal,qOne,qOne,qTwo,qTwo,qTwo,qDoBoth],
+    both:[qBoth,qBoth,qBoth,qBrk,qBrk,qBrk,qBal2],
+    frac:[qF1,qF2,qF3,qF4,qF5,qLCD],
+    words:[qThink,qThink,qForm,qForm,qCtx,qCtx,qCtx],
+    check:[qLine,qLine,qDoBoth,qCheck,qClaim,qClaim],
+    mixed:[qBal,qOne,qTwo,qDoBoth,qBoth,qBrk,qBal2,qF1,qF2,qF3,qF4,qF5,qLCD,qThink,qForm,qCtx,qLine,qCheck,qClaim]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="balance"||m==="both")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="balance"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="balance"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>

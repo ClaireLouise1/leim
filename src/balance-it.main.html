@@ -1,0 +1,154 @@
+<main id="main">
+<style>.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:360px;margin:6px auto 0;font-size:17px}.steps p{margin:4px 0}.wk{font-variant-numeric:tabular-nums;line-height:1.7}.wk .r{color:var(--muted);font-size:15px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Balance It</h1>
+        <p>60 seconds. Keep the scales level: whatever you do to one side, do to the other. Solve one-step and two-step equations, letters on both sides, brackets, fractions and word problems, and spot the slip in someone else's working. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="balance"><div><b>Balance It</b><span>Balance-scale pictures, x + 7 = 12, 4x = −20, 3x + 5 = 26, and "what do you get if you do this to both sides?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="both"><div><b>Letters on both sides</b><span>5x + 3 = 2x + 18, brackets like 3(x − 4) = 2(x + 1), and scales with bags on both sides</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="frac"><div><b>Fractions</b><span>x/4 + 3 = 7, (x + 2)/5 = 3, x/2 + x/3 = 10, and the number that clears the fractions</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="words"><div><b>From words</b><span>"I think of a number…", which equation matches, rectangles, triangles, ages and tickets</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="check"><div><b>Check &amp; fix</b><span>Which line has the first mistake? Is the answer right? Substitute to check</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Balance It, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.2c, AF.4, U.3 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Linear equations</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>An equation is like a balance: the two sides weigh the same. Each bag holds x counters. Here are some scales, and a move made to each one:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">3 bags + 2 counters = 14 counters. Take <b>2 counters off both sides</b> → 3 bags = 12 counters.</li>
+          <li class="note">3 bags = 12 counters. Split <b>both sides into 3 equal groups</b> → 1 bag = 4 counters.</li>
+          <li class="note">5 bags + 1 counter = 2 bags + 10 counters. Take <b>2 bags off both sides</b> → 3 bags + 1 = 10.</li>
+          <li class="note">3 bags + 2 counters = 14 counters. Take 2 counters off <b>the left only</b> → 3 bags = 14 counters?</li>
+        </ul>
+        <p style="margin-top:10px">Which move doesn't keep the scales level? What's the one rule every move has to follow?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The last one tips the scales: 12 ≠ 14. The rule is <b>do the same thing to both sides</b>. Then the two sides stay equal, and "=" still means "has the same value as". In algebra: 3x + 2 = 14 → 3x = 12 → x = 4. Check: 3(4) + 2 = 14 ✓.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Undo, in reverse order</h3>
+        <p>To get x on its own, undo what was done to it, the last thing first. Use the <b>opposite</b> operation on both sides.</p>
+        <div class="note wk"><b>4x − 7 = 21</b><br>4x = 28 &nbsp;<span class="r">(add 7 to both sides)</span><br>x = 7 &nbsp;<span class="r">(divide both sides by 4)</span><br>Check: 4(7) − 7 = 21 ✓</div>
+        <ul style="margin-top:10px">
+          <li>+ undoes −, × undoes ÷. x + 9 = 4 → x = −5. &nbsp;−3x = 12 → x = −4. &nbsp;x/5 = 6 → x = 30.</li>
+          <li>Answers can be negative. That's fine: just check them.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Letters on both sides</h3>
+        <p>Move the x terms to one side and the numbers to the other (do the same to both sides each time).</p>
+        <div class="note wk"><b>5x + 3 = 2x + 18</b><br>3x + 3 = 18 &nbsp;<span class="r">(subtract 2x from both sides)</span><br>3x = 15 &nbsp;<span class="r">(subtract 3 from both sides)</span><br>x = 5 &nbsp;<span class="r">(divide by 3)</span>. Check: 28 = 28 ✓</div>
+        <p style="margin-top:8px">Shortcut you'll see in class: a term that <b>moves across the =</b> changes its sign (+2x on the right becomes −2x on the left). It's the same as doing it to both sides.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Brackets: expand first</h3>
+        <div class="note wk"><b>3(x − 4) = 2(x + 1)</b><br>3x − 12 = 2x + 2 &nbsp;<span class="r">(multiply out: every term)</span><br>x − 12 = 2 &nbsp;<span class="r">(subtract 2x)</span><br>x = 14 &nbsp;<span class="r">(add 12)</span>. Check: 3(10) = 30 and 2(15) = 30 ✓</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Fractions: clear them first</h3>
+        <p>Multiply <b>every term</b> on both sides by the lowest common multiple (LCM) of the bottom numbers.</p>
+        <div class="note wk"><b>x/2 + x/3 = 10</b> &nbsp;<span class="r">(LCM of 2 and 3 is 6)</span><br>3x + 2x = 60 &nbsp;<span class="r">(× 6: 6 × x/2 = 3x, 6 × x/3 = 2x, 6 × 10 = 60)</span><br>5x = 60, so x = 12. Check: 6 + 4 = 10 ✓</div>
+        <ul style="margin-top:10px">
+          <li>(x + 2)/5 = 3 → x + 2 = 15 → x = 13. Keep the top in a bracket when you multiply.</li>
+          <li>(x + 1)/3 = (x − 1)/2 → cross-multiply: 2(x + 1) = 3(x − 1) → 2x + 2 = 3x − 3 → x = 5.</li>
+          <li>The classic slip: multiplying the fractions but <b>forgetting the number on its own</b> (the 10 must become 60).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Forming equations from words</h3>
+        <ol>
+          <li><b>Say what x stands for</b> ("Let x = the price of one child's ticket").</li>
+          <li><b>Write the other amounts using x</b> (an adult ticket costs €6 more: x + 6).</li>
+          <li><b>Find the two things that are equal</b> and write the equation.</li>
+          <li><b>Solve, then answer the question in words</b>, with units.</li>
+        </ol>
+        <div class="note wk">"I think of a number, multiply it by 4 and add 7. The answer is 31."<br>4x + 7 = 31 → 4x = 24 → x = <b>6</b>. Check in the words: 6 × 4 + 7 = 31 ✓</div>
+        <ul style="margin-top:10px">
+          <li>Three consecutive numbers: n, n + 1, n + 2.</li>
+          <li>Angles in a triangle add to 180°; a perimeter adds all the sides.</li>
+          <li>"5 more than" → + 5; "3 times as many" → 3x; "the same as" → =.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Always check</h3>
+        <p>Put your answer back into the <b>original</b> equation. Both sides must give the same number. If they don't, look for a sign slip or a term you forgot to multiply.</p>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Two equations at once (simultaneous equations), equations with x², and inequalities (&lt;, &gt;) come later in Junior Cycle Maths.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Solving a linear equation is one of the most common parts on the paper, and it hides inside bigger questions too: a perimeter or angle question, a word problem about prices or ages, the last step of a pattern or a graph question. Many questions say "write an equation" first: that line earns marks on its own.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show every step</b>, one line each. Method marks are given for correct steps even if the final answer slips.</li>
+            <li><b>Do the same to both sides</b>, and to <b>every</b> term (fractions: the whole number too).</li>
+            <li><b>Watch the signs</b> when you expand a bracket or move a term across the =.</li>
+            <li><b>Word problems:</b> say what x is, write the equation, solve, then answer in words with units.</li>
+            <li><b>Check</b> by putting your answer back in. It takes 20 seconds and catches most slips.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Solve.</b> (a) 5x − 7 = 2x + 11 &nbsp;(b) 4(x − 3) = 2(x + 5) &nbsp;(c) (x + 5)/4 + (x − 1)/2 = 6
+              <details><summary>Show the worked answer</summary><p>(a) 3x − 7 = 11 → 3x = 18 → <b>x = 6</b>. Check: 23 = 23 ✓<br>(b) 4x − 12 = 2x + 10 → 2x = 22 → <b>x = 11</b>. Check: 4(8) = 32, 2(16) = 32 ✓<br>(c) Multiply every term by 4: (x + 5) + 2(x − 1) = 24 → x + 5 + 2x − 2 = 24 → 3x + 3 = 24 → 3x = 21 → <b>x = 7</b>. Check: 12/4 + 6/2 = 3 + 3 = 6 ✓</p></details></li>
+            <li><b>The triangle.</b> An isosceles triangle has sides of x + 4 cm, x + 4 cm and 2x − 1 cm. Its perimeter is 39 cm. (a) Write an equation in x. (b) Solve it. (c) Find the length of each side.
+              <details><summary>Show the worked answer</summary><p>(a) (x + 4) + (x + 4) + (2x − 1) = 39, so <b>4x + 7 = 39</b>.<br>(b) 4x = 32 → <b>x = 8</b>.<br>(c) <b>12 cm, 12 cm and 15 cm</b>. Check: 12 + 12 + 15 = 39 ✓</p></details></li>
+            <li><b>Cinema tickets.</b> A family buys 2 adult tickets and 3 child tickets for €62. An adult ticket costs €6 more than a child ticket. Let x = the price of a child ticket. (a) Write an expression for the price of an adult ticket. (b) Write an equation and solve it. (c) How much is each ticket?
+              <details><summary>Show the worked answer</summary><p>(a) <b>x + 6</b>.<br>(b) 2(x + 6) + 3x = 62 → 2x + 12 + 3x = 62 → 5x + 12 = 62 → 5x = 50 → <b>x = 10</b>.<br>(c) Child <b>€10</b>, adult <b>€16</b>. Check: 2(16) + 3(10) = 32 + 30 = 62 ✓</p></details></li>
+            <li><b>Spot the mistake.</b> Niamh solved 3(x − 2) = x + 8 like this. Line 1: 3x − 2 = x + 8. Line 2: 2x = 10. Line 3: x = 5. (a) Show that x = 5 is not the solution. (b) Which line has the mistake? (c) Solve the equation correctly.
+              <details><summary>Show the worked answer</summary><p>(a) 3(5 − 2) = 9, but 5 + 8 = 13. 9 ≠ 13, so x = 5 is wrong.<br>(b) <b>Line 1</b>: the 3 must multiply both terms: 3(x − 2) = 3x − 6.<br>(c) 3x − 6 = x + 8 → 2x = 14 → <b>x = 7</b>. Check: 3(5) = 15 and 7 + 8 = 15 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/linear-equations-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Linear Equations Teacher Pack (€5)</a>: Word-to-Equation Match cards, Equation Relay, Equation Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
