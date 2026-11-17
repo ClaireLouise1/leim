@@ -54,3 +54,12 @@ tabs.forEach(function (btn) {
 
 // Footer year
 document.querySelectorAll('.yr').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+// Visitor stats (GoatCounter: leim.goatcounter.com). No cookies, no personal data.
+(function () {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', 'https://leim.goatcounter.com/count');
+  document.head.appendChild(s);
+})();
