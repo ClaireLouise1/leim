@@ -12,3 +12,4 @@ Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
 - 2026-11-17 19:58 · Maths Order 16 Linear equations · maths-a
+- 2026-11-17 20:30 · Maths Order 17 Indices & standard form · maths-b
