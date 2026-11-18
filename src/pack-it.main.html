@@ -1,0 +1,170 @@
+<main id="main">
+<style>
+svg.sf{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px}
+svg.sf .fr{fill:#E8F3EC;stroke:#2E7D57;stroke-width:2;stroke-linejoin:round}
+svg.sf .sd{fill:#CFE6D7;stroke:#2E7D57;stroke-width:2;stroke-linejoin:round}
+svg.sf .hd{fill:none;stroke:#2E7D57;stroke-width:1.2;stroke-dasharray:4 4}
+svg.sf .eq{fill:none;stroke:#2E7D57;stroke-width:1.4}
+svg.sf .top{fill:#F2FAF4;stroke:#2E7D57;stroke-width:2}
+svg.sf .ball{fill:#E8F3EC;stroke:#2E7D57;stroke-width:2}
+svg.sf .wt{fill:rgba(52,152,219,.35);stroke:none}
+svg.sf .wl{fill:rgba(52,152,219,.45);stroke:#2980B9;stroke-width:1.3}
+svg.sf .nt{fill:#E8F3EC;stroke:#2E7D57;stroke-width:1.8;stroke-linejoin:round}
+svg.sf .nc{fill:#E8F3EC;stroke:#2E7D57;stroke-width:1.8}
+svg.sf .rl{stroke:#C0392B;stroke-width:1.6;stroke-dasharray:5 3}
+svg.sf .dm{stroke:#2E7D57;stroke-width:1.2;stroke-dasharray:3 3}
+svg.sf .rt{fill:none;stroke:#C0392B;stroke-width:1.4}
+svg.sf .dt{fill:#1B2430}
+svg.sf .fl{font:700 13px Inter,sans-serif;fill:var(--ink)}
+svg.sf .fl.q{fill:#C0392B;font-size:17px}
+.two{display:grid;grid-template-columns:1fr;gap:2px}.two svg.sf{margin:2px auto}.two>div:last-child svg.sf{max-width:200px!important}.two .cap{text-align:center;font-weight:700;font-size:14px;color:var(--muted)}
+.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.fm .note svg.sf{max-width:200px}
+.pat{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}.pat svg.sf{padding:0}.pat div{text-align:center;font-weight:700;font-size:14px}
+.nets{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.nets div{text-align:center;font-weight:700;font-size:14px}
+.ef{max-width:300px;margin:6px auto}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Pack It</h1>
+        <p>Boxes, tins, balls and tanks: volume, surface area and nets against the clock. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="pack"><div><b>Pack It</b><span>Cuboids and cubes: volume, surface area, how many boxes fit, litres</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="prism"><div><b>Prisms &amp; nets</b><span>Triangular prisms, sheds, which net, faces and edges</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="round"><div><b>Cylinders &amp; spheres</b><span>Tins, balls and hemispheres, with π</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="combo"><div><b>Splash &amp; combine</b><span>Water rising, silos, melting and filling</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. Keys 1–4 work too. A calculator helps, just like in the exam. In Pack It, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.2b, GT.2d, GT.2e (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Volume, surface area &amp; nets</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Each layer is 4 × 2 = 8 cubes of 1 cm³.</p>
+        <div class="pat"><div><span data-fig="pat1"></span>1 layer: 8 cm³</div><div><span data-fig="pat2"></span>2 layers: 16 cm³</div><div><span data-fig="pat3"></span>3 layers: ?</div></div>
+        <p>How many cubes in 3 layers? What about 10 layers? Can you write a rule using the area of the base?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">3 layers = 3 × 8 = <b>24 cm³</b>; 10 layers = 80 cm³. <b>Volume = area of the base × height.</b> The same idea works for every prism and cylinder: area of the end × length.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Volume or surface area?</h3>
+        <ul>
+          <li><b>Volume</b> = the space inside (how much it holds). Units: cm³, m³, or litres.</li>
+          <li><b>Surface area</b> = the area of all the outside faces (card, paint, wrapping). Units: cm², m².</li>
+          <li><b>1 litre = 1,000 cm³</b> and <b>1 m³ = 1,000 litres</b>.</li>
+        </ul>
+        <div class="fm">
+          <div class="note"><b class="h">Cuboid</b><span data-fig="rCub"></span>V = l × w × h<br>SA = 2(lw + lh + wh)<br>Cube: V = a³, SA = 6a²</div>
+          <div class="note"><b class="h">Prism</b><span data-fig="rTri"></span>V = area of the end × length<br>SA = 2 ends + the rectangles</div>
+          <div class="note"><b class="h">Cylinder</b><span data-fig="rCyl"></span>V = πr²h<br>Curved SA = 2πrh<br>Closed: + 2πr²</div>
+          <div class="note"><b class="h">Sphere</b><span data-fig="rSph"></span>V = ⁴⁄₃πr³<br>SA = 4πr²</div>
+          <div class="note"><b class="h">Hemisphere</b><span data-fig="rHemi"></span>V = ⅔πr³<br>Curved SA = 2πr²<br>Solid: + πr² = 3πr²</div>
+        </div>
+        <p style="margin-top:8px;font-size:15px;color:var(--muted)">The formulas for the cylinder and sphere are in the <i>Formulae and Tables</i> booklet you get in the exam. Know where they are, and know that r is the RADIUS.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Nets</h3>
+        <p>A net is the flat shape that folds up into the solid. Its area = the surface area.</p>
+        <div class="nets"><div><span data-fig="nCub"></span>Cuboid: 6 rectangles</div><div><span data-fig="nTri"></span>Triangular prism: 2 triangles + 3 rectangles</div><div><span data-fig="nCyl"></span>Cylinder: 2 circles + 1 rectangle</div></div>
+        <ul>
+          <li>The cylinder's rectangle wraps round the circle, so its length is the <b>circumference 2πr</b>.</li>
+          <li>Faces, edges, vertices: cuboid 6, 12, 8; triangular prism 5, 9, 6.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Pack it, fill it, splash it</h3>
+        <ul>
+          <li><b>How many boxes fit?</b> Count along each edge and round DOWN: 50 ÷ 12 → 4. Then multiply. Dividing the two volumes can give too many, because gaps can't hold a whole box.</li>
+          <li><b>Missing length:</b> 240 cm³ ÷ (10 × 6) = 4 cm.</li>
+          <li><b>Water rising:</b> the rise × base area = the volume of what sank in. 2,000 cm³ in a 40 × 25 tank: 2,000 ÷ 1,000 = <b>2 cm</b>. In a cylinder, π cancels: a ball of radius 3 in a tin of radius 6 → ⁴⁄₃ × 27 ÷ 36 = <b>1 cm</b>.</li>
+          <li><b>Combined solids:</b> add the parts. Silo = cylinder + hemisphere.</li>
+          <li><b>π:</b> follow the instruction (π button, 3.14, 22/7 or in terms of π). 36π stays as 36π.</li>
+          <li><span class="lo" style="margin:0">Higher Level</span> work backwards. Sphere volume 288π: r³ = 288 × 3 ÷ 4 = 216, r = ∛216 = <b>6</b>. Melting/recasting: the volume stays the same, so set the two volumes equal.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> using the diameter as r; adding instead of multiplying; using the sloping side for the triangle's height; forgetting a face (or counting the lid of an open box); cm² for a volume; 1 litre = 100 cm³ (it's 1,000); dividing volumes to count boxes; rounding early.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Usually a <b>real-life object</b>: a tank, a tin, a box, a silo, a ball. The parts build up: a volume, then litres, then surface area (card, paint, glass), then a cost, a time to fill, or how far the water rises. Higher Level often asks you to work backwards to a radius or height, or to melt one solid into another.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write the formula</b> (from the <i>Formulae and Tables</i> booklet), put the numbers in, then the answer with <b>units</b>.</li>
+            <li><b>Radius, not diameter.</b> Halve it first.</li>
+            <li><b>Follow the π instruction</b> and round only at the end.</li>
+            <li><b>Surface area:</b> list the faces so none are missed, and check for a lid.</li>
+            <li><b>Litres:</b> ÷ 1,000 from cm³.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The fish tank.</b> A glass tank (no lid) is 60 cm long, 40 cm wide and 50 cm high.
+              <div class="ef" data-fig="ex1"></div>
+              (a) Find its volume in cm³. (b) How many litres does it hold when full? (c) It is filled to 5 cm below the top. How many litres of water is that? (d) Find the area of glass in the tank, in m². (e) A tap pours 6 litres a minute. How long does it take to fill the tank to 5 cm below the top?
+              <details><summary>Show the worked answer</summary><p>(a) 60 × 40 × 50 = <b>120,000 cm³</b>.<br>(b) 120,000 ÷ 1,000 = <b>120 litres</b>.<br>(c) Depth 50 − 5 = 45 cm: 60 × 40 × 45 = 108,000 cm³ = <b>108 litres</b>.<br>(d) No lid, so 5 faces: base 60 × 40 = 2,400, front and back 2 × 60 × 50 = 6,000, ends 2 × 40 × 50 = 4,000. Total 12,400 cm² = <b>1.24 m²</b> (÷ 10,000).<br>(e) 108 ÷ 6 = <b>18 minutes</b>.</p></details></li>
+            <li><b>The grain silo.</b> A silo is a cylinder with a hemisphere on top. The radius is 1.5 m and the cylinder is 4 m high.
+              <div class="ef" data-fig="ex2"></div>
+              (a) Find the volume of the cylinder, in terms of π. (b) Find the volume of the hemisphere, in terms of π. (c) Find the total volume, to 2 decimal places. (d) The curved side and the dome are painted. Find this area, to 2 decimal places. (e) One tin of paint covers 12 m². How many tins are needed?
+              <details><summary>Show the worked answer</summary><p>(a) πr²h = π × 1.5² × 4 = <b>9π m³</b>.<br>(b) ⅔πr³ = ⅔ × π × 1.5³ = <b>2.25π m³</b>.<br>(c) 9π + 2.25π = 11.25π = <b>35.34 m³</b>.<br>(d) Curved side 2πrh = 2 × π × 1.5 × 4 = 12π. Dome = half of 4πr² = 2π × 1.5² = 4.5π. Total 16.5π = <b>51.84 m²</b>.<br>(e) 51.84 ÷ 12 = 4.32, so <b>5 tins</b> (4 is not enough).</p></details></li>
+            <li><b>Splash!</b> A cylinder of radius 10 cm holds water 12 cm deep.
+              <div class="ef" data-fig="ex3"></div>
+              (a) Find the volume of the water, in terms of π. (b) How many litres is that, to 1 decimal place? (c) A ball of radius 6 cm sinks to the bottom and is covered by the water. Find the volume of the ball, in terms of π. (d) By how much does the water rise? (e) <span class="lo" style="margin:0">Higher Level</span> All the water is poured into a sphere-shaped bowl that it fills exactly. Find the radius of the bowl, to 2 decimal places.
+              <details><summary>Show the worked answer</summary><p>(a) π × 10² × 12 = <b>1,200π cm³</b>.<br>(b) 1,200π = 3,769.9 cm³ → ÷ 1,000 = <b>3.8 litres</b>.<br>(c) ⁴⁄₃ × π × 6³ = ⁴⁄₃ × 216π = <b>288π cm³</b>.<br>(d) π × 10² × rise = 288π, so rise = 288 ÷ 100 = <b>2.88 cm</b>.<br>(e) ⁴⁄₃πr³ = 1,200π → r³ = 1,200 × 3 ÷ 4 = 900 → r = ∛900 = <b>9.65 cm</b>.</p></details></li>
+            <li><b>The chocolate box.</b> A box is a triangular prism. Its end is a right-angled triangle with sides 6 cm, 8 cm and 10 cm. It is 15 cm long.
+              <div class="ef" data-fig="ex4"></div>
+              (a) Find the area of one end. (b) Find the volume of the box. (c) Sketch a net of the box and write the size of each face on it. (d) Find the total surface area. (e) A cuboid box has the same volume and a square base 6 cm by 6 cm. How tall is it?
+              <details><summary>Show the worked answer</summary><p>(a) ½ × 6 × 8 = <b>24 cm²</b> (the 10 cm side is the sloping side).<br>(b) 24 × 15 = <b>360 cm³</b>.<br>(c) 2 triangles (sides 6, 8, 10) and 3 rectangles: 6 × 15, 8 × 15 and 10 × 15.<br>(d) Triangles 2 × 24 = 48. Rectangles (6 + 8 + 10) × 15 = 360. Total <b>408 cm²</b>.<br>(e) 360 ÷ (6 × 6) = 360 ÷ 36 = <b>10 cm</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/volume-surface-area-nets-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Volume, Surface Area &amp; Nets Teacher Pack (€5)</a>: Pack It mingle cards, Tank Swap A/B cards, Volume Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

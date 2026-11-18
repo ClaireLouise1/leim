@@ -1,0 +1,396 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function isNice(x,dp){var k=Math.pow(10,dp==null?1:dp);return Math.abs(x*k-Math.round(x*k))<1e-7;}
+  function edgeOK(x,dp){var t=x*Math.pow(10,dp);t=t-Math.floor(t);return Math.abs(t-0.5)>0.006;}
+  function commas(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function num(x,dp){dp=dp==null?2:dp;var k=Math.pow(10,dp),y=Math.round(x*k+1e-9)/k,s=String(y),p=s.split(".");return commas(p[0])+(p[1]?"."+p[1]:"");}
+  function U(u,dp){return function(x){return num(x,dp==null?2:dp)+" "+u;};}
+  function cnt(w){return function(x){return num(x,0)+" "+w;};}
+  /* numeric question: ans and slips are VALUES; f formats them. Wrong options never equal the answer, never ≤ 0, no duplicates */
+  function Q(en,ans,slips,f,why,html,data){var A=f(ans),seen={},out=[];seen[A]=1;
+    slips.forEach(function(x){if(x==null||!isFinite(x)||x<=0)return;var s=f(x);if(/NaN|undefined|Infinity/.test(s)||seen[s]||/^0( |$)|^0π/.test(s))return;if(out.length<3){seen[s]=1;out.push(s);}});
+    return {en:en,html:html||"",answer:A,wrong:out,why:why,review:en+" → "+A,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,html:html||"",answer:String(ans),wrong:w,why:why,review:en+" → "+ans,data:data||{}};}
+  function retry(fn){return function maker(){for(var k=0;k<200;k++){var q=fn();if(q)return q;}throw new Error("maker gave up: "+fn.name);};}
+  var NAMES=["Siobhán","Darragh","Niamh","Oisín","Aoife","Cian","Róisín","Eoin","Ciara","Seán","Méabh","Tadhg"];
+
+  /* ---------- 3D sketch kit (real units, y up; depth z recedes up-right at 30°, drawn at half length) ---------- */
+  var KZ=0.5,CA=Math.cos(Math.PI/6)*KZ,SN=Math.sin(Math.PI/6)*KZ;
+  function r2(x){return Math.round(x*100)/100;}
+  function r4(x){return Math.round(x*1e4)/1e4;}
+  function pj(x,y,z){return [x+z*CA,y+z*SN];}
+  function lab(a,b,t,k,o,z){return {a:a,b:b,t:t,k:k,o:o||[0,0],z:z?1:0};}
+  function T(v,u,key,qk){return key!=null&&key===qk?"?":num(v)+" "+u;}
+  /* prism: cross-section S (CCW, in the x-y plane) pushed back a depth L. Faces facing the viewer are drawn, hidden edges dashed. */
+  function prism(kind,S,L,dims,aria){
+    var n=S.length,F={kind:kind,polys:[],segs:[],paths:[],labs:[],dims:dims,aria:aria};
+    var vis=[];for(var i=0;i<n;i++){var a=S[i],b=S[(i+1)%n],nx=b[1]-a[1],ny=a[0]-b[0];vis.push(nx*CA+ny*SN>1e-9);}
+    var back=S.map(function(p){return pj(p[0],p[1],L);});
+    for(i=0;i<n;i++){var j=(i+1)%n,prev=(i+n-1)%n;
+      if(!vis[i])F.segs.push({a:back[i],b:back[j],c:"hd"});
+      if(!vis[i]&&!vis[prev])F.segs.push({a:S[i],b:back[i],c:"hd"});}
+    for(i=0;i<n;i++)if(vis[i]){j=(i+1)%n;F.polys.push({p:[S[i],S[j],back[j],back[i]],c:"sd",role:"side"});}
+    F.polys.push({p:S.slice(),c:"fr",role:"front"});
+    return F;
+  }
+  function cuboid(l,w,h,u,qk,show){
+    var F=prism("cuboid",[[0,0],[l,0],[l,h],[0,h]],w,{l:l,w:w,h:h},"Cuboid "+num(l)+" by "+num(w)+" by "+num(h)+" "+u);
+    show=show||"lwh";
+    if(show.indexOf("l")>=0)F.labs.push(lab([0,0],[l,0],T(l,u,"l",qk),"l",[0,13]));
+    if(show.indexOf("h")>=0)F.labs.push(lab([0,0],[0,h],T(h,u,"h",qk),"h",[-8,0]));
+    if(show.indexOf("w")>=0)F.labs.push(lab([l,0],pj(l,0,w),T(w,u,"w",qk),"w",[9,7],1));
+    return F;
+  }
+  function cube(a,u,qk){var F=cuboid(a,a,a,u,qk,"l");F.kind="cube";F.aria="Cube with edge "+num(a)+" "+u;return F;}
+  function triPrism(a,b,c,L,u,qk,show){ // right angle at the front bottom-left: legs a (along the ground) and b (up), slope c
+    var F=prism("triprism",[[0,0],[a,0],[0,b]],L,{a:a,b:b,c:c,L:L},"Triangular prism");
+    show=show||"abcL";
+    if(show.indexOf("a")>=0)F.labs.push(lab([0,0],[a,0],T(a,u,"a",qk),"a",[0,13]));
+    if(show.indexOf("b")>=0)F.labs.push(lab([0,0],[0,b],T(b,u,"b",qk),"b",[-8,0]));
+    if(show.indexOf("c")>=0)F.labs.push(lab([a,0],[0,b],T(c,u,"c",qk),"c",[r2(9*b/c),r2(-9*a/c)]));
+    if(show.indexOf("L")>=0)F.labs.push(lab([a,0],pj(a,0,L),T(L,u,"L",qk),"L",[9,7],1));
+    F.rt=[[0,0],[1,0],[0,1]];
+    return F;
+  }
+  function gable(w,h1,H,L,u){ // house-shaped prism
+    var F=prism("gable",[[0,0],[w,0],[w,h1],[w/2,H],[0,h1]],L,{w:w,h1:h1,H:H,L:L},"Prism shaped like a house");
+    F.labs.push(lab([0,0],[w,0],T(w,u),"w",[0,13]),lab([0,0],[0,h1],T(h1,u),"h1",[-8,0]),lab([w,0],pj(w,0,L),T(L,u),"L",[9,7],1));
+    F.segs.push({a:[w/2,0],b:[w/2,H],c:"dm"});F.labs.push(lab([w/2,0],[w/2,H],T(H,u),"H",[8,8]));
+    return F;
+  }
+  var EY=0.32;
+  function cylinder(r,h,u,key,qk,water){ // upright; key "r" or "d" for the top label
+    var e=r*EY,F={kind:"cylinder",polys:[],segs:[],labs:[],dims:{r:r,h:h},aria:"Cylinder"};
+    F.paths=[{d:[["M",-r,h],["L",-r,0],["A",r,e,r,0,0,0],["L",r,h],["Z"]],c:"sd"}];
+    if(water){F.paths.push({d:[["M",-r,water],["L",-r,0],["A",r,e,r,0,0,0],["L",r,water],["A",r,e,-r,water,0,1],["Z"]],c:"wt"});F.ells=[{c:[0,water],rx:r,ry:e,c2:"wl"}];F.dims.water=water;}
+    F.paths.push({d:[["M",-r,0],["A",r,e,r,0,0,1]],c:"hd"});
+    F.ells=(F.ells||[]).concat([{c:[0,h],rx:r,ry:e,c2:"top"}]);
+    if(key==="d"){F.segs.push({a:[-r,h],b:[r,h],c:"rl"});F.labs.push(lab([-r,h],[r,h],T(2*r,u,"d",qk),"d",[0,9]));}
+    else if(key==="r"){F.segs.push({a:[0,h],b:[r,h],c:"rl"});F.labs.push(lab([0,h],[r,h],T(r,u,"r",qk),"r",[0,9]));F.dot=[0,h];}
+    if(!water)F.labs.push(lab([r,0],[r,h],T(h,u,"h",qk),"h",[8,0]));
+    return F;
+  }
+  function sphere(r,u,key,hemi){
+    var e=r*EY,F={kind:hemi?"hemisphere":"sphere",polys:[],segs:[],labs:[],dims:{r:r},aria:hemi?"Hemisphere":"Sphere"};
+    if(hemi)F.paths=[{d:[["M",-r,0],["A",r,r,r,0,0,1],["A",r,e,-r,0,0,1],["Z"]],c:"sd"},{d:[["M",-r,0],["A",r,e,r,0,0,1]],c:"hd"}];
+    else{F.ells=[{c:[0,0],rx:r,ry:r,c2:"ball",u:1}];F.paths=[{d:[["M",-r,0],["A",r,e,r,0,0,1]],c:"hd"},{d:[["M",-r,0],["A",r,e,r,0,0,0]],c:"eq"}];}
+    if(key==="d"){F.segs.push({a:[-r,0],b:[r,0],c:"rl"});F.labs.push(lab([-r,0],[r,0],T(2*r,u),"d",[0,-10]));}
+    else{F.segs.push({a:[0,0],b:[r,0],c:"rl"});F.labs.push(lab([0,0],[r,0],T(r,u),"r",[0,-10]));}
+    F.dot=[0,0];F.bbx=[[-r,hemi?-e:-r],[r,r]];
+    return F;
+  }
+  function silo(r,h,u){ // cylinder with a hemisphere on top
+    var e=r*EY,F={kind:"silo",polys:[],segs:[],labs:[],dims:{r:r,h:h},aria:"Cylinder with a hemisphere on top"};
+    F.paths=[{d:[["M",-r,h],["L",-r,0],["A",r,e,r,0,0,0],["L",r,h],["Z"]],c:"sd"},
+      {d:[["M",-r,h],["A",r,r,r,h,0,1],["A",r,e,-r,h,0,1],["Z"]],c:"sd"},
+      {d:[["M",-r,0],["A",r,e,r,0,0,1]],c:"hd"},{d:[["M",-r,h],["A",r,e,r,h,0,1]],c:"hd"}];
+    F.segs.push({a:[0,h],b:[r,h],c:"rl"});F.dot=[0,h];
+    F.labs.push(lab([0,h],[r,h],T(r,u),"r",[0,10]),lab([r,0],[r,h],T(h,u),"h",[8,0]));
+    F.bbx=[[-r,-e],[r,h+r]];
+    return F;
+  }
+  /* nets: flat shapes (real units) */
+  function netCuboid(l,w,h,u,labels){ // column: back(l×h) / top(l×w) / front(l×h) / bottom(l×w); sides (w×h) next to the front
+    var R=function(x,y,a,b,role){return {p:[[x,y],[x+a,y],[x+a,y+b],[x,y+b]],c:"nt",role:role};};
+    var y0=0,F={kind:"net-cuboid",polys:[],segs:[],labs:[],dims:{l:l,w:w,h:h},aria:"Net of a cuboid"};
+    F.polys.push(R(w,0,l,w,"bottom"),R(w,w,l,h,"front"),R(w,w+h,l,w,"top"),R(w,2*w+h,l,h,"back"),R(0,w,w,h,"side"),R(w+l,w,w,h,"side"));
+    if(labels){F.labs.push(lab([w,0],[w+l,0],T(l,u),"l",[0,13]),lab([w+l,0],[w+l,w],T(w,u),"w",[9,0]),lab([w+l+w,w],[w+l+w,w+h],T(h,u),"h",[9,0]));}
+    return F;
+  }
+  function netTri(a,b,c,L,u){ // rectangles b | a | c side by side, triangles on the a rectangle
+    var F={kind:"net-triprism",polys:[],segs:[],labs:[],dims:{a:a,b:b,c:c,L:L},aria:"Net of a triangular prism"};
+    F.polys.push({p:[[0,0],[b,0],[b,L],[0,L]],c:"nt",role:"rect"},{p:[[b,0],[b+a,0],[b+a,L],[b,L]],c:"nt",role:"rect"},{p:[[b+a,0],[b+a+c,0],[b+a+c,L],[b+a,L]],c:"nt",role:"rect"},
+      {p:[[b,L],[b+a,L],[b,L+b]],c:"nt",role:"tri"},{p:[[b,0],[b,-b],[b+a,0]],c:"nt",role:"tri"});
+    return F;
+  }
+  function netCyl(r,h,u,labels){
+    var w=2*Math.PI*r,F={kind:"net-cylinder",polys:[{p:[[0,0],[w,0],[w,h],[0,h]],c:"nt",role:"rect"}],segs:[],labs:[],ells:[{c:[w/2,h+r],rx:r,ry:r,c2:"nc"},{c:[w/2,-r],rx:r,ry:r,c2:"nc"}],dims:{r:r,h:h},aria:"Net of a cylinder"};
+    if(labels){F.segs.push({a:[w/2,h+r],b:[w/2+r,h+r],c:"rl"});F.dot=[w/2,h+r];F.labs.push(lab([w/2,h+r],[w/2+r,h+r],T(r,u),"r",[0,-10]),lab([0,0],[0,h],T(h,u),"h",[-8,0]),lab([0,0],[w,0],"?","q",[0,13]));}
+    return F;
+  }
+
+  function render(f,box){
+    box=box||[230,150];var xs=[],ys=[];
+    function add(p){xs.push(p[0]);ys.push(p[1]);}
+    (f.polys||[]).forEach(function(P){P.p.forEach(add);});(f.segs||[]).forEach(function(s){add(s.a);add(s.b);});
+    (f.ells||[]).forEach(function(e){add([e.c[0]-e.rx,e.c[1]-e.ry]);add([e.c[0]+e.rx,e.c[1]+e.ry]);});
+    (f.paths||[]).forEach(function(P){P.d.forEach(function(g){if(g[0]==="M"||g[0]==="L")add([g[1],g[2]]);});});
+    (f.bbx||[]).forEach(add);
+    var x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+    var s=Math.min(box[0]/(x1-x0),box[1]/(y1-y0)),px=58,py=30;
+    var X=function(x){return r2(px+(x-x0)*s);},Y=function(y){return r2(py+(y1-y)*s);};
+    var W=r2((x1-x0)*s+2*px),H=r2((y1-y0)*s+2*py);
+    var o='<svg class="sf" viewBox="0 0 '+W+' '+H+'" style="max-width:'+Math.round(W*1.5)+'px" data-kind="'+f.kind+'" data-s="'+Math.round(s*1e6)/1e6+'" data-ox="'+X(0)+'" data-oy="'+Y(0)+'" data-kz="'+KZ+'"';
+    for(var k in f.dims)o+=' data-'+k+'="'+f.dims[k]+'"';
+    o+=' role="img" aria-label="'+f.aria+'">';
+    function el(e){return '<ellipse class="'+e.c2+'" cx="'+X(e.c[0])+'" cy="'+Y(e.c[1])+'" rx="'+r2(e.rx*s)+'" ry="'+r2(e.ry*s)+'"/>';}
+    (f.ells||[]).forEach(function(e){if(e.u)o+=el(e);});
+    (f.paths||[]).forEach(function(P){o+='<path class="'+P.c+'" d="'+P.d.map(function(g){
+      if(g[0]==="M"||g[0]==="L")return g[0]+X(g[1])+" "+Y(g[2]);
+      if(g[0]==="A")return "A"+r2(g[1]*s)+" "+r2(g[2]*s)+" 0 "+g[5]+" "+g[6]+" "+X(g[3])+" "+Y(g[4]);
+      return "Z";}).join(" ")+'"/>';});
+    (f.polys||[]).forEach(function(P){o+='<polygon class="'+P.c+'" data-role="'+P.role+'" points="'+P.p.map(function(p){return X(p[0])+","+Y(p[1]);}).join(" ")+'" data-pts="'+P.p.map(function(p){return r4(p[0])+","+r4(p[1]);}).join(" ")+'"/>';});
+    (f.ells||[]).forEach(function(e){if(!e.u)o+=el(e);});
+    (f.segs||[]).forEach(function(g){o+='<line class="'+g.c+'" x1="'+X(g.a[0])+'" y1="'+Y(g.a[1])+'" x2="'+X(g.b[0])+'" y2="'+Y(g.b[1])+'"/>';});
+    if(f.rt){var v=f.rt[0],q=9;o+='<polyline class="rt" points="'+r2(X(v[0])+q)+","+Y(v[1])+" "+r2(X(v[0])+q)+","+r2(Y(v[1])-q)+" "+X(v[0])+","+r2(Y(v[1])-q)+'"/>';}
+    if(f.dot)o+='<circle class="dt" cx="'+X(f.dot[0])+'" cy="'+Y(f.dot[1])+'" r="2.6"/>';
+    (f.labs||[]).forEach(function(l){var mx=(X(l.a[0])+X(l.b[0]))/2+l.o[0],my=(Y(l.a[1])+Y(l.b[1]))/2+l.o[1],an=l.o[0]<-1?"end":l.o[0]>1&&l.o[1]===0?"start":"middle";
+      if(l.k==="w"||l.k==="L"||l.k==="c")an="start";
+      o+='<text class="fl'+(l.t==="?"?' q':'')+'" x="'+r2(mx)+'" y="'+r2(my)+'" text-anchor="'+an+'" dominant-baseline="central" data-k="'+l.k+'" data-a="'+l.a.map(r4).join(",")+'" data-b="'+l.b.map(r4).join(",")+'" data-z="'+l.z+'">'+l.t+'</text>';});
+    return o+'</svg>';
+  }
+  function two(a,b){return '<div class="two">'+a+b+'</div>';}
+  function tag(t){return '<div class="eqb">'+t+'</div>';}
+
+  /* ---------- π ---------- */
+  var PIV={calc:Math.PI,"314":3.14,"227":22/7};
+  var PIT={calc:" (π button, 1 d.p.)","314":" (π = 3.14)","227":" (π = 22/7)",inpi:" (in terms of π)"};
+  function pf(mode,u){if(mode==="inpi")return function(c){return (Math.abs(c-1)<1e-9?"":num(c,2))+"π "+u;};var dp=mode==="calc"?1:2;return function(x){return num(x,dp)+" "+u;};}
+  function piMode(r,noInPi){var m=["calc","calc","314"];if(!noInPi)m.push("inpi","inpi");if(isNice(r/7,0))m.push("227","227");return rnd(m);}
+  /* coef = the number in front of π; slips are coefs too. Returns null when the numbers don't suit the mode (the maker tries again). */
+  function piQ(en,mode,coef,slips,u,head,html,data){
+    if((mode==="314"||mode==="227")&&!isNice(coef*PIV[mode],2))mode="calc";
+    if(mode==="inpi"&&!isNice(coef,2))mode="calc";
+    if(mode==="calc"&&!edgeOK(coef*Math.PI,1))return null;
+    var f=pf(mode,u),val=function(c){return mode==="inpi"?c:c*PIV[mode];};
+    data=data||{};data.mode=mode;
+    return Q(en+PIT[mode],val(coef),slips.map(val),f,head+(mode==="314"?" (π = 3.14)":mode==="227"?" (π = 22/7)":"")+" = "+f(val(coef))+".",html,data);
+  }
+
+  /* ---------- Pack It: cuboids and cubes ---------- */
+  function dims3(){for(;;){var l=ri(4,15),w=ri(2,10),h=ri(2,12);if(l!==w&&w!==h&&l!==h&&l>w)return [l,w,h];}}
+  function qCubV(){var d=dims3(),l=d[0],w=d[1],h=d[2],V=l*w*h,S=2*(l*w+l*h+w*h);
+    return Q("Volume?",V,[S,l+w+h,l*w,l*w*h/2,V+l*w,4*(l+w+h)],U("cm³",0),"Volume = length × width × height = "+l+" × "+w+" × "+h+" = "+V+" cm³.",render(cuboid(l,w,h,"cm")),{t:"cubv"});}
+  function qCubSA(){var d=dims3(),l=d[0],w=d[1],h=d[2],V=l*w*h,S=2*(l*w+l*h+w*h);
+    return Q("Total surface area?",S,[V,l*w+l*h+w*h,2*l*w+l*h+w*h,6*l*w,S+2*l*w,4*(l+w+h)],U("cm²",0),
+      "6 faces in 3 matching pairs: 2 × ("+l+" × "+w+" + "+l+" × "+h+" + "+w+" × "+h+") = 2 × ("+(l*w)+" + "+(l*h)+" + "+(w*h)+") = "+S+" cm².",render(cuboid(l,w,h,"cm")),{t:"cubsa"});}
+  function qOpenBox(){var d=dims3(),l=d[0],w=d[1],h=d[2],S=l*w+2*l*h+2*w*h,full=2*(l*w+l*h+w*h);
+    return Q("Open box (no lid). Area of card?",S,[full,l*w*h,l*w+l*h+w*h,2*l*h+2*w*h,S+l*w/2],U("cm²",0),
+      "5 faces: base "+l+" × "+w+" = "+(l*w)+", plus 2 × "+l+" × "+h+" = "+(2*l*h)+", plus 2 × "+w+" × "+h+" = "+(2*w*h)+". Total "+S+" cm² (no lid, so not "+full+").",render(cuboid(l,w,h,"cm")),{t:"openbox"});}
+  function qCube(){var a=ri(2,12),V=a*a*a,S=6*a*a;
+    if(Math.random()<.5)return Q("Cube. Volume?",V,[S,3*a,a*a,12*a,4*a*a],U("cm³",0),"Volume = "+a+" × "+a+" × "+a+" = "+a+"³ = "+V+" cm³.",render(cube(a,"cm"),[150,130]),{t:"cubev"});
+    return Q("Cube. Surface area?",S,[V,4*a*a,a*a,6*a,12*a],U("cm²",0),"6 square faces: 6 × "+a+"² = 6 × "+(a*a)+" = "+S+" cm².",render(cube(a,"cm"),[150,130]),{t:"cubesa"});}
+  function qCubeBack(){var a=ri(2,10),V=a*a*a;
+    return Q("A cube holds "+V+" cm³. Edge length?",a,[V/3,V/6,Math.sqrt(V),a+1,a*a,V/12],U("cm",2),"Edge³ = "+V+", so edge = ∛"+V+" = "+a+" cm (check: "+a+" × "+a+" × "+a+" = "+V+").","",{t:"cubeback"});}
+  function qCubMiss(){var d=dims3(),l=d[0],w=d[1],h=d[2],V=l*w*h,k=rnd(["l","w","h"]),v={l:l,w:w,h:h}[k],o=[l,w,h].filter(function(x){return x!==v;});
+    return Q("Volume = "+V+" cm³. Find ?",v,[V-o[0]*o[1],V/o[0],o[0]*o[1],v+1,v*2,V/(o[0]+o[1])],U("cm",2),
+      "Volume = l × w × h, so ? = "+V+" ÷ ("+o[0]+" × "+o[1]+") = "+V+" ÷ "+(o[0]*o[1])+" = "+v+" cm.",render(cuboid(l,w,h,"cm",k)),{t:"cubmiss",V:V});}
+  var BX=[4,5,6,8,10,12,15,20];
+  function qPack(){var a=rnd(BX),b=rnd(BX),c=rnd(BX),nx=ri(2,6),ny=ri(2,5),nz=ri(2,4);
+    if(a===b||b===c||a===c||a<b)return null;
+    var rx=ri(0,a-1),ry=ri(0,b-1),rz=ri(0,c-1);if(rx+ry+rz===0)return null;
+    var L=nx*a+rx,W=ny*b+ry,H=nz*c+rz;if(L>120||W>90||H>80||L===W||W===H||L===H)return null;
+    var n=nx*ny*nz,fv=Math.floor(L*W*H/(a*b*c));if(fv===n)return null;
+    var g=render(cuboid(L,W,H,"cm"),[200,140]),bx=render(cuboid(a,b,c,"cm"),[Math.max(200*a/L,90),Math.max(140*c/H,60)]);
+    return Q("How many boxes fit? (same way round)",n,[fv,(nx+1)*ny*nz,Math.ceil(L/a)*Math.ceil(W/b)*Math.ceil(H/c),nx*ny,nx+ny+nz,n+nx*ny],cnt("boxes"),
+      "Count along each edge (whole boxes only): "+L+" ÷ "+a+" → "+nx+", "+W+" ÷ "+b+" → "+ny+", "+H+" ÷ "+c+" → "+nz+". "+nx+" × "+ny+" × "+nz+" = "+n+". (Dividing the volumes gives "+fv+", but the gaps can't hold a whole box.)",
+      two('<div><div class="cap">📦 container</div>'+g+'</div>','<div><div class="cap">box</div>'+bx+'</div>'),{t:"pack",box:[a,b,c]});}
+  function qLitres(){
+    if(Math.random()<.55){var l=ri(2,12)*10,w=ri(2,8)*5,h=ri(2,8)*5,V=l*w*h;if(l<=w||w===h||l===h)return null;
+      return Q("Fish tank. How many litres? (1 litre = 1,000 cm³)",V/1000,[V/100,V/10000,V/10,2*(l*w+l*h+w*h)/1000,V/1000+1],U("litres",2),
+        l+" × "+w+" × "+h+" = "+commas(String(V))+" cm³. ÷ 1,000 = "+num(V/1000)+" litres.",render(cuboid(l,w,h,"cm")),{t:"litres"});}
+    var a=rnd([1,1.5,2,2.5,3,4]),b=rnd([0.5,1,1.2,1.5,2]),c=rnd([0.5,0.8,1,1.2,1.5]),V=a*b*c;if(a<=b||b===c||a===c||!isNice(V*1000,0))return null;
+    return Q("Water tank. How many litres? (1 m³ = 1,000 litres)",V*1000,[V*100,V,V*10000,V*1000/2,(V+1)*1000],U("litres",0),
+      num(a)+" × "+num(b)+" × "+num(c)+" = "+num(V,3)+" m³. × 1,000 = "+commas(String(Math.round(V*1000)))+" litres.",render(cuboid(a,b,c,"m")),{t:"m3litres"});}
+
+  /* ---------- Prisms & nets ---------- */
+  var TRIP=[[3,4,5],[4,3,5],[6,8,10],[8,6,10],[5,12,13],[12,5,13],[9,12,15],[12,9,15],[8,15,17],[15,8,17]];
+  function tripPick(){var t=rnd(TRIP),k=rnd([1,1,1,2]);return [t[0]*k,t[1]*k,t[2]*k];}
+  function qTriV(){var t=tripPick(),a=t[0],b=t[1],c=t[2],L=ri(5,25);if(L===a||L===b||L===c)return null;var A=a*b/2,V=A*L;
+    if(a*b>200)return null;
+    return Q("Volume?",V,[a*b*L,a*c*L/2,b*c*L/2,a*b*c/2,A+L,(a+b+c)*L],U("cm³",1),
+      "Volume of a prism = area of the end × length. End = ½ × "+a+" × "+b+" = "+num(A)+" cm². × "+L+" = "+num(V)+" cm³. (The sloping "+c+" isn't needed.)",render(triPrism(a,b,c,L,"cm")),{t:"triv"});}
+  function qTriSA(){var t=tripPick(),a=t[0],b=t[1],c=t[2],L=ri(5,20);if(L===a||L===b||L===c||a*b>200)return null;var S=a*b+(a+b+c)*L;
+    return Q("Total surface area?",S,[a*b/2+(a+b+c)*L,a*b+(a+b)*L,(a+b+c)*L,a*b*L/2,2*a*b+(a+b+c)*L,a*b+(a+b+c)*L/2],U("cm²",1),
+      "2 triangles: 2 × ½ × "+a+" × "+b+" = "+(a*b)+". 3 rectangles: ("+a+" + "+b+" + "+c+") × "+L+" = "+((a+b+c)*L)+". Total "+S+" cm².",render(triPrism(a,b,c,L,"cm")),{t:"trisa"});}
+  function qGableV(){var w=ri(4,10),h1=ri(3,6),r=ri(2,4),H=h1+r,L=ri(6,15);if(L===w)return null;var A=w*h1+w*r/2,V=A*L;
+    if(!isNice(V,1))return null;
+    return Q("Volume of this shed?",V,[w*H*L,w*h1*L,A,w*h1*L+w*r*L,(w*h1+w*H/2)*L],U("m³",1),
+      "End = rectangle + triangle: "+w+" × "+h1+" + ½ × "+w+" × "+r+" = "+num(A)+" m². Volume = "+num(A)+" × "+L+" = "+num(V)+" m³.",render(gable(w,h1,H,L,"m")),{t:"gablev"});}
+  function qXsec(){var A=ri(6,60),L=ri(4,30),V=A*L;
+    if(Math.random()<.5)return Q("A prism's end has area "+A+" cm². It is "+L+" cm long. Volume?",V,[A+L,2*A*L,A*L/2,A*L*L,A*A],U("cm³",0),"Volume = area of the end × length = "+A+" × "+L+" = "+V+" cm³.","",{t:"xsec"});
+    return Q("A prism holds "+V+" cm³ and is "+L+" cm long. Area of its end?",A,[V-L,V*L,V/L/2,2*V/L,L],U("cm²",2),"Area of the end = volume ÷ length = "+V+" ÷ "+L+" = "+A+" cm².","",{t:"xsecback"});}
+  var SOL=["Cube","Cuboid","Triangular prism","Cylinder"];
+  function qNetWhich(){var k=ri(0,3),f;
+    if(k===0)f=netCuboid(3,3,3,"cm");
+    else if(k===1){var d=dims3();f=netCuboid(d[0],d[1],d[2],"cm");}
+    else if(k===2){var t=tripPick();f=netTri(t[0],t[1],t[2],ri(5,12),"cm");}
+    else f=netCyl(ri(2,4),ri(5,10),"cm");
+    return C("This net folds into a…",SOL[k],SOL.filter(function(x,i){return i!==k;}),
+      ["6 squares make a cube.","6 rectangles in 3 matching pairs make a cuboid.","2 triangles + 3 rectangles make a triangular prism.","2 circles + 1 rectangle make a cylinder."][k],render(f,[230,170]),{t:"netwhich"});}
+  function qNetSA(){var d=dims3(),l=d[0],w=d[1],h=d[2];if(l>12||h>9)return null;var S=2*(l*w+l*h+w*h);
+    return Q("Area of this net?",S,[l*w*h,l*w+l*h+w*h,4*l*h+2*w*h,S-2*w*h,6*l*w],U("cm²",0),
+      "6 rectangles: 2 × "+l+" × "+w+" + 2 × "+l+" × "+h+" + 2 × "+w+" × "+h+" = "+(2*l*w)+" + "+(2*l*h)+" + "+(2*w*h)+" = "+S+" cm². (The net's area = the surface area.)",render(netCuboid(l,w,h,"cm",true),[230,190]),{t:"netsa"});}
+  var FEV={"Cube":[6,12,8],"Cuboid":[6,12,8],"Triangular prism":[5,9,6]};
+  function qFEV(){var s=rnd(["Cube","Cuboid","Triangular prism"]),k=ri(0,2),n=FEV[s][k],word=["faces","edges","vertices (corners)"][k];
+    var f=s==="Cube"?cube(4,"cm"):s==="Cuboid"?cuboid(7,3,4,"cm"):triPrism(6,4,7.21,9,"cm","","");f.labs=[];
+    var pool=[4,5,6,7,8,9,10,12,14,18].filter(function(x){return x!==n;}).map(String);
+    return C("How many "+word+"?",String(n),pool,s+": "+FEV[s][0]+" faces, "+FEV[s][1]+" edges, "+FEV[s][2]+" vertices.",render(f,[170,120]),{t:"fev",solid:s,k:k});}
+
+  /* ---------- Cylinders & spheres ---------- */
+  var RS=[2,3,4,5,6,7,10,14,1.5,2.5,3.5];
+  function rd(r){return Math.random()<.5?"r":"d";}
+  function qCylV(){var r=rnd(RS),h=ri(3,20),key=rd(),m=piMode(r);if(h===r||h===2*r)return null;
+    return piQ("Volume?",m,r*r*h,[2*r*h,4*r*r*h,r*h,2*r*r*h,r*r*h/2,r*r+h],"cm³","V = πr²h"+(key==="d"?" (radius = "+num(2*r)+" ÷ 2 = "+num(r)+")":"")+" = π × "+num(r)+"² × "+h,render(cylinder(r,h,"cm",key)),{t:"cylv"});}
+  function qCylCSA(){var r=rnd(RS),h=ri(4,20),m=piMode(r);if(h===r||h===2*r)return null;
+    return piQ("Label all the way round. Curved area?",m,2*r*h,[r*r*h,r*h,2*r*h+2*r*r,4*r*h,r*r],"cm²","Curved surface = 2πrh = 2 × π × "+num(r)+" × "+h,render(cylinder(r,h,"cm","r")),{t:"cylcsa"});}
+  function qCylTSA(){var r=rnd(RS),h=ri(4,18),m=piMode(r),lid=Math.random()<.6;if(h===r||h===2*r)return null;
+    var c=lid?2*r*r+2*r*h:r*r+2*r*h;
+    return piQ(lid?"Closed tin. Total surface area?":"No lid. Total surface area?",m,c,[2*r*h,lid?r*r+2*r*h:2*r*r+2*r*h,r*r*h,2*r*r+r*h,r*r+r*h],"cm²",
+      (lid?"2 circles + the curved side: 2πr² + 2πrh":"1 circle (no lid) + the curved side: πr² + 2πrh")+" = "+(lid?"2":"")+"π × "+num(r)+"² + 2π × "+num(r)+" × "+h,render(cylinder(r,h,"cm","r")),{t:"cyltsa",lid:lid});}
+  var SR=[3,6,9,1.5,4.5,2,4,5,7,10];
+  function qSphV(){var r=rnd(SR),key=rd(),m=piMode(r),hemi=Math.random()<.35,c=(hemi?2:4)*r*r*r/3;
+    return piQ(hemi?"Hemisphere. Volume?":"Ball. Volume?",m,c,[4*r*r,(hemi?4:2)*r*r*r/3,r*r*r,4*r*r*r,(hemi?2:4)*r*r/3,4*r*r*r/3*8],"cm³",
+      (hemi?"Half a sphere: ⅔πr³":"V = ⁴⁄₃πr³")+(key==="d"?" (radius "+num(r)+")":"")+" = "+(hemi?"⅔":"⁴⁄₃")+" × π × "+num(r)+"³",render(sphere(r,"cm",key,hemi),[150,130]),{t:hemi?"hemiv":"sphv"});}
+  function qSphSA(){var r=rnd(SR),m=piMode(r),hemi=Math.random()<.4,c=hemi?3*r*r:4*r*r;
+    return piQ(hemi?"Solid hemisphere. Total surface area?":"Ball. Surface area?",m,c,hemi?[2*r*r,4*r*r,r*r,2*r*r*r/3,6*r*r]:[r*r,2*r*r,4*r*r*r/3,8*r*r,4*r],"cm²",
+      hemi?"Curved part 2πr² + flat circle πr² = 3πr² = 3 × π × "+num(r)+"²":"Surface area = 4πr² = 4 × π × "+num(r)+"²",render(sphere(r,"cm","r",hemi),[150,130]),{t:hemi?"hemisa":"sphsa"});}
+  function qCylBackH(){var r=rnd([2,3,4,5,6,10]),h=ri(3,20),c=r*r*h;if(h===r)return null;
+    return Q("Cylinder: volume "+num(c)+"π cm³, radius "+r+" cm. Height?",h,[c/r,c/(2*r),c/(r*r*2),h*r,h+r,c/(r*r)/2],U("cm",2),
+      "πr²h = "+num(c)+"π, so "+(r*r)+"h = "+num(c)+" and h = "+num(c)+" ÷ "+(r*r)+" = "+h+" cm.","",{t:"cylh"});}
+  function qBackR(){ // Higher Level
+    if(Math.random()<.5){var r=rnd([3,6,9,12,15]),c=4*r*r*r/3;
+      return Q("Higher Level. Sphere: volume "+num(c)+"π cm³. Radius?",r,[Math.cbrt(c),c/4,Math.sqrt(c),r*2,r+3,r*3,r-1,r*r],U("cm",2),
+        "⁴⁄₃πr³ = "+num(c)+"π, so r³ = "+num(c)+" × 3 ÷ 4 = "+(r*r*r)+" and r = ∛"+(r*r*r)+" = "+r+" cm.","",{t:"sphr"});}
+    var r2_=ri(2,10),h=ri(2,15),c2=r2_*r2_*h;if(h===r2_)return null;
+    return Q("Higher Level. Cylinder: volume "+num(c2)+"π cm³, height "+h+" cm. Radius?",r2_,[r2_*r2_,c2/h/2,Math.sqrt(c2),r2_+1,2*r2_,c2/h,r2_*3,r2_+2],U("cm",2),
+      "πr²h = "+num(c2)+"π, so r² = "+num(c2)+" ÷ "+h+" = "+(r2_*r2_)+" and r = √"+(r2_*r2_)+" = "+r2_+" cm.","",{t:"cylr"});}
+  function qNetCyl(){var r=rnd([2,3,4,5,7,10]),h=ri(4,12),m=piMode(r);
+    return piQ("Net of a cylinder. Length of the rectangle?",m,2*r,[r,r*r,4*r,2*r*h,r*h],"cm","It wraps once round the circle: the circumference 2πr = 2 × π × "+num(r),render(netCyl(r,h,"cm",true),[230,170]),{t:"netcyl"});}
+
+  /* ---------- Displace & combine ---------- */
+  function qDisRect(){var l=ri(3,8)*10,w=ri(2,6)*5,water=ri(5,15),rise;if(l<=w)return null;
+    var stone=rnd([1,1.5,2,2.5,3,4,6])*1000,k=Math.random()<.5;rise=stone/(l*w);if(!isNice(rise,2)||rise>8)return null;
+    var g=render(cuboid(l,w,water+rise+6,"cm",null,"lw"),[210,140]);
+    var en=k?"A stone of volume "+commas(String(stone))+" cm³ sinks in. Water rises by?":"A "+num(stone/1000)+" litre stone sinks in. Water rises by? (1 litre = 1,000 cm³)";
+    return Q(en,rise,[stone/l,stone/w,stone/(l*w)*10,stone/(l*w)/2,rise+1,stone/(2*(l+w))],U("cm",2),
+      "The water's extra volume = the stone's volume: "+commas(String(stone))+" cm³. Rise = volume ÷ base area = "+commas(String(stone))+" ÷ ("+l+" × "+w+") = "+num(rise)+" cm.",g,{t:"disrect",stone:stone});}
+  function qDisCyl(){var R=rnd([4,5,6,8,10,12]),r=rnd([1.5,2,3,3,4,6]),n=rnd([1,1,2,3]);if(r>=R*0.8)return null;
+    var rise=n*4*r*r*r/(3*R*R);if(!isNice(rise,2)||rise<0.2)return null;var hw=ri(6,14);
+    var g=render(cylinder(R,hw+rise+5,"cm","r",null,hw),[160,150]);
+    return Q((n===1?"A ball":n+" balls")+" of radius "+num(r)+" cm sink"+(n===1?"s":"")+" in. Water rises by?",rise,[n*4*r*r/(R*R),n*4*r*r*r/(3*R),rise*3,n*r*r*r/(R*R),rise/2,4*r*r*r/(3*R*R)*(n+1)],U("cm",2),
+      "Balls: "+(n>1?n+" × ":"")+"⁴⁄₃π × "+num(r)+"³ = "+num(n*4*r*r*r/3,2)+"π cm³. That fills a layer πR²h = π × "+R+"² × h, so h = "+num(n*4*r*r*r/3,2)+" ÷ "+(R*R)+" = "+num(rise)+" cm. (π cancels.)",g,{t:"discyl",n:n,r:r});}
+  function qSilo(){var r=rnd([1.5,2,3,4,5,6]),h=ri(4,15),m=rnd(["inpi","inpi","calc","314"]),c=r*r*h+2*r*r*r/3;
+    return piQ("Grain silo. Volume?",m,c,[r*r*h,r*r*h+4*r*r*r/3,r*r*(h+r),2*r*h+2*r*r,r*r*h+2*r*r/3],"m³","Cylinder πr²h + hemisphere ⅔πr³ = π × "+num(r)+"² × "+h+" + ⅔ × π × "+num(r)+"³",render(silo(r,h,"m"),[150,170]),{t:"silo"});}
+  function qRecast(){ // Higher Level
+    if(Math.random()<.5){var r=rnd([3,6,9]),R=rnd([2,3,4,6,9]),h=4*r*r*r/(3*R*R);if(R===r||!isNice(h,2))return null;
+      return Q("Higher Level. Sphere (radius "+r+" cm) melted into a cylinder (radius "+R+" cm). Height?",h,[4*r*r*r/(3*R),4*r*r/(R*R),h*3,r*r*r/(R*R),h/2],U("cm",2),
+        "Same volume: ⁴⁄₃π × "+r+"³ = π × "+R+"² × h, so "+num(4*r*r*r/3)+" = "+(R*R)+"h and h = "+num(h)+" cm.","",{t:"recast1"});}
+    var Rc=rnd([3,4,6]),hc=rnd([4,6,8,9,12]),rb=rnd([0.5,1,1.5]),n=Rc*Rc*hc/(4*rb*rb*rb/3);if(!isNice(n,0)||n>2000||n<4)return null;
+    return Q("Higher Level. Wax cylinder (radius "+Rc+" cm, height "+hc+" cm) → balls of radius "+num(rb)+" cm. How many?",n,[n*3,n/2,Math.round(Rc*Rc*hc/(rb*rb*rb)),Math.round(Rc*Rc*hc/(4*rb*rb)),n+1],cnt("balls"),
+      "Cylinder π × "+Rc+"² × "+hc+" = "+(Rc*Rc*hc)+"π. One ball ⁴⁄₃π × "+num(rb)+"³ = "+num(4*rb*rb*rb/3,3)+"π. "+(Rc*Rc*hc)+" ÷ "+num(4*rb*rb*rb/3,3)+" = "+n+" balls.","",{t:"recast2"});}
+  function qFill(){var l=ri(4,12)*10,w=ri(3,8)*10,h=ri(3,8)*10,V=l*w*h/1000,rate=rnd([2,4,5,6,8,10,12,15]),t=V/rate;if(l<=w||!isNice(t,1)||t<2)return null;
+    return Q("Tap: "+rate+" litres a minute. Minutes to fill?",t,[t*10,V,l*w*h/rate,t/2,t+rate,V*rate/100],U("minutes",1),
+      l+" × "+w+" × "+h+" = "+commas(String(l*w*h))+" cm³ = "+num(V)+" litres. "+num(V)+" ÷ "+rate+" = "+num(t)+" minutes.",render(cuboid(l,w,h,"cm")),{t:"fill",rate:rate});}
+  function qCylLitres(){var r=rnd([5,8,10,12,14,15,20]),h=rnd([10,15,20,25,30,40,50]),V=Math.PI*r*r*h/1000;if(!edgeOK(V,1))return null;
+    return Q("Bucket. How many litres? (π button, 1 d.p.)",V,[V*10,V/10,Math.PI*2*r*h/1000,V*2,Math.PI*r*h/1000,V+1],U("litres",1),
+      "πr²h = π × "+r+"² × "+h+" = "+num(V*1000,1)+" cm³. ÷ 1,000 = "+num(V,1)+" litres.",render(cylinder(r,h,"cm","r"),[150,150]),{t:"cyllitres"});}
+
+  var MAKERS={
+    pack:[qCubV,qCubV,qCubSA,qCubSA,qOpenBox,qCube,qCubeBack,qCubMiss,qPack,qPack,qLitres],
+    prism:[qTriV,qTriV,qTriSA,qGableV,qXsec,qNetWhich,qNetWhich,qNetSA,qFEV],
+    round:[qCylV,qCylV,qCylCSA,qCylTSA,qSphV,qSphV,qSphSA,qCylBackH,qBackR,qNetCyl],
+    combo:[qDisRect,qDisCyl,qDisCyl,qSilo,qSilo,qRecast,qFill,qCylLitres],
+    mixed:[qCubV,qCubSA,qOpenBox,qCube,qCubeBack,qCubMiss,qPack,qLitres,qTriV,qTriSA,qGableV,qXsec,qNetWhich,qNetSA,qFEV,qCylV,qCylCSA,qCylTSA,qSphV,qSphSA,qCylBackH,qBackR,qNetCyl,qDisRect,qDisCyl,qSilo,qRecast,qFill,qCylLitres]
+  };
+  for(var m_ in MAKERS)MAKERS[m_]=MAKERS[m_].map(function(f){return f.__w||(f.__w=retry(f),f.__w.realName=f.name,f.__w);});
+
+  /* fixed diagrams in the rules and the Exam corner */
+  var FIX={
+    rCub:function(){return render(cuboid(5,3,2,"cm"),[150,90]);},
+    rTri:function(){return render(triPrism(4,3,5,8,"cm"),[150,100]);},
+    rCyl:function(){return render(cylinder(3,7,"cm","r"),[110,120]);},
+    rSph:function(){return render(sphere(3,"cm","r"),[100,100]);},
+    rHemi:function(){return render(sphere(3,"cm","r",true),[100,70]);},
+    nCub:function(){return render(netCuboid(5,3,2,"cm",true),[200,160]);},
+    nTri:function(){return render(netTri(4,3,5,8,"cm"),[200,160]);},
+    nCyl:function(){return render(netCyl(2,5,"cm",false),[200,150]);},
+    pat1:function(){return render(cuboid(4,2,1,"cm",null," "),[120,60]);},
+    pat2:function(){return render(cuboid(4,2,2,"cm",null," "),[120,80]);},
+    pat3:function(){return render(cuboid(4,2,3,"cm",null," "),[120,100]);},
+    ex1:function(){return render(cuboid(60,40,50,"cm"),[200,140]);},
+    ex2:function(){return render(silo(1.5,4,"m"),[120,170]);},
+    ex3:function(){return render(cylinder(10,30,"cm","r",null,12),[130,150]);},
+    ex4:function(){return render(triPrism(6,8,10,15,"cm"),[200,130]);}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="pack"?75:85;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="pack"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="pack"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  window.__leimFinish=finish;
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{render:render,cuboid:cuboid,cube:cube,triPrism:triPrism,gable:gable,cylinder:cylinder,sphere:sphere,silo:silo,netCuboid:netCuboid,netTri:netTri,netCyl:netCyl,two:two,FIX:FIX}};
+})();
+</script>

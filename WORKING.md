@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 18 Nov 17:22 · Maths Order 33 Volume & surface area · maths-h
