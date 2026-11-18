@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-18 13:14 · Arcade mode test (arcade.js, falling-answer game) on integer-rush-test.html only · fun

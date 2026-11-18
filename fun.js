@@ -185,5 +185,10 @@
       if(t-t0<3000)requestAnimationFrame(f);else c.remove();})(t0);
   }
 
+  /* shared with arcade.js */
+  window.LeimFun={snd:SND,confetti:confetti,buzz:buzz,isMuted:function(){return !!S.mute;},
+    award:function(o){var k=PAGE+"|"+o.key,prev=S.best[k]||{score:0,stars:0},isBest=o.right>prev.score&&o.right>0;
+      S.best[k]={score:Math.max(prev.score,o.right),stars:Math.max(prev.stars,o.stars)};S.xp+=o.xp;
+      var nd=o.right>0&&bumpDay();save();drawTop();return {isBest:isBest,best:S.best[k].score,newDay:nd,streak:S.day.count};}};
   reset();drawTop();
 })();
