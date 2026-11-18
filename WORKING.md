@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 18 Nov 16:05 · Maths Order 31 Functions & graphs · maths-f
