@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 18 Nov 20:30 · 5d Spanish oral CBA prep (Speaking section + pack) · spanish-o
