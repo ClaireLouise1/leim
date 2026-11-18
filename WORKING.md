@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-18 09:40 · Maths Order 24 Geometry 2 (theorems, congruent & similar triangles) · maths-b
