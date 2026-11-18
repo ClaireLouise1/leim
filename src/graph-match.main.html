@@ -1,0 +1,158 @@
+<main id="main">
+<style>svg.tg{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px}svg.tg .gl{stroke:#DCE3EA;stroke-width:.8}svg.tg .ax,svg.sk .ax{stroke:#5B6775;stroke-width:1.4}svg.tg .tk{font:600 9.5px Inter,sans-serif;fill:#6B7785}svg.tg .axl{font:italic 700 12px Inter,sans-serif;fill:#5B6775;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}.cv{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}.cv.a{stroke:#2962A6}.cv.b{stroke:#7A4BB3}.cv.c{stroke:#2E7D57}svg.tg .lnl{font:italic 800 14px Inter,sans-serif;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}svg.tg .lnl.a{fill:#2962A6}svg.tg .lnl.b{fill:#7A4BB3}svg.tg .pt{fill:#1B2430}.frame svg.tg{margin-top:10px;max-width:400px}.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.eqs.story{font-size:18px}.eqs.story p{white-space:normal}.maps{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px;margin:8px auto 0}svg.mp,svg.sk{display:block;width:100%;height:auto;background:#fff;border:2px solid var(--line);border-radius:12px}.sk1{max-width:240px;margin:8px auto 0}.frame>svg.mp{max-width:220px;margin:8px auto 0}svg.mp .ov{fill:#F3F6F9;stroke:#5B6775;stroke-width:1.4}svg.mp text{font:800 13px Inter,sans-serif;fill:#1B2430}svg.mp .ar{stroke:#2962A6;stroke-width:1.6}svg.mp .ah{fill:#2962A6}svg .ml{font:800 14px Inter,sans-serif;fill:#C0392B}svg.sk .skl{font:italic 600 10px Inter,sans-serif;fill:#6B7785}table.ft{border-collapse:collapse;margin:8px auto 0;min-width:0;width:auto;background:#fff;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}table.ft td,table.ft th{border:2px solid var(--line);padding:5px 10px;text-align:center}table.ft th{color:var(--ink);text-transform:none;background:var(--mist,#F3F6F9)}.nw{white-space:nowrap}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.wk{font-variant-numeric:tabular-nums;line-height:1.7}.ef{max-width:330px;margin:6px auto}.exam .ef{max-width:340px;margin:8px auto}.exam svg.tg .tk{font-size:11px}.exam svg.tg .lnl{font-size:15px}.pats{display:grid;gap:10px;grid-template-columns:repeat(3,1fr);max-width:440px;margin:8px auto}table.pat{border-collapse:collapse;margin:0 auto;min-width:0;width:auto}table.pat td,table.pat th{border:2px solid var(--line);padding:3px 12px;text-align:center}table.pat th{color:var(--ink);text-transform:none;background:var(--mist,#F3F6F9)}table.pat caption{font-weight:800;padding-bottom:4px}.shapes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:440px;margin:8px auto}.shapes figure{margin:0;text-align:center;font-weight:700;font-size:14px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Graph Match</h1>
+        <p>Functions and graphs against the clock: inputs and outputs, reading graphs, story graphs, and linear, quadratic or exponential. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="io"><div><b>Inputs &amp; outputs</b><span>f(x) notation, mapping diagrams, is it a function?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="read"><div><b>Read the graph</b><span>Roots, turning points, solve f(x) = k from a graph</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="story"><div><b>Story graphs</b><span>Match graphs to real life: a ball, a taxi, a bath</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="type"><div><b>Which type?</b><span>Linear, quadratic or exponential</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In the Inputs &amp; outputs round, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.7a–d, AF.1c, U.4 (2018 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Functions &amp; graphs</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at how the outputs change each time x goes up by 1.</p>
+        <div class="pats">
+          <div class="note"><table class="pat"><caption>A</caption><tr><th>x</th><th>f(x)</th></tr><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>4</td></tr><tr><td>2</td><td>7</td></tr><tr><td>3</td><td>10</td></tr></table></div>
+          <div class="note"><table class="pat"><caption>B</caption><tr><th>x</th><th>f(x)</th></tr><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td></tr><tr><td>2</td><td>4</td></tr><tr><td>3</td><td>9</td></tr></table></div>
+          <div class="note"><table class="pat"><caption>C</caption><tr><th>x</th><th>f(x)</th></tr><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>2</td></tr><tr><td>2</td><td>4</td></tr><tr><td>3</td><td>8</td></tr></table></div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A</b> adds 3 every time: the same jump, so it's <b>linear</b> (f(x) = 3x + 1, a straight line). <b>B</b> jumps 1, 3, 5: the jumps grow by the same amount (2), so it's <b>quadratic</b> (f(x) = x², a ∪ curve). <b>C</b> doubles every time: multiply by the same number, so it's <b>exponential</b> (f(x) = 2ˣ).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">What is a function?</h3>
+        <div class="fm">
+          <div class="note"><b class="h">One input → one output</b>A function is a rule that gives each input <b>exactly one</b> output. Two inputs can share an output; one input can't have two.</div>
+          <div class="note"><div class="ef" data-fig="map" style="max-width:200px"></div><p style="text-align:center;margin:4px 0 0">f(x) = 3x + 2</p></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">f(x) notation</h3>
+        <div class="fm">
+          <div class="note wk"><b class="h">Find an output</b>f(x) = 3x + 2<br>f(4) = 3(4) + 2 = 14<br>f(−1) = 3(−1) + 2 = −1</div>
+          <div class="note wk"><b class="h">Find an input</b>f(x) = 11<br>3x + 2 = 11<br>3x = 9, so x = 3</div>
+        </div>
+        <p style="margin-top:8px">f(4) = 14 means the point <b>(4, 14)</b> is on the graph: x first, then y = f(x).</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Reading a graph</h3>
+        <ul>
+          <li><b>f(x) = 0</b> (the roots): where the curve crosses the x-axis.</li>
+          <li><b>Turning point</b>: the bottom of a ∪ (minimum) or the top of a ∩ (maximum). Write it (x, y).</li>
+          <li><b>f(x) = 5</b>: go across from 5 on the y-axis to the curve, then down to the x-axis. A ∪ or ∩ curve usually gives two answers.</li>
+          <li><b>Estimate</b> when the answer is between gridlines: say "about x = 3.4".</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Linear, quadratic or exponential?</h3>
+        <div class="shapes">
+          <figure><div data-fig="slin"></div>Linear<br>3x + 1</figure>
+          <figure><div data-fig="squad"></div>Quadratic<br>x² − 4</figure>
+          <figure><div data-fig="sexp"></div>Exponential<br>2ˣ</figure>
+        </div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Graphs that tell a story</h3>
+        <ul>
+          <li><b>Straight line up</b>: grows by the same amount each time (a taxi fare).</li>
+          <li><b>Flat</b>: stays the same (one price all day).</li>
+          <li><b>∩ curve</b>: up, then down, with a maximum (a ball's height).</li>
+          <li><b>Exponential</b>: slow, then faster and faster (doubling).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Higher Level</h3>
+        <ul>
+          <li><b>f(x) = g(x)</b>: where the two graphs meet. Read off the x values.</li>
+          <li><b>Exponential functions</b>: f(x) = 3 × 2ˣ, so f(3) = 3 × 8 = 24.</li>
+          <li><b>Find k</b>: if f(x) = x² + kx − 4 and f(2) = 6, then 4 + 2k − 4 = 6, so k = 3.</li>
+        </ul>
+
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> squaring a negative wrong ((−3)² is 9, not −9); writing a point (y, x); 2x and 2ˣ mixed up; joining a quadratic's points with straight lines instead of a smooth curve; giving one answer when the curve gives two; misreading the scale on the y-axis; checking a rule with the first column only.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Functions come up in most papers: find f(3), draw a quadratic graph from a table, "use your graph to estimate", and graphs of real situations such as a ball's height. Higher Level can add where two graphs meet and exponential functions.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the substitution</b>: f(−2) = (−2)² − 2(−2) − 3.</li>
+            <li><b>Draw a smooth curve</b> through the points, not straight lines between them.</li>
+            <li><b>Show your reading</b>: draw the line across (or up) on the graph.</li>
+            <li><b>Give every answer</b>: a quadratic often crosses a line twice.</li>
+            <li><b>In context</b>, answer with units: "16 m after 2 s".</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>A function.</b> <span class="nw">f(x) = 3x − 5</span>. (a) Find f(4). (b) Find f(−2). (c) Find x when f(x) = 10.
+              <details><summary>Show the worked answer</summary><p>(a) f(4) = 3(4) − 5 = <b>7</b>.<br>(b) f(−2) = 3(−2) − 5 = −6 − 5 = <b>−11</b>.<br>(c) 3x − 5 = 10 → 3x = 15 → <b>x = 5</b>.</p></details></li>
+            <li><b>A quadratic graph.</b> This is the graph of <span class="nw">f(x) = x² − 2x − 3</span> for −2 ≤ x ≤ 4.
+              <div class="ef" data-fig="ex2"></div>
+              (a) Use the graph to solve f(x) = 0. (b) Write down the minimum point. (c) Use the graph to estimate the values of x for which f(x) = 2.
+              <details><summary>Show the worked answer</summary><p>(a) The curve cuts the x-axis at <b>x = −1 and x = 3</b>.<br>(b) The bottom of the curve: <b>(1, −4)</b>.<br>(c) Go across from 2 on the y-axis: the curve is there at about <b>x = −1.4 and x = 3.4</b>. (Any answer close to these gets the marks.)</p></details></li>
+            <li><b>A ball.</b> The graph shows the height h metres of a ball t seconds after it is thrown.
+              <div class="ef" data-fig="ex3"></div>
+              (a) What is the greatest height? When is that? (b) When does the ball land? (c) When is the ball 15 m high?
+              <details><summary>Show the worked answer</summary><p>(a) The top of the curve: <b>20 m, after 2 s</b>.<br>(b) h = 0 again at <b>t = 4 s</b>.<br>(c) Go across at 15 m: it meets the curve twice, at <b>1 s (going up) and 3 s (coming down)</b>.</p></details></li>
+            <li><b>Higher Level.</b> The graphs of <span class="nw">f(x) = x² − 2x − 3</span> and <span class="nw">g(x) = x + 1</span> are shown.
+              <div class="ef" data-fig="ex4"></div>
+              (a) Use the graphs to solve f(x) = g(x). (b) Check your answers with algebra. (c) Is <span class="nw">h(x) = 2 × 3ˣ</span> linear, quadratic or exponential? Find h(2).
+              <details><summary>Show the worked answer</summary><p>(a) The graphs meet at (−1, 0) and (4, 5), so <b>x = −1 or x = 4</b>.<br>(b) x² − 2x − 3 = x + 1 → x² − 3x − 4 = 0 → (x + 1)(x − 4) = 0 → <b>x = −1 or x = 4</b> ✓<br>(c) x is the power, so it's <b>exponential</b>. h(2) = 2 × 3² = 2 × 9 = <b>18</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/functions-graphs-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Functions &amp; Graphs Teacher Pack (€5)</a>: Function Match mingle cards, Story Graph Swap A/B cards, Function Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

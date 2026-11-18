@@ -65,7 +65,7 @@ MATHS = [
   ("3rd year","Autumn","Coordinate geometry of the line","GT.5a, GT.5b, GT.5c","Line Lab","line-lab.html","coordinate-geometry-line"),
   ("3rd year","Autumn","Simultaneous equations","AF.4","Two-Line Crossing","two-line-crossing.html","simultaneous-equations"),
   ("3rd year","Autumn","Quadratic equations","AF.4, AF.5","Root Rush","root-rush.html","quadratic-equations"),
-  ("3rd year","Autumn","Functions & graphs","AF.7a–AF.7d, AF.1c","Graph Match","",""),
+  ("3rd year","Autumn","Functions & graphs","AF.7a–AF.7d, AF.1c","Graph Match","graph-match.html","functions-graphs"),
   ("3rd year","Spring","Trigonometry","GT.4","Clinometer Challenge","",""),
   ("3rd year","Spring","Volume & surface area (3D solids & nets)","GT.2b, GT.2d, GT.2e","Pack It","",""),
   ("3rd year","Spring","Inequalities","AF.4, AF.7c","Number-Line Shade","",""),
