@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-18 07:20 · Maths Order 22 Statistics 2: graphs & averages · maths-b

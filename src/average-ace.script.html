@@ -1,0 +1,459 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}
+  function F(n,d){var g=gcd(n,d);return [n/g,d/g];}
+  function fstr(f){f=F(f[0],f[1]);return f[0]===0?"0":f[0]===f[1]?"1":f[0]+"/"+f[1];}
+  function fval(f){return f[0]/f[1];}
+  function sum(a){return a.reduce(function(s,x){return s+x;},0);}
+  function sorted(a){return a.slice().sort(function(x,y){return x-y;});}
+  function median(a){var s=sorted(a),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;}
+  function r1(x){return Math.round(x*10+1e-9)/10;} // half up, 1 d.p. (x >= 0)
+  function is1(x){return Math.abs(x*10-Math.round(x*10))<1e-9;}
+  function num(x){x=Math.round(x*100)/100;var s=String(Math.abs(x));if(x<0)s="−"+s;return s;}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function plural(n,w){return n+" "+w+(n===1?"":"s");}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // number answer: wrong options never equal in VALUE to the answer, never negative, at most 2 decimal places
+  function Q(en,frame,ans,slips,why,html,data,unit){
+    unit=unit||"";var f=function(x){return num(x)+unit;};
+    var pads=ans===Math.round(ans)?[ans+1,ans-1,ans+2,ans-2,ans+3,ans+4]:[ans+0.5,ans-0.5,ans+1,ans-1,ans+1.5,ans+2];
+    var seen={},w=[];seen[f(ans)]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<0)return;if(Math.abs(x*100-Math.round(x*100))>1e-7)return;
+      if(Math.abs(x-ans)<1e-9)return;var t=f(x);if(!seen[t]&&w.length<3){seen[t]=1;w.push(t);}});
+    return {en:en,frame:frame,html:html||"",answer:f(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+f(ans),data:data||{}};}
+  function QF(en,frame,ans,slips,why,html,data){
+    var a=F(ans[0],ans[1]),pads=[[a[0]+1,a[1]],[a[0]-1,a[1]],[a[0],a[1]+1],[a[0],a[1]-1],[a[1]-a[0],a[1]],[a[0]+2,a[1]],[a[0],a[1]+2]],seen={},w=[];
+    seen[fval(a).toFixed(9)]=1;
+    slips.concat(pads).forEach(function(f){if(!f||f[1]<=0||f[0]<=0||f[0]>=f[1]||f[0]!==Math.round(f[0])||f[1]!==Math.round(f[1]))return;
+      var k=fval(f).toFixed(9);if(!seen[k]&&w.length<3){seen[k]=1;w.push(fstr(f));}});
+    return {en:en,frame:frame,html:html||"",answer:fstr(a),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+fstr(a),data:data||{}};}
+  function listS(a){return a.map(num).join(", ");}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",PAL=["#2E7D57","#F2B705","#3B82C4","#D9534F","#8E6CC4"],TXT=["#fff",INK,"#fff","#fff","#fff"];
+  function svgOpen(w,h,label){return '<svg class="chart" viewBox="0 0 '+w+' '+h+'" width="100%" style="max-width:460px;display:block;margin:6px auto 8px;background:#fff;border:2px solid #E3E8EE;border-radius:12px;font-family:Inter,sans-serif" role="img" aria-label="'+label+'">';}
+  function tt(x,y,s,cls,attrs,size,anchor,weight,fill){return '<text class="'+cls+'" x="'+x+'" y="'+y+'" font-size="'+(size||12)+'" text-anchor="'+(anchor||"middle")+'" font-weight="'+(weight||700)+'" fill="'+(fill||INK)+'"'+(attrs||"")+'>'+s+'</text>';}
+  // bar chart. ticks = list of tick values (equal spacing on screen); bars drawn by straight-line steps between ticks
+  function ymap(ticks,v){var n=ticks.length-1;for(var i=0;i<n;i++){if(v<=ticks[i+1]+1e-9){return 180-(i+(v-ticks[i])/(ticks[i+1]-ticks[i]))*150/n;}}return 30;}
+  function barSVG(title,cats,fs,ticks,ylab){
+    var k=cats.length,slot=290/k,bw=Math.min(52,slot*0.62),o=svgOpen(340,222,"Bar chart: "+title);
+    o+=tt(185,18,title,"ttl","",13);
+    ticks.forEach(function(v){var y=ymap(ticks,v).toFixed(1);o+='<line class="gl" x1="40" y1="'+y+'" x2="330" y2="'+y+'" stroke="#E3E8EE" stroke-width="1"/>'+tt(34,+y+4,num(v),"yt",' data-v="'+v+'"',11,"end",600);});
+    o+='<line x1="40" y1="180" x2="330" y2="180" stroke="'+INK+'" stroke-width="1.5"/><line x1="40" y1="30" x2="40" y2="180" stroke="'+INK+'" stroke-width="1.5"/>';
+    cats.forEach(function(c,i){var cx=40+slot*(i+.5),top=ymap(ticks,fs[i]);
+      o+='<rect class="bar" data-c="'+c+'" x="'+(cx-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(180-top).toFixed(1)+'" fill="'+PAL[i%5]+'"/>';
+      o+=tt(cx.toFixed(1),197,c,"xl",' data-c="'+c+'"',11.5);});
+    if(ylab)o+=tt(12,105,ylab,"yl",' transform="rotate(-90 12 105)"',11,"middle",600);
+    return o+'</svg>';}
+  function niceTicks(mx){var st=mx<=8?1:mx<=16?2:mx<=40?5:10,top=Math.ceil(mx/st)*st,t=[];for(var v=0;v<=top+1e-9;v+=st)t.push(v);if(t.length<4){t.push(top+st);}return {ticks:t,step:st};}
+  function pieSVG(title,cats,angs,lab){ // lab: "angle" | "pct" | "" ; pcts optional override for labels
+    var cx=105,cy=118,r=88,o=svgOpen(340,226,"Pie chart: "+title),a=-90;
+    o+=tt(170,18,title,"ttl","",13);
+    cats.forEach(function(c,i){var a0=a,a1=a+angs[i],p0=[cx+r*Math.cos(a0*Math.PI/180),cy+r*Math.sin(a0*Math.PI/180)],p1=[cx+r*Math.cos(a1*Math.PI/180),cy+r*Math.sin(a1*Math.PI/180)];
+      o+='<path class="sec" data-c="'+c+'" d="M'+cx+' '+cy+' L'+p0[0].toFixed(2)+' '+p0[1].toFixed(2)+' A'+r+' '+r+' 0 '+(angs[i]>180?1:0)+' 1 '+p1[0].toFixed(2)+' '+p1[1].toFixed(2)+' Z" fill="'+PAL[i%5]+'" stroke="#fff" stroke-width="2"/>';
+      a=a1;});
+    a=-90;
+    cats.forEach(function(c,i){var m=(a+angs[i]/2)*Math.PI/180,lx=cx+r*.6*Math.cos(m),ly=cy+r*.6*Math.sin(m)+5;
+      if(lab&&lab[i]!=null)o+=tt(lx.toFixed(1),ly.toFixed(1),lab[i],"pa",' data-c="'+c+'"',13,"middle",800,TXT[i%5]);
+      a+=angs[i];
+      o+='<rect x="214" y="'+(58+i*28)+'" width="15" height="15" rx="3" fill="'+PAL[i%5]+'"/>'+tt(236,70+i*28,c,"lg",' data-c="'+c+'"',12.5,"start",700);});
+    return o+'</svg>';}
+  function dotSVG(title,vals,lo,hi){
+    var cnt={},mx=0;vals.forEach(function(v){cnt[v]=(cnt[v]||0)+1;if(cnt[v]>mx)mx=cnt[v];});
+    var H=78+mx*15,ay=H-34,sp=290/(hi-lo),o=svgOpen(340,H,"Line plot: "+title);
+    o+=tt(170,18,title,"ttl","",13)+'<line x1="20" y1="'+ay+'" x2="330" y2="'+ay+'" stroke="'+INK+'" stroke-width="1.5"/>';
+    for(var v=lo;v<=hi;v++){var x=(25+(v-lo)*sp).toFixed(1);o+='<line x1="'+x+'" y1="'+(ay-4)+'" x2="'+x+'" y2="'+(ay+4)+'" stroke="'+INK+'" stroke-width="1.5"/>'+tt(x,ay+20,v,"lx",' data-v="'+v+'"',12.5);}
+    var seen={};vals.forEach(function(v){var j=seen[v]=(seen[v]||0)+1;o+='<circle class="dot" cx="'+(25+(v-lo)*sp).toFixed(1)+'" cy="'+(ay-11-(j-1)*15)+'" r="5.5" fill="'+PAL[2]+'"/>';});
+    return o+'</svg>';}
+  function histSVG(title,lo,w,fs,xlab){
+    var k=fs.length,mx=Math.max.apply(null,fs),T=[],bw=280/k,o=svgOpen(340,226,"Histogram: "+title);for(var t=0;t<=Math.max(4,mx);t++)T.push(t);
+    o+=tt(185,18,title,"ttl","",13);
+    T.forEach(function(v){var y=ymap(T,v).toFixed(1);o+='<line class="gl" x1="40" y1="'+y+'" x2="325" y2="'+y+'" stroke="#E3E8EE" stroke-width="1"/>'+tt(34,+y+3.5,v,"yt",' data-v="'+v+'"',T.length>10?9.5:11,"end",600);});
+    fs.forEach(function(f,i){var top=ymap(T,f),x=40+i*bw;
+      o+='<rect class="hb" x="'+x.toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(180-top).toFixed(1)+'" fill="'+PAL[0]+'" stroke="#fff" stroke-width="1.5"/>';});
+    for(var i=0;i<=k;i++)o+=tt((40+i*bw).toFixed(1),196,lo+i*w,"hx",' data-v="'+(lo+i*w)+'"',11.5);
+    o+='<line x1="40" y1="180" x2="325" y2="180" stroke="'+INK+'" stroke-width="1.5"/><line x1="40" y1="30" x2="40" y2="180" stroke="'+INK+'" stroke-width="1.5"/>';
+    if(xlab)o+=tt(182,216,xlab,"xt","",11.5,"middle",600);
+    return o+'</svg>';}
+  var TD='style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center"',TH='style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0;font-size:14px;background:#E8F2EC;color:#1B2430"',HL='style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center;background:#FFF4CC"';
+  function freqHTML(head,cats,fs){
+    var o='<table class="ftab" style="border-collapse:collapse;margin:0 auto 10px;font-size:16px;font-weight:700;min-width:0;width:auto"><tr><th '+TH+'>'+head+'</th><th '+TH+'>Frequency</th></tr>';
+    cats.forEach(function(c,i){o+='<tr><td '+TD+'>'+c+'</td><td '+TD+'>'+fs[i]+'</td></tr>';});return o+'</table>';}
+  var SLS='style="border-collapse:collapse;margin:0 auto 6px;font-size:17px;font-weight:700;min-width:0;width:auto;font-variant-numeric:tabular-nums"';
+  function leaves(a){return a.length?a.join(" "):"&nbsp;";}
+  function slHTML(vals,key){ // ordered stem-and-leaf (two-digit whole numbers)
+    var s=sorted(vals),lo=Math.floor(s[0]/10),hi=Math.floor(s[s.length-1]/10),o='<table class="sl" '+SLS+'>';
+    for(var st=lo;st<=hi;st++){var lv=s.filter(function(v){return Math.floor(v/10)===st;}).map(function(v){return v%10;});
+      o+='<tr><td class="st" style="padding:3px 10px;text-align:right;border-right:2px solid #1B2430">'+st+'</td><td class="lv" style="padding:3px 10px;text-align:left;letter-spacing:1px">'+leaves(lv)+'</td></tr>';}
+    return o+'</table><p class="key" style="text-align:center;font-size:14px;margin:0 0 8px;color:#4B5563">'+key+'</p>';}
+  function btbHTML(A,B,nA,nB,key){
+    var a=sorted(A),b=sorted(B),all=a.concat(b),lo=Math.floor(Math.min.apply(null,all)/10),hi=Math.floor(Math.max.apply(null,all)/10);
+    var o='<table class="btb" '+SLS+'><tr><th '+TH+' class="na">'+nA+'</th><th '+TH+'></th><th '+TH+' class="nb">'+nB+'</th></tr>';
+    for(var st=lo;st<=hi;st++){var la=a.filter(function(v){return Math.floor(v/10)===st;}).map(function(v){return v%10;}).reverse(),
+      lb=b.filter(function(v){return Math.floor(v/10)===st;}).map(function(v){return v%10;});
+      o+='<tr><td class="la" style="padding:3px 10px;text-align:right;letter-spacing:1px">'+leaves(la)+'</td><td class="st" style="padding:3px 10px;text-align:center;border-left:2px solid #1B2430;border-right:2px solid #1B2430">'+st+'</td><td class="lv" style="padding:3px 10px;text-align:left;letter-spacing:1px">'+leaves(lb)+'</td></tr>';}
+    return o+'</table><p class="key" style="text-align:center;font-size:14px;margin:0 0 8px;color:#4B5563">'+key+'</p>';}
+
+  /* ---------- Average Ace: lists ---------- */
+  var CTX=[["Goals scored by a soccer team in its last N matches",0,6],["Points scored by a camogie player in her last N games",0,12],
+    ["Marks (out of 20) that N students got in a spelling test",6,20],["Minutes N students waited for the bus",1,15],
+    ["Text messages N students sent before 9 a.m.",0,14],["Midday temperatures (°C) in Cork on N days in May",9,19],
+    ["Push-ups N students did in one minute",8,30],["Books N students read over the summer",0,9],["Hours of sleep N students got on Sunday night",5,10]];
+  function ctxList(n){var c=rnd(CTX),a;do{a=[];for(var i=0;i<n;i++)a.push(ri(c[1],c[2]));}while(new Set(a).size<3);return {t:c[0].replace("N",n),a:a,c:c};}
+  function modeOf(a){var c={},b=-1,m=null,tie=false;a.forEach(function(v){c[v]=(c[v]||0)+1;});Object.keys(c).forEach(function(k){if(c[k]>b){b=c[k];m=+k;tie=false;}else if(c[k]===b)tie=true;});return tie?null:m;}
+  function qMean(){
+    var L,n;do{n=rnd([4,5,6,8,10,5]);L=ctxList(n);}while((sum(L.a)*10)%n!==0);
+    var m=sum(L.a)/n;
+    return Q(L.t+". Find the MEAN.",listS(L.a),m,[median(L.a),sum(L.a)/(n-1),sum(L.a),(Math.min.apply(null,L.a)+Math.max.apply(null,L.a))/2],
+      "Mean = total ÷ how many = "+sum(L.a)+" ÷ "+n+" = "+num(m)+".","",{t:"mean"});}
+  function qMedian(){
+    var n=ri(5,9),L=ctxList(n),med=median(L.a),u=L.a,um=n%2?u[(n-1)/2]:(u[n/2-1]+u[n/2])/2;
+    return Q(L.t+". Find the MEDIAN.",listS(L.a),med,[um,(n+1)/2,r1(sum(L.a)/n),Math.max.apply(null,L.a)-Math.min.apply(null,L.a)],
+      "Put them in order first: "+listS(sorted(L.a))+". "+(n%2?"The middle one (number "+(n+1)/2+") is "+num(med)+".":"There are two in the middle, so add them and halve: "+num(med)+"."),"",{t:"median"});}
+  function qMode(){
+    var c=rnd(CTX),m=ri(c[1],c[2]),k=ri(2,3),a=[],pool=[];for(var v=c[1];v<=c[2];v++)if(v!==m)pool.push(v);
+    shuffle(pool);var others=pool.slice(0,ri(3,5));for(var i=0;i<k;i++)a.push(m);a=shuffle(a.concat(others));
+    return Q(c[0].replace("N",a.length)+". Find the MODE.",listS(a),m,[k,median(a),Math.max.apply(null,a)],
+      "The mode is the value that comes up most often: "+m+" ("+k+" times). (Not "+k+": that's how many times.)","",{t:"mode"});}
+  function qRange(){
+    var L=ctxList(ri(5,8)),a=L.a,mx=Math.max.apply(null,a),mn=Math.min.apply(null,a);
+    return Q(L.t+". Find the RANGE.",listS(a),mx-mn,[mx,a[a.length-1]-a[0],mx-mn+1,Math.abs(a[0]-a[a.length-1])],
+      "Range = biggest − smallest = "+mx+" − "+mn+" = "+(mx-mn)+".","",{t:"range"});}
+  function qMissing2(){
+    var c,n,m,a,x,tries=0;do{c=rnd(CTX);n=ri(4,6);a=[];for(var i=0;i<n-1;i++)a.push(ri(c[1],c[2]));m=Math.round(sum(a)/(n-1))+ri(-2,2);x=n*m-sum(a);tries++;}while((x<c[1]||x>c[2]||m<0)&&tries<200);
+    if(x<c[1]||x>c[2]||m<0)return qMean();
+    return Q("The mean of "+n+" numbers is "+m+". "+(n-1)+" of them are shown. What is the missing number?",listS(a)+", ?",x,[m,n*m,sum(a)/(n-1),x+m],
+      "The "+n+" numbers must add up to "+n+" × "+m+" = "+(n*m)+". The ones you know add to "+sum(a)+", so the missing one is "+(n*m)+" − "+sum(a)+" = "+x+".","",{t:"missing"});}
+  var WHO=[["A student's mean mark in","tests","test",40,95],["A runner's mean time (minutes) over","parkruns","parkrun",18,35],["A basketball player's mean points over","games","game",6,32]];
+  function qNewMean(){
+    var w,n,m,x,nm,tries=0;do{w=rnd(WHO);n=ri(3,9);m=ri(w[3]+3,w[4]-3);x=ri(w[3],w[4]);nm=(n*m+x)/(n+1);tries++;}while((x<0||!is1(nm)||x===m)&&tries<300);
+    if(!is1(nm)||x<0||x===m)return qMean();
+    return Q(w[0]+" "+n+" "+w[1]+" is "+m+". In the next "+w[2]+" the result is "+x+". What is the new mean?","",nm,[(m+x)/2,(n*m+x)/n,m+x/(n+1),m],
+      "Old total = "+n+" × "+m+" = "+(n*m)+". New total = "+(n*m)+" + "+x+" = "+(n*m+x)+", now ÷ "+(n+1)+" = "+num(nm)+". (Not ("+m+" + "+x+") ÷ 2: the old mean counts "+n+" times.)","",{t:"newmean"});}
+  var FT=[["Goals scored",0,4,"the number of goals scored in each of N matches"],["Number of pets",0,4,"the number of pets owned by N families"],["Brothers and sisters",0,5,"how many brothers and sisters N students have"],["Shoe size",3,7,"the shoe sizes of N students"],["Times late",0,4,"how many times N students were late this term"]];
+  function ftab(){var t=rnd(FT),vals=[],fs=[];for(var v=t[1];v<=t[2];v++){vals.push(v);fs.push(ri(1,9));}var N=sum(fs);return {t:t,vals:vals,fs:fs,N:N,fx:sum(vals.map(function(v,i){return v*fs[i];})),s:"The table shows "+t[3].replace("N",N)+"."};}
+  function qFreqMean(){
+    var T=ftab(),m=T.fx/T.N,ex=is1(m),ans=r1(m);
+    return Q(T.s+" Find the MEAN"+(ex?"":", to 1 decimal place")+".","",ans,
+      [r1(sum(T.vals)/T.vals.length),r1(T.N/T.vals.length),Math.floor(m*10)/10,r1(T.fx/T.vals.length)],
+      "Multiply each value by its frequency and add: Σfx = "+T.fx+". Divide by the total frequency "+T.N+": "+T.fx+" ÷ "+T.N+" = "+(ex?num(m):m.toFixed(3)+"… ≈ "+num(ans))+".",freqHTML(T.t[0],T.vals,T.fs),{t:"fmean",ex:ex});}
+  function fmedian(T){var s=[];T.vals.forEach(function(v,i){for(var j=0;j<T.fs[i];j++)s.push(v);});return median(s);}
+  function qFreqMedian(){
+    var T=ftab(),med=fmedian(T),md=T.vals[T.fs.indexOf(Math.max.apply(null,T.fs))];
+    return Q(T.s+" Find the MEDIAN.","",med,[md,T.vals[2],Math.ceil(T.N/2),(T.N+1)/2],
+      "There are "+T.N+" values, so the median is "+(T.N%2?"value number "+(T.N+1)/2:"halfway between values "+T.N/2+" and "+(T.N/2+1))+". Count down the frequency column (running totals) to find "+(T.N%2?"it":"them")+": "+num(med)+".",freqHTML(T.t[0],T.vals,T.fs),{t:"fmedian"});}
+  function qFreqMode(){
+    var T;do{T=ftab();}while(T.fs.filter(function(f){return f===Math.max.apply(null,T.fs);}).length>1);
+    var mf=Math.max.apply(null,T.fs),md=T.vals[T.fs.indexOf(mf)];
+    return Q(T.s+" What is the MODE?","",md,[mf,T.N,fmedian(T)],
+      "The mode is the VALUE with the highest frequency: "+md+" (it comes up "+mf+" times). The answer is never the frequency itself.",freqHTML(T.t[0],T.vals,T.fs),{t:"fmode"});}
+  var GT=[["Time (minutes)",0,10,"students","time spent on homework"],["Height (cm)",140,10,"students","heights"],["Age (years)",20,10,"people at a concert","ages"],["Distance (km)",0,5,"cyclists","distances cycled"]];
+  function qGrouped(){
+    var g=rnd(GT),k=ri(4,5),fs=[],lab=[],mids=[];for(var i=0;i<k;i++){fs.push(ri(1,12));var a=g[1]+i*g[2];lab.push(a+"–"+(a+g[2]));mids.push(a+g[2]/2);}
+    var N=sum(fs),m=sum(mids.map(function(x,i){return x*fs[i];}))/N,ans=r1(m),low=sum(fs.map(function(f,i){return f*(g[1]+i*g[2]);}))/N;
+    return Q("The "+g[4]+" of "+N+" "+g[3]+" are grouped below. Use mid-interval values to estimate the MEAN, to 1 decimal place.","",ans,[r1(low),r1(low+g[2]),r1(sum(mids)/k),r1(N/k)],
+      "Mid-interval values: "+mids.join(", ")+". Σ(mid × f) = "+num(m*N)+", ÷ "+N+" = "+(is1(m)?num(m):m.toFixed(3)+"… ≈ "+num(ans))+". (\""+lab[0]+"\" means at least "+g[1]+" but less than "+(g[1]+g[2])+".)",freqHTML(g[0],lab,fs),{t:"grouped"});}
+
+  /* ---------- charts ---------- */
+  var BS=[["How 1st years travel to school","Transport",["Walk","Bus","Car","Bike"],"1st years","said","how some 1st years travel to school"],["Favourite sport","Sport",["Hurling","Soccer","Rugby","Camogie","Athletics"],"students","said","the favourite sports of some students"],
+    ["Pets owned by a class","Pet",["Dog","Cat","Rabbit","Fish"],"students","said","the pets owned by students in a class"],["Favourite crisps","Flavour",["Cheese","Salt","Plain","Bacon"],"students","said","the favourite crisps of some students"],
+    ["Colours of cars in a car park","Colour",["Silver","Black","White","Red","Blue"],"cars","were","the colours of the cars in a car park"]];
+  function barData(want){
+    var s=rnd(BS),k=s[2].length,mx,T,fs,tries=0;
+    do{mx=rnd([6,8,12,16,30]);T=niceTicks(mx);fs=s[2].map(function(){return T.step*ri(1,Math.round(mx/T.step));});tries++;}while((new Set(fs).size<k||(want&&!want(fs)))&&tries<200);
+    return {s:s,fs:fs,T:T,N:sum(fs),svg:barSVG(s[0],s[2],fs,T.ticks,"Frequency")};}
+  function qBarRead(){
+    var B=barData(),i=ri(0,B.fs.length-1);
+    return Q("The bar chart shows "+B.s[5]+". How many "+B.s[3]+" "+B.s[4]+" "+B.s[2][i]+"?","",B.fs[i],B.fs.filter(function(f,j){return j!==i;}).concat([B.fs[i]+B.T.step/2,B.fs[i]-B.T.step/2]),
+      "Go across from the top of the "+B.s[2][i]+" bar to the scale: "+B.fs[i]+". (Each line on the scale is "+B.T.step+".)",B.svg,{t:"barread",c:B.s[2][i]});}
+  function qBarTotal(){
+    var B=barData();
+    return Q("The bar chart shows "+B.s[5]+". How many "+B.s[3]+" are there altogether?","",B.N,[B.fs.length,Math.max.apply(null,B.fs),B.N-B.fs[0]],
+      "Add up the heights of all the bars: "+B.fs.join(" + ")+" = "+B.N+".",B.svg,{t:"bartotal"});}
+  function qBarDiff(){
+    var B=barData(),i,j;do{i=ri(0,B.fs.length-1);j=ri(0,B.fs.length-1);}while(B.fs[i]<=B.fs[j]);
+    return Q("The bar chart shows "+B.s[5]+". How many more "+B.s[3]+" "+B.s[4]+" "+B.s[2][i]+" than "+B.s[2][j]+"?","",B.fs[i]-B.fs[j],[B.fs[i]+B.fs[j],B.fs[i],B.fs[j]],
+      B.s[2][i]+" "+B.fs[i]+" − "+B.s[2][j]+" "+B.fs[j]+" = "+(B.fs[i]-B.fs[j])+".",B.svg,{t:"bardiff",a:B.s[2][i],b:B.s[2][j]});}
+  function qBarMode(){
+    var B=barData(function(fs){var m=Math.max.apply(null,fs);return fs.filter(function(f){return f===m;}).length===1;}),m=Math.max.apply(null,B.fs),a=B.s[2][B.fs.indexOf(m)];
+    return C("The bar chart shows "+B.s[5]+". What is the MODE?","",a,B.s[2].filter(function(c){return c!==a;}),
+      "For categories, the mode is the category with the tallest bar: "+a+" ("+m+").",B.s[0]+": mode → "+a,B.svg,{t:"barmode"});}
+  function qBarPct(){
+    var s=rnd(BS),k=s[2].length,N=rnd([20,25,50]),fs,tries=0;
+    do{fs=[];var left=N;for(var i=0;i<k-1;i++){var f=ri(1,Math.max(1,Math.min(left-(k-1-i),Math.round(N/2))));fs.push(f);left-=f;}fs.push(left);tries++;}while((left<1||new Set(fs).size<k||Math.max.apply(null,fs)>(N===50?30:16))&&tries<300);
+    if(left<1||new Set(fs).size<k)return qBarRead();
+    var T=niceTicks(Math.max.apply(null,fs));if(fs.some(function(f){return f%T.step;}))return qBarRead();
+    var i=ri(0,k-1),p=fs[i]*100/N;
+    return Q("The bar chart shows "+s[5]+" ("+N+" "+s[3]+"). What PERCENTAGE "+s[4]+" "+s[2][i]+"?","",p,[fs[i],100/N,fs[i]*100/(N-fs[i])],
+      s[2][i]+": "+fs[i]+" out of "+N+" = "+fs[i]+"/"+N+" × 100 = "+num(p)+"%.",barSVG(s[0],s[2],fs,T.ticks,"Frequency"),{t:"barpct",c:s[2][i],N:N},"%");}
+  var PIEN=[18,20,24,30,36,40,45,60,72,90,120];
+  function pieData(k,gap){
+    var s=rnd(BS),cats=s[2].slice(0,k||ri(3,Math.min(5,s[2].length))),N=rnd(PIEN),fs,tries=0;k=cats.length;
+    do{fs=[];var left=N;for(var i=0;i<k-1;i++){var f=ri(Math.ceil(N/12),Math.floor(N/2));fs.push(f);left-=f;}fs.push(left);tries++;
+    }while((left<Math.ceil(N/12)||new Set(fs).size<k||(gap&&sorted(fs).some(function(f,j,a){return j&&(a[j]-a[j-1])*360/N<24;})))&&tries<500);
+    if(left<Math.ceil(N/12))return pieData(k,gap);
+    return {s:s,cats:cats,fs:fs,N:N,angs:fs.map(function(f){return f*360/N;})};}
+  function qPieAngle(){
+    var P=pieData(),i=ri(0,P.cats.length-1),a=P.angs[i];
+    return Q("The table shows "+P.s[5]+". In a pie chart of this data, what is the ANGLE of the "+P.cats[i]+" sector?","",a,[P.fs[i],360/P.cats.length,P.fs[i]*10,a/2,a+P.fs[i]],
+      "One "+P.s[3].replace(/s$/,"")+" = 360° ÷ "+P.N+" = "+num(360/P.N)+"°. "+P.cats[i]+": "+P.fs[i]+" × "+num(360/P.N)+"° = "+a+"°.",freqHTML(P.s[1],P.cats,P.fs),{t:"pieangle",c:P.cats[i]},"°");}
+  function qPieFreq(){
+    var P=pieData(),i=ri(0,P.cats.length-1);
+    return Q("The pie chart shows "+P.s[5]+" ("+P.N+" "+P.s[3]+" in total). How many "+P.s[4]+" "+P.cats[i]+"?","",P.fs[i],[P.angs[i],P.angs[i]/10,Math.round(P.N/P.cats.length),P.N-P.fs[i]],
+      P.cats[i]+" is "+P.angs[i]+"° out of 360°: "+P.angs[i]+"/360 × "+P.N+" = "+P.fs[i]+".",pieSVG(P.s[0],P.cats,P.angs,P.angs.map(function(a){return a+"°";})),{t:"piefreq",c:P.cats[i],N:P.N});}
+  function qPieFrac(){
+    var P=pieData(),i=ri(0,P.cats.length-1),f=[P.angs[i],360];
+    return QF("The pie chart shows "+P.s[5]+". What FRACTION "+P.s[4]+" "+P.cats[i]+"? (Simplest form.)","",f,[[P.angs[i],360-P.angs[i]],[1,P.cats.length],[360-P.angs[i],360],[P.fs[i],360],[1,3],[2,3],[1,4],[3,4]],
+      P.cats[i]+": "+P.angs[i]+"° out of 360° = "+P.angs[i]+"/360 = "+fstr(f)+".",pieSVG(P.s[0],P.cats,P.angs,P.angs.map(function(a){return a+"°";})),{t:"piefrac",c:P.cats[i]});}
+  function qPieBig(){
+    var P,ok,tries=0;do{P=pieData(4,true);var sa=sorted(P.angs);ok=sa.every(function(a,j){return !j||a-sa[j-1]>=24;});tries++;}while(!ok&&tries<200);
+    if(!ok)return qPieFreq();
+    var least=Math.random()<.35,v=least?Math.min.apply(null,P.fs):Math.max.apply(null,P.fs),a=P.cats[P.fs.indexOf(v)];
+    return C("The pie chart shows "+P.s[5]+". Which answer was "+(least?"LEAST":"MOST")+" popular?","",a,P.cats.filter(function(c){return c!==a;}),
+      "The "+(least?"smallest":"biggest")+" slice is the "+(least?"least":"most")+" popular: "+a+".",P.s[0]+": "+(least?"least":"most")+" popular → "+a,pieSVG(P.s[0],P.cats,P.angs,null),{t:"piebig",least:least});}
+  var DOTS=[["Brothers and sisters of 2nd years",0,5,"how many brothers and sisters some 2nd years have"],["Goals per match this season",0,6,"the goals a team scored in each match this season"],["Pieces of fruit eaten yesterday",0,6,"how many pieces of fruit some students ate yesterday"],["Hours of sport last week",1,8,"how many hours of sport some students did last week"]];
+  function dotData(){
+    var d=rnd(DOTS),n=ri(12,20),v=[],cnt={};
+    while(v.length<n){var x=ri(d[1],d[2]);if((cnt[x]||0)<6){cnt[x]=(cnt[x]||0)+1;v.push(x);}}
+    return {d:d,v:v,svg:dotSVG(d[0],v,d[1],d[2])};}
+  function qDot(){
+    var D=dotData(),k=ri(0,3),v=D.v,s=sorted(v),mx=s[s.length-1],mn=s[0];
+    if(k===0)return Q("The line plot shows "+D.d[3]+". How many values are shown?","",v.length,[D.d[2]-D.d[1]+1,Math.max.apply(null,v),v.length-1],
+      "Each dot is one value. Count them all: "+v.length+".",D.svg,{t:"dotn"});
+    if(k===1){if(modeOf(v)===null)return qDot();var m=modeOf(v),c=v.filter(function(x){return x===m;}).length;
+      return Q("The line plot shows "+D.d[3]+". What is the MODE?","",m,[c,median(v),mx],"The mode is the value with the tallest stack of dots: "+m+" ("+c+" dots).",D.svg,{t:"dotmode"});}
+    if(k===2)return Q("The line plot shows "+D.d[3]+". What is the RANGE?","",mx-mn,[mx,D.d[2]-D.d[1],mx-mn+1],
+      "Range = biggest − smallest value with a dot = "+mx+" − "+mn+" = "+(mx-mn)+".",D.svg,{t:"dotrange"});
+    var med=median(v);
+    return Q("The line plot shows "+D.d[3]+". What is the MEDIAN?","",med,[modeOf(v)==null?r1(sum(v)/v.length):modeOf(v),(v.length+1)/2,(D.d[1]+D.d[2])/2],
+      "There are "+v.length+" dots, already in order from left to right. The median is "+(v.length%2?"dot number "+(v.length+1)/2:"halfway between dots "+v.length/2+" and "+(v.length/2+1))+": "+num(med)+".",D.svg,{t:"dotmedian"});}
+  var HS=[["Heights of 2nd years","Height (cm)",140,10,"students","the heights of some 2nd years"],["Time spent on homework","Time (minutes)",0,15,"students","the time some students spent on homework"],["Ages of people at a match","Age (years)",10,10,"people","the ages of the people at a match"],["Masses of newborn lambs","Mass (kg)",2,1,"lambs","the masses of some newborn lambs"]];
+  function histData(uniq){
+    var h=rnd(HS),k=ri(4,6),fs,tries=0;
+    do{fs=[];for(var i=0;i<k;i++)fs.push(ri(1,12));tries++;}while(uniq&&fs.filter(function(f){return f===Math.max.apply(null,fs);}).length>1&&tries<100);
+    return {h:h,k:k,fs:fs,N:sum(fs),lab:fs.map(function(f,i){var a=h[2]+i*h[3];return a+"–"+(a+h[3]);}),svg:histSVG(h[0],h[2],h[3],fs,h[1])};}
+  function qHist(){
+    var H=histData(),k=ri(0,2),i=ri(0,H.k-1),lo=H.h[2]+i*H.h[3];
+    if(k===0)return Q("The histogram shows "+H.h[5]+". How many "+H.h[4]+" are in the "+H.lab[i]+" class?","",H.fs[i],
+      H.fs.filter(function(f,j){return j!==i;}).concat([lo]),"Read the height of the bar between "+H.lab[i].replace("–"," and ")+" on the frequency scale: "+H.fs[i]+".",H.svg,{t:"histclass",c:H.lab[i]});
+    if(k===1)return Q("The histogram shows "+H.h[5]+". How many "+H.h[4]+" are there altogether?","",H.N,[H.k,Math.max.apply(null,H.fs),H.N-H.fs[0]],
+      "Add the heights of all the bars: "+H.fs.join(" + ")+" = "+H.N+".",H.svg,{t:"histtotal"});
+    if(i===0)i=1;var x=H.h[2]+i*H.h[3],at=sum(H.fs.slice(i));
+    return Q("The histogram shows "+H.h[5]+". How many "+H.h[4]+" were at least "+x+"? (Each class includes its lower value, not its upper value.)","",at,[H.fs[i],H.N-at,sum(H.fs.slice(i+1))],
+      "Add the bars from "+x+" upwards: "+H.fs.slice(i).join(" + ")+" = "+at+".",H.svg,{t:"histatleast",x:x});}
+  function qHistModal(){
+    var H=histData(true),m=Math.max.apply(null,H.fs),a=H.lab[H.fs.indexOf(m)];
+    return C("The histogram shows "+H.h[5]+". What is the MODAL CLASS?","",a,H.lab.filter(function(l){return l!==a;}),
+      "The modal class has the tallest bar: "+a+" ("+m+").",H.h[0]+": modal class → "+a,H.svg,{t:"histmodal"});}
+  function qHistMedian(){
+    var H=histData(),N=H.N,c=0,pos=[(N+1)/2],lo=Math.floor((N+1)/2),hi=Math.ceil((N+1)/2),ci=-1,cj=-1;
+    H.fs.forEach(function(f,i){if(ci<0&&c+f>=lo)ci=i;if(cj<0&&c+f>=hi)cj=i;c+=f;});
+    if(ci!==cj)return qHistModal();
+    var a=H.lab[ci];
+    return C("The histogram shows "+H.h[5]+" ("+N+" "+H.h[4]+"). Which class contains the MEDIAN?","",a,H.lab.filter(function(l){return l!==a;}),
+      "The median is value number "+num((N+1)/2)+" in order. Add the bars from the left until you pass it: it is in "+a+".",H.h[0]+": median class → "+a,H.svg,{t:"histmedian"});}
+
+  /* ---------- stem and leaf ---------- */
+  var SLC=[["Marks (out of 60) in a Maths test","marks",12,58,"the marks (out of 60) some students got in a Maths test"],["Ages of people in a choir","years",13,67,"the ages of the people in a choir"],["Minutes to finish a 5 km run","minutes",18,49,"the times (in minutes) runners took to finish a 5 km run"],["Points scored by a basketball team","points",31,79,"the points a basketball team scored in each game"],["Heights of tomato plants (cm)","cm",11,46,"the heights (in cm) of some tomato plants"]];
+  function slData(n,uniq){
+    var c=rnd(SLC),a,tries=0;n=n||ri(11,19);
+    do{a=[];for(var i=0;i<n;i++)a.push(ri(c[2],c[3]));tries++;}while((uniq&&modeOf(a)===null)&&tries<200);
+    if(uniq&&modeOf(a)===null){var m=a[0];a[1]=m;a[2]=m;}
+    var s=sorted(a),eg=rnd(s);return {c:c,a:a,s:s,html:slHTML(a,"Key: "+Math.floor(eg/10)+" | "+eg%10+" = "+eg+" "+c[1])};}
+  function qSL(){
+    var k=ri(0,5),D=slData(0,k===2),s=D.s,n=s.length,mx=s[n-1],mn=s[0];
+    var en="The stem-and-leaf plot shows "+D.c[4]+". ";
+    if(k===0)return Q(en+"What is the MEDIAN?","",median(s),[s[Math.floor(n/2)+1],(n+1)/2,r1(sum(s)/n),s[Math.floor(n/2)-1]],
+      "There are "+n+" values and the plot is already in order. "+(n%2?"The median is value number "+(n+1)/2:"The median is halfway between values "+n/2+" and "+(n/2+1))+": "+num(median(s))+".",D.html,{t:"slmedian"});
+    if(k===1)return Q(en+"What is the RANGE?","",mx-mn,[mx,Math.floor(mx/10)-Math.floor(mn/10),mx%10-mn%10,mx-mn+1].filter(function(x){return x>=0;}),
+      "Biggest = "+mx+" (last leaf), smallest = "+mn+" (first leaf). Range = "+mx+" − "+mn+" = "+(mx-mn)+".",D.html,{t:"slrange"});
+    if(k===2){var m=modeOf(s),cnt=s.filter(function(x){return x===m;}).length;
+      return Q(en+"What is the MODE?","",m,[cnt,m%10,median(s)],"Look for the same leaf repeated on one stem: "+m+" comes up "+cnt+" times.",D.html,{t:"slmode"});}
+    if(k===3){var X=ri(Math.ceil((mn+5)/10)*10,Math.max(Math.ceil((mn+5)/10)*10,Math.floor((mx-5)/10)*10));var gt=s.filter(function(x){return x>X;}).length,ge=s.filter(function(x){return x>=X;}).length;
+      return Q(en+"How many values are MORE THAN "+X+"?","",gt,[n-gt,ge,gt+1],"Count the leaves after "+X+": "+gt+".",D.html,{t:"slmore",x:X});}
+    if(k===4)return Q(en+"How many values are shown?","",n,[s.filter(function(x,i){return !i||Math.floor(x/10)!==Math.floor(s[i-1]/10);}).length,mx,n-1],
+      "Each leaf is one value. Count the leaves: "+n+".",D.html,{t:"sln"});
+    var big=Math.random()<.5;
+    return Q(en+"What is the "+(big?"LARGEST":"SMALLEST")+" value?","",big?mx:mn,big?[mx%10,Math.floor(mx/10)*10,s[n-2]]:[mn%10,Math.floor(mn/10)*10,s[1]],
+      "The "+(big?"last leaf on the last":"first leaf on the first")+" stem: "+(big?mx:mn)+".",D.html,{t:big?"slmax":"slmin"});}
+  var BB=[["Reaction times","1st years","3rd years","the reaction times (in hundredths of a second) of some 1st and 3rd years"],["Marks in a quiz","Class A","Class B","the marks two classes got in a quiz"],["Minutes of exercise on Saturday","Boys","Girls","the minutes of exercise some boys and girls did on Saturday"],["Points scored per game","Cork","Kerry","the points two teams scored in each game of a season"]];
+  function btbData(){
+    var b=rnd(BB),A,B,tries=0,lo=ri(1,3)*10;
+    do{A=[];B=[];var n1=rnd([9,11,13]),n2=rnd([9,11,13]),sh=ri(-12,12);for(var i=0;i<n1;i++)A.push(ri(lo+2,lo+38));for(var j=0;j<n2;j++)B.push(Math.min(99,Math.max(10,ri(lo+2,lo+38)+sh)));tries++;}
+    while((median(A)===median(B)||(Math.max.apply(null,A)-Math.min.apply(null,A))===(Math.max.apply(null,B)-Math.min.apply(null,B)))&&tries<100);
+    var both=A.filter(function(a){return B.some(function(x){return Math.floor(x/10)===Math.floor(a/10);});}),ea=both.length?rnd(both):A[0],
+      eb=B.filter(function(x){return Math.floor(x/10)===Math.floor(ea/10);})[0];
+    var key=eb!=null?"Key: "+ea%10+" | "+Math.floor(ea/10)+" | "+eb%10+" = "+ea+" for "+b[1]+" and "+eb+" for "+b[2]:"Key: "+ea%10+" | "+Math.floor(ea/10)+" = "+ea+" for "+b[1];
+    return {b:b,A:A,B:B,html:btbHTML(A,B,b[1],b[2],key)};}
+  function rng(a){return Math.max.apply(null,a)-Math.min.apply(null,a);}
+  function qBTB(){
+    var D=btbData(),k=ri(0,4),en="The back-to-back stem-and-leaf plot shows "+D.b[3]+". ";
+    var mA=median(D.A),mB=median(D.B),rA=rng(D.A),rB=rng(D.B),first=Math.random()<.5,G=first?D.A:D.B,nm=first?D.b[1]:D.b[2],O=first?D.B:D.A;
+    if(k===0)return Q(en+"What is the MEDIAN for "+nm+"?","",median(G),[median(O),(G.length+1)/2,median(G.concat(O))],
+      nm+" has "+G.length+" values, so the median is value number "+(G.length+1)/2+" counted from the smallest. ("+nm+"'s leaves are on the "+(first?"LEFT, so read them from the stem outwards":"RIGHT")+".) Median = "+median(G)+".",D.html,{t:"btbmedian",g:nm});
+    if(k===1)return Q(en+"What is the RANGE for "+nm+"?","",rng(G),[rng(O),Math.max.apply(null,G),rng(G.concat(O))],
+      nm+": biggest "+Math.max.apply(null,G)+" − smallest "+Math.min.apply(null,G)+" = "+rng(G)+".",D.html,{t:"btbrange",g:nm});
+    if(k===2){var a=mA>mB?D.b[1]:D.b[2];
+      return C(en+"Which group has the higher MEDIAN?","",a,[a===D.b[1]?D.b[2]:D.b[1],"Both are the same","You can't tell from the plot"],
+        "Median for "+D.b[1]+" = "+mA+", for "+D.b[2]+" = "+mB+". So "+a+".",D.b[0]+": higher median → "+a,D.html,{t:"btbhigher"});}
+    if(k===3)return Q(en+"What is the DIFFERENCE between the two medians?","",Math.abs(mA-mB),[mA+mB,Math.abs(rA-rB),Math.max(mA,mB)],
+      "Median "+D.b[1]+" = "+mA+", median "+D.b[2]+" = "+mB+". Difference = "+Math.abs(mA-mB)+".",D.html,{t:"btbdiff"});
+    var stm=[[D.b[1]+" has the higher median",mA>mB],[D.b[2]+" has the higher median",mB>mA],[D.b[1]+" has the bigger range",rA>rB],[D.b[2]+" has the bigger range",rB>rA],
+      ["Both groups have the same median",mA===mB],["Both groups have the same range",rA===rB]];
+    var tr=stm.filter(function(s){return s[1];}),right=rnd(tr)[0];
+    return C(en+"Which statement is TRUE?","",right,stm.filter(function(s){return !s[1];}).map(function(s){return s[0];}),
+      D.b[1]+": median "+mA+", range "+rA+". "+D.b[2]+": median "+mB+", range "+rB+".",D.b[0]+": true → "+right,D.html,{t:"btbtrue"});}
+
+  /* ---------- choose & judge ---------- */
+  var PIE="Pie chart",BAR="Bar chart",LP="Line plot",HIST="Histogram",SL="Stem-and-leaf plot",BTB="Back-to-back stem-and-leaf plot";
+  var DISP=[[ "Aoife wants to show what share of the whole class picked each type of music.",PIE,[HIST,SL,BTB]],
+    ["A café owner wants to show what fraction of all her sales came from each drink.",PIE,[HIST,LP,BTB]],
+    ["Cian wants to compare how many students in his year play each sport.",BAR,[HIST,SL,BTB]],
+    ["The council wants to compare the number of cars of each colour in a car park.",BAR,[HIST,LP,BTB]],
+    ["Niamh asked 20 students how many pets they have (answers 0 to 5) and wants to show every answer as a dot.",LP,[HIST,SL,BTB]],
+    ["A teacher has the number of goals (0 to 6) scored in each of 15 matches and wants a quick dot picture.",LP,[HIST,PIE,BTB]],
+    ["The heights of 200 students have been sorted into classes 140–150 cm, 150–160 cm and so on.",HIST,[PIE,LP,BTB]],
+    ["The times of 120 runners in a 5 km race have been grouped into 5-minute classes.",HIST,[PIE,LP,BTB]],
+    ["A coach has 25 two-digit test scores and wants a display that keeps every single value.",SL,[PIE,BAR,BTB]],
+    ["Saoirse has the ages (all between 20 and 69) of 18 people in a club and wants to keep every value in order.",SL,[PIE,BAR,BTB]],
+    ["Darragh wants to compare the reaction times (two-digit numbers) of boys and girls, keeping every value.",BTB,[PIE,BAR,LP]],
+    ["A teacher wants to compare the test marks of two classes side by side, showing every mark.",BTB,[PIE,BAR,LP]]];
+  function qDisplay(){
+    var d=rnd(DISP);
+    return C("Which display is BEST for this?",d[0],d[1],d[2],
+      "Pie chart: parts of a whole. Bar chart: comparing categories. Line plot: a small set of numbers, one dot each. Histogram: lots of numerical data in equal classes. Stem-and-leaf: keeps every value in order. Back-to-back: compares two groups.",d[0]+" → "+d[1],"",{t:"display"});}
+  var WORDS=[["Favourite colours of 9 students",["blue","red","green","blue","purple","blue","red","green","yellow"]],["How 8 students travel to school",["bus","walk","car","bus","bike","bus","walk","car"]],
+    ["Favourite fruit of 9 people",["apple","banana","grapes","apple","orange","apple","banana","kiwi","pear"]]];
+  var OUT=[["Weekly pocket money (€) of 7 students",[8,10,12,9,11,10,95]],["Prices (€1,000s) of 7 houses on a road",[210,235,198,224,240,215,1150]],["Minutes 7 students spent on a puzzle",[6,8,7,9,5,8,48]],["Salaries (€1,000s) at a small company",[32,35,30,38,33,36,240]]];
+  function qBestAvg(){
+    var k=ri(0,2);
+    if(k===0){var w=rnd(WORDS);return C("Which average is the only one you can use for this data?",w[0]+": "+w[1].join(", ")+".","Mode",["Mean","Median","Range"],
+      "The answers are words (categorical nominal), so you can't add them or put them in number order. Only the mode (most common answer) works.",w[0]+" → Mode","",{t:"bestavg",k:"words"});}
+    if(k===1){var o=rnd(OUT),v=shuffle(o[1].map(function(x){return x+ri(-1,1);}));while(new Set(v).size<v.length)v=shuffle(o[1].map(function(x){return x+ri(-1,1);}));
+      return C("Which average best describes a TYPICAL value?",o[0]+": "+v.join(", ")+".","Median",["Mean","Mode","Range"],
+        "One value ("+Math.max.apply(null,v)+") is far bigger than the rest (an outlier). It drags the mean up. All the values are different, so there is no mode. The median ("+median(v)+") is typical.",o[0]+" → Median","",{t:"bestavg",k:"outlier",v:v});}
+    return C("Which average uses EVERY value in the data?","","Mean",["Median","Mode","Range"],"The mean adds up every value. The median only uses the middle and the mode only the most common. The range isn't an average.","Uses every value → Mean","",{t:"bestavg",k:"every"});}
+  var UP="The mean goes up",DOWN="The mean goes down",SAME="The mean stays the same",CANT="You can't tell without more data";
+  function qEffect(){
+    var L,n,m,x,tries=0;do{n=rnd([4,5,6]);L=ctxList(n);m=sum(L.a)/n;tries++;}while(m!==Math.round(m)&&tries<200);
+    if(m!==Math.round(m))return qBestAvg();
+    var k=ri(0,2);x=k===0?m+ri(1,6):k===1?Math.max(0,m-ri(1,6)):m;if(x===m&&k!==2)x=m+1;
+    var a=x>m?UP:x<m?DOWN:SAME;
+    return C(L.t+": "+listS(L.a)+". One more value, "+x+", is added. What happens to the mean?","",a,[UP,DOWN,SAME,CANT].filter(function(s){return s!==a;}),
+      "The mean now is "+sum(L.a)+" ÷ "+n+" = "+m+". A new value "+(x>m?"ABOVE":x<m?"BELOW":"EQUAL TO")+" the mean makes it "+(x>m?"go up":x<m?"go down":"stay the same")+": "+(sum(L.a)+x)+" ÷ "+(n+1)+" = "+num((sum(L.a)+x)/(n+1))+".",L.t+" + "+x+" → "+a,"",{t:"effect"});}
+  var MS=["The vertical axis doesn't start at 0","The gaps on the vertical scale aren't equal","The percentages add up to more than 100%","The chart has no title","The bars are different widths"];
+  var MB=[["Phone sales at two shops",["Shop A","Shop B"]],["Votes for two class reps",["Ciara","Eoin"]],["Tickets sold at two cinemas",["Cinema 1","Cinema 2"]],["Visitors to two museums",["Museum A","Museum B"]]];
+  function qMislead(){
+    var k=ri(0,2),html,true_;
+    if(k===0){var b=rnd(MB),y0=rnd([40,50,80,100]),st=rnd([2,5,10]),t=[];for(var i=0;i<=5;i++)t.push(y0+i*st);var f1=y0+st*ri(1,2),f2=y0+st*ri(4,5);
+      html=barSVG(b[0],b[1],[f1,f2],t,"");true_=MS[0];}
+    else if(k===1){var b2=rnd(MB),T=[0,10,20,50,100,200],v1=rnd([30,40]),v2=rnd([60,80,90,150]);html=barSVG(b2[0],b2[1],[v1,v2],T,"");true_=MS[1];}
+    else{var P=pieData(3),p=P.fs.map(function(f){return Math.round(f*100/P.N);});var add=rnd([10,15,20]);p[ri(0,2)]+=add;
+      var tot=sum(p),angs=p.map(function(x){return x*360/tot;});html=pieSVG(P.s[0],P.cats,angs,p.map(function(x){return x+"%";}));true_=MS[2];}
+    return C("Why is this chart MISLEADING?","",true_,MS.filter(function(s){return s!==true_;}),
+      true_+". "+(k===0?"Bars that don't start at 0 make small differences look huge.":k===1?"Uneven gaps squash big values and stretch small ones.":"A pie chart shows one whole, so the parts must add up to exactly 100%."),"Misleading chart → "+true_,html,{t:"mislead"});}
+  var SMP=[["Aoife","her 10 friends","students in Ireland","like the new canteen"],["Eoin","the 12 people at his bus stop","people in Cork","want a later bus"],["Niamh","the 15 members of her hurling team","students in her school","want more PE"],
+    ["A café owner","20 customers on one Monday morning","people in the town","prefer coffee to tea"]];
+  function qSampleLimit(){
+    var s=rnd(SMP),n=parseInt(s[1].match(/\d+/)[0],10),k=ri(Math.ceil(n*.6),n-1),pc=Math.round(k*100/n);
+    var right=k+" of "+s[1]+" "+s[3]+", but a bigger random sample is needed to say more";
+    return C(s[0]+" asked "+s[1]+". "+k+" of them "+s[3]+". What is the BEST conclusion?","",right,
+      ["Most "+s[2]+" "+s[3],"All "+s[2]+" "+s[3],"Exactly "+pc+"% of "+s[2]+" "+s[3]],
+      "The sample is small and not random, so you can only describe the people asked. A claim about all "+s[2]+" needs a much bigger random sample.",s[0]+": best conclusion → the sample only","",{t:"samplelimit",k:k,n:n});}
+
+  var MAKERS={
+    ace:[qMean,qMean,qMedian,qMedian,qMode,qRange,qMissing2,qNewMean,qFreqMean,qFreqMedian,qFreqMode,qGrouped],
+    charts:[qBarRead,qBarTotal,qBarDiff,qBarMode,qBarPct,qPieAngle,qPieFreq,qPieFrac,qPieBig,qDot,qDot,qHist,qHist,qHistModal,qHistMedian],
+    stem:[qSL,qSL,qSL,qBTB,qBTB,qBTB],
+    judge:[qDisplay,qDisplay,qBestAvg,qBestAvg,qEffect,qMislead,qMislead,qSampleLimit],
+    mixed:[qMean,qMedian,qMode,qRange,qMissing2,qNewMean,qFreqMean,qFreqMedian,qFreqMode,qGrouped,qBarRead,qBarDiff,qBarMode,qBarPct,qPieAngle,qPieFreq,qPieFrac,qPieBig,qDot,qHist,qHistModal,qHistMedian,qSL,qSL,qBTB,qBTB,qDisplay,qBestAvg,qEffect,qMislead,qSampleLimit]
+  };
+
+  /* ---------- fixed charts in the rules / Exam corner ---------- */
+  [].forEach.call(document.querySelectorAll("[data-chart]"),function(el){
+    var c=JSON.parse(el.getAttribute("data-chart"));
+    if(c.kind==="bar")el.innerHTML=barSVG(c.title,c.cats,c.fs,c.ticks,c.ylab||"");
+    else if(c.kind==="pie")el.innerHTML=pieSVG(c.title,c.cats,c.angs,c.lab||null);
+    else if(c.kind==="dot")el.innerHTML=dotSVG(c.title,c.vals,c.lo,c.hi);
+    else if(c.kind==="hist")el.innerHTML=histSVG(c.title,c.lo,c.w,c.fs,c.xlab||"");
+    else if(c.kind==="sl")el.innerHTML=slHTML(c.vals,c.key);
+    else if(c.kind==="btb")el.innerHTML=btbHTML(c.A,c.B,c.nA,c.nB,c.key);
+  });
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="judge"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="ace"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="ace"&&streak%5===0?700:350):3400);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,draw:{barSVG:barSVG,pieSVG:pieSVG,dotSVG:dotSVG,histSVG:histSVG,slHTML:slHTML,btbHTML:btbHTML,freqHTML:freqHTML}};
+})();
+</script>

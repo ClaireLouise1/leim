@@ -1,0 +1,169 @@
+<main id="main">
+<style>.cg{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:8px 0}.cg>div>svg.chart{margin:0 auto}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.cubes{display:flex;gap:14px;justify-content:center;align-items:flex-end;margin:10px 0}.cubes div{display:flex;flex-direction:column-reverse;gap:2px;align-items:center;font-weight:700;font-size:14px}.cubes i{display:block;width:26px;height:22px;background:#2E7D57;border-radius:3px}.ef{max-width:340px;margin:6px auto}.btb td,.sl td{white-space:nowrap}.exam .btb td{font-size:15px;padding:3px 6px!important;letter-spacing:0!important}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Average Ace</h1>
+        <p>Beat the clock on mean, median, mode and range, then read bar charts, pie charts, line plots, histograms and stem-and-leaf plots, pick the best display and catch the misleading graph. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="ace"><div><b>Average Ace</b><span>Mean, median, mode and range from lists and frequency tables, the missing value, the new mean, and grouped data</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="charts"><div><b>Read the chart</b><span>Bar charts, pie charts (angles and fractions), line plots and histograms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="stem"><div><b>Stem &amp; leaf</b><span>Ordered stem-and-leaf plots and back-to-back plots: median, range, mode and comparing two groups</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="judge"><div><b>Choose &amp; judge</b><span>The best display, the best average, misleading charts and what a small sample can (and can't) tell you</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. A calculator helps, just like in the exam. You can also answer with the keys 1, 2, 3 and 4. In Average Ace, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: SP.3d, SP.3e, SP.3f, SP.3g, SP.3h (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Statistics: graphs &amp; averages</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Four friends build towers of cubes: 2, 7, 3 and 4 cubes. They want the towers to be <b>fair</b>, so they move cubes from the tall towers to the short ones until every tower is the same height.</p>
+        <div class="cubes" aria-label="Towers of 2, 7, 3 and 4 cubes">
+          <div><i></i><i></i><span>2</span></div><div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span>7</span></div><div><i></i><i></i><i></i><span>3</span></div><div><i></i><i></i><i></i><i></i><span>4</span></div>
+        </div>
+        <p>How tall is each tower at the end? Now try 5, 1, 6 and 4. Can you find a quick way to get the answer without moving any cubes?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every tower ends up <b>4</b> cubes tall (and 4 again for 5, 1, 6, 4). Moving cubes never changes the <b>total</b> (16), so share the total equally: 16 ÷ 4 towers = 4. That is the <b>mean</b>: <b>total ÷ how many</b>. It is the "fair share" value.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The three averages and the range</h3>
+        <div class="fm">
+          <div class="note"><b class="h">Mean</b>Add them all up, divide by how many. 3, 5, 8, 8 → 24 ÷ 4 = <b>6</b>.</div>
+          <div class="note"><b class="h">Median</b>Put them <b>in order</b>, take the middle one. Two in the middle? Halfway between them. 3, 5, 8, 8 → (5 + 8) ÷ 2 = <b>6.5</b>.</div>
+          <div class="note"><b class="h">Mode</b>The value that comes up <b>most often</b>. 3, 5, 8, 8 → <b>8</b>. (It works for words too: the most popular answer.)</div>
+          <div class="note"><b class="h">Range</b>Biggest − smallest. 3, 5, 8, 8 → 8 − 3 = <b>5</b>. It measures <b>spread</b>, not a typical value.</div>
+        </div>
+        <ul style="margin-top:8px">
+          <li><b>Missing value:</b> the mean of 5 numbers is 7, so they add up to 5 × 7 = 35. Subtract the ones you know.</li>
+          <li><b>A new value:</b> old total + new value, then ÷ the NEW count. (Not "old mean + new value ÷ 2".) A new value above the mean pulls it up; below pulls it down; equal leaves it the same.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Averages from a frequency table</h3>
+        <table style="border-collapse:collapse;margin:8px auto;font-size:16px;min-width:0;width:auto">
+          <tr><th style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0;color:var(--ink);background:#E8F2EC">Goals (x)</th><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">0</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">1</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">2</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">3</td></tr>
+          <tr><th style="border:1px solid #D1D5DB;padding:5px 12px;text-transform:none;letter-spacing:0;color:var(--ink);background:#E8F2EC">Matches (f)</th><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">2</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">5</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">2</td><td style="border:1px solid #D1D5DB;padding:5px 12px;text-align:center">1</td></tr>
+        </table>
+        <ul>
+          <li><b>Mean</b> = Σfx ÷ Σf = (0×2 + 1×5 + 2×2 + 3×1) ÷ 10 = 12 ÷ 10 = <b>1.2 goals</b>.</li>
+          <li><b>Mode</b> = the value with the biggest frequency = <b>1</b> (not 5: that's how many times).</li>
+          <li><b>Median</b>: 10 values, so halfway between values 5 and 6. Running totals 2, 7… both are 1, so the median is <b>1</b>.</li>
+          <li><b>Grouped data</b> (0–10, 10–20…): you don't know the exact values, so use the <b>mid-interval value</b> of each class (5, 15…) and <b>estimate</b> the mean the same way. "10–20" means at least 10 but less than 20.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The charts</h3>
+        <div class="cg">
+          <div><div data-chart='{"kind":"bar","title":"How 1st years travel to school","cats":["Walk","Bus","Car","Bike"],"fs":[6,9,3,2],"ticks":[0,1,2,3,4,5,6,7,8,9],"ylab":"Frequency"}'></div><p class="note" style="margin-top:6px"><b>Bar chart</b>: compares categories. Gaps between bars, equal widths, a scale that starts at 0.</p></div>
+          <div><div data-chart='{"kind":"pie","title":"How 1st years travel to school","cats":["Walk","Bus","Car","Bike"],"angs":[108,162,54,36],"lab":["108°","162°","54°","36°"]}'></div><p class="note" style="margin-top:6px"><b>Pie chart</b>: shares of ONE whole. Same 20 students: 360° ÷ 20 = 18° each, so Bus = 9 × 18° = 162°.</p></div>
+          <div><div data-chart='{"kind":"dot","title":"Brothers and sisters of 12 students","vals":[0,1,1,1,2,2,2,2,3,3,4,5],"lo":0,"hi":5}'></div><p class="note" style="margin-top:6px"><b>Line plot</b>: one dot per value on a number line. Mode = tallest stack (2); median = middle dots (2).</p></div>
+          <div><div data-chart='{"kind":"hist","title":"Heights of 2nd years","lo":140,"w":10,"fs":[3,7,11,6,2],"xlab":"Height (cm)"}'></div><p class="note" style="margin-top:6px"><b>Histogram</b>: numerical data in <b>equal</b> classes, bars touching, the scale under the bar edges. Modal class here: 160–170.</p></div>
+        </div>
+        <div class="cg">
+          <div><div data-chart='{"kind":"sl","vals":[12,15,15,18,21,23,24,24,24,29,30,33,36,41,47],"key":"Key: 2 | 3 = 23 marks"}'></div><p class="note" style="margin-top:6px"><b>Stem-and-leaf</b>: tens on the stem, units as leaves, <b>in order</b>, with a key. It keeps every value. 15 values → median is value 8 = <b>24</b>; range 47 − 12 = <b>35</b>; mode <b>24</b>.</p></div>
+          <div><div data-chart='{"kind":"btb","A":[11,14,18,22,25,25,31,36],"B":[16,23,27,29,32,34,34,38,45],"nA":"Boys","nB":"Girls","key":"Key: 5 | 2 | 3 = 25 for Boys and 23 for Girls"}'></div><p class="note" style="margin-top:6px"><b>Back-to-back</b>: compares two groups on one stem. The left leaves get <b>bigger going outwards</b> (read 5 | 2 as 25). Boys' median 23.5, Girls' 32, so the girls are higher.</p></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Choosing the display and the average</h3>
+        <ul>
+          <li><b>Categorical data</b> (words): bar chart or pie chart (pie = parts of a whole). Average: <b>mode</b> only.</li>
+          <li><b>A few numbers, small values</b> (0 to 6): line plot. <b>Two-digit numbers, keep every value</b>: stem-and-leaf. <b>Comparing two groups</b>: back-to-back stem-and-leaf. <b>Lots of data in classes</b>: histogram.</li>
+          <li><b>Mean</b> uses every value, but one huge or tiny value (an <b>outlier</b>) drags it. With an outlier, the <b>median</b> is the better typical value (house prices, salaries).</li>
+          <li>When you <b>compare</b> two groups, give one average AND the range for each, then say what they mean in words: "The girls scored higher on average and were less spread out."</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Misleading charts and limited samples</h3>
+        <div class="cg">
+          <div><div data-chart='{"kind":"bar","title":"Votes for class rep","cats":["Ciara","Eoin"],"fs":[52,56],"ticks":[50,51,52,53,54,55,56,57]}'></div></div>
+          <div class="note"><b>Spot the trick.</b> Eoin's bar looks three times as tall, but he got 56 votes and Ciara 52: only 4 more. The vertical axis starts at <b>50, not 0</b>. Other tricks: <b>uneven gaps</b> on a scale (0, 10, 20, 50, 100), a pie chart whose percentages <b>don't add to 100%</b>, 3-D slices that make the front look bigger, and pictures that grow in two directions at once.</div>
+        </div>
+        <div class="note" style="margin-top:8px"><b>What can a sample tell you?</b> "8 of my 10 friends like the new canteen" is a fact about your 10 friends. It is <b>not</b> evidence that most students in Ireland like it: the sample is small and not random. Say what your data show, and say what limits your conclusion (sample size, who was asked, how the question was worded).</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Finding the median <b>without putting the values in order</b> first.</li>
+          <li>Giving the <b>position</b> of the median ("the 8th value") instead of the value itself.</li>
+          <li>Giving the <b>frequency</b> as the mode (5) instead of the value (1 goal).</li>
+          <li>Dividing Σfx by the number of <b>rows</b> instead of the total frequency.</li>
+          <li>Reading a back-to-back plot's left side the wrong way round (the left leaf 5 next to stem 2 is <b>25</b>, not 52).</li>
+          <li>Pie chart angles that don't add up to 360° (check!).</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Expect at least one full statistics question, often worth a lot of marks: <b>read or draw a chart</b> (a back-to-back stem-and-leaf plot is a favourite), <b>work out the mean, median, mode and range</b>, <b>compare two groups</b> in words, and <b>judge a chart or a claim</b>. It is also the "analyse" and "interpret" half of <b>CBA 2 (the Statistical Investigation)</b>.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the working</b>: write the total and what you divide by (Σfx = 630, ÷ 30). A right answer with no working can lose marks; working with a slip still earns some.</li>
+            <li><b>Compare with numbers AND words</b>: "The median for 1st years (27) is higher than for 3rd years (22), so 1st years did more exercise." Saying only "1st years are higher" isn't enough.</li>
+            <li><b>Charts need</b> a title, labelled axes, equal scales and (for stem-and-leaf) a <b>key</b>, with the leaves <b>in order</b>.</li>
+            <li><b>Check</b>: pie chart angles add to 360°, frequencies add to the total, the mean lies between the smallest and largest values.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Saturday exercise.</b> The back-to-back stem-and-leaf plot shows the minutes of exercise some 1st years and 3rd years did on a Saturday.
+              <div class="ef" data-chart='{"kind":"btb","A":[12,15,18,21,23,24,27,30,32,35,38,41,45],"B":[10,14,16,19,20,22,25,26,28,31,33],"nA":"1st years","nB":"3rd years","key":"Key: 3 | 2 | 2 = 23 min (1st years) and 22 min (3rd years)"}'></div>
+              (a) Find the median for each group. (b) Find the range for each group. (c) Use your answers to compare the two groups.
+              <details><summary>Show the worked answer</summary><p>(a) 1st years: 13 values, so the 7th = <b>27 min</b>. 3rd years: 11 values, so the 6th = <b>22 min</b>.<br>(b) 1st years: 45 − 12 = <b>33 min</b>. 3rd years: 33 − 10 = <b>23 min</b>.<br>(c) The 1st years did <b>more exercise on average</b> (median 27 v 22 minutes), and their times were <b>more spread out</b> (range 33 v 23 minutes).</p></details></li>
+            <li><b>A pie chart.</b> 72 students named their favourite sport: Hurling 20, Soccer 26, Rugby 8, Camogie 18. (a) Find the angle for each sector of a pie chart. (b) What percentage chose soccer, to 1 decimal place? (c) Ciara says "Soccer is the most popular sport in Ireland." Give one reason why her data can't show this.
+              <details><summary>Show the worked answer</summary><p>(a) 360° ÷ 72 = 5° per student. Hurling 20 × 5 = <b>100°</b>, Soccer <b>130°</b>, Rugby <b>40°</b>, Camogie <b>90°</b> (check: 360° ✓).<br>(b) 26 ÷ 72 × 100 = <b>36.1%</b>.<br>(c) The sample is only <b>72 students</b>, probably <b>from one school</b>, not a random sample of people in Ireland, so it can only describe those students.</p></details></li>
+            <li><b>Means.</b> (a) The mean of six numbers is 14. One number is removed and the mean of the other five is 13. Find the number that was removed. (b) The table shows the time 30 students spent on homework: 0–10 min: 4, 10–20 min: 9, 20–30 min: 12, 30–40 min: 5. Estimate the mean time. (c) Why is your answer to (b) only an estimate?
+              <details><summary>Show the worked answer</summary><p>(a) Total of six = 6 × 14 = 84. Total of five = 5 × 13 = 65. Removed: 84 − 65 = <b>19</b>.<br>(b) Mid-interval values 5, 15, 25, 35: (5×4 + 15×9 + 25×12 + 35×5) ÷ 30 = 630 ÷ 30 = <b>21 minutes</b>.<br>(c) We only know the <b>class</b> each time is in, not the exact times, so we use the middle of each class.</p></details></li>
+            <li><b>A misleading chart.</b> The bar chart in the rules above (votes for class rep) has a vertical axis from 50 to 57. Ciara got 52 votes and Eoin got 56. (a) How many more votes did Eoin get? (b) Eoin says "The chart shows I got three times as many votes as Ciara." Explain why he is wrong. (c) How should the chart be redrawn?
+              <details><summary>Show the worked answer</summary><p>(a) 56 − 52 = <b>4 votes</b>.<br>(b) His bar is three times as tall only because the axis <b>starts at 50</b> (his bar shows 6 above 50, hers 2). 56 is not three times 52; he got about 8% more.<br>(c) Start the vertical axis at <b>0</b> (with equal steps), so the bar heights are in proportion to the votes.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/statistics-graphs-averages-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Graphs &amp; Averages Teacher Pack (€5)</a>: Average Ace mingle cards, Class Data Swap A/B cards, Statistics Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
