@@ -1,0 +1,159 @@
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.eqs .e2{font-size:16px;font-weight:700;color:var(--muted)}.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 14px;text-align:left;max-width:360px;margin:8px auto 0;font-size:16px}.steps p{margin:3px 0}.nw{white-space:nowrap}.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.15}.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 1px}.fr>span:last-child{padding-top:1px}.wk{font-variant-numeric:tabular-nums;line-height:1.8}.wk .r{color:var(--muted);font-size:15px}.flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:18px;margin:6px 0}.flow span{background:#fff;border:2px solid var(--line);border-radius:10px;padding:4px 10px}.flow i{font-style:normal;color:var(--muted)}pre.ld{font:600 17px/1.35 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto;margin:8px 0;max-width:100%}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Rearrange Race</h1>
+        <p>Change the subject, add algebraic fractions, divide by a bracket. Fast. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="rearr"><div><b>Rearrange Race</b><span>Make t the subject of v = u + at</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="frac"><div><b>Fractions</b><span>(x + 1)/2 + (x − 3)/5 as one fraction</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="divide"><div><b>Divide</b><span>(x² + 5x + 6) ÷ (x + 2)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>x on the bottom, square roots, cubics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Spot the slip</b><span>Which line has the first mistake?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Rearrange Race, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.3a, AF.3c, AF.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Algebraic fractions, long division &amp; changing the subject</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="note wk"><span class="fr"><span>1</span><span>2</span></span> + <span class="fr"><span>1</span><span>3</span></span> = <span class="fr"><span>3</span><span>6</span></span> + <span class="fr"><span>2</span><span>6</span></span> = <span class="fr"><span>5</span><span>6</span></span></div>
+        <p style="margin-top:8px">Now try these the same way:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note wk"><span class="fr"><span>x</span><span>2</span></span> + <span class="fr"><span>x</span><span>3</span></span> = ?</li>
+          <li class="note wk"><span class="fr"><span>x + 1</span><span>2</span></span> + <span class="fr"><span>x + 4</span><span>3</span></span> = ?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px" class="wk"><span class="fr"><span>3x</span><span>6</span></span> + <span class="fr"><span>2x</span><span>6</span></span> = <span class="fr"><span>5x</span><span>6</span></span><br>
+          <span class="fr"><span>3(x + 1) + 2(x + 4)</span><span>6</span></span> = <span class="fr"><span>5x + 11</span><span>6</span></span></p>
+          <p>Algebra fractions work <b>exactly like number fractions</b>: same bottom first, then add the tops.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding and subtracting fractions</h3>
+        <div class="note wk"><b><span class="fr"><span>x + 3</span><span>4</span></span> − <span class="fr"><span>x − 2</span><span>6</span></span></b><br>
+          = <span class="fr"><span>3(x + 3) − 2(x − 2)</span><span>12</span></span> <br><span class="r">common bottom 12</span><br>
+          = <span class="fr"><span>3x + 9 − 2x + 4</span><span>12</span></span> <br><span class="r">−2 × −2 = +4</span><br>
+          = <span class="fr"><span>x + 13</span><span>12</span></span></div>
+        <ul style="margin-top:10px">
+          <li>Never add the bottoms: <span class="nw">½ + ⅓ ≠ 2/5</span>.</li>
+          <li>Put each top in a <b>bracket</b>. The minus sign multiplies the <b>whole</b> bracket.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Long division</h3>
+        <p>Same steps as 156 ÷ 12: divide, multiply, subtract, bring down.</p>
+<pre class="ld" aria-label="Long division: x squared plus 5x plus 6, divided by x plus 2, gives x plus 3">              x + 3
+      ┌─────────────
+x + 2 │ x² + 5x + 6
+      −(x² + 2x)
+        ───────
+             3x + 6
+           −(3x + 6)
+             ──────
+                  0</pre>
+        <div class="fm">
+          <div class="note"><b class="h">1. Divide</b>x² ÷ x = <b>x</b></div>
+          <div class="note"><b class="h">2. Multiply</b>x(x + 2) = x² + 2x</div>
+          <div class="note"><b class="h">3. Subtract</b>5x − 2x = 3x. Bring down + 6.</div>
+          <div class="note"><b class="h">4. Again</b>3x ÷ x = <b>3</b>. 3(x + 2) = 3x + 6. Remainder 0.</div>
+        </div>
+        <p style="margin-top:8px"><b>Check:</b> (x + 3)(x + 2) = x² + 5x + 6 ✓</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Changing the subject</h3>
+        <p>Undo the steps in <b>reverse order</b>. y = 3x + 5:</p>
+        <div class="flow"><span>x</span><i>→</i><span>× 3</span><i>→</i><span>+ 5</span><i>→</i><span>y</span></div>
+        <div class="flow"><span>y</span><i>→</i><span>− 5</span><i>→</i><span>÷ 3</span><i>→</i><span>x</span></div>
+        <p style="text-align:center;font-weight:800;font-size:19px">x = <span class="fr"><span>y − 5</span><span>3</span></span></p>
+        <div class="fm" style="margin-top:8px">
+          <div class="note wk"><b class="h">v = u + at → t</b>v − u = at<br>t = <span class="fr"><span>v − u</span><span>a</span></span></div>
+          <div class="note wk"><b class="h">A = ½bh → h</b>2A = bh<br>h = <span class="fr"><span>2A</span><span>b</span></span></div>
+          <div class="note wk"><b class="h">y = <span class="fr"><span>x + 4</span><span>3</span></span> → x</b>3y = x + 4<br>x = 3y − 4</div>
+        </div>
+        <p style="margin-top:8px">A fraction? <b>Multiply it away first.</b> Then move the other terms. Then divide.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> The harder ones</h3>
+        <div class="note wk"><b><span class="fr"><span>3</span><span>x + 2</span></span> − <span class="fr"><span>1</span><span>x − 1</span></span></b><br>
+          = <span class="fr"><span>3(x − 1) − 1(x + 2)</span><span>(x + 2)(x − 1)</span></span><br>= <span class="fr"><span>2x − 5</span><span>(x + 2)(x − 1)</span></span></div>
+        <div class="note wk" style="margin-top:8px"><b>A = πr² → r</b><br><span class="fr"><span>A</span><span>π</span></span> = r² &nbsp;<span class="r">(÷ π)</span><br>r = √(A/π) &nbsp;<span class="r">(square root)</span></div>
+        <div class="note wk" style="margin-top:8px"><b>x twice: y = <span class="fr"><span>x + 2</span><span>x − 3</span></span> → x</b><br>
+          xy − 3y = x + 2 &nbsp;<span class="r">(× (x − 3))</span><br>xy − x = 3y + 2 &nbsp;<span class="r">(x terms together)</span><br>x(y − 1) = 3y + 2 &nbsp;<span class="r">(take out x)</span><br>x = <span class="fr"><span>3y + 2</span><span>y − 1</span></span></div>
+        <div class="note wk" style="margin-top:8px"><b>Cubic ÷ bracket:</b> (x³ − 8) ÷ (x − 2). Write x³ + 0x² + 0x − 8 so nothing gets lost, then divide as normal → <b>x² + 2x + 4</b>.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Usually a part of an algebra question: write as one fraction, divide, or "make t the subject" and then use the new formula. Changing the subject also turns up inside real-life questions.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Brackets</b> round each top. Minus sign → change both signs.</li>
+            <li><b>One line per step</b> when rearranging.</li>
+            <li><b>Long division:</b> line up the like terms. Check by multiplying back.</li>
+            <li><b>Use the formula:</b> rearrange first, then put in the numbers.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>One fraction.</b> Write <span class="nw">(x + 3)/4 + (2x − 1)/3</span> as a single fraction.
+              <details><summary>Show the worked answer</summary><p>Common bottom 12: (3(x + 3) + 4(2x − 1))/12 = (3x + 9 + 8x − 4)/12 = <b>(11x + 5)/12</b>.</p></details></li>
+            <li><b>Divide.</b> Divide 2x² + 7x + 3 by x + 3.
+              <details><summary>Show the worked answer</summary><p>2x² ÷ x = 2x. 2x(x + 3) = 2x² + 6x. Subtract: x + 3. x ÷ x = 1. 1(x + 3) = x + 3. Remainder 0. Answer: <b>2x + 1</b>.<br>Check: (2x + 1)(x + 3) = 2x² + 7x + 3 ✓</p></details></li>
+            <li><b>The formula.</b> v = u + at. (a) Make t the subject. (b) Find t when v = 25, u = 5 and a = 4.
+              <details><summary>Show the worked answer</summary><p>(a) v − u = at, so <b>t = (v − u)/a</b>.<br>(b) t = (25 − 5)/4 = 20/4 = <b>5</b>.</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> (a) Write <span class="nw">3/(x + 2) − 1/(x − 1)</span> as a single fraction. (b) V = πr²h. Make r the subject.
+              <details><summary>Show the worked answer</summary><p>(a) (3(x − 1) − (x + 2))/((x + 2)(x − 1)) = <b>(2x − 5)/((x + 2)(x − 1))</b>.<br>(b) V/(πh) = r², so <b>r = √(V/(πh))</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/algebraic-fractions-changing-the-subject-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Algebraic Fractions &amp; Changing the Subject Teacher Pack (€5)</a>: Rearrange Match mingle cards, Formula Swap A/B cards, Rearranging Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

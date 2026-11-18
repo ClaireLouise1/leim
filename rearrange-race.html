@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rearrange Race: Algebraic Fractions, Long Division &amp; Changing the Subject Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: change the subject of a formula, add and subtract algebraic fractions and divide by a bracket (long division), with Higher Level square-root formulas, x on the bottom and cubics. Rules, exam-style questions and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.eqs .e2{font-size:16px;font-weight:700;color:var(--muted)}.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 14px;text-align:left;max-width:360px;margin:8px auto 0;font-size:16px}.steps p{margin:3px 0}.nw{white-space:nowrap}.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.15}.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px 1px}.fr>span:last-child{padding-top:1px}.wk{font-variant-numeric:tabular-nums;line-height:1.8}.wk .r{color:var(--muted);font-size:15px}.flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:18px;margin:6px 0}.flow span{background:#fff;border:2px solid var(--line);border-radius:10px;padding:4px 10px}.flow i{font-style:normal;color:var(--muted)}pre.ld{font:600 17px/1.35 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto;margin:8px 0;max-width:100%}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Rearrange Race</h1>
+        <p>Change the subject, add algebraic fractions, divide by a bracket. Fast. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="rearr"><div><b>Rearrange Race</b><span>Make t the subject of v = u + at</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="frac"><div><b>Fractions</b><span>(x + 1)/2 + (x − 3)/5 as one fraction</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="divide"><div><b>Divide</b><span>(x² + 5x + 6) ÷ (x + 2)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>x on the bottom, square roots, cubics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Spot the slip</b><span>Which line has the first mistake?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Rearrange Race, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.3a, AF.3c, AF.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Algebraic fractions, long division &amp; changing the subject</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="note wk"><span class="fr"><span>1</span><span>2</span></span> + <span class="fr"><span>1</span><span>3</span></span> = <span class="fr"><span>3</span><span>6</span></span> + <span class="fr"><span>2</span><span>6</span></span> = <span class="fr"><span>5</span><span>6</span></span></div>
+        <p style="margin-top:8px">Now try these the same way:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note wk"><span class="fr"><span>x</span><span>2</span></span> + <span class="fr"><span>x</span><span>3</span></span> = ?</li>
+          <li class="note wk"><span class="fr"><span>x + 1</span><span>2</span></span> + <span class="fr"><span>x + 4</span><span>3</span></span> = ?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px" class="wk"><span class="fr"><span>3x</span><span>6</span></span> + <span class="fr"><span>2x</span><span>6</span></span> = <span class="fr"><span>5x</span><span>6</span></span><br>
+          <span class="fr"><span>3(x + 1) + 2(x + 4)</span><span>6</span></span> = <span class="fr"><span>5x + 11</span><span>6</span></span></p>
+          <p>Algebra fractions work <b>exactly like number fractions</b>: same bottom first, then add the tops.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding and subtracting fractions</h3>
+        <div class="note wk"><b><span class="fr"><span>x + 3</span><span>4</span></span> − <span class="fr"><span>x − 2</span><span>6</span></span></b><br>
+          = <span class="fr"><span>3(x + 3) − 2(x − 2)</span><span>12</span></span> <br><span class="r">common bottom 12</span><br>
+          = <span class="fr"><span>3x + 9 − 2x + 4</span><span>12</span></span> <br><span class="r">−2 × −2 = +4</span><br>
+          = <span class="fr"><span>x + 13</span><span>12</span></span></div>
+        <ul style="margin-top:10px">
+          <li>Never add the bottoms: <span class="nw">½ + ⅓ ≠ 2/5</span>.</li>
+          <li>Put each top in a <b>bracket</b>. The minus sign multiplies the <b>whole</b> bracket.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Long division</h3>
+        <p>Same steps as 156 ÷ 12: divide, multiply, subtract, bring down.</p>
+<pre class="ld" aria-label="Long division: x squared plus 5x plus 6, divided by x plus 2, gives x plus 3">              x + 3
+      ┌─────────────
+x + 2 │ x² + 5x + 6
+      −(x² + 2x)
+        ───────
+             3x + 6
+           −(3x + 6)
+             ──────
+                  0</pre>
+        <div class="fm">
+          <div class="note"><b class="h">1. Divide</b>x² ÷ x = <b>x</b></div>
+          <div class="note"><b class="h">2. Multiply</b>x(x + 2) = x² + 2x</div>
+          <div class="note"><b class="h">3. Subtract</b>5x − 2x = 3x. Bring down + 6.</div>
+          <div class="note"><b class="h">4. Again</b>3x ÷ x = <b>3</b>. 3(x + 2) = 3x + 6. Remainder 0.</div>
+        </div>
+        <p style="margin-top:8px"><b>Check:</b> (x + 3)(x + 2) = x² + 5x + 6 ✓</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Changing the subject</h3>
+        <p>Undo the steps in <b>reverse order</b>. y = 3x + 5:</p>
+        <div class="flow"><span>x</span><i>→</i><span>× 3</span><i>→</i><span>+ 5</span><i>→</i><span>y</span></div>
+        <div class="flow"><span>y</span><i>→</i><span>− 5</span><i>→</i><span>÷ 3</span><i>→</i><span>x</span></div>
+        <p style="text-align:center;font-weight:800;font-size:19px">x = <span class="fr"><span>y − 5</span><span>3</span></span></p>
+        <div class="fm" style="margin-top:8px">
+          <div class="note wk"><b class="h">v = u + at → t</b>v − u = at<br>t = <span class="fr"><span>v − u</span><span>a</span></span></div>
+          <div class="note wk"><b class="h">A = ½bh → h</b>2A = bh<br>h = <span class="fr"><span>2A</span><span>b</span></span></div>
+          <div class="note wk"><b class="h">y = <span class="fr"><span>x + 4</span><span>3</span></span> → x</b>3y = x + 4<br>x = 3y − 4</div>
+        </div>
+        <p style="margin-top:8px">A fraction? <b>Multiply it away first.</b> Then move the other terms. Then divide.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> The harder ones</h3>
+        <div class="note wk"><b><span class="fr"><span>3</span><span>x + 2</span></span> − <span class="fr"><span>1</span><span>x − 1</span></span></b><br>
+          = <span class="fr"><span>3(x − 1) − 1(x + 2)</span><span>(x + 2)(x − 1)</span></span><br>= <span class="fr"><span>2x − 5</span><span>(x + 2)(x − 1)</span></span></div>
+        <div class="note wk" style="margin-top:8px"><b>A = πr² → r</b><br><span class="fr"><span>A</span><span>π</span></span> = r² &nbsp;<span class="r">(÷ π)</span><br>r = √(A/π) &nbsp;<span class="r">(square root)</span></div>
+        <div class="note wk" style="margin-top:8px"><b>x twice: y = <span class="fr"><span>x + 2</span><span>x − 3</span></span> → x</b><br>
+          xy − 3y = x + 2 &nbsp;<span class="r">(× (x − 3))</span><br>xy − x = 3y + 2 &nbsp;<span class="r">(x terms together)</span><br>x(y − 1) = 3y + 2 &nbsp;<span class="r">(take out x)</span><br>x = <span class="fr"><span>3y + 2</span><span>y − 1</span></span></div>
+        <div class="note wk" style="margin-top:8px"><b>Cubic ÷ bracket:</b> (x³ − 8) ÷ (x − 2). Write x³ + 0x² + 0x − 8 so nothing gets lost, then divide as normal → <b>x² + 2x + 4</b>.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Usually a part of an algebra question: write as one fraction, divide, or "make t the subject" and then use the new formula. Changing the subject also turns up inside real-life questions.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Brackets</b> round each top. Minus sign → change both signs.</li>
+            <li><b>One line per step</b> when rearranging.</li>
+            <li><b>Long division:</b> line up the like terms. Check by multiplying back.</li>
+            <li><b>Use the formula:</b> rearrange first, then put in the numbers.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>One fraction.</b> Write <span class="nw">(x + 3)/4 + (2x − 1)/3</span> as a single fraction.
+              <details><summary>Show the worked answer</summary><p>Common bottom 12: (3(x + 3) + 4(2x − 1))/12 = (3x + 9 + 8x − 4)/12 = <b>(11x + 5)/12</b>.</p></details></li>
+            <li><b>Divide.</b> Divide 2x² + 7x + 3 by x + 3.
+              <details><summary>Show the worked answer</summary><p>2x² ÷ x = 2x. 2x(x + 3) = 2x² + 6x. Subtract: x + 3. x ÷ x = 1. 1(x + 3) = x + 3. Remainder 0. Answer: <b>2x + 1</b>.<br>Check: (2x + 1)(x + 3) = 2x² + 7x + 3 ✓</p></details></li>
+            <li><b>The formula.</b> v = u + at. (a) Make t the subject. (b) Find t when v = 25, u = 5 and a = 4.
+              <details><summary>Show the worked answer</summary><p>(a) v − u = at, so <b>t = (v − u)/a</b>.<br>(b) t = (25 − 5)/4 = 20/4 = <b>5</b>.</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> (a) Write <span class="nw">3/(x + 2) − 1/(x − 1)</span> as a single fraction. (b) V = πr²h. Make r the subject.
+              <details><summary>Show the worked answer</summary><p>(a) (3(x − 1) − (x + 2))/((x + 2)(x − 1)) = <b>(2x − 5)/((x + 2)(x − 1))</b>.<br>(b) V/(πh) = r², so <b>r = √(V/(πh))</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/algebraic-fractions-changing-the-subject-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Algebraic Fractions &amp; Changing the Subject Teacher Pack (€5)</a>: Rearrange Match mingle cards, Formula Swap A/B cards, Rearranging Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var v;do{v=ri(a,b);}while(v===0);return v;}
+  var M="−";
+  function n_(x){x=Math.round(x*1e6)/1e6;return x<0?M+(-x):String(x);}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+  function lcm(a,b){return a/gcd(a,b)*b;}
+  /* one term k·v; first term or following term */
+  function tm(k,v,first){if(k===0)return "";var a=Math.abs(k),s=(a===1&&v?"":String(a))+v;
+    if(first)return (k<0?M:"")+s;return (k<0?" "+M+" ":" + ")+s;}
+  function lin(a,b,v){v=v||"x";if(a===0)return n_(b);return tm(a,v,true)+tm(b,"",false);}
+  function ex(a,b,c){return tm(a,"x²",true)+tm(b,"x",false)+tm(c,"",false);}
+  function cub(a,b,c,d){return tm(a,"x³",true)+tm(b,"x²",false)+tm(c,"x",false)+tm(d,"",false);}
+  function bk(s){return /. [+−] /.test(s)?"("+s+")":s;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+  /* stacked fraction for the question box */
+  function sf(t,b){return '<span class="fr"><span>'+t+'</span><span>'+b+'</span></span>';}
+  /* question box: disp = what students see, plain = the same thing in one line (for the checker) */
+  function EQ(disp,plain,extra){return '<div class="eqs"><p class="e" data-e="'+esc(plain||disp)+'">'+disp+'</p>'+(extra?'<p class="e2">'+extra+'</p>':'')+'</div>';}
+  /* single fraction (Ax + B)/L, fully simplified */
+  function fr1(A,B,L){var g=gcd(gcd(A,B),L)||1;A/=g;B/=g;L/=g;if(L<0){A=-A;B=-B;L=-L;}
+    if(L===1)return lin(A,B);
+    if(B===0)return (A===1?"x":A===-1?M+"x":n_(A)+"x")+"/"+L;
+    if(A===0)return n_(B)+"/"+L;
+    return "("+lin(A,B)+")/"+L;}
+  function fkey(A,B,L){return (A/L).toFixed(9)+"|"+(B/L).toFixed(9);}
+  function QI(en,ans,slips,why,html,data){var seen={},w=[];seen[n_(ans)]=1;
+    slips.concat([ans+1,ans-1,ans+2,ans-2,-ans]).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x))return;var s=n_(x);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:n_(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+n_(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+ans,data:data||{}};}
+
+  /* ================= REARRANGE (change the subject) ================= */
+  function qLin(){var a=ri(2,9),b=nz(-12,12),f=ri(0,4),y="y",disp,plain,ans,pool,why;
+    if(f===0){plain="y = "+lin(a,b);ans="x = ("+lin(1,-b,y)+")/"+a;
+      pool=["x = ("+lin(1,b,y)+")/"+a,"x = y/"+a+tm(-b,"",false),"x = "+a+"("+lin(1,-b,y)+")","x = "+lin(a,-b,y)];
+      why="Undo in reverse: "+(b>0?"subtract "+b:"add "+(-b))+", then divide by "+a+".";}
+    else if(f===1){plain="y = "+n_(b)+tm(-a,"x",false);ans="x = ("+n_(b)+" "+M+" y)/"+a;
+      pool=["x = ("+lin(1,-b,y)+")/"+a,"x = ("+lin(1,b,y)+")/"+a,"x = "+n_(b)+" "+M+" y/"+a,"x = "+lin(-a,b,y)];
+      why="Add "+a+"x to both sides: "+a+"x + y = "+n_(b)+". Then "+a+"x = "+n_(b)+" "+M+" y, so divide by "+a+".";}
+    else if(f===2){plain="y = ("+lin(1,b)+")/"+a;disp="y = "+sf(lin(1,b),a);ans="x = "+lin(a,-b,y);
+      pool=["x = "+lin(a,b,y),"x = "+a+"("+lin(1,-b,y)+")","x = y/"+a+tm(-b,"",false),"x = ("+lin(1,-b,y)+")/"+a];
+      why="Multiply by "+a+" first: "+lin(a,0,y)+" = "+lin(1,b)+". Then "+(b>0?"subtract "+b:"add "+(-b))+".";}
+    else if(f===3){plain="y = x/"+a+tm(b,"",false);disp="y = "+sf("x",a)+tm(b,"",false);ans="x = "+a+"("+lin(1,-b,y)+")";
+      pool=["x = "+lin(a,-b,y),"x = "+a+"("+lin(1,b,y)+")","x = ("+lin(1,-b,y)+")/"+a,"x = y/"+a+tm(-b,"",false)];
+      why=(b>0?"Subtract "+b:"Add "+(-b))+" first, then multiply by "+a+".";}
+    else{plain="y = "+a+"("+lin(1,b)+")";ans="x = y/"+a+tm(-b,"",false);
+      pool=["x = ("+lin(1,-b,y)+")/"+a,"x = y/"+a+tm(b,"",false),"x = "+lin(a,-b,y),"x = "+a+"y"+tm(b,"",false)];
+      why="Divide by "+a+" first: y/"+a+" = "+lin(1,b)+". Then "+(b>0?"subtract "+b:"add "+(-b))+".";}
+    return C("Make x the subject.",ans,pool,why,EQ(disp||plain,plain),{t:"rearr",sub:"x",rv:plain});}
+
+  var BANK=[
+    {f:"v = u + at",s:"t",a:"t = (v − u)/a",w:["t = (v + u)/a","t = v/a − u","t = a(v − u)","t = (u − v)/a"],y:"Subtract u, then divide by a."},
+    {f:"v = u + at",s:"u",a:"u = v − at",w:["u = v + at","u = at − v","u = (v − a)/t","u = v/at"],y:"Subtract at from both sides."},
+    {f:"v = u + at",s:"a",a:"a = (v − u)/t",w:["a = (v + u)/t","a = v/t − u","a = t(v − u)","a = (u − v)/t"],y:"Subtract u, then divide by t."},
+    {f:"P = 2l + 2w",s:"l",a:"l = (P − 2w)/2",w:["l = (P + 2w)/2","l = P/2 − 2w","l = 2(P − 2w)","l = P − w"],y:"Subtract 2w, then divide by 2."},
+    {f:"A = lw",s:"w",a:"w = A/l",w:["w = Al","w = l/A","w = A − l"],y:"Divide both sides by l."},
+    {f:"s = d/t",s:"d",a:"d = st",w:["d = s/t","d = t/s","d = s + t"],y:"Multiply both sides by t."},
+    {f:"s = d/t",s:"t",a:"t = d/s",w:["t = ds","t = s/d","t = d − s"],y:"Multiply by t: st = d. Then divide by s."},
+    {f:"C = 2πr",s:"r",a:"r = C/(2π)",w:["r = 2πC","r = 2π/C","r = C − 2π"],y:"Divide both sides by 2π."},
+    {f:"V = lwh",s:"h",a:"h = V/(lw)",w:["h = Vlw","h = lw/V","h = V − lw"],y:"Divide both sides by lw."},
+    {f:"A = ½bh",s:"h",a:"h = 2A/b",w:["h = A/(2b)","h = 2Ab","h = A/b","h = b/(2A)"],y:"Multiply by 2: 2A = bh. Then divide by b."},
+    {f:"F = 1.8C + 32",s:"C",a:"C = (F − 32)/1.8",w:["C = F/1.8 − 32","C = (F + 32)/1.8","C = 1.8(F − 32)"],y:"Subtract 32, then divide by 1.8."},
+    {f:"y = mx + c",s:"x",a:"x = (y − c)/m",w:["x = (y + c)/m","x = y/m − c","x = m(y − c)","x = (c − y)/m"],y:"Subtract c, then divide by m."},
+    {f:"y = mx + c",s:"m",a:"m = (y − c)/x",w:["m = (y + c)/x","m = y/x − c","m = x(y − c)"],y:"Subtract c, then divide by x."},
+    {f:"y = mx + c",s:"c",a:"c = y − mx",w:["c = y + mx","c = mx − y","c = (y − m)/x"],y:"Subtract mx from both sides."},
+    {f:"S = 180(n − 2)",s:"n",a:"n = S/180 + 2",w:["n = S/180 − 2","n = (S − 2)/180","n = 180S + 2"],y:"Divide by 180, then add 2."},
+    {f:"E = mc²",s:"m",a:"m = E/c²",w:["m = Ec²","m = c²/E","m = E − c²"],y:"Divide both sides by c²."},
+    {f:"a = (v − u)/t",s:"v",a:"v = u + at",w:["v = at − u","v = u − at","v = (u + a)t"],y:"Multiply by t: at = v − u. Then add u."}
+  ];
+  function bankDisp(f){var m=f.match(/^(\w) = \((.+)\)\/(\w)$/);if(m)return m[1]+" = "+sf(m[2],m[3]);
+    m=f.match(/^(\w) = (\w+)\/(\w+)$/);if(m)return m[1]+" = "+sf(m[2],m[3]);return f;}
+  function qBank(){var e=rnd(BANK);
+    return C("Make "+e.s+" the subject.",e.a,e.w,e.y,EQ(bankDisp(e.f),e.f),{t:"rearr",sub:e.s,rv:e.f});}
+  /* rearrange, then substitute (the usual exam pair) */
+  function qUse(){var k=ri(0,3),f,sub,ans,vals,sl,why;
+    if(k===0){var u=ri(0,20),a=ri(2,9),t=ri(2,12),v=u+a*t;f="v = u + at";sub="t";ans=t;vals="v = "+v+", u = "+u+", a = "+a;
+      sl=[(v+u)/a,v/a-u,v-u,(v-u)*a];why="t = (v − u)/a = ("+v+" − "+u+") ÷ "+a+" = "+t+".";}
+    else if(k===1){var w=ri(2,15),l=ri(3,25),P=2*l+2*w;f="P = 2l + 2w";sub="l";ans=l;vals="P = "+P+", w = "+w;
+      sl=[(P+2*w)/2,P/2-2*w,P-w,P-2*w];why="l = (P − 2w)/2 = ("+P+" − "+2*w+") ÷ 2 = "+l+".";}
+    else if(k===2){var s=ri(3,15),tt=ri(2,9),d=s*tt;f="s = d/t";sub="t";ans=tt;vals="s = "+s+", d = "+d;
+      sl=[s*d,d-s,s];why="t = d/s = "+d+" ÷ "+s+" = "+tt+".";}
+    else{var Cc=5*ri(-4,9),F=Math.round(1.8*Cc+32);f="F = 1.8C + 32";sub="C";ans=Cc;vals="F = "+n_(F);
+      sl=[Math.round(F/1.8-32),Math.round((F+32)/1.8),Math.round(1.8*(F-32)),F-32];why="C = (F − 32)/1.8 = ("+n_(F)+" − 32) ÷ 1.8 = "+n_(Cc)+".";}
+    return QI("Find "+sub+".",ans,sl,why,EQ(bankDisp(f),f,vals),{t:"use",sub:sub,rv:f+"; "+vals});}
+
+  /* ================= FRACTIONS (add / subtract) ================= */
+  var DEN=[[2,3],[3,4],[2,5],[3,5],[4,5],[2,4],[4,6],[3,6],[2,6],[6,8],[4,3],[5,2],[6,4]];
+  function fracParts(zero){var P=rnd(DEN),c=P[0],f=P[1],a=ri(1,5),d=ri(1,5),b=zero?0:nz(-9,9),e=zero?0:nz(-9,9),s=rnd([1,-1]);return {a:a,b:b,c:c,d:d,e:e,f:f,s:s};}
+  function fracText(p){var op=p.s>0?" + ":" "+M+" ";
+    var t1=lin(p.a,p.b),t2=lin(p.d,p.e);
+    return {plain:bk(t1)+"/"+p.c+op+bk(t2)+"/"+p.f,disp:sf(t1,p.c)+op+sf(t2,p.f)};}
+  function qAdd(){for(var t=0;t<200;t++){var p=fracParts(Math.random()<.25),L=lcm(p.c,p.f),m=L/p.c,n=L/p.f;
+      var A=m*p.a+p.s*n*p.d,B=m*p.b+p.s*n*p.e;if(A===0)continue;var g=gcd(gcd(A,B),L);if(L/g===1)continue;
+      var ans=fr1(A,B,L),key=fkey(A,B,L),cand=[],ks={};ks[key]=1;
+      var add=function(A2,B2,L2){if(!L2||A2===0&&B2===0)return;var k=fkey(A2,B2,L2);if(ks[k])return;ks[k]=1;cand.push(fr1(A2,B2,L2));};
+      add(p.a+p.s*p.d,p.b+p.s*p.e,p.c+p.f);           /* tops + tops, bottoms + bottoms */
+      add(p.a+p.s*p.d,p.b+p.s*p.e,L);                 /* didn't multiply up */
+      add(A,p.b+p.s*p.e,L);                           /* multiplied the x terms only */
+      if(p.s<0)add(A,m*p.b+n*p.e,L);                  /* sign slip on the last term */
+      add(n*p.a+p.s*m*p.d,n*p.b+p.s*m*p.e,L);         /* multipliers swapped */
+      add(A,B,L*2);add(A+1,B,L);
+      if(cand.length<3)continue;
+      var T=fracText(p);
+      return C("Write as one fraction.",ans,cand,"Common denominator "+L+": "+(m>1?"× "+m+" on the first, ":"")+(n>1?"× "+n+" on the second. ":"")+"→ "+ans+".",EQ(T.disp,T.plain),{t:"add",rv:T.plain});}}
+  function qLCD(){var p=fracParts(false),L=lcm(p.c,p.f),T=fracText(p);
+    return QI("Common denominator?",L,[p.c*p.f,p.c+p.f,Math.max(p.c,p.f)],"The smallest number both "+p.c+" and "+p.f+" go into: "+L+".",EQ(T.disp,T.plain),{t:"lcd",rv:T.plain});}
+  function qSimp(){var a=ri(2,6),b=nz(-6,7),c=nz(-5,5),top=lin(a*c,a*b),ans=lin(c,b);
+    var pool=[lin(c,a*b),lin(a*c,b),lin(c*a*a,b),lin(c,b+1),lin(c,-b)].filter(function(z){return z!==ans;});
+    return C("Simplify.",ans,pool,"Divide EVERY term on top by "+a+": "+ans+".",EQ(sf(top,a),bk(top)+"/"+a),{t:"simp",rv:bk(top)+"/"+a});}
+
+  /* ================= DIVIDE (long division) ================= */
+  function divWhy(dv,q){return "Check: "+dv+" × ("+q+") gives the top line back.";}
+  function qDiv1(){var p=nz(-9,9),q=nz(-9,9),b=p+q,c=p*q,top=ex(1,b,c),dv=lin(1,p),ans=lin(1,q);
+    var pool=[lin(1,-q),lin(1,p),lin(1,b),lin(1,c),lin(1,q+1),lin(1,-p),lin(1,q-1),lin(2,q)].filter(function(z){return z!==ans;});
+    return C("Divide.",ans,pool,divWhy("("+dv+")",ans)+" ("+ans+")("+dv+") = "+top+".",EQ("("+top+") ÷ ("+dv+")"),{t:"div",rv:"("+top+") ÷ ("+dv+")"});}
+  function qDiv2(){var a=ri(2,5),p=nz(-7,7),q=nz(-9,9),top=ex(a,a*p+q,p*q),dv=lin(1,p),ans=lin(a,q);
+    var pool=[lin(1,q),lin(a,-q),lin(a,p),lin(a,p*q),lin(a,q+1),lin(1,a*p+q)].filter(function(z){return z!==ans;});
+    return C("Divide.",ans,pool,"x² ÷ x gives x, so the answer starts "+a+"x. ("+ans+")("+dv+") = "+top+".",EQ("("+top+") ÷ ("+dv+")"),{t:"div",rv:"("+top+") ÷ ("+dv+")"});}
+  function qDiv3(){for(var t=0;t<100;t++){var d=ri(2,3),e=nz(-7,7),f=ri(1,4),g=nz(-8,8);if(gcd(d,e)!==1)continue;
+      var B=d*g+e*f;if(B===0)continue;var top=ex(d*f,B,e*g),dv=lin(d,e),ans=lin(f,g);
+      var pool=[lin(f,-g),lin(d*f,g),lin(f,e),lin(f,g+1),lin(d,g),lin(f*d,e*g)].filter(function(z){return z!==ans;});
+      return C("Divide.",ans,pool,"("+ans+")("+dv+") = "+top+".",EQ("("+top+") ÷ ("+dv+")"),{t:"div",rv:"("+top+") ÷ ("+dv+")"});}}
+
+  /* ================= HIGHER LEVEL ================= */
+  function den2(u,v){return "("+lin(1,u)+")("+lin(1,v)+")";}
+  function qHLFrac(){for(var t=0;t<200;t++){var p=ri(1,6),q=ri(1,6),u=nz(-6,6),v=nz(-6,6),s=rnd([1,-1]);if(u===v)continue;
+      var A=p+s*q,B=p*v+s*q*u;if(A===0&&B===0)continue;var D=den2(u,v);
+      var num=function(A2,B2){return A2===0?n_(B2):bk(lin(A2,B2));};
+      var ans=num(A,B)+"/("+D+")",ks={};ks[A+"|"+B]=1;var pool=[];
+      [[p+s*q,p*u+s*q*v],[A,p*v-s*q*u],[A,p+s*q],[A,B+1],[p-s*q,B]].forEach(function(z){if(z[0]===0&&z[1]===0)return;var k=z[0]+"|"+z[1];if(ks[k])return;ks[k]=1;pool.push(num(z[0],z[1])+"/("+D+")");});
+      pool.push(n_(p+s*q)+"/("+lin(2,u+v)+")");
+      var op=s>0?" + ":" "+M+" ",plain=p+"/("+lin(1,u)+")"+op+q+"/("+lin(1,v)+")";
+      return C("Higher Level: Write as one fraction.",ans,pool,"Common denominator "+D+": "+p+"("+lin(1,v)+")"+op+q+"("+lin(1,u)+") = "+lin(A,B)+" on top.",EQ(sf(p,lin(1,u))+op+sf(q,lin(1,v)),plain),{t:"add",hl:1,rv:plain});}}
+  function qCubic(){for(var t=0;t<100;t++){var p=nz(-5,5),q=nz(-6,6),r=nz(-9,9);
+      var b=q+p,c=r+p*q,d=p*r;if(Math.abs(d)>60)continue;var top=cub(1,b,c,d),dv=lin(1,p),ans=ex(1,q,r);
+      var pool=[ex(1,-q,r),ex(1,q,-r),ex(1,q+p,r),ex(1,r,q),ex(1,q,r+p),ex(1,-q,-r),ex(1,q,r-1)].filter(function(z){return z!==ans;});
+      return C("Higher Level: Divide.",ans,pool,"("+ans+")("+dv+") = "+top+".",EQ("("+top+") ÷ ("+dv+")"),{t:"div",hl:1,rv:"("+top+") ÷ ("+dv+")"});}}
+  function qCubeDiff(){var k=ri(1,4),s=rnd([1,-1]),top=s>0?"x³ "+M+" "+k*k*k:"x³ + "+k*k*k,dv=lin(1,-s*k),ans=ex(1,s*k,k*k);
+    var pool=[ex(1,-s*k,k*k),ex(1,s*k,-k*k),ex(1,0,k*k),ex(1,s*k*k,k)].filter(function(z){return z!==ans;});
+    return C("Higher Level: Divide.",ans,pool,"Leave gaps for the missing x² and x terms, then divide: "+ans+". Check: ("+ans+")("+dv+") = "+top+".",EQ("("+top+") ÷ ("+dv+")"),{t:"div",hl:1,rv:"("+top+") ÷ ("+dv+")"});}
+  var HLBANK=[
+    {f:"A = πr²",s:"r",a:"r = √(A/π)",w:["r = A/(2π)","r = √(Aπ)","r = (A/π)²","r = √A/π"],y:"Divide by π, then take the square root."},
+    {f:"E = ½mv²",s:"v",a:"v = √(2E/m)",w:["v = √(E/(2m))","v = 2E/m","v = √(2Em)","v = (2E/m)²"],y:"Multiply by 2, divide by m, then take the square root."},
+    {f:"V = πr²h",s:"r",a:"r = √(V/(πh))",w:["r = V/(πh)","r = √(Vπh)","r = √V/(πh)","r = V/(2πh)"],y:"Divide by πh, then take the square root."},
+    {f:"V = πr²h",s:"h",a:"h = V/(πr²)",w:["h = Vπr²","h = πr²/V","h = V − πr²"],y:"Divide both sides by πr²."},
+    {f:"a = (v − u)/t",s:"t",a:"t = (v − u)/a",w:["t = a(v − u)","t = (v + u)/a","t = a/(v − u)"],y:"Multiply by t: at = v − u. Then divide by a."},
+    {f:"s = ut + ½at²",s:"a",a:"a = 2(s − ut)/t²",w:["a = (s − ut)/(2t²)","a = 2(s + ut)/t²","a = 2s/t² − ut","a = 2(s − ut)/t"],y:"Subtract ut, multiply by 2, then divide by t²."},
+    {f:"1/f = 1/u + 1/v",s:"f",a:"f = uv/(u + v)",w:["f = u + v","f = (u + v)/(uv)","f = uv/(u − v)"],y:"Add the right side: 1/f = (v + u)/(uv). Turn both sides upside down."},
+    {f:"T = 2π√(l/g)",s:"l",a:"l = gT²/(4π²)",w:["l = gT²/(2π)","l = T²/(4π²g)","l = 4π²g/T²","l = gT/(2π)"],y:"Divide by 2π, square both sides, then multiply by g."},
+    {f:"h = √(a² + b²)",s:"a",a:"a = √(h² − b²)",w:["a = h − b","a = √(h − b)","a = h² − b²","a = √(h² + b²)"],y:"Square both sides: h² = a² + b². Subtract b², then take the square root."}
+  ];
+  function hlDisp(f){var m=f.match(/^(\w) = \((.+)\)\/(\w)$/);if(m)return m[1]+" = "+sf(m[2],m[3]);
+    if(f==="1/f = 1/u + 1/v")return sf(1,"f")+" = "+sf(1,"u")+" + "+sf(1,"v");return f;}
+  function qHLRe(){var e=rnd(HLBANK);
+    return C("Higher Level: Make "+e.s+" the subject.",e.a,e.w,e.y,EQ(hlDisp(e.f),e.f),{t:"rearr",sub:e.s,hl:1,rv:e.f});}
+  /* the subject appears twice */
+  function qTwice(){var p,q;do{p=nz(-6,6);q=nz(-6,6);}while(p===q);
+    var top=lin(1,p),bot=lin(1,q),plain="y = ("+top+")/("+bot+")";
+    var num=function(c0,cy){return bk(cy>0&&c0<0?lin(cy,c0,"y"):n_(c0)+tm(cy,"y",false));};
+    var ans="x = "+num(p,-q)+"/(y "+M+" 1)";
+    var pool=["x = "+num(p,-q)+"/(y + 1)","x = "+num(p,-q)+"/y"];[[p,q],[-p,-q],[-p,q]].forEach(function(z){if(z[0]!==-z[1]&&!(z[0]===p&&z[1]===-q))pool.push("x = "+num(z[0],z[1])+"/(y "+M+" 1)");});
+    return C("Higher Level: Make x the subject.",ans,pool,"y("+bot+") = "+top+" → xy"+tm(q,"y",false)+" = "+top+" → xy "+M+" x = "+n_(p)+tm(-q,"y",false)+" → x(y "+M+" 1) = "+n_(p)+tm(-q,"y",false)+".",EQ("y = "+sf(top,bot),plain),{t:"rearr",sub:"x",hl:1,rv:plain});}
+
+  /* ================= SPOT THE SLIP ================= */
+  function stepsHTML(L){return '<div class="steps">'+L.map(function(z,i){return '<p data-line="'+(i+1)+'" data-s="'+esc(z)+'"><b>Line '+(i+1)+':</b> <span class="nw">'+z+'</span></p>';}).join("")+'</div>';}
+  function slipQ(start,startPlain,L,bad,fix,data,sub){var ans=bad===0?"No mistake":"Line "+bad;
+    return C((sub?"Make "+sub+" the subject. ":"")+"Which line has the first mistake?",ans,["Line 1","Line 2","Line 3","No mistake"].filter(function(z){return z!==ans;}),fix,EQ(start,startPlain)+stepsHTML(L),data);}
+  function qSlipFrac(){for(var t=0;t<300;t++){var P=rnd([[2,3],[3,4],[2,5],[3,5],[4,5],[3,2],[4,3],[5,2]]),c=P[0],f=P[1],a=ri(1,4),d=ri(1,4),b=nz(-7,7),e=nz(-7,7),s=rnd([1,-1]),bad=ri(0,3);
+      var Lc=c*f,m=f,n=c;var op=s>0?" + ":" "+M+" ";
+      var m1=bad===1?n:m,n1=bad===1?m:n;
+      var l1="("+m1+"("+lin(a,b)+")"+op+n1+"("+lin(d,e)+"))/"+Lc;
+      var x1=m1*a,c1=m1*b,x2=s*n1*d,c2=s*n1*e;if(bad===2)c2=s>0?e:-c2;   /* forgot to multiply / sign of the last term */
+      var l2="("+lin(x1,c1)+tm(x2,"x",false)+tm(c2,"",false)+")/"+Lc;
+      var A=x1+x2,B=c1+c2;if(bad===3)B+=rnd([-2,2]);if(A===0)continue;
+      var l3=fr1(A,B,Lc);
+      var TA=m*a+s*n*d,TB=m*b+s*n*e;if(bad>0&&fkey(A,B,Lc)===fkey(TA,TB,Lc))continue;if(TA===0)continue;
+      var p={a:a,b:b,c:c,d:d,e:e,f:f,s:s},T=fracText(p);
+      var fix=bad===0?"Every line is right.":bad===1?"Line 1: the first top is multiplied by "+m+" (what "+c+" needs to make "+Lc+").":bad===2?(s>0?"Line 2: "+n+" multiplies BOTH terms in the bracket.":"Line 2: "+M+n+" × "+(e<0?"("+n_(e)+")":e)+" = "+n_(-n*e)+". The minus sign multiplies the whole bracket."):"Line 3: the numbers on top were added wrongly.";
+      return slipQ(T.disp,T.plain,[l1,l2,l3],bad,fix,{t:"slipexpr",rv:T.plain+" ("+[l1,l2,l3].join("; ")+")"});}}
+  function qSlipRe(){for(var t=0;t<300;t++){var a=ri(2,6),c=ri(2,5),b=nz(-9,9),bad=ri(0,3);if(a===c)continue;
+      var start="y = ("+lin(a,b)+")/"+c,L;
+      if(bad===1)L=["y"+tm(-b,"",false)+" = "+a+"x/"+c,c+"(y"+tm(-b,"",false)+") = "+a+"x","x = "+c+"(y"+tm(-b,"",false)+")/"+a];
+      else if(bad===2)L=[c+"y = "+lin(a,b),c+"y"+tm(b,"",false)+" = "+a+"x","x = ("+c+"y"+tm(b,"",false)+")/"+a];
+      else if(bad===3)L=[c+"y = "+lin(a,b),c+"y"+tm(-b,"",false)+" = "+a+"x","x = "+c+"y/"+a+tm(-b,"",false)];
+      else L=[c+"y = "+lin(a,b),c+"y"+tm(-b,"",false)+" = "+a+"x","x = ("+c+"y"+tm(-b,"",false)+")/"+a];
+      var fix=bad===0?"Every line is right.":bad===1?"Line 1: multiply by "+c+" first. "+n_(b)+" is divided by "+c+" too, so you can't move it yet.":bad===2?"Line 2: "+tm(b,"",true)+" changes sign when it moves across.":"Line 3: divide ALL of "+c+"y"+tm(-b,"",false)+" by "+a+".";
+      return slipQ("y = "+sf(lin(a,b),c),start,L,bad,fix,{t:"slipeq",sub:"x",rv:start+" ("+L.join("; ")+")"},"x");}}
+  function qSlipLet(){var k=ri(0,1),bad=ri(0,3),f=k?"s = (u + v)t/2":"A = (a + b)h/2",S=k?"s":"A",x=k?"v":"a",o=k?"u":"b",h=k?"t":"h",L;
+    if(bad===1)L=[S+"/2 = ("+o+" + "+x+")"+h,S+"/(2"+h+") = "+o+" + "+x,x+" = "+S+"/(2"+h+") "+M+" "+o];
+    else if(bad===2)L=["2"+S+" = ("+o+" + "+x+")"+h,"2"+S+" "+M+" "+h+" = "+o+" + "+x,x+" = 2"+S+" "+M+" "+h+" "+M+" "+o];
+    else if(bad===3)L=["2"+S+" = ("+o+" + "+x+")"+h,"2"+S+"/"+h+" = "+o+" + "+x,x+" = 2"+S+"/"+h+" + "+o];
+    else L=["2"+S+" = ("+o+" + "+x+")"+h,"2"+S+"/"+h+" = "+o+" + "+x,x+" = 2"+S+"/"+h+" "+M+" "+o];
+    var fix=bad===0?"Every line is right: "+x+" = 2"+S+"/"+h+" "+M+" "+o+".":bad===1?"Line 1: to undo ÷ 2, MULTIPLY by 2: 2"+S+".":bad===2?"Line 2: to undo × "+h+", DIVIDE by "+h+".":"Line 3: "+o+" moves across, so it becomes "+M+o+".";
+    var disp=S+" = "+sf("("+o+" + "+x+")"+h,2);
+    return slipQ(disp,f,L,bad,fix,{t:"slipeq",sub:x,rv:f+" ("+L.join("; ")+")"},x);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    rearr:[qLin,qLin,qBank,qBank,qBank,qUse],
+    frac:[qAdd,qAdd,qAdd,qLCD,qSimp],
+    divide:[qDiv1,qDiv1,qDiv2,qDiv3],
+    hl:[qHLFrac,qHLFrac,qCubic,qCubeDiff,qHLRe,qHLRe,qTwice],
+    slip:[qSlipFrac,qSlipRe,qSlipLet],
+    mixed:[]
+  };
+  ["rearr","frac","divide","hl","slip"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="rearr"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="rearr"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="rearr"&&streak%5===0?700:350):3600);
+  }
+  function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc2(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc2(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc2(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{lin:lin,fr1:fr1,ex:ex,cub:cub,sf:sf}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

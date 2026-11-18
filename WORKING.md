@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-18 18:25 · Maths Order 35 Algebraic fractions & changing the subject · maths-j
