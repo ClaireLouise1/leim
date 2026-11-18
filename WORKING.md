@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 18 Nov 06:20 · Maths Order 21 Area, perimeter & scale drawings · maths-b
