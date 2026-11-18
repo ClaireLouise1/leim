@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-18 13:30 · Maths Order 27 Factorising · maths-b
