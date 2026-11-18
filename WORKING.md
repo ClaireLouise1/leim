@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 18 Nov 15:30 · Maths Order 30 Quadratic equations · maths-e

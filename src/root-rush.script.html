@@ -1,0 +1,229 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var v;do{v=ri(a,b);}while(v===0);return v;}
+  var M="−";
+  function n_(x){x=Math.round(x*1e6)/1e6;return x<0?M+(-x):String(x);}
+  function br(x){return x<0?"("+n_(x)+")":n_(x);}
+  function nb(s){return s.replace(/ ([=+−]) /g," $1 ");}
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+  /* exact fractions [n, d], d > 0, reduced */
+  function F(n,d){if(d==null)d=1;if(d<0){n=-n;d=-d;}var g=gcd(n,d)||1;return [n/g,d/g];}
+  function fv(a){return Array.isArray(a)?a[0]/a[1]:a;}
+  function fs(f){if(!Array.isArray(f))return n_(f);return n_(f[0])+(f[1]===1?"":"/"+f[1]);}
+  /* one term k·v; first term or following term */
+  function tm(k,v,first){if(k===0)return "";var a=Math.abs(k),s=(a===1&&v?"":String(a))+v;
+    if(first)return (k<0?M:"")+s;return (k<0?" "+M+" ":" + ")+s;}
+  /* ax² + bx + c = rhs */
+  function ex(a,b,c){return tm(a,"x²",true)+tm(b,"x",false)+tm(c,"",false);}
+  function quad(a,b,c,rhs){return ex(a,b,c)+" = "+(rhs==null?"0":rhs);}
+  /* bracket (x − r) for root r */
+  function fb(r){return r===0?"x":"(x"+(r>0?" "+M+" "+r:" + "+(-r))+")";}
+  function facEq(r,s){var A=fb(r),B=fb(s);if(A==="x")return "x"+B+" = 0";if(B==="x")return "x"+A+" = 0";return A+B+" = 0";}
+  /* roots as an answer: "x = −5 or x = 3" (smallest first; one value → "x = 3") */
+  function rs(L){var seen={},V=[];L.forEach(function(v){var k=fv(v).toFixed(9);if(!seen[k]){seen[k]=1;V.push(v);}});
+    V.sort(function(a,b){return fv(a)-fv(b);});return V.map(function(v){return "x = "+fs(v);}).join(" or ");}
+  function EQ(s){return '<div class="eqs"><p class="e" data-e="1">'+s+'</p></div>';}
+  /* numeric answer (whole numbers) */
+  function QI(en,ans,slips,why,html,data){var seen={},w=[];seen[n_(ans)]=1;
+    slips.concat([ans+1,ans-1,-ans,ans+2,ans-2]).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x))return;var s=n_(x);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:n_(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+n_(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+ans,data:data||{}};}
+  /* roots answer: slips are lists of values; any list with the same roots as the answer is dropped */
+  function QR(en,roots,slips,why,html,data){var A=rs(roots),pads=[];
+    var a=roots[0],b=roots[1]!=null?roots[1]:roots[0];
+    if(!Array.isArray(a)&&!Array.isArray(b))pads=[[a+1,b],[a,b-1],[-a,b],[a,-b],[-a,-b],[a],[b]];
+    var pool=slips.concat(pads).filter(function(L){return L&&L.length;}).map(rs).filter(function(s){return s!==A;});
+    return C(en,A,pool,why,html,data);}
+  /* two different whole-number roots */
+  function roots2(lo,hi,noZero){var r,s;do{r=ri(lo,hi);s=ri(lo,hi);}while(r===s||(noZero&&(r===0||s===0))||(r===-s&&Math.random()<.7));return [r,s];}
+  function bc(r,s){return [-(r+s),r*s];}
+  function facWhy(r,s,start){return (start||"Factorise")+": "+facEq(r,s)+". So "+rs([r,s])+".";}
+
+  /* ---------- rectangle picture: width x, length x + d ---------- */
+  function rectPic(top,side,area){
+    var T=function(x,y,s,a,k){return '<text data-'+k+'="'+s+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="#1B2430" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg class="rp" viewBox="0 0 330 140" width="100%" style="max-width:330px" role="img" aria-label="Rectangle: length '+top+', width '+side+', area '+area+'"><rect x="80" y="32" width="200" height="94" fill="#F6CF5A" stroke="#1B2430" stroke-width="3"/>'+T(180,24,top,"middle","top")+T(72,85,side,"end","side")+
+      '<text data-area="'+area+'" x="180" y="85" font-size="17" font-weight="700" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">Area = '+area+'</text></svg>';}
+
+  /* ================= CHECK ================= */
+  function qIsRoot(){var R=roots2(-7,7,true),r=R[0],s=R[1],B=bc(r,s),b=B[0],c=B[1];
+    var pool=[-r,-s,c,b,r+1,s-1,-c,r+2,s+2,r-2,2*r].filter(function(v){return v!==r&&v!==s;}).map(n_);
+    return C("Which x is a root?",n_(r),pool,"x = "+n_(r)+": "+n_(r*r)+tm(b*r,"",false)+tm(c,"",false)+" = 0 ✓",EQ(quad(1,b,c)),{t:"isroot",rv:quad(1,b,c)});}
+  function qFacRoots(){var R=roots2(-8,8),r=R[0],s=R[1];
+    return QR("Solve.",[r,s],[[-r,-s],[-r,s],[r,-s]],"One bracket must be 0: "+(r===0?"x = 0":fb(r).slice(1,-1)+" = 0 → x = "+n_(r))+", "+(s===0?"x = 0":fb(s).slice(1,-1)+" = 0 → x = "+n_(s))+".",EQ(facEq(r,s)),{t:"facroots",rv:facEq(r,s)});}
+  function qValue(){var b=nz(-6,6),c=nz(-12,12),k=nz(-4,5),v=k*k+b*k+c;
+    var sl=[-k*k+b*k+c,k*k-b*k+c,2*k+b*k+c,k*k+b+c];
+    return QI("Find the value when x = "+n_(k)+".",v,sl,br(k)+"² = "+n_(k*k)+", "+n_(b)+" × "+br(k)+" = "+n_(b*k)+". "+n_(k*k)+tm(b*k,"",false)+tm(c,"",false)+" = "+n_(v)+".",EQ(ex(1,b,c)),{t:"value",k:k,rv:ex(1,b,c)});}
+
+  /* ================= SOLVE ================= */
+  function qRearr(){var R=roots2(-7,7,true),B=bc(R[0],R[1]),b=B[0],c=B[1],k=Math.random()<.5,start,ans=quad(1,b,c);
+    if(k||b===0)start=quad(1,b,0,n_(-c));else start="x² = "+tm(-b,"x",true)+tm(-c,"",false);
+    var pool=[quad(1,b,-c),quad(1,-b,c),quad(1,-b,-c),quad(1,b+1,c),quad(1,c,b)].filter(function(s){return s!==ans;});
+    return C("Make it = 0.",ans,pool,"Move every term to the left. A term changes sign when it crosses the = sign: "+ans+".",EQ(start),{t:"rearr",rv:start});}
+  function qSolveTri(){var R=roots2(-9,9,true),r=R[0],s=R[1],B=bc(r,s);
+    return QR("Solve.",[r,s],[[-r,-s],[-r,s],[r,-s],[B[0],B[1]]],facWhy(r,s),EQ(quad(1,B[0],B[1])),{t:"solve",rv:quad(1,B[0],B[1])});}
+  function qSolveCF(){var b=nz(-9,9),form=Math.random()<.5,e=form?quad(1,b,0):"x² = "+tm(-b,"x",true);
+    return QR("Solve.",[0,-b],[[-b],[b],[0,b],[1,-b]],"Take out x: x"+fb(-b)+" = 0, so x = 0 or x = "+n_(-b)+". Don't divide by x: you lose x = 0.",EQ(e),{t:"solve",rv:e});}
+  function qSolveSq(){var k=ri(2,12),f=ri(0,2),e=f===0?quad(1,0,-k*k):f===1?"x² = "+k*k:quad(2,0,-2*k*k);
+    return QR("Solve.",[-k,k],[[k],[-k*k,k*k],[0,k],[-k]],"x² = "+k*k+", so x = "+k+" or x = "+M+k+": a square root has two answers.",EQ(e),{t:"solve",rv:e});}
+  /* which line has the first mistake? */
+  function qSlip(){for(var t=0;t<500;t++){var R=roots2(-8,8,true),r=R[0],s=R[1],B=bc(r,s),b=B[0],c=B[1],bad=ri(0,3);if(b===0)continue;
+      var start=quad(1,b,0,n_(-c));
+      var c1=bad===1?-c:c;                       /* line 1: moved the number without changing its sign */
+      var D=b*b-4*c1;if(D<0)continue;var sq=Math.round(Math.sqrt(D));if(sq*sq!==D)continue;
+      var p=(-b+sq)/2,q=(-b-sq)/2;if(p!==Math.round(p)||p===q)continue;   /* roots of line 1 */
+      var f1=p,f2=q;if(bad===2){f1=-p;f2=-q;}     /* line 2: brackets with the signs swapped */
+      var x1=f1,x2=f2;if(bad===3){x1=-f1;x2=-f2;}   /* line 3: signs swapped */
+      var L=[quad(1,b,c1),facEq(f1,f2),rs([x1,x2])];
+      var html=EQ(start)+'<div class="steps">'+L.map(function(z,i){return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> <span class="nw">'+z+'</span></p>';}).join("")+'</div>';
+      var ans=bad===0?"No mistake":"Line "+bad;
+      var fix=bad===0?"Every line is right: "+rs([r,s])+".":bad===1?"Line 1: "+tm(-c,"",true)+" moves across and becomes "+tm(c,"",true)+": "+quad(1,b,c)+".":bad===2?"Line 2: "+facEq(p,q)+" (the numbers multiply to "+n_(c1)+" and add to "+n_(b)+").":"Line 3: "+fb(f1).slice(1,-1)+" = 0 gives x = "+n_(f1)+".";
+      return C("Which line has the first mistake?",ans,["Line 1","Line 2","Line 3","No mistake"].filter(function(z){return z!==ans;}),fix,html,{t:"slip",rv:start+" ("+L.join("; ")+")"});}
+    return qSolveTri();}
+  /* Higher Level: ax² + bx + c = 0 with a fraction root */
+  function qHLTri(){for(var t=0;t<300;t++){var a=rnd([2,3,2,5]),p=nz(-7,7),q=nz(-6,6);if(gcd(a,p)!==1)continue;
+      var Bq=a*q+p,Cq=p*q;if(Math.abs(Bq)>20||Math.abs(Cq)>30)continue;
+      var r1=F(-p,a),r2=-q;
+      return QR("Higher Level: Solve.",[r1,r2],[[F(p,a),q],[-p,-q],[F(p,a),-q],[F(-a,p),-q],[F(-p,a),q]],"Factorise: ("+tm(a,"x",true)+tm(p,"",false)+")"+fb(-q)+" = 0. "+tm(a,"x",true)+tm(p,"",false)+" = 0 gives x = "+fs(r1)+"; the other bracket gives x = "+n_(r2)+".",EQ(quad(a,Bq,Cq)),{t:"solve",hl:1,rv:quad(a,Bq,Cq)});}
+    return qSolveTri();}
+  function d2(x){var v=Math.round(x*100)/100;if(Math.abs(v)<0.005)v=0;return (v<0?M:"")+Math.abs(v).toFixed(2);}
+  function nice2(x){var f=Math.abs(x*100)%1;return Math.abs(f-0.5)>0.02&&Math.abs(x)>0.02;}
+  function pair2(u,v){var a=Math.min(u,v),b=Math.max(u,v);return "x = "+d2(a)+" or x = "+d2(b);}
+  function qHLFormula(){for(var t=0;t<300;t++){var a=rnd([1,1,2,3]),b=nz(-9,9),c=nz(-9,9),D=b*b-4*a*c;if(D<=0)continue;var sq=Math.sqrt(D);if(Math.round(sq)*Math.round(sq)===D)continue;
+      var u=(-b+sq)/(2*a),v=(-b-sq)/(2*a);if(!nice2(u)||!nice2(v))continue;
+      var ans=pair2(u,v),pool=[pair2(-u,-v),pair2((-b+sq)/a,(-b-sq)/a),pair2((-b+sq)/2,(-b-sq)/2)];
+      var D2=b*b+4*a*c;if(D2>0)pool.push(pair2((-b+Math.sqrt(D2))/(2*a),(-b-Math.sqrt(D2))/(2*a)));
+      pool.push(pair2(-b/(2*a)+sq,-b/(2*a)-sq));
+      pool=pool.filter(function(z){return z!==ans&&!/NaN/.test(z);});if(pool.length<3)continue;
+      return C("Higher Level: Solve. Give your answers to 2 decimal places.",ans,pool,"Use the formula: a = "+a+", b = "+n_(b)+", c = "+n_(c)+". b² − 4ac = "+D+". x = ("+n_(-b)+" ± √"+D+") ÷ "+2*a+" → "+ans+".",EQ(quad(a,b,c)),{t:"formula",hl:1,rv:quad(a,b,c)});}
+    return qHLTri();}
+
+  /* ================= FORM IT (roots → equation) ================= */
+  function rootsBox(r,s){return '<div class="eqs"><p class="e" data-roots="'+r+','+s+'">Roots: '+n_(r)+' and '+n_(s)+'</p></div>';}
+  function qFormEq(){var R=roots2(-7,7,true),r=R[0],s=R[1],B=bc(r,s),ans=quad(1,B[0],B[1]);
+    var pool=[quad(1,-B[0],B[1]),quad(1,B[0],-B[1]),quad(1,-B[0],-B[1]),quad(1,B[1],B[0]),quad(1,r*s+1,B[1]),quad(1,B[0]+1,B[1]),quad(1,B[0],B[1]+1)].filter(function(z){return z!==ans;});
+    return C("Which equation has these roots?",ans,pool,facEq(r,s)+". Multiply out: "+ans+". Check: "+n_(r)+" and "+n_(s)+" multiply to "+n_(B[1])+" and add to "+n_(r+s)+".",rootsBox(r,s),{t:"formeq",rv:"roots "+n_(r)+" and "+n_(s)});}
+  function qFormFac(){var R=roots2(-8,8),r=R[0],s=R[1],ans=facEq(r,s),key=rs([r,s]);
+    var pool=[[-r,-s],[-r,s],[r,-s],[r+1,s],[r,s-1],[r-1,-s],[-r,s+1]].filter(function(L){return rs(L)!==key;}).map(function(L){return facEq(L[0],L[1]);});
+    return C("Which equation has these roots?",ans,pool,"Root "+n_(r)+" → "+fb(r)+", root "+n_(s)+" → "+fb(s)+": the sign in the bracket is the opposite of the root.",rootsBox(r,s),{t:"formfac",rv:"roots "+n_(r)+" and "+n_(s)});}
+  function qOtherRoot(){var R=roots2(-8,8,true),r=R[0],s=R[1],B=bc(r,s);
+    return QI("x = "+n_(r)+" is one root. Find the other.",s,[-s,r+s,-r,B[0]],facWhy(r,s),EQ(quad(1,B[0],B[1])),{t:"other",r:r,rv:quad(1,B[0],B[1])});}
+  function qFindK(){for(var t=0;t<200;t++){var r=nz(-5,5),k=nz(-8,8),c=-r*r-k*r;if(c===0||Math.abs(c)>40)continue;
+      var e="x² + kx"+tm(c,"",false)+" = 0";
+      return QI("Higher Level: x = "+n_(r)+" is a root. Find k.",k,[-k,(r*r+c)/r,(r*r-c)/r,(c-r*r)/r],"Put x = "+n_(r)+": "+n_(r*r)+" + "+br(r)+"k"+tm(c,"",false)+" = 0, so "+tm(r,"k",true)+" = "+n_(-r*r-c)+" and k = "+n_(k)+".",EQ(e),{t:"findk",hl:1,r:r,rv:e});}
+    return qOtherRoot();}
+
+  /* ================= WORD PROBLEMS ================= */
+  function qRect(){var s=ri(2,12),d=ri(1,7),A=s*(s+d);
+    return QI("The area is "+A+" cm². Find x.",s,[-(s+d),s+d,A%d===0&&A/d!==s?A/d:null,s-1],"x(x + "+d+") = "+A+" → "+quad(1,d,-A)+" → (x "+M+" "+s+")(x + "+(s+d)+") = 0. x = "+s+" or x = "+M+(s+d)+". A length can't be negative, so x = "+s+".",rectPic("x + "+d,"x",A+" cm²"),{t:"rect",d:d,A:A});}
+  function qFormWord(){var s=ri(2,12),d=ri(1,7),A=s*(s+d),ans=quad(1,d,-A);
+    var pool=[quad(1,d,A),quad(1,-d,-A),quad(1,-d,A),quad(1,0,d-A),quad(2,d,-A)].filter(function(z){return z!==ans;});
+    return C("Which equation fits?",ans,pool,"Area = length × width: x(x + "+d+") = "+A+", so "+quad(1,d,0,A)+" and "+ans+".",rectPic("x + "+d,"x",A+" cm²"),{t:"formword",d:d,A:A});}
+  function qNum(){var R;do{R=[ri(2,12),-ri(1,12)];}while(R[0]+R[1]===0);var s=R[0],t=R[1],k=-(s+t),N=-s*t;
+    var en="The square of a positive number, "+(k>0?"plus "+(k===1?"the number":k+" times the number"):"minus "+(k===-1?"the number":(-k)+" times the number"))+", is "+N+". Find the number.";
+    return QI(en,s,[t,-t,-s,N-k],"x² "+(k>0?"+ ":M+" ")+(Math.abs(k)===1?"":Math.abs(k))+"x = "+N+" → "+quad(1,k,-N)+" → "+facEq(s,t)+". x = "+s+" or x = "+n_(t)+"; the number is positive, so it is "+s+".","",{t:"num",k:k,N:N});}
+  function qConsec(){var n=ri(5,19),P=n*(n+1);
+    return QI("Two whole numbers in a row multiply to "+P+". Find the smaller one.",n,[n+1,-(n+1),Math.round(P/2),n-1],"x(x + 1) = "+P+" → "+quad(1,1,-P)+" → (x "+M+" "+n+")(x + "+(n+1)+") = 0. The positive answer is x = "+n+": "+n+" × "+(n+1)+" = "+P+".","",{t:"consec",P:P});}
+  function sec(v){return v+" s";}
+  function qBall(){var v=rnd([10,15,20,25,30,35,40]),e="h = "+v+"t "+M+" 5t²",T=v/5;
+    if(Math.random()<.5){
+      var pool=[T+1,T-1,v,2*T,T/2].filter(function(z){return z>0&&z!==T&&z===Math.round(z);}).map(sec);
+      return C("Height h m after t s. When does the ball land?",sec(T),pool,"Land: h = 0. "+v+"t "+M+" 5t² = 0 → 5t("+T+" "+M+" t) = 0 → t = 0 (thrown) or t = "+T+" s.",EQ(e),{t:"land",rv:e});}
+    for(var k=0;k<50;k++){var t1=ri(1,T-1),t2=T-t1;if(t1>=t2)continue;var H=5*t1*t2;
+      var ans="t = "+t1+" s or t = "+t2+" s",pool2=[];[[t1,t2+1],[t1+1,t2],[t1-1,t2],[1,H/5]].forEach(function(p){if(p[0]>0&&p[1]>p[0]&&!(p[0]===t1&&p[1]===t2)&&p[1]===Math.round(p[1]))pool2.push("t = "+p[0]+" s or t = "+p[1]+" s");});
+      pool2.push("t = "+t2+" s","t = "+t1+" s");
+      return C("Height h m after t s. When is the ball "+H+" m high?",ans,pool2,v+"t "+M+" 5t² = "+H+" → 5t² "+M+" "+v+"t + "+H+" = 0 → t² "+M+" "+T+"t + "+t1*t2+" = 0 → (t "+M+" "+t1+")(t "+M+" "+t2+") = 0. On the way up at "+t1+" s, on the way down at "+t2+" s.",EQ(e),{t:"height",H:H,rv:e});}
+    return qRect();}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    check:[qIsRoot,qIsRoot,qFacRoots,qFacRoots,qValue],
+    solve:[qRearr,qSolveTri,qSolveTri,qSolveCF,qSolveSq,qSlip,qHLTri,qHLFormula],
+    form:[qFormEq,qFormEq,qFormFac,qOtherRoot,qFindK],
+    words:[qRect,qFormWord,qNum,qConsec,qBall],
+    mixed:[]
+  };
+  ["check","solve","form","words"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* fixed diagrams in the Exam corner */
+  var FIX={ex3:function(){return rectPic("x + 5","x","84 m²");}};
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="check"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=nb(q.en);
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="check"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="check"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{quad:quad,facEq:facEq,rs:rs,FIX:FIX}};
+})();
+</script>
