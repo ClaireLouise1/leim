@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ladder Lab: Pythagoras' Theorem Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: find the hypotenuse and the shorter sides of right-angled triangles, test whether a triangle is right-angled with the converse, square roots, ladders, screens and shortcuts, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>
+.frame .ft{font-size:16px;font-weight:700;margin:0 0 8px}
+.figs .note svg{max-width:260px}
+.exam .ef{max-width:none;margin:8px 0}
+.exam svg.pf{max-width:280px}
+.pf2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.box3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.box3 .note b.h{display:block;margin-bottom:4px}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Ladder Lab</h1>
+        <p>Find the hypotenuse and the shorter sides of right-angled triangles, test whether a triangle is right-angled, and use Pythagoras' theorem for ladders, screens, fields and journeys. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="ladder"><div><b>Ladder Lab</b><span>Find the hypotenuse, spot it, square roots, ladders</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="short"><div><b>Shorter sides</b><span>Subtract the squares, ladder heights, which calculation, spot the mistake</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="conv"><div><b>Is it right-angled?</b><span>The converse (Theorem 15), Pythagorean triples, the builder's check</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Real-life Pythagoras</b><span>Screens, gates, isosceles triangles, shortcuts, journeys, sliding ladders</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Ladder Lab, every 5 in a row gives you 3 bonus seconds. Keep a calculator handy for the square roots. The diagrams are drawn to scale, but in the exam they usually aren't: use the numbers, not a ruler.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.3b, GT.3e, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Pythagoras' theorem</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>This right-angled triangle has sides 3, 4 and 5. A square is drawn on each side, split into little unit squares.</p>
+        <div class="ef" data-fig="pattern"></div>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">How many little squares are in the square on the side 3? On the side 4? On the side 5?</li>
+          <li class="note">What do you notice about the two smaller squares and the big one?</li>
+          <li class="note">Try it with a triangle that has NO right angle. Does it still work?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The squares hold <b>9</b>, <b>16</b> and <b>25</b> little squares, and 9 + 16 = 25. The two smaller squares together make exactly the big square on the longest side. This works for <b>every right-angled triangle</b> and <b>only</b> for right-angled triangles: that's Pythagoras' theorem.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The hypotenuse</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="hyp"></div>The <b>hypotenuse</b> is the side <b>opposite the right angle</b>. It is always the <b>longest</b> side. Find it first in every question.</div>
+          <div class="note"><b>Pythagoras' theorem (Theorem 14):</b> in a right-angled triangle, the square of the hypotenuse is the sum of the squares of the other two sides.<br><span style="font-size:20px;font-weight:800">c² = a² + b²</span><br>It's in the <i>Formulae and Tables</i> booklet, but you need to know which side is c.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Finding a side</h3>
+        <div class="box3">
+          <div class="note"><b class="h">The hypotenuse: ADD</b>Legs 5 and 12:<br>c² = 5² + 12² = 25 + 144 = 169<br>c = √169 = <b>13</b></div>
+          <div class="note"><b class="h">A shorter side: SUBTRACT</b>Hypotenuse 13, one side 5:<br>a² = 13² − 5² = 169 − 25 = 144<br>a = √144 = <b>12</b></div>
+          <div class="note"><b class="h">Then the square root</b>√ at the end, every time. If it isn't a whole number, round as the question says: √52 = 7.211… = <b>7.2</b> (1 d.p.).</div>
+        </div>
+        <div class="note" style="margin-top:8px"><b>Sense check:</b> the hypotenuse must be longer than both other sides, and a shorter side must be shorter than the hypotenuse. If your "shorter side" comes out longer than the hypotenuse, you added when you should have subtracted.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Square roots without a calculator</h3>
+        <p>Learn the squares 1² = 1 up to 15² = 225. Then you can say where a square root lies: 50 is between 7² = 49 and 8² = 64, so <b>√50 is between 7 and 8</b> (just over 7).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Is it right-angled? (Theorem 15, the converse)</h3>
+        <p>If the square of the longest side equals the sum of the squares of the other two, the triangle <b>is</b> right-angled, and the right angle is <b>opposite the longest side</b>.</p>
+        <ul>
+          <li>8, 15, 17: 8² + 15² = 64 + 225 = 289 = 17². <b>Right-angled.</b></li>
+          <li>6, 9, 11: 6² + 9² = 36 + 81 = 117, but 11² = 121. <b>Not right-angled.</b></li>
+          <li><b>Pythagorean triples</b> are whole numbers that work: 3, 4, 5 · 5, 12, 13 · 8, 15, 17 · 7, 24, 25 · 20, 21, 29. Any multiple works too: 6, 8, 10 · 9, 12, 15.</li>
+          <li><b>The builder's check:</b> measure 3 m along one wall and 4 m along the other. If the gap is exactly 5 m, the corner is square. A longer gap means the angle is more than 90°, a shorter one less.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Pythagoras in real life</h3>
+        <ul>
+          <li><b>Ladders:</b> the ladder is the hypotenuse, the wall and the ground are the other two sides.</li>
+          <li><b>Rectangles:</b> a diagonal cuts a rectangle into two right-angled triangles. The diagonal is the hypotenuse (TV screens are measured along the diagonal).</li>
+          <li><b>Isosceles triangles:</b> the height cuts the base exactly in half. Use <b>half the base</b>, not the whole base.</li>
+          <li><b>Journeys:</b> north then east (or any two directions at right angles): the straight-line distance back is the hypotenuse.</li>
+          <li>Draw a sketch, mark the right angle, label the hypotenuse, then decide: add or subtract?</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Why it's true</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="proof"></div></div>
+          <div class="note">Draw the perpendicular from C to [AB]. It makes two smaller triangles, and each one is <b>similar</b> to the big triangle ABC (they share an angle and each has a right angle). Similar triangles have sides in proportion, which gives |BC|² = |AB| × |BD| and |AC|² = |AB| × |AD|. Add them: |BC|² + |AC|² = |AB| × (|BD| + |AD|) = |AB|². You won't be asked to write this proof out, but you should understand how it works.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Adding the sides (5 + 12 = 17) instead of the squares. √(a² + b²) is <b>never</b> a + b.</li>
+          <li>Forgetting the square root at the end (writing 169 instead of 13).</li>
+          <li>Adding when you need a shorter side: always subtract from the <b>hypotenuse²</b>.</li>
+          <li>Using the whole base of an isosceles triangle instead of half.</li>
+          <li>Rounding too early: keep the full calculator value until the last step.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Pythagoras turns up on both levels, often inside a bigger question: a ladder or a ramp, the diagonal of a rectangle, the height of an isosceles triangle before you find its area, the slant height of a cone, or a distance on a grid. Expect to <b>find a missing side</b>, to <b>show that a triangle is right-angled</b> using the converse, and to <b>give an answer to a stated number of decimal places</b>.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the formula with the numbers in it.</b> "x² = 6.5² − 2.5²" earns marks even if you slip with the calculator.</li>
+            <li><b>Round only at the end</b>, and to the accuracy the question asks for.</li>
+            <li><b>Units.</b> Give the answer in m or cm, as in the question.</li>
+            <li><b>"Show that" questions need the working.</b> For the converse, write both sides out: 20² + 21² = 841 and 29² = 841.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>A ladder.</b> A 6.5 m ladder leans against a vertical wall with its foot 2.5 m from the wall, on level ground. (a) How high up the wall does the ladder reach? (b) The top of the ladder slides down until it is 5.2 m above the ground. How far is the foot of the ladder from the wall now? (c) How far did the foot move?
+              <div class="ef" data-fig="ex1"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The ladder is the hypotenuse: h² = 6.5² − 2.5² = 42.25 − 6.25 = 36, so h = <b>6 m</b>.<br>(b) d² = 6.5² − 5.2² = 42.25 − 27.04 = 15.21, so d = √15.21 = <b>3.9 m</b>.<br>(c) 3.9 − 2.5 = <b>1.4 m</b>.</p></details></li>
+            <li><b>Is it right-angled?</b> The triangle PQR has |PQ| = 20 cm, |QR| = 21 cm and |PR| = 29 cm. (a) Show that the triangle is right-angled. (b) Which angle is the right angle? Give a reason. (c) Seán says a triangle with sides 8 cm, 15 cm and 16 cm is also right-angled. Is he right? Show your working.
+              <div class="ef" data-fig="ex2"></div>
+              <details><summary>Show the worked answer</summary><p>(a) 20² + 21² = 400 + 441 = 841 and 29² = 841. They are equal, so by the converse of Pythagoras' theorem (Theorem 15) the triangle is right-angled.<br>(b) <b>∠PQR</b>: the right angle is opposite the longest side [PR].<br>(c) 8² + 15² = 64 + 225 = 289, but 16² = 256. They are not equal, so <b>no</b>, it is not right-angled (8, 15, <b>17</b> would be).</p></details></li>
+            <li><b>A tent.</b> The front of a tent is an isosceles triangle with a base of 3.2 m and two equal sides of 2 m. (a) Find the height of the tent. (b) Find the area of the front of the tent.
+              <div class="ef" data-fig="ex3"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The height cuts the base in half: 3.2 ÷ 2 = 1.6 m. h² = 2² − 1.6² = 4 − 2.56 = 1.44, so h = <b>1.2 m</b>.<br>(b) Area = ½ × base × height = ½ × 3.2 × 1.2 = <b>1.92 m²</b>.</p></details></li>
+            <li><b>A shortcut.</b> A rectangular field is 80 m long and 60 m wide. (a) Ciara walks along two sides of the field, from one corner to the opposite corner. How far does she walk? (b) Seán walks straight across the diagonal. How far does he walk? (c) Aoife worked out (b) like this: "60 + 80 = 140, √140 = 11.8 m". What did she do wrong?
+              <div class="ef" data-fig="ex4"></div>
+              <details><summary>Show the worked answer</summary><p>(a) 80 + 60 = <b>140 m</b>.<br>(b) d² = 80² + 60² = 6400 + 3600 = 10,000, so d = √10,000 = <b>100 m</b>. (Seán saves 40 m.)<br>(c) She added the <b>sides</b> instead of the <b>squares</b> of the sides. Her answer can't be right: a diagonal of 11.8 m is shorter than both sides of the field.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/pythagoras-right-angled-triangles-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Pythagoras Teacher Pack (€5)</a>: Ladder Lab mingle cards, Triangle Swap A/B cards, Pythagoras Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function num(x){var r=Math.round(x*100)/100;if(Math.abs(r)<1e-9)r=0;return String(r).replace("-","−");}
+  function nice(x,dp){var m=Math.pow(10,dp==null?1:dp);return Math.abs(Math.round(x*m)-x*m)<1e-6;}
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  // angle answer in degrees: whole numbers 1–359, never equal to the answer
+  function QA(en,frame,ans,slips,why,html,data){
+    var pads=[180-ans,ans+10,ans-10,360-ans,ans+20,ans-20,90-ans,ans+5,ans-5,ans+30],seen={},w=[];seen[ans]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<1||x>359||x!==Math.round(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x+"°");}});
+    return {en:en,frame:frame,html:html||"",answer:ans+"°",wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans+"°",data:data||{}};}
+  // number answer with a unit (" cm" or ""): positive, at most 1 d.p., never EQUAL IN VALUE to the answer
+  function QN(en,frame,ans,slips,unit,why,html,data){
+    var pads=[ans+1,ans-1,ans*2,ans/2,ans+2,ans-2,ans+3,ans*1.5],seen={},w=[];seen[num(ans)]=1;
+    slips.concat(pads).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<=0||!nice(x,1))return;var s=num(x);if(!seen[s]&&w.length<3){seen[s]=1;w.push(s+unit);}});
+    return {en:en,frame:frame,html:html||"",answer:num(ans)+unit,wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans)+unit,data:data||{}};}
+
+  /* ---------- geometry drawing kit (y goes UP; the SVG flips it) ---------- */
+  function rad(a){return a*Math.PI/180;}
+  function pt(v,a,r){return [v[0]+r*Math.cos(rad(a)),v[1]+r*Math.sin(rad(a))];}
+  function ang(v,p){return (Math.atan2(p[1]-v[1],p[0]-v[0])*180/Math.PI+360)%360;}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+  function mid(a,b){return [(a[0]+b[0])/2,(a[1]+b[1])/2];}
+  function cen(P){var x=0,y=0;P.forEach(function(p){x+=p[0];y+=p[1];});return [x/P.length,y/P.length];}
+  function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+  function G(){return {lines:[],marks:[],ticks:[],tris:[],names:[],circs:[],dots:[],lens:[],s:0,deco:[]};}
+  function L(g,a,b,grp){g.lines.push({a:a,b:b,g:grp||0});}
+  function M(g,v,a1,sw,lab){g.marks.push({v:v,a1:a1,sw:sw,lab:String(lab)});}
+  // mark the (non-reflex) angle at v between the rays v→u and v→w. lab: number, letter, "rt", "=1".."=3" (1–3 plain arcs), or an expression like "3x + 5"
+  function MB(g,v,u,w,lab){var a1=ang(v,u),a2=ang(v,w),sw=(a2-a1+360)%360;if(sw>180){a1=a2;sw=360-sw;}M(g,v,a1,sw,lab);}
+  function T(g,a,b,n){g.ticks.push({a:a,b:b,n:n||1});}
+  function LEN(g,a,b,lab,away){g.lens.push({a:a,b:b,lab:String(lab),away:away});}
+  function CIR(g,c,r){g.circs.push({c:c,r:r});}
+  function DOT(g,p){g.dots.push(p);}
+  function NM(g,v,t,away){g.names.push({v:v,t:t,away:away});}
+  function POLY(g,P){g.tris.push(P);for(var i=0;i<P.length;i++)L(g,P[i],P[(i+1)%P.length]);}
+  var INK="#1B2430",GRN="#2E7D5B",RED="#D9534F";
+  function f(n){var r=Math.round(n*100)/100;return Math.abs(r)<1e-9?0:r;}
+  function isUnk(lab){return lab==="?"||(/[a-z]/.test(lab)&&!/\d\s?(mm|cm|m|km)²?$/.test(lab));}
+  function render(g,label,box){
+    var P=[],out=[],gx0=Infinity,gx1=-Infinity,gy0=Infinity,gy1=-Infinity;
+    function S(p){return f(p[0])+","+f(-p[1]);}
+    function grow(p){gx0=Math.min(gx0,p[0]);gx1=Math.max(gx1,p[0]);gy0=Math.min(gy0,p[1]);gy1=Math.max(gy1,p[1]);}
+    g.lines.concat(g.deco).forEach(function(l){P.push(l.a,l.b);grow(l.a);grow(l.b);});
+    g.circs.forEach(function(c){var a=[c.c[0]-c.r,c.c[1]-c.r],b=[c.c[0]+c.r,c.c[1]+c.r];P.push(a,b);grow(a);grow(b);});
+    box=box||[320,230];var k=Math.min(box[0]/(gx1-gx0+80),box[1]/(gy1-gy0+70),1.6),u=1/k,sw=f(2.4*u);
+    g.tris.forEach(function(t){out.push('<polygon class="tri" data-pts="'+t.map(S).join(" ")+'" points="'+t.map(S).join(" ")+'" fill="#E8F2EC" stroke="none"/>');});
+    g.deco.forEach(function(l){out.push('<line class="'+(l.c||"deco")+'" x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+(l.col||"#9AA3AE")+'" stroke-width="'+f((l.w||1.4)*u)+'" stroke-linecap="round"'+(l.dash?' stroke-dasharray="'+f(6*u)+' '+f(5*u)+'"':'')+'/>');});
+    g.circs.forEach(function(c){out.push('<circle class="cir" data-c="'+S(c.c)+'" data-r="'+f(c.r)+'" cx="'+f(c.c[0])+'" cy="'+f(-c.c[1])+'" r="'+f(c.r)+'" fill="none" stroke="'+INK+'" stroke-width="'+sw+'"/>');});
+    g.lines.forEach(function(l){out.push('<line class="ln"'+(l.g?' data-g="'+l.g+'"':'')+' x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+INK+'" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      if(l.g){var d=ang(l.a,l.b),m=pt(l.a,d,dist(l.a,l.b)*0.62);for(var n=0;n<l.g;n++){var c=pt(m,d,(n*7-((l.g-1)*3.5))*u);
+        out.push('<path class="par" d="M'+S(pt(c,d+150,8*u))+' L'+S(c)+' L'+S(pt(c,d-150,8*u))+'" fill="none" stroke="'+GRN+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"/>');}}});
+    g.ticks.forEach(function(t){var m=mid(t.a,t.b),d=ang(t.a,t.b);for(var n=0;n<t.n;n++){var c=pt(m,d,(n-(t.n-1)/2)*6*u),e1=pt(c,d+90,7*u),e2=pt(c,d-90,7*u);
+      out.push('<line class="tick" data-a="'+S(t.a)+'" data-b="'+S(t.b)+'" data-n="'+t.n+'" x1="'+f(e1[0])+'" y1="'+f(-e1[1])+'" x2="'+f(e2[0])+'" y2="'+f(-e2[1])+'" stroke="'+RED+'" stroke-width="'+sw+'" stroke-linecap="round"/>');}});
+    g.marks.forEach(function(m){
+      var r=(m.sw<35?40:m.sw<60?32:m.sw<110?26:22)*u,isRt=m.lab==="rt",arcs=/^=\d$/.test(m.lab)?+m.lab.charAt(1):0,lab=isRt||arcs?"":m.lab,bis=m.a1+m.sw/2,
+        p=pt(m.v,m.a1,40),q=pt(m.v,m.a1+m.sw,40),o='<g class="am" data-v="'+S(m.v)+'" data-p="'+S(p)+'" data-q="'+S(q)+'" data-l="'+m.lab+'">';
+      if(isRt){var s=13*u,c1=pt(m.v,m.a1,s),c3=pt(m.v,m.a1+90,s),c2=[c1[0]+c3[0]-m.v[0],c1[1]+c3[1]-m.v[1]];
+        o+='<path d="M'+S(c1)+' L'+S(c2)+' L'+S(c3)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}
+      else if(arcs){for(var n=0;n<arcs;n++){var rr=r*0.8+n*5*u,s2=pt(m.v,m.a1,rr),e2=pt(m.v,m.a1+m.sw,rr);
+        o+='<path d="M'+S(s2)+' A'+f(rr)+' '+f(rr)+' 0 0 0 '+S(e2)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}}
+      else{var s1=pt(m.v,m.a1,r),e1=pt(m.v,m.a1+m.sw,r),unk=isUnk(lab),long=lab.length>2;
+        o+='<path d="M'+S(s1)+' A'+f(r)+' '+f(r)+' 0 0 0 '+S(e1)+'" fill="none" stroke="'+(unk?RED:GRN)+'" stroke-width="'+f(2.2*u)+'"/>';
+        var txt=unk?(lab.length>1?"("+lab+")°":lab):lab+"°",tw=txt.length*4.6*u+4*u,tp=pt(m.v,bis,r+(long?Math.max(17,txt.length*3.6):13)*u);P.push([tp[0]-tw,tp[1]-10*u],[tp[0]+tw,tp[1]+10*u]);
+        o+='<text class="al" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(15*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk&&lab.length===1?' font-style="italic"':'')+'>'+txt+'</text>';}
+      out.push(o+'</g>');});
+    g.lens.forEach(function(l){var m=mid(l.a,l.b),d=ang(l.a,l.b),n1=pt(m,d+90,1),side=l.away&&dist(n1,l.away)<dist(pt(m,d-90,1),l.away)?-90:90,
+      tw=l.lab.length*4.4*u,unk=isUnk(l.lab),
+      tp=pt(m,d+side,Math.abs(Math.sin(rad(d)))*tw+12*u);P.push([tp[0]-tw,tp[1]-10*u],[tp[0]+tw,tp[1]+10*u]);
+      out.push('<text class="ll" data-a="'+S(l.a)+'" data-b="'+S(l.b)+'" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14.5*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk&&l.lab.length===1?' font-style="italic"':'')+'>'+l.lab+'</text>');});
+    g.dots.forEach(function(p){out.push('<circle class="dot" data-p="'+S(p)+'" cx="'+f(p[0])+'" cy="'+f(-p[1])+'" r="'+f(3.2*u)+'" fill="'+INK+'"/>');});
+    g.names.forEach(function(n){var d=n.away?ang(n.away,n.v):90,tp=pt(n.v,d,15*u);P.push([tp[0]-10*u,tp[1]-10*u],[tp[0]+10*u,tp[1]+10*u]);
+      out.push('<text class="vn" data-p="'+S(n.v)+'" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="700" fill="#5B6472">'+n.t+'</text>');});
+    var x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;P.forEach(function(p){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1]);});
+    x0-=8*u;x1+=8*u;y0-=8*u;y1+=8*u;var W=x1-x0,H=y1-y0;
+    return '<svg class="pf" viewBox="'+f(x0)+' '+f(-y1)+' '+f(W)+' '+f(H)+'"'+(g.s?' data-s="'+g.s+'"':'')+' width="'+Math.round(W*k)+'" height="'+Math.round(H*k)+'" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="'+(label||"Geometry diagram")+'">'+out.join("")+'</svg>';}
+  function names(g,P,ls){var c=cen(P);P.forEach(function(p,i){NM(g,p,ls[i],c);});}
+  function rotAll(Ps,t,c){Ps.forEach(function(p){var r=dist(c,p),a0=ang(c,p),q=pt(c,a0+t,r);p[0]=q[0];p[1]=q[1];});}
+  var LET=["ABCD","PQRS","KLMN","WXYZ","EFGH"];
+
+  /* ---------- Pythagoras helpers ---------- */
+  function r1(x){return Math.round(x*10+1e-9)/10;}
+  function sq(x){return x*x;}
+  function isWhole1(x){return Math.abs(r1(x)-x)<1e-9;}           // exactly 0 or 1 d.p.
+  function n1(x){return num(r1(x));}
+  function D(x,u){return num(x)+" "+u;}
+  var TRI=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[9,40,41],[12,35,37],[6,8,10],[9,12,15],[12,16,20],[15,20,25],[10,24,26],[16,30,34],[1.5,2,2.5],[2.5,6,6.5],[4.5,6,7.5],[1.2,3.5,3.7],[0.9,1.2,1.5]];
+  var UNITS=["cm","cm","m"];
+  function triple(){var t=rnd(TRI),k=rnd([1,1,1,2,3]);if(t[0]<3&&k>1)k=2;return [t[0]*k,t[1]*k,t[2]*k].map(function(v){return Math.round(v*10)/10;});}
+  // two random legs (whole numbers or .5) whose hypotenuse is NOT exact to 1 d.p.
+  function legsDec(lo,hi){var a,b;do{a=ri(lo,hi);b=ri(lo,hi);if(Math.random()<0.3)a+=0.5;}while(a===b||isWhole1(Math.sqrt(a*a+b*b))||Math.max(a,b)>3*Math.min(a,b));return [a,b];}
+  function hypLeg(lo,hi){var c,a;do{c=ri(lo,hi);a=ri(Math.max(2,Math.ceil(c*0.25)),c-1);if(Math.random()<0.3)c+=0.5;}while(isWhole1(Math.sqrt(c*c-a*a))||c-a<0.8);return [c,a];}
+  var ROUND=" Give your answer to 1 decimal place.";
+  // right-angled triangle: legs a (base) and b, right angle at C. labs = [labA(leg a), labB(leg b), labC(hyp)]
+  function rtTri(a,b,labs,nm){
+    var s=200/Math.max(a,b),Cc=[0,0],Bp=[a*s,0],Ap=[0,b*s],P=[Cc,Bp,Ap];
+    if(Math.random()<0.5)P.forEach(function(p){p[0]=-p[0];});
+    rotAll(P,rnd([0,0,90,180,270,ri(-25,25),ri(155,205)]),[0,0]);
+    var g=G();g.s=s;g.tris.push(P);L(g,P[0],P[1]);L(g,P[1],P[2]);L(g,P[2],P[0]);MB(g,P[0],P[1],P[2],"rt");
+    if(labs[0])LEN(g,P[0],P[1],labs[0],P[2]);if(labs[1])LEN(g,P[0],P[2],labs[1],P[1]);if(labs[2])LEN(g,P[1],P[2],labs[2],P[0]);
+    if(nm)names(g,P,nm);return g;}
+  // a ladder: foot d from the wall, top h up the wall
+  function ladder(d,h,labs){
+    var s=170/Math.max(d,h),W=[0,0],F=[d*s,0],T2=[0,h*s],g=G();g.s=s;
+    g.deco.push({a:[-30,0],b:[d*s+40,0],c:"ground",col:"#8A6D3B",w:3},{a:[0,0],b:[0,h*s+25],c:"wall",col:"#B5502F",w:5});
+    L(g,W,F);L(g,W,T2);L(g,F,T2);MB(g,W,F,T2,"rt");
+    var len=dist(F,T2),n=Math.max(4,Math.round(len/26));for(var i=1;i<n;i++){var c=lerp(F,T2,i/n),dd=ang(F,T2);g.deco.push({a:pt(c,dd+90,7),b:pt(c,dd-90,7),c:"rung",col:"#8A6D3B",w:2.2});}
+    if(labs[0])LEN(g,W,F,labs[0],T2);if(labs[1])LEN(g,W,T2,labs[1],F);if(labs[2])LEN(g,F,T2,labs[2],W);return g;}
+  // rectangle w × h with one diagonal
+  function rectFig(w,h,labs){
+    var s=220/Math.max(w,h),A=[0,0],B=[w*s,0],Cc=[w*s,h*s],D2=[0,h*s],g=G();g.s=s;g.tris.push([A,B,Cc,D2]);
+    L(g,A,B);L(g,B,Cc);L(g,Cc,D2);L(g,D2,A);L(g,A,Cc);MB(g,B,Cc,A,"rt");
+    if(labs[0])LEN(g,A,B,labs[0],Cc);if(labs[1])LEN(g,B,Cc,labs[1],A);if(labs[2])LEN(g,A,Cc,labs[2],B);return g;}
+  // isosceles triangle, base b, equal sides e, height line from the apex
+  function isoFig(b,e,labs){
+    var h=Math.sqrt(e*e-b*b/4),s=210/Math.max(b,h),A=[0,0],B=[b*s,0],M2=[b*s/2,0],T2=[b*s/2,h*s],g=G();g.s=s;g.tris.push([A,B,T2]);
+    L(g,A,B);L(g,B,T2);L(g,T2,A);L(g,T2,M2);MB(g,M2,B,T2,"rt");T(g,A,T2);T(g,B,T2);
+    if(labs[0])LEN(g,A,B,labs[0],T2);if(labs[1])LEN(g,B,T2,labs[1],A);if(labs[2])LEN(g,M2,T2,labs[2],A);return g;}
+  function pic(g,lab,box){return render(g,lab,box||[300,230]);}
+  // numeric answer in a unit, wrong options never equal in value, positive, 1 d.p.
+  // when the question asks for 1 decimal place every option is written with 1 d.p. ("18.0 cm")
+  function QL(en,frame,ans,slips,unit,why,html,data){
+    var dp=/1 decimal place/.test(en),a=r1(ans),fm=function(x){return (dp?x.toFixed(1):num(x)).replace("-","−")+unit;},seen={},w=[];seen[a]=1;
+    slips.concat([a+1,a-1,a*2,a/2,a+2,a-0.5,a+3,a*1.5]).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||x<=0)return;x=r1(x);if(x<=0||seen[x]||w.length>=3)return;seen[x]=1;w.push(fm(x));});
+    if(dp)why=why.replace(new RegExp(num(a).replace(".","\\.")+"( "+unit.trim()+")"),a.toFixed(1)+"$1");
+    return {en:en,frame:frame,html:html||"",answer:fm(a),wrong:w,why:why,review:en+" → "+fm(a),data:data||{}};}
+
+  /* ---------- mode 1: the hypotenuse ---------- */
+  function qHyp(){var t=triple(),u=rnd(UNITS),a=t[0],b=t[1],c=t[2];if(Math.random()<0.5){a=t[1];b=t[0];}
+    var g=rtTri(a,b,[D(a,u),D(b,u),"x"]);
+    return QL("Find the length of the hypotenuse x.","",c,[a+b,sq(a)+sq(b),Math.sqrt(Math.abs(sq(b)-sq(a))),c+1],u===""?"":" "+u,
+      "x² = "+num(a)+"² + "+num(b)+"² = "+num(sq(a)+sq(b))+", so x = √"+num(sq(a)+sq(b))+" = "+num(c)+" "+u+".",pic(g,"Right-angled triangle"),{t:"fig",find:"hyp"});}
+  function qHypDec(){var l=legsDec(2,15),a=l[0],b=l[1],u=rnd(UNITS),c=Math.sqrt(sq(a)+sq(b));
+    var g=rtTri(a,b,[D(a,u),D(b,u),"x"]);
+    return QL("Find x."+ROUND,"",c,[a+b,Math.sqrt(Math.abs(sq(b)-sq(a))),Math.floor(c*10)/10===r1(c)?c+0.1:Math.floor(c*10)/10,(sq(a)+sq(b))/2,c+1]," "+u,
+      "x² = "+num(a)+"² + "+num(b)+"² = "+num(sq(a)+sq(b))+", so x = √"+num(sq(a)+sq(b))+" = "+n1(c)+" "+u+" (to 1 d.p.).",pic(g,"Right-angled triangle"),{t:"fig",find:"hyp",dp:1});}
+  function qWhichHyp(){var g,ls=rnd(LET).slice(0,3),P;g=rtTri(ri(3,9),ri(3,9),[0,0,0],ls);P=g.tris[0];
+    var nm=ls.split(""),h="["+nm[1]+nm[2]+"]",o1="["+nm[0]+nm[1]+"]",o2="["+nm[0]+nm[2]+"]";
+    return C("Which side is the hypotenuse?","",h,[o1,o2,"There isn't one"],"The hypotenuse is the side opposite the right angle: "+h+". It is always the longest side.","Hypotenuse of a right-angled triangle → the side opposite the right angle",pic(g,"Right-angled triangle "+ls),{t:"whichhyp"});}
+  function qEq(){var ls=rnd(LET).slice(0,3),g=rtTri(ri(3,9),ri(3,9),[0,0,0],ls),n=ls.split(""),A="|"+n[0]+n[1]+"|",B="|"+n[0]+n[2]+"|",H="|"+n[1]+n[2]+"|";
+    return C("Which equation is true for this triangle?","",H+"² = "+A+"² + "+B+"²",[A+"² = "+H+"² + "+B+"²",B+"² = "+A+"² + "+H+"²",H+" = "+A+" + "+B],"The hypotenuse "+H.replace(/\|/g,"").replace(/^/,"[").replace(/$/,"]")+" is opposite the right angle, so its square equals the sum of the squares of the other two sides.","Pythagoras: hypotenuse² = sum of the squares of the other two sides",pic(g,"Right-angled triangle "+ls),{t:"eq"});}
+  function qRoot(){var n,k;do{n=ri(5,400);k=Math.floor(Math.sqrt(n));}while(k*k===n);
+    return C("√"+n+" lies between which two whole numbers?","",k+" and "+(k+1),[(k-1)+" and "+k,(k+1)+" and "+(k+2),Math.floor(n/2)+" and "+(Math.floor(n/2)+1),(k+2)+" and "+(k+3)],k+"² = "+k*k+" and "+(k+1)+"² = "+(k+1)*(k+1)+", and "+n+" is between them, so √"+n+" is between "+k+" and "+(k+1)+".","√"+n+" → between "+k+" and "+(k+1),"",{t:"root"});}
+  function qLadderL(){var t=rnd([[2.5,6,6.5],[1.8,2.4,3],[2.1,7.2,7.5],[1.2,3.5,3.7],[1.6,6.3,6.5],[2,4.8,5.2],[1.4,4.8,5],[1.5,3.6,3.9]]),d=t[0],h=t[1],dec=Math.random()<0.4,L2;
+    if(dec){do{d=rnd([1,1.2,1.5,1.8,2,2.4,2.5]);h=rnd([3,3.5,4,4.5,5,5.5,6,7,8]);}while(isWhole1(Math.sqrt(d*d+h*h)));}
+    L2=Math.sqrt(d*d+h*h);var g=ladder(d,h,[D(d,"m"),D(h,"m"),"x"]);
+    return QL("A ladder reaches "+num(h)+" m up a wall. Its foot is "+num(d)+" m from the wall. How long is the ladder?"+(dec?ROUND:""),"",L2,[d+h,Math.sqrt(h*h-d*d),d*d+h*h,L2+0.5]," m",
+      "The ladder is the hypotenuse: x² = "+num(d)+"² + "+num(h)+"² = "+num(d*d+h*h)+", so x = "+n1(L2)+" m.",pic(ladder(d,h,[D(d,"m"),D(h,"m"),"x"]),"Ladder against a wall"),{t:"fig",find:"hyp",dp:dec?1:0});}
+
+  /* ---------- mode 2: a shorter side ---------- */
+  function qLeg(){var t=triple(),u=rnd(UNITS),a=t[0],b=t[1],c=t[2];if(Math.random()<0.5){a=t[1];b=t[0];}
+    var g=rtTri(a,b,[D(a,u),"x",D(c,u)]);
+    return QL("Find x.","",b,[c-a,Math.sqrt(c*c+a*a),c*c-a*a,b+1]," "+u,"[x] is a shorter side, so subtract: x² = "+num(c)+"² − "+num(a)+"² = "+num(c*c-a*a)+", so x = "+num(b)+" "+u+".",pic(g,"Right-angled triangle"),{t:"fig",find:"leg"});}
+  function qLegDec(){var h=hypLeg(6,20),c=h[0],a=h[1],u=rnd(UNITS),b=Math.sqrt(c*c-a*a),g=rtTri(a,b,[D(a,u),"x",D(c,u)]);
+    return QL("Find x."+ROUND,"",b,[c-a,Math.sqrt(c*c+a*a),Math.floor(b*10)/10===r1(b)?b-0.1:Math.floor(b*10)/10,b+1]," "+u,"x² = "+num(c)+"² − "+num(a)+"² = "+num(c*c-a*a)+", so x = √"+num(c*c-a*a)+" = "+n1(b)+" "+u+".",pic(g,"Right-angled triangle"),{t:"fig",find:"leg",dp:1});}
+  function qLadderH(){var L2,d,dec=Math.random()<0.5,h;
+    if(dec){do{L2=rnd([3,3.5,4,4.5,5,5.5,6,6.5,7,8]);d=rnd([0.8,1,1.2,1.4,1.5,1.6,1.8,2]);}while(isWhole1(Math.sqrt(L2*L2-d*d)));}
+    else{var t=rnd([[2.5,6,6.5],[1.8,2.4,3],[2.1,7.2,7.5],[1.2,3.5,3.7],[1.6,6.3,6.5],[2,4.8,5.2],[1.4,4.8,5],[1.5,3.6,3.9]]);d=t[0];L2=t[2];}
+    h=Math.sqrt(L2*L2-d*d);if(r1(h)>=L2||d<L2*0.15)return qLadderH();
+    return QL("A "+num(L2)+" m ladder leans against a wall with its foot "+num(d)+" m from the wall. How high up the wall does it reach?"+(dec?ROUND:""),"",h,[L2-d,Math.sqrt(L2*L2+d*d),L2*L2-d*d,h+0.5]," m",
+      "The ladder is the hypotenuse, so subtract: x² = "+num(L2)+"² − "+num(d)+"² = "+num(L2*L2-d*d)+", so x = "+n1(h)+" m.",pic(ladder(d,h,[D(d,"m"),"x",D(L2,"m")]),"Ladder against a wall"),{t:"fig",find:"leg",dp:dec?1:0});}
+  function qCalc(){var t=triple(),a=t[0],b=t[1],c=t[2],u=rnd(UNITS),hyp=Math.random()<0.5,g;
+    if(hyp){g=rtTri(a,b,[D(a,u),D(b,u),"x"]);
+      return C("Which calculation finds x?","","√("+num(a)+"² + "+num(b)+"²)",["√("+num(b)+"² − "+num(a)+"²)",num(a)+" + "+num(b),num(a)+"² + "+num(b)+"²"],"x is the hypotenuse, so ADD the squares and then take the square root.","Finding the hypotenuse → √(a² + b²)",pic(g,"Right-angled triangle"),{t:"calc"});}
+    g=rtTri(a,b,[D(a,u),"x",D(c,u)]);
+    return C("Which calculation finds x?","","√("+num(c)+"² − "+num(a)+"²)",["√("+num(c)+"² + "+num(a)+"²)",num(c)+" − "+num(a),num(c)+"² − "+num(a)+"²"],"x is a shorter side, so SUBTRACT the squares (hypotenuse² first) and then take the square root.","Finding a shorter side → √(c² − a²)",pic(g,"Right-angled triangle"),{t:"calc"});}
+  var NAMES=["Niamh","Seán","Aoife","Cian","Róisín","Darragh","Ciara","Oisín"];
+  function qSlip(){var who=rnd(NAMES),u=rnd(["cm","m"]),hyp=Math.random()<0.5,a,b,c,ms,txt,given;
+    if(hyp){do{var l=Math.random()<0.5?triple():null;if(l){a=l[0];b=l[1];}else{l=legsDec(3,14);a=Math.min(l[0],l[1]);b=Math.max(l[0],l[1]);}}while(a===b);
+      given="the hypotenuse x of a right-angled triangle whose other two sides are "+D(a,u)+" and "+D(b,u);
+      ms=[["No mistake: her answer is right",Math.sqrt(a*a+b*b),"x² = "+num(a)+"² + "+num(b)+"² = "+num(a*a+b*b)+", so x = √"+num(a*a+b*b)+" = "+n1(Math.sqrt(a*a+b*b))],
+          ["She added the sides without squaring them",a+b,"x = "+num(a)+" + "+num(b)+" = "+num(a+b)],
+          ["She forgot to take the square root",a*a+b*b,"x² = "+num(a)+"² + "+num(b)+"² = "+num(a*a+b*b)+", so x = "+num(a*a+b*b)],
+          ["She subtracted the squares instead of adding them",Math.sqrt(b*b-a*a),"x² = "+num(b)+"² − "+num(a)+"² = "+num(b*b-a*a)+", so x = √"+num(b*b-a*a)+" = "+n1(Math.sqrt(b*b-a*a))]];}
+    else{var h=Math.random()<0.5?null:hypLeg(6,18);if(h){c=h[0];a=h[1];}else{var t=triple();c=t[2];a=rnd([t[0],t[1]]);}
+      given="the side x of a right-angled triangle whose hypotenuse is "+D(c,u)+" and whose other side is "+D(a,u);
+      ms=[["No mistake: her answer is right",Math.sqrt(c*c-a*a),"x² = "+num(c)+"² − "+num(a)+"² = "+num(c*c-a*a)+", so x = √"+num(c*c-a*a)+" = "+n1(Math.sqrt(c*c-a*a))],
+          ["She subtracted the sides without squaring them",c-a,"x = "+num(c)+" − "+num(a)+" = "+num(c-a)],
+          ["She forgot to take the square root",c*c-a*a,"x² = "+num(c)+"² − "+num(a)+"² = "+num(c*c-a*a)+", so x = "+num(c*c-a*a)],
+          ["She added the squares instead of subtracting them",Math.sqrt(c*c+a*a),"x² = "+num(c)+"² + "+num(a)+"² = "+num(c*c+a*a)+", so x = √"+num(c*c+a*a)+" = "+n1(Math.sqrt(c*c+a*a))]];}
+    var pickI=Math.random()<0.2?0:ri(1,3),m=ms[pickI],pron=/^(Seán|Cian|Darragh|Oisín)$/.test(who);
+    function hs(s){return pron?s.replace(/^She /,"He ").replace(/her answer/,"his answer"):s;}
+    var seen={},vals=ms.map(function(x){return r1(x[1]);});vals.forEach(function(v){seen[v]=(seen[v]||0)+1;});if(seen[vals[pickI]]>1)return qSlip();
+    return C(who+" is finding "+given+". "+(pron?"He":"She")+" writes: "+m[2]+" "+u+". What mistake did "+(pron?"he":"she")+" make?","",hs(m[0]),ms.filter(function(x){return x!==m;}).map(function(x){return hs(x[0]);}),
+      "The right working: "+ms[0][2]+" "+u+(pickI===0?". So the answer is right.":"."),hs(m[0]),"",{t:"slip",hyp:hyp});}
+
+  /* ---------- mode 3: is it right-angled? (the converse) ---------- */
+  function nearMiss(t){var o;do{o=t.slice();var i=ri(0,2),d=rnd([1,-1,2,0.5]);if(t[2]<5)d=rnd([0.1,-0.1,0.5]);o[i]=Math.round((o[i]+d)*10)/10;o.sort(function(p,q){return p-q;});}while(o[0]<=0||Math.abs(o[0]*o[0]+o[1]*o[1]-o[2]*o[2])<1e-6||o[0]+o[1]<=o[2]);return o;}
+  function trs(t,u){return t.map(function(v){return num(v)+(u?" "+u:"");}).join(", ");}
+  function qWhichRight(){var t=triple(),u=rnd(["cm","m"]),pool=[],k=0;while(pool.length<3&&k<40){k++;var o=trs(nearMiss(t),u);if(pool.indexOf(o)<0)pool.push(o);}
+    return C("Which of these triangles is right-angled? (The sides are given.)","",trs(t,u),pool,"Test the converse of Pythagoras: "+num(t[0])+"² + "+num(t[1])+"² = "+num(t[0]*t[0]+t[1]*t[1])+" = "+num(t[2])+"², so this one has a right angle.","Right-angled → "+trs(t,u),"",{t:"whichright"});}
+  function qTriple(){var t=rnd(TRI.filter(function(x){return x[0]===Math.round(x[0]);})),k=rnd([1,1,2,3,4]);t=t.map(function(v){return v*k;});
+    var pool=[],j=0;while(pool.length<3&&j<40){j++;var o=nearMiss(t).map(function(v){return Math.round(v);});if(o[0]*o[0]+o[1]*o[1]!==o[2]*o[2]&&o[0]+o[1]>o[2]&&o[0]<o[1]&&o[1]<o[2]){o=o.join(", ");if(pool.indexOf(o)<0)pool.push(o);}}
+    ["4, 5, 6","5, 6, 7","2, 3, 4",(t[0]+1)+", "+(t[1]+1)+", "+(t[2]+1)].forEach(function(o){if(pool.length<3&&pool.indexOf(o)<0)pool.push(o);});
+    return C("Which of these is a Pythagorean triple?","",t.join(", "),pool,"A Pythagorean triple is three whole numbers with a² + b² = c²: "+t[0]+"² + "+t[1]+"² = "+(t[0]*t[0]+t[1]*t[1])+" = "+t[2]+"².","Pythagorean triple → "+t.join(", "),"",{t:"triple"});}
+  function qWhichAngle(){var t=Math.random()<0.75?triple():nearMiss(triple()),u=rnd(["cm","m"]),ls=rnd(["PQR","ABC","XYZ","KLM","DEF"]).split(""),o=shuffle([0,1,2]);
+    // vertex i is opposite side t[o[i]]
+    var sides=[],ang=[];for(var i=0;i<3;i++){var p=ls[(i+1)%3],q=ls[(i+2)%3],pq=[p,q].sort().join("");sides.push(["|"+pq+"|",t[o[i]]]);ang.push("∠"+p+ls[i]+q);}
+    var right=Math.abs(t[0]*t[0]+t[1]*t[1]-t[2]*t[2])<1e-6,iL=o.indexOf(2),ans=right?ang[iL]:"None: it isn't right-angled";
+    var txt=shuffle(sides.slice()).map(function(s){return s[0]+" = "+D(s[1],u);}).join(", ");
+    return C("Triangle "+ls.join("")+" has "+txt+". Which angle is a right angle?","",ans,ang.concat(["None: it isn't right-angled"]),
+      "Test the longest side: "+num(t[0])+"² + "+num(t[1])+"² = "+num(t[0]*t[0]+t[1]*t[1])+(right?" = ":" ≠ ")+num(t[2])+"² = "+num(t[2]*t[2])+". "+(right?"So the right angle is opposite the longest side: "+ang[iL]+".":"So the triangle has no right angle."),
+      "Converse of Pythagoras → "+ans,"",{t:"whichangle"});}
+  function qIsRight(){var t=Math.random()<0.5?triple():nearMiss(triple()),u=rnd(["cm","m"]),a=num(t[0]),b=num(t[1]),c=num(t[2]),s2=num(t[0]*t[0]+t[1]*t[1]),right=Math.abs(t[0]*t[0]+t[1]*t[1]-t[2]*t[2])<1e-6;
+    var ans=right?"Yes: "+a+"² + "+b+"² = "+s2+" = "+c+"²":"No: "+a+"² + "+b+"² = "+s2+", but "+c+"² = "+num(t[2]*t[2]);
+    var pool=right?["No: "+a+" + "+b+" ≠ "+c,"No: "+a+"² + "+c+"² ≠ "+b+"²","No: you can't tell without a protractor"]:["Yes: "+a+" + "+b+" > "+c,"Yes: all three sides are different","Yes: "+c+"² − "+b+"² = "+num(t[2]*t[2]-t[1]*t[1])];
+    return C("A triangle has sides "+trs(t,u)+". Is it right-angled?","",ans,pool,"Square the two shorter sides and add: "+a+"² + "+b+"² = "+s2+". The longest side squared is "+c+"² = "+num(t[2]*t[2])+". "+(right?"They match, so it IS right-angled (Theorem 15).":"They don't match, so it is NOT right-angled."),"Sides "+trs(t,u)+" → "+(right?"right-angled":"not right-angled"),"",{t:"isright"});}
+  function qBuilder(){var b=rnd([[3,4,"m"],[30,40,"cm"],[60,80,"cm"],[0.6,0.8,"m"],[1.2,1.6,"m"],[6,8,"m"]]),hyp=Math.sqrt(b[0]*b[0]+b[1]*b[1]),dd=rnd([0,0,1,-1,2,-2]),step=b[0]<1||b[2]==="m"&&b[0]<3?0.01:b[0]<10?0.1:1,d=Math.round((hyp+dd*step)*100)/100;
+    var ans=dd===0?"Yes, the corner is a right angle":dd>0?"No, the angle is bigger than 90°":"No, the angle is less than 90°";
+    return C("A builder checks the corner of a wall. She marks "+D(b[0],b[2])+" along one wall and "+D(b[1],b[2])+" along the other, then measures "+D(d,b[2])+" between the marks. Is the corner square?","",ans,["Yes, the corner is a right angle","No, the angle is bigger than 90°","No, the angle is less than 90°","You can't tell without a protractor"].filter(function(x){return x!==ans;}),
+      num(b[0])+"² + "+num(b[1])+"² = "+num(b[0]*b[0]+b[1]*b[1])+", so a right angle needs "+num(hyp)+" "+b[2]+". "+(dd===0?"It measures exactly that.":dd>0?"The gap is longer, so the angle is opened wider than 90°.":"The gap is shorter, so the angle is closed tighter than 90°."),"Builder's check "+num(b[0])+", "+num(b[1])+", "+num(d)+" → "+ans,"",{t:"builder"});}
+  var WORDS=[["What is the hypotenuse?","The side opposite the right angle",["The shortest side","Either side next to the right angle","The side along the bottom"]],
+    ["Which side of a right-angled triangle is always the longest?","The hypotenuse",["The base","The side next to the right angle","They are all the same length"]],
+    ["What does Pythagoras' theorem (Theorem 14) say?","In a right-angled triangle, the square of the hypotenuse is the sum of the squares of the other two sides",["In any triangle, the longest side is the sum of the other two sides","In a right-angled triangle, the hypotenuse is the sum of the other two sides","In a right-angled triangle, the angles add to 90°"]],
+    ["What does the converse of Pythagoras' theorem (Theorem 15) say?","If the square of one side equals the sum of the squares of the other two, the angle opposite that side is a right angle",["If a triangle has a right angle, its angles add to 180°","If two sides of a triangle are equal, two angles are equal","If a triangle is right-angled, the hypotenuse is the longest side"]],
+    ["A Pythagorean triple is…","Three whole numbers with a² + b² = c²",["Three numbers that add to 180","Three numbers that are all square numbers","Three numbers where c = a + b"]],
+    ["If 3, 4, 5 is a Pythagorean triple, which of these is also one?","6, 8, 10",["4, 5, 6","3, 4, 6","5, 6, 7"]],
+    ["To find a SHORTER side of a right-angled triangle, you…","Subtract the squares, then take the square root",["Add the squares, then take the square root","Subtract the two sides","Add the squares and stop"]],
+    ["√(a² + b²) is the same as a + b…","Never, when a and b are both positive",["Always","Only when a = b","Only for whole numbers"]]];
+  function qWords(){var w=rnd(WORDS);return C(w[0],"",w[1],w[2],w[0]+" "+w[1]+".",w[0]+" → "+w[1],"",{t:"words"});}
+
+  /* ---------- mode 4: real life ---------- */
+  var RECT=[["A TV screen","cm",[60,120],[34,68],"wide","high","its diagonal"],["A phone screen","cm",[6,8],[13,17],"wide","tall","its diagonal"],["A door","cm",[76,92],[198,206],"wide","high","the diagonal of the door"],["A rectangular garden","m",[8,20],[5,14],"long","wide","the diagonal path across it"],["A farm gate","m",[3,4],[1,2],"long","high","the diagonal brace"],["A football pitch","m",[100,110],[64,75],"long","wide","the diagonal"]];
+  function qRectDiag(){var c=rnd(RECT),w,h;do{w=ri(c[2][0],c[2][1]);h=ri(c[3][0],c[3][1]);if(c[1]==="m"&&w<5&&Math.random()<0.6)w+=0.5;}while(w===h);
+    var d=Math.sqrt(w*w+h*h),dec=!isWhole1(d);
+    return QL(c[0]+" is "+D(w,c[1])+" "+c[4]+" and "+D(h,c[1])+" "+c[5]+". How long is "+c[6]+"?"+(dec?ROUND:""),"",d,[w+h,Math.abs(w-h)>1?Math.sqrt(Math.abs(w*w-h*h)):d+2,d+1,(w+h)/2]," "+c[1],
+      "The diagonal is the hypotenuse: "+num(w)+"² + "+num(h)+"² = "+num(w*w+h*h)+", so the diagonal = √"+num(w*w+h*h)+" = "+n1(d)+" "+c[1]+".",pic(rectFig(w,h,[D(w,c[1]),D(h,c[1]),"x"]),c[0]),{t:"fig",find:"hyp",dp:dec?1:0});}
+  function qRectSide(){var t,u=rnd(UNITS);do{t=triple();}while(t[1]/t[0]>2.6||t[0]/t[1]>2.6);
+    return QL("The diagonal of a rectangle is "+D(t[2],u)+" and one side is "+D(t[0],u)+". Find the other side, x.","",t[1],[t[2]-t[0],Math.sqrt(t[2]*t[2]+t[0]*t[0]),t[1]+1,t[1]*2]," "+u,
+      "The diagonal is the hypotenuse: x² = "+num(t[2])+"² − "+num(t[0])+"² = "+num(t[2]*t[2]-t[0]*t[0])+", so x = "+num(t[1])+" "+u+".",pic(rectFig(t[0],t[1],[D(t[0],u),"x",D(t[2],u)]),"Rectangle with a diagonal"),{t:"fig",find:"leg"});}
+  function qIsoH(){var b,e,dec=Math.random()<0.4,u=rnd(UNITS);
+    if(dec){do{b=ri(4,20);e=ri(Math.ceil(b/2)+2,b+6);}while(isWhole1(Math.sqrt(e*e-b*b/4)));}else{var t=triple();b=2*t[0];e=t[2];if(Math.random()<0.5){b=2*t[1];}}
+    var h=Math.sqrt(e*e-b*b/4);
+    return QL("This isosceles triangle has a base of "+D(b,u)+" and two sides of "+D(e,u)+". Find its height, x."+(dec?ROUND:""),"",h,[Math.sqrt(e*e-b*b)>0?Math.sqrt(Math.abs(e*e-b*b)):h+2,e-b/2,Math.sqrt(e*e+b*b/4),h+1]," "+u,
+      "The height cuts the base in half ("+num(b/2)+" "+u+"), making a right-angled triangle: x² = "+num(e)+"² − "+num(b/2)+"² = "+num(e*e-b*b/4)+", so x = "+n1(h)+" "+u+".",pic(isoFig(b,e,[D(b,u),D(e,u),"x"]),"Isosceles triangle"),{t:"fig",find:"leg",dp:dec?1:0});}
+  function qIsoArea(){var t=triple(),b=2*t[0],e=t[2],h=t[1],u=rnd(UNITS);if(Math.random()<0.5){b=2*t[1];h=t[0];}
+    var A=b*h/2;if(!isWhole1(A))return qIsoArea();
+    return QL("This isosceles triangle has a base of "+D(b,u)+" and two sides of "+D(e,u)+". Find the height first, then the area of the triangle.","",A,[b*e/2,b*h,e*h/2,A+b]," "+u+"²",
+      "Height² = "+num(e)+"² − "+num(b/2)+"² = "+num(h*h)+", so the height = "+num(h)+" "+u+". Area = ½ × "+num(b)+" × "+num(h)+" = "+num(A)+" "+u+"².",pic(isoFig(b,e,[D(b,u),D(e,u),0]),"Isosceles triangle"),{t:"isoarea"});}
+  function qShortcut(){var w,l,t=Math.random()<0.5?triple():null;if(t&&t[0]>=6&&t[0]%1===0&&t[1]%1===0){w=t[0]*5;l=t[1]*5;}else{do{w=ri(20,90);l=ri(30,120);}while(w>=l);}
+    var d=Math.sqrt(w*w+l*l),s=w+l-d,dec=!isWhole1(s);
+    return QL("A rectangular field is "+w+" m wide and "+l+" m long. Ciara walks along two sides from one corner to the opposite corner. Seán walks straight across the diagonal. How much further does Ciara walk?"+(dec?ROUND:""),"",s,[d,w+l,l-w,s+10,Math.sqrt(w+l)]," m",
+      "Seán: √("+w+"² + "+l+"²) = √"+(w*w+l*l)+" = "+n1(d)+" m. Ciara: "+w+" + "+l+" = "+(w+l)+" m. Difference = "+(w+l)+" − "+n1(d)+" = "+n1(s)+" m.",
+      "",{t:"shortcut"});}
+  var DIRS=[["north","east"],["south","west"],["east","south"],["west","north"]];
+  function qTravel(){var dr=rnd(DIRS),who=rnd(["A boat","A hiker","A drone","A cyclist"]),t=Math.random()<0.6?triple():null,a,b,c;
+    if(t){a=t[0];b=t[1];if(a<3){a*=4;b*=4;}}else{var l=legsDec(3,25);a=l[0];b=l[1];}c=Math.sqrt(a*a+b*b);
+    if(Math.random()<0.5)return QL(who+" goes "+D(a,"km")+" "+dr[0]+" and then "+D(b,"km")+" "+dr[1]+". How far is it from where it started (in a straight line)?"+(isWhole1(c)?"":ROUND),"",c,[a+b,Math.abs(b-a),Math.sqrt(Math.abs(b*b-a*a)),c+1]," km",
+      dr[0]+" and "+dr[1]+" are at right angles, so the straight-line distance is the hypotenuse: √("+num(a)+"² + "+num(b)+"²) = "+n1(c)+" km.","",{t:"travel",find:"hyp"});
+    var C2=r1(c);if(!isWhole1(c))return qTravel();
+    return QL(who+" goes "+D(a,"km")+" "+dr[0]+", then turns and goes "+dr[1]+". The finish is "+D(C2,"km")+" from the start in a straight line. How far "+dr[1]+" did it go?","",b,[C2-a,Math.sqrt(C2*C2+a*a),b+1,C2+a]," km",
+      "The "+num(C2)+" km is the hypotenuse: x² = "+num(C2)+"² − "+num(a)+"² = "+num(C2*C2-a*a)+", so x = "+num(b)+" km.","",{t:"travel",find:"leg"});}
+  function qSlide(){var t=rnd([[1.8,2.4,3],[2.5,6,6.5],[1.4,4.8,5],[2,4.8,5.2],[1.2,3.5,3.7],[1.5,3.6,3.9],[3,4,5],[1.6,6.3,6.5]]),L2=t[2],h1=t[1],dh=rnd([0.2,0.3,0.4,0.5,0.6,0.8,1]),h2=Math.round((h1-dh)*10)/10;
+    if(h2<=L2*0.4)return qSlide();var d2=Math.sqrt(L2*L2-h2*h2),dec=!isWhole1(d2);
+    return QL("A "+num(L2)+" m ladder reaches "+num(h1)+" m up a wall. Its top slides down "+num(dh)+" m. How far is its foot from the wall now?"+(dec?ROUND:""),"",d2,[t[0],t[0]+dh,Math.sqrt(L2*L2-h1*h1)+dh,L2-h2,d2+0.5]," m",
+      "Now the top is "+num(h1)+" − "+num(dh)+" = "+num(h2)+" m up. Foot: √("+num(L2)+"² − "+num(h2)+"²) = √"+num(L2*L2-h2*h2)+" = "+n1(d2)+" m.","",{t:"slide"});}
+
+  var MAKERS={
+    ladder:[qHyp,qHyp,qHyp,qHypDec,qHypDec,qWhichHyp,qEq,qRoot,qRoot,qLadderL,qLadderL],
+    short:[qLeg,qLeg,qLeg,qLegDec,qLegDec,qLadderH,qLadderH,qCalc,qCalc,qSlip,qSlip],
+    conv:[qWhichRight,qWhichRight,qTriple,qWhichAngle,qWhichAngle,qIsRight,qIsRight,qBuilder,qWords,qWords],
+    real:[qRectDiag,qRectDiag,qRectSide,qIsoH,qIsoH,qIsoArea,qShortcut,qTravel,qTravel,qSlide],
+    mixed:[qHyp,qHypDec,qWhichHyp,qEq,qRoot,qLadderL,qLeg,qLegDec,qLadderH,qCalc,qSlip,qWhichRight,qTriple,qWhichAngle,qIsRight,qBuilder,qWords,qRectDiag,qRectSide,qIsoH,qIsoArea,qShortcut,qTravel,qSlide]
+  };
+
+  /* ---------- fixed diagrams for the rules and the Exam corner ---------- */
+  function sqOn(g,p,q,n,away){var v=[q[0]-p[0],q[1]-p[1]],nv=[-v[1],v[0]],m=mid(p,q);if(dist([m[0]+nv[0]*0.01,m[1]+nv[1]*0.01],away)<dist(m,away))nv=[v[1],-v[0]];
+    var p2=[p[0]+nv[0],p[1]+nv[1]],q2=[q[0]+nv[0],q[1]+nv[1]];
+    for(var i=1;i<n;i++){g.deco.push({a:lerp(p,q,i/n),b:lerp(p2,q2,i/n),c:"grid"},{a:lerp(p,p2,i/n),b:lerp(q,q2,i/n),c:"grid"});}
+    [[p,p2],[p2,q2],[q2,q]].forEach(function(e){g.deco.push({a:e[0],b:e[1],c:"sqr",col:"#2E7D5B",w:2.2});});}
+  // un-rotated right-angled triangle (right angle at the first vertex) for the fixed diagrams
+  function rtTri0(a,b,labs,nm){var s=200/Math.max(a,b),Cc=[0,0],Bp=[a*s,0],Ap=[0,b*s],P=[Cc,Bp,Ap],g=G();g.s=s;g.tris.push(P);L(g,P[0],P[1]);L(g,P[1],P[2]);L(g,P[2],P[0]);MB(g,P[0],P[1],P[2],"rt");
+    if(labs[0])LEN(g,P[0],P[1],labs[0],P[2]);if(labs[1])LEN(g,P[0],P[2],labs[1],P[1]);if(labs[2])LEN(g,P[1],P[2],labs[2],P[0]);if(nm)names(g,P,nm);return g;}
+  function foot(A,B,Cc){var v=[B[0]-A[0],B[1]-A[1]],k=((Cc[0]-A[0])*v[0]+(Cc[1]-A[1])*v[1])/(v[0]*v[0]+v[1]*v[1]);return [A[0]+k*v[0],A[1]+k*v[1]];}
+  var FIX={
+    pattern:function(){var u=26,Cc=[0,0],B=[4*u,0],A=[0,3*u],g=G();g.s=u;g.tris.push([Cc,B,A]);L(g,Cc,B);L(g,B,A);L(g,A,Cc);MB(g,Cc,B,A,"rt");sqOn(g,Cc,B,4,A);sqOn(g,Cc,A,3,B);sqOn(g,A,B,5,Cc);
+      [[Cc,B,A,"side 4"],[Cc,A,B,"side 3"],[A,B,Cc,"side 5"]].forEach(function(s){var p=s[0],q=s[1],v=[q[0]-p[0],q[1]-p[1]],nv=[-v[1],v[0]],mm=mid(p,q);if(dist([mm[0]+nv[0]*0.01,mm[1]+nv[1]*0.01],s[2])<dist(mm,s[2]))nv=[v[1],-v[0]];var c=[mm[0]+nv[0]/2,mm[1]+nv[1]/2-15/1.6];g.names.push({v:c,t:s[3]});});return render(g,"Squares on the sides of a 3, 4, 5 triangle",[320,320]);},
+    hyp:function(){return render(rtTri0(4,3,["a","b","c"]),"The hypotenuse c is opposite the right angle",[260,190]);},
+    proof:function(){var Cc=[0,0],B=[220,0],A=[0,150],Dd=foot(A,B,Cc),g=G();
+      g.tris.push([Cc,B,A]);L(g,Cc,B);L(g,B,A);L(g,A,Cc);L(g,Cc,Dd);MB(g,Cc,B,A,"rt");MB(g,Dd,B,Cc,"rt");names(g,[A,B,Cc],"ABC");NM(g,Dd,"D",Cc);return render(g,"Right-angled triangle ABC with the perpendicular CD",[280,200]);},
+    ex1:function(){return render(ladder(2.5,6,["2.5 m",0,"6.5 m"]),"A 6.5 m ladder against a wall",[230,230]);},
+    ex2:function(){return render(rtTri0(21,20,["21 cm","20 cm","29 cm"],"QRP"),"Triangle PQR",[250,200]);},
+    ex3:function(){return render(isoFig(3.2,2,["3.2 m","2 m",0]),"Front of a tent",[280,200]);},
+    ex4:function(){return render(rectFig(80,60,["80 m","60 m",0]),"A rectangular field",[250,190]);}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="ladder"?75:80;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?"<p class='ft'>"+esc(q.frame||"")+"</p>"+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="ladder"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="ladder"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{G:G,L:L,M:M,MB:MB,T:T,LEN:LEN,NM:NM,POLY:POLY,pt:pt,render:render,rtTri:rtTri,rtTri0:rtTri0,ladder:ladder,rectFig:rectFig,isoFig:isoFig,sqOn:sqOn,lerp:lerp,mid:mid,cen:cen,FIX:FIX}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<main id="main">
+<style>
+.frame .ft{font-size:16px;font-weight:700;margin:0 0 8px}
+.figs .note svg{max-width:260px}
+.exam .ef{max-width:none;margin:8px 0}
+.exam svg.pf{max-width:280px}
+.pf2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.box3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.box3 .note b.h{display:block;margin-bottom:4px}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Ladder Lab</h1>
+        <p>Find the hypotenuse and the shorter sides of right-angled triangles, test whether a triangle is right-angled, and use Pythagoras' theorem for ladders, screens, fields and journeys. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="ladder"><div><b>Ladder Lab</b><span>Find the hypotenuse, spot it, square roots, ladders</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="short"><div><b>Shorter sides</b><span>Subtract the squares, ladder heights, which calculation, spot the mistake</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="conv"><div><b>Is it right-angled?</b><span>The converse (Theorem 15), Pythagorean triples, the builder's check</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Real-life Pythagoras</b><span>Screens, gates, isosceles triangles, shortcuts, journeys, sliding ladders</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Ladder Lab, every 5 in a row gives you 3 bonus seconds. Keep a calculator handy for the square roots. The diagrams are drawn to scale, but in the exam they usually aren't: use the numbers, not a ruler.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.3b, GT.3e, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Pythagoras' theorem</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>This right-angled triangle has sides 3, 4 and 5. A square is drawn on each side, split into little unit squares.</p>
+        <div class="ef" data-fig="pattern"></div>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">How many little squares are in the square on the side 3? On the side 4? On the side 5?</li>
+          <li class="note">What do you notice about the two smaller squares and the big one?</li>
+          <li class="note">Try it with a triangle that has NO right angle. Does it still work?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The squares hold <b>9</b>, <b>16</b> and <b>25</b> little squares, and 9 + 16 = 25. The two smaller squares together make exactly the big square on the longest side. This works for <b>every right-angled triangle</b> and <b>only</b> for right-angled triangles: that's Pythagoras' theorem.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The hypotenuse</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="hyp"></div>The <b>hypotenuse</b> is the side <b>opposite the right angle</b>. It is always the <b>longest</b> side. Find it first in every question.</div>
+          <div class="note"><b>Pythagoras' theorem (Theorem 14):</b> in a right-angled triangle, the square of the hypotenuse is the sum of the squares of the other two sides.<br><span style="font-size:20px;font-weight:800">c² = a² + b²</span><br>It's in the <i>Formulae and Tables</i> booklet, but you need to know which side is c.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Finding a side</h3>
+        <div class="box3">
+          <div class="note"><b class="h">The hypotenuse: ADD</b>Legs 5 and 12:<br>c² = 5² + 12² = 25 + 144 = 169<br>c = √169 = <b>13</b></div>
+          <div class="note"><b class="h">A shorter side: SUBTRACT</b>Hypotenuse 13, one side 5:<br>a² = 13² − 5² = 169 − 25 = 144<br>a = √144 = <b>12</b></div>
+          <div class="note"><b class="h">Then the square root</b>√ at the end, every time. If it isn't a whole number, round as the question says: √52 = 7.211… = <b>7.2</b> (1 d.p.).</div>
+        </div>
+        <div class="note" style="margin-top:8px"><b>Sense check:</b> the hypotenuse must be longer than both other sides, and a shorter side must be shorter than the hypotenuse. If your "shorter side" comes out longer than the hypotenuse, you added when you should have subtracted.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Square roots without a calculator</h3>
+        <p>Learn the squares 1² = 1 up to 15² = 225. Then you can say where a square root lies: 50 is between 7² = 49 and 8² = 64, so <b>√50 is between 7 and 8</b> (just over 7).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Is it right-angled? (Theorem 15, the converse)</h3>
+        <p>If the square of the longest side equals the sum of the squares of the other two, the triangle <b>is</b> right-angled, and the right angle is <b>opposite the longest side</b>.</p>
+        <ul>
+          <li>8, 15, 17: 8² + 15² = 64 + 225 = 289 = 17². <b>Right-angled.</b></li>
+          <li>6, 9, 11: 6² + 9² = 36 + 81 = 117, but 11² = 121. <b>Not right-angled.</b></li>
+          <li><b>Pythagorean triples</b> are whole numbers that work: 3, 4, 5 · 5, 12, 13 · 8, 15, 17 · 7, 24, 25 · 20, 21, 29. Any multiple works too: 6, 8, 10 · 9, 12, 15.</li>
+          <li><b>The builder's check:</b> measure 3 m along one wall and 4 m along the other. If the gap is exactly 5 m, the corner is square. A longer gap means the angle is more than 90°, a shorter one less.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Pythagoras in real life</h3>
+        <ul>
+          <li><b>Ladders:</b> the ladder is the hypotenuse, the wall and the ground are the other two sides.</li>
+          <li><b>Rectangles:</b> a diagonal cuts a rectangle into two right-angled triangles. The diagonal is the hypotenuse (TV screens are measured along the diagonal).</li>
+          <li><b>Isosceles triangles:</b> the height cuts the base exactly in half. Use <b>half the base</b>, not the whole base.</li>
+          <li><b>Journeys:</b> north then east (or any two directions at right angles): the straight-line distance back is the hypotenuse.</li>
+          <li>Draw a sketch, mark the right angle, label the hypotenuse, then decide: add or subtract?</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Why it's true</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="proof"></div></div>
+          <div class="note">Draw the perpendicular from C to [AB]. It makes two smaller triangles, and each one is <b>similar</b> to the big triangle ABC (they share an angle and each has a right angle). Similar triangles have sides in proportion, which gives |BC|² = |AB| × |BD| and |AC|² = |AB| × |AD|. Add them: |BC|² + |AC|² = |AB| × (|BD| + |AD|) = |AB|². You won't be asked to write this proof out, but you should understand how it works.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Adding the sides (5 + 12 = 17) instead of the squares. √(a² + b²) is <b>never</b> a + b.</li>
+          <li>Forgetting the square root at the end (writing 169 instead of 13).</li>
+          <li>Adding when you need a shorter side: always subtract from the <b>hypotenuse²</b>.</li>
+          <li>Using the whole base of an isosceles triangle instead of half.</li>
+          <li>Rounding too early: keep the full calculator value until the last step.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Pythagoras turns up on both levels, often inside a bigger question: a ladder or a ramp, the diagonal of a rectangle, the height of an isosceles triangle before you find its area, the slant height of a cone, or a distance on a grid. Expect to <b>find a missing side</b>, to <b>show that a triangle is right-angled</b> using the converse, and to <b>give an answer to a stated number of decimal places</b>.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the formula with the numbers in it.</b> "x² = 6.5² − 2.5²" earns marks even if you slip with the calculator.</li>
+            <li><b>Round only at the end</b>, and to the accuracy the question asks for.</li>
+            <li><b>Units.</b> Give the answer in m or cm, as in the question.</li>
+            <li><b>"Show that" questions need the working.</b> For the converse, write both sides out: 20² + 21² = 841 and 29² = 841.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>A ladder.</b> A 6.5 m ladder leans against a vertical wall with its foot 2.5 m from the wall, on level ground. (a) How high up the wall does the ladder reach? (b) The top of the ladder slides down until it is 5.2 m above the ground. How far is the foot of the ladder from the wall now? (c) How far did the foot move?
+              <div class="ef" data-fig="ex1"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The ladder is the hypotenuse: h² = 6.5² − 2.5² = 42.25 − 6.25 = 36, so h = <b>6 m</b>.<br>(b) d² = 6.5² − 5.2² = 42.25 − 27.04 = 15.21, so d = √15.21 = <b>3.9 m</b>.<br>(c) 3.9 − 2.5 = <b>1.4 m</b>.</p></details></li>
+            <li><b>Is it right-angled?</b> The triangle PQR has |PQ| = 20 cm, |QR| = 21 cm and |PR| = 29 cm. (a) Show that the triangle is right-angled. (b) Which angle is the right angle? Give a reason. (c) Seán says a triangle with sides 8 cm, 15 cm and 16 cm is also right-angled. Is he right? Show your working.
+              <div class="ef" data-fig="ex2"></div>
+              <details><summary>Show the worked answer</summary><p>(a) 20² + 21² = 400 + 441 = 841 and 29² = 841. They are equal, so by the converse of Pythagoras' theorem (Theorem 15) the triangle is right-angled.<br>(b) <b>∠PQR</b>: the right angle is opposite the longest side [PR].<br>(c) 8² + 15² = 64 + 225 = 289, but 16² = 256. They are not equal, so <b>no</b>, it is not right-angled (8, 15, <b>17</b> would be).</p></details></li>
+            <li><b>A tent.</b> The front of a tent is an isosceles triangle with a base of 3.2 m and two equal sides of 2 m. (a) Find the height of the tent. (b) Find the area of the front of the tent.
+              <div class="ef" data-fig="ex3"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The height cuts the base in half: 3.2 ÷ 2 = 1.6 m. h² = 2² − 1.6² = 4 − 2.56 = 1.44, so h = <b>1.2 m</b>.<br>(b) Area = ½ × base × height = ½ × 3.2 × 1.2 = <b>1.92 m²</b>.</p></details></li>
+            <li><b>A shortcut.</b> A rectangular field is 80 m long and 60 m wide. (a) Ciara walks along two sides of the field, from one corner to the opposite corner. How far does she walk? (b) Seán walks straight across the diagonal. How far does he walk? (c) Aoife worked out (b) like this: "60 + 80 = 140, √140 = 11.8 m". What did she do wrong?
+              <div class="ef" data-fig="ex4"></div>
+              <details><summary>Show the worked answer</summary><p>(a) 80 + 60 = <b>140 m</b>.<br>(b) d² = 80² + 60² = 6400 + 3600 = 10,000, so d = √10,000 = <b>100 m</b>. (Seán saves 40 m.)<br>(c) She added the <b>sides</b> instead of the <b>squares</b> of the sides. Her answer can't be right: a diagonal of 11.8 m is shorter than both sides of the field.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/pythagoras-right-angled-triangles-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Pythagoras Teacher Pack (€5)</a>: Ladder Lab mingle cards, Triangle Swap A/B cards, Pythagoras Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
