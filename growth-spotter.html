@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Growth Spotter: Quadratic &amp; Exponential Patterns Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: spot linear, quadratic and exponential patterns, 1st and 2nd differences, growing tile patterns, doubling and tripling. Rules, exam-style questions and a printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.nw{white-space:nowrap}svg.tiles{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:4px}.ft{border-collapse:collapse;margin:8px auto 0;min-width:0;width:auto;background:#fff;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}.ft td,table.ft th{border:2px solid var(--line);padding:5px 10px;text-align:center}.ft th{color:var(--ink);text-transform:none;background:var(--mist,#F3F6F9)}.t3{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.t3 .note b.h{display:block;font-size:17px;margin-bottom:2px}.dt{font:700 17px/1.6 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto;margin:8px 0;max-width:100%;white-space:pre}.dt .r{color:var(--muted);font-weight:600}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Growth Spotter</h1>
+        <p>Linear, quadratic or exponential? Spot how a pattern grows. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spot"><div><b>Growth Spotter</b><span>3, 6, 11, 18 … linear, quadratic or exponential?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="diff"><div><b>Differences</b><span>1st and 2nd differences, missing terms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pics"><div><b>Growing tiles</b><span>How many tiles in stage 10?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="grow"><div><b>Double &amp; triple</b><span>🦠 Doubles every hour</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>Tₙ = an² + bn + c</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Growth Spotter, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.1a, AF.1b, AF.1c, N.4, U.4, U.11 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Patterns 2: quadratic &amp; exponential</h2>
+        <p>Straight-line (linear) patterns are on <a href="pattern-builder.html">Pattern Builder</a>. Graphs of these functions are on <a href="graph-match.html">Graph Match</a>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+<div class="dt">1    4    9    16    25
+   3    5    7     9
+     2    2    2</div>
+        <p style="margin:0;color:var(--muted);font-size:15px">Row 2: 1st differences (the jumps). Row 3: 2nd differences (how the jumps change).</p>
+        <p style="margin-top:8px">Now try these the same way. What changes by the same amount?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>2, 5, 10, 17, 26, …</b></li>
+          <li class="note"><b>3, 6, 12, 24, 48, …</b></li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">2, 5, 10, 17, 26: jumps 3, 5, 7, 9 → 2nd differences 2, 2, 2. <b>Quadratic.</b> (It's n² + 1.)<br>
+          3, 6, 12, 24, 48: jumps 3, 6, 12, 24 — they double too! Each term is <b>× 2</b>. <b>Exponential.</b></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Three kinds of pattern</h3>
+        <div class="t3">
+          <div class="note"><b class="h">Linear</b>5, 8, 11, 14<br>Same jump: <b>+3</b> every time.<br>Graph: a straight line.</div>
+          <div class="note"><b class="h">Quadratic</b>3, 6, 11, 18<br>Jumps 3, 5, 7 → same <b>2nd difference</b> (+2).<br>Graph: a curve (∪).</div>
+          <div class="note"><b class="h">Exponential</b>3, 6, 12, 24<br>Same <b>multiplier</b>: × 2 (doubling) or × 3 (tripling).<br>Graph: flat, then shoots up.</div>
+        </div>
+        <p style="margin-top:8px"><b>Next term of a quadratic:</b> 3, 6, 11, 18, ? Jumps 3, 5, 7, so the next jump is 9. 18 + 9 = <b>27</b>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Growing tile patterns</h3>
+        <div data-fig="sq"></div>
+        <p>Stage n = a square of n × n tiles + 2 yellow tiles. Count: 3, 6, 11, … Rule: <b>n² + 2</b>.<br>Stage 10 = 10 × 10 + 2 = <b>102</b>. (Not 10 × stage 1!)</p>
+        <div data-fig="rect"></div>
+        <p>Stage n = n rows of (n + 1). Count: 2, 6, 12, … Rule: <b>n(n + 1)</b> = n² + n.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Doubling and tripling</h3>
+        <div data-fig="dbl"></div>
+        <p>1, 2, 4, 8, … each stage is <b>× 2</b>. Tripling: 1, 3, 9, 27, … each stage is <b>× 3</b>.</p>
+        <ul>
+          <li>🦠 Start 50, doubles every hour. After 3 hours: 50 × 2 × 2 × 2 = 50 × 2³ = <b>400</b>.</li>
+          <li>Rules: 2, 4, 8, 16 → <b>Tₙ = 2ⁿ</b>. &nbsp;3, 9, 27, 81 → <b>Tₙ = 3ⁿ</b>.</li>
+          <li>Don't mix them up: <span class="nw">2n</span> (2, 4, 6, 8) ≠ <span class="nw">n²</span> (1, 4, 9, 16) ≠ <span class="nw">2ⁿ</span> (2, 4, 8, 16).</li>
+          <li>Doubling starts slowly but in the end beats any linear pattern.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> Finding Tₙ = an² + bn + c</h3>
+<p>4, 11, 22, 37, … 1st differences 7, 11, 15. 2nd differences 4, 4 → <b>2a = 4, so a = 2</b>.</p>
+        <table class="ft"><tr><th>n</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Tₙ</th><td>4</td><td>11</td><td>22</td><td>37</td></tr><tr><th>2n²</th><td>2</td><td>8</td><td>18</td><td>32</td></tr><tr><th>Tₙ − 2n²</th><td>2</td><td>3</td><td>4</td><td>5</td></tr></table>
+        <p style="margin-top:8px">The last row goes up by 1: it's <b>n + 1</b>.</p>
+        <p>So <b>Tₙ = 2n² + n + 1</b>. Check n = 2: 8 + 2 + 1 = 11 ✓</p>
+        <ul>
+          <li><b>a = half the 2nd difference.</b></li>
+          <li>Take away an². What's left is linear → bn + c.</li>
+          <li>"Which term is 211?" Solve 2n² + n + 1 = 211 → n = 10.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>A pattern question: a tile or matchstick picture, or a table. Continue it, say what kind of pattern it is (with a reason), and find a far-away term. Higher Level often asks for the general term.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the differences</b> (or the × number) as your reason. "It goes up" gets no marks.</li>
+            <li><b>Stage 10 ≠ 10 × stage 1.</b> Use the rule.</li>
+            <li><b>Check your rule</b> with two terms from the table.</li>
+            <li>Doubling: <b>× 2 each step</b>, not + 2.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Tiles.</b> The tile pattern in "Growing tile patterns" above has 3, 6, 11 tiles in stages 1, 2, 3. (a) How many tiles in stage 4? (b) Is the pattern linear, quadratic or exponential? Give a reason. (c) How many tiles in stage 10?
+              <details><summary>Show the worked answer</summary><p>(a) Jumps 3, 5 → next jump 7. 11 + 7 = <b>18</b>.<br>(b) 1st differences 3, 5, 7; 2nd differences 2, 2 (the same). <b>Quadratic.</b><br>(c) Stage n = n² + 2, so 10² + 2 = <b>102</b>.</p></details></li>
+            <li><b>Two plans.</b> Plan A: €100 in week 1, then €100 more each week (100, 200, 300, …). Plan B: €1 in week 1, doubling every week (1, 2, 4, …). (a) Find each amount in week 6. (b) In which week is Plan B first bigger than Plan A?
+              <details><summary>Show the worked answer</summary><p>(a) A: 100 × 6 = <b>€600</b>. B: 1, 2, 4, 8, 16, <b>€32</b>.<br>(b) B: 64, 128, 256, 512, 1024, 2048 (weeks 7–12). A: 700, … 1100, 1200. Week 11: 1024 &lt; 1100. Week 12: 2048 &gt; 1200. <b>Week 12.</b></p></details></li>
+            <li><b>Which is which?</b> Three patterns: A: 4, 7, 10, 13, 16. B: 2, 5, 10, 17, 26. C: 3, 9, 27, 81, 243. Which one is linear, which quadratic and which exponential? Give a reason for each.
+              <details><summary>Show the worked answer</summary><p>A: same jump +3 → <b>linear</b>.<br>B: jumps 3, 5, 7, 9, 2nd differences 2, 2, 2 → <b>quadratic</b>.<br>C: × 3 each time → <b>exponential</b> (tripling).</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> The pattern 4, 11, 22, 37, … is quadratic. (a) Find Tₙ in the form an² + bn + c. (b) Which term is 211?
+              <details><summary>Show the worked answer</summary><p>(a) 2nd difference 4, so a = 2. Tₙ − 2n² = 2, 3, 4, 5 = n + 1. <b>Tₙ = 2n² + n + 1</b>.<br>(b) 2n² + n + 1 = 211 → 2n² + n − 210 = 0 → (2n + 21)(n − 10) = 0 → <b>n = 10</b> (n can't be negative). Check: 200 + 10 + 1 = 211 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/quadratic-exponential-patterns-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Quadratic &amp; Exponential Patterns Teacher Pack (€5)</a>: Growth Match mingle cards, Pattern Swap A/B cards, Pattern Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var v;do{v=ri(a,b);}while(v===0);return v;}
+  var M="−";
+  function n_(x){x=Math.round(x*1e6)/1e6;return x<0?M+(-x):String(x);}
+  var SUB="₀₁₂₃₄₅₆₇₈₉";
+  function sub(k){return String(k).split("").map(function(d){return SUB[+d];}).join("");}
+  function T_(k){return "T"+sub(k);}
+  function tm(k,v,first){if(k===0)return "";var a=Math.abs(k),s=(a===1&&v?"":String(a))+v;
+    if(first)return (k<0?M:"")+s;return (k<0?" "+M+" ":" + ")+s;}
+  /* an² + bn + c in n */
+  function qr(a,b,c){var T=[[a,"n²"],[b,"n"],[c,""]].filter(function(t){return t[0]!==0;});if(!T.length)return "0";
+    return T.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");}
+  function ex(c,r){return (c===1?"":c+" × ")+r+"ⁿ";}
+  function seqS(arr){return arr.map(function(v){return v==="?"?"?":n_(v);}).join(", ")+(arr[arr.length-1]==="?"?"":", …");}
+  function EQ(s){return '<div class="eqs"><p class="e" data-e="1">'+s+'</p></div>';}
+  function terms(f,k,from){var o=[];for(var n=from||1;n<(from||1)+k;n++)o.push(f(n));return o;}
+  function diffs(a){var o=[];for(var i=1;i<a.length;i++)o.push(a[i]-a[i-1]);return o;}
+  /* numeric answer (whole numbers) */
+  function QI(en,ans,slips,why,html,data,pos){var seen={},w=[];seen[n_(ans)]=1;
+    slips.concat([ans+1,ans-1,ans+2,ans-2,ans*2]).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||(pos&&x<1))return;var s=n_(x);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:n_(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+n_(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+ans,data:data||{}};}
+  var TYPES=["Linear","Quadratic","Exponential"];
+  function q3(en,ans,why,html,data){data.n3=1;return C(en,ans,TYPES.filter(function(s){return s!==ans;}),why,html,data);}
+
+  /* ---------- pattern makers ---------- */
+  function genLin(){var d=nz(-6,9),a=d>0?ri(-3,12):ri(30,60);return {k:0,f:function(n){return a+d*(n-1);},d:d};}
+  function genQuad(big){var a=big?rnd([1,1,2,2,3]):rnd([1,1,1,2]),b=ri(-3,5),c=ri(-2,8);
+    if(a+b<=0)b=1-a+ri(0,3); /* terms go up from n = 1 */
+    return {k:1,a:a,b:b,c:c,f:function(n){return a*n*n+b*n+c;},s:qr(a,b,c)};}
+  function genExp(){var r=rnd([2,2,3]),c=r===2?rnd([1,2,3,5]):rnd([1,2]);return {k:2,r:r,c:c,f:function(n){return c*Math.pow(r,n-1);}};}
+  function gen(k){return k===0?genLin():k===1?genQuad():genExp();}
+  function typeWhy(P,arr){var d=diffs(arr);
+    if(P.k===0)return "Same jump every time ("+(d[0]<0?n_(d[0]):"+"+d[0])+"): linear.";
+    if(P.k===1)return "Jumps "+d.map(n_).join(", ")+" go up by "+n_(d[1]-d[0])+" each time (same 2nd difference): quadratic.";
+    return "× "+P.r+" every time: exponential.";}
+
+  /* ---------- tile pictures: every tile is <rect class="t"> inside <g data-stage> ---------- */
+  var COL={g:"#9BD3AE",y:"#F6CF5A",b:"#A9C4E8"};
+  var PICS={
+    sqk:{k:1,why:function(p){return "Stage n = an n × n square + "+p.e+" yellow: n² + "+p.e+".";},cells:function(n,p){var o=[],i,j;for(i=0;i<n;i++)for(j=0;j<n;j++)o.push([i,j,"g"]);for(i=0;i<p.e;i++)o.push([n+0.3,i,"y"]);return o;}},
+    rect:{k:1,why:function(){return "Stage n = n rows of (n + 1): n(n + 1) = n² + n.";},cells:function(n){var o=[];for(var i=0;i<n+1;i++)for(var j=0;j<n;j++)o.push([i,j,"b"]);return o;}},
+    big:{k:1,why:function(){return "Stage n = a square with sides n + 1: (n + 1)².";},cells:function(n){var o=[];for(var i=0;i<n+1;i++)for(var j=0;j<n+1;j++)o.push([i,j,"g"]);return o;}},
+    stairs:{k:1,why:function(){return "Stage n = 1 + 2 + … + n tiles. Jumps 2, 3, 4 … so add one more each time.";},cells:function(n){var o=[];for(var i=0;i<n;i++)for(var j=0;j<=i;j++)o.push([i,j,"y"]);return o;}},
+    lin:{k:0,why:function(p){return "Each stage adds "+p.r+" tiles (same jump): linear.";},cells:function(n,p){var o=[],i,j;for(j=0;j<p.e;j++)o.push([0,j,"y"]);for(i=0;i<n;i++)for(j=0;j<p.r;j++)o.push([i+1,j,"g"]);return o;}},
+    dbl:{k:2,why:function(p){return "× "+p.r+" every stage: exponential.";},cells:function(n,p){var N=p.c*Math.pow(p.r,n-1),cols=Math.ceil(Math.sqrt(N)),o=[];for(var i=0;i<N;i++)o.push([i%cols,Math.floor(i/cols),"b"]);return o;}}
+  };
+  function count(P,n){return PICS[P.kind].cells(n,P).length;}
+  function newPic(kinds){var kind=rnd(kinds),P={kind:kind,k:PICS[kind].k};
+    if(kind==="sqk")P.e=ri(1,4);
+    if(kind==="lin"){P.r=ri(2,3);P.e=ri(1,3);}
+    if(kind==="dbl"){P.r=rnd([2,2,3]);P.c=P.r===2?rnd([1,2,3]):1;}
+    return P;}
+  function picSVG(P,stages){var u=10,x0=6,o="",H=0,S=[];
+    stages.forEach(function(n){var c=PICS[P.kind].cells(n,P),w=0,h=0;c.forEach(function(t){w=Math.max(w,t[0]+1);h=Math.max(h,t[1]+1);});if(P.kind==="sqk"){w=n+1.3;h=Math.max(n,P.e);}S.push([n,c,w,h]);H=Math.max(H,h);});
+    var base=8+H*u;
+    S.forEach(function(s){var n=s[0],w=Math.max(s[2],2.6),ox=x0+(w-s[2])*u/2;o+='<g data-stage="'+n+'">';
+      s[1].forEach(function(t){o+='<rect class="t" x="'+(ox+t[0]*u)+'" y="'+(base-(t[1]+1)*u)+'" width="'+(u-1)+'" height="'+(u-1)+'" fill="'+COL[t[2]]+'" stroke="#1B2430" stroke-width=".8"/>';});
+      o+='</g><text x="'+(x0+w*u/2)+'" y="'+(base+14)+'" font-size="10" font-weight="700" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">'+n+'</text>';x0+=w*u+16;});
+    var W=x0-10;
+    return '<svg class="tiles" viewBox="0 0 '+W+' '+(base+20)+'" style="max-width:'+Math.min(360,Math.round(W*1.5))+'px" role="img" aria-label="Tile pattern, stages '+stages.join(", ")+'">'+o+'</svg>';}
+
+  /* ================= GROWTH SPOTTER ================= */
+  function qType(){var k=ri(0,2),P=gen(k),arr=terms(P.f,5);
+    return q3("Linear, quadratic or exponential?",TYPES[k],typeWhy(P,arr),EQ(seqS(arr)),{t:"type",rv:seqS(arr)});}
+  function qNextQ(){var P=genQuad(),a=terms(P.f,5),ans=a[4],s=a.slice(0,4).concat(["?"]),d=diffs(a);
+    return QI("Next term?",ans,[a[3]+d[2],a[3]+2*P.a,2*a[3],ans+2*P.a,ans-P.a],
+      "Jumps "+d.slice(0,3).map(n_).join(", ")+" → next jump "+n_(d[3])+". "+n_(a[3])+" + "+n_(d[3])+" = "+n_(ans)+".",EQ(seqS(s)),{t:"nextq",rv:seqS(s)});}
+  function qNextE(){var P=genExp(),a=terms(P.f,5),ans=a[4],s=a.slice(0,4).concat(["?"]);
+    return QI("Next term?",ans,[a[3]+(a[3]-a[2]),a[3]*(P.r===2?3:2),ans+a[3],a[3]+a[2]],
+      "× "+P.r+" every time: "+n_(a[3])+" × "+P.r+" = "+n_(ans)+".",EQ(seqS(s)),{t:"nexte",rv:seqS(s)},true);}
+
+  /* ================= DIFFERENCES ================= */
+  function qSecond(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a);
+    return QI("2nd difference?",2*P.a,[P.a,d[0],d[1],2*P.a+1,4*P.a],
+      "1st differences "+d.map(n_).join(", ")+". They go up by "+(2*P.a)+" each time.",EQ(seqS(a)),{t:"second",rv:seqS(a)},true);}
+  function qFirst(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a),ans=d.map(n_).join(", "),pool=[];
+    pool.push(d.map(function(x,i){return n_(i===2?x+1:x);}).join(", "));
+    pool.push(d.map(function(x){return n_(x+P.a);}).join(", "));
+    pool.push(a.slice(1).map(function(x,i){return n_(x+a[i]);}).join(", "));
+    pool.push(d.slice(0,3).map(function(x){return n_(x);}).concat([n_(d[2]+d[2]-d[1]+1)]).join(", "));
+    pool.push(d.map(function(x,i){return n_(d[0]+i*(d[1]-d[0]+1));}).join(", "));
+    return C("1st differences?",ans,pool.filter(function(s){return s!==ans;}),"Take each term from the next one: "+a.slice(1).map(function(x,i){return n_(x)+" "+M+" "+n_(a[i]);}).join(", ")+".",EQ(seqS(a)),{t:"first",rv:seqS(a)});}
+  function qGap(){var P=genQuad(true),a=terms(P.f,5),g=ri(1,3),ans=a[g],s=a.map(function(v,i){return i===g?"?":v;});
+    return QI("Missing term?",ans,[(a[g-1]+a[g+1])/2,ans+1,ans-1,ans+2*P.a,ans-2*P.a],
+      "Jumps must go up by "+(2*P.a)+" each time: "+diffs(a).map(n_).join(", ")+". So the missing term is "+n_(ans)+".",EQ(seqS(s)),{t:"gap",rv:seqS(s)});}
+  function qEvalQ(){var P=genQuad(),k=ri(4,10),ans=P.f(k),w=(P.a===1?"":P.a+" × ")+k+"²"+(P.b?(P.b<0?" "+M+" ":" + ")+(Math.abs(P.b)===1?"":Math.abs(P.b)+" × ")+k:"")+(P.c?(P.c<0?" "+M+" ":" + ")+Math.abs(P.c):"");
+    return QI("Find "+T_(k)+".",ans,[P.a*2*k+P.b*k+P.c,P.f(k-1),P.f(k+1),(P.a*k)*(P.a*k)+P.b*k+P.c],
+      "Put n = "+k+": "+w+" = "+n_(ans)+".",EQ("Tₙ = "+P.s),{t:"evalq",k:k,rv:"Tₙ = "+P.s});}
+
+  /* ================= GROWING PICTURES ================= */
+  var QK=["sqk","rect","big","stairs"];
+  function qPicNext(){var P=newPic(QK.concat(["dbl","dbl"])),k=P.kind==="dbl"?5:rnd([5,5,6]),ans=count(P,k),c=[1,2,3,4].map(function(n){return count(P,n);}),d=diffs(c);
+    return QI("Tiles in stage "+k+"?",ans,[c[3]+d[2],2*c[3],c[3]+d[2]+1,count(P,k+1),count(P,k-1)],
+      PICS[P.kind].why(P)+" Stage "+k+": "+ans+".",picSVG(P,[1,2,3,4]),{t:"picnext",k:k,rv:"stages 1–4: "+c.join(", ")},true);}
+  function qPicFar(){var P=newPic(["sqk","sqk","rect","big"]),k=rnd([8,10,10,12,20]),ans=count(P,k),c=[1,2,3,4].map(function(n){return count(P,n);});
+    return QI("Tiles in stage "+k+"?",ans,[k*c[0],c[3]+(k-4)*(c[3]-c[2]),k*k,(k+1)*(k+1),k*(k+1),2*k+(c[0]-2)],
+      PICS[P.kind].why(P)+" Stage "+k+": "+ans+".",picSVG(P,[1,2,3,4]),{t:"picfar",k:k,rv:"stages 1–4: "+c.join(", ")},true);}
+  function qPicType(){var P=newPic(["sqk","rect","big","stairs","lin","lin","dbl","dbl"]),c=[1,2,3,4].map(function(n){return count(P,n);});
+    return q3("Linear, quadratic or exponential?",TYPES[P.k],"Counts "+c.join(", ")+". "+typeWhy(P.kind==="dbl"?{k:2,r:P.r}:{k:P.k},c),picSVG(P,[1,2,3,4]),{t:"pictype",rv:"stages 1–4: "+c.join(", ")});}
+
+  /* ================= DOUBLING & TRIPLING ================= */
+  var LIFE=[["🦠","Bacteria double every hour.",2,"hour",[10,20,25,50,100]],["📱","Followers double every week.",2,"week",[5,15,30,40]],["🐇","Rabbits double every month.",2,"month",[4,6,10]],["📨","Shares triple every day.",3,"day",[2,4,5,10]],["🌿","Weeds triple every week.",3,"week",[3,5,8]]];
+  function qLife(){var L=rnd(LIFE),r=L[2],S=rnd(L[4]),k=r===2?ri(3,6):ri(2,4),ans=S*Math.pow(r,k);
+    return QI(L[0]+" "+L[1]+" Start: "+S+". After "+k+" "+L[3]+"s?",ans,[S*r*k,S*Math.pow(r,k-1),S*Math.pow(r,k+1),S+S*(r-1)*k,S*Math.pow(r===2?3:2,k)],
+      S+" "+Array(k+1).join("× "+r+" ")+"= "+S+" × "+r+(k>1?sup(k):"")+" = "+ans+".","",{t:"life",k:k},true);}
+  function sup(k){return String(k).split("").map(function(d){return "⁰¹²³⁴⁵⁶⁷⁸⁹"[+d];}).join("");}
+  function qWhen(){var L=rnd(LIFE),r=L[2],S=rnd(L[4]),k=r===2?ri(3,7):ri(2,5),lo=S*Math.pow(r,k-1),hi=S*Math.pow(r,k),X;
+    var step=hi-lo>=200?100:hi-lo>=40?10:hi-lo>=10?5:1;X=Math.ceil((lo+1)/step)*step;if(X>=hi)X=lo+1;
+    var list=[];for(var i=0;i<=k;i++)list.push(S*Math.pow(r,i));
+    return QI(L[0]+" "+L[1]+" Start: "+S+". First "+L[3]+" over "+X+"?",k,[k-1,k+1,Math.ceil((X-S)/(S*(r-1))),k+2],
+      list.join(" → ")+". "+L[3].charAt(0).toUpperCase()+L[3].slice(1)+" "+k+": "+hi+" > "+X+".","",{t:"when"},true);}
+  function evR(s,n){var m=s.match(/^Tₙ = (?:(\d+) × )?(\d+)ⁿ$/);if(m)return (m[1]?+m[1]:1)*Math.pow(+m[2],n);
+    m=s.match(/^Tₙ = (\d*)n(²|³)?(?: ([+−]) (\d+))?$/);if(m){var v=(m[1]?+m[1]:1)*Math.pow(n,m[2]==="²"?2:m[2]==="³"?3:1);if(m[3])v+=(m[3]==="+"?1:-1)*(+m[4]);return v;}return NaN;}
+  function tblR(vals){return '<table class="ft"><tr><th>n</th>'+vals.map(function(v,i){return "<td>"+(i+1)+"</td>";}).join("")+'</tr><tr><th>Tₙ</th>'+vals.map(function(v){return "<td>"+n_(v)+"</td>";}).join("")+'</tr></table>';}
+  function qExpRule(){var r=rnd([2,2,3]),c=r===2?rnd([1,1,3,5]):rnd([1,1,2]),ans="Tₙ = "+ex(c,r),vals=[1,2,3,4].map(function(n){return c*Math.pow(r,n);});
+    var pool=["Tₙ = "+r+"n","Tₙ = n²","Tₙ = n³","Tₙ = "+(r===2?3:2)+"ⁿ","Tₙ = "+ex(c*r,r),"Tₙ = "+(c*r)+"n","Tₙ = "+(c*r*r)+"n "+M+" "+(c*r*r-c*r),"Tₙ = n² + "+(c*r-1)];
+    pool=pool.filter(function(s){return s!==ans&&!vals.every(function(v,i){return evR(s,i+1)===v;});});
+    return C("Which rule?",ans,pool,"× "+r+" each time"+(c>1?", starting from "+c+" × "+r:"")+": "+vals.join(", ")+".",tblR(vals),{t:"exprule",rv:vals.join(", ")});}
+
+  /* ================= HIGHER LEVEL ================= */
+  function qRuleQ(){var P=genQuad(true),a=terms(P.f,4),ans="Tₙ = "+P.s,d=diffs(a),pool=[];
+    [[2*P.a,P.b,P.c],[P.a,P.b+1,P.c-1],[P.a,P.b,P.c+1],[P.a,-P.b,P.c],[P.a,P.b+2*P.a,P.c-P.a],[0,d[0],a[0]-d[0]],[P.a,0,a[0]-P.a],[P.a+1,P.b-3,P.c+2]].forEach(function(t){
+      if(t[0]===P.a&&t[1]===P.b&&t[2]===P.c)return;var same=[1,2,3,4].every(function(n){return t[0]*n*n+t[1]*n+t[2]===P.f(n);});if(!same)pool.push("Tₙ = "+qr(t[0],t[1],t[2]));});
+    var rest=[1,2,3,4].map(function(n){return P.f(n)-P.a*n*n;});
+    return C("Which rule?",ans,pool,"2nd difference "+(2*P.a)+" → "+P.a+"n². Tₙ "+M+" "+(P.a===1?"":P.a)+"n² = "+rest.map(n_).join(", ")+" → "+(qr(0,P.b,P.c))+".",EQ(seqS(a)),{t:"ruleq",rv:seqS(a)});}
+  function qFindA(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a);
+    return QI("Tₙ = an² + bn + c. Find a.",P.a,[2*P.a,d[0],P.a+1,4*P.a],"2nd difference = "+(2*P.a)+" = 2a, so a = "+P.a+".",EQ(seqS(a)),{t:"finda",rv:seqS(a)},true);}
+  function qWhichT(){var P,k,X,ok;do{P=genQuad(true);k=ri(6,15);X=P.f(k);ok=true;for(var m=1;m<40;m++)if(m!==k&&P.f(m)===X)ok=false;}while(!ok);
+    return QI("Which term is "+X+"?",k,[k-1,k+1,Math.round(Math.sqrt(X)),Math.round(Math.sqrt(X/P.a))+1,Math.round(X/(P.a+P.b+P.c))],
+      "Solve "+P.s+" = "+X+": n = "+k+". Check "+T_(k)+" = "+X+" ✓",EQ("Tₙ = "+P.s),{t:"whicht",rv:"Tₙ = "+P.s},true);}
+  function qPicRule(){var P=newPic(["sqk","rect","big","stairs"]),c=[1,2,3,4].map(function(n){return count(P,n);});
+    var R={sqk:"Tₙ = n² + "+P.e,rect:"Tₙ = n² + n",big:"Tₙ = (n + 1)²",stairs:"Tₙ = ½n(n + 1)"},ans=R[P.kind];
+    var pool=["Tₙ = n²","Tₙ = 2n","Tₙ = n² + 1","Tₙ = n² + 2","Tₙ = n² + 3","Tₙ = n² + n","Tₙ = (n + 1)²","Tₙ = ½n(n + 1)","Tₙ = 2ⁿ","Tₙ = n(n + 2)","Tₙ = "+qr(0,c[1]-c[0],2*c[0]-c[1])];
+    var ev=function(s,n){var e=s.replace("Tₙ = ","");if(e==="2ⁿ")return Math.pow(2,n);if(e==="½n(n + 1)")return n*(n+1)/2;if(e==="(n + 1)²")return (n+1)*(n+1);if(e==="n(n + 2)")return n*(n+2);
+      var m=e.match(/^n²(?: \+ (n|\d+))?$/);if(m)return n*n+(m[1]==="n"?n:m[1]?+m[1]:0);m=e.match(/^(\d*)n(?: ([+−]) (\d+))?$/);if(m)return (m[1]?+m[1]:1)*n+(m[2]?(m[2]==="+"?1:-1)*m[3]:0);return NaN;};
+    pool=pool.filter(function(s){return s!==ans&&![1,2,3,4].every(function(n){return ev(s,n)===c[n-1];});});
+    return C("Which rule?",ans,pool,PICS[P.kind].why(P),picSVG(P,[1,2,3,4]),{t:"picrule",rv:"stages 1–4: "+c.join(", ")});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spot:[qType,qType,qNextQ,qNextQ,qNextE],
+    diff:[qSecond,qFirst,qGap,qEvalQ],
+    pics:[qPicNext,qPicNext,qPicFar,qPicType],
+    grow:[qLife,qLife,qWhen,qExpRule],
+    hl:[qRuleQ,qRuleQ,qFindA,qWhichT,qPicRule],
+    mixed:[]
+  };
+  ["spot","diff","pics","grow","hl"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* fixed pictures in the rules and the Exam corner */
+  var FIX={sq:function(){return picSVG({kind:"sqk",k:1,e:2},[1,2,3]);},rect:function(){return picSVG({kind:"rect",k:1},[1,2,3]);},dbl:function(){return picSVG({kind:"dbl",k:2,r:2,c:1},[1,2,3,4]);}};
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="spot"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.data.n3?2:3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spot"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spot"&&streak%5===0?700:350):3200);
+  }
+  function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc2(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc2(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc2(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{picSVG:picSVG,count:count,PICS:PICS,FIX:FIX}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

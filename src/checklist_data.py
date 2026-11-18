@@ -70,7 +70,7 @@ MATHS = [
   ("3rd year","Spring","Volume & surface area (3D solids & nets)","GT.2b, GT.2d, GT.2e","Pack It","pack-it.html","volume-surface-area-nets"),
   ("3rd year","Spring","Inequalities","AF.4, AF.7c","Number-Line Shade","number-line-shade.html","inequalities"),
   ("3rd year","Spring","Algebraic fractions, long division & changing the subject","AF.3a, AF.3c, AF.6","Rearrange Race","rearrange-race.html","algebraic-fractions-changing-the-subject"),
-  ("3rd year","Spring","Patterns 2: quadratic & exponential","AF.1a, AF.1b, AF.1c, N.4","Growth Spotter","",""),
+  ("3rd year","Spring","Patterns 2: quadratic & exponential","AF.1a, AF.1b, AF.1c, N.4","Growth Spotter","growth-spotter.html","quadratic-exponential-patterns"),
   ("3rd year","Spring","Surds","N.1b","Surd Simplify","",""),
   ("3rd year","Summer","Problem solving & exam mix","U.5–U.10, U.13","Exam Mix","",""),
 ]

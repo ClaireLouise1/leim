@@ -1,0 +1,234 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var v;do{v=ri(a,b);}while(v===0);return v;}
+  var M="−";
+  function n_(x){x=Math.round(x*1e6)/1e6;return x<0?M+(-x):String(x);}
+  var SUB="₀₁₂₃₄₅₆₇₈₉";
+  function sub(k){return String(k).split("").map(function(d){return SUB[+d];}).join("");}
+  function T_(k){return "T"+sub(k);}
+  function tm(k,v,first){if(k===0)return "";var a=Math.abs(k),s=(a===1&&v?"":String(a))+v;
+    if(first)return (k<0?M:"")+s;return (k<0?" "+M+" ":" + ")+s;}
+  /* an² + bn + c in n */
+  function qr(a,b,c){var T=[[a,"n²"],[b,"n"],[c,""]].filter(function(t){return t[0]!==0;});if(!T.length)return "0";
+    return T.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");}
+  function ex(c,r){return (c===1?"":c+" × ")+r+"ⁿ";}
+  function seqS(arr){return arr.map(function(v){return v==="?"?"?":n_(v);}).join(", ")+(arr[arr.length-1]==="?"?"":", …");}
+  function EQ(s){return '<div class="eqs"><p class="e" data-e="1">'+s+'</p></div>';}
+  function terms(f,k,from){var o=[];for(var n=from||1;n<(from||1)+k;n++)o.push(f(n));return o;}
+  function diffs(a){var o=[];for(var i=1;i<a.length;i++)o.push(a[i]-a[i-1]);return o;}
+  /* numeric answer (whole numbers) */
+  function QI(en,ans,slips,why,html,data,pos){var seen={},w=[];seen[n_(ans)]=1;
+    slips.concat([ans+1,ans-1,ans+2,ans-2,ans*2]).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||(pos&&x<1))return;var s=n_(x);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:n_(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+n_(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en+(data&&data.rv?" ("+data.rv+")":"")+" → "+ans,data:data||{}};}
+  var TYPES=["Linear","Quadratic","Exponential"];
+  function q3(en,ans,why,html,data){data.n3=1;return C(en,ans,TYPES.filter(function(s){return s!==ans;}),why,html,data);}
+
+  /* ---------- pattern makers ---------- */
+  function genLin(){var d=nz(-6,9),a=d>0?ri(-3,12):ri(30,60);return {k:0,f:function(n){return a+d*(n-1);},d:d};}
+  function genQuad(big){var a=big?rnd([1,1,2,2,3]):rnd([1,1,1,2]),b=ri(-3,5),c=ri(-2,8);
+    if(a+b<=0)b=1-a+ri(0,3); /* terms go up from n = 1 */
+    return {k:1,a:a,b:b,c:c,f:function(n){return a*n*n+b*n+c;},s:qr(a,b,c)};}
+  function genExp(){var r=rnd([2,2,3]),c=r===2?rnd([1,2,3,5]):rnd([1,2]);return {k:2,r:r,c:c,f:function(n){return c*Math.pow(r,n-1);}};}
+  function gen(k){return k===0?genLin():k===1?genQuad():genExp();}
+  function typeWhy(P,arr){var d=diffs(arr);
+    if(P.k===0)return "Same jump every time ("+(d[0]<0?n_(d[0]):"+"+d[0])+"): linear.";
+    if(P.k===1)return "Jumps "+d.map(n_).join(", ")+" go up by "+n_(d[1]-d[0])+" each time (same 2nd difference): quadratic.";
+    return "× "+P.r+" every time: exponential.";}
+
+  /* ---------- tile pictures: every tile is <rect class="t"> inside <g data-stage> ---------- */
+  var COL={g:"#9BD3AE",y:"#F6CF5A",b:"#A9C4E8"};
+  var PICS={
+    sqk:{k:1,why:function(p){return "Stage n = an n × n square + "+p.e+" yellow: n² + "+p.e+".";},cells:function(n,p){var o=[],i,j;for(i=0;i<n;i++)for(j=0;j<n;j++)o.push([i,j,"g"]);for(i=0;i<p.e;i++)o.push([n+0.3,i,"y"]);return o;}},
+    rect:{k:1,why:function(){return "Stage n = n rows of (n + 1): n(n + 1) = n² + n.";},cells:function(n){var o=[];for(var i=0;i<n+1;i++)for(var j=0;j<n;j++)o.push([i,j,"b"]);return o;}},
+    big:{k:1,why:function(){return "Stage n = a square with sides n + 1: (n + 1)².";},cells:function(n){var o=[];for(var i=0;i<n+1;i++)for(var j=0;j<n+1;j++)o.push([i,j,"g"]);return o;}},
+    stairs:{k:1,why:function(){return "Stage n = 1 + 2 + … + n tiles. Jumps 2, 3, 4 … so add one more each time.";},cells:function(n){var o=[];for(var i=0;i<n;i++)for(var j=0;j<=i;j++)o.push([i,j,"y"]);return o;}},
+    lin:{k:0,why:function(p){return "Each stage adds "+p.r+" tiles (same jump): linear.";},cells:function(n,p){var o=[],i,j;for(j=0;j<p.e;j++)o.push([0,j,"y"]);for(i=0;i<n;i++)for(j=0;j<p.r;j++)o.push([i+1,j,"g"]);return o;}},
+    dbl:{k:2,why:function(p){return "× "+p.r+" every stage: exponential.";},cells:function(n,p){var N=p.c*Math.pow(p.r,n-1),cols=Math.ceil(Math.sqrt(N)),o=[];for(var i=0;i<N;i++)o.push([i%cols,Math.floor(i/cols),"b"]);return o;}}
+  };
+  function count(P,n){return PICS[P.kind].cells(n,P).length;}
+  function newPic(kinds){var kind=rnd(kinds),P={kind:kind,k:PICS[kind].k};
+    if(kind==="sqk")P.e=ri(1,4);
+    if(kind==="lin"){P.r=ri(2,3);P.e=ri(1,3);}
+    if(kind==="dbl"){P.r=rnd([2,2,3]);P.c=P.r===2?rnd([1,2,3]):1;}
+    return P;}
+  function picSVG(P,stages){var u=10,x0=6,o="",H=0,S=[];
+    stages.forEach(function(n){var c=PICS[P.kind].cells(n,P),w=0,h=0;c.forEach(function(t){w=Math.max(w,t[0]+1);h=Math.max(h,t[1]+1);});if(P.kind==="sqk"){w=n+1.3;h=Math.max(n,P.e);}S.push([n,c,w,h]);H=Math.max(H,h);});
+    var base=8+H*u;
+    S.forEach(function(s){var n=s[0],w=Math.max(s[2],2.6),ox=x0+(w-s[2])*u/2;o+='<g data-stage="'+n+'">';
+      s[1].forEach(function(t){o+='<rect class="t" x="'+(ox+t[0]*u)+'" y="'+(base-(t[1]+1)*u)+'" width="'+(u-1)+'" height="'+(u-1)+'" fill="'+COL[t[2]]+'" stroke="#1B2430" stroke-width=".8"/>';});
+      o+='</g><text x="'+(x0+w*u/2)+'" y="'+(base+14)+'" font-size="10" font-weight="700" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">'+n+'</text>';x0+=w*u+16;});
+    var W=x0-10;
+    return '<svg class="tiles" viewBox="0 0 '+W+' '+(base+20)+'" style="max-width:'+Math.min(360,Math.round(W*1.5))+'px" role="img" aria-label="Tile pattern, stages '+stages.join(", ")+'">'+o+'</svg>';}
+
+  /* ================= GROWTH SPOTTER ================= */
+  function qType(){var k=ri(0,2),P=gen(k),arr=terms(P.f,5);
+    return q3("Linear, quadratic or exponential?",TYPES[k],typeWhy(P,arr),EQ(seqS(arr)),{t:"type",rv:seqS(arr)});}
+  function qNextQ(){var P=genQuad(),a=terms(P.f,5),ans=a[4],s=a.slice(0,4).concat(["?"]),d=diffs(a);
+    return QI("Next term?",ans,[a[3]+d[2],a[3]+2*P.a,2*a[3],ans+2*P.a,ans-P.a],
+      "Jumps "+d.slice(0,3).map(n_).join(", ")+" → next jump "+n_(d[3])+". "+n_(a[3])+" + "+n_(d[3])+" = "+n_(ans)+".",EQ(seqS(s)),{t:"nextq",rv:seqS(s)});}
+  function qNextE(){var P=genExp(),a=terms(P.f,5),ans=a[4],s=a.slice(0,4).concat(["?"]);
+    return QI("Next term?",ans,[a[3]+(a[3]-a[2]),a[3]*(P.r===2?3:2),ans+a[3],a[3]+a[2]],
+      "× "+P.r+" every time: "+n_(a[3])+" × "+P.r+" = "+n_(ans)+".",EQ(seqS(s)),{t:"nexte",rv:seqS(s)},true);}
+
+  /* ================= DIFFERENCES ================= */
+  function qSecond(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a);
+    return QI("2nd difference?",2*P.a,[P.a,d[0],d[1],2*P.a+1,4*P.a],
+      "1st differences "+d.map(n_).join(", ")+". They go up by "+(2*P.a)+" each time.",EQ(seqS(a)),{t:"second",rv:seqS(a)},true);}
+  function qFirst(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a),ans=d.map(n_).join(", "),pool=[];
+    pool.push(d.map(function(x,i){return n_(i===2?x+1:x);}).join(", "));
+    pool.push(d.map(function(x){return n_(x+P.a);}).join(", "));
+    pool.push(a.slice(1).map(function(x,i){return n_(x+a[i]);}).join(", "));
+    pool.push(d.slice(0,3).map(function(x){return n_(x);}).concat([n_(d[2]+d[2]-d[1]+1)]).join(", "));
+    pool.push(d.map(function(x,i){return n_(d[0]+i*(d[1]-d[0]+1));}).join(", "));
+    return C("1st differences?",ans,pool.filter(function(s){return s!==ans;}),"Take each term from the next one: "+a.slice(1).map(function(x,i){return n_(x)+" "+M+" "+n_(a[i]);}).join(", ")+".",EQ(seqS(a)),{t:"first",rv:seqS(a)});}
+  function qGap(){var P=genQuad(true),a=terms(P.f,5),g=ri(1,3),ans=a[g],s=a.map(function(v,i){return i===g?"?":v;});
+    return QI("Missing term?",ans,[(a[g-1]+a[g+1])/2,ans+1,ans-1,ans+2*P.a,ans-2*P.a],
+      "Jumps must go up by "+(2*P.a)+" each time: "+diffs(a).map(n_).join(", ")+". So the missing term is "+n_(ans)+".",EQ(seqS(s)),{t:"gap",rv:seqS(s)});}
+  function qEvalQ(){var P=genQuad(),k=ri(4,10),ans=P.f(k),w=(P.a===1?"":P.a+" × ")+k+"²"+(P.b?(P.b<0?" "+M+" ":" + ")+(Math.abs(P.b)===1?"":Math.abs(P.b)+" × ")+k:"")+(P.c?(P.c<0?" "+M+" ":" + ")+Math.abs(P.c):"");
+    return QI("Find "+T_(k)+".",ans,[P.a*2*k+P.b*k+P.c,P.f(k-1),P.f(k+1),(P.a*k)*(P.a*k)+P.b*k+P.c],
+      "Put n = "+k+": "+w+" = "+n_(ans)+".",EQ("Tₙ = "+P.s),{t:"evalq",k:k,rv:"Tₙ = "+P.s});}
+
+  /* ================= GROWING PICTURES ================= */
+  var QK=["sqk","rect","big","stairs"];
+  function qPicNext(){var P=newPic(QK.concat(["dbl","dbl"])),k=P.kind==="dbl"?5:rnd([5,5,6]),ans=count(P,k),c=[1,2,3,4].map(function(n){return count(P,n);}),d=diffs(c);
+    return QI("Tiles in stage "+k+"?",ans,[c[3]+d[2],2*c[3],c[3]+d[2]+1,count(P,k+1),count(P,k-1)],
+      PICS[P.kind].why(P)+" Stage "+k+": "+ans+".",picSVG(P,[1,2,3,4]),{t:"picnext",k:k,rv:"stages 1–4: "+c.join(", ")},true);}
+  function qPicFar(){var P=newPic(["sqk","sqk","rect","big"]),k=rnd([8,10,10,12,20]),ans=count(P,k),c=[1,2,3,4].map(function(n){return count(P,n);});
+    return QI("Tiles in stage "+k+"?",ans,[k*c[0],c[3]+(k-4)*(c[3]-c[2]),k*k,(k+1)*(k+1),k*(k+1),2*k+(c[0]-2)],
+      PICS[P.kind].why(P)+" Stage "+k+": "+ans+".",picSVG(P,[1,2,3,4]),{t:"picfar",k:k,rv:"stages 1–4: "+c.join(", ")},true);}
+  function qPicType(){var P=newPic(["sqk","rect","big","stairs","lin","lin","dbl","dbl"]),c=[1,2,3,4].map(function(n){return count(P,n);});
+    return q3("Linear, quadratic or exponential?",TYPES[P.k],"Counts "+c.join(", ")+". "+typeWhy(P.kind==="dbl"?{k:2,r:P.r}:{k:P.k},c),picSVG(P,[1,2,3,4]),{t:"pictype",rv:"stages 1–4: "+c.join(", ")});}
+
+  /* ================= DOUBLING & TRIPLING ================= */
+  var LIFE=[["🦠","Bacteria double every hour.",2,"hour",[10,20,25,50,100]],["📱","Followers double every week.",2,"week",[5,15,30,40]],["🐇","Rabbits double every month.",2,"month",[4,6,10]],["📨","Shares triple every day.",3,"day",[2,4,5,10]],["🌿","Weeds triple every week.",3,"week",[3,5,8]]];
+  function qLife(){var L=rnd(LIFE),r=L[2],S=rnd(L[4]),k=r===2?ri(3,6):ri(2,4),ans=S*Math.pow(r,k);
+    return QI(L[0]+" "+L[1]+" Start: "+S+". After "+k+" "+L[3]+"s?",ans,[S*r*k,S*Math.pow(r,k-1),S*Math.pow(r,k+1),S+S*(r-1)*k,S*Math.pow(r===2?3:2,k)],
+      S+" "+Array(k+1).join("× "+r+" ")+"= "+S+" × "+r+(k>1?sup(k):"")+" = "+ans+".","",{t:"life",k:k},true);}
+  function sup(k){return String(k).split("").map(function(d){return "⁰¹²³⁴⁵⁶⁷⁸⁹"[+d];}).join("");}
+  function qWhen(){var L=rnd(LIFE),r=L[2],S=rnd(L[4]),k=r===2?ri(3,7):ri(2,5),lo=S*Math.pow(r,k-1),hi=S*Math.pow(r,k),X;
+    var step=hi-lo>=200?100:hi-lo>=40?10:hi-lo>=10?5:1;X=Math.ceil((lo+1)/step)*step;if(X>=hi)X=lo+1;
+    var list=[];for(var i=0;i<=k;i++)list.push(S*Math.pow(r,i));
+    return QI(L[0]+" "+L[1]+" Start: "+S+". First "+L[3]+" over "+X+"?",k,[k-1,k+1,Math.ceil((X-S)/(S*(r-1))),k+2],
+      list.join(" → ")+". "+L[3].charAt(0).toUpperCase()+L[3].slice(1)+" "+k+": "+hi+" > "+X+".","",{t:"when"},true);}
+  function evR(s,n){var m=s.match(/^Tₙ = (?:(\d+) × )?(\d+)ⁿ$/);if(m)return (m[1]?+m[1]:1)*Math.pow(+m[2],n);
+    m=s.match(/^Tₙ = (\d*)n(²|³)?(?: ([+−]) (\d+))?$/);if(m){var v=(m[1]?+m[1]:1)*Math.pow(n,m[2]==="²"?2:m[2]==="³"?3:1);if(m[3])v+=(m[3]==="+"?1:-1)*(+m[4]);return v;}return NaN;}
+  function tblR(vals){return '<table class="ft"><tr><th>n</th>'+vals.map(function(v,i){return "<td>"+(i+1)+"</td>";}).join("")+'</tr><tr><th>Tₙ</th>'+vals.map(function(v){return "<td>"+n_(v)+"</td>";}).join("")+'</tr></table>';}
+  function qExpRule(){var r=rnd([2,2,3]),c=r===2?rnd([1,1,3,5]):rnd([1,1,2]),ans="Tₙ = "+ex(c,r),vals=[1,2,3,4].map(function(n){return c*Math.pow(r,n);});
+    var pool=["Tₙ = "+r+"n","Tₙ = n²","Tₙ = n³","Tₙ = "+(r===2?3:2)+"ⁿ","Tₙ = "+ex(c*r,r),"Tₙ = "+(c*r)+"n","Tₙ = "+(c*r*r)+"n "+M+" "+(c*r*r-c*r),"Tₙ = n² + "+(c*r-1)];
+    pool=pool.filter(function(s){return s!==ans&&!vals.every(function(v,i){return evR(s,i+1)===v;});});
+    return C("Which rule?",ans,pool,"× "+r+" each time"+(c>1?", starting from "+c+" × "+r:"")+": "+vals.join(", ")+".",tblR(vals),{t:"exprule",rv:vals.join(", ")});}
+
+  /* ================= HIGHER LEVEL ================= */
+  function qRuleQ(){var P=genQuad(true),a=terms(P.f,4),ans="Tₙ = "+P.s,d=diffs(a),pool=[];
+    [[2*P.a,P.b,P.c],[P.a,P.b+1,P.c-1],[P.a,P.b,P.c+1],[P.a,-P.b,P.c],[P.a,P.b+2*P.a,P.c-P.a],[0,d[0],a[0]-d[0]],[P.a,0,a[0]-P.a],[P.a+1,P.b-3,P.c+2]].forEach(function(t){
+      if(t[0]===P.a&&t[1]===P.b&&t[2]===P.c)return;var same=[1,2,3,4].every(function(n){return t[0]*n*n+t[1]*n+t[2]===P.f(n);});if(!same)pool.push("Tₙ = "+qr(t[0],t[1],t[2]));});
+    var rest=[1,2,3,4].map(function(n){return P.f(n)-P.a*n*n;});
+    return C("Which rule?",ans,pool,"2nd difference "+(2*P.a)+" → "+P.a+"n². Tₙ "+M+" "+(P.a===1?"":P.a)+"n² = "+rest.map(n_).join(", ")+" → "+(qr(0,P.b,P.c))+".",EQ(seqS(a)),{t:"ruleq",rv:seqS(a)});}
+  function qFindA(){var P=genQuad(true),a=terms(P.f,5),d=diffs(a);
+    return QI("Tₙ = an² + bn + c. Find a.",P.a,[2*P.a,d[0],P.a+1,4*P.a],"2nd difference = "+(2*P.a)+" = 2a, so a = "+P.a+".",EQ(seqS(a)),{t:"finda",rv:seqS(a)},true);}
+  function qWhichT(){var P,k,X,ok;do{P=genQuad(true);k=ri(6,15);X=P.f(k);ok=true;for(var m=1;m<40;m++)if(m!==k&&P.f(m)===X)ok=false;}while(!ok);
+    return QI("Which term is "+X+"?",k,[k-1,k+1,Math.round(Math.sqrt(X)),Math.round(Math.sqrt(X/P.a))+1,Math.round(X/(P.a+P.b+P.c))],
+      "Solve "+P.s+" = "+X+": n = "+k+". Check "+T_(k)+" = "+X+" ✓",EQ("Tₙ = "+P.s),{t:"whicht",rv:"Tₙ = "+P.s},true);}
+  function qPicRule(){var P=newPic(["sqk","rect","big","stairs"]),c=[1,2,3,4].map(function(n){return count(P,n);});
+    var R={sqk:"Tₙ = n² + "+P.e,rect:"Tₙ = n² + n",big:"Tₙ = (n + 1)²",stairs:"Tₙ = ½n(n + 1)"},ans=R[P.kind];
+    var pool=["Tₙ = n²","Tₙ = 2n","Tₙ = n² + 1","Tₙ = n² + 2","Tₙ = n² + 3","Tₙ = n² + n","Tₙ = (n + 1)²","Tₙ = ½n(n + 1)","Tₙ = 2ⁿ","Tₙ = n(n + 2)","Tₙ = "+qr(0,c[1]-c[0],2*c[0]-c[1])];
+    var ev=function(s,n){var e=s.replace("Tₙ = ","");if(e==="2ⁿ")return Math.pow(2,n);if(e==="½n(n + 1)")return n*(n+1)/2;if(e==="(n + 1)²")return (n+1)*(n+1);if(e==="n(n + 2)")return n*(n+2);
+      var m=e.match(/^n²(?: \+ (n|\d+))?$/);if(m)return n*n+(m[1]==="n"?n:m[1]?+m[1]:0);m=e.match(/^(\d*)n(?: ([+−]) (\d+))?$/);if(m)return (m[1]?+m[1]:1)*n+(m[2]?(m[2]==="+"?1:-1)*m[3]:0);return NaN;};
+    pool=pool.filter(function(s){return s!==ans&&![1,2,3,4].every(function(n){return ev(s,n)===c[n-1];});});
+    return C("Which rule?",ans,pool,PICS[P.kind].why(P),picSVG(P,[1,2,3,4]),{t:"picrule",rv:"stages 1–4: "+c.join(", ")});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spot:[qType,qType,qNextQ,qNextQ,qNextE],
+    diff:[qSecond,qFirst,qGap,qEvalQ],
+    pics:[qPicNext,qPicNext,qPicFar,qPicType],
+    grow:[qLife,qLife,qWhen,qExpRule],
+    hl:[qRuleQ,qRuleQ,qFindA,qWhichT,qPicRule],
+    mixed:[]
+  };
+  ["spot","diff","pics","grow","hl"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* fixed pictures in the rules and the Exam corner */
+  var FIX={sq:function(){return picSVG({kind:"sqk",k:1,e:2},[1,2,3]);},rect:function(){return picSVG({kind:"rect",k:1},[1,2,3]);},dbl:function(){return picSVG({kind:"dbl",k:2,r:2,c:1},[1,2,3,4]);}};
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="spot"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.data.n3?2:3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spot"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spot"&&streak%5===0?700:350):3200);
+  }
+  function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc2(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc2(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc2(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{picSVG:picSVG,count:count,PICS:PICS,FIX:FIX}};
+})();
+</script>

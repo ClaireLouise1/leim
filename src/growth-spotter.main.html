@@ -1,0 +1,148 @@
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.nw{white-space:nowrap}svg.tiles{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:4px}.ft{border-collapse:collapse;margin:8px auto 0;min-width:0;width:auto;background:#fff;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}.ft td,table.ft th{border:2px solid var(--line);padding:5px 10px;text-align:center}.ft th{color:var(--ink);text-transform:none;background:var(--mist,#F3F6F9)}.t3{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.t3 .note b.h{display:block;font-size:17px;margin-bottom:2px}.dt{font:700 17px/1.6 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto;margin:8px 0;max-width:100%;white-space:pre}.dt .r{color:var(--muted);font-weight:600}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Growth Spotter</h1>
+        <p>Linear, quadratic or exponential? Spot how a pattern grows. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spot"><div><b>Growth Spotter</b><span>3, 6, 11, 18 … linear, quadratic or exponential?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="diff"><div><b>Differences</b><span>1st and 2nd differences, missing terms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pics"><div><b>Growing tiles</b><span>How many tiles in stage 10?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="grow"><div><b>Double &amp; triple</b><span>🦠 Doubles every hour</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>Tₙ = an² + bn + c</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Growth Spotter, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.1a, AF.1b, AF.1c, N.4, U.4, U.11 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Patterns 2: quadratic &amp; exponential</h2>
+        <p>Straight-line (linear) patterns are on <a href="pattern-builder.html">Pattern Builder</a>. Graphs of these functions are on <a href="graph-match.html">Graph Match</a>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+<div class="dt">1    4    9    16    25
+   3    5    7     9
+     2    2    2</div>
+        <p style="margin:0;color:var(--muted);font-size:15px">Row 2: 1st differences (the jumps). Row 3: 2nd differences (how the jumps change).</p>
+        <p style="margin-top:8px">Now try these the same way. What changes by the same amount?</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>2, 5, 10, 17, 26, …</b></li>
+          <li class="note"><b>3, 6, 12, 24, 48, …</b></li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">2, 5, 10, 17, 26: jumps 3, 5, 7, 9 → 2nd differences 2, 2, 2. <b>Quadratic.</b> (It's n² + 1.)<br>
+          3, 6, 12, 24, 48: jumps 3, 6, 12, 24 — they double too! Each term is <b>× 2</b>. <b>Exponential.</b></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Three kinds of pattern</h3>
+        <div class="t3">
+          <div class="note"><b class="h">Linear</b>5, 8, 11, 14<br>Same jump: <b>+3</b> every time.<br>Graph: a straight line.</div>
+          <div class="note"><b class="h">Quadratic</b>3, 6, 11, 18<br>Jumps 3, 5, 7 → same <b>2nd difference</b> (+2).<br>Graph: a curve (∪).</div>
+          <div class="note"><b class="h">Exponential</b>3, 6, 12, 24<br>Same <b>multiplier</b>: × 2 (doubling) or × 3 (tripling).<br>Graph: flat, then shoots up.</div>
+        </div>
+        <p style="margin-top:8px"><b>Next term of a quadratic:</b> 3, 6, 11, 18, ? Jumps 3, 5, 7, so the next jump is 9. 18 + 9 = <b>27</b>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Growing tile patterns</h3>
+        <div data-fig="sq"></div>
+        <p>Stage n = a square of n × n tiles + 2 yellow tiles. Count: 3, 6, 11, … Rule: <b>n² + 2</b>.<br>Stage 10 = 10 × 10 + 2 = <b>102</b>. (Not 10 × stage 1!)</p>
+        <div data-fig="rect"></div>
+        <p>Stage n = n rows of (n + 1). Count: 2, 6, 12, … Rule: <b>n(n + 1)</b> = n² + n.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Doubling and tripling</h3>
+        <div data-fig="dbl"></div>
+        <p>1, 2, 4, 8, … each stage is <b>× 2</b>. Tripling: 1, 3, 9, 27, … each stage is <b>× 3</b>.</p>
+        <ul>
+          <li>🦠 Start 50, doubles every hour. After 3 hours: 50 × 2 × 2 × 2 = 50 × 2³ = <b>400</b>.</li>
+          <li>Rules: 2, 4, 8, 16 → <b>Tₙ = 2ⁿ</b>. &nbsp;3, 9, 27, 81 → <b>Tₙ = 3ⁿ</b>.</li>
+          <li>Don't mix them up: <span class="nw">2n</span> (2, 4, 6, 8) ≠ <span class="nw">n²</span> (1, 4, 9, 16) ≠ <span class="nw">2ⁿ</span> (2, 4, 8, 16).</li>
+          <li>Doubling starts slowly but in the end beats any linear pattern.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> Finding Tₙ = an² + bn + c</h3>
+<p>4, 11, 22, 37, … 1st differences 7, 11, 15. 2nd differences 4, 4 → <b>2a = 4, so a = 2</b>.</p>
+        <table class="ft"><tr><th>n</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Tₙ</th><td>4</td><td>11</td><td>22</td><td>37</td></tr><tr><th>2n²</th><td>2</td><td>8</td><td>18</td><td>32</td></tr><tr><th>Tₙ − 2n²</th><td>2</td><td>3</td><td>4</td><td>5</td></tr></table>
+        <p style="margin-top:8px">The last row goes up by 1: it's <b>n + 1</b>.</p>
+        <p>So <b>Tₙ = 2n² + n + 1</b>. Check n = 2: 8 + 2 + 1 = 11 ✓</p>
+        <ul>
+          <li><b>a = half the 2nd difference.</b></li>
+          <li>Take away an². What's left is linear → bn + c.</li>
+          <li>"Which term is 211?" Solve 2n² + n + 1 = 211 → n = 10.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>A pattern question: a tile or matchstick picture, or a table. Continue it, say what kind of pattern it is (with a reason), and find a far-away term. Higher Level often asks for the general term.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the differences</b> (or the × number) as your reason. "It goes up" gets no marks.</li>
+            <li><b>Stage 10 ≠ 10 × stage 1.</b> Use the rule.</li>
+            <li><b>Check your rule</b> with two terms from the table.</li>
+            <li>Doubling: <b>× 2 each step</b>, not + 2.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Tiles.</b> The tile pattern in "Growing tile patterns" above has 3, 6, 11 tiles in stages 1, 2, 3. (a) How many tiles in stage 4? (b) Is the pattern linear, quadratic or exponential? Give a reason. (c) How many tiles in stage 10?
+              <details><summary>Show the worked answer</summary><p>(a) Jumps 3, 5 → next jump 7. 11 + 7 = <b>18</b>.<br>(b) 1st differences 3, 5, 7; 2nd differences 2, 2 (the same). <b>Quadratic.</b><br>(c) Stage n = n² + 2, so 10² + 2 = <b>102</b>.</p></details></li>
+            <li><b>Two plans.</b> Plan A: €100 in week 1, then €100 more each week (100, 200, 300, …). Plan B: €1 in week 1, doubling every week (1, 2, 4, …). (a) Find each amount in week 6. (b) In which week is Plan B first bigger than Plan A?
+              <details><summary>Show the worked answer</summary><p>(a) A: 100 × 6 = <b>€600</b>. B: 1, 2, 4, 8, 16, <b>€32</b>.<br>(b) B: 64, 128, 256, 512, 1024, 2048 (weeks 7–12). A: 700, … 1100, 1200. Week 11: 1024 &lt; 1100. Week 12: 2048 &gt; 1200. <b>Week 12.</b></p></details></li>
+            <li><b>Which is which?</b> Three patterns: A: 4, 7, 10, 13, 16. B: 2, 5, 10, 17, 26. C: 3, 9, 27, 81, 243. Which one is linear, which quadratic and which exponential? Give a reason for each.
+              <details><summary>Show the worked answer</summary><p>A: same jump +3 → <b>linear</b>.<br>B: jumps 3, 5, 7, 9, 2nd differences 2, 2, 2 → <b>quadratic</b>.<br>C: × 3 each time → <b>exponential</b> (tripling).</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> The pattern 4, 11, 22, 37, … is quadratic. (a) Find Tₙ in the form an² + bn + c. (b) Which term is 211?
+              <details><summary>Show the worked answer</summary><p>(a) 2nd difference 4, so a = 2. Tₙ − 2n² = 2, 3, 4, 5 = n + 1. <b>Tₙ = 2n² + n + 1</b>.<br>(b) 2n² + n + 1 = 211 → 2n² + n − 210 = 0 → (2n + 21)(n − 10) = 0 → <b>n = 10</b> (n can't be negative). Check: 200 + 10 + 1 = 211 ✓</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/quadratic-exponential-patterns-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Quadratic &amp; Exponential Patterns Teacher Pack (€5)</a>: Growth Match mingle cards, Pattern Swap A/B cards, Pattern Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
