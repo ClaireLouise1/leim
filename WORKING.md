@@ -12,3 +12,4 @@ Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
 - 2026-11-18 20:50 · B2c JC Maths Exam Pack (mock papers) · maths-p
+- 2026-11-18 20:55 · E1 JC English curriculum map + tracker · english-e
