@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mirror Move: Transformations &amp; Symmetry Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: axial symmetry, central symmetry, translations and rotations on a coordinate grid, naming the transformation and axes of symmetry, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>svg.tg{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px}svg.tg .gl{stroke:#DCE3EA;stroke-width:.8}svg.tg .ax{stroke:#5B6775;stroke-width:1.4}svg.tg .tk{font:600 9.5px Inter,sans-serif;fill:#6B7785}svg.tg .axl{font:italic 700 12px Inter,sans-serif;fill:#5B6775}svg.tg .sp{stroke-width:2;stroke-linejoin:round}svg.tg .sp.ob{fill:rgba(46,125,87,.28);stroke:#2E7D57}svg.tg .sp.im{fill:rgba(41,98,166,.14);stroke:#2962A6}svg.tg .pn{font:800 12px Inter,sans-serif;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}svg.tg .mir{stroke:#C0392B;stroke-width:2;stroke-dasharray:6 4}svg.tg .ml{font:italic 800 14px Inter,sans-serif;fill:#C0392B;paint-order:stroke;stroke:#fff;stroke-width:3px}svg.tg .pt{fill:#1B2430}svg.tg .pt.cc{fill:#C0392B}svg.tg .pt.vp{fill:#7A4BB3}svg.tg .pl{font:800 12px Inter,sans-serif;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}svg.tg .vec{stroke:#7A4BB3;stroke-width:2.4}svg.tg .vh{fill:#7A4BB3}svg.tg .cell{fill:#fff;stroke:#B9C4CF;stroke-width:1}svg.tg .cell.on{fill:#2E7D57}svg.tg.sy .sp.ob{fill:#E8F3EC}svg.tg.sy .mir.dl{stroke-width:1.8}.frame svg.tg{margin-top:10px;max-width:420px}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.ef{max-width:330px;margin:6px auto}.ax4{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.ax4 .note{text-align:center}.exam .ef{max-width:none;margin:8px 0}.exam svg.tg .tk{font-size:11px}.exam svg.tg .pn,.exam svg.tg .pl{font-size:14px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Mirror Move</h1>
+        <p>Flip, slide and turn shapes on the grid against the clock. Find the image of a shape or a point under axial symmetry, central symmetry, translations and rotations, name the transformation, and spot the axes of symmetry. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="mirror"><div><b>Mirror Move</b><span>Axial symmetry: pick the mirror image of a shape, find the image of a point in the x-axis, the y-axis or a line m, and complete a symmetric pattern</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="moves"><div><b>Slides &amp; half turns</b><span>Translations (slides) and central symmetry (half turns through a point): images of shapes and points, arrows and describing the move</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="turns"><div><b>Rotations</b><span>Quarter turns clockwise and anticlockwise about a point, and naming the transformation that maps S onto S′</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="symmetry"><div><b>Axes of symmetry</b><span>How many axes does a shape have, which line is an axis, centres of symmetry and true-or-false facts</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. A sheet of tracing paper (or any thin paper) helps with turns, just like in class. In Mirror Move, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.6a, GT.6b (2018 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Transformations &amp; symmetry</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>S′ is the mirror image of triangle S in the y-axis. S has corners (1, 1), (4, 1) and (1, 3). Read off the corners of S′. What happens to the x-coordinate? What happens to the y-coordinate?</p>
+        <div class="ef" data-fig="patAx"></div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">S′ has corners (−1, 1), (−4, 1) and (−1, 3). The <b>x-coordinate changes sign</b> and the <b>y-coordinate stays the same</b>: (x, y) → (−x, y). Each corner is the same distance from the mirror line as before, just on the other side. Can you guess the rule for a mirror in the x-axis? (It's (x, y) → (x, −y).)</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The four transformations</h3>
+        <p>A <b>transformation</b> moves every point of a shape. The new shape is the <b>image</b> (we often call it S′, "S dash"). All four keep the shape and size exactly the same.</p>
+        <div class="ef" data-fig="ruleAll"></div>
+        <div class="fm">
+          <div class="note"><b class="h">Translation (slide)</b>Every point moves the same distance in the same direction. The shape is <b>not</b> turned or flipped. In the picture, S → T: 6 left and 2 up.</div>
+          <div class="note"><b class="h">Axial symmetry (mirror)</b>A reflection in a line (the axis). Each point and its image are the same distance from the line, on opposite sides, and the line joining them is at right angles to it. The shape is <b>flipped</b>. S → A: in the x-axis.</div>
+          <div class="note"><b class="h">Central symmetry (half turn)</b>A reflection through a point (the centre). Go from the point to the centre, then the same distance again. It is the same as a <b>rotation of 180°</b>: the shape ends up upside down, but not flipped. S → C: in (0, 0).</div>
+          <div class="note"><b class="h">Rotation (turn)</b>Turn every point through the same angle about a fixed point (the centre of rotation). A quarter turn is 90°, clockwise or anticlockwise. S → R: 90° anticlockwise about (0, 0).</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Coordinates: the quick rules</h3>
+        <div class="fm">
+          <div class="note"><b class="h">In the x-axis</b>(x, y) → (x, −y)<br>(3, 2) → (3, −2)</div>
+          <div class="note"><b class="h">In the y-axis</b>(x, y) → (−x, y)<br>(3, 2) → (−3, 2)</div>
+          <div class="note"><b class="h">In the origin (0, 0)</b>(x, y) → (−x, −y)<br>(3, 2) → (−3, −2)</div>
+          <div class="note"><b class="h">Translation</b>add the move: 4 right and 1 down<br>(3, 2) → (7, 1)</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li><b>A mirror line m that isn't an axis:</b> count the squares straight across to the line (at right angles to it), then the same number of squares on the other side. A point ON the line stays where it is.</li>
+          <li><b>Central symmetry in a point C:</b> count how far you go from the point to C (across and up), then go the same again. For P(1, 4) and C(2, 1): 1 right and 3 down gets you to C, so the image is 1 right and 3 down again: (3, −2).</li>
+          <li><b>A translation given by two points</b> (A → B, or an arrow): work out the move from A to B, then do the same move to every point.</li>
+          <li><b>Rotation of 90° about (0, 0):</b> anticlockwise (x, y) → (−y, x); clockwise (x, y) → (y, −x). Easier than memorising: trace the shape and the axes, put your pencil on the centre and turn the page a quarter turn.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Axes of symmetry and centres of symmetry</h3>
+        <p>An <b>axis of symmetry</b> of a shape is a line that folds the shape exactly onto itself (axial symmetry in that line leaves the shape where it was). A <b>centre of symmetry</b> is a point where a half turn fits the shape back onto itself.</p>
+        <div class="ef" style="max-width:220px" data-fig="ruleSq"></div>
+        <div class="ax4">
+          <div class="note"><b>Square</b><br>4 axes · centre ✓</div>
+          <div class="note"><b>Rectangle</b><br>2 axes · centre ✓</div>
+          <div class="note"><b>Rhombus</b><br>2 axes (the diagonals) · centre ✓</div>
+          <div class="note"><b>Parallelogram</b><br>0 axes · centre ✓</div>
+          <div class="note"><b>Kite</b><br>1 axis · no centre</div>
+          <div class="note"><b>Isosceles triangle</b><br>1 axis · no centre</div>
+          <div class="note"><b>Equilateral triangle</b><br>3 axes · no centre</div>
+          <div class="note"><b>Regular polygon, n sides</b><br>n axes · centre only if n is even</div>
+        </div>
+        <p style="margin-top:8px">A rectangle's diagonals are <b>not</b> axes of symmetry: fold a sheet of paper along its diagonal and the corners don't meet. The square is the only rectangle where they are.</p>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> changing the wrong sign (the x-axis keeps x and changes y); mixing up clockwise and anticlockwise; thinking central symmetry flips the shape (it turns it 180°); moving a translation the opposite way (A → B, not B → A); counting to a mirror line m along the grid instead of straight across at right angles; saying a rectangle or a parallelogram has 4 axes; forgetting that a point on the mirror line (or the centre) is its own image.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Transformations usually come as a <b>diagram on a grid</b> (often with the x- and y-axes) where you draw the image of a shape, write the coordinates of an image, or name the transformation that maps one shape onto another. Symmetry also turns up inside other questions: patterns, logos, letters and shapes, where you draw the axes of symmetry.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name it fully.</b> "Axial symmetry in the y-axis", "central symmetry in (0, 0)", "a rotation of 90° clockwise about (0, 0)", "a translation 3 right and 2 up". "A reflection" or "a turn" on its own loses marks.</li>
+            <li><b>Move the corners one at a time</b>, then join them up. Label the image (S′ or the letter asked for).</li>
+            <li><b>Use a ruler</b> for lines of symmetry and the sides of an image, and draw axes of symmetry right across the shape.</li>
+            <li><b>Check the image:</b> same shape, same size. Mirror images are flipped; translations aren't turned; half turns are upside down.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Moving K.</b> The quadrilateral K has corners (1, 2), (4, 2), (4, 4) and (2, 5).
+              <div class="ef" data-fig="ex1"></div>
+              (a) Write the coordinates of the corners of the image of K under axial symmetry in the x-axis. (b) Find the image of the point P(4, 4) under central symmetry in the origin. (c) K is moved by the translation 5 units left and 1 unit down. Write the coordinates of the corners of the image. (d) Find the image of P(4, 4) under a rotation of 90° anticlockwise about (0, 0).
+              <details><summary>Show the worked answer</summary><p>(a) Keep x, change the sign of y: <b>(1, −2), (4, −2), (4, −4), (2, −5)</b>.<br>(b) Change both signs: <b>(−4, −4)</b>.<br>(c) Subtract 5 from x and 1 from y: <b>(−4, 1), (−1, 1), (−1, 3), (−3, 4)</b>.<br>(d) (x, y) → (−y, x): <b>(−4, 4)</b>. Check with tracing paper: P is in the top-right quarter and a quarter turn anticlockwise takes it to the top-left quarter.</p></details></li>
+            <li><b>Name the move.</b> Shapes A, B, D and E are all images of the triangle S.
+              <div class="ef" data-fig="ex2"></div>
+              (a) Name the transformation that maps S onto each of A, B, D and E. (b) Which images are flipped over (mirror images of S)? (c) Ciara says D is the image of S under axial symmetry in the x-axis. Explain why she is wrong.
+              <details><summary>Show the worked answer</summary><p>(a) A: <b>a translation, 6 right and 5 down</b>. B: <b>axial symmetry in the y-axis</b>. D: <b>central symmetry in the origin</b> (a half turn). E: <b>a rotation of 90° clockwise about (0, 0)</b>.<br>(b) Only <b>B</b>. A is just slid; D and E are turned, not flipped.<br>(c) The image in the x-axis would stay on the <b>left</b>, below the x-axis: (−5, −1), (−2, −1), (−4, −3). D is on the right: its corners are (5, −1), (2, −1), (4, −3), which is what you get when <b>both</b> signs change. So D is the image under central symmetry in (0, 0).</p></details></li>
+            <li><b>Complete the pattern.</b> The line m is to be an axis of symmetry of this pattern.
+              <div class="ef" data-fig="ex3"></div>
+              (a) How many more squares must be shaded? (b) Shade them (or describe where they go). (c) How many axes of symmetry does a regular hexagon have? Does it have a centre of symmetry? (d) Draw a quadrilateral with exactly one axis of symmetry and no centre of symmetry, and name it.
+              <details><summary>Show the worked answer</summary><p>(a) <b>5</b> more squares.<br>(b) Each shaded square needs a shaded partner the same distance from m on the other side. Counting columns from the left and rows from the top, shade: column 8 row 1, column 5 row 2, column 7 row 3, column 6 row 4 and column 6 row 6.<br>(c) <b>6 axes</b> (3 through opposite corners, 3 through the middles of opposite sides), and <b>yes</b>, it has a centre of symmetry (a half turn fits it back on itself).<br>(d) A <b>kite</b> (or an isosceles trapezium): one axis, and a half turn does not fit it back on itself.</p></details></li>
+            <li><b>Two moves.</b> The point A is (3, −2). (a) Find A′, the image of A under axial symmetry in the y-axis. (b) Find A″, the image of A′ under central symmetry in the origin. (c) Which single transformation maps A straight onto A″? (d) A translation maps (2, −1) onto (−1, 3). Find the image of (0, 0) under this translation, and the point whose image is (0, 0).
+              <details><summary>Show the worked answer</summary><p>(a) <b>A′ = (−3, −2)</b>.<br>(b) Change both signs: <b>A″ = (3, 2)</b>.<br>(c) A(3, −2) → A″(3, 2) keeps x and changes the sign of y: <b>axial symmetry in the x-axis</b>.<br>(d) The move is 3 left and 4 up. (0, 0) → <b>(−3, 4)</b>. Working backwards (3 right and 4 down): <b>(3, −4)</b> maps onto (0, 0).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/transformations-symmetry-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Transformations &amp; Symmetry Teacher Pack (€5)</a>: Mirror Move mingle cards, Grid Swap A/B cards, Transformation Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function n_(x){return x<0?"−"+(-x):String(x);}
+  function cs(p){return "("+n_(p[0])+", "+n_(p[1])+")";}
+  function key(P){return P.map(function(p){return p[0]+","+p[1];}).sort().join(" ");}
+  function eqSet(A,B){return key(A)===key(B);}
+  function r2(x){return Math.round(x*100)/100;}
+  /* numeric question (whole numbers), wrong options never equal the answer, ≥ 0, no duplicates */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},w=[];seen[ans]=1;
+    slips.concat([ans+1,ans+2,ans-1,ans+3,ans-2]).forEach(function(x){if(x==null||!isFinite(x)||x<0||seen[x]||w.length>=3)return;seen[x]=1;w.push(String(x));});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  /* coordinate question: ans and slips are points; wrong options never the same point as the answer */
+  function QP(en,frame,ans,slips,why,html,data){var seen={},w=[],A=cs(ans);seen[A]=1;
+    slips.concat([[ans[0]+1,ans[1]],[ans[0],ans[1]-1],[ans[1],ans[0]],[-ans[0],ans[1]],[ans[0],-ans[1]]]).forEach(function(p){var s=cs(p);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:w,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+
+  /* ---------- transformations (exact, on lattice points) ---------- */
+  function TR(v){return {k:"tr",v:v,f:function(p){return [p[0]+v[0],p[1]+v[1]];}};}
+  function AX(L){return {k:"ax",L:L,f:function(p){var x=p[0],y=p[1];
+    if(L.t==="x")return [x,2*L.c-y];          // horizontal line y = c (c = 0: the x-axis)
+    if(L.t==="y")return [2*L.c-x,y];          // vertical line x = c (c = 0: the y-axis)
+    if(L.t==="d")return [y,x];                // y = x
+    return [-y,-x];}};}                        // y = −x
+  function CS(c){return {k:"cs",c:c,f:function(p){return [2*c[0]-p[0],2*c[1]-p[1]];}};}
+  function RO(c,cw){return {k:"ro",c:c,cw:cw,f:function(p){var dx=p[0]-c[0],dy=p[1]-c[1];return cw?[c[0]+dy,c[1]-dx]:[c[0]-dy,c[1]+dx];}};}
+  function img(T,P){return P.map(T.f);}
+  function inBox(P,R){return P.every(function(p){return Math.abs(p[0])<=R&&Math.abs(p[1])<=R;});}
+  function bb(P){var xs=P.map(function(p){return p[0];}),ys=P.map(function(p){return p[1];});return [Math.min.apply(null,xs),Math.min.apply(null,ys),Math.max.apply(null,xs),Math.max.apply(null,ys)];}
+  function apart(P,Q){var a=bb(P),b=bb(Q);return a[2]<=b[0]||b[2]<=a[0]||a[3]<=b[1]||b[3]<=a[1];}
+  function cen(P){var x=0,y=0;P.forEach(function(p){x+=p[0];y+=p[1];});return [x/P.length,y/P.length];}
+
+  /* a small shape with no symmetry (all sides different), vertices on grid points, in a 0..w × 0..h box */
+  function d2(a,b){return (a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1]);}
+  function shape(){
+    for(var t=0;t<500;t++){var n=Math.random()<.65?3:4,w=ri(2,3),h=ri(2,3),P=[],ok=true,i,j;
+      if(n===3)P=[[0,ri(0,h)],[w,ri(0,h)],[ri(0,w),rnd([0,h])]];
+      else P=[[0,ri(0,h-1)],[ri(1,w-1),0],[w,ri(1,h)],[ri(0,w-1),h]];
+      var k={};P.forEach(function(p){k[p]=1;});if(Object.keys(k).length<n)continue;
+      var c=cen(P);P.sort(function(a,b){return Math.atan2(a[1]-c[1],a[0]-c[0])-Math.atan2(b[1]-c[1],b[0]-c[0]);});
+      var A=0;for(i=0;i<n;i++){var a=P[i],b=P[(i+1)%n];A+=a[0]*b[1]-b[0]*a[1];}if(Math.abs(A)<4)continue;var mx=0;for(i=0;i<n;i++)mx=Math.max(mx,Math.sqrt(d2(P[i],P[(i+1)%n])));if(Math.abs(A)/mx<1.3)continue;
+      var L=[];for(i=0;i<n;i++)L.push(d2(P[i],P[(i+1)%n]));
+      for(i=0;i<n;i++)for(j=i+1;j<n;j++)if(L[i]===L[j])ok=false;
+      if(n===4){for(i=0;i<n;i++){var p=P[i],q=P[(i+1)%n],r=P[(i+2)%n];if((q[0]-p[0])*(r[1]-q[1])-(q[1]-p[1])*(r[0]-q[0])===0)ok=false;}
+        if(d2(P[0],P[2])===d2(P[1],P[3]))ok=false;}
+      if(!ok)continue;var b0=bb(P);return P.map(function(p){return [p[0]-b0[0],p[1]-b0[1]];});}
+    return [[0,0],[3,0],[1,2]];
+  }
+  function place(P,x,y){return P.map(function(p){return [p[0]+x,p[1]+y];});}
+
+  /* line descriptions */
+  function lname(L){return L.t==="x"&&L.c===0?"the x-axis":L.t==="y"&&L.c===0?"the y-axis":"the line m";}
+  function cname(c,nm){return c[0]===0&&c[1]===0?"the origin (0, 0)":"the point "+nm+cs(c);}
+  function tdesc(v){var s=[];if(v[0])s.push(Math.abs(v[0])+(Math.abs(v[0])===1?" unit ":" units ")+(v[0]>0?"right":"left"));if(v[1])s.push(Math.abs(v[1])+(Math.abs(v[1])===1?" unit ":" units ")+(v[1]>0?"up":"down"));return s.join(" and ");}
+  function describe(T){ // short description used in options
+    if(T.k==="tr")return "Translation: "+tdesc(T.v);
+    if(T.k==="ax")return "Axial symmetry in "+lname(T.L);
+    if(T.k==="cs")return "Central symmetry in "+(T.c[0]||T.c[1]?cs(T.c):"(0, 0)");
+    return "Rotation of 90° "+(T.cw?"clockwise":"anticlockwise")+" about "+(T.c[0]||T.c[1]?cs(T.c):"(0, 0)");
+  }
+
+  /* ---------- coordinate-grid kit ---------- */
+  /* o = {R, polys:[{P,c,n}], pts:[{p,n,c}], lines:[L], vec:[[a,b]], cen:[{p,n}], axes:true} */
+  function clip(L,R){if(L.t==="x")return [[-R,L.c],[R,L.c]];if(L.t==="y")return [[L.c,-R],[L.c,R]];if(L.t==="d")return [[-R,-R],[R,R]];return [[-R,R],[R,-R]];}
+  function plane(o){
+    var R=o.R||6,s=o.s||22,pd=18,W=2*R*s+2*pd,i;
+    var X=function(x){return r2(pd+(x+R)*s);},Y=function(y){return r2(pd+(R-y)*s);};
+    var h='<svg class="tg" viewBox="0 0 '+W+' '+W+'" style="max-width:'+Math.round(W*1.45)+'px" data-r="'+R+'" data-s="'+s+'" data-pd="'+pd+'" role="img" aria-label="'+(o.aria||"Shapes on a coordinate grid")+'">';
+    for(i=-R;i<=R;i++){h+='<line class="gl" x1="'+X(i)+'" y1="'+Y(-R)+'" x2="'+X(i)+'" y2="'+Y(R)+'"/><line class="gl" x1="'+X(-R)+'" y1="'+Y(i)+'" x2="'+X(R)+'" y2="'+Y(i)+'"/>';}
+    if(o.axes!==false){h+='<line class="ax" x1="'+X(-R)+'" y1="'+Y(0)+'" x2="'+X(R)+'" y2="'+Y(0)+'"/><line class="ax" x1="'+X(0)+'" y1="'+Y(-R)+'" x2="'+X(0)+'" y2="'+Y(R)+'"/>';
+      for(i=-R;i<=R;i++){if(i===0)continue;h+='<text class="tk" data-v="'+i+'" x="'+X(i)+'" y="'+r2(Y(0)+11)+'" text-anchor="middle">'+n_(i)+'</text><text class="tk" data-w="'+i+'" x="'+r2(X(0)-4)+'" y="'+r2(Y(i)+3.5)+'" text-anchor="end">'+n_(i)+'</text>';}
+      h+='<text class="tk" x="'+r2(X(0)-4)+'" y="'+r2(Y(0)+11)+'" text-anchor="end">0</text><text class="axl" x="'+r2(X(R)+7)+'" y="'+r2(Y(0)+4)+'" text-anchor="middle">x</text><text class="axl" x="'+X(0)+'" y="'+r2(Y(R)-6)+'" text-anchor="middle">y</text>';}
+    (o.lines||[]).forEach(function(L){var e=clip(L,R),lab=L.n||"m",q=e[1];
+      h+='<line class="mir" data-t="'+L.t+'" data-c="'+(L.c||0)+'" x1="'+X(e[0][0])+'" y1="'+Y(e[0][1])+'" x2="'+X(e[1][0])+'" y2="'+Y(e[1][1])+'"/>';
+      if(!(L.t==="x"&&L.c===0)&&!(L.t==="y"&&L.c===0)){var lx=L.t==="y"?X(q[0])+9:L.t==="x"?X(q[0])-8:L.t==="d"?X(q[0])-9:X(q[0])-9,ly=L.t==="y"?Y(q[1])+12:L.t==="x"?Y(q[1])-6:L.t==="d"?Y(q[1])+16:Y(q[1])-6;
+        h+='<text class="ml" x="'+r2(lx)+'" y="'+r2(ly)+'" text-anchor="middle">'+lab+'</text>';}});
+    (o.vec||[]).forEach(function(v){var a=v[0],b=v[1],x1=X(a[0]),y1=Y(a[1]),x2=X(b[0]),y2=Y(b[1]),dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy),ux=dx/l,uy=dy/l;
+      h+='<line class="vec" data-a="'+a.join(",")+'" data-b="'+b.join(",")+'" x1="'+x1+'" y1="'+y1+'" x2="'+r2(x2-ux*7)+'" y2="'+r2(y2-uy*7)+'"/><polygon class="vh" points="'+x2+','+y2+' '+r2(x2-ux*10-uy*5)+','+r2(y2-uy*10+ux*5)+' '+r2(x2-ux*10+uy*5)+','+r2(y2-uy*10-ux*5)+'"/>';});
+    (o.polys||[]).forEach(function(p){var c=cen(p.P);
+      h+='<polygon class="sp '+(p.c||"ob")+'" data-n="'+(p.n||"")+'" points="'+p.P.map(function(q){return X(q[0])+","+Y(q[1]);}).join(" ")+'" data-pts="'+p.P.map(function(q){return q.join(",");}).join(" ")+'"/>';
+      if(p.n)h+='<text class="pn '+(p.c||"ob")+'" x="'+X(c[0])+'" y="'+r2(Y(c[1])+4.5)+'" text-anchor="middle">'+p.n+'</text>';});
+    (o.pts||[]).forEach(function(p){var dx=p.dx==null?8:p.dx,dy=p.dy==null?-7:p.dy;
+      h+='<circle class="pt '+(p.c||"")+'" data-x="'+p.p[0]+'" data-y="'+p.p[1]+'" data-n="'+(p.n||"")+'" cx="'+X(p.p[0])+'" cy="'+Y(p.p[1])+'" r="3.6"/>';
+      if(p.n)h+='<text class="pl" x="'+r2(X(p.p[0])+dx)+'" y="'+r2(Y(p.p[1])+dy)+'" text-anchor="middle">'+p.n+'</text>';});
+    return h+'</svg>';
+  }
+  /* squared paper pattern: on = list of [col,row] cells (row 0 at the bottom), line {t:"v"|"h"|"d"} through the middle */
+  function cells(W,H,on,L){
+    var s=26,pd=12,X=function(c){return pd+c*s;},Y=function(r){return pd+(H-r)*s;},w=W*s+2*pd,hh=H*s+2*pd,o='<svg class="tg cg" viewBox="0 0 '+w+' '+hh+'" style="max-width:'+Math.round(w*1.45)+'px" data-w="'+W+'" data-h="'+H+'" data-s="'+s+'" data-pd="'+pd+'" role="img" aria-label="Pattern of shaded squares with a mirror line">',k={};
+    on.forEach(function(c){k[c]=1;});
+    for(var c=0;c<W;c++)for(var r=0;r<H;r++)o+='<rect class="cell'+(k[[c,r]]?' on':'')+'" data-c="'+c+'" data-r="'+r+'" x="'+X(c)+'" y="'+Y(r+1)+'" width="'+s+'" height="'+s+'"/>';
+    var e=L.t==="v"?[[W/2,-0.4],[W/2,H+0.4]]:L.t==="h"?[[-0.4,H/2],[W+0.4,H/2]]:[[-0.3,-0.3],[W+0.3,H+0.3]];
+    o+='<line class="mir" data-t="'+L.t+'" x1="'+r2(X(e[0][0]))+'" y1="'+r2(Y(e[0][1]))+'" x2="'+r2(X(e[1][0]))+'" y2="'+r2(Y(e[1][1]))+'"/><text class="ml" x="'+r2(X(e[1][0])+(L.t==="v"?9:L.t==="h"?-2:-4))+'" y="'+r2(Y(e[1][1])+(L.t==="v"?10:L.t==="h"?-6:-4))+'" text-anchor="middle">m</text>';
+    return o+'</svg>';
+  }
+  function cref(L,W,H){return function(c){var x=c[0],y=c[1];return L.t==="v"?[W-1-x,y]:L.t==="h"?[x,H-1-y]:[y,x];};}
+
+  /* plain shape (not on a grid) with optional dashed lines through it, for axes of symmetry */
+  function shapeSVG(P,lines,aria){
+    var b0=bb(P),w=b0[2]-b0[0],h=b0[3]-b0[1],c=cen(P),L=0.5*Math.sqrt(w*w+h*h)+0.15*Math.max(w,h),E=[];
+    (lines||[]).forEach(function(l){var dx=Math.cos(l.a),dy=Math.sin(l.a);E.push({n:l.n,a:[c[0]-dx*L,c[1]-dy*L],e:[c[0]+dx*L,c[1]+dy*L],d:[dx,dy]});});
+    var all=P.concat(E.map(function(x){return x.a;}),E.map(function(x){return x.e;})),b=bb(all),bw=b[2]-b[0],bh=b[3]-b[1],box=E.length?200:170,s=box/Math.max(bw,bh),pd=E.length?22:30,W=r2(bw*s+2*pd),H=r2(bh*s+2*pd);
+    var X=function(x){return r2(pd+(x-b[0])*s);},Y=function(y){return r2(pd+(b[3]-y)*s);};
+    var o='<svg class="tg sy" viewBox="0 0 '+W+' '+H+'" style="max-width:'+Math.round(W*1.5)+'px" data-s="'+r2(s*1e4)/1e4+'" data-ox="'+X(0)+'" data-oy="'+Y(0)+'" role="img" aria-label="'+(aria||"Shape")+'">';
+    o+='<polygon class="sp ob" points="'+P.map(function(p){return X(p[0])+","+Y(p[1]);}).join(" ")+'" data-pts="'+P.map(function(p){return r2(p[0]*1e4)/1e4+","+r2(p[1]*1e4)/1e4;}).join(" ")+'"/>';
+    E.forEach(function(l){var ex=X(l.e[0]),ey=Y(l.e[1]);
+      o+='<line class="mir dl" data-n="'+l.n+'" x1="'+X(l.a[0])+'" y1="'+Y(l.a[1])+'" x2="'+ex+'" y2="'+ey+'"/>';
+      if(l.n)o+='<text class="ml" x="'+r2(Math.min(W-7,Math.max(7,ex+l.d[0]*11)))+'" y="'+r2(Math.min(H-3,Math.max(13,ey-l.d[1]*11+5)))+'" text-anchor="middle">'+l.n+'</text>';});
+    return o+'</svg>';
+  }
+
+  /* ---------- named shapes for axes of symmetry ---------- */
+  function reg(n,r,rot){var P=[];for(var i=0;i<n;i++){var a=rot+2*Math.PI*i/n;P.push([r*Math.cos(a),r*Math.sin(a)]);}return P;}
+  var SHAPES={
+    "square":function(){var s=ri(3,5);return {P:[[0,0],[s,0],[s,s],[0,s]],ax:4,cen:true};},
+    "rectangle":function(){var w=ri(4,7),h=ri(2,w-1);return {P:[[0,0],[w,0],[w,h],[0,h]],ax:2,cen:true};},
+    "rhombus":function(){var a=ri(3,5),b=ri(2,a-1)*0.8;return {P:[[0,-b],[a,0],[0,b],[-a,0]],ax:2,cen:true};},
+    "parallelogram":function(){var w=ri(4,6),h=ri(2,3),p=ri(1,2);return {P:[[0,0],[w,0],[w+p,h],[p,h]],ax:0,cen:true};},
+    "kite":function(){var a=ri(2,3),t=ri(1,2),b=ri(t+2,t+4);return {P:[[0,t],[a,0],[0,-b],[-a,0]],ax:1,cen:false};},
+    "isosceles trapezium":function(){var w=ri(5,7),t=ri(2,w-2),h=ri(2,3);if((w-t)%2)t--;return {P:[[0,0],[w,0],[(w+t)/2,h],[(w-t)/2,h]],ax:1,cen:false};},
+    "isosceles triangle":function(){var w=ri(3,6),h=ri(3,6);if(Math.abs(h-w*0.866)<0.6)h+=2;if(2*h===w)h++;return {P:[[0,0],[w,0],[w/2,h]],ax:1,cen:false};},
+    "equilateral triangle":function(){return {P:reg(3,ri(3,4),Math.PI/2),ax:3,cen:false};},
+    "scalene triangle":function(){return {P:[[0,0],[6,0],[ri(1,2),ri(3,4)]],ax:0,cen:false};},
+    "right-angled isosceles triangle":function(){var a=ri(3,5);return {P:[[0,0],[a,0],[0,a]],ax:1,cen:false};},
+    "regular pentagon":function(){return {P:reg(5,3,Math.PI/2),ax:5,cen:false};},
+    "regular hexagon":function(){return {P:reg(6,3,0),ax:6,cen:true};},
+    "regular octagon":function(){return {P:reg(8,3,Math.PI/8),ax:8,cen:true};}
+  };
+  var SNAMES=Object.keys(SHAPES);
+
+  var NAMES=["Siobhán","Darragh","Niamh","Oisín","Aoife","Cian","Róisín","Eoin","Ciara","Seán","Méabh","Tadhg"];
+
+  /* ---------- the transformation that a question asks for ---------- */
+  function lineAt(){var r=Math.random();if(r<.25)return {t:"y",c:0};if(r<.5)return {t:"x",c:0};if(r<.62)return {t:"d"};if(r<.72)return {t:"e"};return Math.random()<.5?{t:"y",c:rnd([-2,-1,1,2])}:{t:"x",c:rnd([-2,-1,1,2])};}
+  function centreAt(){return Math.random()<.5?[0,0]:[ri(-2,2),ri(-2,2)];}
+  function tvec(){var v;do{v=[ri(-6,6),ri(-5,5)];}while(Math.abs(v[0])+Math.abs(v[1])<3||Math.abs(v[0])<1&&Math.abs(v[1])<2);return v;}
+  function asked(kind){
+    if(kind==="ax"){var L=lineAt();return {T:AX(L),lines:[L],txt:"axial symmetry in "+lname(L)};}
+    if(kind==="cs"){var c=centreAt();return {T:CS(c),pts:c[0]||c[1]?[{p:c,n:"C",c:"cc"}]:[{p:c,n:"",c:"cc"}],txt:"central symmetry in "+cname(c,"C")};}
+    if(kind==="ro"){var c2=centreAt(),cw=Math.random()<.5;return {T:RO(c2,cw),pts:c2[0]||c2[1]?[{p:c2,n:"C",c:"cc"}]:[{p:c2,n:"",c:"cc"}],txt:"a rotation of 90° "+(cw?"clockwise":"anticlockwise")+" about "+cname(c2,"C")};}
+    var v=tvec();return {T:TR(v),txt:"the translation that moves every point "+tdesc(v)};
+  }
+  /* decoy transformations: every other kind, centred near the middle */
+  function decoys(){var D=[],i,j;
+    [{t:"x",c:0},{t:"y",c:0},{t:"d"},{t:"e"},{t:"x",c:-1},{t:"x",c:1},{t:"y",c:-1},{t:"y",c:1},{t:"x",c:2},{t:"y",c:-2}].forEach(function(L){D.push(AX(L));});
+    for(i=-2;i<=2;i++)for(j=-2;j<=2;j++){D.push(CS([i,j]));D.push(RO([i,j],true));D.push(RO([i,j],false));}
+    for(i=0;i<14;i++)D.push(TR(tvec()));
+    return shuffle(D);}
+
+  /* ---------- Mirror Move: pick the image ---------- */
+  function qPick(kind,lab){
+    for(var t=0;t<600;t++){
+      var a=asked(kind),R=6,S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),I=img(a.T,P);
+      if(!inBox(I,R)||!apart(P,I))continue;
+      var cs_=[I],D=decoys();
+      for(var d=0;d<D.length&&cs_.length<4;d++){var J=img(D[d],P);if(!inBox(J,R)||eqSet(J,I)||eqSet(J,P))continue;
+        if(!cs_.every(function(K){return apart(J,K);})||!apart(J,P))continue;cs_.push(J);}
+      if(cs_.length<4)continue;
+      /* point labels (the centre C) must not sit inside a shape's box */
+      var pts=a.pts||[];if(pts.some(function(p){return cs_.concat([P]).some(function(K){var B=bb(K);return p.p[0]>=B[0]&&p.p[0]<=B[2]&&p.p[1]>=B[1]&&p.p[1]<=B[3];});}))continue;
+      var L4=["A","B","C","D"],order=shuffle([0,1,2,3]),polys=[{P:P,c:"ob",n:"S"}],ans;
+      if(pts.some(function(p){return p.n==="C";}))L4=["A","B","D","E"];
+      order.forEach(function(k,i){polys.push({P:cs_[k],c:"im",n:L4[i]});if(k===0)ans=L4[i];});
+      var g=plane({R:R,polys:polys,lines:a.lines,pts:pts,aria:"Shape S and four other shapes on a grid"});
+      var how={ax:"Every point and its image are the same distance from the mirror line, on opposite sides, and the shape is flipped.",
+        cs:"Central symmetry sends every point through the centre to the same distance on the other side: a half turn (180°).",
+        ro:"Turn the shape a quarter turn about the centre. Trace it on paper and turn the page to check.",
+        tr:"A translation slides every point the same way: no flip, no turn."}[kind];
+      return C("Which shape is the image of S under "+a.txt+"?","",ans,L4.filter(function(x){return x!==ans;}),"It's shape "+ans+". "+how,
+        "Image of S under "+a.txt+" → "+ans,g,{t:"pick",kind:kind,after:true});
+    }
+    return qPoint(kind);
+  }
+
+  /* ---------- the image of a point ---------- */
+  function qPoint(kind,pic){
+    var a=asked(kind),R=6,P,I,t=0;
+    do{P=[ri(-5,5),ri(-5,5)];I=a.T.f(P);t++;}while((!inBox([I],R)||(I[0]===P[0]&&I[1]===P[1])||(P[0]===0&&P[1]===0))&&t<400);
+    var slips=[];
+    if(kind==="ax"){var L=a.lines[0];slips=[AX({t:L.t==="x"?"y":"x",c:L.t==="x"||L.t==="y"?L.c:0}).f(P),CS([0,0]).f(P),[P[1],P[0]],[-P[1],-P[0]],AX({t:L.t,c:-(L.c||0)}).f(P),[I[0]+(L.t==="y"?1:0),I[1]+(L.t==="x"?1:0)]];}
+    else if(kind==="cs"){var c=a.T.c;slips=[[-P[0],-P[1]],[c[0]-P[0],c[1]-P[1]],[2*c[0]+P[0],2*c[1]+P[1]],[P[0],2*c[1]-P[1]],[2*c[0]-P[0],P[1]],[P[0]+c[0],P[1]+c[1]]];}
+    else if(kind==="ro"){var c3=a.T.c;slips=[RO(c3,!a.T.cw).f(P),CS(c3).f(P),[P[1],P[0]],[-P[1],-P[0]],RO([0,0],a.T.cw).f(P)];}
+    else {var v=a.T.v;slips=[[P[0]-v[0],P[1]-v[1]],[P[0]+v[1],P[1]+v[0]],[P[0]+v[0],P[1]-v[1]],[P[0]-v[0],P[1]+v[1]],v];}
+    var nm=rnd(["P","Q","A","B","K"]),g=pic!==true&&(pic===false||Math.random()<.35)?"":plane({R:R,lines:a.lines,pts:(a.pts||[]).concat([{p:P,n:nm}]),aria:"Point "+nm+" on a grid"});
+    var why={ax:"Same distance from the mirror line, on the other side.",cs:"Go from "+nm+" to the centre, then the same again: the image is "+cs(I)+".",ro:"Turn the arrow from the centre to "+nm+" a quarter turn "+(a.T.cw?"clockwise":"anticlockwise")+".",tr:"Add the move to each coordinate."}[kind];
+    if(kind==="ax"){var L2=a.lines[0];why=L2.t==="x"&&L2.c===0?"Axial symmetry in the x-axis: keep x, change the sign of y.":L2.t==="y"&&L2.c===0?"Axial symmetry in the y-axis: change the sign of x, keep y.":L2.t==="d"||L2.t==="e"?"Count squares at right angles to the line m: the image is the same distance on the other side.":"Count the squares straight across to the line m, then the same number on the other side.";}
+    if(kind==="cs"&&!a.T.c[0]&&!a.T.c[1])why="Central symmetry in the origin: change the sign of BOTH coordinates.";
+    if(kind==="tr")why="Add the move to each coordinate: "+cs(P)+" → "+cs(I)+".";
+    var en=g?"Find the image of the point "+nm+" under "+a.txt+".":"Find the image of the point "+nm+cs(P)+" under "+a.txt+".";
+    if(!g&&a.lines&&a.lines[0].t!=="x"&&a.lines[0].t!=="y")return qPoint(kind,true);           // the line m must be drawn
+    if(!g&&a.lines&&a.lines[0].c)return qPoint(kind,true);
+    return QP(en,"",I,slips,why,g,{t:"point",kind:kind,after:true});
+  }
+
+  /* the image of one vertex of a drawn shape */
+  function qVertex(kind){
+    for(var t=0;t<400;t++){var a=asked(kind),R=6,S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),I=img(a.T,P);
+      if(!inBox(I,R)||!apart(P,I))continue;var k=ri(0,P.length-1),V=P[k];if(key([V])===key([I[k]]))continue;var c=cen(P),dx=V[0]-c[0],dy=V[1]-c[1],l=Math.sqrt(dx*dx+dy*dy)||1;
+      var pts=(a.pts||[]).concat([{p:V,n:"P",dx:r2(dx/l*12),dy:r2(-dy/l*12+4)}]);
+      var g=plane({R:R,polys:[{P:P,c:"ob",n:""}],lines:a.lines,pts:pts,aria:"A shape with the vertex P marked"});
+      var other=P.filter(function(q,i){return i!==k;}).map(a.T.f);
+      return QP("Find the coordinates of the image of the vertex P under "+a.txt+".","",I[k],other.concat([V]),
+        "Move just the one point P: "+cs(V)+" → "+cs(I[k])+".",g,{t:"vertex",kind:kind,after:true});}
+    return qPoint(kind,true);
+  }
+
+  /* ---------- complete the symmetry on squared paper ---------- */
+  function qComplete(){
+    var L={t:rnd(["v","v","h","d"])},W,H;if(L.t==="d"){W=H=6;}else if(L.t==="v"){W=8;H=6;}else{W=7;H=6;}
+    var f=cref(L,W,H),on={},i,miss=0,tries=0,side=function(c){return L.t==="v"?c[0]<W/2:L.t==="h"?c[1]<H/2:c[0]>c[1];};
+    do{on={};var n=ri(5,8);tries++;
+      for(i=0;i<n;i++){var c=[ri(0,W-1),ri(0,H-1)];if(side(c))on[c]=c;}
+      var arr=Object.keys(on).map(function(k){return on[k];});
+      arr.forEach(function(c){if(Math.random()<.35){var m=f(c);on[m]=m;}});
+      if(L.t==="d"&&Math.random()<.5){var q=ri(0,W-1);on[[q,q]]=[q,q];}
+      arr=Object.keys(on).map(function(k){return on[k];});
+      miss=arr.filter(function(c){return !on[f(c)];}).length;
+    }while((miss<2||miss>7)&&tries<300);
+    var list=Object.keys(on).map(function(k){return on[k];}),tot=list.length;
+    return QN("How many more squares must be shaded so that the line m is an axis of symmetry of the whole pattern?","",miss,
+      [tot,tot+miss,2*miss,miss-1,miss+1,miss*2-1],"Reflect each shaded square in m: "+miss+" of the mirror squares are not shaded yet.",cells(W,H,list,L),{t:"complete",after:true});
+  }
+
+  /* ---------- name the transformation ---------- */
+  function pool4(){var L=[{t:"x",c:0},{t:"y",c:0}];return [AX(L[0]),AX(L[1]),CS([0,0]),RO([0,0],true),RO([0,0],false),TR(tvec()),TR(tvec())];}
+  function qName(){
+    for(var t=0;t<400;t++){var R=6,S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),Pool=pool4(),T=rnd(Pool.slice(0,6));
+      if(T.k==="tr"&&Math.random()<.5)continue;
+      var I=img(T,P);if(!inBox(I,R)||!apart(P,I))continue;
+      var wrong=Pool.filter(function(D){return describe(D)!==describe(T)&&!eqSet(img(D,P),I);}).map(describe);
+      var g=plane({R:R,polys:[{P:P,c:"ob",n:"S"},{P:I,c:"im",n:"S′"}],aria:"Shape S and its image S′"});
+      var why=T.k==="tr"?"S′ is the same way round and the same way up: a slide.":T.k==="ax"?"S′ is flipped over "+lname(T.L)+" (a mirror image).":T.k==="cs"?"S′ is upside down through (0, 0): a half turn.":"S′ is turned a quarter turn about (0, 0).";
+      return C("Which transformation maps S onto S′?","",describe(T),wrong,why,"S → S′: "+describe(T),g,{t:"name",after:true});}
+    return qPoint("ax",true);
+  }
+  /* which kind of transformation (with any line or centre) */
+  var KIND={tr:"A translation",ax:"An axial symmetry",cs:"A central symmetry",ro:"A rotation of 90°"};
+  function qKind(){
+    for(var t=0;t<400;t++){var R=6,kind=rnd(["tr","ax","cs","ro"]),a=asked(kind),S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),I=img(a.T,P);
+      if(!inBox(I,R)||!apart(P,I))continue;
+      var g=plane({R:R,polys:[{P:P,c:"ob",n:"S"},{P:I,c:"im",n:"S′"}],aria:"Shape S and its image S′"});
+      var why={tr:"Same way round and same way up: every point slid the same way.",ax:"S′ is a mirror image of S (flipped): axial symmetry.",cs:"S′ is a half turn of S (upside down, not flipped): central symmetry.",ro:"S′ is turned a quarter turn: a rotation of 90°."}[kind];
+      return C("What kind of transformation maps S onto S′?","",KIND[kind],Object.keys(KIND).filter(function(k){return k!==kind;}).map(function(k){return KIND[k];}),why,"S → S′: "+KIND[kind],g,{t:"kind",after:true});}
+    return qName();
+  }
+
+  /* ---------- translations ---------- */
+  function qTransMap(){
+    var a,b,c,t=0;do{a=[ri(-4,4),ri(-4,4)];var v=tvec();b=[a[0]+v[0],a[1]+v[1]];c=[ri(-4,4),ri(-4,4)];t++;}while((!inBox([b],6)||!inBox([[c[0]+b[0]-a[0],c[1]+b[1]-a[1]]],6)||key([a])===key([c]))&&t<500);
+    var v2=[b[0]-a[0],b[1]-a[1]],I=[c[0]+v2[0],c[1]+v2[1]];
+    return QP("A translation maps A"+cs(a)+" onto B"+cs(b)+". What is the image of C"+cs(c)+" under the same translation?","",I,
+      [[c[0]-v2[0],c[1]-v2[1]],[c[0]+b[0],c[1]+b[1]],[c[0]+v2[1],c[1]+v2[0]],[b[0]-c[0],b[1]-c[1]],[c[0]+v2[0],c[1]-v2[1]]],
+      "A → B moves "+tdesc(v2)+". Do the same to C: "+cs(c)+" → "+cs(I)+".","",{t:"tmap"});
+  }
+  function qTransArrow(){
+    for(var t=0;t<400;t++){var R=6,v=tvec(),A=[ri(-5,5),ri(-5,5)],B=[A[0]+v[0],A[1]+v[1]];if(!inBox([B],R))continue;
+      var S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),I=img(TR(v),P);if(!inBox(I,R)||!apart(P,I))continue;
+      var k=ri(0,P.length-1),V=P[k];if(key([V])===key([A])||key([V])===key([B]))continue;
+      var vecIn=function(Q){var B2=bb(Q);return [A,B].some(function(p){return p[0]>=B2[0]&&p[0]<=B2[2]&&p[1]>=B2[1]&&p[1]<=B2[3];});};if(vecIn(P))continue;
+      var c=cen(P),dx=V[0]-c[0],dy=V[1]-c[1],l=Math.sqrt(dx*dx+dy*dy)||1;
+      var g=plane({R:R,polys:[{P:P,c:"ob"}],vec:[[A,B]],pts:[{p:A,n:"A",c:"vp"},{p:B,n:"B",c:"vp"},{p:V,n:"P",dx:r2(dx/l*12),dy:r2(-dy/l*12+4)}],aria:"A shape, a translation arrow from A to B and a vertex P"});
+      return QP("The shape is moved by the translation AB (the arrow). Find the image of the vertex P.","",I[k],
+        [[V[0]-v[0],V[1]-v[1]],B,[V[0]+v[1],V[1]+v[0]],[V[0]+v[0],V[1]-v[1]],[V[0]-v[0],V[1]+v[1]]],
+        "The arrow goes "+tdesc(v)+". Move P the same way: "+cs(V)+" → "+cs(I[k])+".",g,{t:"tarrow",after:true});}
+    return qTransMap();
+  }
+  function qTransDesc(){
+    for(var t=0;t<400;t++){var R=6,v=tvec(),S=shape(),b=bb(S),P=place(S,ri(-R,R-b[2]),ri(-R,R-b[3])),I=img(TR(v),P);if(!inBox(I,R)||!apart(P,I))continue;
+      var wrong=[[-v[0],-v[1]],[v[1],v[0]],[v[0],-v[1]],[-v[0],v[1]],[v[0]+1,v[1]],[v[0],v[1]-1]].filter(function(w){return (w[0]||w[1])&&!(w[0]===v[0]&&w[1]===v[1]);}).map(tdesc);
+      var g=plane({R:R,polys:[{P:P,c:"ob",n:"S"},{P:I,c:"im",n:"S′"}],aria:"Shape S and its image S′"});
+      return C("S′ is the image of S under a translation. Describe the translation.","",tdesc(v),wrong,"Pick one corner of S and count to the same corner of S′: "+tdesc(v)+".","S → S′ is "+tdesc(v),g,{t:"tdesc",after:true});}
+    return qTransMap();
+  }
+
+  /* ---------- does it have a centre of symmetry? which statement is true? ---------- */
+  function qCentre(){
+    var yes=SNAMES.filter(function(n){return SHAPES[n]().cen;}),no=SNAMES.filter(function(n){return !SHAPES[n]().cen;});
+    if(Math.random()<.5){var a=rnd(yes);return C("Which one of these shapes has a centre of symmetry?","",a.charAt(0).toUpperCase()+a.slice(1),no.map(function(n){return n.charAt(0).toUpperCase()+n.slice(1);}),
+      "A shape has a centre of symmetry if a half turn (180°) about its centre fits it back on itself. A "+a+" does.","Has a centre of symmetry → "+a,"",{t:"centre"});}
+    var b=rnd(no);return C("Which one of these shapes does NOT have a centre of symmetry?","",b.charAt(0).toUpperCase()+b.slice(1),yes.map(function(n){return n.charAt(0).toUpperCase()+n.slice(1);}),
+      "Turn a "+b+" through 180°: it ends up upside down, so it has no centre of symmetry.","No centre of symmetry → "+b,"",{t:"nocentre"});
+  }
+  var TRUE=["Central symmetry in a point is the same as a rotation of 180° about that point","A translation does not change the size or the shape","Axial symmetry flips a shape over","Under axial symmetry, a point on the mirror line is its own image","Under central symmetry, the centre is its own image","A rotation turns a shape about a fixed point","A square has 4 axes of symmetry","A circle has a centre of symmetry"];
+  var FALSE=["A translation turns a shape round","Axial symmetry makes a shape bigger","Central symmetry is the same as a rotation of 90°","Under axial symmetry, every point is its own image","A rectangle has 4 axes of symmetry","A parallelogram has 2 axes of symmetry","An equilateral triangle has a centre of symmetry","A translation flips a shape over","A rotation of 90° clockwise is the same as a rotation of 90° anticlockwise","An isosceles triangle has 3 axes of symmetry","A kite has 2 axes of symmetry","A regular pentagon has a centre of symmetry"];
+  function qFact(){var t=rnd(TRUE);return C("Which one of these statements is TRUE?","",t,FALSE,"True: "+t.charAt(0).toLowerCase()+t.slice(1)+".","True statement → "+t,"",{t:"fact"});}
+
+  /* ---------- axes of symmetry ---------- */
+  function qAxes(){
+    var n=rnd(SNAMES),S=SHAPES[n](),g=shapeSVG(S.P,[],"A "+n);
+    var wr={4:[2,8,1],2:[4,1,0],0:[2,1,4],1:[2,0,3],3:[1,6,0],5:[1,10,0],6:[3,12,2],8:[4,16,6]}[S.ax];
+    return QN("How many axes of symmetry does this shape have?","",S.ax,wr,"It's a "+n+": "+S.ax+(S.ax===1?" axis":" axes")+" of symmetry. Imagine folding it so the two halves fit exactly on top of each other.",g,{t:"axes",name:n,after:true});
+  }
+  /* angles of the true axes (through the centre of the vertices) */
+  function axesOf(P){var c=cen(P),out=[];
+    var cand=[];P.forEach(function(p,i){cand.push(Math.atan2(p[1]-c[1],p[0]-c[0]));var q=P[(i+1)%P.length];cand.push(Math.atan2((p[1]+q[1])/2-c[1],(p[0]+q[0])/2-c[0]));});
+    cand.forEach(function(a){a=((a%Math.PI)+Math.PI)%Math.PI;var dx=Math.cos(a),dy=Math.sin(a);
+      var ok=P.every(function(p){var x=p[0]-c[0],y=p[1]-c[1],d=x*dx+y*dy,rx=2*d*dx-x+c[0],ry=2*d*dy-y+c[1];return P.some(function(q){return Math.abs(q[0]-rx)<1e-6&&Math.abs(q[1]-ry)<1e-6;});});
+      if(ok&&!out.some(function(b){return Math.abs(b-a)<1e-6||Math.abs(Math.abs(b-a)-Math.PI)<1e-6;}))out.push(a);});
+    return out;}
+  function qWhichLine(){
+    var n=rnd(SNAMES.filter(function(m){return SHAPES[m]().ax>=1&&SHAPES[m]().ax<=2;})),S=SHAPES[n](),A=axesOf(S.P),good=rnd(A),ang=[good],t=0;
+    while(ang.length<4&&t<200){var a=Math.random()*Math.PI;t++;if(A.concat(ang).some(function(b){var d=Math.abs(a-b)%Math.PI;return Math.min(d,Math.PI-d)<0.32;}))continue;ang.push(a);}
+    if(ang.length<4)return qAxes();
+    var L=shuffle(ang.slice()),labs=["a","b","c","d"],ans=labs[L.indexOf(good)];
+    var g=shapeSVG(S.P,L.map(function(a,i){return {a:a,n:labs[i]};}),"A "+n+" with four dashed lines a, b, c and d");
+    return C("Which dashed line is an axis of symmetry of the "+n+"?","",ans,labs.filter(function(x){return x!==ans;}),
+      "Line "+ans+": fold along it and the two halves fit exactly. The other lines give two halves that don't match.","Axis of symmetry of the "+n+" → line "+ans,g,{t:"whichline",name:n,after:true});
+  }
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    mirror:[function qPickAx(){return qPick("ax");},function qPickAx2(){return qPick("ax");},function qPointAx(){return qPoint("ax");},function qPointAx2(){return qPoint("ax");},function qVertexAx(){return qVertex("ax");},qComplete],
+    moves:[function qPickTr(){return qPick("tr");},function qPickCs(){return qPick("cs");},function qPointTr(){return qPoint("tr");},function qPointCs(){return qPoint("cs");},function qVertexCs(){return qVertex("cs");},qTransMap,qTransArrow,qTransDesc],
+    turns:[function qPickRo(){return qPick("ro");},function qPickRo2(){return qPick("ro");},function qPointRo(){return qPoint("ro");},function qPointRo2(){return qPoint("ro");},function qVertexRo(){return qVertex("ro");},qName,qKind],
+    symmetry:[qAxes,qAxes,qWhichLine,qWhichLine,qComplete,qCentre,qFact],
+    mixed:[]
+  };
+  ["mirror","moves","turns","symmetry"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+  MAKERS.mixed.push(qName,qKind);
+
+  /* fixed diagrams in the rules and the Exam corner */
+  var T1=[[1,1],[4,1],[1,3]];
+  var FIX={
+    patAx:function(){return plane({R:5,polys:[{P:T1,c:"ob",n:"S"},{P:img(AX({t:"y",c:0}),T1),c:"im",n:"S′"}],lines:[{t:"y",c:0}],aria:"Triangle S and its mirror image in the y-axis"});},
+    ruleAll:function(){var P=[[1,1],[3,1],[1,2]];return plane({R:5,polys:[{P:P,c:"ob",n:"S"},{P:img(TR([-6,2]),P),c:"im",n:"T"},{P:img(AX({t:"x",c:0}),P),c:"im",n:"A"},{P:img(CS([0,0]),P),c:"im",n:"C"},{P:img(RO([0,0],false),P),c:"im",n:"R"}],aria:"Shape S and four images"});},
+    ruleSq:function(){return shapeSVG([[0,0],[4,0],[4,4],[0,4]],axesOf([[0,0],[4,0],[4,4],[0,4]]).map(function(a,i){return {a:a,n:""};}),"A square with its four axes of symmetry");},
+    ex1:function(){return plane({R:6,polys:[{P:[[1,2],[4,2],[4,4],[2,5]],c:"ob",n:"K"}],pts:[{p:[4,4],n:"P",dx:10,dy:-4}],aria:"Quadrilateral K"});},
+    ex2:function(){var P=[[-5,1],[-2,1],[-4,3]];return plane({R:6,polys:[{P:P,c:"ob",n:"S"},{P:img(TR([6,-5]),P),c:"im",n:"A"},{P:img(AX({t:"y",c:0}),P),c:"im",n:"B"},{P:img(CS([0,0]),P),c:"im",n:"D"},{P:img(RO([0,0],true),P),c:"im",n:"E"}],aria:"Shape S and four images A, B, D and E"});},
+    ex3:function(){return cells(8,6,[[0,5],[1,4],[1,3],[2,2],[3,1],[3,4],[6,4],[4,1],[2,0]],{t:"v"});}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="mirror"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="mirror"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="mirror"&&streak%5===0?700:350):3400);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{plane:plane,cells:cells,shapeSVG:shapeSVG,SHAPES:SHAPES,axesOf:axesOf,AX:AX,CS:CS,RO:RO,TR:TR,img:img,FIX:FIX}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

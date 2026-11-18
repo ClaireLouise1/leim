@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-18 09:05 · Maths Order 23 Transformations & symmetry (Mirror Move) · maths-b
