@@ -1,0 +1,134 @@
+<main id="main">
+<style>.rcpt{margin:4px auto 8px;border-collapse:collapse;font-family:"Courier New",monospace;font-size:16px;background:#FFFDF6;border:2px dashed var(--line);min-width:0;width:auto}.rcpt caption{font-weight:800;font-family:Inter,sans-serif;font-size:15px;padding:6px 0 2px}.rcpt td{padding:3px 12px;text-align:left;border:0}.rcpt td+td{text-align:right}.rcpt tr.tot td{border-top:2px solid var(--ink);font-weight:800}.rcpt tr.gr td{font-weight:800}.rcpt td.q{background:#FFE58A;font-weight:800;text-align:center}.rcpt.ci{font-size:12px}.rcpt.ci td{padding:3px 4px;white-space:nowrap}.rcpt.ci tr.h td{font-family:Inter,sans-serif;font-weight:800;border-bottom:2px solid var(--ink)}.hlt{display:inline-block;background:var(--night);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:420px;margin:8px auto 0;font-size:16px}.steps p{margin:4px 0;font-weight:500}.steps p b{font-weight:800}.ptab{border-collapse:collapse;margin:8px 0;min-width:0;width:auto;font-size:15px}.ptab td,.ptab th{border:1px solid var(--line);padding:4px 10px;text-align:right}.ptab th{background:var(--mist);color:var(--ink);text-transform:none;letter-spacing:0;font-size:14px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Payslip Puzzle</h1>
+        <p>Follow the money from a pay packet to a savings account. Work out gross pay and overtime, read a payslip, take off income tax and the tax credit, find the net pay, and grow savings (or a loan) with compound interest. Then play detective and find the first mistake in someone else's working. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="pay"><div><b>Payslip Puzzle</b><span>Hours × rate, overtime at time-and-a-half, weekly ↔ yearly pay, and payslips with a missing line</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tax"><div><b>Income tax</b><span>Gross tax at 20%, tax credits, tax payable, net pay, going backwards, and Higher Level cut-off points and % deductions</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="interest"><div><b>Compound interest</b><span>Savings and loans for up to 3 years, year-by-year tables, different rates each year, and Higher Level working backwards</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Spot the slip</b><span>Find the first wrong line in someone's working, and name the mistake</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. A calculator helps in the interest round, just like in the exam. In Payslip Puzzle, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.2c, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Money: income tax, net pay &amp; compound interest</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Two friends each put €1,000 away for 3 years at 10% a year. Aoife's account pays 10% of the <b>first</b> €1,000 every year. Cian's account pays 10% of whatever is <b>in the account</b> at the start of each year.</p>
+        <table class="ptab"><tr><th>End of year</th><th>Aoife</th><th>Cian</th></tr><tr><td>1</td><td>€1,100</td><td>€1,100</td></tr><tr><td>2</td><td>€1,200</td><td>€1,210</td></tr><tr><td>3</td><td>€1,300</td><td>€1,331</td></tr></table>
+        <p>Why does Cian pull ahead, and why does the gap get bigger every year? What single number could you multiply €1,000 by three times to get Cian's €1,331?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Cian earns interest on his <b>interest</b> too: in year 2 he gets 10% of €1,100 (€110), not 10% of €1,000. That's <b>compound interest</b>. Adding 10% is the same as multiplying by <b>1.1</b>, so €1,000 × 1.1 × 1.1 × 1.1 = €1,000 × 1.1³ = <b>€1,331</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Gross pay and net pay</h3>
+        <ul>
+          <li><b>Gross pay</b> = what you earn before anything is taken off. Hourly pay: hours × rate (38 hours at €15.50 = €589).</li>
+          <li><b>Overtime:</b> "time-and-a-half" = 1.5 × the normal rate; "double time" = 2 × the normal rate. Only the extra hours get the overtime rate.</li>
+          <li><b>Weekly, monthly, yearly:</b> 52 weeks in a year, 12 months in a year. Never mix them up (a month is not 4 weeks).</li>
+          <li><b>Net pay</b> (take-home pay) = gross pay − all the deductions (income tax, USC, PRSI, pension, union fees…).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Income tax</h3>
+        <div class="fm">
+          <div class="note"><b class="h">1. Gross tax</b>Gross income × the tax rate. In the exam the standard rate is usually 20%: 20% of €40,000 = <b>€8,000</b>.</div>
+          <div class="note"><b class="h">2. Tax payable</b>Gross tax − tax credit. With a €3,750 tax credit: €8,000 − €3,750 = <b>€4,250</b>.</div>
+          <div class="note"><b class="h">3. Net income</b>Gross income − tax payable (and any other deductions): €40,000 − €4,250 = <b>€35,750</b>.</div>
+        </div>
+        <p style="margin-top:10px">A <b>tax credit</b> is taken off the <b>tax</b>, never off the income. Going backwards: tax payable + tax credit = gross tax, and gross tax ÷ 0.2 (or × 5) = gross income.</p>
+        <div class="note" style="margin-top:10px"><b>Two rates of tax</b> <span class="hlt">Higher Level</span><br>Income up to the <b>standard rate cut-off point</b> is taxed at 20%; everything above it is taxed at the <b>higher rate</b> (40% in the exam). Earns €52,000, cut-off point €44,000: 20% of €44,000 = €8,800, plus 40% of €8,000 = €3,200. Gross tax €12,000, then take away the tax credits.</div>
+        <p style="margin-top:10px"><b>Other deductions:</b> <b>USC</b> (Universal Social Charge), <b>PRSI</b> (social insurance) and pension. At Ordinary Level the exam gives you these as amounts. <span class="hlt">Higher Level</span> they can be given as a % of gross pay: PRSI at 4% of €750 = €30.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Compound interest</h3>
+        <ul>
+          <li>Each year, the interest is worked out on the amount at the <b>start of that year</b>, then added on.</li>
+          <li><b>Quick way:</b> r% a year means × (1 + r/100) each year. 4% → × 1.04; 2.5% → × 1.025. For 3 years at 4%: × 1.04³.</li>
+          <li><b>Different rate each year?</b> Use each year's own multiplier: × 1.03 × 1.04 × 1.05.</li>
+          <li><b>Interest earned</b> = final value − the amount you started with.</li>
+          <li><b>Loans</b> work the same way. If a repayment is made at the end of a year, take it off <b>after</b> adding that year's interest, then carry on.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Working backwards</b> <span class="hlt">Higher Level</span><br>Worth €4,410 after 2 years at 5%: P × 1.05² = €4,410, so P = €4,410 ÷ 1.1025 = <b>€4,000</b>. Finding the rate: €5,000 grew to €6,050 in 2 years → 6,050 ÷ 5,000 = 1.21 = (1 + r)², and √1.21 = 1.1, so r = <b>10%</b>.</div>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> taking the tax credit off the income; adding the tax credit; using 1.5 for 5% (it's 1.05); working out interest on the first amount every year; giving the interest when the question asks for the value; and taking 5% off twice to go backwards (divide by 1.05² instead).</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Wages, tax and savings are a favourite <b>real-life setting</b>: a payslip or a person's yearly income with a tax credit, a family's savings or a loan over two or three years, often as one part of a longer money question. The early parts are usually straightforward; the later parts ask you to go backwards, compare two options, or explain someone's mistake.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write each step with a label:</b> gross tax, tax payable, deductions, net pay. Each line can earn marks even if a later one goes wrong.</li>
+            <li><b>Compound interest year by year</b> (or with the multiplier): show the value at the end of each year. A table is a great way to set it out.</li>
+            <li><b>Give money to the nearest cent</b> unless the question says otherwise.</li>
+            <li><b>Read what's asked:</b> "how much interest" is not "how much is it worth"; "net" is not "gross".</li>
+            <li><b>"Explain" parts need a sentence</b> with numbers in it, not just "he's wrong".</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The payslip.</b> Ciara is paid €16.40 an hour for a basic 39-hour week, and time-and-a-half for overtime. One week she works 45 hours. (a) Find her basic pay. (b) Find her overtime pay. (c) Her deductions that week are income tax €78.40, USC €21.15 and PRSI €31.49. Find her net pay.
+              <details><summary>Show the worked answer</summary><p>(a) 39 × €16.40 = <b>€639.60</b>.<br>(b) Overtime rate = 1.5 × €16.40 = €24.60. 6 hours × €24.60 = <b>€147.60</b>.<br>(c) Gross = €639.60 + €147.60 = €787.20. Deductions = €78.40 + €21.15 + €31.49 = €131.04. Net = €787.20 − €131.04 = <b>€656.16</b>.</p></details></li>
+            <li><b>Income tax.</b> Darragh earns €41,500 a year. His tax credit is €4,000 and the standard rate of income tax is 20%. (a) Find his gross tax. (b) Find the tax he pays. (c) He also pays USC of €1,240 and PRSI of €1,660. Find his net income. (d) Darragh says "I pay 20% of my income in income tax." Is he right? Explain.
+              <details><summary>Show the worked answer</summary><p>(a) 20% of €41,500 = <b>€8,300</b>.<br>(b) €8,300 − €4,000 = <b>€4,300</b>.<br>(c) €41,500 − €4,300 − €1,240 − €1,660 = <b>€34,300</b>.<br>(d) <b>No.</b> The tax credit brings his tax down to €4,300, and €4,300 ÷ €41,500 × 100 ≈ 10.4% of his income, not 20%.</p></details></li>
+            <li><b>The savings account.</b> Róisín invests €5,000 for 3 years. The account pays compound interest of 3% in year 1, 4% in year 2 and 5% in year 3. (a) Find the value of her investment at the end of each year. (b) How much interest does she earn altogether? (c) Her brother says "3% + 4% + 5% = 12%, and 12% of €5,000 is €600, so that's the interest." Explain why his answer is too small.
+              <details><summary>Show the worked answer</summary><p>(a) Year 1: €5,000 × 1.03 = <b>€5,150</b>. Year 2: €5,150 × 1.04 = <b>€5,356</b>. Year 3: €5,356 × 1.05 = <b>€5,623.80</b>.<br>(b) €5,623.80 − €5,000 = <b>€623.80</b>.<br>(c) He has worked out every year's interest on the first €5,000. With compound interest, years 2 and 3 earn interest on the interest already added (4% of €5,150 and 5% of €5,356), so the total is more than €600.</p></details></li>
+            <li><span class="hlt">Higher Level</span> (a) Aoife earns €62,000 a year. Her standard rate cut-off point is €44,000, the standard rate is 20%, the higher rate is 40% and her tax credits are €4,000. Find the income tax she pays. (b) Aoife's savings grew from €12,500 to €13,520 in two years at the same rate of compound interest each year. Find the rate.
+              <details><summary>Show the worked answer</summary><p>(a) 20% of €44,000 = €8,800. €62,000 − €44,000 = €18,000 at 40% = €7,200. Gross tax = €16,000. Tax payable = €16,000 − €4,000 = <b>€12,000</b>.<br>(b) €13,520 ÷ €12,500 = 1.0816 = (1 + r)². √1.0816 = 1.04, so the rate is <b>4%</b> a year. (Not 8.16% ÷ 2 = 4.08%.)</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/money-tax-net-pay-compound-interest-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Money: Income Tax, Net Pay &amp; Compound Interest Teacher Pack (€5)</a>: Payday mingle cards, Payslip Swap A/B cards, Money Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

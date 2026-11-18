@@ -1,0 +1,355 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  /* money is kept in whole CENTS (integers) so every answer is exact */
+  function eur(c){c=Math.round(c);var neg=c<0;c=Math.abs(c);var e=String(Math.floor(c/100)).replace(/\B(?=(\d{3})+(?!\d))/g,",");return (neg?"−":"")+"€"+e+"."+String(c%100).padStart(2,"0");}
+  function pc(x){var y=Math.round(x*100)/100;return String(y)+"%";}
+  function isInt(x){return Math.abs(x-Math.round(x))<1e-7;}
+  function mult(r){return String(Math.round((100+r)*1000)/100000);}            // 5 → "1.05", 2.5 → "1.025", 10 → "1.1"
+  function sup(n){return n===2?"²":n===3?"³":"";}
+  /* value of any option: "€1,234.50" → 1234.5, "12.5%" → 12.5 */
+  function num(x){return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function val(s){return +String(s).replace(/[€%, ]/g,"").replace("−","-");}
+  /* numeric question: wrong options never equal the answer in VALUE, never ≤ 0, no duplicates */
+  function Q(en,frame,ans,slips,pads,why,html,data){var seen=[val(ans)],out=[];
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|null/.test(x))return;var y=val(x);
+      if(!isFinite(y)||y<=0)return;if(seen.some(function(z){return Math.abs(z-y)<1e-9;}))return;if(out.length<3){seen.push(y);out.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:ans,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function ePads(c){return [eur(c+100),eur(c-100),eur(c+1000),eur(c-1000),eur(c+50),eur(c*2)];}
+
+  var NAMES=["Siobhán","Darragh","Niamh","Oisín","Aoife","Cian","Róisín","Eoin","Ciara","Seán","Méabh","Tadhg"];
+  var JOBS=["shop assistant","chef","nurse","electrician","bus driver","hairdresser","lab technician","carpenter","barista","care worker"];
+
+  /* ---------- pictures ---------- */
+  function payslipHTML(name,rows,hide){ // rows = [[label,cents],…] ; first row = gross, last = net ; hide = index shown as ?
+    var o='<table class="rcpt pay" style="min-width:0;width:auto"><caption>Payslip: '+name+'</caption>';
+    rows.forEach(function(r,i){var cls=i===rows.length-1?' class="tot"':i===0?' class="gr"':'';
+      o+='<tr'+cls+' data-k="'+r[0]+'" data-c="'+(i===hide?"?":r[1])+'"><td>'+r[0]+'</td><td'+(i===hide?' class="q"':'')+'>'+(i===hide?"?":(i>0&&i<rows.length-1?"− ":"")+eur(r[1]))+'</td></tr>';});
+    return o+'</table>';}
+  function ciHTML(P,rs,hide){ // year-by-year table; hide = [row, col] with col 1 start, 2 interest, 3 end
+    var o='<table class="rcpt ci" style="min-width:0;width:auto"><tr class="h"><td>Year</td><td>Start</td><td>Interest</td><td>End</td></tr>',A=P;
+    rs.forEach(function(r,i){var I=A*r/100,E=A+I,cells=[A,I,E];
+      o+='<tr data-y="'+(i+1)+'" data-r="'+r+'"><td>'+(i+1)+' ('+r+'%)</td>';
+      cells.forEach(function(c,j){var h=hide&&hide[0]===i&&hide[1]===j+1;o+='<td data-k="'+(j+1)+'"'+(h?' class="q">?':'>'+eur(c))+'</td>';});
+      o+='</tr>';A=E;});
+    return o+'</table>';}
+  function stepsHTML(lines){return '<div class="steps">'+lines.map(function(l,i){return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> '+l+'</p>';}).join("")+'</div>';}
+
+  /* ---------- compound-interest plans whose every value is a whole number of cents ---------- */
+  var RATES=[2,3,4,5,6,8,10,2.5,1.5,3.5,4.5,5,4,3];
+  function plan(n,same){
+    for(var t=0;t<500;t++){
+      var P=ri(2,40)*rnd([50,100,250,500,1000])*100;if(P>3000000||P<100000)continue;
+      var r0=rnd(RATES),rs=[];for(var i=0;i<n;i++)rs.push(same?r0:rnd(RATES));
+      if(!same&&rs.every(function(r){return r===rs[0];}))continue;
+      var A=P,ok=true,am=[P];rs.forEach(function(r){var I=A*r/100;if(!isInt(I))ok=false;A=Math.round(A+I);am.push(A);});
+      if(ok)return {P:P,rs:rs,am:am};}
+    var rs2=[];for(var k=0;k<n;k++)rs2.push(5);var am2=[800000];for(k=0;k<n;k++)am2.push(am2[k]*21/20);return {P:800000,rs:rs2,am:am2};
+  }
+  function simple(P,rs){return P+rs.reduce(function(s,r){return s+P*r/100;},0);}
+
+  /* ---------- Payslip Puzzle: gross pay, overtime, payslips ---------- */
+  function qHours(){
+    var n=rnd(NAMES),j=rnd(JOBS),r=ri(1300,2600),h=rnd([15,20,24,30,35,37.5,38,39,40]),g=Math.round(r*h);
+    if(!isInt(r*h))return qHours();
+    return Q(n+" works as a "+j+" for "+h+" hours a week at "+eur(r)+" an hour. What is "+n+"'s gross pay for the week?","",eur(g),
+      [eur(g+r),eur(g-r),eur(r*(h+5)),eur(r*h/10),eur(g+1000)],ePads(g),
+      "Gross pay = hours × rate = "+h+" × "+eur(r)+" = "+eur(g)+". (Gross = before any tax or other deductions.)","",{t:"hours"});
+  }
+  function qOvertime(){
+    var n=rnd(NAMES),b=rnd([35,37,38,39,40]),r=2*ri(650,1300),o=ri(2,9),k=rnd([[1.5,"time-and-a-half"],[1.5,"time-and-a-half"],[2,"double time"]]),ot=r*k[0]*o,g=r*b+ot;
+    return Q(n+" earns "+eur(r)+" an hour for a basic "+b+"-hour week, and "+k[1]+" for overtime. This week "+n+" works "+(b+o)+" hours. What is the gross pay?","",eur(g),
+      [eur(r*(b+o)),eur(r*b+o*r*(k[0]===2?1.5:2)),eur(r*b+o*(r+150)),eur(r*(b+o)*k[0]),eur(r*b+o*r*0.5)],ePads(g),
+      "Basic: "+b+" × "+eur(r)+" = "+eur(r*b)+". Overtime: "+o+" hours at "+k[0]+" × "+eur(r)+" = "+eur(r*k[0])+" an hour → "+eur(ot)+". Gross = "+eur(r*b)+" + "+eur(ot)+" = "+eur(g)+".","",{t:"overtime"});
+  }
+  function qYear(){
+    var n=rnd(NAMES),kind=rnd(["w2y","m2y","y2m","y2w"]);
+    if(kind==="w2y"){var w=ri(30,120)*1000;return Q(n+" earns "+eur(w)+" gross a week, every week of the year. What is the gross pay for the year (52 weeks)?","",eur(w*52),[eur(w*12),eur(w*50),eur(w*48),eur(w*4*12+w)],ePads(w*52),
+      "A year has 52 weeks: "+eur(w)+" × 52 = "+eur(w*52)+".","",{t:"year",kind:kind});}
+    if(kind==="m2y"){var m=ri(150,500)*1000;return Q(n+" earns "+eur(m)+" gross a month. What is the gross pay for the year?","",eur(m*12),[eur(m*52),eur(m*10),eur(m*4*12),eur(m*13)],ePads(m*12),
+      "12 months in a year: "+eur(m)+" × 12 = "+eur(m*12)+".","",{t:"year",kind:kind});}
+    if(kind==="y2m"){var y=ri(20,70)*120000;return Q(n+" earns "+eur(y)+" gross a year. What is that a month?","",eur(y/12),[eur(Math.round(y/52)),eur(y/10),eur(y/12*4),eur(y/24)],ePads(y/12),
+      eur(y)+" ÷ 12 = "+eur(y/12)+" a month.","",{t:"year",kind:kind});}
+    var yy=ri(400,1400)*5200;return Q(n+" earns "+eur(yy)+" gross a year. What is that a week (52 weeks)?","",eur(yy/52),[eur(yy/12),eur(yy/50),eur(yy/48),eur(yy/52*4)],ePads(yy/52),
+      eur(yy)+" ÷ 52 = "+eur(yy/52)+" a week.","",{t:"year",kind:"y2w"});
+  }
+  function slipRows(){ // a weekly payslip with deductions of specified amounts
+    var g=ri(45,140)*1000+rnd([0,250,500,750]),tax=Math.round(g*rnd([8,10,12,14])/100/100)*100+rnd([0,40,75]),usc=ri(8,40)*100+rnd([0,25,60]),prsi=Math.round(g*0.04),pen=Math.random()<.5?ri(15,60)*100:0;
+    var rows=[["Gross pay",g],["Income tax",tax],["USC",usc],["PRSI",prsi]];if(pen)rows.push(["Pension",pen]);
+    var net=g-rows.slice(1).reduce(function(s,r){return s+r[1];},0);rows.push(["Net pay",net]);return rows;
+  }
+  function qPayslip(){
+    var n=rnd(NAMES),rows=slipRows(),last=rows.length-1,ask=Math.random()<.65?last:ri(1,last-1),ded=rows.slice(1,last).reduce(function(s,r){return s+r[1];},0),g=rows[0][1],net=rows[last][1];
+    if(ask===last)return Q("Here is "+n+"'s payslip for one week. What is the net pay?","",eur(net),[eur(g+ded),eur(ded),eur(net+rows[1][1]),eur(net+rows[2][1]),eur(net-rows[1][1])],ePads(net),
+      "Total deductions = "+rows.slice(1,last).map(function(r){return eur(r[1]);}).join(" + ")+" = "+eur(ded)+". Net pay = gross − deductions = "+eur(g)+" − "+eur(ded)+" = "+eur(net)+".",payslipHTML(n,rows,last),{t:"payslip",ask:"net"});
+    var x=rows[ask][1],others=ded-x;
+    return Q("Here is "+n+"'s payslip for one week. One deduction is missing. How much is the "+rows[ask][0]+"?","",eur(x),[eur(g-net),eur(g-others),eur(net-others),eur(x+100),eur(others)],ePads(x),
+      "Gross − net = all the deductions: "+eur(g)+" − "+eur(net)+" = "+eur(g-net)+". Take away the ones you know ("+eur(others)+"): "+eur(g-net)+" − "+eur(others)+" = "+eur(x)+".",payslipHTML(n,rows,ask),{t:"payslip",ask:"one"});
+  }
+  function qNetSpec(){
+    var n=rnd(NAMES),y=ri(24,58)*1000*100,tax=ri(20,90)*10000,usc=ri(4,20)*10000+rnd([0,2500,5000]),prsi=Math.round(y*0.04),net=y-tax-usc-prsi;
+    return Q(n+"'s gross income is "+eur(y)+" a year. "+n+" pays "+eur(tax)+" income tax, "+eur(usc)+" USC and "+eur(prsi)+" PRSI. What is "+n+"'s net income?","",eur(net),
+      [eur(y-tax),eur(tax+usc+prsi),eur(y-tax-usc),eur(net+2*prsi)],ePads(net),
+      "Deductions: "+eur(tax)+" + "+eur(usc)+" + "+eur(prsi)+" = "+eur(tax+usc+prsi)+". Net = "+eur(y)+" − "+eur(tax+usc+prsi)+" = "+eur(net)+".","",{t:"netspec"});
+  }
+
+  /* ---------- Income tax ---------- */
+  var CREDITS=[3400,3750,4000,4200,3550,2950,4500,3200];
+  function taxCase(){var G,T;do{G=ri(24,70)*1000+rnd([0,0,500,250]);T=rnd(CREDITS);}while(G*0.2<=T+1000);return {G:G*100,T:T*100};}
+  function qGrossTax(){
+    var n=rnd(NAMES),c=taxCase(),gt=c.G/5;
+    return Q(n+" has a gross income of "+eur(c.G)+" a year. The standard rate of income tax is 20%. How much is the gross tax?","",eur(gt),
+      [eur(c.G/50),eur(c.G-gt),eur(c.G*0.4),eur(c.G/20),eur(gt-c.T)],ePads(gt),
+      "Gross tax = 20% of the gross income = "+eur(c.G)+" × 0.2 = "+eur(gt)+". (Before the tax credit is taken off.)","",{t:"grosstax"});
+  }
+  function qTaxPay(){
+    var n=rnd(NAMES),c=taxCase(),gt=c.G/5,tp=gt-c.T;
+    return Q(n+" earns "+eur(c.G)+" a year and has a tax credit of "+eur(c.T)+". Income tax is charged at the standard rate of 20%. How much income tax does "+n+" pay?","",eur(tp),
+      [eur(gt),eur(gt+c.T),eur((c.G-c.T)/5),eur(c.G-c.T),eur(tp-c.T)],ePads(tp),
+      "Gross tax = 20% of "+eur(c.G)+" = "+eur(gt)+". Tax payable = gross tax − tax credit = "+eur(gt)+" − "+eur(c.T)+" = "+eur(tp)+".","",{t:"taxpay"});
+  }
+  function qNetTax(){
+    var n=rnd(NAMES),c=taxCase(),gt=c.G/5,tp=gt-c.T,net=c.G-tp;
+    return Q(n+" earns "+eur(c.G)+" a year, with a tax credit of "+eur(c.T)+" and income tax at 20%. There are no other deductions. What is "+n+"'s take-home (net) pay for the year?","",eur(net),
+      [eur(c.G-gt),eur(c.G-gt-c.T),eur(tp),eur(c.G-c.T)],ePads(net),
+      "Gross tax = "+eur(gt)+". Tax payable = "+eur(gt)+" − "+eur(c.T)+" = "+eur(tp)+". Net = "+eur(c.G)+" − "+eur(tp)+" = "+eur(net)+". (The tax credit makes the tax SMALLER, so net pay goes UP.)","",{t:"nettax"});
+  }
+  function qWhichTax(){
+    var ans="20% of the gross income, then take away the tax credit";
+    return C("Which of these gives the income tax a person pays (standard rate 20%)?","",ans,
+      ["20% of (the gross income minus the tax credit)","20% of the gross income, then add the tax credit","The gross income minus the tax credit","20% of the net income"],
+      "Work out the gross tax first (20% of the gross income). The tax credit is then taken off the TAX, not off the income.",null,"",{t:"whichtax"});
+  }
+  function qBackTax(){
+    var n=rnd(NAMES),c=taxCase(),tp=c.G/5-c.T;
+    return Q(n+" pays "+eur(tp)+" income tax for the year. The tax credit is "+eur(c.T)+" and the standard rate is 20%. What is "+n+"'s gross income?","",eur(c.G),
+      [eur(tp*5),eur((tp-c.T)*5),eur(tp*5+c.T),eur(tp+c.T)],ePads(c.G),
+      "Gross tax = tax paid + tax credit = "+eur(tp)+" + "+eur(c.T)+" = "+eur(tp+c.T)+". That is 20% of the income, so the income = "+eur(tp+c.T)+" × 5 = "+eur(c.G)+".","",{t:"backtax"});
+  }
+  function qTwoRates(){
+    var n=rnd(NAMES),Cc=rnd([38000,40000,42000,44000,36800,35300])*100,G,T=rnd(CREDITS)*100;do{G=ri(46,95)*1000*100+rnd([0,50000]);}while(G<=Cc+300000);
+    var st=Cc/5,hi=(G-Cc)*0.4,tp=st+hi-T;
+    return Q("Higher Level: "+n+" earns "+eur(G)+" a year. The standard rate cut-off point is "+eur(Cc)+", the standard rate is 20% and the higher rate is 40%. "+n+"'s tax credits are "+eur(T)+". How much income tax does "+n+" pay?","",eur(tp),
+      [eur(G/5-T),eur(G*0.4-T),eur(st+G*0.4-T),eur(st+hi),eur(st+hi+T)],ePads(tp),
+      "20% of "+eur(Cc)+" = "+eur(st)+". The rest, "+eur(G)+" − "+eur(Cc)+" = "+eur(G-Cc)+", at 40% = "+eur(hi)+". Gross tax = "+eur(st+hi)+". Minus the credits: "+eur(st+hi)+" − "+eur(T)+" = "+eur(tp)+".","",{t:"tworates"});
+  }
+  function qNetPct(){
+    var n=rnd(NAMES),g=ri(50,140)*1000+rnd([0,500]),tax=ri(40,200)*100,usc=ri(8,40)*100,p=rnd([4,4,4.2,5]),prsi=g*p/100,pen=rnd([0,0,5,6]),pe=g*pen/100;
+    if(!isInt(prsi)||!isInt(pe))return qNetPct();
+    var net=g-tax-usc-prsi-pe;
+    return Q("Higher Level: "+n+"'s gross pay is "+eur(g)+" a week. Tax payable is "+eur(tax)+" and USC is "+eur(usc)+". PRSI is "+p+"% of gross pay"+(pen?" and "+pen+"% of gross pay goes into a pension":"")+". What is the net pay?","",eur(net),
+      [eur(g-tax-usc),eur(g-tax-usc-p*100-pen*100),eur(net+prsi),eur(tax+usc+prsi+pe),eur(net-tax)],ePads(net),
+      "PRSI = "+p+"% of "+eur(g)+" = "+eur(prsi)+(pen?". Pension = "+pen+"% of "+eur(g)+" = "+eur(pe):"")+". Deductions = "+eur(tax+usc+prsi+pe)+". Net = "+eur(g)+" − "+eur(tax+usc+prsi+pe)+" = "+eur(net)+".","",{t:"netpct"});
+  }
+
+  /* ---------- Compound interest ---------- */
+  var SAVE=["puts","invests","saves"];
+  function qCIAmount(){
+    var n=ri(2,3),p=plan(n,true),r=p.rs[0],A=p.am[n],who=rnd(NAMES),si=simple(p.P,p.rs);
+    return Q(who+" "+rnd(SAVE)+" "+eur(p.P)+" in a savings account paying "+r+"% compound interest a year. What is it worth after "+n+" years?","",eur(A),
+      [eur(si),eur(p.am[n-1]),eur(A-p.P),eur(p.P*(1+r/10)),eur(A+p.P*r/100)],ePads(A),
+      "Each year × "+mult(r)+": "+p.am.map(eur).join(" → ")+". (Or "+eur(p.P)+" × "+mult(r)+sup(n)+" = "+eur(A)+".)","",{t:"ciamount",n:n});
+  }
+  function qCIInterest(){
+    var n=ri(2,3),p=plan(n,true),r=p.rs[0],A=p.am[n],who=rnd(NAMES),I=A-p.P,si=simple(p.P,p.rs)-p.P;
+    return Q(who+" "+rnd(SAVE)+" "+eur(p.P)+" for "+n+" years at "+r+"% compound interest a year. How much interest does "+who+" earn altogether?","",eur(I),
+      [eur(A),eur(si),eur(p.P*r/100),eur(p.am[n-1]-p.P)],ePads(I),
+      "Value after "+n+" years: "+p.am.map(eur).join(" → ")+". Interest = "+eur(A)+" − "+eur(p.P)+" = "+eur(I)+".","",{t:"ciinterest",n:n});
+  }
+  function qCITable(){
+    var n=ri(2,3),p=plan(n,Math.random()<.5),row=ri(0,n-1),col=ri(1,3),who=rnd(NAMES),Ai=p.am[row],I=Ai*p.rs[row]/100,cells=[Ai,I,Ai+I],x=cells[col-1];
+    if(row===0&&col===1)return qCITable();
+    return Q("This table shows "+who+"'s savings growing with compound interest. What goes in the yellow box?","",eur(x),
+      [eur(col===1?p.P:x+p.P*p.rs[row]/100),eur(col===2?Ai+I:I),eur(col===3?Ai+p.P*p.rs[row]/100:x+100),eur(x-100)],ePads(x),
+      col===1?"Each year starts with the END value of the year before: "+eur(Ai)+".":col===2?"Interest = "+p.rs[row]+"% of the START of that year = "+eur(Ai)+" × "+(p.rs[row]/100)+" = "+eur(I)+".":"End = start + interest = "+eur(Ai)+" + "+eur(I)+" = "+eur(Ai+I)+".",
+      ciHTML(p.P,p.rs,[row,col]),{t:"citable",row:row,col:col});
+  }
+  function qCIRates(){
+    var n=ri(2,3),p=plan(n,false),who=rnd(NAMES),A=p.am[n];
+    var rt=p.rs.map(function(r,i){return r+"% in year "+(i+1);}).join(", ");
+    return Q(who+" invests "+eur(p.P)+". The interest rate is "+rt+" (compound). What is the investment worth at the end of year "+n+"?","",eur(A),
+      [eur(simple(p.P,p.rs)),eur(p.am[n-1]),eur(A-p.P),eur(p.P*Math.pow(1+p.rs[0]/100,n))],ePads(A),
+      "Use each year's own rate on the new amount: "+p.am.map(eur).join(" → ")+".","",{t:"cirates",n:n});
+  }
+  function qLoan(){
+    var p,R,O,who=rnd(NAMES),tries=0;
+    do{p=plan(2,true);R=Math.round(p.am[1]*rnd([20,25,30,40,50])/100/10000)*10000;O=p.am[1]-R;tries++;}while((R<=0||!isInt(O*p.rs[0]/100))&&tries<50);
+    if(R<=0||!isInt(O*p.rs[0]/100))return qLoan();
+    var r=p.rs[0],ans=O+O*r/100;
+    return Q(who+" borrows "+eur(p.P)+" at "+r+"% compound interest a year. At the end of year 1, "+who+" repays "+eur(R)+". How much is owed at the end of year 2?","",eur(ans),
+      [eur(p.am[2]-R),eur((p.P-R)*(1+r/100)*(1+r/100)),eur(O),eur(p.am[2])],ePads(ans),
+      "End of year 1: "+eur(p.P)+" × "+mult(r)+" = "+eur(p.am[1])+". Repay "+eur(R)+": "+eur(O)+" left. Year 2: "+eur(O)+" × "+mult(r)+" = "+eur(ans)+".","",{t:"loan"});
+  }
+  function qWhichCI(){
+    var r=rnd([2,3,4,5,6,8]),n=ri(2,3),P=ri(2,20)*1000,ans="€"+num(P)+" × "+mult(r)+sup(n);
+    var pool=["€"+num(P)+" × "+mult(r*n),"€"+num(P)+" × "+(r/100)+sup(n),"€"+num(P)+" × "+mult(r*10)+sup(n),"€"+num(P)+" × "+mult(r)+" × "+n];
+    return C("Which calculation gives the value of €"+num(P)+" after "+n+" years at "+r+"% compound interest a year?","",ans,pool,
+      r+"% growth means × "+mult(r)+" each year. For "+n+" years: × "+mult(r)+" "+n+" times = × "+mult(r)+sup(n)+".",null,"",{t:"whichci",P:P,r:r,n:n});
+  }
+  function qBackP(){
+    var r=rnd([2,4,5,10,20,3,6,8]),f=(100+r)/100,P,A;
+    for(var t=0;t<300;t++){P=ri(2,40)*rnd([100,500,1000,2500])*100;A=P*f*f;if(isInt(A)&&isInt(P*f))break;}
+    if(!isInt(A)||!isInt(P*f))return qBackP();
+    A=Math.round(A);var who=rnd(NAMES);
+    return Q("Higher Level: "+who+" invested some money at "+r+"% compound interest a year. After 2 years it is worth "+eur(A)+". How much did "+who+" invest?","",eur(P),
+      [eur(Math.round(A*(100-2*r)/100)),eur(Math.round(A/f)),eur(Math.round(A*(100-r)/100*(100-r)/100)),eur(Math.round(A/(1+2*r/100)))],ePads(P),
+      "Value = P × "+mult(r)+"² = P × "+String(Math.round(f*f*1e6)/1e6)+". So P = "+eur(A)+" ÷ "+String(Math.round(f*f*1e6)/1e6)+" = "+eur(P)+". (Taking "+r+"% off twice does NOT get you back.)","",{t:"backp",r:r});
+  }
+  function qFindRate(){
+    var r=rnd([2,3,4,5,6,8,10,20]),f=(100+r)/100,P,A;
+    for(var t=0;t<300;t++){P=ri(2,40)*rnd([100,500,1000,2500])*100;A=P*f*f;if(isInt(A)&&isInt(P*f))break;}
+    if(!isInt(A))return qFindRate();
+    A=Math.round(A);var who=rnd(NAMES),gain=(A-P)/P*100;
+    return Q("Higher Level: "+eur(P)+" grows to "+eur(A)+" in 2 years at the same compound rate each year. What is the rate?","",pc(r),
+      [pc(gain/2),pc(gain),pc(r+1),pc(r*2),pc(r/2)],[pc(r+2),pc(r-1)],
+      eur(A)+" ÷ "+eur(P)+" = "+String(Math.round(f*f*1e6)/1e6)+" = (1 + r)². √"+String(Math.round(f*f*1e6)/1e6)+" = "+mult(r)+", so r = "+r+"%. (Halving the total % increase gives the wrong answer.)","",{t:"findrate"});
+  }
+
+  /* ---------- Spot the slip ---------- */
+  function qLine(){
+    var kind=rnd(["tax","ci"]),lines,bad=ri(0,4),L=["Line 1","Line 2","Line 3","Line 4","No mistake"],who=rnd(NAMES),en;
+    function off(x){return x+rnd([100,-100,1000,-1000,10,-10,500]);}
+    if(kind==="tax"){
+      var c=taxCase(),usc=ri(5,25)*10000,gt=c.G/5;
+      if(bad===0)gt=Math.random()<.5?c.G/50:off(gt);
+      var tp=gt-c.T,l2op="−";if(bad===1){if(Math.random()<.5){tp=gt+c.T;l2op="+";}else tp=off(tp);}
+      var D=tp+usc;if(bad===2)D=off(D);
+      var net=c.G-D;if(bad===3)net=off(net);
+      if([gt,tp,D,net].some(function(x){return x<=0;}))return qLine();
+      en=who+" earns "+eur(c.G)+" a year, has a tax credit of "+eur(c.T)+", pays USC of "+eur(usc)+" and income tax at 20%. Here is "+who+"'s working for the net pay. Which line has the first mistake?";
+      lines=["Gross tax = 20% of "+eur(c.G)+" = "+eur(gt),"Tax payable = "+eur(gt)+" "+l2op+" "+eur(c.T)+" = "+eur(tp),"Deductions = "+eur(tp)+" + "+eur(usc)+" = "+eur(D),"Net pay = "+eur(c.G)+" − "+eur(D)+" = "+eur(net)];
+    } else {
+      var p=plan(3,true),r=p.rs[0],a=[p.P],m=[],base=[];
+      // a[k] = value at the end of year k as WRITTEN; a mistake in line k changes a[k] and later lines carry on from it
+      for(var k=1;k<=3;k++){
+        var b0=a[k-1],mm=mult(r),v;
+        if(bad===k-1){var ty=rnd(["arith","mult","base"]);
+          if(ty==="mult"){mm=mult(r*10);v=b0*(100+10*r)/100;}
+          else if(ty==="base"&&k>1){b0=p.P;v=p.P*(100+r)/100;}
+          else v=off(b0*(100+r)/100);}
+        else v=b0*(100+r)/100;
+        if(!isInt(v))return qLine();
+        base.push(b0);m.push(mm);a.push(Math.round(v));
+      }
+      var I=a[3]-p.P;if(bad===3)I=off(I);
+      if(I<=0)return qLine();
+      en=who+" invests "+eur(p.P)+" for 3 years at "+r+"% compound interest a year. Here is "+who+"'s working for the interest earned. Which line has the first mistake?";
+      lines=[1,2,3].map(function(k){return "Year "+k+": "+eur(base[k-1])+" × "+m[k-1]+" = "+eur(a[k]);}).concat(["Interest = "+eur(a[3])+" − "+eur(p.P)+" = "+eur(I)]);
+    }
+    var ans=L[bad];
+    return C(en,"",ans,L.filter(function(x){return x!==ans;}),
+      bad===4?"Every line is right.":"The first wrong line is Line "+(bad+1)+": "+lines[bad]+".",en.replace(/ Here is.*$/,"")+" First mistake: "+ans,stepsHTML(lines),{t:"line",kind:kind,after:true});
+  }
+  var WHY={
+    taxfirst:"Took the tax credit off the income instead of off the tax",
+    taxadd:"Added the tax credit instead of taking it away",
+    taxforgot:"Forgot to take away the tax credit",
+    cisimple:"Worked out the interest on the first amount every year (simple interest)",
+    cimult:"Used the wrong multiplier (5% is × 1.05, not × 1.5)",
+    ciyears:"Did one year too few",
+    ciint:"Gave the interest, not the final value"
+  };
+  function qWhyWrong(){
+    var who=rnd(NAMES);
+    if(Math.random()<.5){
+      var c=taxCase(),cand={taxfirst:(c.G-c.T)/5,taxadd:c.G/5+c.T,taxforgot:c.G/5},k=rnd(Object.keys(cand));
+      return C(who+" earns "+eur(c.G)+" a year with a tax credit of "+eur(c.T)+". Income tax is 20%. "+who+" says the tax payable is "+eur(cand[k])+". What mistake did "+who+" make?","",WHY[k],
+        ["taxfirst","taxadd","taxforgot"].filter(function(x){return x!==k;}).map(function(x){return WHY[x];}).concat([WHY.cisimple]),
+        "Right answer: 20% of "+eur(c.G)+" = "+eur(c.G/5)+", minus "+eur(c.T)+" = "+eur(c.G/5-c.T)+".",null,"",{t:"whywrong",kind:"tax"});
+    }
+    var p=plan(3,true),r=p.rs[0],ks=["cisimple","ciyears","ciint"];
+    var cand2={cisimple:simple(p.P,p.rs),ciyears:p.am[2],ciint:p.am[3]-p.P};
+    if(r===5){ks.push("cimult");cand2.cimult=p.P*1.5*1.5*1.5;}
+    var k2=rnd(ks),vals=ks.map(function(x){return cand2[x];});
+    if(vals.some(function(v,i){return vals.indexOf(v)!==i;})||vals.indexOf(p.am[3])>=0)return qWhyWrong();
+    return C(who+" invests "+eur(p.P)+" for 3 years at "+r+"% compound interest a year. "+who+" says it will be worth "+eur(cand2[k2])+". What mistake did "+who+" make?","",WHY[k2],
+      ks.filter(function(x){return x!==k2;}).map(function(x){return WHY[x];}).concat([WHY.taxadd]),
+      "Right answer: "+p.am.map(eur).join(" → ")+", so it's worth "+eur(p.am[3])+".",null,"",{t:"whywrong",kind:"ci"});
+  }
+
+  var MAKERS={
+    pay:[qHours,qHours,qOvertime,qOvertime,qYear,qPayslip,qPayslip,qPayslip,qNetSpec],
+    tax:[qGrossTax,qTaxPay,qTaxPay,qNetTax,qNetTax,qWhichTax,qBackTax,qTwoRates,qNetPct],
+    interest:[qCIAmount,qCIAmount,qCIInterest,qCITable,qCITable,qCIRates,qLoan,qWhichCI,qBackP,qFindRate],
+    slip:[qLine,qLine,qLine,qWhyWrong,qWhyWrong],
+    mixed:[qHours,qOvertime,qYear,qPayslip,qNetSpec,qGrossTax,qTaxPay,qNetTax,qWhichTax,qBackTax,qTwoRates,qNetPct,qCIAmount,qCIInterest,qCITable,qCIRates,qLoan,qWhichCI,qBackP,qFindRate,qLine,qWhyWrong]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="pay"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="pay"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="pay"&&streak%5===0?700:350):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
