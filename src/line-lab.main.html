@@ -1,0 +1,147 @@
+<main id="main">
+<style>svg.tg{display:block;width:100%;height:auto;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:12px}svg.tg .gl{stroke:#DCE3EA;stroke-width:.8}svg.tg .ax{stroke:#5B6775;stroke-width:1.4}svg.tg .tk{font:600 9.5px Inter,sans-serif;fill:#6B7785}svg.tg .axl{font:italic 700 12px Inter,sans-serif;fill:#5B6775}svg.tg .ln{stroke-width:2.6;stroke-linecap:round}svg.tg .ln.a{stroke:#2962A6}svg.tg .ln.b{stroke:#7A4BB3}svg.tg .ln.c{stroke:#2E7D57}svg.tg .lnl{font:italic 800 14px Inter,sans-serif;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}svg.tg .lnl.a{fill:#2962A6}svg.tg .lnl.b{fill:#7A4BB3}svg.tg .lnl.c{fill:#2E7D57}svg.tg .sg{stroke:#2962A6;stroke-width:2.6;stroke-linecap:round}svg.tg .stp{stroke:#C0392B;stroke-width:1.8;stroke-dasharray:5 3}svg.tg .sl{font:700 11px Inter,sans-serif;fill:#C0392B;paint-order:stroke;stroke:#fff;stroke-width:3px}svg.tg .pt{fill:#1B2430}svg.tg .pt.mp{fill:#C0392B}svg.tg .pl{font:800 12px Inter,sans-serif;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}.frame svg.tg{margin-top:10px;max-width:420px}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.ef{max-width:330px;margin:6px auto}.exam .ef{max-width:none;margin:8px 0}.exam svg.tg .tk{font-size:11px}.exam svg.tg .pl,.exam svg.tg .lnl{font-size:15px}table.pat{border-collapse:collapse;margin:8px auto;min-width:0;width:auto}table.pat td,table.pat th{border:2px solid var(--line);padding:5px 12px;text-align:center}table.pat th{color:var(--ink);text-transform:none;background:var(--mist,#F3F6F9)}.fx{font-weight:800;font-size:18px;text-align:center;margin:6px 0}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Line Lab</h1>
+        <p>Slopes, midpoints, distances and the equation of a line, against the clock. Read lines off the grid, find where they meet, and spot parallel and perpendicular lines. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="slope"><div><b>Slope</b><span>Slope from two points and from a graph, positive or negative, and what the slope means in a real graph (euro per hour, litres per minute)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="dist"><div><b>Midpoint &amp; distance</b><span>The midpoint of [AB], finding the other end, and the distance between two points (Pythagoras on the grid)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="lines"><div><b>y = mx + c</b><span>Read the slope and where the line meets the y-axis, match a line to its equation, find the equation of a line, and check if a point is on it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="meet"><div><b>Parallel &amp; meeting</b><span>Parallel lines, where lines meet and cross the axes, plus Higher Level perpendicular lines</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. In the Slope round, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.5a, GT.5b, GT.5c (2018 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Coordinate geometry of the line</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are five points on the line y = 2x + 1. Each time x goes up by 1, what happens to y? Where does the line cross the y-axis? Can you see both numbers in the equation?</p>
+        <table class="pat"><tbody><tr><th>x</th><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr><tr><th>y</th><td>−3</td><td>−1</td><td>1</td><td>3</td><td>5</td></tr></tbody></table>
+        <div class="ef" data-fig="pat"></div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every step of 1 to the right, the line goes <b>up 2</b>: that's the <b>2 in front of x</b>, the <b>slope</b>. When x = 0, y = 1: the line crosses the y-axis at <b>(0, 1)</b>, the <b>number on its own</b>. That is the whole idea of <b>y = mx + c</b>: m is the slope and c is where the line meets the y-axis. What would y = 2x − 4 look like? (Just as steep, but crossing the y-axis at (0, −4).)</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Slope: how steep is the line?</h3>
+        <p>The <b>slope</b> (m) is the <b>rise ÷ run</b>: how far the line goes up for every step across. Going from A(−1, −1) to B(2, 1): run 3, rise 2, so the slope is <b>2/3</b>.</p>
+        <div class="ef" data-fig="slope"></div>
+        <p class="fx">slope m = (y₂ − y₁) ÷ (x₂ − x₁)</p>
+        <div class="ef" data-fig="signs"></div>
+        <div class="fm">
+          <div class="note"><b class="h">Positive slope</b>The line rises from left to right (line a, slope 1).</div>
+          <div class="note"><b class="h">Negative slope</b>The line falls from left to right (line b, slope −2).</div>
+          <div class="note"><b class="h">Zero slope</b>A flat (horizontal) line, like y = −3 (line c).</div>
+        </div>
+        <p style="margin-top:8px"><b>In a real graph</b> the slope is the <b>rate of change</b>: euro per hour, litres per minute, euro per km. Where the graph meets the y-axis is the <b>starting value</b>: a call-out charge, a fixed charge, the water there at the start.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Midpoint and distance</h3>
+        <div class="ef" data-fig="dist"></div>
+        <div class="fm">
+          <div class="note"><b class="h">Midpoint</b>Add the x's and halve, add the y's and halve.<br>A(−2, −1), B(2, 2): M = (0, 0.5)<br>((x₁ + x₂) ÷ 2, (y₁ + y₂) ÷ 2)</div>
+          <div class="note"><b class="h">Distance (length)</b>It's Pythagoras: across 4, up 3, so √(4² + 3²) = √25 = 5.<br>√((x₂ − x₁)² + (y₂ − y₁)²)</div>
+        </div>
+        <p style="margin-top:8px"><b>Finding the other end:</b> if M is the midpoint and you know A, go from A to M, then the same again. A(1, 2), M(3, 5): 2 across and 3 up, so B is (5, 8). Revise Pythagoras with <a href="ladder-lab.html">Ladder Lab</a>.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The equation of a line</h3>
+        <div class="fm">
+          <div class="note"><b class="h">y = mx + c</b>m = slope, c = where it meets the y-axis, (0, c).<br>y = 3x − 5: slope 3, meets the y-axis at (0, −5).</div>
+          <div class="note"><b class="h">y − y₁ = m(x − x₁)</b>Use it when you know one point (x₁, y₁) and the slope. Through (2, 3) with slope 4: y − 3 = 4(x − 2), so y = 4x − 5.</div>
+          <div class="note"><b class="h">Two points?</b>Find the slope first, then use y − y₁ = m(x − x₁) with either point.</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li><b>Get y on its own first.</b> y = 7 − 2x has slope <b>−2</b> (not 7). It's y = −2x + 7.</li>
+          <li><b>Is a point on the line?</b> Put its x into the equation. If you get its y, it's on the line. (3, 4) is on y = 2x − 2 because 2 × 3 − 2 = 4.</li>
+          <li><b>Where does it cross the axes?</b> On the y-axis x = 0; on the x-axis y = 0. y = 2x − 6 crosses the x-axis where 0 = 2x − 6, at (3, 0).</li>
+          <li><b>Higher Level: ax + by + c = 0.</b> Get y on its own: 2x + 3y − 6 = 0 → 3y = −2x + 6 → y = −⅔x + 2. Shortcut: the slope is −a ÷ b.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Parallel, perpendicular and where lines meet</h3>
+        <div class="fm">
+          <div class="note"><b class="h">Parallel</b>Same slope. y = 2x + 1 and y = 2x − 3 are parallel.</div>
+          <div class="note"><b class="h">Perpendicular (Higher Level)</b>The slopes multiply to −1: flip the fraction and change the sign. 2/3 → −3/2; 4 → −¼.</div>
+          <div class="note"><b class="h">Where they meet</b>Read the point where the lines cross, then check it in BOTH equations.</div>
+        </div>
+
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> run ÷ rise instead of rise ÷ run; losing a minus sign when you subtract a negative (5 − (−2) = 7); mixing the order (y₂ − y₁ on top, x₂ − x₁ underneath, both from the same point first); subtracting for the midpoint (you add, then halve); adding instead of squaring for distance (√(3² + 4²), not 3 + 4); reading c as the slope; forgetting to get y on its own first; giving the slope of a parallel line the opposite sign.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Coordinate geometry of the line comes up most years, usually as a <b>graph or a list of points</b> with parts that build on each other: the midpoint, the slope, the length, the equation, then a parallel line, where two lines meet, or a question about a real graph (costs, journeys, tanks filling). Higher Level adds perpendicular lines and lines written as ax + by + c = 0.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write the formula, then put in the numbers</b> with brackets for negatives: (5 − (−1)) ÷ (2 − (−3)). The formulas are in the <i>Formulae and Tables</i> booklet.</li>
+            <li><b>Label (x₁, y₁) and (x₂, y₂)</b> before you start, so the signs don't get mixed up.</li>
+            <li><b>Check your answer:</b> put the points back into your equation, and check a meeting point in both lines.</li>
+            <li><b>In a context question, say what the numbers mean</b> with units: "€2 per km", "a €4 fixed charge".</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The segment [AB].</b> A is (−3, 1) and B is (3, 5). (a) Find the midpoint of [AB]. (b) Find the slope of AB. (c) Find |AB|, the length of [AB], to 1 decimal place. (d) Find the equation of the line AB. (e) Does the point C(6, 7) lie on the line AB?
+              <details><summary>Show the worked answer</summary><p>(a) ((−3 + 3) ÷ 2, (1 + 5) ÷ 2) = <b>(0, 3)</b>.<br>(b) (5 − 1) ÷ (3 − (−3)) = 4 ÷ 6 = <b>2/3</b>.<br>(c) √(6² + 4²) = √52 = <b>7.2</b>.<br>(d) y − 1 = ⅔(x − (−3)) → y − 1 = ⅔x + 2 → <b>y = ⅔x + 3</b>. (It goes through the midpoint (0, 3), so c = 3 ✓.)<br>(e) ⅔ × 6 + 3 = 4 + 3 = 7 ✓ <b>Yes</b>, C is on the line.</p></details></li>
+            <li><b>Two lines.</b> The lines l and k are drawn on the grid.
+              <div class="ef" data-fig="ex2"></div>
+              (a) Write down the point where l crosses the y-axis, and find the slope of l. (b) Write the equation of l. (c) Find the equation of k. (d) Write down the point where l and k meet, and check it in both equations. (e) Higher Level: are l and k perpendicular? Give a reason.
+              <details><summary>Show the worked answer</summary><p>(a) <b>(0, −2)</b>. From (0, −2) to (1, 1): run 1, rise 3, so the slope is <b>3</b>.<br>(b) <b>y = 3x − 2</b>.<br>(c) k meets the y-axis at (0, 6) and falls 1 for every 1 across (slope −1): <b>y = −x + 6</b>.<br>(d) <b>(2, 4)</b>. Check: 3 × 2 − 2 = 4 ✓ and −2 + 6 = 4 ✓.<br>(e) 3 × (−1) = −3, not −1, so <b>no</b>, they are not perpendicular.</p></details></li>
+            <li><b>Taxi fares.</b> A taxi company's fares are shown by a straight-line graph through (0, 4) and (10, 24), where x is the distance in km and y is the fare in euro. (a) Find the slope of the line and say what it means. (b) What does the point (0, 4) tell you? (c) Write the equation of the line. (d) How much is a 15 km journey? (e) A second company charges €3 per km with no fixed charge. Show that both companies charge the same for a 4 km journey.
+              <details><summary>Show the worked answer</summary><p>(a) (24 − 4) ÷ (10 − 0) = <b>2</b>: the fare goes up by <b>€2 per km</b>.<br>(b) A <b>€4 fixed charge</b>, before the taxi moves.<br>(c) <b>y = 2x + 4</b>.<br>(d) 2 × 15 + 4 = <b>€34</b>.<br>(e) First company: 2 × 4 + 4 = €12. Second company: 3 × 4 = €12. <b>Both €12</b> ✓. (On a graph, this is where the two lines meet.)</p></details></li>
+            <li><b>Parallel and perpendicular.</b> The line p has equation y = 2x − 3. (a) Show that (4, 5) is on p. (b) Find the equation of the line through (1, 6) that is parallel to p. (c) Where does p cross the x-axis? (d) Higher Level: find the equation of the line through (2, 1) that is perpendicular to p. (e) Higher Level: show that 4x − 2y − 6 = 0 is the same line as p.
+              <details><summary>Show the worked answer</summary><p>(a) 2 × 4 − 3 = 5 ✓, so (4, 5) is on p.<br>(b) Same slope, 2: y − 6 = 2(x − 1) → <b>y = 2x + 4</b>.<br>(c) 0 = 2x − 3 → x = 1.5: <b>(1.5, 0)</b>.<br>(d) Perpendicular slope: 2 → −½. y − 1 = −½(x − 2) → y − 1 = −½x + 1 → <b>y = −½x + 2</b>.<br>(e) −2y = −4x + 6 → y = 2x − 3 ✓, the same as p.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/coordinate-geometry-line-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Coordinate Geometry of the Line Teacher Pack (€5)</a>: Line Lab mingle cards, Line Swap A/B cards, Line Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
