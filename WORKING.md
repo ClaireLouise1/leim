@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-18 14:10 · Maths Order 28 Coordinate geometry (Line Lab) · maths-c
