@@ -50,7 +50,8 @@ DESC = {"integer-rush.html": "negative numbers, the signs rules, BIMDAS and the 
         "number-line-shade.html": "reading and drawing inequalities on a number line (open and closed dots, ℕ, ℤ and ℝ), solving linear inequalities, listing, counting and finding the biggest or smallest whole-number answer, taxi, lift and savings problems and reading a solution from a graph, plus Higher Level flips, double inequalities and fractions, with an Exam corner of exam-style questions.",
         "rearrange-race.html": "changing the subject of a formula (v = u + at, A = ½bh, F = 1.8C + 32), using the rearranged formula, adding and subtracting algebraic fractions, long division of a quadratic by a bracket and spotting the first mistake in someone's working, plus Higher Level fractions with x on the bottom, square-root formulas, the subject appearing twice and cubics",
         "growth-spotter.html": "telling linear, quadratic and exponential patterns apart, 1st and 2nd differences, next and missing terms, growing tile patterns, doubling and tripling, plus Higher Level general terms Tₙ = an² + bn + c",
-        "surd-simplify.html": "simplifying surds like √72 = 6√2, adding like surds, multiplying, dividing and squaring surds, plus Higher Level brackets with surds"}
+        "surd-simplify.html": "simplifying surds like √72 = 6√2, adding like surds, multiplying, dividing and squaring surds, plus Higher Level brackets with surds",
+        "exam-mix.html": "questions from every Maths topic mixed like the real paper, plus two-step problems that join topics: area and cost, speed and arrival time, mean working backwards"}
 live = [r for r in MATHS if r[5]]
 cards = "\n".join(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><h3>{e(r[4])}</h3><p>{e(r[2])}: {DESC.get(r[5], "")}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>' for r in live)
 nxt = [r for r in MATHS if not r[5]][:3]

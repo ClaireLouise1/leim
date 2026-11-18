@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 18 Nov 19:58 · Maths Order 38 Problem solving & exam mix · maths-m

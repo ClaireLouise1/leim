@@ -1,0 +1,215 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function r2(x){return Math.round(x*100)/100;}
+  /* money: €574 or €33.75 */
+  function eu(x){x=r2(x);return "€"+(Math.abs(x-Math.round(x))<1e-9?String(Math.round(x)):x.toFixed(2));}
+  function dl(x){x=r2(x);return "$"+(Math.abs(x-Math.round(x))<1e-9?String(Math.round(x)):x.toFixed(2));}
+  function hm(mins){mins=((mins%1440)+1440)%1440;var h=Math.floor(mins/60),m=mins%60;return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;}
+  /* fact card: each line is one fact */
+  function FC(lines){return '<div class="facts">'+lines.map(function(l){return "<p>"+l+"</p>";}).join("")+"</div>";}
+  /* choice question: wrong options are unique and never equal to the answer */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];ans=String(ans);seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|€-|\$-|^-|−0\b/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:ans,wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function nums(a,unit){return a.map(function(v){return v+(unit||"");});}
+
+  /* ================= PROBLEM SOLVER: two or three steps, strands joined ================= */
+  /* 1 Area & perimeter + money */
+  function pFence(){var l=ri(6,20),w=ri(4,l-1),p=rnd([8,9,12,15,18,20,25]),P=2*(l+w),ans=P*p;
+    return C("Cost to fence all round?",eu(ans),[eu(l*w*p),eu((l+w)*p),eu((2*l+w)*p),eu(P*p+p*2),eu(P+p)],
+      "Perimeter = 2 × ("+l+" + "+w+") = "+P+" m. Cost = "+P+" × €"+p+" = "+eu(ans)+".",
+      FC(["🌱 Garden: "+l+" m by "+w+" m","🪵 Fencing: €"+p+" per metre"]),{t:"fence",rv:"Garden "+l+" m × "+w+" m, fence €"+p+"/m"});}
+  /* 2 Area + division, round UP */
+  function pPaint(){var l,h,cov,coats,A;do{l=ri(4,12);h=rnd([2,2.5,3]);cov=rnd([4,5,6,8,10]);coats=rnd([1,1,2]);A=l*h*coats;}while(Math.abs(A/cov-Math.round(A/cov))<1e-9||A/cov>14);
+    var ans=Math.ceil(A/cov),f=Math.floor(A/cov);
+    return C("Tins needed?",ans+" tins",nums([f,ans+1,Math.ceil(l*h/cov)===ans?ans+2:Math.ceil(l*h/cov),Math.ceil(2*(l+h)*coats/cov),Math.round(A)]," tins"),
+      "Area = "+l+" × "+h+(coats>1?" × 2 coats":"")+" = "+A+" m². "+A+" ÷ "+cov+" = "+r2(A/cov)+". Round UP: "+ans+" tins.",
+      FC(["🧱 Wall: "+l+" m by "+h+" m",coats>1?"🖌️ 2 coats":"🖌️ 1 coat","🪣 1 tin covers "+cov+" m²"]),{t:"paint",rv:"Wall "+l+" × "+h+", "+coats+" coat(s), tin "+cov+" m²"});}
+  /* 3 Linear equation from a bill */
+  function pPlan(){var a=rnd([5,6,8,10,12,15]),b=rnd([2,3,4,5]),g=ri(3,12),T=a+b*g;
+    var pool=[g+1,g-1,T-a,Math.round(T/b),Math.round((T+a)/b),g+2];
+    return C("How many GB?",g+" GB",nums(pool," GB"),"€"+a+" + €"+b+" × GB = €"+T+". So "+b+" × GB = "+(T-a)+", GB = "+g+".",
+      FC(["📱 €"+a+" a month + €"+b+" per GB","🧾 Bill: €"+T]),{t:"plan",rv:"€"+a+" + €"+b+"/GB, bill €"+T});}
+  /* 4 Two percentage changes */
+  function pSale(){var x,y,P,ans;do{P=rnd([40,60,80,120,150,200,250]);x=rnd([10,20,25,30,40]);y=rnd([10,20,25,50]);ans=P*(100-x)/100*(100-y)/100;}while(Math.abs(ans*100-Math.round(ans*100))>1e-6);
+    return C("Price now?",eu(ans),[eu(P*(100-x-y)/100),eu(P*(100-x)/100),eu(P*(100-y)/100),eu(P*x/100*y/100),eu(ans+P*x/100*y/100*2)],
+      x+"% off: €"+P+" × "+(100-x)/100+" = "+eu(P*(100-x)/100)+". Then "+y+"% off: × "+(100-y)/100+" = "+eu(ans)+". Not "+(x+y)+"% off!",
+      FC(["🧥 Jacket: €"+P,"🏷️ "+x+"% off","🏷️ Then "+y+"% off the new price"]),{t:"sale",rv:"€"+P+", "+x+"% off then "+y+"% off"});}
+  /* 5 Ratio then fraction */
+  function pShare(){var a,b,k,d,T;do{a=ri(1,5);b=ri(a+1,8);d=rnd([2,3,4,5]);k=d*ri(2,10);T=(a+b)*k;}while(T>400||gcd(a,b)>1);
+    var sm=a*k,ans=sm-sm/d;
+    var fr=d===2?"½":d===3?"⅓":d===4?"¼":"⅕";
+    return C("Ann has left?",eu(ans),[eu(sm/d),eu(b*k-b*k/d),eu(sm),eu(T-T/d),eu(T/a-T/a/d),eu(ans+k),eu(ans*2),eu(sm+sm/d),eu(ans+5),eu(ans*3),eu(ans+2)],
+      "1 part = €"+T+" ÷ "+(a+b)+" = €"+k+". Ann: "+a+" × €"+k+" = €"+sm+". Spends "+fr+": €"+(sm/d)+". Left: "+eu(ans)+".",
+      FC(["💶 €"+T+" shared "+a+" : "+b,"👩 Ann gets the smaller share","🛍️ She spends "+fr+" of it"]),{t:"share",rv:"€"+T+" in "+a+":"+b+", spends 1/"+d});}
+  function gcd(a,b){return b?gcd(b,a%b):a;}
+  /* 6 Speed, distance, time + clock */
+  function pTrip(){var v=rnd([40,50,60,70,80,90,100]),tm=rnd([60,75,90,105,120,135,150,180,210]),d=v*tm/60,dep=ri(6*4,16*4)*15+rnd([0,5,10]);
+    if(Math.abs(d-Math.round(d))>1e-9)return pTrip();
+    var ans=hm(dep+tm),h=Math.floor(tm/60),m=tm%60;
+    var slip=hm(dep+h*60+Math.round(m*100/60)),slip2=hm(dep+Math.round(tm/60*100));
+    return C("Arrives at?",ans,[slip,slip2,hm(dep+tm+30),hm(dep+tm-15),hm(dep+60*Math.round(tm/60))],
+      "Time = "+d+" ÷ "+v+" = "+(tm/60)+" h = "+h+" h "+m+" min. "+hm(dep)+" + "+h+" h "+m+" min = "+ans+".",
+      FC(["🚗 "+d+" km at "+v+" km/h","🕘 Leaves at "+hm(dep)]),{t:"trip",rv:d+" km at "+v+" km/h from "+hm(dep)});}
+  /* 7 Pythagoras + subtraction */
+  function pPath(){var tr=rnd([[3,4,5],[5,12,13],[8,15,17],[6,8,10],[7,24,25]]),k=rnd([2,3,4,5,10]);if(tr[2]*k>130)k=2;
+    var a=tr[0]*k,b=tr[1]*k,c=tr[2]*k,ans=a+b-c;if(Math.random()<0.5){var t=a;a=b;b=t;}
+    return C("Metres saved?",ans+" m",nums([c,a+b,c-Math.min(a,b),Math.max(a,b)-Math.min(a,b),ans+k,a+b-Math.round(Math.sqrt(a*a+b*b)/2)]," m"),
+      "Diagonal: √("+a+"² + "+b+"²) = √"+(a*a+b*b)+" = "+c+" m. Two sides: "+(a+b)+" m. Saved: "+(a+b)+" − "+c+" = "+ans+" m.",
+      FC(["🟩 Field: "+a+" m by "+b+" m","🚶 Walk the diagonal, not two sides"]),{t:"path",rv:"Field "+a+" × "+b+", diagonal"});}
+  /* 8 Mean working backwards */
+  function pMean(){var n=4,s,m,need;do{s=[];for(var i=0;i<n;i++)s.push(ri(50,90));m=ri(60,85);need=m*(n+1)-s.reduce(function(x,y){return x+y;},0);}while(need<40||need>100);
+    var sum=s.reduce(function(x,y){return x+y;},0);
+    return C("Score needed in test 5?",need,[m,Math.round(sum/n),m*n-sum,need+5,need-5,Math.round((sum+m)/(n+1))],
+      "Total needed: 5 × "+m+" = "+(5*m)+". Total so far: "+sum+". "+(5*m)+" − "+sum+" = "+need+".",
+      FC(["📝 Scores: "+s.join(", "),"🎯 Wants a mean of "+m+" after 5 tests"]),{t:"mean",rv:"Scores "+s.join(", ")+", mean "+m});}
+  /* 9 Probability + equation */
+  function pBag(){var r=ri(2,9),b=ri(r+2,r+12),ans=b-r;
+    var pool=[b,ans+1,ans-1,b+r,Math.round(b/2)];
+    return C("Red balls to add?",ans,pool,"P(red) = ½ when red = blue. "+b+" blue, so "+b+" red: add "+b+" − "+r+" = "+ans+".",
+      FC(["🔴 "+r+" red  🔵 "+b+" blue","🎯 Add red so P(red) = ½"]),{t:"bag",rv:r+" red, "+b+" blue → P(red) = ½"});}
+  /* 10 Volume + units + rate */
+  function pTank(){var l,w,h,rate,V,ans;do{l=rnd([30,40,50,60,80,100]);w=rnd([20,25,30,40,50]);h=rnd([20,25,30,40,50]);rate=rnd([2,3,4,5,6,8,10]);V=l*w*h/1000;ans=V/rate;}while(Math.abs(ans-Math.round(ans))>1e-9||ans>60||ans<3);
+    return C("Minutes to fill?",ans+" min",nums([V,ans*10,V*rate,Math.round(ans/10)||ans+3,ans*60,ans+rate]," min"),
+      l+" × "+w+" × "+h+" = "+(l*w*h)+" cm³ = "+V+" litres (1 litre = 1000 cm³). "+V+" ÷ "+rate+" = "+ans+" min.",
+      FC(["🐟 Tank: "+l+" cm × "+w+" cm × "+h+" cm","🚰 Fills at "+rate+" litres a minute"]),{t:"tank",rv:"Tank "+l+"×"+w+"×"+h+", "+rate+" L/min"});}
+  /* 11 Wages with overtime */
+  function pWage(){var r=rnd([12,13,14,15,16,18,20]),h=rnd([30,35,38,39,40]),o=ri(2,8),ans=r*h+r*1.5*o;
+    return C("Gross pay?",eu(ans),[eu(r*(h+o)),eu(r*h+r*2*o),eu(r*h+1.5*o),eu(r*h*1.5),eu(r*h)],
+      "Basic: "+h+" × €"+r+" = "+eu(r*h)+". Overtime rate: €"+r+" × 1.5 = "+eu(r*1.5)+". "+o+" × "+eu(r*1.5)+" = "+eu(r*1.5*o)+". Total "+eu(ans)+".",
+      FC(["⏱️ €"+r+" an hour for "+h+" hours","⭐ Overtime: "+o+" hours at time-and-a-half"]),{t:"wage",rv:"€"+r+"/h × "+h+" + "+o+" h overtime"});}
+  /* 12 Pattern + inequality */
+  function pTiles(){var a=ri(2,6),b=ri(1,6),N,ans;do{N=ri(30,120);ans=Math.floor((N-b)/a);}while((N-b)%a===0&&Math.random()<0.7);
+    var pool=[ans+1,Math.floor(N/a),a*N+b,ans-1,Math.round(N/(a+b))];
+    return C("Biggest stage you can build?","Stage "+ans,pool.map(function(v){return "Stage "+v;}),
+      a+"n + "+b+" ≤ "+N+". So "+a+"n ≤ "+(N-b)+", n ≤ "+r2((N-b)/a)+". Biggest whole number: "+ans+".",
+      FC(["🟦 Stage n uses "+a+"n + "+b+" tiles","📦 You have "+N+" tiles"]),{t:"tiles",rv:a+"n + "+b+" tiles, have "+N});}
+  /* 13 Currency + subtraction */
+  function pCash(){var E,r,sp,D;do{E=rnd([100,150,200,250,300,400,500]);r=rnd([1.05,1.08,1.1,1.12,1.15,1.2]);D=r2(E*r);sp=10*ri(3,Math.floor(D/10)-2);}while(sp>=D);
+    var ans=r2(D-sp);
+    return C("Dollars left?",dl(ans),[dl(r2(E/r)-sp),dl(E-sp),dl(r2((E-sp)*r)),dl(r2(D+sp)),dl(ans+10),dl(ans+20),dl(ans*2),dl(r2(E*(r-1)))],
+      "€"+E+" × "+r+" = "+dl(D)+". "+dl(D)+" − "+dl(sp)+" = "+dl(ans)+".",
+      FC(["💶 €"+E+" changed to dollars","💱 €1 = $"+r,"🛍️ Spends $"+sp]),{t:"cash",rv:"€"+E+" at $"+r+", spends $"+sp});}
+  /* 14 Perimeter equation + area */
+  function pRect(){var w=ri(2,15),d=ri(1,8),P=2*(2*w+d),L=w+d,ans=w*L;
+    return C("Area?",ans+" cm²",nums([P,(P/4)*(P/4),L*L,w*w,ans+d,(w+1)*(L+1)]," cm²"),
+      "Width x, length x + "+d+": 2x + 2(x + "+d+") = "+P+", 4x = "+(P-2*d)+", x = "+w+". Area = "+w+" × "+L+" = "+ans+" cm².",
+      FC(["▭ Rectangle: perimeter "+P+" cm","📏 Length is "+d+" cm more than width"]),{t:"rect",rv:"Perimeter "+P+", length = width + "+d});}
+  /* 15 VAT + division */
+  function pVat(){var parts=rnd([2,3,4]),base=100*parts*ri(1,4),tot=base*1.23,ans=tot/parts;
+    return C("Each payment?",eu(ans),[eu(base/parts),eu(base*0.23/parts),eu(base/parts+23),eu(tot),eu(base*1.13/parts)],
+      "VAT: €"+base+" × 1.23 = "+eu(tot)+". ÷ "+parts+" = "+eu(ans)+".",
+      FC(["🧾 Bill: €"+base+" before VAT","➕ VAT at 23%","💳 Paid in "+parts+" equal parts"]),{t:"vat",rv:"€"+base+" + 23% VAT ÷ "+parts});}
+  var SOLVE=[pFence,pPaint,pPlan,pSale,pShare,pTrip,pPath,pMean,pBag,pTank,pWage,pTiles,pCash,pRect,pVat];
+
+  /* ---------- question bundles from the other games (loaded when needed) ---------- */
+  var STR={number:1,algebra:1,geometry:1,stats:1},loading={};
+  function need(list,cb){var left=list.filter(function(s){return !(window.LEIM_MAKERS&&STRLOAD[s]);});
+    if(!left.length)return cb();var n=left.length;
+    left.forEach(function(s){if(loading[s]){loading[s].push(done);return;}loading[s]=[done];
+      var sc=document.createElement("script");sc.src="exam-mix-"+s+".js?v=1";
+      sc.onload=function(){STRLOAD[s]=1;var q=loading[s];loading[s]=null;q.forEach(function(f){f();});};
+      sc.onerror=function(){var q=loading[s];loading[s]=null;q.forEach(function(f){f(true);});};
+      document.body.appendChild(sc);});
+    var failed=false;function done(err){if(err)failed=true;if(--n===0)cb(failed);}}
+  var STRLOAD={};
+  var SLUGS={number:["integer-rush","prime-smash","fraction-match","round-it","venn-sorter","percent-pop","share-it-out","clock-dash","power-up","shop-keeper","payslip-puzzle","road-trip","surd-simplify"],
+    algebra:["like-term-sweep","pattern-builder","bracket-blaster","balance-it","factor-match","two-line-crossing","root-rush","graph-match","number-line-shade","rearrange-race","growth-spotter"],
+    geometry:["angle-chase","construction-steps","floor-planner","mirror-move","proof-builder","ladder-lab","line-lab","clinometer-challenge","pack-it"],
+    stats:["spin-and-predict","data-detective","average-ace","coin-dice-lab"]};
+  /* one maker per game: picks a game, then one of its questions, and tags it */
+  function fromGame(slug){var f=function(){var M=window.LEIM_MAKERS[slug],q=rnd(M.mixed)();q.src=slug;return q;};f.realName="g_"+slug;return f;}
+  function solveTag(f){var g=function(){var q=f();q.src="solve";return q;};g.realName=f.name;return g;}
+  var MAKERS={solve:SOLVE.map(solveTag),number:[],algebra:[],geometry:[],stats:[],mixed:[]};
+  Object.keys(SLUGS).forEach(function(k){SLUGS[k].forEach(function(s){MAKERS[k].push(fromGame(s));});});
+  /* full paper mix: a strand first (weights roughly like the paper), then a game */
+  var MIXW=[["solve",3],["number",3],["algebra",3],["geometry",3],["stats",2]];
+  MAKERS.mixed=[function mixPick(){var tot=0,i;MIXW.forEach(function(w){tot+=w[1];});var r=Math.random()*tot;
+    for(i=0;i<MIXW.length;i++){r-=MIXW[i][1];if(r<0)break;}return rnd(MAKERS[MIXW[Math.min(i,MIXW.length-1)][0]])();}];
+  var NEEDS={solve:[],number:["number"],algebra:["algebra"],geometry:["geometry"],stats:["stats"],mixed:["number","algebra","geometry","stats"]};
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function start(m){
+    mode=m;$("en").textContent="Loading…";$("frame").innerHTML="";$("choices").innerHTML="";
+    show("play");$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    need(NEEDS[m],function(err){
+      if(err){$("en").textContent="Couldn't load the questions. Check your connection and try again.";return;}
+      DUR=m==="solve"?120:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+      $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+      $("bar").style.width="100%";$("bar").className="";
+      next();
+      clearInterval(timer);
+      timer=setInterval(function(){
+        left--;$("time").textContent=left+"s";
+        $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+        $("bar").className=left<=10?"low":"";
+        if(left<=0)finish();
+      },1000);
+    });
+  }
+  function name(src){return src==="solve"?"Problem solver":(window.LEIM_GAMES&&LEIM_GAMES[src])||"";}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").innerHTML='<span class="src">'+esc(name(q.src))+'</span>'+esc(q.en);
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame gx-"+q.src+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="solve"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||"",src:current.src});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="solve"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=16?"Brilliant! That's exam-ready.":score>=10?"Great work!":score>=5?"Good! Keep going.":"Good start. Try again!";
+    $("summary").textContent=msg+" Best streak: "+best+". ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>",games={};
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;if(m.src&&m.src!=="solve")games[m.src]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      html+="</ul>";
+      var g=Object.keys(games);
+      if(g.length)html+="<p style='font-size:15px'><b>Practise:</b> "+g.map(function(s){return "<a href='"+s+".html'>"+esc(name(s))+"</a>";}).join(" · ")+"</p>";
+      r.innerHTML=html;
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,SOLVE:SOLVE,load:need,NEEDS:NEEDS};
+})();
+</script>

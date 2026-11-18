@@ -154,6 +154,7 @@ main=f'''<main id="main">
     <li><strong>Never leave a part blank.</strong> Write the formula, put in the numbers, draw a labelled diagram: one line can be worth marks.</li>
   </ol>
   <a class="card cardlink" href="junior-cycle-maths.html#games"><h3 style="margin:0">Practise topic by topic: free Maths games</h3><p>60-second games for each topic, each with the rules, a free printable sheet and an Exam corner of exam-style questions with worked answers.</p><p style="color:var(--green);font-weight:700">Play the Maths games →</p></a>
+  <a class="card cardlink" href="exam-mix.html" style="margin-top:12px"><h3 style="margin:0">Mixed practice like the real paper: Exam Mix</h3><p>Questions from every topic, mixed together against the clock, plus two-step problems that join topics (area and cost, speed and arrival time).</p><p style="color:var(--green);font-weight:700">Play Exam Mix →</p></a>
 </section>
 
 <section id="grades">

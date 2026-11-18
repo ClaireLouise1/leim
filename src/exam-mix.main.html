@@ -1,0 +1,128 @@
+<main id="main">
+<style>.facts{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 16px;text-align:left;font-size:19px;font-weight:700;line-height:1.35}.facts p{margin:4px 0}.en .src{display:block;width:max-content;margin:0 auto 6px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--mist);border-radius:999px;padding:3px 10px}.steps4{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.steps4 .note b.h{display:block;font-size:18px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Exam Mix</h1>
+        <p>Questions from every Maths topic, mixed like the real paper. Plus two-step problems. Tips below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Problem-solving tips</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="solve"><div><b>Problem solver</b><span>🌱 Fence cost? 🚗 Arrival time?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="number"><div><b>Number mix</b><span>13 topics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="algebra"><div><b>Algebra &amp; functions mix</b><span>11 topics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="geometry"><div><b>Geometry &amp; trig mix</b><span>9 topics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="stats"><div><b>Statistics &amp; probability mix</b><span>4 topics</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Full paper mix</b><span>Everything</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: use paper. Keys 1–4 work too. In Problem solver, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: U.5, U.6, U.7, U.8, U.9, U.10, U.13 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Problem-solving tips</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Problem solving</h2>
+        <p>Most exam questions join two or three topics: an <b>area</b> becomes a <b>cost</b>, a <b>speed</b> becomes a <b>clock time</b>. Each step on its own is easy. The skill is spotting the steps.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:6px">
+          <li class="note">🌱 Garden 10 m by 6 m · fence €20 per m → <b>perimeter</b> 32 m → <b>€640</b></li>
+          <li class="note">🧱 Wall 8 m by 3 m · tin covers 5 m² → <b>area</b> 24 m² → 4.8 → <b>5 tins</b></li>
+          <li class="note">🚗 150 km at 60 km/h, leaves 10:15 → <b>2.5 h</b> = 2 h 30 min → <b>12:45</b></li>
+        </ul>
+        <p style="margin-top:8px">What happens in the middle of each one? Why is it 5 tins and not 4.8?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Each answer from step 1 is the <b>input</b> to step 2. Find the hidden middle number first (perimeter, area, time).<br>
+          Then check it makes sense: you can't buy 0.8 of a tin, so round <b>up</b>. And 2.5 hours is 2 h <b>30</b> min, not 2 h 50 min.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four steps for any problem</h3>
+        <div class="steps4">
+          <div class="note"><b class="h">1. Read</b>Underline the numbers and the units. What is the question asking for?</div>
+          <div class="note"><b class="h">2. Plan</b>Which topic? What do I need first? Draw a sketch.</div>
+          <div class="note"><b class="h">3. Do</b>One step per line. Write what each number is.</div>
+          <div class="note"><b class="h">4. Check</b>Units? Sensible size? Round the right way? Answer the question asked.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Traps to watch for</h3>
+        <ul>
+          <li><b>Two discounts</b>: 20% off then 10% off is NOT 30% off. €100 → €80 → <b>€72</b>.</li>
+          <li><b>Units</b>: 1 litre = 1000 cm³. 1 m = 100 cm. Change them before you start.</li>
+          <li><b>Rounding</b>: tins, buses, boxes → round <b>up</b>. "How many can you build/buy?" → round <b>down</b>.</li>
+          <li><b>Time</b>: 1.25 h = 1 h 15 min. 0.1 h = 6 min.</li>
+          <li><b>Working backwards</b>: mean 70 over 5 tests needs a total of 5 × 70 = 350.</li>
+        </ul>
+        <p>Stuck on one topic? Each question in the game shows where it's from, and the end screen links to that game.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Everywhere. The paper has about 13 compulsory questions, and the long ones (often the last few) are in context and join strands: a floor plan with a cost, a journey with a graph, a survey with a probability. Every part builds on the one before.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show every step.</b> A right method with a slip still earns most of the marks. A bare wrong answer earns none.</li>
+            <li><b>Carry your answer on.</b> If part (a) is wrong but you use it correctly in (b), you can still get (b).</li>
+            <li><b>Units and rounding</b> as the question asks.</li>
+            <li><b>Never leave a part blank.</b> Write down the formula or a first step.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li>A rectangular patio is 6 m by 4.5 m. Paving costs €38 per m². Find the total cost, including VAT at 13.5%.
+              <details><summary>Show the worked answer</summary><p>Area = 6 × 4.5 = 27 m².<br>Cost before VAT = 27 × €38 = €1026.<br>VAT: €1026 × 1.135 = <b>€1164.51</b>.</p></details></li>
+            <li>Orla drives 180 km. She drives the first 120 km at 80 km/h and the rest at 60 km/h. She leaves at 08:50. When does she arrive?
+              <details><summary>Show the worked answer</summary><p>120 ÷ 80 = 1.5 h. 60 ÷ 60 = 1 h. Total 2.5 h = 2 h 30 min.<br>08:50 + 2 h 30 min = <b>11:20</b>.</p></details></li>
+            <li>A bag has 6 red and some blue counters. The probability of picking red is 2/5. How many blue counters are there? Then 4 more red are added. Find the new probability of red.
+              <details><summary>Show the worked answer</summary><p>6 is 2 parts out of 5, so 1 part = 3 and the total is 15. Blue = 15 − 6 = <b>9</b>.<br>New: 10 red out of 19. P(red) = <b>10/19</b>.</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> A garden is a rectangle. Its length is 3 m more than its width, and its area is 70 m². Find the width. Then find the length of the diagonal path, correct to 1 decimal place.
+              <details><summary>Show the worked answer</summary><p>x(x + 3) = 70 → x² + 3x − 70 = 0 → (x + 10)(x − 7) = 0 → x = 7 (a width can't be −10).<br>Width <b>7 m</b>, length 10 m.<br>Diagonal = √(7² + 10²) = √149 = 12.206… = <b>12.2 m</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/problem-solving-exam-mix-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the tips + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: tips, mixed exam-style problems, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Problem Solving &amp; Exam Mix Teacher Pack (€5)</a>: Two-Step Match mingle cards, Problem Swap A/B cards, Mixed Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a> · <a href="junior-cycle-maths-exam-centre.html">Maths Exam Centre →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

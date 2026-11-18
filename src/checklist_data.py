@@ -72,5 +72,5 @@ MATHS = [
   ("3rd year","Spring","Algebraic fractions, long division & changing the subject","AF.3a, AF.3c, AF.6","Rearrange Race","rearrange-race.html","algebraic-fractions-changing-the-subject"),
   ("3rd year","Spring","Patterns 2: quadratic & exponential","AF.1a, AF.1b, AF.1c, N.4","Growth Spotter","growth-spotter.html","quadratic-exponential-patterns"),
   ("3rd year","Spring","Surds","N.1b","Surd Simplify","surd-simplify.html","surds"),
-  ("3rd year","Summer","Problem solving & exam mix","U.5–U.10, U.13","Exam Mix","",""),
+  ("3rd year","Summer","Problem solving & exam mix","U.5–U.10, U.13","Exam Mix","exam-mix.html","problem-solving-exam-mix"),
 ]
