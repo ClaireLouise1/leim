@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-18 19:10 · Maths Order 36 Patterns 2 (quadratic & exponential) · maths-k
