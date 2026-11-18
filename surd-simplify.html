@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surd Simplify: Surds Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths surds game: simplify √72 to 6√2, add like surds, multiply and divide surds and expand brackets (Higher Level). Rules, exam-style questions and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.nw{white-space:nowrap}.t3{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.t3 .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Surd Simplify</h1>
+        <p>√72 = 6√2. Simplify, add and multiply surds against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="simp"><div><b>Surd Simplify</b><span>√72 = 6√2</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="add"><div><b>Add &amp; subtract</b><span>√8 + √18</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mul"><div><b>Multiply &amp; divide</b><span>√2 × √8</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>(3 + √2)(3 − √2)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Surd Simplify, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1b, U.13 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Surds</h2>
+        <p>A <b>surd</b> is a square root that never comes out exact: √2, √3, √5, √12 … &nbsp;√9 = 3 and √25 = 5 are <b>not</b> surds. Index rules are on <a href="power-up.html">Power Up</a>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:6px">
+          <li class="note"><b>√4 × √9</b> = 2 × 3 = 6 &nbsp;·&nbsp; <b>√36</b> = 6</li>
+          <li class="note"><b>√4 × √25</b> = 2 × 5 = 10 &nbsp;·&nbsp; <b>√100</b> = 10</li>
+          <li class="note"><b>√9 × √16</b> = 3 × 4 = 12 &nbsp;·&nbsp; <b>√144</b> = 12</li>
+        </ul>
+        <p style="margin-top:8px">What do you notice? Now try: is √9 + √16 the same as √25?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Multiplying works inside one root: <b>√a × √b = √(ab)</b>.<br>
+          Adding does NOT: √9 + √16 = 3 + 4 = 7, but √25 = 5. So <b>√a + √b ≠ √(a + b)</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The rules</h3>
+        <div class="t3">
+          <div class="note"><b class="h">Multiply</b>√a × √b = √(ab)<br>√2 × √8 = √16 = <b>4</b></div>
+          <div class="note"><b class="h">Divide</b>√a ÷ √b = √(a ÷ b)<br>√50 ÷ √2 = √25 = <b>5</b></div>
+          <div class="note"><b class="h">Square</b>(√a)² = a<br>(√7)² = <b>7</b> &nbsp;(3√2)² = 9 × 2 = <b>18</b></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Simplifying a surd</h3>
+        <p>Find the <b>biggest square number</b> that goes into it: 4, 9, 16, 25, 36, 49, 64 …</p>
+        <ul>
+          <li>√72 = √(36 × 2) = √36 × √2 = <b>6√2</b></li>
+          <li>√50 = √(25 × 2) = <b>5√2</b></li>
+          <li>√48 = √(16 × 3) = <b>4√3</b> &nbsp;(√(4 × 12) = 2√12 is not finished: 12 still has a square in it.)</li>
+          <li>Backwards: 3√5 = √9 × √5 = <b>√45</b></li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding and subtracting</h3>
+        <p>Only <b>like surds</b> (same number under the root) can be added. Treat √2 like a letter: 3√2 + 5√2 = 8√2, just like 3x + 5x = 8x.</p>
+        <ul>
+          <li>√8 + √18 = 2√2 + 3√2 = <b>5√2</b> &nbsp;(simplify first!)</li>
+          <li>√50 − √8 = 5√2 − 2√2 = <b>3√2</b></li>
+          <li>√2 + √3 <b>can't be simplified</b>. It is not √5.</li>
+        </ul>
+        <p><b>Multiply</b> the numbers in front and the roots separately: 2√3 × 5√2 = 10√6.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> Brackets with surds</h3>
+        <p>Expand like algebra, and remember √3 × √3 = 3.</p>
+        <ul>
+          <li>√3(4 + √3) = 4√3 + 3 = <b>3 + 4√3</b></li>
+          <li>(5 + √2)(5 − √2) = 25 − 5√2 + 5√2 − 2 = <b>23</b> &nbsp;(the middle terms cancel)</li>
+          <li>(1 + √2)² = 1 + √2 + √2 + 2 = <b>3 + 2√2</b> &nbsp;(not 1 + 2 = 3!)</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Mostly Higher Level: a short "simplify" or "show that" part, or a surd answer inside a Pythagoras or area question ("give your answer in the form a√b").</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use the biggest square.</b> 2√12 is not fully simplified.</li>
+            <li><b>Show the step</b>: √72 = √36 × √2 = 6√2.</li>
+            <li><b>Exact answer</b> means leave the √. Don't write 8.49.</li>
+            <li>√a + √b is <b>not</b> √(a + b).</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li>Simplify √48 + √27. Give your answer in the form a√b.
+              <details><summary>Show the worked answer</summary><p>√48 = √16 × √3 = 4√3. √27 = √9 × √3 = 3√3.<br>4√3 + 3√3 = <b>7√3</b>.</p></details></li>
+            <li>Show that √2 × √18 is a whole number.
+              <details><summary>Show the worked answer</summary><p>√2 × √18 = √36 = <b>6</b>, a whole number.</p></details></li>
+            <li>A right-angled triangle has shorter sides 2 cm and 4 cm. Find the longest side. Give your answer in the form a√b.
+              <details><summary>Show the worked answer</summary><p>c² = 2² + 4² = 4 + 16 = 20. c = √20 = √4 × √5 = <b>2√5 cm</b>.</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> Expand and simplify (3 + √2)(3 − √2) + (1 + √2)².
+              <details><summary>Show the worked answer</summary><p>(3 + √2)(3 − √2) = 9 − 2 = 7.<br>(1 + √2)² = 1 + 2√2 + 2 = 3 + 2√2.<br>Total: 7 + 3 + 2√2 = <b>10 + 2√2</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/surds-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Surds Teacher Pack (€5)</a>: Surd Match mingle cards, Surd Swap A/B cards, Surd Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var M="−";
+  function n_(x){return x<0?M+(-x):String(x);}
+  /* n = s² × t with t square-free: returns [s,t] */
+  function simp(n){var s=1,t=n;for(var k=2;k*k<=t;k++){while(t%(k*k)===0){t/=k*k;s*=k;}}return [s,t];}
+  function sqf(n){return n>1&&simp(n)[0]===1;}
+  function isSq(n){var r=Math.round(Math.sqrt(n));return r*r===n;}
+  var SQF=[2,3,5,6,7,10,11,13,14,15];
+  /* a√b as text (b square-free or 1) */
+  function S(a,b){if(a===0)return "0";if(b===1)return n_(a);var c=Math.abs(a)===1?"":String(Math.abs(a));return (a<0?M:"")+c+"√"+b;}
+  function SV(a,b){return a*Math.sqrt(b);}
+  function R(n){var p=simp(n);return [S(p[0],p[1]),Math.sqrt(n)];}            /* √n fully simplified */
+  function K(a,b){var p=simp(b);return [S(a*p[0],p[1]),a*Math.sqrt(b)];}        /* a√b fully simplified */
+  /* term written for a question: a√n (n not simplified) */
+  function W(a,n){return (a===1?"":String(a))+"√"+n;}
+  /* c + d√b */
+  function F(c,d,b){if(d===0)return [n_(c),c];if(c===0)return [S(d,b),SV(d,b)];
+    if(c<0&&d>0)return [S(d,b)+" "+M+" "+(-c),c+SV(d,b)];
+    return [n_(c)+(d<0?" "+M+" ":" + ")+S(Math.abs(d),b),c+SV(d,b)];}
+  function EQ(s){return '<div class="eqs"><p class="e" data-e="1">'+s+'</p></div>';}
+  /* choice question from [text,value] options: wrong ones must have a different value */
+  function CV(en,ans,pool,why,html,data){var seen={},w=[];seen[ans[0]]=1;
+    shuffle(pool.slice()).forEach(function(o){if(!o||o[0]==null)return;var s=String(o[0]);if(/NaN|undefined|Infinity/.test(s))return;
+      if(o[1]!=null&&Math.abs(o[1]-ans[1])<1e-9)return;if(!seen[s]&&w.length<3){seen[s]=1;w.push(s);}});
+    return {en:en,frame:"",html:html||"",answer:ans[0],wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans[0],data:data||{}};}
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* plausible near-miss versions of a√b */
+  function near(a,b){var o=[[S(a+1,b),SV(a+1,b)],[S(2*a,b),SV(2*a,b)],[S(a+2,b),SV(a+2,b)]];if(a>1)o.push([S(a-1,b),SV(a-1,b)]);
+    if(b>1)o.push([n_(a*b),a*b]);
+    return o;}
+
+  /* ================= SURD SIMPLIFY ================= */
+  function qSimp(){var b,a,n;do{b=rnd(SQF);a=ri(2,b<=3?10:6);n=a*a*b;}while(n>300);
+    var ans=K(1,n),pool=near(a,b);
+    if(sqf(a)&&a!==b)pool.push([S(b,a),SV(b,a)]);
+    pool.push([S(a*a,b),SV(a*a,b)]);
+    return CV("Simplify.",ans,pool,n+" = "+(a*a)+" × "+b+", and √"+(a*a)+" = "+a+". So √"+n+" = "+ans[0]+".",EQ("√"+n),{t:"simp",rv:"√"+n});}
+  function qBack(){var b=rnd(SQF.slice(0,6)),a=ri(2,6),N=a*a*b,ans=["√"+N,a*Math.sqrt(b)];
+    var pool=[a*b,a+b,a*a+b,2*a*b,a*b*b,a*a*b*b].map(function(m){return ["√"+m,Math.sqrt(m)];});
+    return CV("Write as one square root.",ans,pool,a+" = √"+(a*a)+", so "+S(a,b)+" = √("+(a*a)+" × "+b+") = √"+N+".",EQ(S(a,b)),{t:"back",rv:S(a,b)});}
+  function qSurd(){var not=Math.random()<0.4,sq=shuffle([4,9,16,25,36,49,64,81,100,121,144]).slice(0,3),ns=[],k;
+    while(ns.length<3){k=ri(2,60);if(!isSq(k)&&ns.indexOf(k)<0)ns.push(k);}
+    if(!not)return C("Which one is a surd?","√"+ns[0],sq.map(function(v){return "√"+v;}),"√"+ns[0]+" is not a whole number (or a fraction). "+sq.map(function(v){return "√"+v+" = "+Math.sqrt(v);}).join(", ")+".","",{t:"surd"});
+    return C("Which one is NOT a surd?","√"+sq[0],ns.map(function(v){return "√"+v;}),"√"+sq[0]+" = "+Math.sqrt(sq[0])+", a whole number. The others never come out exact.","",{t:"notsurd"});}
+  function qBetween(){var n;do{n=ri(5,150);}while(isSq(n));var k=Math.floor(Math.sqrt(n)),h=Math.floor(n/2);
+    var pool=[(k-1)+" and "+k,(k+1)+" and "+(k+2)];if(h!==k&&h!==k-1&&h!==k+1)pool.push(h+" and "+(h+1));pool.push((k+2)+" and "+(k+3));
+    return C("Between which two whole numbers?",k+" and "+(k+1),pool,k+"² = "+(k*k)+" and "+(k+1)+"² = "+((k+1)*(k+1))+". "+n+" is in between.",EQ("√"+n),{t:"between",rv:"√"+n});}
+
+  /* ================= ADD & SUBTRACT ================= */
+  function qLike(){var b=rnd(SQF.slice(0,7)),p=ri(2,9),q=ri(1,8),minus=Math.random()<0.4;if(minus&&q>=p){var t=p;p=q+1;q=t;if(q===p)q=p-1;}
+    var r=minus?p-q:p+q,ans=[S(r,b),SV(r,b)],e=S(p,b)+(minus?" "+M+" ":" + ")+S(q,b),r2=minus?p+q:p-q;
+    var pool=near(r,b).concat([[S(p*q,b),SV(p*q,b)],[S(r2,b),SV(r2,b)],[n_(r),r]]);if(sqf(2*b))pool.push([S(r,2*b),SV(r,2*b)]);
+    return CV("Simplify.",ans,pool,"Like surds: add or take the numbers in front. "+p+(minus?" "+M+" ":" + ")+q+" = "+r+", so "+ans[0]+".",EQ(e),{t:"like",rv:e});}
+  function qAddSimp(){var b=rnd([2,3,5,6,7]),p,q;do{p=ri(1,5);q=ri(1,5);}while(p===q||(p*p*b>200||q*q*b>200));
+    var minus=Math.random()<0.35;if(minus&&q>p){var t=p;p=q;q=t;}
+    var r=minus?p-q:p+q,ans=[S(r,b),SV(r,b)],e=(p===1?"√"+b:"√"+(p*p*b))+(minus?" "+M+" ":" + ")+(q===1?"√"+b:"√"+(q*q*b));
+    var tot=minus?p*p*b-q*q*b:p*p*b+q*q*b,pool=near(r,b).concat([R(tot),[S(p*q,b),SV(p*q,b)]]);
+    if(Math.random()<0.4)pool=["Can't simplify"].map(function(s){return [s,NaN];}).concat(pool.slice(0,3));
+    var parts=[p,q].map(function(k){return k===1?"√"+b:"√"+(k*k*b)+" = "+S(k,b);}).join(", ");
+    return CV("Simplify.",ans,pool,parts+". Then "+p+(minus?" "+M+" ":" + ")+q+" = "+r+": "+ans[0]+".",EQ(e),{t:"addsimp",rv:e});}
+  function qCant(){var x=rnd([2,3,5,6,7]),y;do{y=rnd([2,3,5,6,7,10,11]);}while(y===x);if(y<x){var t=x;x=y;y=t;}
+    var e="√"+x+" + √"+y,pool=[R(x+y),R(x*y),K(2,x+y),[S(2,x),SV(2,x)]];
+    return CV("Simplify.",["Can't simplify",NaN],pool,"√"+x+" and √"+y+" are not like surds, so they can't be added. (√"+x+" + √"+y+" is NOT √"+(x+y)+".)",EQ(e),{t:"cant",rv:e});}
+
+  /* ================= MULTIPLY & DIVIDE ================= */
+  var NS=[2,3,5,6,7,8,10,12,15,18,20,24,27,32,50];
+  function qMul(){var x,y;do{x=rnd(NS);y=rnd(NS);}while(x===y&&Math.random()<0.6||x*y>600);
+    var ans=R(x*y),p=simp(x*y),e="√"+x+" × √"+y,pool=near(p[0],p[1]).concat([R(x+y),K(2,x*y)]);
+    return CV("Work out.",ans,pool,"√"+x+" × √"+y+" = √"+(x*y)+(ans[0]!=="√"+(x*y)?" = "+ans[0]:"")+".",EQ(e),{t:"mul",rv:e});}
+  function qCoef(){var x=rnd([2,3,5,6,7]),y=rnd([2,3,5,6,7,10]),p=ri(2,5),q=ri(2,5),ans=K(p*q,x*y),s=simp(x*y);
+    var e=S(p,x)+" × "+S(q,y),pool=near(s[0]*p*q,s[1]).concat([K(p+q,x*y),[n_(p*q*x*y),p*q*x*y],K(p*q,x+y)]);
+    return CV("Work out.",ans,pool,"Numbers: "+p+" × "+q+" = "+(p*q)+". Roots: √"+x+" × √"+y+" = "+R(x*y)[0]+". Answer "+ans[0]+".",EQ(e),{t:"coef",rv:e});}
+  function qSqr(){var b=rnd(SQF.slice(0,7)),p=rnd([1,1,2,3,4,5]),v=p*p*b,e="("+S(p,b)+")²";
+    var pool=[[n_(p*b),p*b],[n_(v*b),v*b],[S(p*p,b),SV(p*p,b)],[S(2*p,b),SV(2*p,b)],[n_(v+1),v+1]];
+    return CV("Work out.",[n_(v),v],pool,(p>1?p+"² × ":"")+"(√"+b+")² = "+(p>1?(p*p)+" × ":"")+b+" = "+v+". Squaring removes the root.",EQ(e),{t:"sqr",rv:e});}
+  function qDiv(){var y,k,x;do{y=rnd([2,3,5,6,7]);k=rnd([4,9,16,25,2,3,5,6,7,8,12]);x=y*k;}while(isSq(x));var ans=R(k),e="√"+x+" ÷ √"+y,s=simp(k);
+    var pre="";if(Math.random()<0.35){var q=rnd([2,3]),p=q*ri(2,5);e=S(p,x)+" ÷ "+S(q,y);ans=K(p/q,k);s=[s[0]*p/q,s[1]];pre="Numbers: "+p+" ÷ "+q+" = "+(p/q)+". ";}
+    var pool=near(s[0],s[1]).concat([[n_(k),k],R(x-y),R(x*y),[S(3*s[0],s[1]),SV(3*s[0],s[1])]]);
+    return CV("Work out.",ans,pool,pre+"Roots: √("+x+" ÷ "+y+") = √"+k+(R(k)[0]!=="√"+k?" = "+R(k)[0]:"")+". Answer "+ans[0]+".",EQ(e),{t:"div",rv:e});}
+
+  /* ================= HIGHER LEVEL: BRACKETS ================= */
+  function qExp1(){var b=rnd([2,3,5,6,7]),p=ri(1,6),q=ri(1,4),minus=Math.random()<0.4,sg=minus?-1:1;
+    var e="√"+b+"("+p+(minus?" "+M+" ":" + ")+S(q,b)+")",ans=F(sg*q*b,p,b);
+    var pool=[F(sg*q,p,b),F(sg*q*b,p+q,b),[n_(p+sg*q*b),p+sg*q*b],F(sg*q*b*b,p,b),F(-sg*q*b,p,b)];
+    return CV("Expand.",ans,pool,"√"+b+" × "+p+" = "+S(p,b)+". √"+b+" × "+(minus?M:"")+S(q,b)+" = "+(minus?M:"")+(q*b)+". Answer "+ans[0]+".",EQ(e),{t:"exp1",rv:e});}
+  function qConj(){var b=rnd([2,3,5,6,7,10,11]),p=ri(1,6),v=p*p-b,e="("+p+" + √"+b+")("+p+" "+M+" √"+b+")";
+    var pool=[[n_(p*p+b),p*p+b],[n_(p-b),p-b],[n_(p*p-b*b),p*p-b*b],F(v,2*p,b),[n_(v+2),v+2],[n_(2*p-b),2*p-b]];
+    return CV("Expand.",[n_(v),v],pool,p+"² "+M+" (√"+b+")² = "+(p*p)+" "+M+" "+b+" = "+n_(v)+". The middle terms cancel.",EQ(e),{t:"conj",rv:e});}
+  function qSq(){var b=rnd([2,3,5,6,7]),p=ri(1,5),e="("+p+" + √"+b+")²",ans=F(p*p+b,2*p,b);
+    var pool=[[n_(p*p+b),p*p+b],F(p*p+b,p,b),F(p*p,2*p,b),F(p*p+b*b,2*p,b),F(p*p+b,4*p,b)];
+    return CV("Expand.",ans,pool,"("+p+" + √"+b+")("+p+" + √"+b+") = "+(p*p)+" + "+S(p,b)+" + "+S(p,b)+" + "+b+" = "+ans[0]+".",EQ(e),{t:"sq",rv:e});}
+  function qExp2(){var b=rnd([2,3,5,7]),p=ri(1,5),q;do{q=ri(1,5);}while(q===p);var e="("+p+" + √"+b+")("+q+" + √"+b+")",ans=F(p*q+b,p+q,b);
+    var pool=[[n_(p*q+b),p*q+b],F(p*q,p+q,b),F(p*q+b,p*q,b),F(p*q+b*b,p+q,b),F(p+q,p*q+b,b)];
+    return CV("Expand.",ans,pool,(p*q)+" + "+S(p,b)+" + "+S(q,b)+" + "+b+" = "+ans[0]+".",EQ(e),{t:"exp2",rv:e});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    simp:[qSimp,qSimp,qSimp,qBack,qSurd,qBetween],
+    add:[qLike,qAddSimp,qAddSimp,qCant],
+    mul:[qMul,qMul,qCoef,qSqr,qDiv],
+    hl:[qExp1,qConj,qSq,qExp2],
+    mixed:[]
+  };
+  ["simp","add","mul","hl"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="simp"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="simp"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="simp"&&streak%5===0?700:350):3200);
+  }
+  function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc2(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc2(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc2(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{simp:simp,S:S,F:F}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

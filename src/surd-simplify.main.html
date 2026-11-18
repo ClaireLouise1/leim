@@ -1,0 +1,142 @@
+<main id="main">
+<style>.eqs{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 18px;text-align:left;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}.eqs p{margin:3px 0;white-space:nowrap}.nw{white-space:nowrap}.t3{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.t3 .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Surd Simplify</h1>
+        <p>√72 = 6√2. Simplify, add and multiply surds against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="simp"><div><b>Surd Simplify</b><span>√72 = 6√2</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="add"><div><b>Add &amp; subtract</b><span>√8 + √18</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mul"><div><b>Multiply &amp; divide</b><span>√2 × √8</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="hl"><div><b>Higher Level</b><span>(3 + √2)(3 − √2)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Surd Simplify, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1b, U.13 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Surds</h2>
+        <p>A <b>surd</b> is a square root that never comes out exact: √2, √3, √5, √12 … &nbsp;√9 = 3 and √25 = 5 are <b>not</b> surds. Index rules are on <a href="power-up.html">Power Up</a>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <ul style="list-style:none;padding:0;display:grid;gap:6px">
+          <li class="note"><b>√4 × √9</b> = 2 × 3 = 6 &nbsp;·&nbsp; <b>√36</b> = 6</li>
+          <li class="note"><b>√4 × √25</b> = 2 × 5 = 10 &nbsp;·&nbsp; <b>√100</b> = 10</li>
+          <li class="note"><b>√9 × √16</b> = 3 × 4 = 12 &nbsp;·&nbsp; <b>√144</b> = 12</li>
+        </ul>
+        <p style="margin-top:8px">What do you notice? Now try: is √9 + √16 the same as √25?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Multiplying works inside one root: <b>√a × √b = √(ab)</b>.<br>
+          Adding does NOT: √9 + √16 = 3 + 4 = 7, but √25 = 5. So <b>√a + √b ≠ √(a + b)</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The rules</h3>
+        <div class="t3">
+          <div class="note"><b class="h">Multiply</b>√a × √b = √(ab)<br>√2 × √8 = √16 = <b>4</b></div>
+          <div class="note"><b class="h">Divide</b>√a ÷ √b = √(a ÷ b)<br>√50 ÷ √2 = √25 = <b>5</b></div>
+          <div class="note"><b class="h">Square</b>(√a)² = a<br>(√7)² = <b>7</b> &nbsp;(3√2)² = 9 × 2 = <b>18</b></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Simplifying a surd</h3>
+        <p>Find the <b>biggest square number</b> that goes into it: 4, 9, 16, 25, 36, 49, 64 …</p>
+        <ul>
+          <li>√72 = √(36 × 2) = √36 × √2 = <b>6√2</b></li>
+          <li>√50 = √(25 × 2) = <b>5√2</b></li>
+          <li>√48 = √(16 × 3) = <b>4√3</b> &nbsp;(√(4 × 12) = 2√12 is not finished: 12 still has a square in it.)</li>
+          <li>Backwards: 3√5 = √9 × √5 = <b>√45</b></li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding and subtracting</h3>
+        <p>Only <b>like surds</b> (same number under the root) can be added. Treat √2 like a letter: 3√2 + 5√2 = 8√2, just like 3x + 5x = 8x.</p>
+        <ul>
+          <li>√8 + √18 = 2√2 + 3√2 = <b>5√2</b> &nbsp;(simplify first!)</li>
+          <li>√50 − √8 = 5√2 − 2√2 = <b>3√2</b></li>
+          <li>√2 + √3 <b>can't be simplified</b>. It is not √5.</li>
+        </ul>
+        <p><b>Multiply</b> the numbers in front and the roots separately: 2√3 × 5√2 = 10√6.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px"><span class="lo" style="margin:0">Higher Level</span> Brackets with surds</h3>
+        <p>Expand like algebra, and remember √3 × √3 = 3.</p>
+        <ul>
+          <li>√3(4 + √3) = 4√3 + 3 = <b>3 + 4√3</b></li>
+          <li>(5 + √2)(5 − √2) = 25 − 5√2 + 5√2 − 2 = <b>23</b> &nbsp;(the middle terms cancel)</li>
+          <li>(1 + √2)² = 1 + √2 + √2 + 2 = <b>3 + 2√2</b> &nbsp;(not 1 + 2 = 3!)</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Mostly Higher Level: a short "simplify" or "show that" part, or a surd answer inside a Pythagoras or area question ("give your answer in the form a√b").</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use the biggest square.</b> 2√12 is not fully simplified.</li>
+            <li><b>Show the step</b>: √72 = √36 × √2 = 6√2.</li>
+            <li><b>Exact answer</b> means leave the √. Don't write 8.49.</li>
+            <li>√a + √b is <b>not</b> √(a + b).</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li>Simplify √48 + √27. Give your answer in the form a√b.
+              <details><summary>Show the worked answer</summary><p>√48 = √16 × √3 = 4√3. √27 = √9 × √3 = 3√3.<br>4√3 + 3√3 = <b>7√3</b>.</p></details></li>
+            <li>Show that √2 × √18 is a whole number.
+              <details><summary>Show the worked answer</summary><p>√2 × √18 = √36 = <b>6</b>, a whole number.</p></details></li>
+            <li>A right-angled triangle has shorter sides 2 cm and 4 cm. Find the longest side. Give your answer in the form a√b.
+              <details><summary>Show the worked answer</summary><p>c² = 2² + 4² = 4 + 16 = 20. c = √20 = √4 × √5 = <b>2√5 cm</b>.</p></details></li>
+            <li><span class="lo" style="margin:0">Higher Level</span> Expand and simplify (3 + √2)(3 − √2) + (1 + √2)².
+              <details><summary>Show the worked answer</summary><p>(3 + √2)(3 − √2) = 9 − 2 = 7.<br>(1 + √2)² = 1 + 2√2 + 2 = 3 + 2√2.<br>Total: 7 + 3 + 2√2 = <b>10 + 2√2</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/surds-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Surds Teacher Pack (€5)</a>: Surd Match mingle cards, Surd Swap A/B cards, Surd Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
