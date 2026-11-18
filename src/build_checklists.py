@@ -6,7 +6,7 @@ Makes: junior-cycle-<subject>-checklist.html (web page, ticks saved in localStor
 Data: src/checklist_data.py (update it when a topic goes live, then re-run)."""
 import html, re, subprocess, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-from checklist_data import SPANISH, MATHS
+from checklist_data import SPANISH, MATHS, ENGLISH
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPL = open(os.path.join(ROOT, "junior-cycle-spanish.html"), encoding="utf-8").read()
@@ -33,6 +33,8 @@ SUBJ = {
                   lo_note="Learning outcome codes: 2017 specification (2nd and 3rd years, exams 2027–2028) / 2025 specification (1st years from September 2026)."),
   "maths": dict(name="Maths", page="junior-cycle-maths.html", rows=norm(MATHS, "maths"),
                 lo_note="Learning outcome codes from the 2018 Junior Cycle Mathematics specification (U = Unifying, N = Number, GT = Geometry & trigonometry, AF = Algebra & functions, SP = Statistics & probability)."),
+  "english": dict(name="English", page="junior-cycle-english.html", rows=norm(ENGLISH, "english"),
+                  lo_note="Learning outcome codes from the Junior Cycle English specification (2015): OL = Oral language, R = Reading, W = Writing. The two CBA rows are Classroom-Based Assessments done in class, not topics in the June exam."),
 }
 
 CSS = """<style>
@@ -101,7 +103,8 @@ def page(key):
                 term = r["term"]; out.append(f'<div class="ck-term">{e(term)}</div>\n')
             t = e(r["title"])
             title = f'<a href="{r["url"]}">{t}</a>' if r["url"] else f'{t}<span class="soon">Coming soon</span>'
-            game = f'Game: <a href="{r["url"]}">{e(r["game"])}</a>' if r["url"] else f'Game: {e(r["game"])}'
+            lab = "CBA guide" if r["game"] == "CBA guide" else "Game"
+            game = (f'{lab}: <a href="{r["url"]}">{e(r["game"])}</a>' if r["url"] else f'{lab}: {e(r["game"])}') if lab == "Game" else ('<a href="%s">Free CBA guide</a>' % r["url"] if r["url"] else "Free CBA guide")
             sheet = f' · <a href="{r["sheet"]}" target="_blank" rel="noopener">Revision sheet (PDF)</a>' if r["sheet"] else ""
             dis = "" if r["url"] else " disabled"
             came = f'<div class="came">Came up in: {e(r["came"])}</div>' if r["came"] else ""
@@ -194,7 +197,8 @@ def pages_of(p):
     return len(re.findall(rb"/Type\s*/Page[^s]", d))
 
 if __name__ == "__main__":
-    for key in SUBJ:
+    # optional: python3 src/build_checklists.py english  (only rebuild the subjects named)
+    for key in (sys.argv[1:] or SUBJ):
         open(os.path.join(ROOT, f"junior-cycle-{key}-checklist.html"), "w", encoding="utf-8").write(page(key))
         src = os.path.join(ROOT, "src", f"{key}-topic-checklist.html")
         open(src, "w", encoding="utf-8").write(pdf(key))

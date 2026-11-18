@@ -74,3 +74,41 @@ MATHS = [
   ("3rd year","Spring","Surds","N.1b","Surd Simplify","surd-simplify.html","surds"),
   ("3rd year","Summer","Problem solving & exam mix","U.5–U.10, U.13","Exam Mix","exam-mix.html","problem-solving-exam-mix"),
 ]
+
+# English (JC English 2015 spec, minor amendments 2018) — from the English tracker's Topics tab (made 18 Nov 2026).
+# year, term, title, LOs (2015 spec), planned game name, live game page ("" = coming soon), free sheet slug ("" = not yet)
+# CBA rows: game name "CBA guide" (a free guide page, no game).
+ENGLISH = [
+  ("1st year","Autumn","Parts of speech: nouns, verbs, adjectives & adverbs","W10, W12, R11, OL12","Word Sort","",""),
+  ("1st year","Autumn","Sentences: types, fragments & run-ons","W10, W11, W12","Sentence Surgeon","",""),
+  ("1st year","Autumn","Punctuation 1: capitals, full stops, commas & apostrophes","W11, W6","Comma Catch","",""),
+  ("1st year","Autumn","Reading for meaning: comprehension skills","R1, R2, R3, OL4","Clue Hunt","",""),
+  ("1st year","Autumn","The novel 1: character","R6, R7, R4, W8","Character Clues","",""),
+  ("1st year","Spring","Spelling & commonly confused words","W11, R10","Spell Strike","",""),
+  ("1st year","Spring","Paragraphs & topic sentences","W1, W10, W3","Paragraph Builder","",""),
+  ("1st year","Spring","Poetry 1: imagery & sound","R8, R11, R4, OL8","Technique Spotter","",""),
+  ("1st year","Spring","Personal & descriptive writing","W3, W4, W9, W7","Show, Don't Tell","",""),
+  ("1st year","Spring","Speaking & listening: talking to a group","OL1, OL2, OL3, OL4, OL5, OL6, OL7","Talk Tips","",""),
+  ("1st year","Summer","Short stories","R6, R8, R9, W7","Twist Detector","",""),
+  ("1st year","Summer","Narrative writing: your own story","W3, W7, W9, W1","Story Spine","",""),
+  ("1st year","Summer","Vocabulary & dictionary skills","R10, OL13, W5","Word Ladder","",""),
+  ("2nd year","Autumn","The novel 2: setting, plot, structure & theme","R6, R7, R9, W8","Plot Line","",""),
+  ("2nd year","Autumn","Letters & emails: formal and informal","W4, W12, R13","Format Fixer","",""),
+  ("2nd year","Autumn","Register & tone","OL12, R12, R13, W12","Register Switch","",""),
+  ("2nd year","Autumn","Grammar 2: tenses, agreement & pronouns","W10, W12, OL12","Tense Trap","",""),
+  ("2nd year","Spring","Persuasive writing & speeches","W3, OL5, OL7, OL10, R8","Persuasion Power","",""),
+  ("2nd year","Spring","Oral Communication (CBA 1)","OL1, OL5, OL7, OL9, OL13, R3, W3, W5","CBA guide","",""),
+  ("2nd year","Spring","Media 1: advertising","R9, R8, OL8, W3","Ad Breaker","",""),
+  ("2nd year","Spring","Drama 1: how plays work","R6, R7, R9, OL8","Stage It","",""),
+  ("2nd year","Summer","Functional writing: reports, reviews, articles & blogs","W4, W3, R13","Format Sort","",""),
+  ("2nd year","Summer","Poetry 2: theme, tone & comparing poems","R7, R8, R9, R4, W8","Mood Match","",""),
+  ("2nd year","Summer","Punctuation 2: dialogue, quotes, colons & semicolons","W11, W10","Speech Marks Sprint","",""),
+  ("3rd year","Autumn","Collection of the Student's Texts (CBA 2)","OL1, R2, R6, R8, W1, W2, W3, W4, W6, W9, W11","CBA guide","",""),
+  ("3rd year","Autumn","Editing & redrafting: proofreading your own work","W1, W6, W13, W2","Proofread Patrol","",""),
+  ("3rd year","Autumn","Film: camera shots, sound & key scenes","R9, R7, OL8, W8","Shot Spotter","",""),
+  ("3rd year","Autumn","Shakespeare (Higher Level only)","R6, R7, R8, R4, OL8","Who Said It?","",""),
+  ("3rd year","Spring","Answering on texts: point, quote, explain","R3, R4, R7, W7, W8","PQE Builder","",""),
+  ("3rd year","Spring","Comparing texts & characters","R6, R7, R9, W8","Compare Cards","",""),
+  ("3rd year","Spring","Non-literary & visual texts","R3, R9, R12, OL8","Fact or Opinion","",""),
+  ("3rd year","Summer","Exam technique & exam mix","R3, R7, W1, W3, W4, W11","Exam Mix","",""),
+]
