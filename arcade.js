@@ -15,12 +15,25 @@
 
   /* ---------- styles ---------- */
   var css=[
+  ".arc-lite .sec-head p,.arc-lite .sec-head .hero-actions,.arc-lite #start>.pill,.arc-lite #start>h2,.arc-lite #start>p.small,.arc-lite #start .lo,.arc-lite .mode div span,.arc-lite .mode .go{display:none!important}",
+  ".arc-lite .sec-head{margin-bottom:10px}",
+  ".arc-lite #start{text-align:center}",
+  ".arc-play{display:block;width:100%;font:inherit;font-weight:900;font-size:30px;letter-spacing:.02em;color:#fff;background:#58CC02;border:0;border-radius:20px;padding:22px 10px;margin:8px 0 16px;cursor:pointer;box-shadow:0 7px 0 #46A302;animation:arcPulse 1.6s ease-in-out infinite}",
+  ".arc-play:active{transform:translateY(5px);box-shadow:0 2px 0 #46A302;animation:none}",
+  ".arc-lite .modes{grid-template-columns:1fr 1fr;gap:10px;margin:0}",
+  ".arc-lite .mode{flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:4px;min-height:92px;padding:12px 8px;border-radius:16px;background:#fff;border:2px solid var(--line,#E5E7EB);box-shadow:0 4px 0 var(--line,#E5E7EB)}",
+  ".arc-lite .mode b{font-size:15px;line-height:1.2}",
+  ".arc-lite .mode:last-child:nth-child(odd){grid-column:1/-1}",
+  ".arc-lite .mode .fun-stars{margin:0}",
+  ".arc-lvl{display:inline-block;width:28px;height:28px;line-height:28px;border-radius:50%;background:#1CB0F6;color:#fff;font-weight:900;font-size:15px;box-shadow:0 3px 0 #1899D6}",
+  ".arc-swap{background:none;border:0;font:inherit;font-weight:700;font-size:14px;color:var(--muted,#5B6470);text-decoration:underline;cursor:pointer;margin-top:14px}",
+  "@keyframes arcPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}",
   ".arc-style{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}",
   ".arc-style button{font:inherit;font-weight:800;font-size:16px;padding:12px 8px;border-radius:14px;border:2px solid var(--line,#E5E7EB);background:#fff;color:var(--ink,#1B2430);cursor:pointer;box-shadow:0 4px 0 var(--line,#E5E7EB)}",
   ".arc-style button small{display:block;font-weight:600;font-size:12.5px;color:var(--muted,#5B6470)}",
   ".arc-style button.on{border-color:#1CB0F6;background:#DDF4FF;box-shadow:0 4px 0 #1899D6}",
   ".arc-style button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line,#E5E7EB)}",
-  "#arcade{padding:0;overflow:hidden;border:0;background:#141C2B;color:#fff;border-radius:20px;position:relative;user-select:none;-webkit-user-select:none;touch-action:manipulation}",
+  "#arcade{scroll-margin-top:96px;padding:0;overflow:hidden;border:0;background:#141C2B;color:#fff;border-radius:20px;position:relative;user-select:none;-webkit-user-select:none;touch-action:manipulation}",
   ".arc-hud{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;font-weight:900;font-size:16px;background:#0E1522}",
   ".arc-hud .lv{background:#FF9600;border-radius:999px;padding:3px 12px;box-shadow:0 3px 0 #C46F00}",
   ".arc-hud .sc{color:#FFD43B;font-size:20px;min-width:60px;text-align:right}",
@@ -34,7 +47,7 @@
   ".arc-q table{min-width:0!important;width:auto!important;margin:6px auto;font-size:14px}",
   ".arc-q.ok{background:#D7FFB8}.arc-q.bad{background:#FFDFE0}",
   ".arc-why{font-size:14px;font-weight:700;color:#C0392B;margin-top:6px;min-height:0}",
-  ".arc-sky{position:relative;height:clamp(300px,48vh,430px);margin-top:-14px;overflow:hidden;",
+  ".arc-sky{position:relative;height:clamp(260px,44vh,400px);margin-top:0;overflow:hidden;",
   "background:radial-gradient(2px 2px at 12% 22%,#fff8,transparent),radial-gradient(1.5px 1.5px at 72% 12%,#fff9,transparent),radial-gradient(2px 2px at 40% 64%,#fff6,transparent),radial-gradient(1.5px 1.5px at 88% 52%,#fff8,transparent),radial-gradient(1.5px 1.5px at 24% 82%,#fff6,transparent),radial-gradient(2px 2px at 58% 36%,#fff7,transparent),linear-gradient(#1D2B47,#2A3F66 70%,#3B5A8C)}",
   ".arc-ground{position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(#58CC02,#46A302);box-shadow:inset 0 4px 0 #89E219;z-index:2}",
   ".arc-ground.hit{animation:arcHit .5s}",
@@ -69,13 +82,21 @@
   var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
   /* ---------- play-style switch on the start screen ---------- */
-  var modesBox=startP.querySelector(".modes");
-  var sw=document.createElement("div");sw.className="arc-style";
-  sw.innerHTML="<button type='button' data-s='arcade'>🚀 Arcade<small>Catch the falling answers</small></button>"+
-               "<button type='button' data-s='classic'>⏱️ Classic<small>60-second quiz</small></button>";
-  if(modesBox)modesBox.parentNode.insertBefore(sw,modesBox);else startP.appendChild(sw);
-  function drawSw(){[].forEach.call(sw.children,function(b){b.classList.toggle("on",b.dataset.s===style);});}
-  [].forEach.call(sw.children,function(b){b.onclick=function(){style=b.dataset.s;try{localStorage.setItem(STYLE_KEY,style);}catch(e){}drawSw();};});
+  var modesBox=startP.querySelector(".modes"),modeBtns=[].slice.call(document.querySelectorAll(".mode"));
+  var gameBox=startP.closest(".game")||document.body;
+  var playB=document.createElement("button");playB.type="button";playB.className="arc-play";playB.textContent="▶ PLAY";
+  var swapB=document.createElement("button");swapB.type="button";swapB.className="arc-swap";
+  if(modesBox){modesBox.parentNode.insertBefore(playB,modesBox);modesBox.parentNode.insertBefore(swapB,modesBox.nextSibling);}
+  modeBtns.forEach(function(b,i){var n=document.createElement("span");n.className="arc-lvl";n.textContent=i+1;b.insertBefore(n,b.firstChild);});
+  function page(){return location.pathname.replace(/^.*\//,"").replace(/(-test|-play)?\.html$/,"")||"game";}
+  function nextLevel(){var S={};try{S=JSON.parse(localStorage.getItem("leimFun")||"{}").best||{};}catch(e){}
+    for(var i=0;i<modeBtns.length;i++){var k=page()+"|arcade-"+modeBtns[i].dataset.mode;if(!S[k]||S[k].stars<3)return modeBtns[i].dataset.mode;}
+    return modeBtns.length?modeBtns[modeBtns.length-1].dataset.mode:null;}
+  playB.onclick=function(){var m=nextLevel();if(m)begin(m);};
+  function drawSw(){var a=style==="arcade";gameBox.classList.toggle("arc-lite",a);playB.hidden=!a;
+    modeBtns.forEach(function(b){var n=b.querySelector(".arc-lvl");if(n)n.hidden=!a;});
+    swapB.textContent=a?"⏱️ Quiz mode":"🚀 Arcade mode";}
+  swapB.onclick=function(){style=style==="arcade"?"classic":"arcade";try{localStorage.setItem(STYLE_KEY,style);}catch(e){}drawSw();};
   drawSw();
   [].forEach.call(document.querySelectorAll(".mode"),function(b){
     b.addEventListener("click",function(e){
@@ -102,7 +123,7 @@
   }
   function begin(m){
     mode=m;hearts=MAXH;score=0;level=1;right=0;asked=0;combo=0;bestCombo=0;mistakes=[];bubbles=[];last="";busy=false;
-    fallTime=9.5;
+    fallTime=8;
     var ov=P.querySelector(".arc-over");if(ov)ov.remove();
     startP.hidden=true;playP.hidden=true;var e=document.getElementById("end");if(e)e.hidden=true;
     P.hidden=false;drawHud();
@@ -136,8 +157,8 @@
       sky.appendChild(el);
       var lane=lanes===opts.length?i:(i%lanes),laneW=W/lanes;
       var x=lane*laneW+(laneW-bw)/2+(lanes===1?0:(Math.random()-.5)*Math.max(0,laneW-bw-8));
-      var b={el:el,text:o,x:x,y:-el.offsetHeight-20-order[i]*gap,h:el.offsetHeight,dead:false};
-      el.addEventListener("pointerdown",function(ev){ev.preventDefault();tap(b);});
+      var b={el:el,text:o,x:x,y:16-order[i]*gap*0.5,h:el.offsetHeight,dead:false};
+      el.addEventListener("pointerdown",function(ev){ev.preventDefault();tap(b);});el.addEventListener("click",function(){tap(b);});
       place(b);bubbles.push(b);
     });
   }
@@ -205,16 +226,15 @@
     var seen={},rv="";
     mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;rv+="<li><b>"+esc(m.review)+"</b>"+(m.why?"<br><span class='w'>"+esc(m.why)+"</span>":"")+"</li>";});
     var o=document.createElement("div");o.className="arc-over";
-    o.innerHTML="<h2>"+(stars===3?"Legendary! 🏆":stars===2?"Brilliant! 🎉":stars===1?"Good run! 💪":"Have another go! 💪")+"</h2>"+
+    o.innerHTML="<h2>"+(stars===3?"🏆":stars===2?"🎉":"💪")+"</h2>"+
       "<div class='st'>"+[1,2,3].map(function(n,i){return "<span class='"+(n<=stars?"on":"")+"' style='animation-delay:"+(.2+i*.3)+"s'>★</span>";}).join("")+"</div>"+
-      "<div class='ch'><div><b>"+score+"</b><span>points</span></div><div><b>"+right+"</b><span>caught</span></div><div><b>"+level+"</b><span>level</span></div><div><b>🔥 "+bestCombo+"</b><span>best combo</span></div></div>"+
-      (res.isBest?"<span class='nb'>🏅 New personal best!</span>":"")+(res.newDay?"<span class='nb'>🔥 "+res.streak+"-day streak!</span>":"")+
-      "<p style='color:#9FB0C8;font-size:14px;margin:6px 0'>"+(stars<3?"Catch 15 for 3 stars.":"All 3 stars!")+"</p>"+
-      (rv?"<div class='rv'><b>Go back over these</b><ul style='margin:6px 0 0;padding-left:18px'>"+rv+"</ul></div>":"")+
-      "<div class='bt'><button class='go1' type='button'>Play again</button><button class='go2' type='button'>Choose another level</button></div>";
+      "<div class='ch'><div><b>⭐ "+score+"</b></div><div><b>✅ "+right+"</b></div><div><b>🔥 "+bestCombo+"</b></div></div>"+
+      (res.isBest?"<span class='nb'>🏅 Best!</span>":"")+
+      "<div class='bt'><button class='go1' type='button'>▶ Again</button><button class='go2' type='button'>☰ Levels</button></div>"+
+      (rv?"<details class='rv'><summary><b>📖 Mistakes ("+Object.keys(seen).length+")</b></summary><ul style='margin:6px 0 0;padding-left:18px'>"+rv+"</ul></details>":"");
     P.appendChild(o);
     o.querySelector(".go1").onclick=function(){begin(mode);};
-    o.querySelector(".go2").onclick=function(){o.remove();showStart();};
+    o.querySelector(".go2").onclick=function(){o.remove();showStart();};drawSw();
     snd(stars>=2?"win":"heart");if(stars>=2&&f)setTimeout(f.confetti,500);
   }
   window.__leimArcade={begin:begin,state:function(){return {hearts:hearts,score:score,level:level,right:right,cur:cur,bubbles:bubbles};}};
