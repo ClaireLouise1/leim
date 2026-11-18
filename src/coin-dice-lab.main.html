@@ -1,0 +1,155 @@
+<main id="main">
+<style>.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}.lab{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}.lab .row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}.lab button{font:700 15px Inter,sans-serif;border:2px solid var(--line);background:var(--mist);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}.lab button.on{background:var(--night);color:#fff;border-color:var(--night)}.lab button.go{background:#2E7D57;color:#fff;border-color:#2E7D57}.rtab{border-collapse:collapse;margin:8px auto;min-width:0;width:auto;font-size:15px}.rtab td,.rtab th{border:1px solid var(--line);padding:4px 9px;text-align:center}.rtab th{background:var(--mist);color:var(--ink);text-transform:none;letter-spacing:0;font-size:14px}.box{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:center;font-weight:800;font-size:18px;margin:8px auto;max-width:520px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Coin &amp; Dice Lab</h1>
+        <p>A drawing pin can land point up or point down, but not 50 : 50. How do you find its probability? Do the experiment! Work out relative frequencies, predict how often things will happen, decide whether a die is fair, and count menus, outfits and lock codes with the fundamental principle of counting. Stuck? The rules (and a lab where you can throw a coin 1,000 times) are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="lab"><div><b>Coin &amp; Dice Lab</b><span>Relative frequency from experiments, tables and bar charts</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="expect"><div><b>How many would you expect?</b><span>Expected frequency = probability × number of trials</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="count"><div><b>Count them up</b><span>Menus, outfits, codes and podiums: the fundamental principle of counting</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fair"><div><b>Fair or biased?</b><span>Judge the results, read the graph, spot the myths</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: read how the answer should be written (decimal, percentage or fraction). You can also answer with the keys 1, 2, 3 and 4. In Coin &amp; Dice Lab, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: SP.1b, SP.2c (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Probability 2: relative frequency &amp; counting</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern: the lab</h3>
+        <p>Throw a fair coin 10 times and work out the <b>relative frequency</b> of heads (heads ÷ throws). Then keep going to 100, 1,000 and 10,000 throws.</p>
+        <div class="lab" id="lab">
+          <div class="row"><button class="labkind on" data-k="coin" aria-pressed="true">Coin: heads</button><button class="labkind" data-k="die" aria-pressed="false">Die: sixes</button></div>
+          <div class="row"><button class="labgo go" data-n="10">Throw 10</button><button class="labgo go" data-n="100">Throw 100</button><button class="labgo go" data-n="1000">Throw 1,000</button><button class="labgo go" data-n="10000">Throw 10,000</button><button id="labreset">Start again</button></div>
+          <div id="labout"></div>
+          <div id="labsvg"></div>
+        </div>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">After 10 throws, is the relative frequency exactly 0.5? Press "Start again" and try 10 more. Do you get the same?</li>
+          <li class="note">What happens to the relative frequency as the number of throws gets bigger?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">After a few throws the relative frequency jumps around (0.3, 0.7…) and changes every time you start again. After thousands of throws it <b>settles down close to the probability</b>, 0.5 for heads (or 1/6 ≈ 0.167 for a six). So: <b>the more trials, the better the relative frequency is as an estimate of the probability</b>. That's how we find probabilities we can't work out by counting, like a drawing pin landing point up.</p>
+        </details>
+
+        <h3 style="font-size:22px;margin:22px 0 8px">Relative frequency</h3>
+        <div class="box">Relative frequency = number of times it happened ÷ number of trials</div>
+        <p>A drawing pin is dropped 50 times and lands point up 18 times. Relative frequency = 18 ÷ 50 = <b>0.36</b> (or 36%, or 9/25). It is always between 0 and 1.</p>
+        <div class="fm">
+          <div class="note"><b class="h">Estimate a probability</b>When outcomes are NOT equally likely (a drawing pin, a bent coin, a bottle flip, a penalty), do an experiment. The relative frequency is your <b>estimate</b> of the probability.</div>
+          <div class="note"><b class="h">More trials = better</b>An estimate from 500 trials is more reliable than one from 20. Two people doing the same experiment usually get different results, and that's normal.</div>
+          <div class="note"><b class="h">Putting results together</b>Ciara: 12 out of 30. Seán: 18 out of 50. Together: <b>30 out of 80</b> = 0.375. Add the counts first; don't take the mean of 0.4 and 0.36.</div>
+        </div>
+
+        <h3 style="font-size:22px;margin:22px 0 8px">Expected frequency</h3>
+        <div class="box">Expected frequency = probability × number of trials</div>
+        <div class="fm">
+          <div class="note"><b class="h">From a fair model</b>A fair die is rolled 300 times. Expected sixes = 1/6 × 300 = <b>50</b>. You'll get <i>about</i> 50, not exactly 50.</div>
+          <div class="note"><b class="h">From an experiment</b>18 of 50 seeds grew (0.36). Plant 1,000: expect 0.36 × 1,000 = <b>360</b> to grow.</div>
+          <div class="note"><b class="h">Working backwards</b>P(red) = 1/4. To expect 30 reds: trials × 1/4 = 30, so trials = 30 × 4 = <b>120</b>.</div>
+          <div class="note"><b class="h">What's in the bag?</b>20 counters; picked and put back 200 times; red 50 times. 50 ÷ 200 = 0.25, so about 0.25 × 20 = <b>5</b> red counters.</div>
+        </div>
+
+        <h3 style="font-size:22px;margin:22px 0 8px">Fair or biased?</h3>
+        <p>A die is <b>fair</b> if every score is equally likely. Roll it many times and compare the results with what you'd <b>expect</b>. A die rolled 600 times should give about 100 of each score.</p>
+        <table class="rtab"><tr><th>Score</th><th>Die A</th><th>Die B</th></tr><tr><th>1</th><td>96</td><td>78</td></tr><tr><th>2</th><td>104</td><td>81</td></tr><tr><th>3</th><td>99</td><td>74</td></tr><tr><th>4</th><td>107</td><td>83</td></tr><tr><th>5</th><td>93</td><td>79</td></tr><tr><th>6</th><td>101</td><td>205</td></tr><tr><th>Total</th><td>600</td><td>600</td></tr></table>
+        <p>Die A: every result is close to 100, so it looks <b>fair</b> (results are never exactly equal). Die B: a 6 came up about twice as often as expected, so it is probably <b>biased</b>. With only 12 rolls you couldn't tell either way: you need lots of trials.</p>
+
+        <h3 style="font-size:22px;margin:22px 0 8px">The fundamental principle of counting</h3>
+        <div class="box">If one thing can be done in m ways and another in n ways, both together can be done in m × n ways</div>
+        <div class="fm">
+          <div class="note"><b class="h">Menus and outfits</b>3 starters, 4 mains, 2 desserts: 3 × 4 × 2 = <b>24</b> lunch deals. A tree diagram would have 24 branch ends, a two-way table 3 × 4 cells for the first two choices.</div>
+          <div class="note"><b class="h">Codes (repeats allowed)</b>A lock with 3 dials, each 0 to 9: 10 × 10 × 10 = <b>1,000</b> codes. One letter A–Z then one digit: 26 × 10 = <b>260</b>.</div>
+          <div class="note"><b class="h">No repeats: the choices go down</b>4 friends in a row: 4 × 3 × 2 × 1 = <b>24</b>. Gold, silver and bronze from 8 runners: 8 × 7 × 6 = <b>336</b>.</div>
+          <div class="note"><b class="h">Counting and probability</b>A 3-dial code set at random: P(it's 7 1 3) = 1/1,000. Count all the outcomes, then the ones you want.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Dividing by "the rest" (18 ÷ 32) instead of by the <b>number of trials</b> (18 ÷ 50).</li>
+          <li>Thinking a fair die rolled 60 times gives <b>exactly</b> 10 sixes, or that a coin "is due" a tail after 5 heads (it has no memory).</li>
+          <li>Trusting a result from 10 trials more than one from 1,000.</li>
+          <li><b>Adding</b> the choices (3 + 4 + 2) instead of <b>multiplying</b> them (3 × 4 × 2).</li>
+          <li>Forgetting a 2-way choice like "with or without a name" (it doubles the total).</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Relative frequency and counting usually come as one part of a bigger probability question, on both levels: a table of experiment results to turn into relative frequencies, a "how many would you expect?" prediction, a "is it fair?" judgement with a reason, or a counting question about clothes, menus, codes or teams. The reason ("more trials give a better estimate") is often worth as much as the number.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the division.</b> "18 ÷ 50 = 0.36" earns marks even if you then slip.</li>
+            <li><b>Write it the way you're asked:</b> decimal, percentage or fraction.</li>
+            <li><b>Give a reason with numbers.</b> "Biased, because a 6 came up 205 times but we'd expect about 100" beats "biased".</li>
+            <li><b>Multiply, don't add,</b> for counting, and show the multiplication.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Bottle flip.</b> Ciara flips a water bottle 80 times and it lands standing up 12 times. (a) Find the relative frequency of the bottle landing standing up. (b) Ciara is going to flip the bottle 500 times. How many times would you expect it to land standing up? (c) Seán flipped the same bottle 20 times and it landed standing up 6 times. Whose results give the better estimate of the probability? Give a reason. (d) They put their results together. Find the new relative frequency.
+              <details><summary>Show the worked answer</summary><p>(a) 12 ÷ 80 = <b>0.15</b>.<br>(b) 0.15 × 500 = <b>75</b> times.<br>(c) <b>Ciara's</b>: she did more trials (80 v 20), and more trials give a better estimate.<br>(d) 12 + 6 = 18 standing up out of 80 + 20 = 100 flips: 18 ÷ 100 = <b>0.18</b>.</p></details></li>
+            <li><b>Is the spinner fair?</b> A spinner with 4 equal sectors is spun 200 times.
+              <table class="rtab"><tr><th>Colour</th><th>Frequency</th></tr><tr><th>Red</th><td>52</td></tr><tr><th>Blue</th><td>47</td></tr><tr><th>Green</th><td>49</td></tr><tr><th>Yellow</th><td>52</td></tr><tr><th>Total</th><td>200</td></tr></table>
+              (a) If the spinner is fair, how many times would you expect each colour? (b) Find the relative frequency of each colour. (c) Do you think the spinner is fair? Give a reason. (d) Use the results to estimate how many times it would land on red in 1,000 spins.
+              <details><summary>Show the worked answer</summary><p>(a) 1/4 × 200 = <b>50</b> each.<br>(b) Red 52 ÷ 200 = <b>0.26</b>, blue <b>0.235</b>, green <b>0.245</b>, yellow <b>0.26</b>.<br>(c) <b>Yes, probably fair</b>: every result is close to 50 (every relative frequency is close to 0.25). Results are never exactly equal.<br>(d) 0.26 × 1,000 = <b>260</b>.</p></details></li>
+            <li><b>School hoodies.</b> A school hoodie comes in 5 colours (one of them navy) and 4 sizes, with or without a name printed on the back. (a) How many different hoodies are possible? (b) The school adds 2 more colours. How many different hoodies are possible now? (c) Before the new colours, one of the hoodie types from (a) is picked at random. What is the probability that it is navy?
+              <details><summary>Show the worked answer</summary><p>(a) 5 × 4 × 2 = <b>40</b>.<br>(b) 7 × 4 × 2 = <b>56</b>.<br>(c) Navy hoodies: 1 × 4 × 2 = 8 of the 40, so P = 8/40 = <b>1/5</b>.</p></details></li>
+            <li><b>A bike lock.</b> A bike lock has 3 dials, each numbered 0 to 9. (a) How many different codes are possible? (b) Aoife forgets her code but knows it starts with 7. How many codes might she have to try? (c) Each try takes 4 seconds. What is the longest it could take her? Give your answer in minutes and seconds. (d) How many codes have three different digits?
+              <details><summary>Show the worked answer</summary><p>(a) 10 × 10 × 10 = <b>1,000</b>.<br>(b) 1 × 10 × 10 = <b>100</b>.<br>(c) 100 × 4 = 400 seconds = <b>6 minutes 40 seconds</b>.<br>(d) 10 × 9 × 8 = <b>720</b> (the second dial can't repeat the first, and the third can't repeat either).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/relative-frequency-counting-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Relative Frequency &amp; Counting Teacher Pack (€5)</a>: Class Experiment sheets, Coin &amp; Dice Lab mingle cards, Probability Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
