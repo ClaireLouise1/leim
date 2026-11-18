@@ -1,0 +1,143 @@
+<main id="main">
+<style>.rcpt{margin:4px auto 8px;border-collapse:collapse;font-family:"Courier New",monospace;font-size:16px;background:#FFFDF6;border:2px dashed var(--line);min-width:0;width:auto}.rcpt caption{font-weight:800;font-family:Inter,sans-serif;font-size:15px;padding:6px 0 2px}.rcpt td{padding:3px 12px;text-align:left;border:0}.rcpt td+td{text-align:right}.rcpt tr.tot td{border-top:2px solid var(--ink);font-weight:800}.hlt{display:inline-block;background:var(--night);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Shop Keeper</h1>
+        <p>Run the till. Add up receipts and give the right change, work out electricity and phone bills, add VAT (and take it back off the right way), find sale prices, profit and loss, and spot the best buy. Higher Level? Mark-up and margin are in the Profit round. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="till"><div><b>Shop Keeper</b><span>Add up receipts, give change, electricity meter readings, phone bills and call-out charges</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="vat"><div><b>VAT &amp; discounts</b><span>Add VAT at 23%, 13.5% or 9%, find the price before VAT, sale tags, the price before the sale</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="profit"><div><b>Profit &amp; loss</b><span>Profit or loss, % profit on the cost price, selling price, cost price, and Higher Level mark-up and margin</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="value"><div><b>Value for money</b><span>Best buy, cost per 100 g, "3 for 2" or % off?, big pack savings, which plan is cheaper</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Shop Keeper, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.2c, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Money: bills, VAT, profit &amp; loss</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>A shop adds VAT at 23% to a price, and then a customer asks for the VAT to be taken off again. The shop assistant just takes 23% off the new price. Look what happens:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">€100 → add 23% → <b>€123</b> → take 23% off → <b>€94.71</b></li>
+          <li class="note">€200 → add 23% → <b>€246</b> → take 23% off → <b>€189.42</b></li>
+          <li class="note">€500 → add 23% → <b>€615</b> → take 23% off → <b>€473.55</b></li>
+        </ul>
+        <p style="margin-top:10px">Why don't you get back to where you started? What should the assistant do instead?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The first 23% is 23% of the <b>old</b> price; the second 23% is 23% of the <b>bigger</b> price, so it takes off too much. €123 is <b>123%</b> of the old price, so <b>divide by 1.23</b>: €123 ÷ 1.23 = <b>€100</b>. The same trick finds the price before a sale and the cost price from a selling price.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Bills and receipts</h3>
+        <ul>
+          <li><b>Receipts:</b> multiply each line first (3 × €1.25 = €3.75), then add the lines. Change = what you paid − the total.</li>
+          <li><b>Electricity and gas:</b> units used = <b>present</b> reading − <b>previous</b> reading. Cost = units × price per unit, plus the <b>standing charge</b> (a fixed amount you pay whatever you use), then VAT.</li>
+          <li><b>Phone plans:</b> monthly charge + extras. Only the minutes, texts or data <b>over</b> the allowance are charged.</li>
+          <li><b>Call-out charges:</b> fixed charge + hourly rate × hours. 2.5 hours at €40 an hour = €100.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">VAT and discounts</h3>
+        <p>VAT (Value Added Tax) is added to the price of most things. In Ireland the standard rate is <b>23%</b>; some things have lower rates such as <b>13.5%</b> (for example hotel rooms and building work) or <b>9%</b> (for example electricity and gas bills, and restaurant meals). The exam always tells you which rate to use.</p>
+        <div class="fm">
+          <div class="note"><b class="h">Add VAT</b>VAT = 23% of €400 = €92. Total = €492. Quick way: €400 × <b>1.23</b>.</div>
+          <div class="note"><b class="h">Price before VAT</b>€492 is 123% of the price. €492 ÷ <b>1.23</b> = €400. Never take 23% off €492.</div>
+          <div class="note"><b class="h">Discount</b>25% off €80: 25% of €80 = €20, sale price €60. Quick way: €80 × <b>0.75</b>.</div>
+          <div class="note"><b class="h">Price before a sale</b>€60 after 25% off is 75% of the old price. €60 ÷ <b>0.75</b> = €80.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Profit and loss</h3>
+        <ul>
+          <li><b>Cost price</b> = what the shop pays. <b>Selling price</b> = what the customer pays.</li>
+          <li><b>Profit</b> = selling price − cost price. If the answer is negative, it's a <b>loss</b>.</li>
+          <li><b>% profit (or loss) on the cost price</b> = profit ÷ <b>cost price</b> × 100. Bought for €40, sold for €50: €10 ÷ €40 × 100 = <b>25%</b>.</li>
+          <li><b>Selling at a % profit:</b> cost €40, 25% profit → €40 × 1.25 = €50. <b>Back to the cost:</b> €50 ÷ 1.25 = €40.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Mark-up and margin</b> <span class="hlt">Higher Level</span><br><b>Mark-up</b> = profit as a % of the <b>cost</b> price. <b>Margin</b> = profit as a % of the <b>selling</b> price. Bought for €60, sold for €75: profit €15, mark-up = 15 ÷ 60 = <b>25%</b>, margin = 15 ÷ 75 = <b>20%</b>. The margin is always the smaller one (you divide by a bigger number).</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Value for money</h3>
+        <ul>
+          <li><b>Best buy:</b> find the price of the <b>same amount</b> in each pack (per 100 g, per litre or per item). The cheapest per unit is the best value.</li>
+          <li><b>"3 for the price of 2"</b> means you pay for 2 of the 3: that's the same as 33⅓% off. It beats 25% off but loses to 40% off.</li>
+          <li><b>Plans:</b> work out the total cost of each plan for <b>this</b> person, then compare. A plan that's cheaper for one person can be dearer for another.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> taking 23% off a price that already includes VAT; dividing by the selling price when the question asks for % profit on the <b>cost</b> price; forgetting the standing charge; and using the present meter reading instead of the units used.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Money is one of the most common <b>real-life settings</b> on the paper: a household bill with meter readings, a shop buying and selling at a profit, a price with or without VAT, a sale, or choosing the better deal. These questions often have several parts that build on each other, and the later parts usually need a "which is better? Explain." answer.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write every step</b> with euro signs: units used, cost of units, standing charge, subtotal, VAT, total. Each line can earn marks.</li>
+            <li><b>Give money to the nearest cent</b> (two decimal places) unless the question says otherwise.</li>
+            <li><b>Read "on the cost price" carefully</b>: % profit divides by the cost, not the selling price.</li>
+            <li><b>Going backwards?</b> Divide by 1.23 (or 0.75, or 1.25). Taking the % off the new price is the most common way to lose the marks.</li>
+            <li><b>"Which is better value?" needs numbers AND a sentence:</b> show the price per 100 g for each, then say which one and why.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The electricity bill.</b> The Murphys' meter read 52 418 units at the start of the billing period and 53 268 units at the end. Each unit costs 31c and there is a standing charge of €38.40. VAT at 9% is added to the whole bill. (a) How many units did they use? (b) Find the bill before VAT. (c) Find the total bill, correct to the nearest cent.
+              <details><summary>Show the worked answer</summary><p>(a) 53 268 − 52 418 = <b>850 units</b>.<br>(b) 850 × €0.31 = €263.50. €263.50 + €38.40 = <b>€301.90</b>.<br>(c) VAT = 9% of €301.90 = €27.171 = €27.17. Total = €301.90 + €27.17 = <b>€329.07</b>. (Or €301.90 × 1.09 = €329.071 → €329.07.)</p></details></li>
+            <li><b>The hoodie stall.</b> Aisling buys 40 hoodies for €18 each. She sells 30 of them for €35 each and sells the rest in a sale at 40% off. (a) How much did the hoodies cost her? (b) What is the sale price of one hoodie? (c) Find her total profit, and her profit as a percentage of the cost price.
+              <details><summary>Show the worked answer</summary><p>(a) 40 × €18 = <b>€720</b>.<br>(b) 40% of €35 = €14, so the sale price is €35 − €14 = <b>€21</b>.<br>(c) Income: 30 × €35 = €1,050 and 10 × €21 = €210, total €1,260. Profit = €1,260 − €720 = <b>€540</b>. % profit = 540 ÷ 720 × 100 = <b>75%</b>.</p></details></li>
+            <li><b>Taking the VAT off.</b> A bike costs €861, including VAT at 23%. (a) Find the price of the bike before VAT. (b) How much VAT is paid? (c) Seán says "the VAT is 23% of €861, which is €198.03". Explain why Seán is wrong.
+              <details><summary>Show the worked answer</summary><p>(a) €861 is 123% of the price before VAT. €861 ÷ 1.23 = <b>€700</b>.<br>(b) €861 − €700 = <b>€161</b>. (Check: 23% of €700 = €161 ✓.)<br>(c) The VAT is 23% of the price <b>before</b> VAT (€700), not 23% of €861. €861 already includes the VAT, so 23% of it is too much.</p></details></li>
+            <li><b>The café.</b> (a) A 500 g bag of coffee beans costs €3.40 and a 1.25 kg bag costs €8. Which bag is better value? Show your work. (b) <span class="hlt">Higher Level</span> The café works out that each cup of coffee costs it €0.80 to make and sells it for €3.20. Find the mark-up and the margin.
+              <details><summary>Show the worked answer</summary><p>(a) 500 g: €3.40 ÷ 5 = 68c per 100 g. 1.25 kg = 1 250 g: €8 ÷ 12.5 = 64c per 100 g. The <b>1.25 kg bag</b> is better value (64c is less than 68c per 100 g).<br>(b) Profit = €3.20 − €0.80 = €2.40. Mark-up = 2.40 ÷ 0.80 × 100 = <b>300%</b>. Margin = 2.40 ÷ 3.20 × 100 = <b>75%</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/money-bills-vat-profit-loss-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Money: Bills, VAT, Profit &amp; Loss Teacher Pack (€5)</a>: Market Day mingle cards, Bill Swap A/B cards, Money Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

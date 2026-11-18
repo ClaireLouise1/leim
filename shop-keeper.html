@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop Keeper: Money, Bills &amp; VAT Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: add up receipts and bills, add and remove VAT, sale prices, profit and loss, value for money, plus Higher Level mark-up and margin, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.rcpt{margin:4px auto 8px;border-collapse:collapse;font-family:"Courier New",monospace;font-size:16px;background:#FFFDF6;border:2px dashed var(--line);min-width:0;width:auto}.rcpt caption{font-weight:800;font-family:Inter,sans-serif;font-size:15px;padding:6px 0 2px}.rcpt td{padding:3px 12px;text-align:left;border:0}.rcpt td+td{text-align:right}.rcpt tr.tot td{border-top:2px solid var(--ink);font-weight:800}.hlt{display:inline-block;background:var(--night);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}.fm{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.fm .note b.h{display:block;font-size:17px;margin-bottom:2px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Shop Keeper</h1>
+        <p>Run the till. Add up receipts and give the right change, work out electricity and phone bills, add VAT (and take it back off the right way), find sale prices, profit and loss, and spot the best buy. Higher Level? Mark-up and margin are in the Profit round. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="till"><div><b>Shop Keeper</b><span>Add up receipts, give change, electricity meter readings, phone bills and call-out charges</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="vat"><div><b>VAT &amp; discounts</b><span>Add VAT at 23%, 13.5% or 9%, find the price before VAT, sale tags, the price before the sale</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="profit"><div><b>Profit &amp; loss</b><span>Profit or loss, % profit on the cost price, selling price, cost price, and Higher Level mark-up and margin</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="value"><div><b>Value for money</b><span>Best buy, cost per 100 g, "3 for 2" or % off?, big pack savings, which plan is cheaper</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Shop Keeper, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.2c, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">75s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Money: bills, VAT, profit &amp; loss</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>A shop adds VAT at 23% to a price, and then a customer asks for the VAT to be taken off again. The shop assistant just takes 23% off the new price. Look what happens:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">€100 → add 23% → <b>€123</b> → take 23% off → <b>€94.71</b></li>
+          <li class="note">€200 → add 23% → <b>€246</b> → take 23% off → <b>€189.42</b></li>
+          <li class="note">€500 → add 23% → <b>€615</b> → take 23% off → <b>€473.55</b></li>
+        </ul>
+        <p style="margin-top:10px">Why don't you get back to where you started? What should the assistant do instead?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The first 23% is 23% of the <b>old</b> price; the second 23% is 23% of the <b>bigger</b> price, so it takes off too much. €123 is <b>123%</b> of the old price, so <b>divide by 1.23</b>: €123 ÷ 1.23 = <b>€100</b>. The same trick finds the price before a sale and the cost price from a selling price.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Bills and receipts</h3>
+        <ul>
+          <li><b>Receipts:</b> multiply each line first (3 × €1.25 = €3.75), then add the lines. Change = what you paid − the total.</li>
+          <li><b>Electricity and gas:</b> units used = <b>present</b> reading − <b>previous</b> reading. Cost = units × price per unit, plus the <b>standing charge</b> (a fixed amount you pay whatever you use), then VAT.</li>
+          <li><b>Phone plans:</b> monthly charge + extras. Only the minutes, texts or data <b>over</b> the allowance are charged.</li>
+          <li><b>Call-out charges:</b> fixed charge + hourly rate × hours. 2.5 hours at €40 an hour = €100.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">VAT and discounts</h3>
+        <p>VAT (Value Added Tax) is added to the price of most things. In Ireland the standard rate is <b>23%</b>; some things have lower rates such as <b>13.5%</b> (for example hotel rooms and building work) or <b>9%</b> (for example electricity and gas bills, and restaurant meals). The exam always tells you which rate to use.</p>
+        <div class="fm">
+          <div class="note"><b class="h">Add VAT</b>VAT = 23% of €400 = €92. Total = €492. Quick way: €400 × <b>1.23</b>.</div>
+          <div class="note"><b class="h">Price before VAT</b>€492 is 123% of the price. €492 ÷ <b>1.23</b> = €400. Never take 23% off €492.</div>
+          <div class="note"><b class="h">Discount</b>25% off €80: 25% of €80 = €20, sale price €60. Quick way: €80 × <b>0.75</b>.</div>
+          <div class="note"><b class="h">Price before a sale</b>€60 after 25% off is 75% of the old price. €60 ÷ <b>0.75</b> = €80.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Profit and loss</h3>
+        <ul>
+          <li><b>Cost price</b> = what the shop pays. <b>Selling price</b> = what the customer pays.</li>
+          <li><b>Profit</b> = selling price − cost price. If the answer is negative, it's a <b>loss</b>.</li>
+          <li><b>% profit (or loss) on the cost price</b> = profit ÷ <b>cost price</b> × 100. Bought for €40, sold for €50: €10 ÷ €40 × 100 = <b>25%</b>.</li>
+          <li><b>Selling at a % profit:</b> cost €40, 25% profit → €40 × 1.25 = €50. <b>Back to the cost:</b> €50 ÷ 1.25 = €40.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Mark-up and margin</b> <span class="hlt">Higher Level</span><br><b>Mark-up</b> = profit as a % of the <b>cost</b> price. <b>Margin</b> = profit as a % of the <b>selling</b> price. Bought for €60, sold for €75: profit €15, mark-up = 15 ÷ 60 = <b>25%</b>, margin = 15 ÷ 75 = <b>20%</b>. The margin is always the smaller one (you divide by a bigger number).</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Value for money</h3>
+        <ul>
+          <li><b>Best buy:</b> find the price of the <b>same amount</b> in each pack (per 100 g, per litre or per item). The cheapest per unit is the best value.</li>
+          <li><b>"3 for the price of 2"</b> means you pay for 2 of the 3: that's the same as 33⅓% off. It beats 25% off but loses to 40% off.</li>
+          <li><b>Plans:</b> work out the total cost of each plan for <b>this</b> person, then compare. A plan that's cheaper for one person can be dearer for another.</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> taking 23% off a price that already includes VAT; dividing by the selling price when the question asks for % profit on the <b>cost</b> price; forgetting the standing charge; and using the present meter reading instead of the units used.</div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Money is one of the most common <b>real-life settings</b> on the paper: a household bill with meter readings, a shop buying and selling at a profit, a price with or without VAT, a sale, or choosing the better deal. These questions often have several parts that build on each other, and the later parts usually need a "which is better? Explain." answer.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write every step</b> with euro signs: units used, cost of units, standing charge, subtotal, VAT, total. Each line can earn marks.</li>
+            <li><b>Give money to the nearest cent</b> (two decimal places) unless the question says otherwise.</li>
+            <li><b>Read "on the cost price" carefully</b>: % profit divides by the cost, not the selling price.</li>
+            <li><b>Going backwards?</b> Divide by 1.23 (or 0.75, or 1.25). Taking the % off the new price is the most common way to lose the marks.</li>
+            <li><b>"Which is better value?" needs numbers AND a sentence:</b> show the price per 100 g for each, then say which one and why.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The electricity bill.</b> The Murphys' meter read 52 418 units at the start of the billing period and 53 268 units at the end. Each unit costs 31c and there is a standing charge of €38.40. VAT at 9% is added to the whole bill. (a) How many units did they use? (b) Find the bill before VAT. (c) Find the total bill, correct to the nearest cent.
+              <details><summary>Show the worked answer</summary><p>(a) 53 268 − 52 418 = <b>850 units</b>.<br>(b) 850 × €0.31 = €263.50. €263.50 + €38.40 = <b>€301.90</b>.<br>(c) VAT = 9% of €301.90 = €27.171 = €27.17. Total = €301.90 + €27.17 = <b>€329.07</b>. (Or €301.90 × 1.09 = €329.071 → €329.07.)</p></details></li>
+            <li><b>The hoodie stall.</b> Aisling buys 40 hoodies for €18 each. She sells 30 of them for €35 each and sells the rest in a sale at 40% off. (a) How much did the hoodies cost her? (b) What is the sale price of one hoodie? (c) Find her total profit, and her profit as a percentage of the cost price.
+              <details><summary>Show the worked answer</summary><p>(a) 40 × €18 = <b>€720</b>.<br>(b) 40% of €35 = €14, so the sale price is €35 − €14 = <b>€21</b>.<br>(c) Income: 30 × €35 = €1,050 and 10 × €21 = €210, total €1,260. Profit = €1,260 − €720 = <b>€540</b>. % profit = 540 ÷ 720 × 100 = <b>75%</b>.</p></details></li>
+            <li><b>Taking the VAT off.</b> A bike costs €861, including VAT at 23%. (a) Find the price of the bike before VAT. (b) How much VAT is paid? (c) Seán says "the VAT is 23% of €861, which is €198.03". Explain why Seán is wrong.
+              <details><summary>Show the worked answer</summary><p>(a) €861 is 123% of the price before VAT. €861 ÷ 1.23 = <b>€700</b>.<br>(b) €861 − €700 = <b>€161</b>. (Check: 23% of €700 = €161 ✓.)<br>(c) The VAT is 23% of the price <b>before</b> VAT (€700), not 23% of €861. €861 already includes the VAT, so 23% of it is too much.</p></details></li>
+            <li><b>The café.</b> (a) A 500 g bag of coffee beans costs €3.40 and a 1.25 kg bag costs €8. Which bag is better value? Show your work. (b) <span class="hlt">Higher Level</span> The café works out that each cup of coffee costs it €0.80 to make and sells it for €3.20. Find the mark-up and the margin.
+              <details><summary>Show the worked answer</summary><p>(a) 500 g: €3.40 ÷ 5 = 68c per 100 g. 1.25 kg = 1 250 g: €8 ÷ 12.5 = 64c per 100 g. The <b>1.25 kg bag</b> is better value (64c is less than 68c per 100 g).<br>(b) Profit = €3.20 − €0.80 = €2.40. Mark-up = 2.40 ÷ 0.80 × 100 = <b>300%</b>. Margin = 2.40 ÷ 3.20 × 100 = <b>75%</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/money-bills-vat-profit-loss-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Money: Bills, VAT, Profit &amp; Loss Teacher Pack (€5)</a>: Market Day trading cards, Bill Swap A/B cards, Money Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  /* money is kept in whole CENTS (integers) so every answer is exact */
+  function eur(c){c=Math.round(c);var neg=c<0;c=Math.abs(c);var e=String(Math.floor(c/100)).replace(/\B(?=(\d{3})+(?!\d))/g,",");return (neg?"−":"")+"€"+e+"."+String(c%100).padStart(2,"0");}
+  function pc(x){var y=Math.round(x*10)/10;return String(y).replace(/\.0$/,"")+"%";}            // 12.5 → "12.5%"
+  function num(x){return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function rate(r){return String(r)+"%";}
+  /* value of any option: "€1,234.50" → 1234.5, "12.5%" → 12.5 */
+  function val(s){return +String(s).replace(/[€%, c]/g,"").replace("−","-");}
+  /* numeric question: wrong options never equal the answer in VALUE, never ≤ 0, no duplicates */
+  function Q(en,frame,ans,slips,pads,why,html,data){var seen=[val(ans)],out=[];
+    slips.concat(pads||[]).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|null/.test(x))return;var y=val(x);
+      if(!isFinite(y)||y<=0)return;if(seen.some(function(z){return Math.abs(z-y)<1e-9;}))return;if(out.length<3){seen.push(y);out.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:ans,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+ans,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+  function ePads(c){return [eur(c+100),eur(c-100),eur(c+10),eur(c-10),eur(c+50),eur(c*2)];}
+  function pPads(p){return [pc(p+5),pc(p-5),pc(p+10),pc(p*2),pc(p/2)];}
+
+  /* ---------- pictures ---------- */
+  var INK="#1B2430",RED="#C8463D";
+  function receiptHTML(shop,lines,foot){ // a till receipt: lines = [[qty,item,unitCents],…]
+    var o='<table class="rcpt" style="min-width:0;width:auto" data-shop="'+shop+'"><caption>'+shop+'</caption>';
+    lines.forEach(function(l){o+='<tr data-q="'+l[0]+'" data-c="'+l[2]+'"><td>'+l[0]+' × '+l[1]+'</td><td>@ '+eur(l[2])+'</td></tr>';});
+    return o+'<tr class="tot"><td>'+(foot||"TOTAL")+'</td><td>?</td></tr></table>';}
+  function meterSVG(prev,pres){ // two electricity meter readings
+    function box(y,lab,n){var s=String(n).padStart(5,"0"),o='<text x="10" y="'+(y+26)+'" font-size="15" font-weight="700" fill="'+INK+'" font-family="Inter,sans-serif">'+lab+'</text>';
+      for(var i=0;i<5;i++)o+='<rect x="'+(110+i*34)+'" y="'+y+'" width="30" height="38" rx="4" fill="'+INK+'"/><text class="dg" data-row="'+lab+'" x="'+(125+i*34)+'" y="'+(y+28)+'" font-size="24" font-weight="800" text-anchor="middle" fill="#fff" font-family="Inter,monospace">'+s[i]+'</text>';
+      return o;}
+    return '<svg viewBox="0 0 290 100" width="100%" style="max-width:300px" role="img" aria-label="Meter readings: previous '+prev+', present '+pres+'">'+box(4,"Previous",prev)+box(54,"Present",pres)+'</svg>';}
+  function tagSVG(price,pct,item){ // a sale tag: item, old price, % off
+    return '<svg viewBox="0 0 300 130" width="100%" style="max-width:300px" role="img" aria-label="'+item+', was '+price+', '+pct+' off" data-price="'+price+'" data-pct="'+pct+'">'+
+      '<path d="M40 10 H285 a8 8 0 0 1 8 8 V112 a8 8 0 0 1 -8 8 H40 L6 65 Z" fill="#FFF8E1" stroke="'+INK+'" stroke-width="3"/>'+
+      '<circle cx="34" cy="65" r="7" fill="#fff" stroke="'+INK+'" stroke-width="2.5"/>'+
+      '<text x="165" y="42" font-size="18" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+item+'</text>'+
+      '<text x="165" y="76" font-size="28" font-weight="800" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+price+'</text>'+
+      '<rect x="105" y="86" width="120" height="28" rx="6" fill="'+RED+'"/>'+
+      '<text x="165" y="107" font-size="18" font-weight="800" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif">'+pct+' OFF</text></svg>';}
+
+  /* ---------- Shop Keeper: receipts, change and bills ---------- */
+  var SHOPS=["Daly's Shop, Ballincollig","Corner Shop, Douglas","Spar, Blackpool","Centra, Mallow","Mace, Macroom"];
+  var ITEMS=[["milk",[105,115,125,135]],["bread",[160,185,210,240]],["eggs (6)",[199,215,240,265]],["apples",[45,50,55,60]],["yoghurt",[65,70,85,90]],["crisps",[95,110,120]],["cola",[150,165,180]],["butter",[310,345,395]],["bananas",[25,30,35]],["cheese",[285,320,350]],["juice",[175,199,225]],["pasta",[129,145,169]]];
+  function qReceipt(){
+    var it=shuffle(ITEMS.slice()).slice(0,ri(3,4)),lines=it.map(function(x){return [rnd([1,1,2,2,3,4,6]),x[0],rnd(x[1])];});
+    var tot=lines.reduce(function(s,l){return s+l[0]*l[2];},0),noq=lines.reduce(function(s,l){return s+l[2];},0),shop=rnd(SHOPS),change=Math.random()<.5;
+    var big=lines.filter(function(l){return l[0]>1;})[0]||lines[0];
+    if(change){var note=[1000,2000,5000,10000].filter(function(n){return n>tot;})[0];
+      return Q("Here is a receipt. You pay with a "+eur(note).replace(".00","")+" note. How much change should you get?","",eur(note-tot),[eur(note-noq),eur(tot),eur(note-tot+big[2]),eur(note-tot-100),eur(note-tot+100)],ePads(note-tot),
+        "Line totals: "+lines.map(function(l){return l[0]+" × "+eur(l[2])+" = "+eur(l[0]*l[2]);}).join(", ")+". Total "+eur(tot)+". Change = "+eur(note)+" − "+eur(tot)+" = "+eur(note-tot)+".",receiptHTML(shop,lines),{t:"change"});}
+    return Q("Here is a receipt. What is the total?","",eur(tot),[eur(noq),eur(tot-big[2]),eur(tot+big[2]),eur(tot+100),eur(tot-100)],ePads(tot),
+      "Multiply each line first: "+lines.map(function(l){return l[0]+" × "+eur(l[2])+" = "+eur(l[0]*l[2]);}).join(", ")+". Add them: "+eur(tot)+".",receiptHTML(shop,lines),{t:"receipt"});
+  }
+  /* unit price (cents) and how many units it must be a multiple of so the cost is whole euros */
+  var UNIT=[[25,4],[30,10],[32,25],[35,20],[36,25],[40,5],[28,25],[45,20]];
+  function qMeter(){
+    var u=rnd(UNIT),n=u[1]*ri(Math.ceil(150/u[1]),Math.floor(900/u[1])),prev=ri(10000,89000),pres=prev+n,sc=rnd([1850,2200,2475,2900,3150,3600]);
+    var bill=n*u[0]+sc;
+    return Q("Electricity: previous meter reading "+prev+", present reading "+pres+". Each unit costs "+u[0]+"c and the standing charge is "+eur(sc)+". What is the bill before VAT?","",eur(bill),
+      [eur(n*u[0]),eur(pres*u[0]+sc),eur(n*u[0]*10+sc),eur(n*u[0]-sc),eur((n+100)*u[0]+sc)],ePads(bill),
+      "Units used = present − previous = "+pres+" − "+prev+" = "+n+". "+n+" × "+u[0]+"c = "+eur(n*u[0])+". Add the standing charge: "+eur(n*u[0])+" + "+eur(sc)+" = "+eur(bill)+".",meterSVG(prev,pres),{t:"meter"});
+  }
+  var PLANS=[["minutes","extra minute",[5,8,10,12,15,20]],["texts","extra text",[5,6,8,10]],["GB of data","extra GB",[150,200,250,300,500]]];
+  function qPhone(){
+    var p=rnd(PLANS),fee=rnd([1000,1500,1999,2000,2500,2999,3500]),inc=p[0]==="GB of data"?rnd([10,20,30,50]):rnd([100,200,300,500]),
+      ex=p[0]==="GB of data"?ri(2,9):rnd([20,25,30,40,50,60,75,80,120]),used=inc+ex,c=rnd(p[2]),bill=fee+ex*c;
+    return Q("A phone plan costs "+eur(fee)+" a month and includes "+inc+" "+p[0]+". Each "+p[1]+" costs "+(c>=100?eur(c):c+"c")+". Ríona uses "+used+" "+p[0]+" this month. What is her bill?","",eur(bill),
+      [eur(fee+used*c),eur(ex*c),eur(fee+inc*c),eur(fee+ex*c*10),eur(fee+ex)],ePads(bill),
+      "Extra = "+used+" − "+inc+" = "+ex+". "+ex+" × "+(c>=100?eur(c):c+"c")+" = "+eur(ex*c)+". Bill = "+eur(fee)+" + "+eur(ex*c)+" = "+eur(bill)+".","",{t:"phone"});
+  }
+  var TRADES=[["A plumber","call-out charge"],["An electrician","call-out charge"],["A mechanic","fixed charge"],["A carpet fitter","fixed charge"]];
+  function qHourly(){
+    var tr=rnd(TRADES),co=rnd([4000,5000,6000,7500,8000]),hr=rnd([3000,3500,4000,4500,5000,5500,6000]),h=rnd([2,3,4,5,1.5,2.5,3.5]),lab=Math.round(h*hr),bill=co+lab,vat=Math.random()<.4;
+    if(vat&&bill%200!==0)vat=false;
+    var en=tr[0]+" charges a "+tr[1]+" of "+eur(co)+" plus "+eur(hr)+" an hour. The job takes "+h+" hours. What is the bill"+(vat?" including VAT at 13.5%?":" (no VAT)?"),ans=vat?bill+bill*135/1000:bill;
+    if(vat)return Q(en,"",eur(ans),[eur(bill),eur(bill*135/1000),eur(bill+1350),eur(bill*123/100)],ePads(ans),
+      "Labour "+h+" × "+eur(hr)+" = "+eur(lab)+". Before VAT: "+eur(co)+" + "+eur(lab)+" = "+eur(bill)+". VAT = 13.5% of "+eur(bill)+" = "+eur(bill*135/1000)+". Total "+eur(ans)+".","",{t:"hourly",vat:true});
+    return Q(en,"",eur(ans),[eur(lab),eur(co+hr),eur((co+hr)*h),eur(co+hr*Math.floor(h)),eur(co*h)],ePads(ans),
+      "Labour = "+h+" × "+eur(hr)+" = "+eur(lab)+". Add the "+tr[1]+": "+eur(lab)+" + "+eur(co)+" = "+eur(ans)+".","",{t:"hourly",vat:false});
+  }
+
+  /* ---------- VAT & discounts ---------- */
+  var VATITEMS=[["A laptop costs",23,[400,500,600,800,900,1200]],["A games console costs",23,[300,400,500]],["A bike costs",23,[200,300,500,700]],["A pair of runners costs",23,[60,80,100,120]],["A phone costs",23,[300,400,600,900]],["An electricity bill comes to",9,[100,150,200,300,400]],["A gas bill comes to",9,[100,120,200,300]],["A meal in a café costs",9,[20,40,50,60,80]],["A haircut costs",9,[20,30,40,50]],["A hotel room costs",13.5,[100,120,160,200,240]],["Some building work costs",13.5,[1000,2000,4000,6000]]];
+  function qAddVat(){
+    var it=rnd(VATITEMS),r=it[1],P=rnd(it[2])*100,V=P*r/100,ask=rnd(["total","total","vat"]);
+    var en=it[0]+" "+eur(P)+" before VAT. VAT is charged at "+rate(r)+". "+(ask==="vat"?"How much is the VAT?":"What is the price including VAT?");
+    if(ask==="vat")return Q(en,"",eur(V),[eur(P+V),eur(r*100),eur(P*r/1000),eur(P-V)],ePads(V),rate(r)+" of "+eur(P)+" = "+eur(P)+" × "+(r/100)+" = "+eur(V)+".","",{t:"vat",ask:"vat"});
+    return Q(en,"",eur(P+V),[eur(V),eur(P+r*100),eur(P-V),eur(P+P*r/1000),eur(P*(100+(r===23?13.5:23))/100)],ePads(P+V),
+      "VAT = "+rate(r)+" of "+eur(P)+" = "+eur(V)+". Total = "+eur(P)+" + "+eur(V)+" = "+eur(P+V)+". Quick way: "+eur(P)+" × "+(1+r/100)+".","",{t:"vat",ask:"total"});
+  }
+  function qBackVat(){
+    var it=rnd(VATITEMS),r=it[1],P=rnd(it[2])*100,T=P*(100+r)/100,ask=rnd(["before","before","vat"]),slip=Math.round(T*(100-r)/100);
+    var en=it[0]+" "+eur(T)+" including VAT at "+rate(r)+". "+(ask==="vat"?"How much of that is VAT?":"What was the price before VAT?");
+    if(ask==="vat")return Q(en,"",eur(T-P),[eur(T-slip),eur(T*r/100),eur(T*r/1000),eur(P)],ePads(T-P),
+      eur(T)+" is "+(100+r)+"% of the price. 100% = "+eur(T)+" ÷ "+(1+r/100)+" = "+eur(P)+". VAT = "+eur(T)+" − "+eur(P)+" = "+eur(T-P)+". (Not "+rate(r)+" of "+eur(T)+"!)","",{t:"backvat",ask:"vat"});
+    return Q(en,"",eur(P),[eur(slip),eur(T-r*100),eur(Math.round(T*100/(100+2*r))),eur(Math.round(T/(1+r/10)))],ePads(P),
+      eur(T)+" = "+(100+r)+"% of the old price. Divide by "+(1+r/100)+": "+eur(T)+" ÷ "+(1+r/100)+" = "+eur(P)+". Taking "+rate(r)+" off "+eur(T)+" gives "+eur(slip)+", which is WRONG.","",{t:"backvat",ask:"before"});
+  }
+  var SALE=[["Jacket",[60,80,90,120,150]],["Runners",[60,80,100,120]],["Headphones",[40,50,80,150,200]],["Hoodie",[30,40,50,60]],["Tablet",[200,250,300,400]],["Football",[20,25,30,40]]];
+  function qSale(){
+    var s=rnd(SALE),P=rnd(s[1])*100,d=rnd([10,15,20,25,30,40,50,35]),off=P*d/100,ask=rnd(["now","now","save"]);
+    if(off%1)return qSale();
+    if(ask==="save")return Q("How much do you save in this sale?","",eur(off),[eur(P-off),eur(d*100),eur(P*d/1000),eur(P*(100-d)/1000)],ePads(off),d+"% of "+eur(P)+" = "+eur(off)+". That's what you save.",tagSVG(eur(P),d+"%",s[0]),{t:"sale",ask:"save",P:P,d:d});
+    return Q("What is the sale price?","",eur(P-off),[eur(off),eur(P-d*100),eur(P+off),eur(P*(100-d)/1000)],ePads(P-off),
+      d+"% of "+eur(P)+" = "+eur(off)+". "+eur(P)+" − "+eur(off)+" = "+eur(P-off)+". Quick way: "+(100-d)+"% of "+eur(P)+" = "+eur(P-off)+".",tagSVG(eur(P),d+"%",s[0]),{t:"sale",ask:"now",P:P,d:d});
+  }
+  function qWas(){
+    var d=rnd([10,20,25,40,50,30]),P=rnd([40,60,80,100,120,150,200,250,300])*100,N=P*(100-d)/100,it=rnd(["coat","bike","lamp","watch","guitar","desk"]),slip=Math.round(N*(100+d)/100);
+    if(N%1)return qWas();
+    return Q("In a sale, a "+it+" costs "+eur(N)+" after "+d+"% off. What was the price before the sale?","",eur(P),[eur(slip),eur(N+d*100),eur(Math.round(N*100/(100+d))),eur(N*2)],ePads(P),
+      eur(N)+" is "+(100-d)+"% of the old price. 1% = "+eur(N)+" ÷ "+(100-d)+" = "+eur(N/(100-d))+", so 100% = "+eur(P)+". Adding "+d+"% back on gives "+eur(slip)+", which is WRONG.","",{t:"was"});
+  }
+  function qWhich(){
+    var kind=rnd(["off","vat"]),d=kind==="vat"?rnd([23,13.5,9]):rnd([10,15,20,25,30,40]),k=(100+(kind==="vat"?d:-d))/100,flip=(100+(kind==="vat"?-d:d))/100;
+    var ans="× "+k,pool=["× "+flip,"× "+(d/100),"× "+(kind==="vat"?(1+d/1000):(1-d/1000)),"× "+d,kind==="vat"?"+ "+d:"− "+d];
+    return C(kind==="vat"?"Which calculation adds VAT at "+rate(d)+" to a price?":"Which calculation takes "+d+"% off a price?","",ans,pool,
+      kind==="vat"?"Price + "+rate(d)+" = "+(100+d)+"% of the price, so multiply by "+k+".":"Price − "+d+"% = "+(100-d)+"% of the price, so multiply by "+k+".",null,"",{t:"which",kind:kind,d:d});
+  }
+
+  /* ---------- Profit & loss (mark-up and margin at Higher Level) ---------- */
+  var GOODS=["T-shirts","phone cases","scarves","mugs","bikes","lamps","hurleys","backpacks","jerseys","football boots"];
+  function qPL(){
+    var g=rnd(GOODS),cost=ri(8,90)*100+rnd([0,0,50]),delta=ri(2,40)*100+rnd([0,50]),prof=Math.random()<.65,sell=prof?cost+delta:cost-delta;
+    if(sell<=100)return qPL();
+    var ans=(prof?"Profit of ":"Loss of ")+eur(delta),pool=[(prof?"Loss of ":"Profit of ")+eur(delta),(prof?"Profit of ":"Loss of ")+eur(delta+100),(prof?"Profit of ":"Loss of ")+eur(cost+sell),(prof?"Profit of ":"Loss of ")+eur(Math.abs(delta-50))];
+    return C("A shop buys "+g+" for "+eur(cost)+" each and sells them for "+eur(sell)+" each. Profit or loss on each one?","",ans,pool,
+      "Selling price − cost price = "+eur(sell)+" − "+eur(cost)+(prof?" = "+eur(delta)+". It's positive, so a PROFIT.":" is negative ("+eur(-delta)+"), so a LOSS of "+eur(delta)+"."),null,"",{t:"pl"});
+  }
+  var PCTS=[5,10,15,20,25,30,40,50,60,75,12,35];
+  function costFor(p){var c;do{c=ri(4,60)*rnd([50,100,200]);}while((c*p)%100!==0);return c;}
+  function qPctPL(){
+    var prof=Math.random()<.6,p=rnd(prof?PCTS:[10,20,25,30,40,50,15]),C0=costFor(p),d=C0*p/100,S=prof?C0+d:C0-d,g=rnd(GOODS);
+    return Q("A trader buys "+g+" for "+eur(C0)+" and sells them for "+eur(S)+". What is the percentage "+(prof?"profit":"loss")+" on the cost price?","",pc(p),
+      [pc(d/S*100),pc(d/100),pc(S/C0*100),pc(100-p)],pPads(p),
+      (prof?"Profit":"Loss")+" = "+eur(d)+". % "+(prof?"profit":"loss")+" = "+(prof?"profit":"loss")+" ÷ COST price × 100 = "+eur(d)+" ÷ "+eur(C0)+" × 100 = "+pc(p)+".","",{t:"pctpl",prof:prof});
+  }
+  function qSell(){
+    var prof=Math.random()<.65,p=rnd(prof?PCTS:[10,20,25,30,40,50]),C0=costFor(p),d=C0*p/100,S=prof?C0+d:C0-d,g=rnd(["car","van","second-hand bike","painting","hurley","laptop","sofa"]);
+    return Q("Aidan buys a "+g+" for "+eur(C0)+" and sells it at a "+(prof?"profit":"loss")+" of "+p+"% on the cost price. What does he sell it for?","",eur(S),
+      [eur(d),eur(prof?C0-d:C0+d),eur(C0+(prof?1:-1)*p*100),eur(Math.round(C0*100/(100+(prof?-p:p))))],ePads(S),
+      p+"% of "+eur(C0)+" = "+eur(d)+". "+eur(C0)+(prof?" + ":" − ")+eur(d)+" = "+eur(S)+". Quick way: "+eur(C0)+" × "+((100+(prof?p:-p))/100)+".","",{t:"sell",prof:prof});
+  }
+  function qCostBack(){
+    var p=rnd([10,20,25,50,40,60,30]),C0=costFor(p),S=C0*(100+p)/100,g=rnd(GOODS),slip=Math.round(S*(100-p)/100);
+    return Q("A shop sells "+g+" for "+eur(S)+" each, making a profit of "+p+"% on the cost price. What is the cost price?","",eur(C0),
+      [eur(slip),eur(S-p*100),eur(Math.round(S/(p/10))),eur(S*p/100)],ePads(C0),
+      eur(S)+" = "+(100+p)+"% of the cost price. ÷ "+(1+p/100)+": "+eur(S)+" ÷ "+(1+p/100)+" = "+eur(C0)+". Taking "+p+"% off "+eur(S)+" gives "+eur(slip)+", which is WRONG.","",{t:"costback"});
+  }
+  /* mark-up m% (profit ÷ cost) and margin g% (profit ÷ selling price) that are both exact */
+  var MM=[[25,20],[100,50],[60,37.5],[150,60],[300,75],[400,80],[20,null],[50,null],[40,null],[80,null]];
+  function qMarkup(){
+    var mm=rnd(MM.filter(function(x){return x[1]!=null;})),m=mm[0],gg=mm[1],C0,S;do{C0=ri(2,40)*rnd([100,200,500]);}while((C0*m)%100!==0||(C0*(100+m)/100)%1!==0);
+    S=C0*(100+m)/100;var g=rnd(GOODS),ask=Math.random()<.5?"mark-up":"margin",ans=ask==="mark-up"?m:gg,other=ask==="mark-up"?gg:m;
+    return Q("Higher Level: A shop buys "+g+" for "+eur(C0)+" and sells them for "+eur(S)+". Find the "+ask+".","",pc(ans),
+      [pc(other),pc((S-C0)/100),pc(S/C0*100),pc(C0/S*100),pc(100-ans)],pPads(ans),
+      "Profit = "+eur(S-C0)+". Mark-up = profit ÷ COST = "+pc(m)+". Margin = profit ÷ SELLING price = "+pc(gg)+". The "+ask+" is "+pc(ans)+".","",{t:"markup",ask:ask});
+  }
+  function qMarginBack(){
+    var g=rnd([20,25,40,50,60,75]),C0,S;do{C0=ri(2,40)*rnd([100,300,500]);S=C0*100/(100-g);}while(S%100!==0);
+    var slip=Math.round(C0*(100+g)/100),it=rnd(GOODS);
+    return Q("Higher Level: A shop buys "+it+" for "+eur(C0)+" each. It wants a margin of "+g+"% (profit as a percentage of the SELLING price). What should the selling price be?","",eur(S),
+      [eur(slip),eur(C0*g/100),eur(Math.round(C0*(100-g)/100)),eur(S*2)],ePads(S),
+      "Margin "+g+"% means the cost is "+(100-g)+"% of the selling price. "+eur(C0)+" ÷ "+((100-g)/100)+" = "+eur(S)+". Check: profit "+eur(S-C0)+" ÷ "+eur(S)+" = "+g+"%. (Adding "+g+"% to the cost gives the mark-up, not the margin.)","",{t:"marginback"});
+  }
+
+  /* ---------- Value for money ---------- */
+  var VFM=[["cereal","g",[250,375,500,750,1000],[20,90]],["washing-up liquid","ml",[250,500,750,1000,1500],[12,60]],["rice","g",[500,1000,2000,250,750],[8,45]],["orange juice","ml",[250,500,1000,1500,2000],[8,45]],["coffee","g",[100,200,250,400,500],[90,320]]];
+  function qBest(){
+    var v=rnd(VFM),sizes=shuffle(v[2].slice()).slice(0,ri(3,4)),us=[],packs;
+    while(us.length<sizes.length){var u=4*ri(Math.ceil(v[3][0]/4),Math.floor(v[3][1]/4));if(us.indexOf(u)<0)us.push(u);}  // cents per 100 g/ml, multiple of 4 → whole cents
+    packs=sizes.map(function(s,i){return {s:s,u:us[i],p:s*us[i]/100};}).filter(function(p){return p.p%1===0;});
+    if(packs.length<3)return qBest();
+    var lab=function(p){return (p.s>=1000?(p.s/1000)+(v[1]==="g"?" kg":p.s===1000?" litre":" litres"):p.s+" "+v[1])+" for "+eur(p.p);};
+    var best=packs.slice().sort(function(a,b){return a.u-b.u;})[0];
+    return C("Which pack of "+v[0]+" is the best value?","",lab(best),packs.filter(function(p){return p!==best;}).map(lab),
+      "Find the price of 100 "+v[1]+" in each: "+packs.map(function(p){return lab(p)+" → "+eur(p.u);}).join("; ")+". Cheapest per 100 "+v[1]+" = best value.",
+      "Best value: "+lab(best)+" (from "+packs.map(lab).join(", ")+")","",{t:"best",unit:v[1],opts:packs.map(lab)});
+  }
+  function qPer100(){
+    var v=rnd(VFM),s=rnd(v[2].filter(function(x){return x!==100;})),u;do{u=ri(v[3][0],v[3][1]);}while((s*u/100)%1!==0);var p=s*u/100;
+    var sz=s>=1000?(s/1000)+(v[1]==="g"?" kg":s===1000?" litre":" litres"):s+" "+v[1];
+    return Q("A "+sz+" pack of "+v[0]+" costs "+eur(p)+". What is the cost of 100 "+v[1]+"?","",eur(u),[eur(p*100/s*10),eur(p/10),eur(p*s/10000),eur(Math.round(p/(s/1000)))],ePads(u).concat([eur(u+5),eur(u-5)]),
+      sz+" = "+(s/100)+" lots of 100 "+v[1]+". "+eur(p)+" ÷ "+(s/100)+" = "+eur(u)+" per 100 "+v[1]+".","",{t:"per100"});
+  }
+  function qDeal(){
+    var P=rnd([100,150,200,250,300,400,500,600,800,1000,1200]),it=rnd(["shampoo","notebooks","tins of beans","packets of biscuits","phone chargers"]),d=rnd([20,25,30,40,50,10]);
+    var a=2*P,b=3*P*(100-d)/100;if(b%1||a===b)return qDeal();
+    var ans=a<b?"3 for the price of 2":d+"% off each";
+    return C("You need 3 "+it+" that cost "+eur(P)+" each. Shop A: \"3 for the price of 2\". Shop B: \""+d+"% off each\". Which is cheaper?","",ans,[a<b?d+"% off each":"3 for the price of 2","They cost the same"],
+      "Shop A: you pay for 2 → 2 × "+eur(P)+" = "+eur(a)+". Shop B: 3 × "+eur(P)+" = "+eur(3*P)+", minus "+d+"% = "+eur(b)+". "+(a<b?"Shop A":"Shop B")+" is cheaper. (3 for 2 is the same as 33⅓% off.)",null,"",{t:"deal"});
+  }
+  function qSave(){
+    var v=rnd([["orange juice","ml",500,2000],["rice","g",500,2000],["cereal","g",250,1000],["milk","ml",1000,3000],["dog food","g",400,2000]]),k=v[3]/v[2],sp=rnd([95,110,120,135,150,180,199,240]),bp=k*sp-rnd([40,60,80,100,120,150]);
+    if(bp<=sp)return qSave();
+    var big=(v[3]/1000)+(v[1]==="g"?" kg":" litre"+(v[3]>1000?"s":"")),small=v[2]>=1000?(v[2]/1000)+(v[1]==="g"?" kg":" litre"):v[2]+" "+v[1];
+    return Q("A "+small+" pack of "+v[0]+" costs "+eur(sp)+" and a "+big+" pack costs "+eur(bp)+". How much do you save by buying one big pack instead of "+k+" small packs?","",eur(k*sp-bp),
+      [eur(bp-sp),eur(k*sp),eur(bp-(k-1)*sp),eur((k+1)*sp-bp)],ePads(k*sp-bp),
+      big+" = "+k+" × "+small+". "+k+" small packs cost "+k+" × "+eur(sp)+" = "+eur(k*sp)+". Saving = "+eur(k*sp)+" − "+eur(bp)+" = "+eur(k*sp-bp)+".","",{t:"save"});
+  }
+  function qPlans(){
+    var fa=rnd([2000,2500,3000,3500,4000]),fb=rnd([0,500,1000]),cb=rnd([300,400,500,600,800]),n=ri(3,12),A=fa,B=fb+n*cb,ctx=rnd([["Gym A","Gym B","a month for unlimited visits","a month plus","per visit","visits"],["Pool A","Pool B","a month for unlimited swims","a month plus","per swim","swims"]]);
+    if(A===B)return qPlans();
+    var ans=A<B?ctx[0]:ctx[1];
+    return C(ctx[0]+" costs "+eur(fa)+" "+ctx[2]+". "+ctx[1]+" costs "+eur(fb)+" "+ctx[3]+" "+eur(cb)+" "+ctx[4]+". Méabh goes "+n+" times a month. Which is cheaper for her?","",ans,[A<B?ctx[1]:ctx[0],"They cost the same"],
+      ctx[0]+": "+eur(A)+". "+ctx[1]+": "+eur(fb)+" + "+n+" × "+eur(cb)+" = "+eur(B)+". "+ans+" is cheaper by "+eur(Math.abs(A-B))+".",null,"",{t:"plans"});
+  }
+
+  var MAKERS={
+    till:[qReceipt,qReceipt,qMeter,qMeter,qPhone,qPhone,qHourly],
+    vat:[qAddVat,qAddVat,qBackVat,qBackVat,qSale,qSale,qWas,qWhich],
+    profit:[qPL,qPL,qPctPL,qPctPL,qSell,qSell,qCostBack,qMarkup,qMarginBack],
+    value:[qBest,qBest,qPer100,qPer100,qDeal,qSave,qPlans],
+    mixed:[qReceipt,qMeter,qPhone,qHourly,qAddVat,qBackVat,qSale,qWas,qWhich,qPL,qPctPL,qSell,qCostBack,qMarkup,qMarginBack,qBest,qPer100,qDeal,qSave,qPlans]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="till"||m==="vat")?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.data.t==="pl"||q.data.t==="deal"||q.data.t==="plans"?2:3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="till"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="till"&&streak%5===0?700:350):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
