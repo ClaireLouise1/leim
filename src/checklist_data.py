@@ -58,7 +58,7 @@ MATHS = [
   ("2nd year","Spring","Area, perimeter & scale drawings","GT.2a, GT.2c","Floor Planner","floor-planner.html","area-perimeter-scale-drawings"),
   ("2nd year","Spring","Statistics 2: graphs & averages","SP.3d–SP.3h","Average Ace","average-ace.html","statistics-graphs-averages"),
   ("2nd year","Summer","Transformations & symmetry","GT.6a, GT.6b","Mirror Move","mirror-move.html","transformations-symmetry"),
-  ("2nd year","Summer","Geometry 2: theorems, congruent & similar triangles","GT.3b–GT.3e, U.11, U.12","Proof Builder","",""),
+  ("2nd year","Summer","Geometry 2: theorems, congruent & similar triangles","GT.3b–GT.3e, U.11, U.12","Proof Builder","proof-builder.html","theorems-congruent-similar-triangles"),
   ("2nd year","Summer","Pythagoras & right-angled triangles","GT.3b, GT.4","Ladder Lab","",""),
   ("2nd year","Summer","Probability 2: relative frequency & counting","SP.1b, SP.2c","Coin & Dice Lab","",""),
   ("3rd year","Autumn","Factorising","AF.3d","Factor Match","",""),

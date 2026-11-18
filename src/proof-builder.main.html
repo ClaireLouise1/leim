@@ -1,0 +1,171 @@
+<main id="main">
+<style>
+.steps{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;font-size:15px;line-height:1.45;margin:6px auto 4px;max-width:520px}
+.steps p{margin:4px 0}
+.steps .gv{color:var(--muted);font-size:14px}
+.steps .rs{color:var(--muted);font-size:14px}
+.steps .rs.gap{background:#FFE27A;color:var(--ink);font-weight:800;padding:0 8px;border-radius:6px}
+.frame .ft{font-size:16px;font-weight:700;margin:0 0 8px}
+.figs .note svg{max-width:260px}
+.exam .ef{max-width:none;margin:8px 0}
+.exam svg.pf{max-width:300px}
+.pf2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Proof Builder</h1>
+        <p>Fill the gaps in real geometry proofs, put the steps in order, and use the theorems: parallelograms, the angle in a semicircle, congruent triangles (SSS, SAS, ASA, RHS) and similar triangles. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="proof"><div><b>Proof Builder</b><span>Fill the missing reason, put the steps in order, axiom, theorem, converse…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="shapes"><div><b>Parallelograms &amp; circles</b><span>Opposite sides and angles, diagonals, the angle in a semicircle (+ Higher Level circle theorems)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="cong"><div><b>Congruent triangles</b><span>SSS, SAS, ASA or RHS? Matching sides and angles</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sim"><div><b>Similar triangles</b><span>Scale factors, missing sides, parallel lines, shadows (+ Higher Level ratios)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: you can also answer with the keys 1, 2, 3 and 4. In Proof Builder, every 5 in a row gives you 3 bonus seconds. Questions marked "Higher Level" are for Higher Level students only. The diagrams are drawn to scale, but in the exam they usually aren't: use the facts, not a ruler.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.3b, GT.3c, GT.3d, GT.3e, U.11, U.12 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Theorems, congruent &amp; similar triangles</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Draw a parallelogram on paper (two pairs of parallel sides). Draw the diagonal from A to C, then cut the parallelogram out and cut along the diagonal.</p>
+        <div class="ef" data-fig="pattern"></div>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Turn one triangle round. Does it fit exactly on top of the other?</li>
+          <li class="note">Which side of one triangle lands on [AB]? Which lands on [BC]?</li>
+          <li class="note">So what can you say about the opposite sides and the opposite angles of every parallelogram?</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The two triangles always fit exactly: they are <b>congruent</b>. The angles with the same marks are <b>alternate angles</b> (equal), and [AC] is shared, so they are congruent by <b>ASA</b>. When they fit, [CD] lands on [AB] and [DA] lands on [BC]. So in <b>every</b> parallelogram the <b>opposite sides are equal</b> and the <b>opposite angles are equal</b>: that's Theorem 9, and you have just seen its proof.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The words of proof</h3>
+        <div class="note"><b>Axiom:</b> a statement we accept without proof, as a starting point (for example, the congruence tests SAS, ASA and SSS). <b>Theorem:</b> a statement that has been proved. <b>Proof:</b> a chain of steps, each with a reason, that shows a statement must be true. <b>Corollary:</b> a result that follows quickly from a theorem. <b>Converse:</b> swap the "if" and the "then" parts. <b>Implies (⇒):</b> "A ⇒ B" means "if A is true, then B is true".</div>
+        <div class="note" style="margin-top:8px"><b>A converse isn't always true!</b> "If a shape is a square, then it has four right angles" is true, but its converse "if a shape has four right angles, then it is a square" is false (a rectangle). For the theorems on this page, the converses we use <b>are</b> true.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Parallelograms (Theorems 9 and 10)</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="para"></div><b>Opposite sides are equal and opposite angles are equal</b> (Theorem 9). Neighbouring angles add to 180° (co-interior angles).</div>
+          <div class="note"><div data-fig="diag"></div><b>The diagonals bisect each other</b> (Theorem 10): each diagonal cuts the other exactly in half. They are <b>not</b> usually equal or at right angles.</div>
+        </div>
+        <p style="margin-top:8px"><b>Converses:</b> a quadrilateral IS a parallelogram if its opposite angles are equal, or its opposite sides are equal, or its diagonals bisect each other. <b>Higher Level:</b> a diagonal divides a parallelogram into two congruent triangles (Corollary 1).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Circles</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="semi"></div><b>Every angle in a semicircle is a right angle</b> (Corollary 3). If [BC] is a diameter, ∠BAC = 90°. <b>Converse</b> (Corollary 4): if the angle at A is 90°, then [BC] is a diameter.</div>
+          <div class="note"><div data-fig="centre"></div><b>Higher Level:</b> the angle at the centre is <b>twice</b> the angle at the circle standing on the same arc (Theorem 19). Angles at the circle on the same arc are <b>equal</b> (Corollary 2).</div>
+          <div class="note"><div data-fig="cyclic"></div><b>Higher Level:</b> in a cyclic quadrilateral (all four corners on the circle) <b>opposite angles add to 180°</b> (Corollary 5).</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Congruent triangles: the same shape AND the same size</h3>
+        <div class="ef" data-fig="cases"></div>
+        <ul>
+          <li><b>SSS:</b> all three sides match.</li>
+          <li><b>SAS:</b> two sides and the angle <b>between</b> them (the included angle) match.</li>
+          <li><b>ASA:</b> two angles and the side <b>between</b> them match.</li>
+          <li><b>RHS:</b> both have a right angle, the same hypotenuse (the side opposite the right angle) and one other equal side.</li>
+          <li><b>Not tests:</b> three angles (AAA) only gives the same shape, and two sides with an angle that is NOT between them can give two different triangles.</li>
+        </ul>
+        <div class="note"><b>Naming matters:</b> △ABC ≡ △PQR means A matches P, B matches Q and C matches R. So |BC| = |QR| and ∠ABC = ∠PQR. Once two triangles are congruent, all their matching parts are equal: that's how a congruence proof finishes.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Similar triangles: the same shape, maybe a different size</h3>
+        <div class="ef" data-fig="sim"></div>
+        <ul>
+          <li>Triangles are <b>similar</b> if their angles match (equiangular). Two matching angles are enough, as the third must match too.</li>
+          <li><b>Theorem 13:</b> if two triangles are similar, their sides are in proportion: |AD| : |AB| = |AE| : |AC| = |DE| : |BC|.</li>
+          <li><b>Scale factor</b> = a side of the new triangle ÷ the matching side of the old one. Multiply every side by it.</li>
+          <li>A line parallel to one side of a triangle makes a small triangle similar to the big one (corresponding angles, and the angle at the top is shared).</li>
+          <li><b>Higher Level:</b> a line parallel to one side cuts the other two sides in the same ratio (Theorem 12), and three parallel lines that cut equal pieces off one transversal cut equal pieces off any other (Theorem 11).</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How to write a proof</h3>
+        <ol>
+          <li>Write down what you're <b>given</b> and what you want to <b>prove</b>. Mark the diagram.</li>
+          <li>Write one fact per line, with the <b>reason</b> in brackets: <b>∠BAC = ∠ACD (alternate angles)</b>.</li>
+          <li>For congruence, find three matching facts and name the test: <b>△ABD ≡ △ACD (SSS)</b>.</li>
+          <li>Finish with "So …" and the thing you wanted to prove. Each line may only use facts from the lines before it.</li>
+          <li>You won't be asked to write out the formal proofs of the theorems, but you need to <b>use</b> them and understand how they work.</li>
+        </ol>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Geometry on both papers uses these facts. Expect to <b>find missing angles and lengths</b> in parallelograms, circles and triangles, to <b>say which test</b> proves two triangles congruent, to use <b>similar triangles</b> to find a length, and to <b>write a short argument</b> with a reason on every line. Higher Level adds the circle theorems (Theorem 19, Corollaries 2 and 5), Theorems 11 and 12, and more proof.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>A reason on every line.</b> "∠ABC = 65°" on its own loses marks when the question says "give a reason" or "justify".</li>
+            <li><b>Name the test.</b> In a congruence proof, the last line must say which test: SSS, SAS, ASA or RHS, and the three facts must fit it.</li>
+            <li><b>Match the letters.</b> △ABC ≡ △PQR tells you which parts match. Getting the order wrong is the most common slip.</li>
+            <li><b>Use the scale factor the right way round.</b> Big ÷ small to go from the small triangle to the big one.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>A parallelogram.</b> PQRS is a parallelogram with ∠PQR = 115°. Its diagonals meet at T. (a) Find ∠QRS and ∠RSP, giving a reason for each. (b) |PT| = 4.5 cm and |QS| = 14 cm. Find |PR| and |QT|.
+              <div class="ef" data-fig="ex1"></div>
+              <details><summary>Show the worked answer</summary><p>(a) ∠QRS = 180° − 115° = <b>65°</b> (co-interior angles: PQ ∥ SR). ∠RSP = <b>115°</b> (opposite angles of a parallelogram are equal).<br>(b) The diagonals bisect each other (Theorem 10): |PR| = 2 × 4.5 = <b>9 cm</b> and |QT| = 14 ÷ 2 = <b>7 cm</b>.</p></details></li>
+            <li><b>A congruence proof.</b> In the quadrilateral ABCD, |AB| = |AD| and ∠BAC = ∠DAC. (a) Prove that the triangles ABC and ADC are congruent. (b) Hence show that |BC| = |DC|.
+              <div class="ef" data-fig="ex2"></div>
+              <details><summary>Show the worked answer</summary><p>(a) |AB| = |AD| (given)<br>∠BAC = ∠DAC (given)<br>|AC| = |AC| (common side)<br>So △ABC ≡ △ADC (<b>SAS</b>: the angle at A is between the two sides).<br>(b) [BC] and [DC] are matching sides of the congruent triangles, so <b>|BC| = |DC|</b>.</p></details></li>
+            <li><b>Similar triangles.</b> In the triangle ABC, DE ∥ BC, |AD| = 6 cm, |DB| = 3 cm and |DE| = 8 cm. (a) Explain why the triangles ADE and ABC are similar. (b) Find x = |BC|. (c) |AE| = 5 cm. Find |EC|.
+              <div class="ef" data-fig="ex3"></div>
+              <details><summary>Show the worked answer</summary><p>(a) ∠ADE = ∠ABC and ∠AED = ∠ACB (corresponding angles: DE ∥ BC), and the angle at A is shared. The triangles are equiangular, so they are similar.<br>(b) |AB| = 6 + 3 = 9 cm. Scale factor = 9 ÷ 6 = 1.5, so x = 8 × 1.5 = <b>12 cm</b>.<br>(c) |AC| = 5 × 1.5 = 7.5 cm, so |EC| = 7.5 − 5 = <b>2.5 cm</b>.</p></details></li>
+            <li><b>Angles in a circle.</b> [BC] is a diameter of the circle with centre O, and ∠ABC = 32°. (a) Find x, giving a reason. (b) Find y. (c) <i>Higher Level:</i> D is on the circle. Find z, giving a reason.
+              <div class="ef" data-fig="ex4"></div>
+              <details><summary>Show the worked answer</summary><p>(a) x = <b>90°</b> (the angle in a semicircle is a right angle).<br>(b) y = 180° − (90° + 32°) = <b>58°</b> (angles in a triangle).<br>(c) z and y both stand on the arc AB, so z = y = <b>58°</b> (angles at the circle on the same arc are equal).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/theorems-congruent-similar-triangles-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Theorems, Congruent &amp; Similar Triangles Teacher Pack (€5)</a>: Proof Sort cards, Proof Builder mingle cards, Geometry Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
