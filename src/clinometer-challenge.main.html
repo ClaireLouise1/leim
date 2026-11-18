@@ -1,0 +1,166 @@
+<main id="main">
+<style>
+.figs .note svg{max-width:260px}
+.exam .ef{max-width:none;margin:8px 0}
+.exam svg.pf{max-width:300px}
+.pf2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.box3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.box3 .note b.h{display:block;margin-bottom:4px}
+.soh{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0;text-align:center}
+.soh .note{padding:10px 4px;font-size:14px}.soh b{display:block;font-size:24px;letter-spacing:1px}
+table.pt{border-collapse:collapse;margin:8px 0;font-size:15px;min-width:0;width:auto}table.pt th,table.pt td{border:1px solid var(--line);padding:5px 10px;text-align:center}table.pt th{color:var(--ink);text-transform:none}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Clinometer Challenge</h1>
+        <p>Sin, cos and tan: name the sides, find a side, find an angle, and measure trees, kites, ramps and cliffs. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="label"><div><b>SOH CAH TOA</b><span>Name the sides, pick the ratio, sin θ as a fraction</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="side"><div><b>Find a side</b><span>Multiply or divide, which calculation</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="angle"><div><b>Find an angle</b><span>sin⁻¹, cos⁻¹, tan⁻¹</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Up and down</b><span>Angles of elevation and depression: trees, kites, ladders, ramps, cliffs</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keep a calculator handy, in <b>DEG</b> mode. Keys 1–4 answer too. In SOH CAH TOA, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.4, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Trigonometry</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Three right-angled triangles share the same 35° angle. Each one is bigger than the last.</p>
+        <div class="ef" data-fig="pattern"></div>
+        <table class="pt"><tr><th>Triangle</th><th>Opposite (cm)</th><th>Hypotenuse (cm)</th></tr><tr><td>A</td><td>2.8</td><td>4.9</td></tr><tr><td>B</td><td>4.9</td><td>8.5</td></tr><tr><td>C</td><td>7.0</td><td>12.2</td></tr></table>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Work out opposite ÷ hypotenuse for each triangle. What do you notice?</li>
+          <li class="note">Now type sin 35° into your calculator. Compare.</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every answer is about <b>0.57</b>, and sin 35° = 0.5736. The triangles are similar, so the ratio of the sides depends <b>only on the angle</b>, not on the size. That fixed ratio is <b>sin 35°</b>. Cos and tan are the other two ratios.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Name the sides (from the angle θ)</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="names"></div></div>
+          <div class="note"><b>Hypotenuse:</b> opposite the right angle, the longest side.<br><b>Opposite:</b> across from θ (it doesn't touch θ).<br><b>Adjacent:</b> next to θ (the side that isn't the hypotenuse).<br>Move θ to the other angle and the opposite and adjacent swap.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">SOH CAH TOA</h3>
+        <div class="soh">
+          <div class="note"><b>SOH</b>sin θ = O ÷ H</div>
+          <div class="note"><b>CAH</b>cos θ = A ÷ H</div>
+          <div class="note"><b>TOA</b>tan θ = O ÷ A</div>
+        </div>
+        <p>Pick the ratio that uses the side you <b>have</b> and the side you <b>want</b>. They're in the <i>Formulae and Tables</i> booklet, but you still need to label the sides.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Finding a side or an angle</h3>
+        <div class="box3">
+          <div class="note"><b class="h">x on top: MULTIPLY</b>Hypotenuse 12, angle 35°, want the opposite:<br>sin 35° = x ÷ 12<br>x = 12 × sin 35° = <b>6.9</b></div>
+          <div class="note"><b class="h">x on the bottom: DIVIDE</b>Opposite 8, angle 40°, want the hypotenuse:<br>sin 40° = 8 ÷ x<br>x = 8 ÷ sin 40° = <b>12.4</b></div>
+          <div class="note"><b class="h">An angle: use ⁻¹ (SHIFT)</b>Opposite 5, adjacent 8:<br>tan θ = 5 ÷ 8<br>θ = tan⁻¹(5 ÷ 8) = 32.0…° = <b>32°</b></div>
+        </div>
+        <div class="note" style="margin-top:8px"><b>Calculator in DEG.</b> Check: sin 30° must give 0.5. If you get −0.988, it's in RAD mode.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Angles of elevation and depression</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="elev"></div><b>Elevation:</b> looking <b>up</b>, measured from the horizontal.</div>
+          <div class="note"><div data-fig="dep"></div><b>Depression:</b> looking <b>down</b>, measured from the horizontal (not from the cliff).</div>
+        </div>
+        <ul>
+          <li>The angle of depression from the top = the angle of elevation from the bottom (alternate angles).</li>
+          <li><b>Eye height:</b> if the angle is measured from someone's eyes, add their eye height at the end.</li>
+          <li>A <b>clinometer</b> measures angles of elevation. With a tape measure for the distance, you can find the height of anything.</li>
+          <li><span class="lo" style="margin:0">Higher Level</span> two angles from the same point (a flagpole on a tower): find both heights, then subtract. Or use one ratio to find another: tan A = 3/4 → sides 3, 4, 5 → sin A = 3/5.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Calculator in RAD mode.</li>
+          <li>Labelling from the wrong angle: opposite and adjacent depend on which angle you use.</li>
+          <li>Multiplying when x is on the bottom (8 × sin 40° instead of 8 ÷ sin 40°).</li>
+          <li>Typing sin instead of sin⁻¹ when you want an angle.</li>
+          <li>Measuring the angle of depression from the vertical cliff.</li>
+          <li>Rounding too early: keep the full calculator value until the last step.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Trigonometry is a regular on both levels, often with Pythagoras in the same question: a ramp, a ladder, a tree measured with a clinometer, a boat seen from a cliff. Expect to <b>find a side</b>, <b>find an angle</b> to the nearest degree, and to <b>explain</b> whether an answer is reasonable.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write the ratio with the numbers in it.</b> "tan 32° = h ÷ 18" earns marks even if you slip on the calculator.</li>
+            <li><b>DEG mode</b>, every time.</li>
+            <li><b>Round only at the end</b>, to the accuracy asked.</li>
+            <li><b>Units:</b> metres for sides, degrees for angles.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first. The diagrams are sketches: use the numbers.</p>
+          <ol class="eq">
+            <li><b>A ramp.</b> A wheelchair ramp is 4.5 m long and rises 0.35 m. (a) Find the angle the ramp makes with the ground, to the nearest degree. (b) The rule is that a ramp must be no steeper than 5°. Does this ramp follow the rule? (c) Find the horizontal length of the ramp, to 2 decimal places.
+              <div class="ef" data-fig="ex1"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The ramp is the hypotenuse, the rise is the opposite: sin θ = 0.35 ÷ 4.5, so θ = sin⁻¹(0.0777…) = 4.46…° = <b>4°</b>.<br>(b) <b>Yes</b>: 4.46° is less than 5°.<br>(c) Pythagoras: √(4.5² − 0.35²) = √20.1275 = <b>4.49 m</b> (or 4.5 × cos 4.46…°).</p></details></li>
+            <li><b>The clinometer.</b> Ciara stands 18 m from a tree. Using a clinometer, she measures the angle of elevation of the top of the tree as 32°. Her eyes are 1.5 m above the ground. (a) Find the height of the tree, to 1 decimal place. (b) Ciara walks towards the tree until she is 10 m from it. What will the angle of elevation be now, to the nearest degree?
+              <div class="ef" data-fig="ex2"></div>
+              <details><summary>Show the worked answer</summary><p>(a) tan 32° = h ÷ 18, so h = 18 × tan 32° = 11.247… m. Add her eye height: 11.247… + 1.5 = <b>12.7 m</b>.<br>(b) The part above her eyes is still 11.247… m: tan θ = 11.247… ÷ 10, so θ = tan⁻¹(1.1247…) = <b>48°</b>.</p></details></li>
+            <li><b>A cliff.</b> From the top of a cliff 60 m high, the angle of depression of a boat is 14°. (a) How far is the boat from the foot of the cliff, to 1 decimal place? (b) Later the angle of depression is 22°. How far has the boat moved towards the cliff?
+              <div class="ef" data-fig="ex3"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The angle at the boat is also 14° (alternate angles). tan 14° = 60 ÷ x, so x = 60 ÷ tan 14° = <b>240.6 m</b>.<br>(b) 60 ÷ tan 22° = 148.5… m. It moved 240.64… − 148.50… = <b>92.1 m</b>.</p></details></li>
+            <li><b>Sides and angles.</b> In the triangle ABC, |∠ABC| = 90°, |AB| = 7 cm and |BC| = 24 cm. (a) Find |AC|. (b) Write tan ∠BAC as a fraction. (c) Find |∠BAC| to the nearest degree. (d) Write sin ∠BCA as a fraction.
+              <div class="ef" data-fig="ex4"></div>
+              <details><summary>Show the worked answer</summary><p>(a) |AC|² = 7² + 24² = 625, so |AC| = <b>25 cm</b>.<br>(b) From A, the opposite side is [BC] and the adjacent side is [AB]: tan ∠BAC = <b>24/7</b>.<br>(c) tan⁻¹(24 ÷ 7) = 73.7…° = <b>74°</b>.<br>(d) From C, the opposite side is [AB]: sin ∠BCA = <b>7/25</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/trigonometry-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Trigonometry Teacher Pack (€5)</a>: Clinometer mingle cards, Height Swap A/B cards, Trigonometry Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

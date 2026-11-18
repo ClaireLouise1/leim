@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinometer Challenge: Trigonometry Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: sin, cos and tan with SOH CAH TOA, find a side, find an angle with sin⁻¹, cos⁻¹ and tan⁻¹, angles of elevation and depression, plus Higher Level two-step problems, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>
+.figs .note svg{max-width:260px}
+.exam .ef{max-width:none;margin:8px 0}
+.exam svg.pf{max-width:300px}
+.pf2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.box3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.box3 .note b.h{display:block;margin-bottom:4px}
+.soh{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0;text-align:center}
+.soh .note{padding:10px 4px;font-size:14px}.soh b{display:block;font-size:24px;letter-spacing:1px}
+table.pt{border-collapse:collapse;margin:8px 0;font-size:15px;min-width:0;width:auto}table.pt th,table.pt td{border:1px solid var(--line);padding:5px 10px;text-align:center}table.pt th{color:var(--ink);text-transform:none}
+</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Clinometer Challenge</h1>
+        <p>Sin, cos and tan: name the sides, find a side, find an angle, and measure trees, kites, ramps and cliffs. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="label"><div><b>SOH CAH TOA</b><span>Name the sides, pick the ratio, sin θ as a fraction</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="side"><div><b>Find a side</b><span>Multiply or divide, which calculation</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="angle"><div><b>Find an angle</b><span>sin⁻¹, cos⁻¹, tan⁻¹</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Up and down</b><span>Angles of elevation and depression: trees, kites, ladders, ramps, cliffs</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keep a calculator handy, in <b>DEG</b> mode. Keys 1–4 answer too. In SOH CAH TOA, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: GT.4, U.6 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Trigonometry</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Three right-angled triangles share the same 35° angle. Each one is bigger than the last.</p>
+        <div class="ef" data-fig="pattern"></div>
+        <table class="pt"><tr><th>Triangle</th><th>Opposite (cm)</th><th>Hypotenuse (cm)</th></tr><tr><td>A</td><td>2.8</td><td>4.9</td></tr><tr><td>B</td><td>4.9</td><td>8.5</td></tr><tr><td>C</td><td>7.0</td><td>12.2</td></tr></table>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">Work out opposite ÷ hypotenuse for each triangle. What do you notice?</li>
+          <li class="note">Now type sin 35° into your calculator. Compare.</li>
+        </ul>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Every answer is about <b>0.57</b>, and sin 35° = 0.5736. The triangles are similar, so the ratio of the sides depends <b>only on the angle</b>, not on the size. That fixed ratio is <b>sin 35°</b>. Cos and tan are the other two ratios.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Name the sides (from the angle θ)</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="names"></div></div>
+          <div class="note"><b>Hypotenuse:</b> opposite the right angle, the longest side.<br><b>Opposite:</b> across from θ (it doesn't touch θ).<br><b>Adjacent:</b> next to θ (the side that isn't the hypotenuse).<br>Move θ to the other angle and the opposite and adjacent swap.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">SOH CAH TOA</h3>
+        <div class="soh">
+          <div class="note"><b>SOH</b>sin θ = O ÷ H</div>
+          <div class="note"><b>CAH</b>cos θ = A ÷ H</div>
+          <div class="note"><b>TOA</b>tan θ = O ÷ A</div>
+        </div>
+        <p>Pick the ratio that uses the side you <b>have</b> and the side you <b>want</b>. They're in the <i>Formulae and Tables</i> booklet, but you still need to label the sides.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Finding a side or an angle</h3>
+        <div class="box3">
+          <div class="note"><b class="h">x on top: MULTIPLY</b>Hypotenuse 12, angle 35°, want the opposite:<br>sin 35° = x ÷ 12<br>x = 12 × sin 35° = <b>6.9</b></div>
+          <div class="note"><b class="h">x on the bottom: DIVIDE</b>Opposite 8, angle 40°, want the hypotenuse:<br>sin 40° = 8 ÷ x<br>x = 8 ÷ sin 40° = <b>12.4</b></div>
+          <div class="note"><b class="h">An angle: use ⁻¹ (SHIFT)</b>Opposite 5, adjacent 8:<br>tan θ = 5 ÷ 8<br>θ = tan⁻¹(5 ÷ 8) = 32.0…° = <b>32°</b></div>
+        </div>
+        <div class="note" style="margin-top:8px"><b>Calculator in DEG.</b> Check: sin 30° must give 0.5. If you get −0.988, it's in RAD mode.</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Angles of elevation and depression</h3>
+        <div class="pf2">
+          <div class="note"><div data-fig="elev"></div><b>Elevation:</b> looking <b>up</b>, measured from the horizontal.</div>
+          <div class="note"><div data-fig="dep"></div><b>Depression:</b> looking <b>down</b>, measured from the horizontal (not from the cliff).</div>
+        </div>
+        <ul>
+          <li>The angle of depression from the top = the angle of elevation from the bottom (alternate angles).</li>
+          <li><b>Eye height:</b> if the angle is measured from someone's eyes, add their eye height at the end.</li>
+          <li>A <b>clinometer</b> measures angles of elevation. With a tape measure for the distance, you can find the height of anything.</li>
+          <li><span class="lo" style="margin:0">Higher Level</span> two angles from the same point (a flagpole on a tower): find both heights, then subtract. Or use one ratio to find another: tan A = 3/4 → sides 3, 4, 5 → sin A = 3/5.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Classic mistakes</h3>
+        <ul>
+          <li>Calculator in RAD mode.</li>
+          <li>Labelling from the wrong angle: opposite and adjacent depend on which angle you use.</li>
+          <li>Multiplying when x is on the bottom (8 × sin 40° instead of 8 ÷ sin 40°).</li>
+          <li>Typing sin instead of sin⁻¹ when you want an angle.</li>
+          <li>Measuring the angle of depression from the vertical cliff.</li>
+          <li>Rounding too early: keep the full calculator value until the last step.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Trigonometry is a regular on both levels, often with Pythagoras in the same question: a ramp, a ladder, a tree measured with a clinometer, a boat seen from a cliff. Expect to <b>find a side</b>, <b>find an angle</b> to the nearest degree, and to <b>explain</b> whether an answer is reasonable.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write the ratio with the numbers in it.</b> "tan 32° = h ÷ 18" earns marks even if you slip on the calculator.</li>
+            <li><b>DEG mode</b>, every time.</li>
+            <li><b>Round only at the end</b>, to the accuracy asked.</li>
+            <li><b>Units:</b> metres for sides, degrees for angles.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first. The diagrams are sketches: use the numbers.</p>
+          <ol class="eq">
+            <li><b>A ramp.</b> A wheelchair ramp is 4.5 m long and rises 0.35 m. (a) Find the angle the ramp makes with the ground, to the nearest degree. (b) The rule is that a ramp must be no steeper than 5°. Does this ramp follow the rule? (c) Find the horizontal length of the ramp, to 2 decimal places.
+              <div class="ef" data-fig="ex1"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The ramp is the hypotenuse, the rise is the opposite: sin θ = 0.35 ÷ 4.5, so θ = sin⁻¹(0.0777…) = 4.46…° = <b>4°</b>.<br>(b) <b>Yes</b>: 4.46° is less than 5°.<br>(c) Pythagoras: √(4.5² − 0.35²) = √20.1275 = <b>4.49 m</b> (or 4.5 × cos 4.46…°).</p></details></li>
+            <li><b>The clinometer.</b> Ciara stands 18 m from a tree. Using a clinometer, she measures the angle of elevation of the top of the tree as 32°. Her eyes are 1.5 m above the ground. (a) Find the height of the tree, to 1 decimal place. (b) Ciara walks towards the tree until she is 10 m from it. What will the angle of elevation be now, to the nearest degree?
+              <div class="ef" data-fig="ex2"></div>
+              <details><summary>Show the worked answer</summary><p>(a) tan 32° = h ÷ 18, so h = 18 × tan 32° = 11.247… m. Add her eye height: 11.247… + 1.5 = <b>12.7 m</b>.<br>(b) The part above her eyes is still 11.247… m: tan θ = 11.247… ÷ 10, so θ = tan⁻¹(1.1247…) = <b>48°</b>.</p></details></li>
+            <li><b>A cliff.</b> From the top of a cliff 60 m high, the angle of depression of a boat is 14°. (a) How far is the boat from the foot of the cliff, to 1 decimal place? (b) Later the angle of depression is 22°. How far has the boat moved towards the cliff?
+              <div class="ef" data-fig="ex3"></div>
+              <details><summary>Show the worked answer</summary><p>(a) The angle at the boat is also 14° (alternate angles). tan 14° = 60 ÷ x, so x = 60 ÷ tan 14° = <b>240.6 m</b>.<br>(b) 60 ÷ tan 22° = 148.5… m. It moved 240.64… − 148.50… = <b>92.1 m</b>.</p></details></li>
+            <li><b>Sides and angles.</b> In the triangle ABC, |∠ABC| = 90°, |AB| = 7 cm and |BC| = 24 cm. (a) Find |AC|. (b) Write tan ∠BAC as a fraction. (c) Find |∠BAC| to the nearest degree. (d) Write sin ∠BCA as a fraction.
+              <div class="ef" data-fig="ex4"></div>
+              <details><summary>Show the worked answer</summary><p>(a) |AC|² = 7² + 24² = 625, so |AC| = <b>25 cm</b>.<br>(b) From A, the opposite side is [BC] and the adjacent side is [AB]: tan ∠BAC = <b>24/7</b>.<br>(c) tan⁻¹(24 ÷ 7) = 73.7…° = <b>74°</b>.<br>(d) From C, the opposite side is [AB]: sin ∠BCA = <b>7/25</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/trigonometry-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 30 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Trigonometry Teacher Pack (€5)</a>: Clinometer mingle cards, Height Swap A/B cards, Trigonometry Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function num(x){var r=Math.round(x*100)/100;if(Math.abs(r)<1e-9)r=0;return String(r).replace("-","−");}
+
+  /* ---------- geometry drawing kit (y goes UP; the SVG flips it) ---------- */
+  function rad(a){return a*Math.PI/180;}
+  function pt(v,a,r){return [v[0]+r*Math.cos(rad(a)),v[1]+r*Math.sin(rad(a))];}
+  function ang(v,p){return (Math.atan2(p[1]-v[1],p[0]-v[0])*180/Math.PI+360)%360;}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+  function mid(a,b){return [(a[0]+b[0])/2,(a[1]+b[1])/2];}
+  function cen(P){var x=0,y=0;P.forEach(function(p){x+=p[0];y+=p[1];});return [x/P.length,y/P.length];}
+  function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+  function G(){return {lines:[],marks:[],ticks:[],tris:[],names:[],circs:[],dots:[],lens:[],s:0,deco:[]};}
+  function L(g,a,b,grp){g.lines.push({a:a,b:b,g:grp||0});}
+  function M(g,v,a1,sw,lab){g.marks.push({v:v,a1:a1,sw:sw,lab:String(lab)});}
+  // mark the (non-reflex) angle at v between the rays v→u and v→w. lab: number, letter, "rt", "=1".."=3" (1–3 plain arcs), or an expression like "3x + 5"
+  function MB(g,v,u,w,lab){var a1=ang(v,u),a2=ang(v,w),sw=(a2-a1+360)%360;if(sw>180){a1=a2;sw=360-sw;}M(g,v,a1,sw,lab);}
+  function T(g,a,b,n){g.ticks.push({a:a,b:b,n:n||1});}
+  function LEN(g,a,b,lab,away){g.lens.push({a:a,b:b,lab:String(lab),away:away});}
+  function CIR(g,c,r){g.circs.push({c:c,r:r});}
+  function DOT(g,p){g.dots.push(p);}
+  function NM(g,v,t,away){g.names.push({v:v,t:t,away:away});}
+  function POLY(g,P){g.tris.push(P);for(var i=0;i<P.length;i++)L(g,P[i],P[(i+1)%P.length]);}
+  var INK="#1B2430",GRN="#2E7D5B",RED="#D9534F";
+  function f(n){var r=Math.round(n*100)/100;return Math.abs(r)<1e-9?0:r;}
+  function isUnk(lab){return /^(\?|θ|[a-z])$/.test(lab);}
+  function render(g,label,box){
+    var P=[],out=[],gx0=Infinity,gx1=-Infinity,gy0=Infinity,gy1=-Infinity;
+    function S(p){return f(p[0])+","+f(-p[1]);}
+    function grow(p){gx0=Math.min(gx0,p[0]);gx1=Math.max(gx1,p[0]);gy0=Math.min(gy0,p[1]);gy1=Math.max(gy1,p[1]);}
+    g.lines.concat(g.deco).forEach(function(l){P.push(l.a,l.b);grow(l.a);grow(l.b);});
+    g.circs.forEach(function(c){var a=[c.c[0]-c.r,c.c[1]-c.r],b=[c.c[0]+c.r,c.c[1]+c.r];P.push(a,b);grow(a);grow(b);});
+    box=box||[320,230];var k=Math.min(box[0]/(gx1-gx0+80),box[1]/(gy1-gy0+70),1.6),u=1/k,sw=f(2.4*u);
+    g.tris.forEach(function(t){out.push('<polygon class="tri" data-pts="'+t.map(S).join(" ")+'" points="'+t.map(S).join(" ")+'" fill="#E8F2EC" stroke="none"/>');});
+    g.deco.forEach(function(l){out.push('<line class="'+(l.c||"deco")+'" x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+(l.col||"#9AA3AE")+'" stroke-width="'+f((l.w||1.4)*u)+'" stroke-linecap="round"'+(l.dash?' stroke-dasharray="'+f(6*u)+' '+f(5*u)+'"':'')+'/>');});
+    g.circs.forEach(function(c){out.push('<circle class="cir" data-c="'+S(c.c)+'" data-r="'+f(c.r)+'" cx="'+f(c.c[0])+'" cy="'+f(-c.c[1])+'" r="'+f(c.r)+'" fill="none" stroke="'+INK+'" stroke-width="'+sw+'"/>');});
+    g.lines.forEach(function(l){out.push('<line class="ln"'+(l.g?' data-g="'+l.g+'"':'')+' x1="'+f(l.a[0])+'" y1="'+f(-l.a[1])+'" x2="'+f(l.b[0])+'" y2="'+f(-l.b[1])+'" stroke="'+INK+'" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      if(l.g){var d=ang(l.a,l.b),m=pt(l.a,d,dist(l.a,l.b)*0.62);for(var n=0;n<l.g;n++){var c=pt(m,d,(n*7-((l.g-1)*3.5))*u);
+        out.push('<path class="par" d="M'+S(pt(c,d+150,8*u))+' L'+S(c)+' L'+S(pt(c,d-150,8*u))+'" fill="none" stroke="'+GRN+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"/>');}}});
+    g.ticks.forEach(function(t){var m=mid(t.a,t.b),d=ang(t.a,t.b);for(var n=0;n<t.n;n++){var c=pt(m,d,(n-(t.n-1)/2)*6*u),e1=pt(c,d+90,7*u),e2=pt(c,d-90,7*u);
+      out.push('<line class="tick" data-a="'+S(t.a)+'" data-b="'+S(t.b)+'" data-n="'+t.n+'" x1="'+f(e1[0])+'" y1="'+f(-e1[1])+'" x2="'+f(e2[0])+'" y2="'+f(-e2[1])+'" stroke="'+RED+'" stroke-width="'+sw+'" stroke-linecap="round"/>');}});
+    g.marks.forEach(function(m){
+      var r=(m.sw<35?40:m.sw<60?32:m.sw<110?26:22)*u,isRt=m.lab==="rt",arcs=/^=\d$/.test(m.lab)?+m.lab.charAt(1):0,lab=isRt||arcs?"":m.lab,bis=m.a1+m.sw/2,
+        p=pt(m.v,m.a1,40),q=pt(m.v,m.a1+m.sw,40),o='<g class="am" data-v="'+S(m.v)+'" data-p="'+S(p)+'" data-q="'+S(q)+'" data-l="'+m.lab+'">';
+      if(isRt){var s=13*u,c1=pt(m.v,m.a1,s),c3=pt(m.v,m.a1+90,s),c2=[c1[0]+c3[0]-m.v[0],c1[1]+c3[1]-m.v[1]];
+        o+='<path d="M'+S(c1)+' L'+S(c2)+' L'+S(c3)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}
+      else if(arcs){for(var n=0;n<arcs;n++){var rr=r*0.8+n*5*u,s2=pt(m.v,m.a1,rr),e2=pt(m.v,m.a1+m.sw,rr);
+        o+='<path d="M'+S(s2)+' A'+f(rr)+' '+f(rr)+' 0 0 0 '+S(e2)+'" fill="none" stroke="'+GRN+'" stroke-width="'+f(2*u)+'"/>';}}
+      else{var s1=pt(m.v,m.a1,r),e1=pt(m.v,m.a1+m.sw,r),unk=isUnk(lab),long=lab.length>2;
+        o+='<path d="M'+S(s1)+' A'+f(r)+' '+f(r)+' 0 0 0 '+S(e1)+'" fill="none" stroke="'+(unk?RED:GRN)+'" stroke-width="'+f(2.2*u)+'"/>';
+        var txt=unk?(lab.length>1?"("+lab+")°":lab):lab+"°",tw=txt.length*4.6*u+4*u,tp=pt(m.v,bis,r+(long?Math.max(17,txt.length*3.6):13)*u);P.push([tp[0]-tw,tp[1]-10*u],[tp[0]+tw,tp[1]+10*u]);
+        o+='<text class="al" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(15*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk&&lab.length===1?' font-style="italic"':'')+'>'+txt+'</text>';}
+      out.push(o+'</g>');});
+    g.lens.forEach(function(l){var m=mid(l.a,l.b),d=ang(l.a,l.b),n1=pt(m,d+90,1),side=l.away&&dist(n1,l.away)<dist(pt(m,d-90,1),l.away)?-90:90,
+      tw=l.lab.length*4.4*u,unk=isUnk(l.lab),
+      tp=pt(m,d+side,Math.abs(Math.sin(rad(d)))*tw+12*u);P.push([tp[0]-tw,tp[1]-10*u],[tp[0]+tw,tp[1]+10*u]);
+      out.push('<text class="ll" data-a="'+S(l.a)+'" data-b="'+S(l.b)+'" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14.5*u)+'" font-weight="800" fill="'+(unk?RED:INK)+'"'+(unk&&l.lab.length===1?' font-style="italic"':'')+'>'+l.lab+'</text>');});
+    g.dots.forEach(function(p){out.push('<circle class="dot" data-p="'+S(p)+'" cx="'+f(p[0])+'" cy="'+f(-p[1])+'" r="'+f(3.2*u)+'" fill="'+INK+'"/>');});
+    g.names.forEach(function(n){var d=n.away?ang(n.away,n.v):90,tp=pt(n.v,d,15*u);P.push([tp[0]-10*u,tp[1]-10*u],[tp[0]+10*u,tp[1]+10*u]);
+      out.push('<text class="vn" data-p="'+S(n.v)+'" x="'+f(tp[0])+'" y="'+f(-tp[1]+5*u)+'" text-anchor="middle" font-size="'+f(14*u)+'" font-weight="700" fill="#5B6472">'+n.t+'</text>');});
+    var x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;P.forEach(function(p){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1]);});
+    x0-=8*u;x1+=8*u;y0-=8*u;y1+=8*u;var W=x1-x0,H=y1-y0;
+    return '<svg class="pf" viewBox="'+f(x0)+' '+f(-y1)+' '+f(W)+' '+f(H)+'"'+(g.s?' data-s="'+g.s+'"':'')+' width="'+Math.round(W*k)+'" height="'+Math.round(H*k)+'" style="max-width:100%;height:auto;display:block;margin:0 auto 8px" role="img" aria-label="'+(label||"Geometry diagram")+'">'+out.join("")+'</svg>';}
+  function names(g,P,ls){var c=cen(P);P.forEach(function(p,i){NM(g,p,ls[i],c);});}
+  function rotAll(Ps,t,c){Ps.forEach(function(p){var r=dist(c,p),a0=ang(c,p),q=pt(c,a0+t,r);p[0]=q[0];p[1]=q[1];});}
+  var LET=["ABCD","PQRS","KLMN","WXYZ","EFGH"];
+
+
+  /* ---------- trigonometry helpers ---------- */
+  function sinD(a){return Math.sin(rad(a));}
+  function cosD(a){return Math.cos(rad(a));}
+  function tanD(a){return Math.tan(rad(a));}
+  function dg(x){return x*180/Math.PI;}
+  function r1(x){return Math.round(x*10)/10;}
+  function f1(x){return r1(x).toFixed(1).replace("-","−");}
+  function D(x,u){return num(x)+" "+u;}
+  // far enough from a rounding boundary (so the calculator and the checker always agree)
+  function safe1(x){var t=x*10-Math.floor(x*10);return Math.abs(t-0.5)>0.03;}
+  function safe0(x){var t=x-Math.floor(x);return Math.abs(t-0.5)>0.03;}
+  var NM3={o:"Opposite",a:"Adjacent",h:"Hypotenuse"},FN={o:{h:"sin",a:"tan"},a:{h:"cos",o:"tan"},h:{o:"sin",a:"cos"}};
+  function fnOf(p,q){return FN[p][q];}            // which ratio links sides p and q
+  function C(en,ans,pool,why,html,data){data=data||{};var n=data.n3?2:3,seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){x=String(x);if(!seen[x]&&w.length<n){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en.replace(/^[^\x00-\x7F]\S*\s/,"")+" → "+ans,data:data};}
+  // a length to 1 d.p.: every option written with 1 d.p., positive, never equal in value
+  function QD(en,ans,slips,unit,why,html,data){var a=r1(ans),seen={},w=[];seen[a.toFixed(1)]=1;
+    slips.concat([a+1,a-1,a*2,a/2,a+2,a+0.5,a-0.5,a*1.5]).forEach(function(x){if(typeof x!=="number"||!isFinite(x)||r1(x)<=0)return;var s=r1(x).toFixed(1);if(!seen[s]&&w.length<3){seen[s]=1;w.push(s+unit);}});
+    return {en:en,frame:"",html:html||"",answer:a.toFixed(1)+unit,wrong:w,why:why,review:en.replace(/^[^\x00-\x7F]\S*\s/,"")+" → "+a.toFixed(1)+unit,data:data||{}};}
+  // an angle to the nearest degree, options 1°–89°
+  function QG(en,ans,slips,why,html,data){var a=Math.round(ans),seen={},w=[];seen[a]=1;
+    slips.concat([90-a,a+1,a-1,a+2,a-2,a+5,a-5,a+10]).forEach(function(x){if(typeof x!=="number"||!isFinite(x))return;x=Math.round(x);if(x<1||x>89||seen[x]||w.length>=3)return;seen[x]=1;w.push(x+"°");});
+    return {en:en,frame:"",html:html||"",answer:a+"°",wrong:w,why:why,review:en.replace(/^[^\x00-\x7F]\S*\s/,"")+" → "+a+"°",data:data||{}};}
+  var DP=" (to 1 d.p.)",ND=" (to the nearest degree)";
+
+  // right-angled triangle with angle th marked. o = opposite, a = adjacent (any units; drawn to scale).
+  // labs = {o,a,h}: label text or 0. angLab = "35" (shows 35°) or "θ".
+  function ttri(o,a,labs,angLab,fixed){
+    var atB=fixed?true:Math.random()<0.6,la=atB?a:o,lb=atB?o:a,s=200/Math.max(la,lb),Cc=[0,0],Bp=[la*s,0],Ap=[0,lb*s],P=[Cc,Bp,Ap];
+    if(!fixed){if(Math.random()<0.5)P.forEach(function(p){p[0]=-p[0];});rotAll(P,rnd([0,0,0,90,180,270,ri(-25,25),ri(155,205)]),[0,0]);}
+    var g=G();g.s=s;g.tris.push(P);L(g,P[0],P[1]);L(g,P[1],P[2]);L(g,P[2],P[0]);MB(g,P[0],P[1],P[2],"rt");
+    var V=atB?P[1]:P[2],W=atB?P[2]:P[1];MB(g,V,P[0],W,angLab);
+    var lA=atB?labs.a:labs.o,lB=atB?labs.o:labs.a;
+    if(lA)LEN(g,P[0],P[1],lA,P[2]);if(lB)LEN(g,P[0],P[2],lB,P[1]);if(labs.h)LEN(g,P[1],P[2],labs.h,P[0]);return g;}
+  function pic(g,lab,box){return render(g,lab,box||[300,230]);}
+  // a real-life scene: O on the left, F the foot, T the top; the right angle at F.
+  // kind: "elev" (angle at O), "dep" (angle of depression at T), "ramp" (angle at O, no observer).
+  // labs = {d: |OF|, h: |FT|, l: |OT|, e: eye height}. opt.eye = eye height (lifts the triangle).
+  function scene(kind,d,h,labs,al,opt){opt=opt||{};var e=opt.eye||0,s=210/Math.max(d,h+e),y0=e*s,O=[0,y0],F=[d*s,y0],T=[d*s,y0+h*s],g=G();g.s=s;
+    g.deco.push({a:[-25,0],b:[d*s+35,0],c:"ground",col:"#8A6D3B",w:3});
+    if(opt.obj)g.deco.push({a:[d*s,0],b:T,c:"obj",col:opt.obj,w:7});
+    if(e){var P0=[0,0];L(g,P0,O);L(g,[d*s,0],F);if(labs.e)LEN(g,P0,O,labs.e,F);}
+    g.tris.push([F,O,T]);L(g,O,F);L(g,F,T);L(g,O,T);MB(g,F,O,T,"rt");
+    if(kind==="dep"){var Hp=[d*s*0.25,T[1]];g.deco.push({a:Hp,b:T,c:"hz",col:"#5B6472",w:1.6,dash:1});MB(g,T,Hp,O,al);}
+    else MB(g,O,F,T,al);
+    if(labs.d)LEN(g,O,F,labs.d,T);if(labs.h)LEN(g,F,T,labs.h,O);if(labs.l)LEN(g,O,T,labs.l,F);return g;}
+  function ladderT(d,h,labs,al){var s=170/Math.max(d,h),W=[0,0],F=[d*s,0],T2=[0,h*s],g=G();g.s=s;
+    g.deco.push({a:[-30,0],b:[d*s+40,0],c:"ground",col:"#8A6D3B",w:3},{a:[0,0],b:[0,h*s+25],c:"wall",col:"#B5502F",w:5});
+    g.tris.push([W,F,T2]);L(g,W,F);L(g,W,T2);L(g,F,T2);MB(g,W,F,T2,"rt");
+    var len=dist(F,T2),n=Math.max(4,Math.round(len/26));for(var i=1;i<n;i++){var c=lerp(F,T2,i/n),dd=ang(F,T2);g.deco.push({a:pt(c,dd+90,7),b:pt(c,dd-90,7),c:"rung",col:"#8A6D3B",w:2.2});}
+    MB(g,F,W,T2,String(al));
+    if(labs.d)LEN(g,W,F,labs.d,T2);if(labs.h)LEN(g,W,T2,labs.h,F);if(labs.l)LEN(g,F,T2,labs.l,W);return g;}
+  function th0(){var t;do{t=ri(16,74);}while(t===45);return t;}
+  function side0(){var v=ri(4,24);if(Math.random()<0.25)v+=0.5;return v;}
+  var UNITS=["cm","cm","m"];
+  // solve the triangle from one known side and the angle
+  function solveT(k,v,th){var o,a,h;if(k==="h"){h=v;o=v*sinD(th);a=v*cosD(th);}else if(k==="o"){o=v;h=v/sinD(th);a=v/tanD(th);}else{a=v;h=v/cosD(th);o=v*tanD(th);}return {o:o,a:a,h:h};}
+  function calcStr(v,op,fn,th){return num(v)+" "+op+" "+fn+" "+th+"°";}
+  function calcVal(v,op,fn,th){var r={sin:sinD,cos:cosD,tan:tanD}[fn](th);return op==="×"?v*r:v/r;}
+  function rule(k,u){var fn=fnOf(k,u);return fn==="sin"?"SOH: sin = O ÷ H":fn==="cos"?"CAH: cos = A ÷ H":"TOA: tan = O ÷ A";}
+  function howSide(k,u,v,th){var fn=fnOf(k,u),top=fn==="sin"?"o":fn==="cos"?"a":"o";return u===top?"×":"÷";}
+  var SIX=[["×","sin"],["×","cos"],["×","tan"],["÷","sin"],["÷","cos"],["÷","tan"]];
+
+  /* ---------- mode 1: name the sides (SOH CAH TOA) ---------- */
+  function qName(){var th=th0(),k=rnd(["o","a","h"]),labs={o:0,a:0,h:0};labs[k]="?";
+    var g=ttri(sinD(th),cosD(th),labs,"θ"),ans=NM3[k];
+    var why={o:"The opposite side is across from θ: it doesn't touch θ.",a:"The adjacent side touches θ and isn't the hypotenuse.",h:"The hypotenuse is opposite the right angle: always the longest side."}[k];
+    return C("Name the side marked ?",ans,["Opposite","Adjacent","Hypotenuse"],why,pic(g,"Right-angled triangle with angle θ"),{t:"name",n3:1});}
+  var TRIP=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[6,8,10],[9,12,15],[12,16,20],[9,40,41]];
+  function trip(){var t=rnd(TRIP).slice();return Math.random()<0.5?[t[1],t[0],t[2]]:t;}   // [opposite, adjacent, hypotenuse]
+  function qWhichRatio(){var t=trip(),pair=rnd([["o","h"],["a","h"],["o","a"]]),labs={o:0,a:0,h:0},V={o:t[0],a:t[1],h:t[2]};pair.forEach(function(k){labs[k]=String(V[k]);});
+    var g=ttri(t[0],t[1],labs,"θ"),fn=fnOf(pair[0],pair[1]);
+    return C("Which ratio uses the two labelled sides?",fn,["sin","cos","tan"],"The labelled sides are the "+NM3[pair[0]].toLowerCase()+" and the "+NM3[pair[1]].toLowerCase()+": "+rule(pair[0],pair[1])+".",pic(g,"Right-angled triangle with angle θ"),{t:"whichratio",n3:1});}
+  function qFrac(){var t=trip(),V={o:t[0],a:t[1],h:t[2]},fn=rnd(["sin","cos","tan"]),g=ttri(t[0],t[1],{o:String(t[0]),a:String(t[1]),h:String(t[2])},"θ");
+    var fr=function(p,q){return V[p]+"/"+V[q];},ans=fn==="sin"?fr("o","h"):fn==="cos"?fr("a","h"):fr("o","a"),seenV={},pool=[];
+    seenV[(fn==="sin"?V.o/V.h:fn==="cos"?V.a/V.h:V.o/V.a).toFixed(9)]=1;
+    [["o","h"],["a","h"],["o","a"],["a","o"],["h","o"],["h","a"]].forEach(function(p){var v=(V[p[0]]/V[p[1]]).toFixed(9),s=fr(p[0],p[1]);if(!seenV[v]&&s!==ans){seenV[v]=1;pool.push(s);}});
+    return C(fn+" θ = ?",ans,pool,rule(fn==="cos"?"a":"o",fn==="tan"?"a":"h")+" = "+ans+".",pic(g,"Right-angled triangle with sides "+t.join(", ")),{t:"frac",fn:fn});}
+  var SOH=[["sin θ = ?","Opposite ÷ Hypotenuse"],["cos θ = ?","Adjacent ÷ Hypotenuse"],["tan θ = ?","Opposite ÷ Adjacent"]];
+  function qSOH(){var s=rnd(SOH);return C(s[0],s[1],["Opposite ÷ Hypotenuse","Adjacent ÷ Hypotenuse","Opposite ÷ Adjacent","Hypotenuse ÷ Opposite","Adjacent ÷ Opposite"],"SOH CAH TOA: Sin = O ÷ H, Cos = A ÷ H, Tan = O ÷ A.","",{t:"soh"});}
+  function d4(x){return x.toFixed(4).replace("-","−");}
+  function qCalc(){var th,fn=rnd(["sin","cos","tan"]),F={sin:sinD,cos:cosD,tan:tanD},R={sin:Math.sin,cos:Math.cos,tan:Math.tan},v,vals;
+    do{th=ri(5,85);v=F[fn](th);vals=[v,R[fn](th)].concat(["sin","cos","tan"].filter(function(x){return x!==fn;}).map(function(x){return F[x](th);}));}
+    while(new Set(vals.map(d4)).size<4||!safe4(v));
+    return C("🧮 "+fn+" "+th+"° = ? (to 4 d.p.)",d4(v),vals.slice(1).map(d4),"Calculator in DEG mode: "+fn+" "+th+"° = "+d4(v)+". If you got "+d4(R[fn](th))+", your calculator is in RAD (radians) mode.","",{t:"calc"});}
+  function safe4(x){var t=Math.abs(x)*1e4-Math.floor(Math.abs(x)*1e4);return Math.abs(t-0.5)>0.03;}
+
+  /* ---------- mode 2: find a side ---------- */
+  function sideSetup(){var th=th0(),ks=shuffle(["o","a","h"]),k=ks[0],x=ks[1],v=side0(),S=solveT(k,v,th);return {th:th,k:k,x:x,v:v,S:S};}
+  function qSide(){var Q,u=rnd(UNITS);do{Q=sideSetup();}while(!safe1(Q.S[Q.x])||Q.S.h>80);
+    var labs={o:0,a:0,h:0};labs[Q.k]=D(Q.v,u);labs[Q.x]="x";
+    var g=ttri(Q.S.o,Q.S.a,labs,String(Q.th)),fn=fnOf(Q.k,Q.x),op=howSide(Q.k,Q.x),ans=Q.S[Q.x];
+    var slips=SIX.map(function(s){return calcVal(Q.v,s[0],s[1],Q.th);}).concat([Q.v*Math.abs(Math.sin(Q.th))]);
+    return QD("Find x"+DP,ans,slips," "+u,"You have the "+NM3[Q.k].toLowerCase()+" and want the "+NM3[Q.x].toLowerCase()+": "+rule(Q.k,Q.x)+". x = "+calcStr(Q.v,op,fn,Q.th)+" = "+f1(ans)+" "+u+".",pic(g,"Right-angled triangle"),{t:"fig"});}
+  function qSideCalc(){var Q,u=rnd(UNITS);do{Q=sideSetup();}while(Q.S.h>80);
+    var labs={o:0,a:0,h:0};labs[Q.k]=D(Q.v,u);labs[Q.x]="x";
+    var g=ttri(Q.S.o,Q.S.a,labs,String(Q.th)),fn=fnOf(Q.k,Q.x),op=howSide(Q.k,Q.x),ans=calcStr(Q.v,op,fn,Q.th),av=Q.S[Q.x],pool=[];
+    SIX.forEach(function(s){if(Math.abs(calcVal(Q.v,s[0],s[1],Q.th)-av)>1e-6)pool.push(calcStr(Q.v,s[0],s[1],Q.th));});
+    return C("Which calculation finds x?",ans,pool,rule(Q.k,Q.x)+", so x = "+ans+".",pic(g,"Right-angled triangle"),{t:"calcfig"});}
+  function qSideH(){var Q,u=rnd(UNITS),th=th0(),k=rnd(["o","a"]),v=side0(),S=solveT(k,v,th);if(!safe1(S.h)||S.h>80)return qSideH();
+    var labs={o:0,a:0,h:0};labs[k]=D(v,u);labs.h="x";var g=ttri(S.o,S.a,labs,String(th)),fn=fnOf(k,"h");
+    return QD("Find the hypotenuse x"+DP,S.h,[v*(fn==="sin"?sinD(th):cosD(th)),v/(fn==="sin"?cosD(th):sinD(th)),v/tanD(th),v*tanD(th)]," "+u,
+      "x is on the bottom: "+fn+" "+th+"° = "+num(v)+" ÷ x, so x = "+calcStr(v,"÷",fn,th)+" = "+f1(S.h)+" "+u+".",pic(g,"Right-angled triangle"),{t:"fig"});}
+
+  /* ---------- mode 3: find an angle ---------- */
+  var INV={sin:"sin⁻¹",cos:"cos⁻¹",tan:"tan⁻¹"};
+  function angSetup(){var pair=rnd([["o","h"],["a","h"],["o","a"]]),p,q,th;
+    do{if(pair[1]==="h"){q=ri(5,25);p=ri(2,q-1);if(Math.random()<0.2)p+=0.5;}else{p=ri(2,20);q=ri(2,20);if(Math.random()<0.2)q+=0.5;}
+      th=pair[1]==="h"?(pair[0]==="o"?dg(Math.asin(p/q)):dg(Math.acos(p/q))):dg(Math.atan(p/q));}
+    while(th<12||th>78||!safe0(th)||p===q);
+    var S=pair[0]==="o"&&pair[1]==="h"?{o:p,h:q,a:Math.sqrt(q*q-p*p)}:pair[0]==="a"&&pair[1]==="h"?{a:p,h:q,o:Math.sqrt(q*q-p*p)}:{o:p,a:q,h:Math.hypot(p,q)};
+    return {pair:pair,p:p,q:q,th:th,S:S,fn:fnOf(pair[0],pair[1])};}
+  function angSlips(Q){var r=Q.p/Q.q,o=[];[r,1/r].forEach(function(x){if(x<=1){o.push(dg(Math.asin(x)),dg(Math.acos(x)));}o.push(dg(Math.atan(x)));});return o;}
+  function qAngle(){var Q=angSetup(),u=rnd(UNITS),labs={o:0,a:0,h:0};labs[Q.pair[0]]=D(Q.p,u);labs[Q.pair[1]]=D(Q.q,u);
+    var g=ttri(Q.S.o,Q.S.a,labs,"θ");
+    return QG("Find θ"+ND,Q.th,angSlips(Q),rule(Q.pair[0],Q.pair[1])+". θ = "+INV[Q.fn]+"("+num(Q.p)+" ÷ "+num(Q.q)+") = "+Math.round(Q.th)+"°.",pic(g,"Right-angled triangle with angle θ"),{t:"fig"});}
+  function qAngleCalc(){var Q=angSetup(),u=rnd(UNITS),labs={o:0,a:0,h:0};labs[Q.pair[0]]=D(Q.p,u);labs[Q.pair[1]]=D(Q.q,u);
+    var g=ttri(Q.S.o,Q.S.a,labs,"θ"),ans=INV[Q.fn]+"("+num(Q.p)+" ÷ "+num(Q.q)+")",pool=[];
+    ["sin","cos","tan"].forEach(function(fn){[[Q.p,Q.q],[Q.q,Q.p]].forEach(function(pq){var s=INV[fn]+"("+num(pq[0])+" ÷ "+num(pq[1])+")";if(s!==ans)pool.push(s);});});
+    var A=Math.round(Q.th);pool=pool.filter(function(s){var m=s.match(/^(\w+)⁻¹\(([\d.]+) ÷ ([\d.]+)\)$/),r=+m[2]/+m[3];if(m[1]!=="tan"&&r>1)return true;var v=m[1]==="sin"?Math.asin(r):m[1]==="cos"?Math.acos(r):Math.atan(r);return Math.round(dg(v))!==A;});
+    return C("Which calculation finds θ?",ans,pool,rule(Q.pair[0],Q.pair[1])+", so θ = "+ans+".",pic(g,"Right-angled triangle with angle θ"),{t:"anglecalc"});}
+  function qInv(){var fn=rnd(["sin","cos","tan"]),v,th,vals;
+    do{v=fn==="tan"?ri(10,300)/100:ri(5,95)/100;th=fn==="sin"?dg(Math.asin(v)):fn==="cos"?dg(Math.acos(v)):dg(Math.atan(v));}while(!safe0(th)||th<3||th>87);
+    var sl=[dg(Math.atan(v))];if(v<=1)sl.push(dg(Math.asin(v)),dg(Math.acos(v)));
+    return QG("🧮 "+INV[fn]+"("+num(v)+") = ?"+ND,th,sl,INV[fn]+"("+num(v)+") = "+th.toFixed(2)+"…° = "+Math.round(th)+"°. Use the SHIFT key, with the calculator in degrees.","",{t:"inv"});}
+
+  /* ---------- mode 4: elevation and depression ---------- */
+  var OBJ=[["🌳 How tall is the tree?","#3E7C4F"],["🏢 How tall is the building?","#7A8594"],["🗼 How tall is the tower?","#7A8594"],["🚩 How tall is the flagpole?","#9AA3AE"]];
+  function qTree(){var th,d,hh;do{th=ri(15,70);d=ri(8,60);hh=d*tanD(th);}while(!safe1(hh)||hh>90||hh<3);
+    var o=rnd(OBJ),g=scene("elev",d,hh,{d:D(d,"m"),h:"x"},String(th),{obj:o[1]});
+    return QD(o[0]+DP,hh,[d*sinD(th),d*cosD(th),d/tanD(th),d/sinD(th)]," m","Angle of elevation "+th+"°, the distance along the ground is the adjacent: TOA. x = "+calcStr(d,"×","tan",th)+" = "+f1(hh)+" m.",pic(g,"Angle of elevation to the top"),{t:"fig"});}
+  var NAMES=["Niamh","Seán","Aoife","Cian","Róisín","Darragh","Ciara","Oisín"];
+  function he(n){return /^(Seán|Cian|Darragh|Oisín)$/.test(n)?"His":"Her";}
+  function qTreeEye(){var th,d,hh,e=rnd([1.5,1.6,1.7,1.4,1.8]);do{th=ri(15,60);d=ri(8,50);hh=d*tanD(th);}while(!safe1(hh+e)||hh>80||hh<3);
+    var o=rnd(OBJ),who=rnd(NAMES),g=scene("elev",d,hh,{d:D(d,"m"),e:D(e,"m")},String(th),{obj:o[1],eye:e});
+    return QD(o[0].split(" ")[0]+" "+who+"'s eyes are "+num(e)+" m above the ground. "+o[0].slice(o[0].indexOf(" ")+1)+DP,hh+e,[hh,d*sinD(th)+e,d/tanD(th)+e,hh-e]," m",
+      "The triangle: "+calcStr(d,"×","tan",th)+" = "+f1(hh)+"… m. Then add the eye height: "+f1(hh)+"… + "+num(e)+" = "+f1(hh+e)+" m.",pic(g,"Angle of elevation from eye height"),{t:"eye"});}
+  function qKite(){var th,l,hh;do{th=ri(25,70);l=ri(15,80);hh=l*sinD(th);}while(!safe1(hh));
+    var g=scene("elev",l*cosD(th),hh,{l:D(l,"m"),h:"x"},String(th));
+    return QD("🪁 How high is the kite?"+DP,hh,[l*cosD(th),l*tanD(th),l/sinD(th)]," m","The string is the hypotenuse, you want the opposite: SOH. x = "+calcStr(l,"×","sin",th)+" = "+f1(hh)+" m.",pic(g,"Kite string"),{t:"fig"});}
+  function qLadderAng(){var l,hh,th;do{l=rnd([3,3.5,4,4.5,5,5.5,6,6.5,7,8]);hh=r1(l*ri(70,95)/100);th=dg(Math.asin(hh/l));}while(!safe0(th)||th>80||hh>=l);
+    var d=Math.sqrt(l*l-hh*hh),g=ladderT(d,hh,{l:D(l,"m"),h:D(hh,"m")},"θ");
+    return QG("🪜 Angle between the ladder and the ground?"+ND,th,[dg(Math.acos(hh/l)),dg(Math.atan(hh/l))],"Ladder = hypotenuse, wall height = opposite: SOH. θ = sin⁻¹("+num(hh)+" ÷ "+num(l)+") = "+Math.round(th)+"°.",pic(g,"Ladder against a wall"),{t:"fig"});}
+  function qLadderH(){var l=rnd([3,3.5,4,4.5,5,5.5,6,6.5,7,8]),th,hh;do{th=ri(60,80);hh=l*sinD(th);}while(!safe1(hh));
+    var g=ladderT(l*cosD(th),hh,{l:D(l,"m"),h:"x"},String(th));
+    return QD("🪜 How high up the wall does it reach?"+DP,hh,[l*cosD(th),l*tanD(th),l/sinD(th)]," m","Ladder = hypotenuse: x = "+calcStr(l,"×","sin",th)+" = "+f1(hh)+" m.",pic(g,"Ladder against a wall"),{t:"fig"});}
+  function qRamp(){var rise,len,th,useH=Math.random()<0.5,d;
+    do{rise=rnd([0.5,0.6,0.75,0.8,0.9,1,1.2,1.5]);len=rnd([2.5,3,3.5,4,4.5,5,6]);th=useH?dg(Math.asin(rise/len)):dg(Math.atan(rise/len));}while(!safe0(th)||th<8||th>25);
+    d=useH?Math.sqrt(len*len-rise*rise):len;var g=scene("ramp",d,rise,useH?{l:D(len,"m"),h:D(rise,"m")}:{d:D(len,"m"),h:D(rise,"m")},"θ");
+    return QG("♿ Find the angle of the ramp, θ"+ND,th,useH?[dg(Math.atan(rise/len)),dg(Math.acos(rise/len))]:[dg(Math.asin(rise/len)),dg(Math.atan(len/rise))],
+      (useH?"Ramp = hypotenuse, rise = opposite: SOH. θ = sin⁻¹(":"Rise = opposite, ground = adjacent: TOA. θ = tan⁻¹(")+num(rise)+" ÷ "+num(len)+") = "+Math.round(th)+"°.",pic(g,"Ramp"),{t:"fig"});}
+  function qDep(){var th,hh,d;do{th=ri(10,55);hh=rnd([20,25,30,40,45,50,60,75,80,90,100,120]);d=hh/tanD(th);}while(!safe1(d)||d>400);
+    var g=scene("dep",d,hh,{h:D(hh,"m"),d:"x"},String(th),{obj:"#9C8C6E"});
+    return QD("⛵ How far is the boat from the cliff?"+DP,d,[hh*tanD(th),hh/sinD(th),hh*cosD(th),hh/cosD(th)]," m",
+      "Angle of depression "+th+"° = the angle at the boat (alternate angles). TOA: tan "+th+"° = "+num(hh)+" ÷ x, so x = "+calcStr(hh,"÷","tan",th)+" = "+f1(d)+" m.",pic(g,"Angle of depression from a cliff"),{t:"fig"});}
+  function qElevAng(){var d,hh,th;do{d=ri(5,60);hh=ri(3,60);th=dg(Math.atan(hh/d));}while(!safe0(th)||th<10||th>75);
+    var o=rnd(OBJ),g=scene("elev",d,hh,{d:D(d,"m"),h:D(hh,"m")},"θ",{obj:o[1]});
+    return QG("📐 Find the angle of elevation, θ"+ND,th,[dg(Math.atan(d/hh)),dg(Math.asin(Math.min(hh,d)/Math.max(hh,d))),th+3],"Opposite "+num(hh)+" m, adjacent "+num(d)+" m: TOA. θ = tan⁻¹("+num(hh)+" ÷ "+num(d)+") = "+Math.round(th)+"°.",pic(g,"Angle of elevation"),{t:"fig"});}
+  var WORDS=[["The angle of elevation is measured…","Up from the horizontal",["Down from the horizontal","From the vertical","Inside the object"]],
+    ["The angle of depression is measured…","Down from the horizontal",["Up from the horizontal","From the vertical","At the bottom of the cliff"]],
+    ["From a boat, the angle of elevation of a cliff top is 20°. The angle of depression from the cliff top to the boat is…","20°",["70°","160°","40°"]],
+    ["Your calculator must be in…","DEG (degrees) mode",["RAD (radians) mode","GRA mode","Any mode"]],
+    ["Sin, cos and tan work in…","Right-angled triangles only",["Any triangle","Equilateral triangles only","Isosceles triangles only"]],
+    ["sin⁻¹ gives you…","An angle",["A side","The hypotenuse","1 ÷ sin"]],
+    ["To find an angle you need…","Two sides",["One side","Three angles","No sides"]],
+    ["A clinometer measures…","Angles of elevation",["Distances","Heights directly","Speeds"]]];
+  function qWords(){var w=rnd(WORDS);return C(w[0],w[1],w[2],w[0]+" "+w[1]+".","",{t:"words"});}
+  // Higher Level: two angles from the same point
+  function qFlag(){var d,a1,a2,top,low;do{d=ri(15,60);a1=ri(20,50);a2=a1+ri(4,15);low=d*tanD(a1);top=d*tanD(a2);}while(!safe1(top-low)||top>120||a2>75);
+    var s=210/Math.max(d,top),O=[0,0],F=[d*s,0],B=[d*s,low*s],T=[d*s,top*s],g=G();g.s=s;
+    g.deco.push({a:[-25,0],b:[d*s+35,0],c:"ground",col:"#8A6D3B",w:3},{a:F,b:B,c:"obj",col:"#7A8594",w:9});
+    g.tris.push([F,O,T]);L(g,O,F);L(g,F,B);L(g,B,T);L(g,O,B);L(g,O,T);MB(g,F,O,T,"rt");MB(g,O,F,B,String(a1));
+    g.marks.push({v:O,a1:a1,sw:a2-a1,lab:"=1"});g.lens.push({a:O,b:F,lab:D(d,"m"),away:T});g.lens.push({a:B,b:T,lab:"x",away:O});
+    var x=top-low;
+    return QD("🚩 Higher Level: the angle to the top is "+a2+"°. How tall is the flagpole, x?"+DP,x,[top,low,d*(tanD(a2-a1)),x+2]," m",
+      "Top: "+calcStr(d,"×","tan",a2)+" = "+f1(top)+"… m. Tower: "+calcStr(d,"×","tan",a1)+" = "+f1(low)+"… m. Flagpole x = "+f1(top)+"… − "+f1(low)+"… = "+f1(x)+" m.",render(g,"Flagpole on a tower",[300,250]),{t:"flag"});}
+  function qRatioHL(){var t=trip(),V={o:t[0],a:t[1],h:t[2]},given=rnd(["sin","cos","tan"]),want=rnd(["sin","cos","tan"].filter(function(x){return x!==given;}));
+    var fr=function(p,q){return V[p]+"/"+V[q];},R={sin:fr("o","h"),cos:fr("a","h"),tan:fr("o","a")},ans=R[want],seenV={},pool=[];
+    seenV[eval(ans).toFixed(9)]=1;[R[given],fr("a","o"),fr("h","o"),fr("h","a"),fr("o","h"),fr("a","h"),fr("o","a")].forEach(function(s){var v=eval(s).toFixed(9);if(!seenV[v]){seenV[v]=1;pool.push(s);}});
+    return C("Higher Level: "+given+" A = "+R[given]+" (0° < A < 90°). "+want+" A = ?",ans,pool,"Draw a right-angled triangle with "+given+" A = "+R[given]+". Pythagoras gives the third side: the sides are "+t.join(", ")+". So "+want+" A = "+ans+".","",{t:"ratiohl"});}
+
+  var MAKERS={
+    label:[qName,qName,qName,qWhichRatio,qWhichRatio,qFrac,qFrac,qSOH,qCalc,qCalc],
+    side:[qSide,qSide,qSide,qSide,qSideH,qSideH,qSideCalc,qSideCalc],
+    angle:[qAngle,qAngle,qAngle,qAngleCalc,qAngleCalc,qInv,qInv],
+    real:[qTree,qTree,qTreeEye,qKite,qLadderAng,qLadderH,qRamp,qDep,qDep,qElevAng,qWords,qFlag,qRatioHL],
+    mixed:[qName,qWhichRatio,qFrac,qSOH,qCalc,qSide,qSide,qSideH,qSideCalc,qAngle,qAngle,qAngleCalc,qInv,qTree,qTreeEye,qKite,qLadderAng,qLadderH,qRamp,qDep,qElevAng,qWords,qFlag,qRatioHL]
+  };
+
+  /* ---------- fixed diagrams for the rules and the Exam corner ---------- */
+  var FIX={
+    pattern:function(){var th=35,g=G(),O=[0,0],s=26;g.s=s;[4,7,10].forEach(function(d,i){var F=[d*s,0],T=[d*s,d*tanD(th)*s];L(g,O,F);L(g,F,T);L(g,O,T);if(i===2){g.tris.push([O,F,T]);MB(g,F,O,T,"rt");}NM(g,T,["A","B","C"][i],F);});
+      MB(g,O,[10,0],[10,7],"35");return render(g,"Three right-angled triangles with the same 35° angle",[300,220]);},
+    names:function(){return render(ttri(3,4,{o:"opposite",a:"adjacent",h:"hypotenuse"},"θ",true),"Opposite, adjacent and hypotenuse",[300,220]);},
+    elev:function(){return render(scene("elev",30,18,{d:0,h:0},"θ",{obj:"#3E7C4F"}),"Angle of elevation",[260,170]);},
+    dep:function(){return render(scene("dep",30,18,{d:0,h:0},"θ",{obj:"#9C8C6E"}),"Angle of depression",[260,170]);},
+    ex1:function(){var l=4.5,r=0.35;return render(scene("ramp",Math.sqrt(l*l-r*r),r*3,{l:"4.5 m",h:"0.35 m"},"θ"),"Ramp (height stretched)",[280,170]);},
+    ex2:function(){return render(scene("elev",18,18*tanD(32),{d:"18 m",e:"1.5 m"},"32",{obj:"#3E7C4F",eye:1.5}),"Ciara and the tree",[260,220]);},
+    ex3:function(){return render(scene("dep",60/tanD(14),60,{h:"60 m",d:"x"},"14",{obj:"#9C8C6E"}),"Cliff and boat",[340,200]);},
+    ex4:function(){var g=G(),s=8,B=[0,0],A=[0,7*s],Cc=[24*s,0];g.s=s;g.tris.push([B,Cc,A]);L(g,B,Cc);L(g,Cc,A);L(g,A,B);MB(g,B,Cc,A,"rt");LEN(g,A,B,"7 cm",Cc);LEN(g,B,Cc,"24 cm",A);names(g,[A,B,Cc],"ABC");return render(g,"Triangle ABC",[340,220]);}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="label"?75:80;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.data&&q.data.n3?2:3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="label"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="label"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{G:G,L:L,M:M,MB:MB,LEN:LEN,NM:NM,render:render,ttri:ttri,scene:scene,ladderT:ladderT,FIX:FIX}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
