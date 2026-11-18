@@ -1,0 +1,368 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));} // standard order (highest power first)
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  /* Bracket Blaster: expansions are written in standard order (highest power first), so no positive-first swap */
+  function fmtStd(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));}
+  /* ---------- multiplying terms: a key is letters with powers, e.g. "x²", "ab", "a²b" ---------- */
+  var SUPS={"²":2,"³":3,"⁴":4,"⁵":5},SUPC=["","","²","³","⁴","⁵"];
+  function kp(k){var p={},i=0;while(i<k.length){var L=k[i];i++;var e=1;if(i<k.length&&SUPS[k[i]]){e=SUPS[k[i]];i++;}p[L]=(p[L]||0)+e;}return p;}
+  function kstr(p){return Object.keys(p).sort().map(function(L){return L+SUPC[p[L]];}).join("");}
+  function kmul(a,b){var p=kp(a),q=kp(b);for(var L in q)p[L]=(p[L]||0)+q[L];return kstr(p);}
+  function mul(A,B){var m={};for(var a in A)for(var b in B){if(!A[a]||!B[b])continue;var k=kmul(a,b);m[k]=(m[k]||0)+A[a]*B[b];}return m;}
+  function T1(c,k){var m={};m[k]=c;return m;}
+  function lin(v,a,b){var m={};m[v]=a;m[""]=b;return m;}            // a·v + b
+  function inner(m){return fmtStd(m);}
+  function brk(c,k,m){ // c·k outside a bracket: "3(x − 4)", "−(x + 2)", "2x(x − 5)"
+    var out=k===""?(c===1?"":c===-1?M:num(c)):tm(c,k,true);return out+"("+inner(m)+")";}
+  function sq(m){return "("+inner(m)+")²";}
+  function pr(A,B){return "("+inner(A)+")("+inner(B)+")";}
+  function cnt(m){return keys(m).length;}
+  var INK="#1B2430",YEL="#F6CF5A";
+
+  /* ---------- area-model picture: rows × columns, each cell = row term × column term ---------- */
+  function areaSVG(rows,cols,show,hideHeads){ // rows/cols: [[coef,key],…]; show(i,j) → "text" | "?" | ""; hideHeads → "?" on the sides
+    var cw=86,rh=58,L=64,Tp=34,W=L+cw*cols.length+6,H=Tp+rh*rows.length+6,o="";
+    function txt(x,y,s,cls,extra,fill,size,anchor){return '<text class="'+cls+'" '+(extra||"")+' x="'+x+'" y="'+y+'" font-size="'+(size||17)+'" font-weight="700" text-anchor="'+(anchor||"middle")+'" fill="'+(fill||INK)+'" font-family="Inter,sans-serif">'+s+'</text>';}
+    cols.forEach(function(c,j){var s=hideHeads?"?":tm(c[0],c[1],true);o+=txt(L+cw*j+cw/2,Tp-11,s,"ch",'data-t="'+s+'"',hideHeads?"#C0392B":INK);});
+    rows.forEach(function(r,i){var s=hideHeads?"?":tm(r[0],r[1],true);o+=txt(L-12,Tp+rh*i+rh/2+6,s,"rh",'data-t="'+s+'"',hideHeads?"#C0392B":INK,17,"end");
+      cols.forEach(function(c,j){var s=show(i,j),q=s==="?";
+        o+='<rect x="'+(L+cw*j)+'" y="'+(Tp+rh*i)+'" width="'+cw+'" height="'+rh+'" fill="'+(q?YEL:(i+j)%2?"#E9F5EE":"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';
+        if(s)o+=txt(L+cw*j+cw/2,Tp+rh*i+rh/2+6,s,"cell",'data-i="'+i+'" data-j="'+j+'"',INK,q?22:16);});});
+    return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:'+Math.min(340,Math.round(W*1.4))+'px" role="img" aria-label="Area model with boxes '+rows.map(function(r,i){return cols.map(function(c,j){return show(i,j);}).join(", ");}).join(", ")+'">'+o+'</svg>';}
+  function terms(m){return keys(m).map(function(k){return [m[k],k];});}
+  /* rectangle: top label, side label, area written inside (one side is "?") */
+  function rectSVG(top,side,area){
+    var T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+(s==="?"?"#C0392B":INK)+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg viewBox="0 0 330 140" width="100%" style="max-width:330px" role="img" data-shape="rect" aria-label="Rectangle: length '+top+', width '+side+', area '+area+'"><rect x="80" y="32" width="200" height="94" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(180,24,top,0)+T(72,85,side,1,"end")+
+      '<text data-area="'+area+'" x="180" y="78" font-size="15" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">Area = '+area+'</text><text x="180" y="98" font-size="15" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif"></text></svg>';}
+
+  /* ---------- factorised forms: {c: number outside, k: letters outside, b: [bracket maps]} ---------- */
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+  function gcdL(l){return l.reduce(function(a,b){return gcd(a,b);},0);}
+  function mk(p){var q={};for(var L in p)if(p[L])q[L]=p[L];return kstr(q);}   // key from powers, zero powers dropped
+  function FF(c,k,b){return {c:c,k:k||"",b:b||[]};}
+  function fexp(F){var m=T1(F.c,F.k);F.b.forEach(function(B){m=mul(m,B);});return m;}
+  function fout(F){if(!F.b.length)return tm(F.c,F.k,true);return F.k===""?(F.c===1?"":F.c===-1?M:num(F.c)):tm(F.c,F.k,true);}
+  function fs(F){return fout(F)+F.b.map(function(B){return "("+inner(B)+")";}).join("");}
+  function fcanon(F){return fout(F)+"|"+F.b.map(function(B){return inner(B);}).sort().join("|");}
+  function flipC(B){var m=plus(B,{});if(m[""])m[""]=-m[""];else{var k=keys(m);m[k[k.length-1]]=-m[k[k.length-1]];}return m;}
+  /* factorising question: wrong options never equal the answer (unless they are listed as partial = not fully factorised,
+     only allowed when the question says "fully"), never equal each other, never the answer with the brackets swapped */
+  function FQ(en,frame,F,slips,partials,why,html,data){
+    var A=fs(F),AE=fmt(fexp(F)),seen={},seenE={},out=[];seen[fcanon(F)]=1;seenE[AE]=1;
+    var pads=[];F.b.forEach(function(B,i){var G=FF(F.c,F.k,F.b.slice());G.b[i]=flipC(B);pads.push(G);});
+    if(F.b.length===2){pads.push(FF(F.c,F.k,[flipC(F.b[0]),flipC(F.b[1])]));}
+    if(F.b.length===1&&F.c!==1)pads.push(FF(F.c+1,F.k,F.b));
+    var full=/fully/i.test(en),cand=(full?(partials||[]):[]).map(function(G){return [G,1];}).concat(slips.concat(shuffle(pads)).map(function(G){return [G,0];}));
+    cand.forEach(function(x){var G=x[0];if(!G||out.length>=3)return;var cn=fcanon(G),e=fmt(fexp(G));if(seen[cn]||e==="0")return;
+      if(x[1]){if(e!==AE)return;}else{if(seenE[e])return;seenE[e]=1;}
+      if(G.b.some(function(B){return keys(B).length<1;}))return;
+      seen[cn]=1;out.push(fs(G));});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  function lin2(u,a,w,b){var m={};m[u]=a;m[w]=b;return m;}   // a·u + b·w (w may be "")
+  var NAMES=[["Ciara","she"],["Liam","he"],["Aoife","she"],["Jack","he"],["Zara","she"],["Oisín","he"],["Emma","she"],["Tomás","he"]];
+  var V1=["x","x","x","a","n","y","t","p"];
+  function nb(s){return s.replace(/ /g,"\u00a0");}
+  function chk(F){return " Check by multiplying out: "+fs(F)+" = "+fmt(fexp(F))+" ✓";}
+
+  /* ---------- Common factor ---------- */
+  function qHCF(){
+    var P2=rnd([["x","y"],["a","b"],["m","n"],["p","q"]]),u=P2[0],w=P2[1],g=ri(2,6),a1,a2,t=0;
+    do{a1=ri(1,6);a2=ri(1,6);t++;}while((a1===a2||gcd(a1,a2)!==1)&&t<40);
+    var e=[ri(1,3),ri(1,3)],f=[ri(0,2),ri(0,2)];if(Math.random()<.4){f=[0,0];}
+    var p1={},p2={};p1[u]=e[0];p1[w]=f[0];p2[u]=e[1];p2[w]=f[1];
+    var K1=mk(p1),K2=mk(p2),hp={};hp[u]=Math.min(e[0],e[1]);hp[w]=Math.min(f[0],f[1]);var HK=mk(hp),lp={};lp[u]=Math.max(e[0],e[1]);lp[w]=Math.max(f[0],f[1]);
+    var ans=T1(g,HK),frame=tm(g*a1,K1,true)+" and "+tm(g*a2,K2,true);
+    var s1=T1(g,mk(lp)),s2=T1(g,""),s3=T1(g*a1*a2,HK),s4=T1(g===4||g===6?g/2:1,HK);
+    return P("What is the highest common factor (HCF) of",frame,ans,[s1,s2,s3,s4],
+      "Numbers: the HCF of "+g*a1+" and "+g*a2+" is "+g+". Letters: take each letter that is in BOTH terms, with the SMALLER power"+(HK?": "+HK:" (no letter is in both terms)")+". HCF = "+tm(g,HK,true)+".","",{t:"hcf",terms:[tm(g*a1,K1,true),tm(g*a2,K2,true)]});
+  }
+  function qCF1(){
+    var v=rnd(V1),g=ri(2,9),a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qCF1();
+    var F=FF(g,"",[lin(v,a,b)]),E=fexp(F);
+    return FQ("Factorise:",fmt(E),F,[FF(g,"",[lin(v,a,g*b)]),FF(g,"",[lin(v,g*a,b)]),FF(g,"",[lin(v,a,-b)]),FF(g,v,[lin(v,a,b)])],[],
+      "The HCF of "+g*a+" and "+Math.abs(g*b)+" is "+g+". Divide each term by "+g+": "+tm(g*a,v,true)+" ÷ "+g+" = "+tm(a,v,true)+", "+num(g*b)+" ÷ "+g+" = "+num(b)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qCF2(){
+    var v=rnd(V1),g=ri(1,6),a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qCF2();
+    var F=FF(g,v,[lin(v,a,b)]),E=fexp(F),sq={};sq[v+"²"]=a;sq[v]=b;
+    return FQ("Factorise:",fmt(E),F,[FF(g,v,[sq]),FF(g,"",[lin(v,a,b)]),FF(g,v,[lin(v,a,-b)]),FF(g,v+"²",[lin(v,a,b)])],[],
+      "Both terms have "+(g>1?g+" and ":"")+v+" in them, so the HCF is "+tm(g,v,true)+". "+tm(g*a,v+"²",true)+" ÷ "+tm(g,v,true)+" = "+tm(a,v,true)+" and "+tm(g*b,v,true)+" ÷ "+tm(g,v,true)+" = "+num(b)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qCF3(){
+    var S=rnd([["a","b","c"],["x","y","z"],["p","q","r"]]),i=ri(0,2),cL=S[i],o=S.filter(function(x,j){return j!==i;}),g=ri(2,6),a,b,c,t=0,three=Math.random()<.5;
+    do{a=ri(1,5);b=nz(-6,6);c=three?(Math.random()<.6?rnd([1,-1]):nz(-5,5)):0;t++;}while(gcdL([a,b,c])!==1&&t<40);if(gcdL([a,b,c])!==1)return qCF3();
+    var B=lin2(o[0],a,o[1],b);if(three)B[""]=c;var F=FF(g,cL,[B]),E=fexp(F);
+    var noC=plus(B,{});noC[""]=0;var slips=[FF(g,"",[B]),FF(g,cL,[flipC(B)])];if(three)slips.unshift(FF(g,cL,[noC]));
+    var big=plus(B,{});big[o[0]]=a*g;slips.push(FF(g,cL,[big]));
+    return FQ("Factorise:",fmt(E),F,slips,[],
+      "Every term has "+g+" and "+cL+" in it, so take out "+tm(g,cL,true)+". Divide each term by "+tm(g,cL,true)+(three&&Math.abs(c)===1?" (the last term leaves "+num(c)+", don't leave it out)":"")+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qFully(){
+    var v="x",T=ri(0,2),F,parts,slips;
+    if(T===0){var g=ri(2,5),a,b,t=0;do{a=ri(1,5);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qFully();
+      F=FF(g,v,[lin(v,a,b)]);var sq={};sq["x²"]=g*a;sq["x"]=g*b;var s2={};s2["x²"]=a;s2["x"]=b;
+      parts=[FF(g,"",[s2]),FF(1,v,[lin(v,g*a,g*b)])];slips=[FF(g,v,[lin(v,a,-b)]),FF(g,"",[lin(v,a,b)])];}
+    else if(T===1){var g2=ri(2,5),k=ri(1,9);F=FF(g2,"",[lin(v,1,-k),lin(v,1,k)]);
+      parts=[FF(g2,"",[{"x²":1,"":-k*k}]),FF(1,"",[lin(v,g2,-g2*k),lin(v,1,k)])];slips=[FF(1,"",[lin(v,1,-k),lin(v,1,k)]),FF(g2,"",[lin(v,1,-k),lin(v,1,-k)])];}
+    else{var g3=ri(2,4),p=nz(-6,6),q=nz(-6,6);if(p===q||p===-q)return qFully();
+      F=FF(g3,"",[lin(v,1,p),lin(v,1,q)]);parts=[FF(g3,"",[{"x²":1,"x":p+q,"":p*q}]),FF(1,"",[lin(v,g3,g3*p),lin(v,1,q)])];slips=[FF(1,"",[lin(v,1,p),lin(v,1,q)]),FF(g3,"",[lin(v,1,-p),lin(v,1,-q)])];}
+    return FQ("Which is the FULLY factorised form of",fmt(fexp(F)),F,slips,shuffle(parts),
+      "Fully factorised means no bracket can be factorised any more: take out the HIGHEST common factor"+(T>0?", then factorise what's left":"")+". Answer: "+fs(F)+". The others either don't multiply back to the question, or still have a common factor (or a factorisable bracket) left inside.","",{t:"fully"});
+  }
+  function qBoxT(){
+    var v=rnd(V1),g=ri(2,6),a,b,t=0;do{a=ri(2,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qBoxT();
+    var F=FF(g,v,[lin(v,a,b)]),E=fexp(F),frame=tm(g,v,true)+"(□ "+(b<0?M+" "+(-b):"+ "+b)+") = "+fmt(E);
+    return P("What goes in the box?",frame,T1(a,v),[T1(g*a,v),T1(a,v+"²"),T1(a,""),T1(g*a,v+"²")],
+      tm(g*a,v+"²",true)+" ÷ "+tm(g,v,true)+" = "+tm(a,v,true)+", so the box is "+tm(a,v,true)+"."+chk(F),"",{t:"box"});
+  }
+  function qRectCF(){
+    var v=rnd(["x","a","n"]),g=ri(2,6),withV=Math.random()<.6,a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qRectCF();
+    if(b<0)b=-b;var W=T1(g,withV?v:""),L=lin(v,a,b),A=mul(W,L);
+    return P("This rectangle has the area shown. Write its length as an expression.","",L,[mul(T1(g,""),L),lin(v,a,g*b),lin(v,g*a,b),{"":a+b}],
+      "Area = length × width, so length = area ÷ width. Factorise: "+fmt(A)+" = "+tm(g,withV?v:"",true)+"("+inner(L)+"). Length = "+inner(L)+".",rectSVG("?",tm(g,withV?v:"",true),fmt(A)),{t:"rect"});
+  }
+
+  /* ---------- Grouping ---------- */
+  function grp(){ // returns {A,B,list} with A·B expanded in a pairs-first order
+    var T=ri(0,2),A,B;
+    if(T===0){var P2=rnd([["x","y"],["a","b"],["m","n"],["p","q"]]);A=lin(P2[0],1,nz(-9,9));B=lin(P2[1],1,nz(-9,9));}
+    else if(T===1){var S=rnd([["a","b","x","y"],["s","t","x","y"],["a","b","m","n"]]);A=lin2(S[0],1,S[1],rnd([1,1,-1]));B=lin2(S[2],1,S[3],rnd([1,-1]));if(A[S[1]]<0&&B[S[3]]<0)B[S[3]]=1;}
+    else{var P3=rnd([["a","b"],["x","y"],["p","q"]]),k=ri(2,4),p=nz(-9,9);if(gcd(k,p)!==1)p=p>0?1:-1;A=lin(P3[0],k,p);B=lin(P3[1],1,nz(-9,9));}
+    var ta=terms(A),tb=terms(B),list=[],swap=Math.random()<.35;
+    if(!swap)ta.forEach(function(x){tb.forEach(function(y){list.push([x[0]*y[0],kmul(x[1],y[1])]);});});
+    else tb.forEach(function(y){ta.forEach(function(x){list.push([x[0]*y[0],kmul(x[1],y[1])]);});});
+    return {A:A,B:B,ta:ta,tb:tb,list:list,swap:swap,T:T};
+  }
+  function qGroup(){
+    var G=grp(),F=FF(1,"",[G.A,G.B]);
+    var s1=FF(1,"",[flipC(G.A),G.B]),s2=FF(1,"",[G.A,flipC(G.B)]),s3=FF(1,"",[flipC(G.A),flipC(G.B)]);
+    var sw=null;if(G.T!==1){var A2=plus(G.A,{}),B2=plus(G.B,{}),t=A2[""];A2[""]=B2[""];B2[""]=t;sw=FF(1,"",[A2,B2]);}
+    var f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1],other=G.swap?G.B:G.A;
+    return FQ("Factorise by grouping:",fmtList(G.list),F,[sw,s1,s2,s3],[],
+      "Group in pairs: "+fmtList(G.list.slice(0,2))+" = "+tm(f1[0],f1[1],true)+"("+inner(in1)+") and "+fmtList(G.list.slice(2))+" = "+tm(f2[0],f2[1],true)+"("+inner(in1)+"). The bracket ("+inner(in1)+") is common: ("+inner(in1)+")("+inner(other)+"). Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qGroupGap(){
+    var G;do{G=grp();}while(G.T===1);
+    var f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1];
+    if(f2[1]!=="")return qGroupGap();
+    var frame=fmtList(G.list)+" = "+tm(f1[0],f1[1],true)+"("+inner(in1)+") + □("+inner(in1)+")";
+    return QN("What number goes in the box?",frame,f2[0],[-f2[0],(in1[""]||0),f2[0]*(in1[""]||1),f2[0]+1],
+      "The last two terms are "+fmtList(G.list.slice(2))+". Take out "+num(f2[0])+": "+fmtList(G.list.slice(2))+" = "+num(f2[0])+"("+inner(in1)+"). Check: "+br(f2[0])+" × "+br(in1[""]||0)+" = "+num(G.list[3][0])+". So the box is "+num(f2[0])+".","",{t:"boxn"});
+  }
+  function qGroupFinish(){
+    var G=grp(),f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1],other=G.swap?G.B:G.A,F=FF(1,"",[in1,other]);
+    var frame=tm(f1[0],f1[1],true)+"("+inner(in1)+")"+(f2[0]<0?" "+M+" ":" + ")+tm(Math.abs(f2[0]),f2[1],true)+"("+inner(in1)+")";
+    var s1=FF(1,"",[in1,flipC(other)]),s2=null;if(in1[""]&&other[""]){var I2=plus(in1,{}),O2=plus(other,{}),tc=I2[""];I2[""]=O2[""];O2[""]=tc;s2=FF(1,"",[I2,O2]);}var s4=FF(1,"",[flipC(in1),other]);
+    return FQ("Finish factorising:",frame,F,[s1,s4,s2],[],
+      "Both parts have the bracket ("+inner(in1)+"). Take it out and put what's left in the other bracket: ("+inner(other)+"). Answer: "+fs(F)+".","",{t:"fac"});
+  }
+
+  /* ---------- Trinomials ---------- */
+  function pq(){var p,q,t=0;do{p=nz(-9,9);q=nz(-9,9);t++;}while((p===q||p===-q||Math.abs(p*q)>60)&&t<60);return [p,q];}
+  function pairStr(a,b){return a<=b?num(a)+" and "+num(b):num(b)+" and "+num(a);}
+  function qPair(){
+    var r=pq(),p=r[0],q=r[1],c=p*q,b=p+q,pool=[];
+    for(var i=1;i<=Math.abs(c);i++)if(Math.abs(c)%i===0){var j=c/i;[[i,j],[-i,-j]].forEach(function(x){if(x[0]+x[1]!==b)pool.push(pairStr(x[0],x[1]));});}
+    pool.push(pairStr(-p,-q));pool.push(pairStr(p,-q));pool.push(pairStr(-p,q));
+    return C("Which two numbers multiply to give "+num(c)+" and add to give "+num(b)+"?","",pairStr(p,q),pool,
+      num(p)+" × "+br(q)+" = "+num(c)+" and "+num(p)+" + "+br(q)+" = "+num(b)+". So x² "+(b<0?M+" "+tm(-b,"x",true):"+ "+tm(b,"x",true))+(c<0?" "+M+" "+(-c):" + "+c)+" = (x "+(p<0?M+" "+(-p):"+ "+p)+")(x "+(q<0?M+" "+(-q):"+ "+q)+").",null,"",{t:"pair",c:c,b:b});
+  }
+  function qTri1(){
+    var v=rnd(["x","x","x","a","n","y","t"]),r=pq(),p=r[0],q=r[1],F=FF(1,"",[lin(v,1,p),lin(v,1,q)]),E=fexp(F),slips=[];
+    for(var i=1;i<=Math.abs(p*q);i++)if(Math.abs(p*q)%i===0){var j=p*q/i;if(i+j!==p+q&&i!==j&&slips.length<2)slips.push(FF(1,"",[lin(v,1,i),lin(v,1,j)]));}
+    slips=[FF(1,"",[lin(v,1,-p),lin(v,1,-q)])].concat(shuffle(slips));
+    return FQ("Factorise:",fmt(E),F,slips,[],
+      "Find two numbers that MULTIPLY to "+num(p*q)+" and ADD to "+num(p+q)+": "+num(p)+" and "+num(q)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qTriBox(){
+    var r=pq(),p=r[0],q=r[1],E=mul(lin("x",1,p),lin("x",1,q));
+    var frame="(x "+(p<0?M+" "+(-p):"+ "+p)+")(x + □) = "+fmt(E);
+    return QN("What number goes in the box?",frame,q,[-q,p+q,p*q,q-p,(p+q)-q*0+1],
+      "The two numbers must multiply to "+num(p*q)+" and add to "+num(p+q)+". "+num(p)+" × "+br(q)+" = "+num(p*q)+" and "+num(p)+" + "+br(q)+" = "+num(p+q)+", so the box is "+num(q)+".","",{t:"boxn"});
+  }
+  function qTriArea(){
+    var r=pq(),p=r[0],q=r[1],rows=[[1,"x"],[p,""]],cols=[[1,"x"],[q,""]],E=mul(lin("x",1,p),lin("x",1,q)),F=FF(1,"",[lin("x",1,p),lin("x",1,q)]);
+    var html=areaSVG(rows,cols,function(i,j){return fmt(mul(T1(rows[i][0],rows[i][1]),T1(cols[j][0],cols[j][1])));},true);
+    return FQ("The four boxes add up to "+nb(fmt(E))+". Which brackets go on the sides?","",F,[FF(1,"",[lin("x",1,-p),lin("x",1,-q)]),FF(1,"",[lin("x",1,p*q),lin("x",1,1)])],[],
+      "The side terms multiply to give each box: x × x = x², and the numbers on the sides are "+num(p)+" and "+num(q)+" (they multiply to "+num(p*q)+", the bottom-right box). Answer: "+fs(F)+".",html,{t:"tarea"});
+  }
+  function qTriHL(){
+    var v="x",m=rnd([2,2,3,3,5,4,6]),n=1,p,q,t=0;if(m>=4&&Math.random()<.5){m=2;n=3;}
+    do{p=nz(-7,7);q=nz(-7,7);t++;}while((gcd(m,p)!==1||gcd(n,q)!==1||m*q+n*p===0||m*q===n*p)&&t<60);if(t>=60)return qTriHL();
+    var A=lin(v,m,p),B=lin(v,n,q),F=FF(1,"",[A,B]),E=fexp(F);
+    var sw=FF(1,"",[lin(v,m,q),lin(v,n,p)]);
+    return FQ("Higher Level: factorise:",fmt(E),F,[sw,FF(1,"",[lin(v,m,-p),lin(v,n,-q)]),FF(1,"",[lin(v,m,-q),lin(v,n,-p)])],[],
+      "The x² term "+tm(m*n,"x²",true)+" comes from "+tm(m,v,true)+" × "+tm(n,v,true)+", and the number "+num(p*q)+" from "+num(p)+" × "+br(q)+". Try the pairs until the middle term works: "+tm(m,v,true)+" × "+br(q)+" + "+br(p)+" × "+tm(n,v,true)+" = "+tm(m*q+n*p,v,true)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qTriCF(){
+    var v="x",g=ri(2,5),r=pq(),p=r[0],q=r[1],F=FF(g,"",[lin(v,1,p),lin(v,1,q)]),tri={"x²":1,"x":p+q,"":p*q};
+    return FQ("Factorise fully:",fmt(fexp(F)),F,[FF(1,"",[lin(v,1,p),lin(v,1,q)]),FF(g,"",[lin(v,1,-p),lin(v,1,-q)])],[FF(g,"",[tri]),FF(1,"",[lin(v,g,g*p),lin(v,1,q)])],
+      "First take out the common factor "+g+": "+g+"("+inner(tri)+"). Then factorise the bracket: two numbers that multiply to "+num(p*q)+" and add to "+num(p+q)+" are "+num(p)+" and "+num(q)+". Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qRectTri(){
+    var r=pq(),p=r[0],q=r[1];if(p<1&&q<1)return qRectTri();if(p<1){var tt=p;p=q;q=tt;}
+    var L=lin("x",1,p),W=lin("x",1,q),A=mul(L,W);
+    return P("This rectangle has the area shown. Write its width as an expression.","",W,[lin("x",1,-q),lin("x",1,p*q),lin("x",1,p+q)],
+      "Factorise the area: "+fmt(A)+" = ("+inner(L)+")("+inner(W)+"). The length is "+inner(L)+", so the width is "+inner(W)+".",rectSVG(inner(L),"?",fmt(A)),{t:"rect"});
+  }
+
+  /* ---------- Difference of two squares & checks ---------- */
+  function qDots1(){
+    var v=rnd(["x","x","a","y","n","t"]),a=ri(1,12),F=FF(1,"",[lin(v,1,-a),lin(v,1,a)]),E=fexp(F);
+    return FQ("Factorise:",fmt(E),F,[FF(1,"",[lin(v,1,-a),lin(v,1,-a)]),FF(1,"",[lin(v,1,a),lin(v,1,a)]),a>1?FF(1,"",[lin(v,1,-a*a),lin(v,1,1)]):null,FF(1,v,[lin(v,1,-a)])],[],
+      fmt(E)+" is a difference of two squares: "+v+"² "+M+" "+a+"². So it is ("+v+" "+M+" "+a+")("+v+" + "+a+")."+chk(F),"",{t:"fac"});
+  }
+  function qDotsHL(){
+    var P2=rnd([["x","y"],["a","b"],["p","q"],["x",""],["x",""]]),u=P2[0],w=P2[1],p,q,t=0;
+    do{p=ri(2,7);q=ri(1,9);t++;}while((gcd(p,q)!==1)&&t<40);if(gcd(p,q)!==1)return qDotsHL();
+    var F=FF(1,"",[lin2(u,p,w,-q),lin2(u,p,w,q)]),E=fexp(F);
+    return FQ("Higher Level: factorise:",fmt(E),F,[FF(1,"",[lin2(u,p*p,w,-q),lin2(u,1,w,q)]),FF(1,"",[lin2(u,p,w,-q),lin2(u,p,w,-q)]),FF(1,"",[lin2(u,p,w,-q*q),lin2(u,p,w,1)])],[],
+      tm(p*p,u+"²",true)+" = ("+tm(p,u,true)+")² and "+tm(q*q,w?w+"²":"",true)+" = ("+tm(q,w,true)+")². A difference of two squares: (first − second)(first + second). Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qDotsCF(){
+    var v="x",g=ri(2,5),a=ri(1,9),F=FF(g,"",[lin(v,1,-a),lin(v,1,a)]);
+    return FQ("Factorise fully:",fmt(fexp(F)),F,[FF(1,"",[lin(v,1,-a),lin(v,1,a)]),FF(g,"",[lin(v,1,-a),lin(v,1,-a)])],[FF(g,"",[{"x²":1,"":-a*a}]),FF(1,"",[lin(v,g,-g*a),lin(v,1,a)])],
+      "Take out the common factor "+g+" first: "+g+"(x² "+M+" "+a*a+"). Then x² "+M+" "+a*a+" is a difference of two squares. Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qIsDots(){
+    var v=rnd(["x","a","y"]),a=ri(2,10),ans=v+"² "+M+" "+a*a;
+    var pool=[v+"² + "+a*a,v+"² "+M+" "+(a*a+rnd([1,-1,2])),v+"³ "+M+" "+a*a,"2"+v+"² "+M+" "+a*a,v+"² "+M+" "+2*a*a,v+"² "+M+" "+a+v];
+    return C("Which of these is a difference of two squares?","",ans,pool,
+      ans+" = "+v+"² "+M+" "+a+"²: two perfect squares with a MINUS between them, so it factorises as ("+v+" "+M+" "+a+")("+v+" + "+a+"). A plus sign, a number that isn't a square, or a power that isn't 2 doesn't work.",ans+" is a difference of two squares","",{t:"isdots"});
+  }
+  function qDotsNum(){
+    var A,B,t=0;do{A=ri(31,99);B=ri(11,A-2);t++;}while(((A+B)%10!==0&&(A-B)%10!==0)&&t<60);
+    return QN("Use factorising to work out, without a calculator:",A+"² "+M+" "+B+"²",(A-B)*(A+B),[(A-B)*(A-B),A-B,A+B,(A-B)*(A+B)+10],
+      A+"² "+M+" "+B+"² = ("+A+" "+M+" "+B+")("+A+" + "+B+") = "+(A-B)+" × "+(A+B)+" = "+(A-B)*(A+B)+".","",{t:"dnum"});
+  }
+  function qClaimF(){
+    var N=rnd(NAMES),nm=N[0],he=N[1],T=ri(0,5),r=pq(),p=r[0],q=r[1],L,R,truth,alts;
+    var a=ri(2,9),g=ri(2,5);
+    if(T===0){L=mul(lin("x",1,p),lin("x",1,q));R=FF(1,"",[lin("x",1,p),lin("x",1,q)]);truth=null;alts=[FF(1,"",[lin("x",1,-p),lin("x",1,-q)]),FF(1,"",[lin("x",1,p*q),lin("x",1,1)])];}
+    else if(T===1){L=mul(lin("x",1,p),lin("x",1,q));R=FF(1,"",[lin("x",1,-p),lin("x",1,-q)]);truth=FF(1,"",[lin("x",1,p),lin("x",1,q)]);alts=[FF(1,"",[lin("x",1,p),lin("x",1,-q)]),FF(1,"",[lin("x",1,-p),lin("x",1,q)])];}
+    else if(T===2){L={"x²":1,"":-a*a};R=FF(1,"",[lin("x",1,-a),lin("x",1,-a)]);truth=FF(1,"",[lin("x",1,-a),lin("x",1,a)]);alts=[FF(1,"",[lin("x",1,a),lin("x",1,a)]),FF(1,"",[lin("x",1,-a*a),lin("x",1,1)])];}
+    else if(T===3){L={"x²":1,"":-a*a};R=FF(1,"",[lin("x",1,a),lin("x",1,-a)]);truth=null;alts=[FF(1,"",[lin("x",1,-a),lin("x",1,-a)]),FF(1,"",[lin("x",1,a),lin("x",1,a)]),FF(1,"",[lin("x",1,-a*a),lin("x",1,1)]),FF(1,"x",[lin("x",1,-a)])];}
+    else if(T===4){var b;do{b=nz(-9,9);}while(gcd(a,b)!==1);L=mul(T1(g,""),lin("x",a,b));R=FF(g,"",[lin("x",a,g*b)]);truth=FF(g,"",[lin("x",a,b)]);alts=[FF(g,"",[lin("x",a,-b)]),FF(g,"x",[lin("x",a,b)])];}
+    else{var b2;do{b2=nz(-9,9);}while(gcd(a,b2)!==1);L=mul(T1(g,"x"),lin("x",a,b2));R=FF(g,"x",[lin("x",a,b2)]);truth=null;alts=[FF(g,"",[lin("x",a,b2)]),FF(g,"x",[lin("x",a,-b2)]),FF(g,"x",[lin("x",a,g*b2)]),FF(g,"x²",[lin("x",a,b2)])];}
+    var lhs=fmt(L),rhs=fs(R),ans=truth?"Wrong: it should be "+fs(truth):"Right",base=truth||R;
+    base.b.forEach(function(B,i){var G=FF(base.c,base.k,base.b.slice());G.b[i]=flipC(B);alts.push(G);});alts.push(FF(base.c,base.k,base.b.map(flipC)));
+    var sE={};sE[fmt(L)]=1;var pool=(truth?["Right"]:[]).concat(shuffle(alts).filter(function(G){var e=fmt(fexp(G));if(sE[e]||fs(G)===rhs)return false;sE[e]=1;return true;}).map(function(G){return "Wrong: it should be "+fs(G);}));
+    return C(nm+" writes: "+nb(lhs+" = "+rhs)+". Is "+he+" right?","",ans,pool,
+      "Check by multiplying out: "+rhs+" = "+fmt(fexp(R))+(truth?", not "+lhs+". The right answer is "+fs(truth)+".":", which is "+lhs+" ✓. So "+he+" is right."),
+      lhs+" = "+rhs+"? → "+ans,"",{t:"claim"});
+  }
+
+  var MAKERS={
+    common:[qHCF,qCF1,qCF1,qCF2,qCF2,qCF3,qCF3,qFully,qBoxT,qRectCF],
+    group:[qGroup,qGroup,qGroup,qGroupGap,qGroupGap,qGroupFinish,qGroupFinish],
+    trinomial:[qPair,qTri1,qTri1,qTri1,qTriBox,qTriArea,qTriCF,qRectTri,qTriHL],
+    squares:[qDots1,qDots1,qDots1,qDotsHL,qDotsCF,qIsDots,qDotsNum,qClaimF,qClaimF],
+    mixed:[qHCF,qCF1,qCF2,qCF3,qFully,qBoxT,qRectCF,qGroup,qGroupGap,qGroupFinish,qPair,qTri1,qTriBox,qTriArea,qTriCF,qRectTri,qTriHL,qDots1,qDotsHL,qDotsCF,qIsDots,qDotsNum,qClaimF]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="common"||m==="trinomial")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="common"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="common"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+

@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factor Match: Factorising Game | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: factorise by taking out the highest common factor, by grouping, quadratic trinomials x² + bx + c and the difference of two squares, plus Higher Level ax² + bx + c, with an exam corner.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:360px;margin:6px auto 0;font-size:17px}.steps p{margin:4px 0}.fp{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:300px;margin:8px auto 0}.fp span{background:#fff;border:2px solid var(--line);border-radius:10px;padding:6px;text-align:center;font-weight:700}.fp span.y{background:var(--yellow,#F6CF5A)}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Factor Match</h1>
+        <p>60 seconds. Put the brackets back: take out the highest common factor, factorise by grouping, crack x² + bx + c and spot a difference of two squares. Every answer can be checked by multiplying out. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="common"><div><b>Common factor</b><span>The HCF of 12x²y and 18xy², then 6x + 9, 4x² − 10x, 6ab + 9ac and "which is FULLY factorised?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="group"><div><b>Grouping</b><span>Four terms in pairs: xy − 3x + 2y − 6 = x(y − 3) + 2(y − 3) = (x + 2)(y − 3)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="trinomial"><div><b>x² + bx + c</b><span>Two numbers that multiply and add, the area model backwards, rectangles, and a Higher Level round of 2x² + 7x + 3</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="squares"><div><b>Squares &amp; checks</b><span>x² − 49, the difference of two squares, 53² − 47² without a calculator, and is the working right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Common factor, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcome: AF.3d (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Factorising</h2>
+        <p>Factorising is expanding <b>backwards</b>: you start with x² + 5x + 6 and put the brackets back, (x + 2)(x + 3). You can always check your answer by multiplying it out again.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are some brackets that have been multiplied out. Look at the two numbers in the brackets and the last two numbers in the answer:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">(x + 2)(x + 3) = x² + <b>5</b>x + <b>6</b></li>
+          <li class="note">(x + 1)(x + 6) = x² + <b>7</b>x + <b>6</b></li>
+          <li class="note">(x − 2)(x − 3) = x² <b>− 5</b>x + <b>6</b></li>
+          <li class="note">(x + 6)(x − 1) = x² + <b>5</b>x <b>− 6</b></li>
+        </ul>
+        <p style="margin-top:10px">Now go backwards. Can you put the brackets back on x² + 8x + 12? On x² − x − 12?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The two numbers in the brackets <b>multiply</b> to give the last number and <b>add</b> to give the middle number. For x² + 8x + 12 you want two numbers that multiply to 12 and add to 8. List the pairs that make 12:</p>
+          <div class="fp"><span>1 and 12 → 13</span><span>2 and 6 → <b>8</b> ✓</span><span>3 and 4 → 7</span><span>−2 and −6 → −8</span></div>
+          <p style="margin-top:8px">So x² + 8x + 12 = <b>(x + 2)(x + 6)</b>. For x² − x − 12: multiply to −12, add to −1 → 3 and −4, so <b>(x + 3)(x − 4)</b>. Check: x² − 4x + 3x − 12 = x² − x − 12 ✓.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">1. Take out the highest common factor (HCF)</h3>
+        <p>Always look for this first. Find the biggest number and the letters that are in <b>every</b> term (each letter with its <b>smallest</b> power), put it outside, and divide each term by it.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>6x + 9</b>: HCF = 3. 6x ÷ 3 = 2x, 9 ÷ 3 = 3. So <b>3(2x + 3)</b>.</li>
+          <li class="note"><b>4x² − 10x</b>: HCF = 2x. 4x² ÷ 2x = 2x, −10x ÷ 2x = −5. So <b>2x(2x − 5)</b>.</li>
+          <li class="note"><b>6ab + 9ac − 3a</b>: HCF = 3a. So <b>3a(2b + 3c − 1)</b>. Don't lose the 1: 3a ÷ 3a = 1.</li>
+          <li class="note">The HCF of <b>12x²y</b> and <b>18xy²</b> is <b>6xy</b>: 6 is the HCF of 12 and 18, x is in both (smallest power x¹), y is in both (smallest power y¹).</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Fully factorised</b> means nothing more can come out. 4x² − 10x = 2(2x² − 5x) is true, but 2x² − 5x still has an x in both terms, so it is <b>not</b> fully factorised. The full answer is 2x(2x − 5).</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">2. Grouping (four terms)</h3>
+        <p>Split the four terms into two pairs. Take a common factor out of each pair. The same bracket appears twice: take it out.</p>
+        <div class="note"><b>xy − 3x + 2y − 6</b><br>= x(y − 3) + 2(y − 3)<br>= <b>(y − 3)(x + 2)</b></div>
+        <ul style="margin-top:10px">
+          <li>Letters only: ax − ay + bx − by = a(x − y) + b(x − y) = <b>(x − y)(a + b)</b>.</li>
+          <li>If the second pair starts with a minus, take out the minus too: 2ab + 8a − 3b − 12 = 2a(b + 4) <b>− 3</b>(b + 4) = <b>(b + 4)(2a − 3)</b>. Check: −3 × 4 = −12 ✓.</li>
+          <li>The two brackets must be <b>exactly</b> the same. If they aren't, check the signs in the second pair.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">3. Quadratic trinomials: x² + bx + c</h3>
+        <p>Find two numbers that <b>multiply</b> to c and <b>add</b> to b. Then x² + bx + c = (x + first)(x + second).</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Signs help:</b> c positive → both numbers have the same sign as b. c negative → one plus, one minus (the bigger one takes the sign of b).</li>
+          <li class="note">x² + 7x + 10: 2 × 5 = 10, 2 + 5 = 7 → <b>(x + 2)(x + 5)</b>.</li>
+          <li class="note">x² − 9x + 14: −2 × −7 = 14, −2 + −7 = −9 → <b>(x − 2)(x − 7)</b>.</li>
+          <li class="note">x² + 2x − 15: 5 × −3 = −15, 5 + −3 = 2 → <b>(x + 5)(x − 3)</b>.</li>
+        </ul>
+        <p style="margin-top:10px">The <b>area model backwards</b>: the four boxes of (x + 5)(x − 3) are x², −3x, 5x and −15. Put x² and −15 in opposite corners, split the middle term into two boxes that work, and read the sides.</p>
+        <div class="note" style="overflow-x:auto">
+          <svg viewBox="0 0 250 160" width="100%" style="max-width:300px;display:block;margin:0 auto" role="img" aria-label="Area model for x² + 2x − 15: boxes x², −3x, 5x, −15 with sides x, +5 and x, −3">
+            <g font-family="Inter,sans-serif" font-weight="700" font-size="17" fill="#1B2430" text-anchor="middle">
+              <text x="107" y="23" fill="#C0392B">x</text><text x="193" y="23" fill="#C0392B">−3</text>
+              <text x="52" y="69" text-anchor="end" fill="#C0392B">x</text><text x="52" y="127" text-anchor="end" fill="#C0392B">+5</text>
+              <rect x="64" y="34" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="150" y="34" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/>
+              <rect x="64" y="92" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/><rect x="150" y="92" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/>
+              <text x="107" y="69">x²</text><text x="193" y="69">−3x</text><text x="107" y="127">5x</text><text x="193" y="127">−15</text>
+            </g>
+          </svg>
+          <p style="margin-top:6px;text-align:center"><b>x² + 2x − 15</b> = <b>(x + 5)(x − 3)</b></p>
+        </div>
+        <div class="note" style="margin-top:10px"><b>Higher Level: ax² + bx + c.</b> Try pairs of brackets that give the first term and the last term, and check the middle. 2x² + 7x + 3: 2x² = 2x × x, 3 = 1 × 3. Try (2x + 1)(x + 3): middle = 2x × 3 + 1 × x = 7x ✓. So <b>2x² + 7x + 3 = (2x + 1)(x + 3)</b>. (Swapping the numbers, (2x + 3)(x + 1), gives 5x: wrong.)</div>
+        <div class="note" style="margin-top:10px"><b>Common factor first:</b> 3x² + 15x + 18 = 3(x² + 5x + 6) = <b>3(x + 2)(x + 3)</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">4. The difference of two squares</h3>
+        <p>A square <b>minus</b> a square: <b>a² − b² = (a − b)(a + b)</b>. The middle terms cancel when you multiply out.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>x² − 49</b> = x² − 7² = <b>(x − 7)(x + 7)</b>.</li>
+          <li class="note"><b>2x² − 18</b> = 2(x² − 9) = <b>2(x − 3)(x + 3)</b>. Common factor first.</li>
+          <li class="note"><b>Higher Level:</b> 9x² − 4y² = (3x)² − (2y)² = <b>(3x − 2y)(3x + 2y)</b>.</li>
+          <li class="note"><b>No calculator:</b> 53² − 47² = (53 − 47)(53 + 47) = 6 × 100 = <b>600</b>.</li>
+          <li class="note">x² <b>+</b> 49 is NOT a difference of two squares (it's a sum), and x² − 12 isn't either (12 isn't a square number).</li>
+        </ul>
+
+        <div class="note" style="margin-top:12px"><b>Which method?</b> 1. Common factor first, always. 2. Two terms with a minus and both squares → difference of two squares. 3. Three terms → x² + bx + c (or ax² + bx + c). 4. Four terms → grouping. <b>Then check by multiplying out.</b></div>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> 6ab + 9ac − 3a = 3a(2b + 3c) (the 1 is lost), 4x² − 10x = 2(2x² − 5x) (not fully factorised), x² − 5x + 6 = (x + 2)(x + 3) (signs: it's (x − 2)(x − 3)), and x² − 9 = (x − 3)(x − 3) (that gives x² − 6x + 9).</div>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Expanding brackets came in Algebra 2. Solving quadratic equations by factorising comes in Quadratic equations; algebraic fractions and long division come in Algebra 4.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>"Factorise" (or "factorise fully") is one of the most common short parts on the paper, often with three parts: a common factor, grouping or a trinomial, and a difference of two squares. Factorising also turns up inside bigger questions: solving a quadratic equation, simplifying an algebraic fraction, finding the sides of a rectangle from its area, and working out sums like 87² − 13² without a calculator.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Take out the highest common factor first</b>, and check nothing is left to take out ("fully").</li>
+            <li><b>Show the middle line in grouping</b>: x(y + 4) − 3(y + 4). It earns marks even if you slip after.</li>
+            <li><b>Watch the signs</b>: for x² − x − 12 the numbers are 3 and −4, not −3 and 4.</li>
+            <li><b>Don't lose a 1</b> when a whole term comes out: 5x² + x = x(5x + 1).</li>
+            <li><b>Check by multiplying out</b>, or put x = 1 into the question and your answer.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Factorise.</b> (a) 6x² − 15x &nbsp;(b) xy + 4x − 3y − 12 &nbsp;(c) x² − 64
+              <details><summary>Show the worked answer</summary><p>(a) HCF = 3x: <b>3x(2x − 5)</b>.<br>(b) x(y + 4) − 3(y + 4) = <b>(y + 4)(x − 3)</b>.<br>(c) x² − 8² = <b>(x − 8)(x + 8)</b>.</p></details></li>
+            <li><b>The rectangle.</b> A rectangle has area x² − 2x − 24 cm² and its length is x + 4 cm. (a) Factorise x² − 2x − 24. (b) Write the width of the rectangle. (c) Find the length and the width when x = 10, and check that they give the right area.
+              <details><summary>Show the worked answer</summary><p>(a) Multiply to −24, add to −2: 4 and −6. <b>(x + 4)(x − 6)</b>.<br>(b) Width = <b>x − 6</b> cm.<br>(c) Length 14 cm, width 4 cm: 14 × 4 = 56. And 10² − 2(10) − 24 = 100 − 20 − 24 = <b>56 cm²</b> ✓.</p></details></li>
+            <li><b>Squares.</b> (a) Use factorising to work out 87² − 13² without a calculator. (b) Factorise fully 5x² − 45. (c) <i>Higher Level:</i> factorise 4x² − 9y².
+              <details><summary>Show the worked answer</summary><p>(a) (87 − 13)(87 + 13) = 74 × 100 = <b>7,400</b>.<br>(b) 5(x² − 9) = <b>5(x − 3)(x + 3)</b>.<br>(c) (2x)² − (3y)² = <b>(2x − 3y)(2x + 3y)</b>.</p></details></li>
+            <li><b>Spot the mistake.</b> Ciara wrote 2x² + 8x = 2(x² + 4x). (a) Is her answer equal to 2x² + 8x? Is it fully factorised? (b) Write the fully factorised form. (c) <i>Higher Level:</i> factorise 2x² + 7x + 3 and check your answer with x = 1.
+              <details><summary>Show the worked answer</summary><p>(a) Yes, 2(x² + 4x) = 2x² + 8x, but it is <b>not</b> fully factorised: x² + 4x still has x in both terms.<br>(b) <b>2x(x + 4)</b>.<br>(c) <b>(2x + 1)(x + 3)</b>. Check with x = 1: 2 + 7 + 3 = 12, and (3)(4) = 12 ✓.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/factorising-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Factorising Teacher Pack (€5)</a>: Factor Match mingle cards, Grouping Relay, Factorising Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−"; // proper minus sign
+  function num(n){return n<0?M+(-n):String(n);}
+  function br(n){return n<0?"("+num(n)+")":String(n);}       // value in brackets when negative
+  function sum(list){return list.map(function(c,i){return i===0?num(c):(c<0?" "+M+" "+(-c):" + "+c);}).join("");}
+  /* ---------- expressions: a map {key: coefficient}; key "" = constant, "x", "x²", "xy", "ab" ... ---------- */
+  function deg(k){var d=0;for(var i=0;i<k.length;i++){var c=k[i];d+=c==="²"?1:c==="³"?2:c==="⁴"?3:1;}return d;}
+  function keys(m){return Object.keys(m).filter(function(k){return m[k]!==0;}).sort(function(a,b){return deg(b)-deg(a)||(a<b?-1:a>b?1:0);});}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function fmtList(list){if(!list.length)return "0";return list.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // list of [coef,key] in this order
+  function fmt(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));} // standard order (highest power first)
+  function mapOf(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+t[0];});return m;}
+  function plus(a,b){var m={};[a,b].forEach(function(x){for(var k in x)m[k]=(m[k]||0)+x[k];});return m;}
+  function times(a,s){var m={};for(var k in a)m[k]=a[k]*s;return m;}
+  function absMap(list){var m={};list.forEach(function(t){m[t[1]]=(m[t[1]]||0)+Math.abs(t[0]);});return m;}
+  function same(a,b){return fmt(a)===fmt(b);}
+  /* expression question: wrong options never EQUAL the answer as expressions, no duplicates */
+  function P(en,frame,ans,slips,why,html,data){var A=fmt(ans),seen={},out=[];seen[A]=1;
+    var pads=[];keys(ans).forEach(function(k){var a=plus(ans,{});a[k]+=1;pads.push(a);var b=plus(ans,{});b[k]-=1;pads.push(b);var c=plus(ans,{});c[k]=-c[k];pads.push(c);});
+    slips.concat(shuffle(pads)).forEach(function(m){if(!m)return;var s=fmt(m);if(s==="0"||seen[s]||out.length>=3)return;seen[s]=1;out.push(s);});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* whole-number question (negatives allowed) */
+  function QN(en,frame,ans,slips,why,html,data){var seen={},out=[];seen[ans]=1;
+    slips.concat(shuffle([ans+1,ans-1,-ans,ans+2,ans-2,ans+10,ans-10])).forEach(function(x){if(x==null||!isFinite(x)||x!==Math.round(x)||seen[x]||out.length>=3)return;seen[x]=1;out.push(num(x));});
+    return {en:en,frame:frame,html:html||"",answer:num(ans),wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+num(ans),data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  /* Bracket Blaster: expansions are written in standard order (highest power first), so no positive-first swap */
+  function fmtStd(m){return fmtList(keys(m).map(function(k){return [m[k],k];}));}
+  /* ---------- multiplying terms: a key is letters with powers, e.g. "x²", "ab", "a²b" ---------- */
+  var SUPS={"²":2,"³":3,"⁴":4,"⁵":5},SUPC=["","","²","³","⁴","⁵"];
+  function kp(k){var p={},i=0;while(i<k.length){var L=k[i];i++;var e=1;if(i<k.length&&SUPS[k[i]]){e=SUPS[k[i]];i++;}p[L]=(p[L]||0)+e;}return p;}
+  function kstr(p){return Object.keys(p).sort().map(function(L){return L+SUPC[p[L]];}).join("");}
+  function kmul(a,b){var p=kp(a),q=kp(b);for(var L in q)p[L]=(p[L]||0)+q[L];return kstr(p);}
+  function mul(A,B){var m={};for(var a in A)for(var b in B){if(!A[a]||!B[b])continue;var k=kmul(a,b);m[k]=(m[k]||0)+A[a]*B[b];}return m;}
+  function T1(c,k){var m={};m[k]=c;return m;}
+  function lin(v,a,b){var m={};m[v]=a;m[""]=b;return m;}            // a·v + b
+  function inner(m){return fmtStd(m);}
+  function brk(c,k,m){ // c·k outside a bracket: "3(x − 4)", "−(x + 2)", "2x(x − 5)"
+    var out=k===""?(c===1?"":c===-1?M:num(c)):tm(c,k,true);return out+"("+inner(m)+")";}
+  function sq(m){return "("+inner(m)+")²";}
+  function pr(A,B){return "("+inner(A)+")("+inner(B)+")";}
+  function cnt(m){return keys(m).length;}
+  var INK="#1B2430",YEL="#F6CF5A";
+
+  /* ---------- area-model picture: rows × columns, each cell = row term × column term ---------- */
+  function areaSVG(rows,cols,show,hideHeads){ // rows/cols: [[coef,key],…]; show(i,j) → "text" | "?" | ""; hideHeads → "?" on the sides
+    var cw=86,rh=58,L=64,Tp=34,W=L+cw*cols.length+6,H=Tp+rh*rows.length+6,o="";
+    function txt(x,y,s,cls,extra,fill,size,anchor){return '<text class="'+cls+'" '+(extra||"")+' x="'+x+'" y="'+y+'" font-size="'+(size||17)+'" font-weight="700" text-anchor="'+(anchor||"middle")+'" fill="'+(fill||INK)+'" font-family="Inter,sans-serif">'+s+'</text>';}
+    cols.forEach(function(c,j){var s=hideHeads?"?":tm(c[0],c[1],true);o+=txt(L+cw*j+cw/2,Tp-11,s,"ch",'data-t="'+s+'"',hideHeads?"#C0392B":INK);});
+    rows.forEach(function(r,i){var s=hideHeads?"?":tm(r[0],r[1],true);o+=txt(L-12,Tp+rh*i+rh/2+6,s,"rh",'data-t="'+s+'"',hideHeads?"#C0392B":INK,17,"end");
+      cols.forEach(function(c,j){var s=show(i,j),q=s==="?";
+        o+='<rect x="'+(L+cw*j)+'" y="'+(Tp+rh*i)+'" width="'+cw+'" height="'+rh+'" fill="'+(q?YEL:(i+j)%2?"#E9F5EE":"#fff")+'" stroke="'+INK+'" stroke-width="2"/>';
+        if(s)o+=txt(L+cw*j+cw/2,Tp+rh*i+rh/2+6,s,"cell",'data-i="'+i+'" data-j="'+j+'"',INK,q?22:16);});});
+    return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:'+Math.min(340,Math.round(W*1.4))+'px" role="img" aria-label="Area model with boxes '+rows.map(function(r,i){return cols.map(function(c,j){return show(i,j);}).join(", ");}).join(", ")+'">'+o+'</svg>';}
+  function terms(m){return keys(m).map(function(k){return [m[k],k];});}
+  /* rectangle: top label, side label, area written inside (one side is "?") */
+  function rectSVG(top,side,area){
+    var T=function(x,y,s,i,a){return '<text data-side="'+i+'" x="'+x+'" y="'+y+'" font-size="19" font-weight="700" text-anchor="'+(a||"middle")+'" fill="'+(s==="?"?"#C0392B":INK)+'" font-family="Inter,sans-serif">'+s+'</text>';};
+    return '<svg viewBox="0 0 330 140" width="100%" style="max-width:330px" role="img" data-shape="rect" aria-label="Rectangle: length '+top+', width '+side+', area '+area+'"><rect x="80" y="32" width="200" height="94" fill="'+YEL+'" stroke="'+INK+'" stroke-width="3"/>'+T(180,24,top,0)+T(72,85,side,1,"end")+
+      '<text data-area="'+area+'" x="180" y="78" font-size="15" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">Area = '+area+'</text><text x="180" y="98" font-size="15" font-weight="700" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif"></text></svg>';}
+
+  /* ---------- factorised forms: {c: number outside, k: letters outside, b: [bracket maps]} ---------- */
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+  function gcdL(l){return l.reduce(function(a,b){return gcd(a,b);},0);}
+  function mk(p){var q={};for(var L in p)if(p[L])q[L]=p[L];return kstr(q);}   // key from powers, zero powers dropped
+  function FF(c,k,b){return {c:c,k:k||"",b:b||[]};}
+  function fexp(F){var m=T1(F.c,F.k);F.b.forEach(function(B){m=mul(m,B);});return m;}
+  function fout(F){if(!F.b.length)return tm(F.c,F.k,true);return F.k===""?(F.c===1?"":F.c===-1?M:num(F.c)):tm(F.c,F.k,true);}
+  function fs(F){return fout(F)+F.b.map(function(B){return "("+inner(B)+")";}).join("");}
+  function fcanon(F){return fout(F)+"|"+F.b.map(function(B){return inner(B);}).sort().join("|");}
+  function flipC(B){var m=plus(B,{});if(m[""])m[""]=-m[""];else{var k=keys(m);m[k[k.length-1]]=-m[k[k.length-1]];}return m;}
+  /* factorising question: wrong options never equal the answer (unless they are listed as partial = not fully factorised,
+     only allowed when the question says "fully"), never equal each other, never the answer with the brackets swapped */
+  function FQ(en,frame,F,slips,partials,why,html,data){
+    var A=fs(F),AE=fmt(fexp(F)),seen={},seenE={},out=[];seen[fcanon(F)]=1;seenE[AE]=1;
+    var pads=[];F.b.forEach(function(B,i){var G=FF(F.c,F.k,F.b.slice());G.b[i]=flipC(B);pads.push(G);});
+    if(F.b.length===2){pads.push(FF(F.c,F.k,[flipC(F.b[0]),flipC(F.b[1])]));}
+    if(F.b.length===1&&F.c!==1)pads.push(FF(F.c+1,F.k,F.b));
+    var full=/fully/i.test(en),cand=(full?(partials||[]):[]).map(function(G){return [G,1];}).concat(slips.concat(shuffle(pads)).map(function(G){return [G,0];}));
+    cand.forEach(function(x){var G=x[0];if(!G||out.length>=3)return;var cn=fcanon(G),e=fmt(fexp(G));if(seen[cn]||e==="0")return;
+      if(x[1]){if(e!==AE)return;}else{if(seenE[e])return;seenE[e]=1;}
+      if(G.b.some(function(B){return keys(B).length<1;}))return;
+      seen[cn]=1;out.push(fs(G));});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  function lin2(u,a,w,b){var m={};m[u]=a;m[w]=b;return m;}   // a·u + b·w (w may be "")
+  var NAMES=[["Ciara","she"],["Liam","he"],["Aoife","she"],["Jack","he"],["Zara","she"],["Oisín","he"],["Emma","she"],["Tomás","he"]];
+  var V1=["x","x","x","a","n","y","t","p"];
+  function nb(s){return s.replace(/ /g,"\u00a0");}
+  function chk(F){return " Check by multiplying out: "+fs(F)+" = "+fmt(fexp(F))+" ✓";}
+
+  /* ---------- Common factor ---------- */
+  function qHCF(){
+    var P2=rnd([["x","y"],["a","b"],["m","n"],["p","q"]]),u=P2[0],w=P2[1],g=ri(2,6),a1,a2,t=0;
+    do{a1=ri(1,6);a2=ri(1,6);t++;}while((a1===a2||gcd(a1,a2)!==1)&&t<40);
+    var e=[ri(1,3),ri(1,3)],f=[ri(0,2),ri(0,2)];if(Math.random()<.4){f=[0,0];}
+    var p1={},p2={};p1[u]=e[0];p1[w]=f[0];p2[u]=e[1];p2[w]=f[1];
+    var K1=mk(p1),K2=mk(p2),hp={};hp[u]=Math.min(e[0],e[1]);hp[w]=Math.min(f[0],f[1]);var HK=mk(hp),lp={};lp[u]=Math.max(e[0],e[1]);lp[w]=Math.max(f[0],f[1]);
+    var ans=T1(g,HK),frame=tm(g*a1,K1,true)+" and "+tm(g*a2,K2,true);
+    var s1=T1(g,mk(lp)),s2=T1(g,""),s3=T1(g*a1*a2,HK),s4=T1(g===4||g===6?g/2:1,HK);
+    return P("What is the highest common factor (HCF) of",frame,ans,[s1,s2,s3,s4],
+      "Numbers: the HCF of "+g*a1+" and "+g*a2+" is "+g+". Letters: take each letter that is in BOTH terms, with the SMALLER power"+(HK?": "+HK:" (no letter is in both terms)")+". HCF = "+tm(g,HK,true)+".","",{t:"hcf",terms:[tm(g*a1,K1,true),tm(g*a2,K2,true)]});
+  }
+  function qCF1(){
+    var v=rnd(V1),g=ri(2,9),a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qCF1();
+    var F=FF(g,"",[lin(v,a,b)]),E=fexp(F);
+    return FQ("Factorise:",fmt(E),F,[FF(g,"",[lin(v,a,g*b)]),FF(g,"",[lin(v,g*a,b)]),FF(g,"",[lin(v,a,-b)]),FF(g,v,[lin(v,a,b)])],[],
+      "The HCF of "+g*a+" and "+Math.abs(g*b)+" is "+g+". Divide each term by "+g+": "+tm(g*a,v,true)+" ÷ "+g+" = "+tm(a,v,true)+", "+num(g*b)+" ÷ "+g+" = "+num(b)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qCF2(){
+    var v=rnd(V1),g=ri(1,6),a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qCF2();
+    var F=FF(g,v,[lin(v,a,b)]),E=fexp(F),sq={};sq[v+"²"]=a;sq[v]=b;
+    return FQ("Factorise:",fmt(E),F,[FF(g,v,[sq]),FF(g,"",[lin(v,a,b)]),FF(g,v,[lin(v,a,-b)]),FF(g,v+"²",[lin(v,a,b)])],[],
+      "Both terms have "+(g>1?g+" and ":"")+v+" in them, so the HCF is "+tm(g,v,true)+". "+tm(g*a,v+"²",true)+" ÷ "+tm(g,v,true)+" = "+tm(a,v,true)+" and "+tm(g*b,v,true)+" ÷ "+tm(g,v,true)+" = "+num(b)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qCF3(){
+    var S=rnd([["a","b","c"],["x","y","z"],["p","q","r"]]),i=ri(0,2),cL=S[i],o=S.filter(function(x,j){return j!==i;}),g=ri(2,6),a,b,c,t=0,three=Math.random()<.5;
+    do{a=ri(1,5);b=nz(-6,6);c=three?(Math.random()<.6?rnd([1,-1]):nz(-5,5)):0;t++;}while(gcdL([a,b,c])!==1&&t<40);if(gcdL([a,b,c])!==1)return qCF3();
+    var B=lin2(o[0],a,o[1],b);if(three)B[""]=c;var F=FF(g,cL,[B]),E=fexp(F);
+    var noC=plus(B,{});noC[""]=0;var slips=[FF(g,"",[B]),FF(g,cL,[flipC(B)])];if(three)slips.unshift(FF(g,cL,[noC]));
+    var big=plus(B,{});big[o[0]]=a*g;slips.push(FF(g,cL,[big]));
+    return FQ("Factorise:",fmt(E),F,slips,[],
+      "Every term has "+g+" and "+cL+" in it, so take out "+tm(g,cL,true)+". Divide each term by "+tm(g,cL,true)+(three&&Math.abs(c)===1?" (the last term leaves "+num(c)+", don't leave it out)":"")+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qFully(){
+    var v="x",T=ri(0,2),F,parts,slips;
+    if(T===0){var g=ri(2,5),a,b,t=0;do{a=ri(1,5);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qFully();
+      F=FF(g,v,[lin(v,a,b)]);var sq={};sq["x²"]=g*a;sq["x"]=g*b;var s2={};s2["x²"]=a;s2["x"]=b;
+      parts=[FF(g,"",[s2]),FF(1,v,[lin(v,g*a,g*b)])];slips=[FF(g,v,[lin(v,a,-b)]),FF(g,"",[lin(v,a,b)])];}
+    else if(T===1){var g2=ri(2,5),k=ri(1,9);F=FF(g2,"",[lin(v,1,-k),lin(v,1,k)]);
+      parts=[FF(g2,"",[{"x²":1,"":-k*k}]),FF(1,"",[lin(v,g2,-g2*k),lin(v,1,k)])];slips=[FF(1,"",[lin(v,1,-k),lin(v,1,k)]),FF(g2,"",[lin(v,1,-k),lin(v,1,-k)])];}
+    else{var g3=ri(2,4),p=nz(-6,6),q=nz(-6,6);if(p===q||p===-q)return qFully();
+      F=FF(g3,"",[lin(v,1,p),lin(v,1,q)]);parts=[FF(g3,"",[{"x²":1,"x":p+q,"":p*q}]),FF(1,"",[lin(v,g3,g3*p),lin(v,1,q)])];slips=[FF(1,"",[lin(v,1,p),lin(v,1,q)]),FF(g3,"",[lin(v,1,-p),lin(v,1,-q)])];}
+    return FQ("Which is the FULLY factorised form of",fmt(fexp(F)),F,slips,shuffle(parts),
+      "Fully factorised means no bracket can be factorised any more: take out the HIGHEST common factor"+(T>0?", then factorise what's left":"")+". Answer: "+fs(F)+". The others either don't multiply back to the question, or still have a common factor (or a factorisable bracket) left inside.","",{t:"fully"});
+  }
+  function qBoxT(){
+    var v=rnd(V1),g=ri(2,6),a,b,t=0;do{a=ri(2,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qBoxT();
+    var F=FF(g,v,[lin(v,a,b)]),E=fexp(F),frame=tm(g,v,true)+"(□ "+(b<0?M+" "+(-b):"+ "+b)+") = "+fmt(E);
+    return P("What goes in the box?",frame,T1(a,v),[T1(g*a,v),T1(a,v+"²"),T1(a,""),T1(g*a,v+"²")],
+      tm(g*a,v+"²",true)+" ÷ "+tm(g,v,true)+" = "+tm(a,v,true)+", so the box is "+tm(a,v,true)+"."+chk(F),"",{t:"box"});
+  }
+  function qRectCF(){
+    var v=rnd(["x","a","n"]),g=ri(2,6),withV=Math.random()<.6,a,b,t=0;do{a=ri(1,6);b=nz(-9,9);t++;}while(gcd(a,b)!==1&&t<40);if(gcd(a,b)!==1)return qRectCF();
+    if(b<0)b=-b;var W=T1(g,withV?v:""),L=lin(v,a,b),A=mul(W,L);
+    return P("This rectangle has the area shown. Write its length as an expression.","",L,[mul(T1(g,""),L),lin(v,a,g*b),lin(v,g*a,b),{"":a+b}],
+      "Area = length × width, so length = area ÷ width. Factorise: "+fmt(A)+" = "+tm(g,withV?v:"",true)+"("+inner(L)+"). Length = "+inner(L)+".",rectSVG("?",tm(g,withV?v:"",true),fmt(A)),{t:"rect"});
+  }
+
+  /* ---------- Grouping ---------- */
+  function grp(){ // returns {A,B,list} with A·B expanded in a pairs-first order
+    var T=ri(0,2),A,B;
+    if(T===0){var P2=rnd([["x","y"],["a","b"],["m","n"],["p","q"]]);A=lin(P2[0],1,nz(-9,9));B=lin(P2[1],1,nz(-9,9));}
+    else if(T===1){var S=rnd([["a","b","x","y"],["s","t","x","y"],["a","b","m","n"]]);A=lin2(S[0],1,S[1],rnd([1,1,-1]));B=lin2(S[2],1,S[3],rnd([1,-1]));if(A[S[1]]<0&&B[S[3]]<0)B[S[3]]=1;}
+    else{var P3=rnd([["a","b"],["x","y"],["p","q"]]),k=ri(2,4),p=nz(-9,9);if(gcd(k,p)!==1)p=p>0?1:-1;A=lin(P3[0],k,p);B=lin(P3[1],1,nz(-9,9));}
+    var ta=terms(A),tb=terms(B),list=[],swap=Math.random()<.35;
+    if(!swap)ta.forEach(function(x){tb.forEach(function(y){list.push([x[0]*y[0],kmul(x[1],y[1])]);});});
+    else tb.forEach(function(y){ta.forEach(function(x){list.push([x[0]*y[0],kmul(x[1],y[1])]);});});
+    return {A:A,B:B,ta:ta,tb:tb,list:list,swap:swap,T:T};
+  }
+  function qGroup(){
+    var G=grp(),F=FF(1,"",[G.A,G.B]);
+    var s1=FF(1,"",[flipC(G.A),G.B]),s2=FF(1,"",[G.A,flipC(G.B)]),s3=FF(1,"",[flipC(G.A),flipC(G.B)]);
+    var sw=null;if(G.T!==1){var A2=plus(G.A,{}),B2=plus(G.B,{}),t=A2[""];A2[""]=B2[""];B2[""]=t;sw=FF(1,"",[A2,B2]);}
+    var f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1],other=G.swap?G.B:G.A;
+    return FQ("Factorise by grouping:",fmtList(G.list),F,[sw,s1,s2,s3],[],
+      "Group in pairs: "+fmtList(G.list.slice(0,2))+" = "+tm(f1[0],f1[1],true)+"("+inner(in1)+") and "+fmtList(G.list.slice(2))+" = "+tm(f2[0],f2[1],true)+"("+inner(in1)+"). The bracket ("+inner(in1)+") is common: ("+inner(in1)+")("+inner(other)+"). Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qGroupGap(){
+    var G;do{G=grp();}while(G.T===1);
+    var f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1];
+    if(f2[1]!=="")return qGroupGap();
+    var frame=fmtList(G.list)+" = "+tm(f1[0],f1[1],true)+"("+inner(in1)+") + □("+inner(in1)+")";
+    return QN("What number goes in the box?",frame,f2[0],[-f2[0],(in1[""]||0),f2[0]*(in1[""]||1),f2[0]+1],
+      "The last two terms are "+fmtList(G.list.slice(2))+". Take out "+num(f2[0])+": "+fmtList(G.list.slice(2))+" = "+num(f2[0])+"("+inner(in1)+"). Check: "+br(f2[0])+" × "+br(in1[""]||0)+" = "+num(G.list[3][0])+". So the box is "+num(f2[0])+".","",{t:"boxn"});
+  }
+  function qGroupFinish(){
+    var G=grp(),f1=G.swap?G.tb[0]:G.ta[0],in1=G.swap?G.A:G.B,f2=G.swap?G.tb[1]:G.ta[1],other=G.swap?G.B:G.A,F=FF(1,"",[in1,other]);
+    var frame=tm(f1[0],f1[1],true)+"("+inner(in1)+")"+(f2[0]<0?" "+M+" ":" + ")+tm(Math.abs(f2[0]),f2[1],true)+"("+inner(in1)+")";
+    var s1=FF(1,"",[in1,flipC(other)]),s2=null;if(in1[""]&&other[""]){var I2=plus(in1,{}),O2=plus(other,{}),tc=I2[""];I2[""]=O2[""];O2[""]=tc;s2=FF(1,"",[I2,O2]);}var s4=FF(1,"",[flipC(in1),other]);
+    return FQ("Finish factorising:",frame,F,[s1,s4,s2],[],
+      "Both parts have the bracket ("+inner(in1)+"). Take it out and put what's left in the other bracket: ("+inner(other)+"). Answer: "+fs(F)+".","",{t:"fac"});
+  }
+
+  /* ---------- Trinomials ---------- */
+  function pq(){var p,q,t=0;do{p=nz(-9,9);q=nz(-9,9);t++;}while((p===q||p===-q||Math.abs(p*q)>60)&&t<60);return [p,q];}
+  function pairStr(a,b){return a<=b?num(a)+" and "+num(b):num(b)+" and "+num(a);}
+  function qPair(){
+    var r=pq(),p=r[0],q=r[1],c=p*q,b=p+q,pool=[];
+    for(var i=1;i<=Math.abs(c);i++)if(Math.abs(c)%i===0){var j=c/i;[[i,j],[-i,-j]].forEach(function(x){if(x[0]+x[1]!==b)pool.push(pairStr(x[0],x[1]));});}
+    pool.push(pairStr(-p,-q));pool.push(pairStr(p,-q));pool.push(pairStr(-p,q));
+    return C("Which two numbers multiply to give "+num(c)+" and add to give "+num(b)+"?","",pairStr(p,q),pool,
+      num(p)+" × "+br(q)+" = "+num(c)+" and "+num(p)+" + "+br(q)+" = "+num(b)+". So x² "+(b<0?M+" "+tm(-b,"x",true):"+ "+tm(b,"x",true))+(c<0?" "+M+" "+(-c):" + "+c)+" = (x "+(p<0?M+" "+(-p):"+ "+p)+")(x "+(q<0?M+" "+(-q):"+ "+q)+").",null,"",{t:"pair",c:c,b:b});
+  }
+  function qTri1(){
+    var v=rnd(["x","x","x","a","n","y","t"]),r=pq(),p=r[0],q=r[1],F=FF(1,"",[lin(v,1,p),lin(v,1,q)]),E=fexp(F),slips=[];
+    for(var i=1;i<=Math.abs(p*q);i++)if(Math.abs(p*q)%i===0){var j=p*q/i;if(i+j!==p+q&&i!==j&&slips.length<2)slips.push(FF(1,"",[lin(v,1,i),lin(v,1,j)]));}
+    slips=[FF(1,"",[lin(v,1,-p),lin(v,1,-q)])].concat(shuffle(slips));
+    return FQ("Factorise:",fmt(E),F,slips,[],
+      "Find two numbers that MULTIPLY to "+num(p*q)+" and ADD to "+num(p+q)+": "+num(p)+" and "+num(q)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qTriBox(){
+    var r=pq(),p=r[0],q=r[1],E=mul(lin("x",1,p),lin("x",1,q));
+    var frame="(x "+(p<0?M+" "+(-p):"+ "+p)+")(x + □) = "+fmt(E);
+    return QN("What number goes in the box?",frame,q,[-q,p+q,p*q,q-p,(p+q)-q*0+1],
+      "The two numbers must multiply to "+num(p*q)+" and add to "+num(p+q)+". "+num(p)+" × "+br(q)+" = "+num(p*q)+" and "+num(p)+" + "+br(q)+" = "+num(p+q)+", so the box is "+num(q)+".","",{t:"boxn"});
+  }
+  function qTriArea(){
+    var r=pq(),p=r[0],q=r[1],rows=[[1,"x"],[p,""]],cols=[[1,"x"],[q,""]],E=mul(lin("x",1,p),lin("x",1,q)),F=FF(1,"",[lin("x",1,p),lin("x",1,q)]);
+    var html=areaSVG(rows,cols,function(i,j){return fmt(mul(T1(rows[i][0],rows[i][1]),T1(cols[j][0],cols[j][1])));},true);
+    return FQ("The four boxes add up to "+nb(fmt(E))+". Which brackets go on the sides?","",F,[FF(1,"",[lin("x",1,-p),lin("x",1,-q)]),FF(1,"",[lin("x",1,p*q),lin("x",1,1)])],[],
+      "The side terms multiply to give each box: x × x = x², and the numbers on the sides are "+num(p)+" and "+num(q)+" (they multiply to "+num(p*q)+", the bottom-right box). Answer: "+fs(F)+".",html,{t:"tarea"});
+  }
+  function qTriHL(){
+    var v="x",m=rnd([2,2,3,3,5,4,6]),n=1,p,q,t=0;if(m>=4&&Math.random()<.5){m=2;n=3;}
+    do{p=nz(-7,7);q=nz(-7,7);t++;}while((gcd(m,p)!==1||gcd(n,q)!==1||m*q+n*p===0||m*q===n*p)&&t<60);if(t>=60)return qTriHL();
+    var A=lin(v,m,p),B=lin(v,n,q),F=FF(1,"",[A,B]),E=fexp(F);
+    var sw=FF(1,"",[lin(v,m,q),lin(v,n,p)]);
+    return FQ("Higher Level: factorise:",fmt(E),F,[sw,FF(1,"",[lin(v,m,-p),lin(v,n,-q)]),FF(1,"",[lin(v,m,-q),lin(v,n,-p)])],[],
+      "The x² term "+tm(m*n,"x²",true)+" comes from "+tm(m,v,true)+" × "+tm(n,v,true)+", and the number "+num(p*q)+" from "+num(p)+" × "+br(q)+". Try the pairs until the middle term works: "+tm(m,v,true)+" × "+br(q)+" + "+br(p)+" × "+tm(n,v,true)+" = "+tm(m*q+n*p,v,true)+". Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qTriCF(){
+    var v="x",g=ri(2,5),r=pq(),p=r[0],q=r[1],F=FF(g,"",[lin(v,1,p),lin(v,1,q)]),tri={"x²":1,"x":p+q,"":p*q};
+    return FQ("Factorise fully:",fmt(fexp(F)),F,[FF(1,"",[lin(v,1,p),lin(v,1,q)]),FF(g,"",[lin(v,1,-p),lin(v,1,-q)])],[FF(g,"",[tri]),FF(1,"",[lin(v,g,g*p),lin(v,1,q)])],
+      "First take out the common factor "+g+": "+g+"("+inner(tri)+"). Then factorise the bracket: two numbers that multiply to "+num(p*q)+" and add to "+num(p+q)+" are "+num(p)+" and "+num(q)+". Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qRectTri(){
+    var r=pq(),p=r[0],q=r[1];if(p<1&&q<1)return qRectTri();if(p<1){var tt=p;p=q;q=tt;}
+    var L=lin("x",1,p),W=lin("x",1,q),A=mul(L,W);
+    return P("This rectangle has the area shown. Write its width as an expression.","",W,[lin("x",1,-q),lin("x",1,p*q),lin("x",1,p+q)],
+      "Factorise the area: "+fmt(A)+" = ("+inner(L)+")("+inner(W)+"). The length is "+inner(L)+", so the width is "+inner(W)+".",rectSVG(inner(L),"?",fmt(A)),{t:"rect"});
+  }
+
+  /* ---------- Difference of two squares & checks ---------- */
+  function qDots1(){
+    var v=rnd(["x","x","a","y","n","t"]),a=ri(1,12),F=FF(1,"",[lin(v,1,-a),lin(v,1,a)]),E=fexp(F);
+    return FQ("Factorise:",fmt(E),F,[FF(1,"",[lin(v,1,-a),lin(v,1,-a)]),FF(1,"",[lin(v,1,a),lin(v,1,a)]),a>1?FF(1,"",[lin(v,1,-a*a),lin(v,1,1)]):null,FF(1,v,[lin(v,1,-a)])],[],
+      fmt(E)+" is a difference of two squares: "+v+"² "+M+" "+a+"². So it is ("+v+" "+M+" "+a+")("+v+" + "+a+")."+chk(F),"",{t:"fac"});
+  }
+  function qDotsHL(){
+    var P2=rnd([["x","y"],["a","b"],["p","q"],["x",""],["x",""]]),u=P2[0],w=P2[1],p,q,t=0;
+    do{p=ri(2,7);q=ri(1,9);t++;}while((gcd(p,q)!==1)&&t<40);if(gcd(p,q)!==1)return qDotsHL();
+    var F=FF(1,"",[lin2(u,p,w,-q),lin2(u,p,w,q)]),E=fexp(F);
+    return FQ("Higher Level: factorise:",fmt(E),F,[FF(1,"",[lin2(u,p*p,w,-q),lin2(u,1,w,q)]),FF(1,"",[lin2(u,p,w,-q),lin2(u,p,w,-q)]),FF(1,"",[lin2(u,p,w,-q*q),lin2(u,p,w,1)])],[],
+      tm(p*p,u+"²",true)+" = ("+tm(p,u,true)+")² and "+tm(q*q,w?w+"²":"",true)+" = ("+tm(q,w,true)+")². A difference of two squares: (first − second)(first + second). Answer: "+fs(F)+"."+chk(F),"",{t:"fac"});
+  }
+  function qDotsCF(){
+    var v="x",g=ri(2,5),a=ri(1,9),F=FF(g,"",[lin(v,1,-a),lin(v,1,a)]);
+    return FQ("Factorise fully:",fmt(fexp(F)),F,[FF(1,"",[lin(v,1,-a),lin(v,1,a)]),FF(g,"",[lin(v,1,-a),lin(v,1,-a)])],[FF(g,"",[{"x²":1,"":-a*a}]),FF(1,"",[lin(v,g,-g*a),lin(v,1,a)])],
+      "Take out the common factor "+g+" first: "+g+"(x² "+M+" "+a*a+"). Then x² "+M+" "+a*a+" is a difference of two squares. Answer: "+fs(F)+".","",{t:"fac"});
+  }
+  function qIsDots(){
+    var v=rnd(["x","a","y"]),a=ri(2,10),ans=v+"² "+M+" "+a*a;
+    var pool=[v+"² + "+a*a,v+"² "+M+" "+(a*a+rnd([1,-1,2])),v+"³ "+M+" "+a*a,"2"+v+"² "+M+" "+a*a,v+"² "+M+" "+2*a*a,v+"² "+M+" "+a+v];
+    return C("Which of these is a difference of two squares?","",ans,pool,
+      ans+" = "+v+"² "+M+" "+a+"²: two perfect squares with a MINUS between them, so it factorises as ("+v+" "+M+" "+a+")("+v+" + "+a+"). A plus sign, a number that isn't a square, or a power that isn't 2 doesn't work.",ans+" is a difference of two squares","",{t:"isdots"});
+  }
+  function qDotsNum(){
+    var A,B,t=0;do{A=ri(31,99);B=ri(11,A-2);t++;}while(((A+B)%10!==0&&(A-B)%10!==0)&&t<60);
+    return QN("Use factorising to work out, without a calculator:",A+"² "+M+" "+B+"²",(A-B)*(A+B),[(A-B)*(A-B),A-B,A+B,(A-B)*(A+B)+10],
+      A+"² "+M+" "+B+"² = ("+A+" "+M+" "+B+")("+A+" + "+B+") = "+(A-B)+" × "+(A+B)+" = "+(A-B)*(A+B)+".","",{t:"dnum"});
+  }
+  function qClaimF(){
+    var N=rnd(NAMES),nm=N[0],he=N[1],T=ri(0,5),r=pq(),p=r[0],q=r[1],L,R,truth,alts;
+    var a=ri(2,9),g=ri(2,5);
+    if(T===0){L=mul(lin("x",1,p),lin("x",1,q));R=FF(1,"",[lin("x",1,p),lin("x",1,q)]);truth=null;alts=[FF(1,"",[lin("x",1,-p),lin("x",1,-q)]),FF(1,"",[lin("x",1,p*q),lin("x",1,1)])];}
+    else if(T===1){L=mul(lin("x",1,p),lin("x",1,q));R=FF(1,"",[lin("x",1,-p),lin("x",1,-q)]);truth=FF(1,"",[lin("x",1,p),lin("x",1,q)]);alts=[FF(1,"",[lin("x",1,p),lin("x",1,-q)]),FF(1,"",[lin("x",1,-p),lin("x",1,q)])];}
+    else if(T===2){L={"x²":1,"":-a*a};R=FF(1,"",[lin("x",1,-a),lin("x",1,-a)]);truth=FF(1,"",[lin("x",1,-a),lin("x",1,a)]);alts=[FF(1,"",[lin("x",1,a),lin("x",1,a)]),FF(1,"",[lin("x",1,-a*a),lin("x",1,1)])];}
+    else if(T===3){L={"x²":1,"":-a*a};R=FF(1,"",[lin("x",1,a),lin("x",1,-a)]);truth=null;alts=[FF(1,"",[lin("x",1,-a),lin("x",1,-a)]),FF(1,"",[lin("x",1,a),lin("x",1,a)]),FF(1,"",[lin("x",1,-a*a),lin("x",1,1)]),FF(1,"x",[lin("x",1,-a)])];}
+    else if(T===4){var b;do{b=nz(-9,9);}while(gcd(a,b)!==1);L=mul(T1(g,""),lin("x",a,b));R=FF(g,"",[lin("x",a,g*b)]);truth=FF(g,"",[lin("x",a,b)]);alts=[FF(g,"",[lin("x",a,-b)]),FF(g,"x",[lin("x",a,b)])];}
+    else{var b2;do{b2=nz(-9,9);}while(gcd(a,b2)!==1);L=mul(T1(g,"x"),lin("x",a,b2));R=FF(g,"x",[lin("x",a,b2)]);truth=null;alts=[FF(g,"",[lin("x",a,b2)]),FF(g,"x",[lin("x",a,-b2)]),FF(g,"x",[lin("x",a,g*b2)]),FF(g,"x²",[lin("x",a,b2)])];}
+    var lhs=fmt(L),rhs=fs(R),ans=truth?"Wrong: it should be "+fs(truth):"Right",base=truth||R;
+    base.b.forEach(function(B,i){var G=FF(base.c,base.k,base.b.slice());G.b[i]=flipC(B);alts.push(G);});alts.push(FF(base.c,base.k,base.b.map(flipC)));
+    var sE={};sE[fmt(L)]=1;var pool=(truth?["Right"]:[]).concat(shuffle(alts).filter(function(G){var e=fmt(fexp(G));if(sE[e]||fs(G)===rhs)return false;sE[e]=1;return true;}).map(function(G){return "Wrong: it should be "+fs(G);}));
+    return C(nm+" writes: "+nb(lhs+" = "+rhs)+". Is "+he+" right?","",ans,pool,
+      "Check by multiplying out: "+rhs+" = "+fmt(fexp(R))+(truth?", not "+lhs+". The right answer is "+fs(truth)+".":", which is "+lhs+" ✓. So "+he+" is right."),
+      lhs+" = "+rhs+"? → "+ans,"",{t:"claim"});
+  }
+
+  var MAKERS={
+    common:[qHCF,qCF1,qCF1,qCF2,qCF2,qCF3,qCF3,qFully,qBoxT,qRectCF],
+    group:[qGroup,qGroup,qGroup,qGroupGap,qGroupGap,qGroupFinish,qGroupFinish],
+    trinomial:[qPair,qTri1,qTri1,qTri1,qTriBox,qTriArea,qTriCF,qRectTri,qTriHL],
+    squares:[qDots1,qDots1,qDots1,qDotsHL,qDotsCF,qIsDots,qDotsNum,qClaimF,qClaimF],
+    mixed:[qHCF,qCF1,qCF2,qCF3,qFully,qBoxT,qRectCF,qGroup,qGroupGap,qGroupFinish,qPair,qTri1,qTriBox,qTriArea,qTriCF,qRectTri,qTriHL,qDots1,qDotsHL,qDotsCF,qIsDots,qDotsNum,qClaimF]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="common"||m==="trinomial")?60:75;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/LEN*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="common"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="common"&&streak%5===0?700:350):2800);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

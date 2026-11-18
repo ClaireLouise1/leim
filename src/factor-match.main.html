@@ -1,0 +1,170 @@
+<main id="main">
+<style>.steps{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left;max-width:360px;margin:6px auto 0;font-size:17px}.steps p{margin:4px 0}.fp{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:300px;margin:8px auto 0}.fp span{background:#fff;border:2px solid var(--line);border-radius:10px;padding:6px;text-align:center;font-weight:700}.fp span.y{background:var(--yellow,#F6CF5A)}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Factor Match</h1>
+        <p>60 seconds. Put the brackets back: take out the highest common factor, factorise by grouping, crack x² + bx + c and spot a difference of two squares. Every answer can be checked by multiplying out. Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="common"><div><b>Common factor</b><span>The HCF of 12x²y and 18xy², then 6x + 9, 4x² − 10x, 6ab + 9ac and "which is FULLY factorised?"</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="group"><div><b>Grouping</b><span>Four terms in pairs: xy − 3x + 2y − 6 = x(y − 3) + 2(y − 3) = (x + 2)(y − 3)</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="trinomial"><div><b>x² + bx + c</b><span>Two numbers that multiply and add, the area model backwards, rectangles, and a Higher Level round of 2x² + 7x + 3</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="squares"><div><b>Squares &amp; checks</b><span>x² − 49, the difference of two squares, 53² − 47² without a calculator, and is the working right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator! In Common factor, every 5 in a row gives you 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcome: AF.3d (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Factorising</h2>
+        <p>Factorising is expanding <b>backwards</b>: you start with x² + 5x + 6 and put the brackets back, (x + 2)(x + 3). You can always check your answer by multiplying it out again.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Here are some brackets that have been multiplied out. Look at the two numbers in the brackets and the last two numbers in the answer:</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note">(x + 2)(x + 3) = x² + <b>5</b>x + <b>6</b></li>
+          <li class="note">(x + 1)(x + 6) = x² + <b>7</b>x + <b>6</b></li>
+          <li class="note">(x − 2)(x − 3) = x² <b>− 5</b>x + <b>6</b></li>
+          <li class="note">(x + 6)(x − 1) = x² + <b>5</b>x <b>− 6</b></li>
+        </ul>
+        <p style="margin-top:10px">Now go backwards. Can you put the brackets back on x² + 8x + 12? On x² − x − 12?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The two numbers in the brackets <b>multiply</b> to give the last number and <b>add</b> to give the middle number. For x² + 8x + 12 you want two numbers that multiply to 12 and add to 8. List the pairs that make 12:</p>
+          <div class="fp"><span>1 and 12 → 13</span><span>2 and 6 → <b>8</b> ✓</span><span>3 and 4 → 7</span><span>−2 and −6 → −8</span></div>
+          <p style="margin-top:8px">So x² + 8x + 12 = <b>(x + 2)(x + 6)</b>. For x² − x − 12: multiply to −12, add to −1 → 3 and −4, so <b>(x + 3)(x − 4)</b>. Check: x² − 4x + 3x − 12 = x² − x − 12 ✓.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">1. Take out the highest common factor (HCF)</h3>
+        <p>Always look for this first. Find the biggest number and the letters that are in <b>every</b> term (each letter with its <b>smallest</b> power), put it outside, and divide each term by it.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>6x + 9</b>: HCF = 3. 6x ÷ 3 = 2x, 9 ÷ 3 = 3. So <b>3(2x + 3)</b>.</li>
+          <li class="note"><b>4x² − 10x</b>: HCF = 2x. 4x² ÷ 2x = 2x, −10x ÷ 2x = −5. So <b>2x(2x − 5)</b>.</li>
+          <li class="note"><b>6ab + 9ac − 3a</b>: HCF = 3a. So <b>3a(2b + 3c − 1)</b>. Don't lose the 1: 3a ÷ 3a = 1.</li>
+          <li class="note">The HCF of <b>12x²y</b> and <b>18xy²</b> is <b>6xy</b>: 6 is the HCF of 12 and 18, x is in both (smallest power x¹), y is in both (smallest power y¹).</li>
+        </ul>
+        <div class="note" style="margin-top:10px"><b>Fully factorised</b> means nothing more can come out. 4x² − 10x = 2(2x² − 5x) is true, but 2x² − 5x still has an x in both terms, so it is <b>not</b> fully factorised. The full answer is 2x(2x − 5).</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">2. Grouping (four terms)</h3>
+        <p>Split the four terms into two pairs. Take a common factor out of each pair. The same bracket appears twice: take it out.</p>
+        <div class="note"><b>xy − 3x + 2y − 6</b><br>= x(y − 3) + 2(y − 3)<br>= <b>(y − 3)(x + 2)</b></div>
+        <ul style="margin-top:10px">
+          <li>Letters only: ax − ay + bx − by = a(x − y) + b(x − y) = <b>(x − y)(a + b)</b>.</li>
+          <li>If the second pair starts with a minus, take out the minus too: 2ab + 8a − 3b − 12 = 2a(b + 4) <b>− 3</b>(b + 4) = <b>(b + 4)(2a − 3)</b>. Check: −3 × 4 = −12 ✓.</li>
+          <li>The two brackets must be <b>exactly</b> the same. If they aren't, check the signs in the second pair.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">3. Quadratic trinomials: x² + bx + c</h3>
+        <p>Find two numbers that <b>multiply</b> to c and <b>add</b> to b. Then x² + bx + c = (x + first)(x + second).</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>Signs help:</b> c positive → both numbers have the same sign as b. c negative → one plus, one minus (the bigger one takes the sign of b).</li>
+          <li class="note">x² + 7x + 10: 2 × 5 = 10, 2 + 5 = 7 → <b>(x + 2)(x + 5)</b>.</li>
+          <li class="note">x² − 9x + 14: −2 × −7 = 14, −2 + −7 = −9 → <b>(x − 2)(x − 7)</b>.</li>
+          <li class="note">x² + 2x − 15: 5 × −3 = −15, 5 + −3 = 2 → <b>(x + 5)(x − 3)</b>.</li>
+        </ul>
+        <p style="margin-top:10px">The <b>area model backwards</b>: the four boxes of (x + 5)(x − 3) are x², −3x, 5x and −15. Put x² and −15 in opposite corners, split the middle term into two boxes that work, and read the sides.</p>
+        <div class="note" style="overflow-x:auto">
+          <svg viewBox="0 0 250 160" width="100%" style="max-width:300px;display:block;margin:0 auto" role="img" aria-label="Area model for x² + 2x − 15: boxes x², −3x, 5x, −15 with sides x, +5 and x, −3">
+            <g font-family="Inter,sans-serif" font-weight="700" font-size="17" fill="#1B2430" text-anchor="middle">
+              <text x="107" y="23" fill="#C0392B">x</text><text x="193" y="23" fill="#C0392B">−3</text>
+              <text x="52" y="69" text-anchor="end" fill="#C0392B">x</text><text x="52" y="127" text-anchor="end" fill="#C0392B">+5</text>
+              <rect x="64" y="34" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/><rect x="150" y="34" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/>
+              <rect x="64" y="92" width="86" height="58" fill="#E9F5EE" stroke="#1B2430" stroke-width="2"/><rect x="150" y="92" width="86" height="58" fill="#fff" stroke="#1B2430" stroke-width="2"/>
+              <text x="107" y="69">x²</text><text x="193" y="69">−3x</text><text x="107" y="127">5x</text><text x="193" y="127">−15</text>
+            </g>
+          </svg>
+          <p style="margin-top:6px;text-align:center"><b>x² + 2x − 15</b> = <b>(x + 5)(x − 3)</b></p>
+        </div>
+        <div class="note" style="margin-top:10px"><b>Higher Level: ax² + bx + c.</b> Try pairs of brackets that give the first term and the last term, and check the middle. 2x² + 7x + 3: 2x² = 2x × x, 3 = 1 × 3. Try (2x + 1)(x + 3): middle = 2x × 3 + 1 × x = 7x ✓. So <b>2x² + 7x + 3 = (2x + 1)(x + 3)</b>. (Swapping the numbers, (2x + 3)(x + 1), gives 5x: wrong.)</div>
+        <div class="note" style="margin-top:10px"><b>Common factor first:</b> 3x² + 15x + 18 = 3(x² + 5x + 6) = <b>3(x + 2)(x + 3)</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">4. The difference of two squares</h3>
+        <p>A square <b>minus</b> a square: <b>a² − b² = (a − b)(a + b)</b>. The middle terms cancel when you multiply out.</p>
+        <ul style="list-style:none;padding:0;display:grid;gap:8px">
+          <li class="note"><b>x² − 49</b> = x² − 7² = <b>(x − 7)(x + 7)</b>.</li>
+          <li class="note"><b>2x² − 18</b> = 2(x² − 9) = <b>2(x − 3)(x + 3)</b>. Common factor first.</li>
+          <li class="note"><b>Higher Level:</b> 9x² − 4y² = (3x)² − (2y)² = <b>(3x − 2y)(3x + 2y)</b>.</li>
+          <li class="note"><b>No calculator:</b> 53² − 47² = (53 − 47)(53 + 47) = 6 × 100 = <b>600</b>.</li>
+          <li class="note">x² <b>+</b> 49 is NOT a difference of two squares (it's a sum), and x² − 12 isn't either (12 isn't a square number).</li>
+        </ul>
+
+        <div class="note" style="margin-top:12px"><b>Which method?</b> 1. Common factor first, always. 2. Two terms with a minus and both squares → difference of two squares. 3. Three terms → x² + bx + c (or ax² + bx + c). 4. Four terms → grouping. <b>Then check by multiplying out.</b></div>
+        <div class="note" style="margin-top:10px"><b>The classic mistakes:</b> 6ab + 9ac − 3a = 3a(2b + 3c) (the 1 is lost), 4x² − 10x = 2(2x² − 5x) (not fully factorised), x² − 5x + 6 = (x + 2)(x + 3) (signs: it's (x − 2)(x − 3)), and x² − 9 = (x − 3)(x − 3) (that gives x² − 6x + 9).</div>
+        <p style="margin-top:10px;color:var(--muted);font-size:15px">Expanding brackets came in Algebra 2. Solving quadratic equations by factorising comes in Quadratic equations; algebraic fractions and long division come in Algebra 4.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>"Factorise" (or "factorise fully") is one of the most common short parts on the paper, often with three parts: a common factor, grouping or a trinomial, and a difference of two squares. Factorising also turns up inside bigger questions: solving a quadratic equation, simplifying an algebraic fraction, finding the sides of a rectangle from its area, and working out sums like 87² − 13² without a calculator.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Take out the highest common factor first</b>, and check nothing is left to take out ("fully").</li>
+            <li><b>Show the middle line in grouping</b>: x(y + 4) − 3(y + 4). It earns marks even if you slip after.</li>
+            <li><b>Watch the signs</b>: for x² − x − 12 the numbers are 3 and −4, not −3 and 4.</li>
+            <li><b>Don't lose a 1</b> when a whole term comes out: 5x² + x = x(5x + 1).</li>
+            <li><b>Check by multiplying out</b>, or put x = 1 into the question and your answer.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>Factorise.</b> (a) 6x² − 15x &nbsp;(b) xy + 4x − 3y − 12 &nbsp;(c) x² − 64
+              <details><summary>Show the worked answer</summary><p>(a) HCF = 3x: <b>3x(2x − 5)</b>.<br>(b) x(y + 4) − 3(y + 4) = <b>(y + 4)(x − 3)</b>.<br>(c) x² − 8² = <b>(x − 8)(x + 8)</b>.</p></details></li>
+            <li><b>The rectangle.</b> A rectangle has area x² − 2x − 24 cm² and its length is x + 4 cm. (a) Factorise x² − 2x − 24. (b) Write the width of the rectangle. (c) Find the length and the width when x = 10, and check that they give the right area.
+              <details><summary>Show the worked answer</summary><p>(a) Multiply to −24, add to −2: 4 and −6. <b>(x + 4)(x − 6)</b>.<br>(b) Width = <b>x − 6</b> cm.<br>(c) Length 14 cm, width 4 cm: 14 × 4 = 56. And 10² − 2(10) − 24 = 100 − 20 − 24 = <b>56 cm²</b> ✓.</p></details></li>
+            <li><b>Squares.</b> (a) Use factorising to work out 87² − 13² without a calculator. (b) Factorise fully 5x² − 45. (c) <i>Higher Level:</i> factorise 4x² − 9y².
+              <details><summary>Show the worked answer</summary><p>(a) (87 − 13)(87 + 13) = 74 × 100 = <b>7,400</b>.<br>(b) 5(x² − 9) = <b>5(x − 3)(x + 3)</b>.<br>(c) (2x)² − (3y)² = <b>(2x − 3y)(2x + 3y)</b>.</p></details></li>
+            <li><b>Spot the mistake.</b> Ciara wrote 2x² + 8x = 2(x² + 4x). (a) Is her answer equal to 2x² + 8x? Is it fully factorised? (b) Write the fully factorised form. (c) <i>Higher Level:</i> factorise 2x² + 7x + 3 and check your answer with x = 1.
+              <details><summary>Show the worked answer</summary><p>(a) Yes, 2(x² + 4x) = 2x² + 8x, but it is <b>not</b> fully factorised: x² + 4x still has x in both terms.<br>(b) <b>2x(x + 4)</b>.<br>(c) <b>(2x + 1)(x + 3)</b>. Check with x = 1: 2 + 7 + 3 = 12, and (3)(4) = 12 ✓.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/factorising-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Factorising Teacher Pack (€5)</a>: Factor Match mingle cards, Grouping Relay, Factorising Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

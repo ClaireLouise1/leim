@@ -61,7 +61,7 @@ MATHS = [
   ("2nd year","Summer","Geometry 2: theorems, congruent & similar triangles","GT.3b–GT.3e, U.11, U.12","Proof Builder","proof-builder.html","theorems-congruent-similar-triangles"),
   ("2nd year","Summer","Pythagoras & right-angled triangles","GT.3b, GT.3e, U.6","Ladder Lab","ladder-lab.html","pythagoras-right-angled-triangles"),
   ("2nd year","Summer","Probability 2: relative frequency & counting","SP.1b, SP.2c","Coin & Dice Lab","coin-dice-lab.html","relative-frequency-counting"),
-  ("3rd year","Autumn","Factorising","AF.3d","Factor Match","",""),
+  ("3rd year","Autumn","Factorising","AF.3d","Factor Match","factor-match.html","factorising"),
   ("3rd year","Autumn","Coordinate geometry of the line","GT.5a, GT.5b, GT.5c","Line Lab","",""),
   ("3rd year","Autumn","Simultaneous equations","AF.4","Two-Line Crossing","",""),
   ("3rd year","Autumn","Quadratic equations","AF.4, AF.5","Root Rush","",""),
