@@ -1,0 +1,333 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function r2(x){return Math.round(x*100)/100;}
+  function n_(x){x=Math.round(x*1e6)/1e6;return x<0?"−"+(-x):String(x);}
+  function br(x){return x<0?"("+n_(x)+")":n_(x);}
+  function cs(p){return "("+n_(p[0])+", "+n_(p[1])+")";}
+  /* exact fractions [n, d], d > 0, reduced */
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+  function F(n,d){if(d==null)d=1;if(d===0)return null;if(d<0){n=-n;d=-d;}var g=gcd(n,d)||1;return [n/g,d/g];}
+  function fadd(a,b){return F(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);}
+  function fmul(a,b){return F(a[0]*b[0],a[1]*b[1]);}
+  function fneg(a){return [-a[0],a[1]];}
+  function finv(a){return a[0]===0?null:F(a[1],a[0]);}
+  function fv(a){return a[0]/a[1];}
+  function feq(a,b){return a&&b&&a[0]===b[0]&&a[1]===b[1];}
+  function fs(f){return n_(f[0])+(f[1]===1?"":"/"+f[1]);}
+  var UF={"1/2":"½","1/3":"⅓","2/3":"⅔","1/4":"¼","3/4":"¾"};
+  function mterm(m){if(m[0]===0)return "";var s=m[0]<0?"−":"",a=Math.abs(m[0]),k=a+"/"+m[1];
+    if(m[1]===1)return s+(a===1?"":a)+"x";return s+(UF[k]||"("+k+")")+"x";}
+  /* y = mx + c with c a whole number */
+  function eq(m,c){var t=mterm(m);if(!t)return "y = "+n_(c);return "y = "+t+(c===0?"":c>0?" + "+c:" − "+(-c));}
+  function cf(k,v){return k===1?v:k===-1?"−"+v:n_(k)+v;}
+  function bf(f){return f[0]<0?"("+fs(f)+")":fs(f);}
+  function nb(s){return s.replace(/ ([=+−]) /g," $1 ");}
+  /* general form ax + by + d = 0 (a > 0) */
+  function gen(a,b,d){var s=(a===1?"":a)+"x"+(b<0?" − ":" + ")+(Math.abs(b)===1?"":Math.abs(b))+"y";return s+(d===0?"":d<0?" − "+(-d):" + "+d)+" = 0";}
+  /* slopes used for drawn lines and equations: whole numbers and the nice fractions */
+  var SL=[[1,1],[2,1],[3,1],[-1,1],[-2,1],[-3,1],[1,2],[-1,2],[1,3],[-1,3],[2,3],[-2,3],[3,2],[-3,2],[1,4],[3,4],[-3,4]];
+  var SLW=[[1,1],[2,1],[3,1],[4,1],[-1,1],[-2,1],[-3,1],[-4,1],[1,2],[-1,2],[1,3],[2,3],[-2,3],[3,4],[-1,4]];   // for equations (unicode-friendly)
+  var NAMES=["Siobhán","Darragh","Niamh","Oisín","Aoife","Cian","Róisín","Eoin","Ciara","Seán","Méabh","Tadhg"];
+
+  /* numeric question: whole numbers (may be negative) */
+  function QI(en,ans,slips,why,html,data){var seen={},w=[];seen[n_(ans)]=1;
+    slips.concat([ans+1,ans-1,-ans,ans+2,ans-2]).forEach(function(x){if(x==null||!isFinite(x))return;var s=n_(x);if(seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:n_(ans),wrong:w,why:why,review:en+" → "+n_(ans),data:data||{}};}
+  /* fraction question: wrong options never equal in value */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:en+" → "+ans,data:data||{}};}
+
+  /* ---------- coordinate-grid kit ---------- */
+  /* o = {R, lines:[{m,c,n,k} | {v,n,k}], segs:[[a,b]], pts:[{p,n,c,dx,dy}], steps:[[a,b]]} ; c may be a fraction */
+  function clipL(L,R){if(L.v!=null)return [[L.v,-R],[L.v,R]];
+    var m=fv(L.m),c=fv(L.c),P=[];
+    [-R,R].forEach(function(x){var y=m*x+c;if(y>=-R-1e-9&&y<=R+1e-9)P.push([x,y]);});
+    if(m!==0)[-R,R].forEach(function(y){var x=(y-c)/m;if(x>-R+1e-9&&x<R-1e-9)P.push([x,y]);});
+    P.sort(function(a,b){return a[0]-b[0]||a[1]-b[1];});return [P[0],P[P.length-1]];}
+  function spans(L,R){var e=clipL(L,R);if(!e[0])return 0;var dx=e[1][0]-e[0][0],dy=e[1][1]-e[0][1];return Math.sqrt(dx*dx+dy*dy);}
+  function plane(o){
+    var R=o.R||6,s=o.s||22,pd=18,W=2*R*s+2*pd,i,h;
+    var X=function(x){return r2(pd+(x+R)*s);},Y=function(y){return r2(pd+(R-y)*s);};
+    h='<svg class="tg" viewBox="0 0 '+W+' '+W+'" style="max-width:'+Math.round(W*1.45)+'px" data-r="'+R+'" data-s="'+s+'" data-pd="'+pd+'" role="img" aria-label="'+(o.aria||"Lines on a coordinate grid")+'">';
+    for(i=-R;i<=R;i++){h+='<line class="gl" x1="'+X(i)+'" y1="'+Y(-R)+'" x2="'+X(i)+'" y2="'+Y(R)+'"/><line class="gl" x1="'+X(-R)+'" y1="'+Y(i)+'" x2="'+X(R)+'" y2="'+Y(i)+'"/>';}
+    h+='<line class="ax" x1="'+X(-R)+'" y1="'+Y(0)+'" x2="'+X(R)+'" y2="'+Y(0)+'"/><line class="ax" x1="'+X(0)+'" y1="'+Y(-R)+'" x2="'+X(0)+'" y2="'+Y(R)+'"/>';
+    for(i=-R;i<=R;i++){if(i===0)continue;h+='<text class="tk" data-v="'+i+'" x="'+X(i)+'" y="'+r2(Y(0)+11)+'" text-anchor="middle">'+n_(i)+'</text><text class="tk" data-w="'+i+'" x="'+r2(X(0)-4)+'" y="'+r2(Y(i)+3.5)+'" text-anchor="end">'+n_(i)+'</text>';}
+    h+='<text class="tk" x="'+r2(X(0)-4)+'" y="'+r2(Y(0)+11)+'" text-anchor="end">0</text><text class="axl" x="'+r2(X(R)+7)+'" y="'+r2(Y(0)+4)+'" text-anchor="middle">x</text><text class="axl" x="'+X(0)+'" y="'+r2(Y(R)-6)+'" text-anchor="middle">y</text>';
+    (o.steps||[]).forEach(function(st){var a=st[0],b=st[1];
+      h+='<line class="stp" x1="'+X(a[0])+'" y1="'+Y(a[1])+'" x2="'+X(b[0])+'" y2="'+Y(a[1])+'"/><line class="stp" x1="'+X(b[0])+'" y1="'+Y(a[1])+'" x2="'+X(b[0])+'" y2="'+Y(b[1])+'"/>';
+      h+='<text class="sl" x="'+r2((X(a[0])+X(b[0]))/2)+'" y="'+r2(Y(a[1])+(b[1]>a[1]?14:-6))+'" text-anchor="middle">run '+Math.abs(b[0]-a[0])+'</text>';
+      h+='<text class="sl" x="'+r2(X(b[0])+(b[0]>a[0]?6:-6))+'" y="'+r2((Y(a[1])+Y(b[1]))/2+4)+'" text-anchor="'+(b[0]>a[0]?"start":"end")+'">'+(b[1]>=a[1]?"rise ":"fall ")+Math.abs(b[1]-a[1])+'</text>';});
+    (o.lines||[]).forEach(function(L,j){var e=clipL(L,R),k=L.k||(j?"b":"a");
+      h+='<line class="ln '+k+'" data-n="'+(L.n||"")+'" x1="'+X(e[0][0])+'" y1="'+Y(e[0][1])+'" x2="'+X(e[1][0])+'" y2="'+Y(e[1][1])+'"/>';
+      if(L.n){var q=L.end===0?e[0]:e[1],p=L.end===0?e[1]:e[0],dx=p[0]-q[0],dy=p[1]-q[1],l=Math.sqrt(dx*dx+dy*dy),t=Math.min(1.1,l/3),ux=dx/l,uy=dy/l;
+        var lx=X(q[0]+ux*t)+uy*12,ly=Y(q[1]+uy*t)+ux*12+4;lx=Math.min(W-8,Math.max(8,lx));ly=Math.min(W-4,Math.max(14,ly));
+        h+='<text class="lnl '+k+'" x="'+r2(lx)+'" y="'+r2(ly)+'" text-anchor="middle">'+L.n+'</text>';}});
+    (o.segs||[]).forEach(function(g){var a=g[0],b=g[1];h+='<line class="sg" data-a="'+a.join(",")+'" data-b="'+b.join(",")+'" x1="'+X(a[0])+'" y1="'+Y(a[1])+'" x2="'+X(b[0])+'" y2="'+Y(b[1])+'"/>';});
+    (o.pts||[]).forEach(function(p){var dx=p.dx==null?9:p.dx,dy=p.dy==null?-7:p.dy;
+      h+='<circle class="pt '+(p.c||"")+'" data-x="'+p.p[0]+'" data-y="'+p.p[1]+'" data-n="'+(p.n||"")+'" cx="'+X(p.p[0])+'" cy="'+Y(p.p[1])+'" r="3.6"/>';
+      if(p.n)h+='<text class="pl" x="'+r2(X(p.p[0])+dx)+'" y="'+r2(Y(p.p[1])+dy)+'" text-anchor="middle">'+p.n+'</text>';});
+    return h+'</svg>';
+  }
+  /* label offset away from a line of slope m (so a point's name doesn't sit on the line) */
+  function off(m){var v=fv(m);return v>0?{dx:9,dy:12}:{dx:9,dy:-8};}
+
+  /* ================= SIMULTANEOUS EQUATIONS KIT ================= */
+  var M="−";
+  function nz(a,b){var v;do{v=ri(a,b);}while(v===0);return v;}
+  /* one term: k·v, first term or following term */
+  function tm(k,v,first){if(k===0)return "";var a=Math.abs(k),s=(a===1&&v?"":String(a))+v;
+    if(first)return (k<0?M:"")+s;return (k<0?" "+M+" ":" + ")+s;}
+  /* ax + by = c */
+  function lin(E){var a=E[0],b=E[1],c=E[2],L=a?tm(a,"x",true)+tm(b,"y",false):tm(b,"y",true);return L+" = "+n_(c);}
+  /* y = mx + k (m, k whole numbers) */
+  function yeq(m,k){return "y = "+tm(m,"x",true)+(k===0?"":k>0?" + "+k:" "+M+" "+(-k));}
+  function on(E,P){return E[0]*P[0]+E[1]*P[1]===E[2];}
+  function thru(a,b,P){return [a,b,a*P[0]+b*P[1]];}
+  function det(E1,E2){return E1[0]*E2[1]-E1[1]*E2[0];}
+  function solve(E1,E2){var d=det(E1,E2);if(!d)return null;return [F(E1[2]*E2[1]-E1[1]*E2[2],d),F(E1[0]*E2[2]-E1[2]*E2[0],d)];}
+  function pv(v){return Array.isArray(v)?fs(v):n_(v);}
+  function ps(P){return "x = "+pv(P[0])+", y = "+pv(P[1]);}
+  function EQS(a,b,la,lb){return '<div class="eqs"><p class="e" data-e="1">'+(la||"①")+' '+a+'</p><p class="e" data-e="2">'+(lb||"②")+' '+b+'</p></div>';}
+  function solPt(){return Math.random()<.7?[ri(1,8),ri(1,8)]:[ri(-4,7),ri(-4,7)];}
+  /* pair-answer question: options are (x, y) pairs */
+  function QS(en,ans,slips,why,html,data){var seen={},w=[],A=ps(ans);seen[A]=1;
+    var x=ans[0],y=ans[1],num=!Array.isArray(x)&&!Array.isArray(y);
+    slips.concat(num?[[y,x],[x,-y],[-x,y],[x+1,y-1],[x-1,y+1],[x,y+2]]:[[y,x],[fneg(Array.isArray(x)?x:F(x)),y],[x,fneg(Array.isArray(y)?y:F(y))]]).forEach(function(p){if(!p)return;var s=ps(p);if(/NaN|undefined|Infinity/.test(s)||seen[s]||w.length>=3)return;seen[s]=1;w.push(s);});
+    return {en:en,frame:"",html:html||"",answer:A,wrong:w,why:why,review:en.replace(/\.$/,"")+(data&&data.rv?": "+data.rv:"")+" → "+A,data:data||{}};}
+  /* two equations through P with a unique solution; kind: "opp" (y terms opposite), "same" (y terms equal), "mult" (multiply one equation), "both", "any" */
+  function pairFor(P,kind){for(var t=0;t<400;t++){var a1=nz(-5,5),b1=nz(-4,4),a2=nz(-5,5),b2;
+      if(kind==="opp")b2=-b1;else if(kind==="same")b2=b1;
+      else if(kind==="mult"){var k=rnd([2,3,-2,-3]);b2=b1*k;if(Math.abs(b2)>9)continue;if(Math.random()<.5){var s=b1;b1=b2;b2=s;}}
+      else if(kind==="both"){b1=rnd([2,3,4,5])*rnd([1,-1]);b2=rnd([2,3,4,5])*rnd([1,-1]);if(Math.abs(b1)===Math.abs(b2)||b1%b2===0||b2%b1===0)continue;if(Math.abs(a1)===Math.abs(a2)||a1%a2===0||a2%a1===0)continue;}
+      else b2=nz(-5,5);
+      if(a1<0&&Math.random()<.8)a1=-a1;if(a2<0&&Math.random()<.8)a2=-a2;
+      var E1=thru(a1,b1,P),E2=thru(a2,b2,P);if(!det(E1,E2))continue;if(Math.abs(E1[2])>60||Math.abs(E2[2])>60)continue;
+      if(kind==="opp"||kind==="same"){var dd=kind==="opp"?a1+a2:a1-a2;if(!dd)continue;}
+      return [E1,E2];}
+    return [thru(1,1,P),thru(1,-1,P)];}
+  /* points that fit only one equation (classic slips) */
+  function onlyOne(E,P){return [P[0]+E[1],P[1]-E[0]];}
+  function subWhy(E,x,lab){var a=E[0],b=E[1],c=E[2],ax=a*x,r=c-ax;return "Put x = "+n_(x)+" into "+lab+": "+n_(ax)+tm(b,"y",false)+" = "+n_(c)+", so "+tm(b,"y",true)+" = "+n_(r)+(b===1?".":" and y = "+n_(r/b)+".");}
+
+  /* ================= CHECK ================= */
+  function qIsSol(){var P=solPt(),E=pairFor(P,"any"),E1=E[0],E2=E[1],k=ri(0,3),T;
+    if(k===0)T=P;else if(k===1)T=onlyOne(E1,P);else if(k===2)T=onlyOne(E2,P);else{for(var t=0;t<50;t++){T=[P[0]+nz(-2,2),P[1]+nz(-2,2)];if(!on(E1,T)&&!on(E2,T))break;}}
+    var o1=on(E1,T),o2=on(E2,T),ans=o1&&o2?"Yes, both":o1?"Only ①":o2?"Only ②":"Neither";
+    var chk=function(E,lab){var v=E[0]*T[0]+E[1]*T[1];return lab+": "+n_(E[0]*T[0])+(E[1]*T[1]<0?" − "+n_(-E[1]*T[1]):" + "+n_(E[1]*T[1]))+" = "+n_(v)+(v===E[2]?" ✓":" ✗ (not "+n_(E[2])+")");};
+    return C("Does x = "+n_(T[0])+", y = "+n_(T[1])+" fit both equations?",ans,["Yes, both","Only ①","Only ②","Neither"].filter(function(s){return s!==ans;}),
+      chk(E1,"①")+". "+chk(E2,"②")+".",EQS(lin(E1),lin(E2)),{t:"issol",T:T,rv:lin(E1)+" and "+lin(E2)+", x = "+n_(T[0])+", y = "+n_(T[1])});}
+  function qWhichPair(){var P=solPt(),E=pairFor(P,"any"),E1=E[0],E2=E[1];
+    var why="Check x = "+n_(P[0])+", y = "+n_(P[1])+" in both: ① "+n_(E1[0]*P[0]+E1[1]*P[1])+" = "+n_(E1[2])+" ✓ ② "+n_(E2[0]*P[0]+E2[1]*P[1])+" = "+n_(E2[2])+" ✓. The other pairs fit one equation at most.";
+    return QS("Which pair fits both equations?",P,[onlyOne(E1,P),onlyOne(E2,P),[P[0]-E1[1],P[1]+E1[0]],[P[0]-E2[1],P[1]+E2[0]]],why,EQS(lin(E1),lin(E2)),{t:"pair",rv:lin(E1)+" and "+lin(E2)});}
+  function qFindOther(){for(var t=0;t<200;t++){var a=Math.random()<.85?ri(1,6):nz(-5,-1),b=nz(-4,5),x=ri(-3,6),y=ri(-4,8),E=[a,b,a*x+b*y];if(Math.abs(b)===1&&Math.random()<.5)continue;
+      var ax=a*x,r=E[2]-ax;
+      return QI("x = "+n_(x)+". Find y.",y,[r,E[2]+ax!==0&&(E[2]+ax)%b===0?(E[2]+ax)/b:null,-y,(E[2]-a)/b===Math.round((E[2]-a)/b)?(E[2]-a)/b:null,y+1],
+        subWhy(E,x,"the equation"),'<div class="eqs one"><p class="e" data-e="1">'+lin(E)+'</p></div>',{t:"findy",x:x,rv:lin(E)+", x = "+n_(x)});}
+    return qWhichPair();}
+
+  /* ================= ELIMINATION ================= */
+  var COMBOS=[[1,1],[1,-1],[2,1],[2,-1],[1,2],[1,-2],[3,1],[3,-1],[1,3],[1,-3]];
+  function cmb(c){return (c[0]===1?"①":c[0]+" × ①")+(c[1]>0?" + ":" − ")+(Math.abs(c[1])===1?"②":Math.abs(c[1])+" × ②");}
+  function qStep(){for(var t=0;t<400;t++){var v=Math.random()<.65?1:0,vn=v?"y":"x",A=rnd(COMBOS),p=A[0],q=A[1],k1,k2;
+      if(Math.abs(q)===1){k1=nz(-3,3);k2=-p*k1/q;}else{k2=nz(-3,3);k1=-q*k2;}
+      if(Math.abs(k1)>9||Math.abs(k2)>9)continue;
+      var o1=nz(-5,5),o2=nz(-5,5);if(o1<0)o1=-o1;
+      var P=solPt(),E1=v?thru(o1,k1,P):thru(k1,o1,P),E2=v?thru(o2,k2,P):thru(k2,o2,P);if(!det(E1,E2))continue;
+      var el=function(c){return c[0]*E1[v]+c[1]*E2[v]===0;};
+      var pool=shuffle(COMBOS.filter(function(c){return !el(c);})).slice(0,3).map(cmb);
+      if(pool.length<3)continue;
+      return C("Which step gets rid of "+vn+"?",cmb(A),pool,cmb(A)+": "+n_(p*E1[v])+vn+" and "+n_(q*E2[v])+vn+" add up to 0, so "+vn+" is gone.",EQS(lin(E1),lin(E2)),{t:"step",v:vn,rv:lin(E1)+" and "+lin(E2)});}
+    return qIsSol();}
+  function same(A,B){return A[0]*B[1]===A[1]*B[0]&&A[0]*B[2]===A[2]*B[0]&&A[1]*B[2]===A[2]*B[1];}
+  function qAfter(){var P=solPt(),add=Math.random()<.5,E=pairFor(P,add?"opp":"same"),E1=E[0],E2=E[1],s=add?1:-1;
+    var R=[E1[0]+s*E2[0],0,E1[2]+s*E2[2]],ans=lin(R);
+    var cands=[[E1[0]+s*E2[0],0,E1[2]-s*E2[2]],[E1[0]-s*E2[0],E1[1]-s*E2[1],E1[2]-s*E2[2]],[E1[0]-s*E2[0],0,E1[2]+s*E2[2]],[E1[0]+s*E2[0],2*E1[1],E1[2]+s*E2[2]],[E1[0]+s*E2[0],0,E1[2]+s*E2[2]+2]];
+    var pool=cands.filter(function(c){return (c[0]||c[1])&&!same(c,R);}).map(lin);
+    return C(add?"Add ① and ②. What do you get?":"Take ② away from ①. What do you get?",ans,pool,
+      (add?"① + ②":"① − ②")+": "+tm(E1[0],"x",true)+(add?" + ":" − ")+br(E2[0])+"x = "+n_(R[0])+"x, the y terms cancel, and "+n_(E1[2])+(add?" + ":" − ")+br(E2[2])+" = "+n_(R[2])+". So "+ans+".",EQS(lin(E1),lin(E2)),{t:"after",op:add?"add":"sub",rv:lin(E1)+" and "+lin(E2)});}
+  function elimWhy(E1,E2,P){var v=E1[1]===-E2[1]?"add":E1[1]===E2[1]?"sub":null;
+    if(v){var R0=v==="add"?E1[0]+E2[0]:E1[0]-E2[0],R2=v==="add"?E1[2]+E2[2]:E1[2]-E2[2];
+      return (v==="add"?"Add":"Subtract")+" to get rid of y: "+tm(R0,"x",true)+" = "+n_(R2)+", so x = "+n_(P[0])+". "+subWhy(E1,P[0],"①")+" Check in ②: "+n_(E2[0]*P[0]+E2[1]*P[1])+" = "+n_(E2[2])+" ✓";}
+    return "Make the y terms the same size (multiply one or both equations), add or subtract to find x = "+n_(P[0])+", then "+subWhy(E1,P[0],"①").replace(/^Put/,"put")+" Check in ②: "+n_(E2[0]*P[0]+E2[1]*P[1])+" = "+n_(E2[2])+" ✓";}
+  function qSolveElim(){var P=solPt(),E=pairFor(P,Math.random()<.5?"opp":"same"),E1=E[0],E2=E[1];
+    return QS("Solve the equations.",P,[onlyOne(E1,P),onlyOne(E2,P),[P[0],-P[1]]],elimWhy(E1,E2,P),EQS(lin(E1),lin(E2)),{t:"solve",rv:lin(E1)+" and "+lin(E2)});}
+  function qSolveMult(){var P=solPt(),E=pairFor(P,Math.random()<.7?"mult":"both"),E1=E[0],E2=E[1];
+    return QS("Solve the equations.",P,[onlyOne(E1,P),onlyOne(E2,P),[-P[0],P[1]]],elimWhy(E1,E2,P),EQS(lin(E1),lin(E2)),{t:"solve",rv:lin(E1)+" and "+lin(E2)});}
+  /* which line has the first mistake? */
+  function qSlip(){for(var t=0;t<500;t++){var P=solPt(),add=Math.random()<.5,E=pairFor(P,add?"opp":"same"),E1=E[0],E2=E[1],s=add?1:-1,bad=ri(0,4);
+      var A0=E1[0]+s*E2[0],C0=E1[2]+s*E2[2];if(bad===1){C0=E1[2]-s*E2[2];if(C0===E1[2]+s*E2[2])continue;}
+      if(C0%A0)continue;var x=C0/A0;if(bad===2){x=bad===2?(Math.random()<.5?C0-A0:-x):x;if(x===C0/A0)continue;}
+      var ax=E1[0]*x;if(bad===3){ax=-ax;if(ax===E1[0]*x)continue;}
+      var r=E1[2]-ax;if(r%E1[1])continue;var y=r/E1[1];if(bad===4){y=(E1[2]+ax)/E1[1];if(y!==Math.round(y)||y===r/E1[1])continue;}
+      if(Math.abs(A0)<2||[C0,x,ax,y,E1[2]].some(function(v){return Math.abs(v)>40;}))continue;
+      var L=[(add?"① + ②: ":"① − ②: ")+tm(A0,"x",true)+" = "+n_(C0),"x = "+n_(x),"Put x = "+n_(x)+" in ①: "+n_(ax)+tm(E1[1],"y",false)+" = "+n_(E1[2]),"y = "+n_(y)];
+      var html=EQS(lin(E1),lin(E2))+'<div class="steps">'+L.map(function(s,i){var j=s.indexOf(": ");return '<p data-line="'+(i+1)+'"><b>Line '+(i+1)+':</b> '+(j<0?'<span class="nw">'+s+'</span>':s.slice(0,j+2)+'<span class="nw">'+s.slice(j+2)+'</span>')+'</p>';}).join("")+'</div>';
+      var ans=bad===0?"No mistake":"Line "+bad,R0=E1[2]+s*E2[2],xr=R0/A0;
+      var fix=bad===0?"Every line is right: x = "+n_(P[0])+", y = "+n_(P[1])+" fits both equations.":bad===1?"Line 1: "+n_(E1[2])+(add?" + ":" − ")+br(E2[2])+" = "+n_(R0)+".":bad===2?"Line 2: "+tm(A0,"x",true)+" = "+n_(C0)+" means x = "+n_(C0)+" ÷ "+br(A0)+" = "+n_(C0/A0)+".":bad===3?"Line 3: "+n_(E1[0])+" × "+br(x)+" = "+n_(E1[0]*x)+".":"Line 4: "+tm(E1[1],"y",true)+" = "+n_(E1[2])+" − "+br(ax)+" = "+n_(r)+", so y = "+n_(r/E1[1])+".";
+      return C("Which line has the first mistake?",ans,["Line 1","Line 2","Line 3","Line 4","No mistake"].filter(function(s){return s!==ans;}),fix,html,{t:"slip",rv:lin(E1)+" and "+lin(E2)+" ("+L.join("; ")+")"});}
+    return qSolveElim();}
+  /* Higher Level: fractions */
+  function qHLFrac(){for(var t=0;t<300;t++){var d1=rnd([2,3,4]),d2=rnd([2,3,5]);if(d1===d2)continue;var P=[d1*ri(1,3),d2*ri(-1,3)],s=rnd([1,-1]);
+      if(!P[1])continue;var c1=P[0]/d1+s*P[1]/d2,a2=ri(1,3),b2=nz(-3,3),E2=thru(a2,b2,P);
+      var e1="x/"+d1+(s>0?" + ":" − ")+"y/"+d2+" = "+n_(c1),E1=[d2,s*d1,c1*d1*d2];if(!det(E1,E2))continue;
+      return QS("Higher Level: Solve the equations.",P,[onlyOne(E2,P),[P[0]/d1,P[1]/d2]],"Multiply ① by "+d1*d2+" to clear the fractions: "+lin(E1)+". Then solve with ②: x = "+n_(P[0])+", y = "+n_(P[1])+". Check ①: "+n_(P[0]/d1)+(s>0?" + ":" − ")+br(P[1]/d2)+" = "+n_(c1)+" ✓",EQS(e1,lin(E2)),{t:"solve",hl:1,rv:e1+" and "+lin(E2)});}
+    return qSolveElim();}
+  function qHLFracSol(){for(var t=0;t<400;t++){var dx=rnd([1,2,3]),dy=dx===1?rnd([2,3]):rnd([1,1,2]),P=[F(nz(-5,7),dx),F(nz(-5,7),dy)];if(P[0][1]===1&&P[1][1]===1)continue;
+      var a1=P[0][1]*nz(-3,3),b1=P[1][1]*nz(-3,3),a2=P[0][1]*nz(-3,3),b2=P[1][1]*nz(-3,3);if(a1<0)a1=-a1;if(a2<0)a2=-a2;
+      var c1=a1*fv(P[0])+b1*fv(P[1]),c2=a2*fv(P[0])+b2*fv(P[1]),E1=[a1,b1,Math.round(c1)],E2=[a2,b2,Math.round(c2)];
+      if(!det(E1,E2)||Math.abs(E1[2])>40||Math.abs(E2[2])>40)continue;if(Math.abs(a1)>9||Math.abs(b1)>9||Math.abs(a2)>9||Math.abs(b2)>9)continue;
+      var S=solve(E1,E2);if(!feq(S[0],P[0])||!feq(S[1],P[1]))continue;
+      return QS("Higher Level: Solve the equations.",P,[[finv(P[0])||P[1],P[1]],[P[0],F(P[1][0]+P[1][1],P[1][1])],[fneg(P[0]),P[1]],[P[1],P[0]]],
+        "Eliminate one letter, then divide carefully: the answers are fractions this time. x = "+fs(P[0])+", y = "+fs(P[1])+". Check ①: "+n_(a1)+" × "+bf(P[0])+" + "+br(b1)+" × "+bf(P[1])+" = "+n_(E1[2])+" ✓",EQS(lin(E1),lin(E2)),{t:"solve",hl:1,rv:lin(E1)+" and "+lin(E2)});}
+    return qSolveMult();}
+
+  /* ================= GRAPHS & SUBSTITUTION ================= */
+  /* line of slope p/q through P, written as ax + by = c (a > 0, or y = c) */
+  function lineEq(p,q,P){var a=p,b=-q,c=p*P[0]-q*P[1];if(a<0||a===0&&b<0){a=-a;b=-b;c=-c;}var g=gcd(gcd(Math.abs(a),Math.abs(b)),Math.abs(c))||1;return [a/g,b/g,c/g];}
+  function disp(E){/* y = mx + k when it is whole, else ax + by = c */
+    if(E[1]!==0&&E[0]%E[1]===0&&E[2]%E[1]===0&&Math.random()<.6)return yeq(-E[0]/E[1],E[2]/E[1]);
+    return lin(E);}
+  function qGraph(){for(var t=0;t<500;t++){var P=[ri(-3,3),ri(-3,3)],s1=rnd(SL),s2=rnd(SL);if(feq(s1,s2))continue;
+      if(Math.abs(Math.atan(fv(s1))-Math.atan(fv(s2)))<0.5)continue;   /* lines must cross clearly */
+      var c1=fadd(F(P[1]),fneg(fmul(s1,F(P[0])))),c2=fadd(F(P[1]),fneg(fmul(s2,F(P[0])))),L1={m:s1,c:c1},L2={m:s2,c:c2};
+      if(spans(L1,6)<8||spans(L2,6)<8)continue;
+      var E1=lineEq(s1[0],s1[1],P),E2=lineEq(s2[0],s2[1],P),e1=disp(E1),e2=disp(E2);
+      var pic=EQS(e1,e2,'<b class="la">l:</b>','<b class="lb">k:</b>')+plane({lines:[{m:s1,c:c1,n:"l"},{m:s2,c:c2,n:"k",end:0}],aria:"The lines l and k on a grid"});
+      var sl=[[P[1],P[0]],[-P[0],P[1]],[P[0],-P[1]]];if(c1[1]===1)sl.push([0,fv(c1)]);if(c2[1]===1)sl.push([0,fv(c2)]);
+      return QS("Use the graph to solve the equations.",P,sl,"The solution is where the lines cross: ("+n_(P[0])+", "+n_(P[1])+"), so x = "+n_(P[0])+", y = "+n_(P[1])+". Check it in both equations.",pic,{t:"graph",rv:e1+" and "+e2});}
+    return qSolveSub();}
+  function brk(m,k){return "("+tm(m,"x",true)+(k===0?"":k>0?" + "+k:" "+M+" "+(-k))+")";}
+  function subst(a,b,c,m,k){/* ax + b(mx + k) = c */
+    var inner=brk(m,k);return tm(a,"x",true)+(b===1?tm(m,"x",false)+(k===0?"":k>0?" + "+k:" "+M+" "+(-k)):b===-1?" "+M+" "+inner:(b<0?" "+M+" ":" + ")+Math.abs(b)+inner)+" = "+n_(c);}
+  function qSubStep(){for(var t=0;t<300;t++){var m=nz(-3,4),k=nz(-5,6),a=nz(-4,5),b=nz(-4,4),x=ri(-3,5),y=m*x+k,c=a*x+b*y;if(a+b*m===0)continue;if(a<0)a=-a,c=a*x+b*y;if(a+b*m===0)continue;
+      var ans=subst(a,b,c,m,k),x0=F(c-b*k,a+b*m),pool=[];
+      /* each slip with the x it would give: drop any that give the same x as the answer */
+      var cand=[[subst(a,b,c,m,-k),F(c+b*k,a+b*m)],[subst(a,b,c,-m,k),F(c-b*k,a-b*m)],[subst(a,b,0,m,k),F(-b*k,a+b*m)]];
+      if(Math.abs(b)!==1)cand.push([tm(a,"x",true)+tm(b*m,"x",false)+(k>0?" + "+k:" "+M+" "+(-k))+" = "+n_(c),F(c-k,a+b*m)]);
+      cand.forEach(function(z){if(z[1]&&!feq(z[1],x0))pool.push(z[0]);});
+      pool.push(tm(a*m,"x",true)+tm(a*k,"",false)+tm(b,"y",false)+" = "+n_(c));
+      return C("Put ① into ②. What do you get?",ans,pool.filter(function(s){return s!==ans;}),"Swap the y in ② for ("+yeq(m,k).slice(4)+"): "+ans+". Keep the bracket so every term gets multiplied.",EQS(yeq(m,k),lin([a,b,c])),{t:"subst",rv:yeq(m,k)+" and "+lin([a,b,c])});}
+    return qSolveSub();}
+  function qSolveSub(){for(var t=0;t<300;t++){var P=solPt(),m=nz(-3,4),k=P[1]-m*P[0];if(Math.abs(k)>9)continue;var a=nz(1,5),b=nz(-4,4);if(a+b*m===0)continue;var E2=thru(a,b,P),E1=[-m,1,k];
+      var ax=a+b*m,r=E2[2]-b*k;
+      return QS("Solve the equations.",P,[onlyOne(E2,P),[P[0]+1,P[1]+m],[P[0],m*P[0]-k]],"Put ① into ②: "+subst(a,b,E2[2],m,k)+" → "+tm(ax,"x",true)+" = "+n_(r)+", so x = "+n_(P[0])+". Then y = "+n_(m)+" × "+br(P[0])+(k===0?"":k>0?" + "+k:" − "+(-k))+" = "+n_(P[1])+".",EQS(yeq(m,k),lin(E2)),{t:"solve",rv:yeq(m,k)+" and "+lin(E2)});}
+    return qSolveElim();}
+
+  /* ================= WORD PROBLEMS ================= */
+  var TIX=[["A school show","adult","child","adults","children"],["A county final","adult","student","adults","students"],["A cinema","adult","child","adults","children"],["A charity concert","adult","teen","adults","teens"]];
+  function qTickets(){for(var t=0;t<200;t++){var X=rnd(TIX),pa=ri(6,15),pb=ri(3,pa-2),A=ri(20,140),B=ri(20,140),n=A+B,T=pa*A+pb*B,askA=Math.random()<.5;
+      var en=X[0]+" sold "+n+" tickets: "+X[3]+" €"+pa+", "+X[4]+" €"+pb+". Takings: €"+T+". How many "+X[askA?1:2]+" tickets?";
+      var ans=askA?A:B;
+      return QI(en,ans,[askA?B:A,Math.round(T/(pa+pb)),Math.floor(T/pa),n-ans+1],"x "+X[3]+", y "+X[4]+": x + y = "+n+" and "+pa+"x + "+pb+"y = "+T+". Multiply the first by "+pb+" and subtract: "+(pa-pb)+"x = "+(T-pb*n)+", so x = "+A+" and y = "+B+".","",{t:"tix",ask:askA?"a":"b"});}
+    return qTwoNum();}
+  var ITEMS=[["coffee","coffees","scone","scones"],["pen","pens","copy","copies"],["burger","burgers","bag of chips","bags of chips"],["hurley","hurleys","sliotar","sliotars"],["pizza","pizzas","drink","drinks"]];
+  function plu(n,s,p){return n+" "+(n===1?s:p);}
+  function qPrices(){for(var t=0;t<300;t++){var I=rnd(ITEMS),p=ri(2,12),q=ri(1,9),a1=ri(1,4),b1=ri(1,4),a2=ri(1,4),b2=ri(1,4);if(a1*b2===a2*b1||p===q)continue;
+      if(I[0]==="hurley"&&(p<12))p=ri(15,30);
+      var T1=a1*p+b1*q,T2=a2*p+b2*q,askA=Math.random()<.6,ans=askA?p:q;
+      var en=plu(a1,I[0],I[1])+" and "+plu(b1,I[2],I[3])+" cost €"+T1+". "+plu(a2,I[0],I[1])+" and "+plu(b2,I[2],I[3])+" cost €"+T2+". How much is one "+(askA?I[0]:I[2])+"?";
+      var pool=[askA?q:p,ans+1,ans-1,Math.round(T1/(a1+b1)),ans+2,ans+3,2*ans].filter(function(v){return v>0&&v!==ans;}).map(function(v){return "€"+v;});
+      return C(en,"€"+ans,pool,"x = one "+I[0]+", y = one "+I[2]+": "+lin([a1,b1,T1])+" and "+lin([a2,b2,T2])+". Solve: x = €"+p+", y = €"+q+". Check: "+a1+" × "+p+" + "+b1+" × "+q+" = "+T1+" ✓","",{t:"price",ask:askA?"a":"b"});}
+    return qTwoNum();}
+  function qTwoNum(){var a=ri(8,40),b=ri(1,a-1),big=Math.random()<.5;
+    return QI("Two numbers add up to "+(a+b)+". Their difference is "+(a-b)+". What is the "+(big?"bigger":"smaller")+" number?",big?a:b,[big?b:a,(a+b)/2===Math.round((a+b)/2)?(a+b)/2:null,a+b-(a-b),a-b],
+      "x + y = "+(a+b)+" and x − y = "+(a-b)+". Add: 2x = "+2*a+", so x = "+a+" and y = "+b+".","",{t:"two",big:big});}
+  function qForm(){var X=rnd(TIX),pa=ri(6,15),pb=ri(3,pa-2),A=ri(20,90),B=ri(20,90),n=A+B,T=pa*A+pb*B;
+    var en=X[0]+" sold "+n+" tickets: "+X[3]+" €"+pa+", "+X[4]+" €"+pb+". Takings: €"+T+". x = "+X[3]+", y = "+X[4]+". Which equations fit?";
+    var f=function(e1,e2){return e1+" and "+e2;},ans=f(lin([1,1,n]),lin([pa,pb,T]));
+    return C(en,ans,[f(lin([1,1,T]),lin([pa,pb,n])),f(lin([1,1,n]),lin([pb,pa,T])),f(lin([1,-1,n]),lin([pa,pb,T])),f(lin([pa,1,n]),lin([1,pb,T])),f(lin([1,1,n]),lin([pa+pb,0,T]))],
+      "Count the tickets: x + y = "+n+". Count the money: "+pa+"x + "+pb+"y = "+T+".","",{t:"form"});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    check:[qIsSol,qIsSol,qWhichPair,qWhichPair,qFindOther],
+    elim:[qStep,qAfter,qSolveElim,qSolveElim,qSolveMult,qSlip,qHLFrac,qHLFracSol],
+    graph:[qGraph,qGraph,qSubStep,qSolveSub,qSolveSub],
+    words:[qTickets,qPrices,qPrices,qTwoNum,qForm],
+    mixed:[]
+  };
+  ["check","elim","graph","words"].forEach(function(m){MAKERS[m].forEach(function(f){if(MAKERS.mixed.indexOf(f)<0)MAKERS.mixed.push(f);});});
+
+  /* fixed diagrams in the rules and the Exam corner */
+  var FIX={
+    meet:function(){return plane({R:5,lines:[{m:[-1,1],c:[5,1],n:"l"},{m:[2,1],c:[-1,1],n:"k",end:0}],pts:[{p:[2,3],n:"(2, 3)",dx:24,dy:4}],aria:"The lines x + y = 5 and y = 2x − 1 crossing at (2, 3)"});},
+    ex2:function(){return plane({R:6,lines:[{m:[1,2],c:[1,1],n:"l"},{m:[-2,1],c:[6,1],n:"k",end:0}],aria:"Two lines l and k"});}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="check"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=nb(q.en);
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="check"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="check"&&streak%5===0?700:350):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{plane:plane,lin:lin,yeq:yeq,F:F,FIX:FIX,solve:solve}};
+})();
+</script>
