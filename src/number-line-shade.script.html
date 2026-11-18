@@ -1,0 +1,272 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function nz(a,b){var x;do{x=ri(a,b);}while(x===0);return x;}
+  var M="−";
+  function num(n){return n<0?M+(-n):String(n);}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function tm(c,k,first){var a=Math.abs(c),t=k===""?String(a):(a===1?"":a)+k;return first?(c<0?M+t:t):(c<0?" "+M+" "+t:" + "+t);}
+  function lin(a,b,v){v=v||"x";var L=[];if(a)L.push([a,v]);if(b||!a)L.push([b,""]);return L.map(function(t,i){return tm(t[0],t[1],i===0);}).join("");} // a·x + b
+  function linR(b,a,v){v=v||"x";return tm(b,"",true)+tm(a,v,false);}                      // b + a·x  (number first)
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,html:html||"",answer:String(ans),wrong:w,why:why,review:en+" "+(data&&data.q?data.q+" ":"")+"→ "+ans,data:data||{}};}
+  function retry(fn){return function maker(){for(var k=0;k<200;k++){var q=fn();if(q)return q;}throw new Error("maker gave up: "+fn.name);};}
+
+  /* ---------- inequalities: I = {lo, loIn, hi, hiIn}; null = no end ---------- */
+  var SYM={"<":"<",">":">","<=":"≤",">=":"≥"};
+  function flipOp(o){return {"<":">",">":"<","<=":">=",">=":"<="}[o];}
+  function mk(op,v){return op==="<"?{lo:null,hi:v,hiIn:false}:op==="<="?{lo:null,hi:v,hiIn:true}:op===">"?{lo:v,loIn:false,hi:null}:{lo:v,loIn:true,hi:null};}
+  function two(lo,loIn,hi,hiIn){return {lo:lo,loIn:loIn,hi:hi,hiIn:hiIn};}
+  var SETN={R:"ℝ",Z:"ℤ",N:"ℕ"};
+  function fmtI(I,set,v){v=v||"x";var s;
+    if(I.lo!=null&&I.hi!=null)s=num(I.lo)+(I.loIn?" ≤ ":" < ")+v+(I.hiIn?" ≤ ":" < ")+num(I.hi);
+    else if(I.lo!=null)s=v+(I.loIn?" ≥ ":" > ")+num(I.lo);else s=v+(I.hiIn?" ≤ ":" < ")+num(I.hi);
+    return set?s+", "+v+" ∈ "+SETN[set]:s;}
+  function inI(I,x){return (I.lo==null||(I.loIn?x>=I.lo:x>I.lo))&&(I.hi==null||(I.hiIn?x<=I.hi:x<I.hi));}
+  function ints(I,set){var out=[];for(var x=-60;x<=60;x++){if(set==="N"&&x<1)continue;if(inI(I,x))out.push(x);}return out;}
+  function same(I,s,J,t){ // same solution set?
+    s=s||"R";t=t||"R";
+    if(s==="R"||t==="R"){if(s!==t)return false;return I.lo===J.lo&&I.hi===J.hi&&(I.lo==null||I.loIn===J.loIn)&&(I.hi==null||I.hiIn===J.hiIn);}
+    return ints(I,s).join()===ints(J,t).join();}
+  /* inequality question: answer I (in set), pool of [J,set] that are NOT the same set */
+  function CI(en,I,set,pool,why,html,data,showSet){var A=fmtI(I,showSet?set:null),opts=[];
+    pool.forEach(function(p){if(!p||!p[0])return;var J=p[0],t=p[1]||set;if(J.lo!=null&&J.hi!=null&&J.lo>=J.hi)return;if(same(I,set,J,t))return;opts.push(fmtI(J,showSet?t:null));});
+    return C(en,A,opts,why,html,data);}
+  /* the usual wrong answers for "x OP v": other three signs, and v ± 1 / wrong values */
+  function variants(op,v,vals){var o=[];["<","<=",">",">="].forEach(function(p){if(p!==op)o.push([mk(p,v)]);});
+    (vals||[]).forEach(function(w){if(w!=null&&isFinite(w)&&w===Math.round(w))o.push([mk(op,w)],[mk(flipOp(op),w)]);});return o;}
+  function setStr(list,more){if(!list.length)return "{ }";return "{"+list.map(num).join(", ")+(more?", …":"")+"}";}
+
+  /* ---------- number line picture ---------- */
+  var G="#2E7D57",INK="#1B2430";
+  function nl(I,set,L,R){
+    var W=340,pad=22,u=(W-2*pad)/(R-L),y=34,X=function(v){return +(pad+(v-L)*u).toFixed(2);},o="";
+    o+='<line x1="6" y1="'+y+'" x2="'+(W-6)+'" y2="'+y+'" stroke="'+INK+'" stroke-width="2"/>';
+    o+='<path d="M6 '+y+' l9 -5 v10 Z M'+(W-6)+' '+y+' l-9 -5 v10 Z" fill="'+INK+'"/>';
+    for(var t=L;t<=R;t++)o+='<line x1="'+X(t)+'" y1="'+(y-6)+'" x2="'+X(t)+'" y2="'+(y+6)+'" stroke="'+INK+'" stroke-width="1.5"/><text class="tk" data-v="'+t+'" x="'+X(t)+'" y="'+(y+26)+'" text-anchor="middle" font-size="14" font-weight="600" fill="'+INK+'" font-family="Inter,sans-serif">'+num(t)+'</text>';
+    if(set==="R"){
+      var a=I.lo!=null?X(I.lo):10,b=I.hi!=null?X(I.hi):W-10;
+      o+='<line class="sh" data-a="'+(I.lo!=null?I.lo:"-inf")+'" data-b="'+(I.hi!=null?I.hi:"inf")+'" x1="'+a+'" y1="'+y+'" x2="'+b+'" y2="'+y+'" stroke="'+G+'" stroke-width="7" stroke-linecap="butt"/>';
+      if(I.lo==null)o+='<path d="M4 '+y+' l13 -9 v18 Z" fill="'+G+'"/>';
+      if(I.hi==null)o+='<path d="M'+(W-4)+' '+y+' l-13 -9 v18 Z" fill="'+G+'"/>';
+      [[I.lo,I.loIn],[I.hi,I.hiIn]].forEach(function(e){if(e[0]==null)return;o+='<circle class="ep" data-x="'+e[0]+'" data-in="'+(e[1]?1:0)+'" cx="'+X(e[0])+'" cy="'+y+'" r="7.5" fill="'+(e[1]?G:"#fff")+'" stroke="'+G+'" stroke-width="3"/>';});
+    }else{
+      for(var k=L;k<=R;k++){if(set==="N"&&k<1)continue;if(inI(I,k))o+='<circle class="dt" data-x="'+k+'" cx="'+X(k)+'" cy="'+y+'" r="7" fill="'+G+'"/>';}
+      var moreR=I.hi==null||I.hi>R,moreL=set==="Z"&&(I.lo==null||I.lo<L);
+      if(moreR)o+='<text class="more" data-d="r" x="'+(W-14)+'" y="'+(y-12)+'" text-anchor="middle" font-size="18" font-weight="800" fill="'+G+'" font-family="Inter,sans-serif">…</text>';
+      if(moreL)o+='<text class="more" data-d="l" x="14" y="'+(y-12)+'" text-anchor="middle" font-size="18" font-weight="800" fill="'+G+'" font-family="Inter,sans-serif">…</text>';
+    }
+    return '<svg class="nl" data-set="'+set+'" data-l="'+L+'" data-r="'+R+'" viewBox="0 0 '+W+' 68" width="100%" style="max-width:420px;display:block;margin:6px auto" role="img" aria-label="Number line">'+o+'</svg>';}
+  function around(v){var L=Math.floor(v)-ri(3,6);return [L,L+10];}
+  function iq(s){return '<div class="iq">'+esc(s)+'</div>';}
+
+  /* ================= Number-Line Shade: read and draw ================= */
+  function qRead(){var v=nz(-6,8),op=rnd(["<","<=",">",">="]),I=mk(op,v),r=around(v);
+    return CI("Which inequality?",I,"R",variants(op,v,[v+1,v-1]),
+      (I.lo!=null?"Shaded to the right: x is bigger than "+num(v)+".":"Shaded to the left: x is smaller than "+num(v)+".")+(op.length>1?" Closed dot: "+num(v)+" is included (≤ or ≥).":" Open dot: "+num(v)+" is NOT included (< or >)."),
+      nl(I,"R",r[0],r[1]),{t:"read",ask:"ineq"});}
+  function qRead2(){var a=nz(-5,4),w=ri(2,5),b=a+w,aI=Math.random()<.5,bI=Math.random()<.5,I=two(a,aI,b,bI),L=a-ri(1,3),R=L+10;
+    if(b>R)return null;
+    var pool=[[two(a,!aI,b,bI)],[two(a,aI,b,!bI)],[two(a,!aI,b,!bI)],[two(a-1,aI,b,bI)],[two(a,aI,b+1,bI)],[mk(aI?">=":">",a)],[mk(bI?"<=":"<",b)]];
+    return CI("Which inequality?",I,"R",pool,"x is between "+num(a)+" and "+num(b)+". Closed dot = included (≤), open dot = not included (<).",nl(I,"R",L,R),{t:"read",ask:"ineq"});}
+  function qReadZ(){var set=Math.random()<.35?"N":"Z",I,L,R;
+    if(set==="N"){var v=ri(2,7),op=rnd(["<","<=",">",">="]);I=mk(op,v);L=0;R=10;if(I.hi==null&&v>=9)return null;}
+    else{var v2=nz(-5,5),op2=rnd(["<","<=",">",">="]);I=mk(op2,v2);var r=around(v2);L=r[0];R=r[1];}
+    var A=I.lo!=null?(I.loIn?">=":">"):(I.hiIn?"<=":"<"),vv=I.lo!=null?I.lo:I.hi;
+    var pool=variants(A,vv,[vv+2,vv-2]).map(function(p){return [p[0],set];});
+    pool.push([I,set==="N"?"Z":"R"],[I,"R"]);
+    return CI("Which one is shown?",I,set,pool,"Dots on whole numbers only: x ∈ "+(set==="N"?"ℕ (1, 2, 3 …)":"ℤ (… −1, 0, 1 …)")+". A shaded line would be ℝ.",nl(I,set,L,R),{t:"readz",ask:"ineqset"},true);}
+  function qWords(){var v=nz(-5,12),P=rnd([["at least",">="],["at most","<="],["more than",">"],["less than","<"],["no more than","<="],["no less than",">="],["over",">"],["under","<"]]);
+    var I=mk(P[1],v);return CI("x is "+P[0]+" "+num(v)+".",I,"R",variants(P[1],v,[]),
+      "\""+P[0]+"\" → "+SYM[P[1]]+(P[1].length>1?" (the number itself counts)":" (the number itself does not count)")+".","",{t:"words",ask:"ineq",ph:P[0],v:v});}
+  function qWhich(){ // a solved or simple inequality: which number fits?
+    var op=rnd(["<","<=",">",">="]),v=nz(-5,8),a=ri(1,4),b=nz(-9,9),k=a*v+b,s=lin(a,b)+" "+SYM[op]+" "+num(k),I=mk(op,v);
+    var cand=[];for(var x=v-4;x<=v+4;x++)cand.push(x);
+    var sat=cand.filter(function(x){return inI(I,x);}),uns=cand.filter(function(x){return !inI(I,x);});
+    var near=function(L){return L.slice().sort(function(p,q){return Math.abs(p-v)-Math.abs(q-v);});};
+    var ans=near(sat)[ri(0,1)],wrong=near(uns).slice(0,3);
+    return C("Which value of x fits?",num(ans),wrong.map(num),"Solve it: "+fmtI(I)+". "+num(ans)+" fits"+(op.length===1?"; "+num(v)+" itself does not.":"."),iq(s),{t:"which",ask:"num",q:s});}
+
+  /* ================= Solve (Ordinary Level) ================= */
+  function qS1(){var v=nz(-6,9),b=nz(-9,9),op=rnd(["<","<=",">",">="]),k=v+b,s=lin(1,b)+" "+SYM[op]+" "+num(k),I=mk(op,v);
+    return CI("Solve.",I,"R",variants(op,v,[k+b,-v]),(b>0?"Subtract "+b:"Add "+(-b))+" on both sides: "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s});}
+  function qS2(){var v=nz(-5,8),a=ri(2,6),b=nz(-12,12),op=rnd(["<","<=",">",">="]),k=a*v+b,s=lin(a,b)+" "+SYM[op]+" "+num(k),I=mk(op,v);
+    var sl=[(k+b)/a,k-b,v+b];
+    return CI("Solve.",I,"R",variants(op,v,sl),(b>0?"Subtract "+b:"Add "+(-b))+": "+tm(a,"x",true)+" "+SYM[op]+" "+num(k-b)+". Divide by "+a+": "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s});}
+  function qS3(){var c=ri(1,4),a=c+ri(1,4),v=nz(-5,8),b=nz(-10,10),d=a*v+b-c*v,op=rnd(["<","<=",">",">="]);
+    var s=lin(a,b)+" "+SYM[op]+" "+lin(c,d),I=mk(op,v);if(d===0)return null;
+    return CI("Solve.",I,"R",variants(op,v,[(d-b)/(a+c),(d+b)/(a-c),-v]),"x terms left, numbers right: "+tm(a-c,"x",true)+" "+SYM[op]+" "+num(d-b)+", so "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s});}
+  function qS4(){var k=ri(2,5),p=nz(-6,6),v=nz(-5,7),op=rnd(["<","<=",">",">="]),c=k*(v+p),s=k+"("+lin(1,p)+") "+SYM[op]+" "+num(c),I=mk(op,v);
+    return CI("Solve.",I,"R",variants(op,v,[c-p,(c-p)/k,c/k+p]),"Expand: "+lin(k,k*p)+" "+SYM[op]+" "+num(c)+". Then "+fmtI(I)+". (Or divide by "+k+" first.)",iq(s),{t:"solve",ask:"ineq",q:s});}
+  function qS5(){ // number first: 7 + 2x > 15 / 20 ≥ 3x + 2
+    var v=nz(-4,8),a=ri(2,5),b=nz(-9,12),k=a*v+b,op=rnd(["<","<=",">",">="]),rev=Math.random()<.5,s,I;
+    if(rev){s=num(k)+" "+SYM[op]+" "+lin(a,b);I=mk(flipOp(op),v);} // k OP ax+b  →  x flipOp v
+    else{s=linR(b,a)+" "+SYM[op]+" "+num(k);I=mk(op,v);}
+    var o2=I.lo!=null?(I.loIn?">=":">"):(I.hiIn?"<=":"<");
+    return CI("Solve.",I,"R",variants(o2,v,[(k+b)/a,k-b]),(rev?"Read it from the x side: "+lin(a,b)+" "+SYM[flipOp(op)]+" "+num(k)+". ":"")+"Then "+tm(a,"x",true)+" "+SYM[o2]+" "+num(k-b)+", so "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s});}
+
+  /* ================= Flip it (Higher Level) ================= */
+  function qN1(){var v=nz(-6,7),a=ri(2,6),b=nz(-10,10),op=rnd(["<","<=",">",">="]),k=-a*v+b,form=Math.random()<.5;
+    var s=(form?lin(-a,b):linR(b,-a))+" "+SYM[op]+" "+num(k),I=mk(flipOp(op),v);
+    return CI("Solve.",I,"R",[[mk(op,v)],[mk(op,-v)],[mk(flipOp(op),-v)]].concat(variants(flipOp(op),v,[(k+b)/-a])),
+      (b>0?"Subtract "+b:"Add "+(-b))+": "+tm(-a,"x",true)+" "+SYM[op]+" "+num(k-b)+". Divide by "+num(-a)+" and FLIP the sign: "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s,hl:1});}
+  function qN2(){var a=ri(1,4),c=a+ri(1,4),v=nz(-5,7),b=nz(-10,10),d=a*v+b-c*v,op=rnd(["<","<=",">",">="]);if(d===0)return null;
+    var s=lin(a,b)+" "+SYM[op]+" "+lin(c,d),I=mk(flipOp(op),v);
+    return CI("Solve.",I,"R",[[mk(op,v)],[mk(op,-v)]].concat(variants(flipOp(op),v,[-v])),
+      tm(a-c,"x",true)+" "+SYM[op]+" "+num(d-b)+". Divide by "+num(a-c)+" and flip: "+fmtI(I)+". (Or move the x terms right: no flip needed.)",iq(s),{t:"solve",ask:"ineq",q:s,hl:1});}
+  function qD1(){var a=ri(1,4),b=nz(-7,7),lo=nz(-5,3),hi=lo+ri(2,6),loIn=Math.random()<.5,hiIn=Math.random()<.5;
+    var s=num(a*lo+b)+(loIn?" ≤ ":" < ")+lin(a,b)+(hiIn?" ≤ ":" < ")+num(a*hi+b),I=two(lo,loIn,hi,hiIn);
+    var pool=[[two(lo,!loIn,hi,hiIn)],[two(lo,loIn,hi,!hiIn)],[two(a*lo,loIn,a*hi,hiIn)],[two(lo-b,loIn,hi-b,hiIn)],[two(a*lo+2*b,loIn,a*hi+2*b,hiIn)],[two(lo+1,loIn,hi+1,hiIn)]];
+    return CI("Solve.",I,"R",pool,"Do the same to ALL THREE parts: "+(b>0?"subtract "+b:"add "+(-b))+(a>1?", then divide by "+a:"")+": "+fmtI(I)+".",iq(s),{t:"solve",ask:"ineq",q:s,hl:1});}
+  function qFr(){var a=ri(2,5),op=rnd(["<","<=",">",">="]),v,s,why;
+    if(Math.random()<.5){var y=nz(-4,6),b=nz(-8,8);v=a*y;s="x/"+a+" "+(b<0?M+" "+(-b):"+ "+b)+" "+SYM[op]+" "+num(y+b);
+      why=(b>0?"Subtract "+b:"Add "+(-b))+": x/"+a+" "+SYM[op]+" "+num(y)+". Multiply by "+a+": x "+SYM[op]+" "+num(v)+".";}
+    else{var c=nz(-4,6),p=nz(-8,8);v=a*c-p;s="("+lin(1,p)+")/"+a+" "+SYM[op]+" "+num(c);
+      why="Multiply by "+a+": "+lin(1,p)+" "+SYM[op]+" "+num(a*c)+". Then x "+SYM[op]+" "+num(v)+".";}
+    var I=mk(op,v);return CI("Solve.",I,"R",variants(op,v,[v/a,v+a,v-a]),why,iq(s),{t:"solve",ask:"ineq",q:s,hl:1});}
+  function qDZ(){ // double inequality, list the integers
+    var a=ri(1,3),b=nz(-6,6),lo=nz(-4,2),hi=lo+ri(2,4),loIn=Math.random()<.5,hiIn=Math.random()<.5;
+    var s=num(a*lo+b)+(loIn?" ≤ ":" < ")+lin(a,b)+(hiIn?" ≤ ":" < ")+num(a*hi+b)+", x ∈ ℤ",I=two(lo,loIn,hi,hiIn),A=ints(I,"Z");if(!A.length)return null;
+    var pool=[ints(two(lo,true,hi,true),"Z"),ints(two(lo,false,hi,false),"Z"),ints(two(lo,!loIn,hi,hiIn),"Z"),ints(two(lo,loIn,hi,!hiIn),"Z"),ints(two(lo+1,loIn,hi+1,hiIn),"Z")].map(function(L){return setStr(L);});
+    return C("List the values.",setStr(A),pool,"Solve: "+fmtI(I)+". Whole numbers only: "+setStr(A)+".",iq(s),{t:"dz",ask:"list",q:s,hl:1});}
+
+  /* ================= Whole numbers: ℕ and ℤ ================= */
+  function qList(){var v=ri(2,6),a=ri(1,4),b=nz(-6,8),op=rnd(["<","<="]),k=a*v+b,s=lin(a,b)+" "+SYM[op]+" "+num(k)+", x ∈ ℕ",I=mk(op,v),A=ints(I,"N");if(!A.length)return null;
+    var pool=[[0].concat(A),ints(mk(op==="<"?"<=":"<",v),"N"),ints(mk(op,v+1),"N"),ints(mk(op,v-1),"N")].map(function(L){return setStr(L);});
+    pool.push(setStr(ints(mk(flipOp(op),v),"N").slice(0,3),true));
+    return C("List the values.",setStr(A),pool,"Solve: "+fmtI(I)+". ℕ starts at 1: "+setStr(A)+".",iq(s),{t:"list",ask:"list",q:s});}
+  function qMax(){var a=ri(2,5),b=nz(-9,9),k=nz(-10,25),op=rnd(["<","<="]),s=lin(a,b)+" "+SYM[op]+" "+num(k)+", x ∈ ℤ",bd=(k-b)/a;
+    var A=op==="<"?Math.ceil(bd)-1:Math.floor(bd);
+    return C("Biggest value of x?",num(A),[A+1,A-1,A+2,Math.round(bd)===A?null:Math.round(bd),k-b].filter(function(z){return z!=null&&z!==A;}).map(num),
+      tm(a,"x",true)+" "+SYM[op]+" "+num(k-b)+", so x "+SYM[op]+" "+(bd===Math.round(bd)?num(bd):num(k-b)+"/"+a)+". Biggest whole number: "+num(A)+".",iq(s),{t:"max",ask:"num",q:s});}
+  function qMin(){var a=ri(2,5),b=nz(-9,9),k=nz(-10,25),op=rnd([">",">="]),s=lin(a,b)+" "+SYM[op]+" "+num(k)+", x ∈ ℤ",bd=(k-b)/a;
+    var A=op===">"?Math.floor(bd)+1:Math.ceil(bd);
+    return C("Smallest value of x?",num(A),[A-1,A+1,A-2,Math.round(bd)===A?null:Math.round(bd),k-b].filter(function(z){return z!=null&&z!==A;}).map(num),
+      tm(a,"x",true)+" "+SYM[op]+" "+num(k-b)+", so x "+SYM[op]+" "+(bd===Math.round(bd)?num(bd):num(k-b)+"/"+a)+". Smallest whole number: "+num(A)+".",iq(s),{t:"min",ask:"num",q:s});}
+  function qCount(){var lo=nz(-6,3),hi=lo+ri(2,7),loIn=Math.random()<.5,hiIn=Math.random()<.5,I=two(lo,loIn,hi,hiIn),s=fmtI(I,"Z"),A=ints(I,"Z").length;
+    return C("How many values?",String(A),[A+1,A-1,A+2,A+3,hi-lo===A?null:hi-lo].filter(function(z){return z!=null&&z>0&&z!==A;}).map(String),
+      setStr(ints(I,"Z"))+": "+A+" values.",iq(s),{t:"count",ask:"num",q:s});}
+  function qListZ(){var lo=nz(-5,2),hi=lo+ri(2,4),loIn=Math.random()<.5,hiIn=Math.random()<.5,I=two(lo,loIn,hi,hiIn),s=fmtI(I,"Z"),A=ints(I,"Z");if(!A.length)return null;
+    var pool=[ints(two(lo,!loIn,hi,hiIn),"Z"),ints(two(lo,loIn,hi,!hiIn),"Z"),ints(two(lo,!loIn,hi,!hiIn),"Z"),A.filter(function(x){return x!==0;}),ints(two(lo,loIn,hi,hiIn),"N")].map(function(L){return setStr(L);});
+    return C("List the values.",setStr(A),pool,"≤ includes the end, < does not: "+setStr(A)+".",iq(s),{t:"listz",ask:"list",q:s});}
+
+  /* ================= Words & graphs ================= */
+  function qCtx(){var f=ri(0,3),A,en,why,html="",d;
+    if(f===0){var fx=ri(3,6),p=ri(2,3),B=ri(14,30);A=Math.floor((B-fx)/p);en="🚕 €"+fx+" + €"+p+" per km. You have €"+B+". Most km?";
+      why=fx+" + "+p+"k ≤ "+B+" → "+p+"k ≤ "+(B-fx)+" → k ≤ "+((B-fx)%p?(B-fx)+"/"+p:(B-fx)/p)+". Most whole km: "+A+".";d={k:"taxi",f:fx,p:p,B:B};}
+    else if(f===1){var L=rnd([400,450,500,600]),m=ri(60,95),w=rnd([15,20,25,30]);A=Math.floor((L-m)/w);en="🛗 Lift: max "+L+" kg. You: "+m+" kg. Boxes: "+w+" kg each. Most boxes?";
+      why=m+" + "+w+"b ≤ "+L+" → "+w+"b ≤ "+(L-m)+" → b ≤ "+((L-m)/w).toFixed(2).replace(/\.?0+$/,"")+". Most boxes: "+A+".";d={k:"lift",L:L,m:m,w:w};}
+    else if(f===2){var s0=rnd([10,15,20,25,30]),w2=rnd([5,6,8,12,15]),T=rnd([90,100,120,150,180]);A=Math.ceil((T-s0)/w2);en="🐷 You have €"+s0+". Save €"+w2+" a week. Need €"+T+". Fewest weeks?";
+      why=s0+" + "+w2+"w ≥ "+T+" → "+w2+"w ≥ "+(T-s0)+" → w ≥ "+((T-s0)/w2).toFixed(2).replace(/\.?0+$/,"")+". Fewest whole weeks: "+A+".";d={k:"save",s:s0,w:w2,T:T};}
+    else{var pr=rnd([6,7,8,9,12]),bk=rnd([2,3,4,5]),B2=ri(40,90);A=Math.floor((B2-bk)/pr);en="🎟️ Tickets €"+pr+" each + €"+bk+" booking fee. You have €"+B2+". Most tickets?";
+      why=pr+"t + "+bk+" ≤ "+B2+" → "+pr+"t ≤ "+(B2-bk)+" → t ≤ "+((B2-bk)/pr).toFixed(2).replace(/\.?0+$/,"")+". Most tickets: "+A+".";d={k:"tix",p:pr,f:bk,B:B2};}
+    if(A<1)return null;d.t="ctx";d.ask="num";
+    var ex=f===2?Math.floor:Math.ceil,alt=ex(f===0?(B-fx)/p:f===1?(L-m)/w:f===2?(T-s0)/w2:(B2-bk)/pr);
+    return C(en,String(A),[A+1,A-1,alt!==A?alt:A+2,A+2].filter(function(z){return z>0&&z!==A;}).map(String),why,html,d);}
+  function qCtxForm(){var L=rnd([400,450,500,600]),m=ri(60,95),w=rnd([15,20,25,30]);
+    var en="🛗 Lift: max "+L+" kg. You: "+m+" kg. b boxes of "+w+" kg. Which one?",ans=m+" + "+w+"b ≤ "+L;
+    return C(en,ans,[m+" + "+w+"b < "+L,m+" + "+w+"b ≥ "+L,w+" + "+m+"b ≤ "+L,m+"b + "+w+" ≤ "+L,m+" + "+w+"b > "+L],"Total weight = "+m+" + "+w+"b. \"Max\" means it can be equal: ≤ "+L+".","",{t:"ctxform",ask:"form",k:"lift",L:L,m:m,w:w});}
+  /* graph of y = mx + c with a dashed line y = k: when is the line below / above it? */
+  function graphSVG(m,c,k){var xa=-1,xb=6,ys=[m*xa+c,m*xb+c,k,0],ya=Math.min.apply(null,ys)-1,yb=Math.max.apply(null,ys)+1;if(yb-ya>14)return null;
+    var W=300,H=Math.max(200,Math.min(300,(yb-ya)*22+40)),p=28,sx=(W-2*p)/(xb-xa),sy=(H-2*p)/(yb-ya),PX=function(x){return +(p+(x-xa)*sx).toFixed(2);},PY=function(y){return +(H-p-(y-ya)*sy).toFixed(2);},o="";
+    for(var gx=xa;gx<=xb;gx++)o+='<line x1="'+PX(gx)+'" y1="'+PY(ya)+'" x2="'+PX(gx)+'" y2="'+PY(yb)+'" stroke="#E4E8EE"/>';
+    for(var gy=ya;gy<=yb;gy++)o+='<line x1="'+PX(xa)+'" y1="'+PY(gy)+'" x2="'+PX(xb)+'" y2="'+PY(gy)+'" stroke="#E4E8EE"/>';
+    o+='<line x1="'+PX(xa)+'" y1="'+PY(0)+'" x2="'+PX(xb)+'" y2="'+PY(0)+'" stroke="'+INK+'" stroke-width="1.6"/><line x1="'+PX(0)+'" y1="'+PY(ya)+'" x2="'+PX(0)+'" y2="'+PY(yb)+'" stroke="'+INK+'" stroke-width="1.6"/>';
+    for(gx=xa;gx<=xb;gx++)if(gx)o+='<text x="'+PX(gx)+'" y="'+(PY(0)+15)+'" font-size="12" text-anchor="middle" fill="'+INK+'" font-family="Inter,sans-serif">'+num(gx)+'</text>';
+    for(gy=ya;gy<=yb;gy++)if(gy&&(yb-ya<=10||gy%2===0))o+='<text x="'+(PX(0)-5)+'" y="'+(PY(gy)+4)+'" font-size="12" text-anchor="end" fill="'+INK+'" font-family="Inter,sans-serif">'+num(gy)+'</text>';
+    o+='<text x="'+(PX(xb)-4)+'" y="'+(PY(0)-6)+'" font-size="13" font-weight="700" text-anchor="end" fill="'+INK+'" font-family="Inter,sans-serif">x</text><text x="'+(PX(0)+6)+'" y="'+(PY(yb)+12)+'" font-size="13" font-weight="700" fill="'+INK+'" font-family="Inter,sans-serif">y</text>';
+    o+='<line class="kl" data-k="'+k+'" x1="'+PX(xa)+'" y1="'+PY(k)+'" x2="'+PX(xb)+'" y2="'+PY(k)+'" stroke="#C0392B" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(PX(xb)-2)+'" y="'+(PY(k)-6)+'" font-size="13" font-weight="700" text-anchor="end" fill="#C0392B" font-family="Inter,sans-serif">y = '+num(k)+'</text>';
+    o+='<line class="fn" x1="'+PX(xa)+'" y1="'+PY(m*xa+c)+'" x2="'+PX(xb)+'" y2="'+PY(m*xb+c)+'" stroke="'+G+'" stroke-width="3"/>';
+    return '<svg class="gr" data-xa="'+xa+'" data-ya="'+ya+'" data-sx="'+sx.toFixed(4)+'" data-sy="'+sy.toFixed(4)+'" data-p="'+p+'" data-h="'+H+'" viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:360px;display:block;margin:4px auto;background:#fff;border:2px solid var(--line);border-radius:12px" role="img" aria-label="Graph">'+o+'</svg>';
+}
+  function qGraph(){var m=nz(-2,3),x0=ri(1,4),k=nz(-2,6),c=k-m*x0,svg=graphSVG(m,c,k);if(!svg)return null;
+    var below=Math.random()<.5,orEq=Math.random()<.35,op=below?(orEq?"<=":"<"):(orEq?">=":">");
+    var xop=m>0?op:flipOp(op),I=mk(xop,x0);
+    return CI("When is y "+SYM[op]+" "+num(k)+"?",I,"R",variants(xop,x0,[k,c]),"The line meets y = "+num(k)+" at x = "+num(x0)+". It is "+(below?"below":"above")+" the dashed line to the "+((m>0)===below?"left":"right")+": "+fmtI(I)+".",svg,{t:"graph",ask:"ineq",op:op});}
+
+  var MAKERS={
+    shade:[qRead,qRead,qRead,qRead2,qReadZ,qReadZ,qWords,qWhich],
+    solve:[qS1,qS2,qS2,qS3,qS4,qS5,qWhich],
+    flip:[qN1,qN1,qN2,qD1,qD1,qFr,qDZ],
+    whole:[qList,qList,qMax,qMin,qCount,qListZ,qReadZ],
+    ctx:[qCtx,qCtx,qCtx,qCtxForm,qGraph,qGraph,qGraph],
+    mixed:[qRead,qRead2,qReadZ,qWords,qWhich,qS1,qS2,qS3,qS4,qS5,qN1,qN2,qD1,qFr,qDZ,qList,qMax,qMin,qCount,qListZ,qCtx,qCtxForm,qGraph]
+  };
+  for(var m_ in MAKERS)MAKERS[m_]=MAKERS[m_].map(function(f){return f.__w||(f.__w=retry(f),f.__w.realName=f.name,f.__w);});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="shade"?60:75;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="shade"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="shade"&&streak%5===0?700:350):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready speed.":score>=12?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  window.__leimFinish=finish;
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,kit:{nl:nl,fmtI:fmtI,ints:ints,graphSVG:graphSVG}};
+})();
+</script>
