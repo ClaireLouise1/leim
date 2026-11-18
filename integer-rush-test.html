@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integers and order of operations: play Integer Rush | Léim</title>
+<meta name="description" content="Free Junior Cycle Maths game: adding, subtracting, multiplying and dividing negative numbers, BIMDAS and the number line, with an Exam corner. Rules and a free printable below.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle Maths · Free game</span>
+        <h1 style="margin-top:12px">Integer Rush</h1>
+        <p>60 seconds. Negative numbers, the signs rules and BIMDAS: the small slips that cost marks all over the Maths paper. Is <b>−3 − 5</b> equal to <b>−2</b> or <b>−8</b>? Is <b>2 + 3 × 4</b> equal to <b>20</b> or <b>14</b>? Stuck? The rules are just below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your rush</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sums"><div><b>Integer sums</b><span>+ and − with negative numbers, and number-line hops</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="muldiv"><div><b>× and ÷ with negatives</b><span>Same signs give +, different signs give −</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="bimdas"><div><b>Order of operations</b><span>BIMDAS: brackets, indices, × ÷, then + −</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="real"><div><b>Real life &amp; the number line</b><span>Temperatures, bank balances, lifts, and which is bigger?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together, like the real thing</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper first, then tap. You can also answer with the keys 1, 2, 3 and 4. No calculator!</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: N.1a, N.1b, N.1c, U.1, U.2 (2018 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another rush</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Integers and the order of operations</h2>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Look at these. Each line goes down by one step.</p>
+        <div class="table-wrap"><table style="min-width:0">
+          <tbody>
+            <tr><td>3 × 2 = 6</td><td>3 × (−2) = −6</td></tr>
+            <tr><td>2 × 2 = 4</td><td>2 × (−2) = −4</td></tr>
+            <tr><td>1 × 2 = 2</td><td>1 × (−2) = −2</td></tr>
+            <tr><td>0 × 2 = 0</td><td>0 × (−2) = 0</td></tr>
+            <tr><td>−1 × 2 = <b>?</b></td><td>−1 × (−2) = <b>?</b></td></tr>
+          </tbody></table></div>
+        <p style="margin-top:10px">The answers on the left go down by 2 each time. On the right they go <b>up</b> by 2. What comes next in each column?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Left: −1 × 2 = <b>−2</b>. Right: −1 × (−2) = <b>2</b>. Keep the pattern going and a negative times a negative has to come out <b>positive</b>. That's where the signs rule comes from: it isn't magic, it's the pattern.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Integers and the number line</h3>
+        <p><b>Integers</b> are the whole numbers, positive and negative, and zero: … −3, −2, −1, 0, 1, 2, 3 … (the set ℤ). <b>Natural numbers</b> are the counting numbers 1, 2, 3 … (the set ℕ). On a number line, numbers get <b>bigger to the right</b>. So −2 is bigger than −8, even though 8 looks bigger: −2 &gt; −8.</p>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> the coldest temperature is the <b>smallest</b> number. −8 °C is colder than −2 °C, so −8 &lt; −2.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Adding and subtracting</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Rule</th><th>Example</th><th>Think…</th></tr></thead>
+          <tbody>
+            <tr><td><b>Adding</b> a positive: move right</td><td>−5 + 8 = <b>3</b></td><td>Start at −5, hop 8 to the right</td></tr>
+            <tr><td><b>Subtracting</b> a positive: move left</td><td>2 − 7 = <b>−5</b></td><td>Start at 2, hop 7 to the left</td></tr>
+            <tr><td>Two minus signs side by side become <b>+</b></td><td>4 − (−3) = 4 + 3 = <b>7</b></td><td>Taking away a debt is like being given money</td></tr>
+            <tr><td>A plus and a minus become <b>−</b></td><td>6 + (−9) = 6 − 9 = <b>−3</b></td><td>Adding a debt takes money away</td></tr>
+            <tr><td>Both negative: add the sizes, keep the −</td><td>−4 − 6 = <b>−10</b></td><td>Owe 4, then owe 6 more</td></tr>
+          </tbody></table></div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Multiplying and dividing</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Signs</th><th>Answer</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Same signs: + and +, or − and −</td><td><b>Positive</b></td><td>(−6) × (−3) = 18 · (−20) ÷ (−4) = 5</td></tr>
+            <tr><td>Different signs: one + and one −</td><td><b>Negative</b></td><td>(−6) × 3 = −18 · 20 ÷ (−4) = −5</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">More than two numbers? Count the minus signs: an <b>even</b> number of them gives a positive answer, an <b>odd</b> number gives a negative one. (−2) × (−3) × (−1) = <b>−6</b> (three minus signs).</p>
+        <div class="note" style="margin-top:10px"><b>Watch out:</b> these rules are for × and ÷ only. (−3) + (−5) is <b>−8</b>, not +8. And squaring a negative gives a positive: (−4)² = (−4) × (−4) = <b>16</b>.</div>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">The order of operations: BIMDAS</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td style="width:60px"><b>B</b></td><td><b>Brackets</b> first</td><td>(2 + 3) × 4 = 5 × 4 = 20</td></tr>
+            <tr><td><b>I</b></td><td><b>Indices</b> (powers and roots)</td><td>2 × 3² = 2 × 9 = 18, not 6² = 36</td></tr>
+            <tr><td><b>M D</b></td><td><b>× and ÷</b>, working left to right</td><td>12 ÷ 3 × 2 = 4 × 2 = 8</td></tr>
+            <tr><td><b>A S</b></td><td><b>+ and −</b>, working left to right</td><td>10 − 4 + 3 = 6 + 3 = 9</td></tr>
+          </tbody></table></div>
+        <p style="margin-top:12px">So 2 + 3 × 4 = 2 + 12 = <b>14</b>. If you just go left to right you get 20, which is wrong. × and ÷ are equal partners, and so are + and −: whichever comes first, reading left to right, goes first.</p>
+
+        <h3 style="font-size:19px;margin:24px 0 8px">Three laws you can use to make sums easier</h3>
+        <ul>
+          <li><b>Commutative:</b> the order doesn't matter for + and ×. 7 + (−2) = (−2) + 7 · 4 × 25 = 25 × 4. (Not for − or ÷: 5 − 2 ≠ 2 − 5.)</li>
+          <li><b>Associative:</b> how you group doesn't matter for + and ×. (2 × 5) × 9 = 2 × (5 × 9) = 90.</li>
+          <li><b>Distributive:</b> multiply everything inside the brackets. 3 × (40 + 2) = 3 × 40 + 3 × 2 = 126. Handy for mental maths: 7 × 99 = 7 × 100 − 7 × 1 = 693.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Integers and BIMDAS rarely get a whole question to themselves. They are <b>inside almost every question</b> on the paper: temperatures and bank balances, substituting into a formula, solving equations, coordinates and slopes. One sign slip early on can carry right through a question.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show every step.</b> Examiners give part marks for correct work, so a right method with one slip can still earn marks. A wrong answer on its own earns nothing.</li>
+            <li><b>Put negatives in brackets</b> when you substitute: if x = −3, then x² = (−3)² = 9, not −9.</li>
+            <li><b>On the calculator</b>, use the (−) key for a negative number and type the brackets in. Then check the answer is sensible: a temperature drop should give a lower number.</li>
+            <li><b>Write the units</b> (°C, €, m) and answer the question asked: "how much colder?" wants a difference, not the new temperature.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Try each one on paper first.</p>
+          <ol class="eq">
+            <li><b>The coldest night.</b> One night the temperature in Mullingar was −6 °C and in Kinsale it was 3 °C.<br>(a) How many degrees warmer was it in Kinsale?<br>(b) By morning the Mullingar temperature had risen by 4 degrees. What was it in the morning?
+              <details><summary>Show the worked answer</summary><p>(a) 3 − (−6) = 3 + 6 = <b>9 degrees</b> warmer. (Count on the number line: from −6 up to 0 is 6, then 0 up to 3 is 3 more.)<br>(b) −6 + 4 = <b>−2 °C</b>. Check: rising means a bigger number, and −2 is bigger than −6. ✓</p></details></li>
+            <li><b>Finish the calculation.</b> Aoife says 20 − 8 ÷ 4 × 2 = 6. Show that she is wrong and find the right answer.
+              <details><summary>Show the worked answer</summary><p>Aoife went left to right with the subtraction first: 20 − 8 = 12, 12 ÷ 4 = 3, 3 × 2 = 6. But ÷ and × come before −.<br>8 ÷ 4 = 2, then 2 × 2 = 4, then 20 − 4 = <b>16</b>.</p></details></li>
+            <li><b>Substitute.</b> Find the value of 2a² − 3b when a = −3 and b = −5.
+              <details><summary>Show the worked answer</summary><p>2(−3)² − 3(−5) = 2(9) − (−15) = 18 + 15 = <b>33</b>.<br>Two places to slip: (−3)² is +9, and taking away −15 is the same as adding 15.</p></details></li>
+            <li><b>Brackets.</b> Put one pair of brackets into 4 + 6 × 5 − 2 so that the answer is 48.
+              <details><summary>Show the worked answer</summary><p>Try the brackets in different places: 4 + 6 × (5 − 2) = 4 + 18 = 22 ✗ · 4 + (6 × 5 − 2) = 4 + 28 = 32 ✗ · (4 + 6) × 5 − 2 = 50 − 2 = 48 ✓<br>Answer: <b>(4 + 6) × 5 − 2 = 48</b>.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this topic here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/integers-order-of-operations-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, 34 practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/UEp6b" target="_blank" rel="noopener">Integers &amp; Order of Operations Teacher Pack (€5)</a>: Human Number Line, Find Your Match mingle, Integer Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, the Maths bonus, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-maths.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function nz(a,b){var n;do{n=ri(a,b);}while(n===0);return n;}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var M="−";
+  function f(n){return n<0?M+Math.abs(n):String(n);}          // −5
+  function p(n){return n<0?"("+f(n)+")":f(n);}                // (−5)
+  function u(n,unit){ // number with unit
+    if(unit==="€")return (n<0?M:"")+"€"+Math.abs(n);
+    if(unit==="floor")return "Floor "+f(n);
+    return f(n)+unit;}
+  // 3 distinct wrong answers from slips, padded with near misses
+  function wrongs(ans,c,fmt){
+    fmt=fmt||f;var seen={},out=[];seen[fmt(ans)]=1;
+    c.concat([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10]).forEach(function(x){
+      if(typeof x!=="number"||!isFinite(x)||Math.round(x)!==x)return;
+      var s=fmt(x);if(!seen[s]&&out.length<3){seen[s]=1;out.push(s);}});
+    return out;}
+  function Q(en,frame,ans,c,why,fmt,html){fmt=fmt||f;
+    return {en:en,frame:frame,html:html||"",answer:fmt(ans),wrong:wrongs(ans,c,fmt),why:why,review:(frame||en)+" = "+fmt(ans)};}
+
+  /* ---------- Integer sums ---------- */
+  function qAdd(){
+    var a=nz(-15,15),b=nz(-12,12),plus=Math.random()<.5,ans,fr,why;
+    if(plus){ans=a+b;fr=f(a)+" + "+p(b);
+      why=b<0?"Adding a negative is the same as subtracting: "+f(a)+" − "+Math.abs(b)+".":(a<0?"Start at "+f(a)+" and hop "+b+" to the right.":"");
+      return Q("Work it out",fr,ans,[-ans,a-b,(a<0?-1:1)*(Math.abs(a)+Math.abs(b))],why);}
+    ans=a-b;fr=f(a)+" − "+p(b);
+    why=b<0?"Two minus signs side by side make +: "+f(a)+" + "+Math.abs(b)+".":"Start at "+f(a)+" and hop "+b+" to the left.";
+    return Q("Work it out",fr,ans,[-ans,a+b,-(a+b)],why);
+  }
+  function lineSVG(s){
+    var w=560,x0=20,step=(w-40)/20,h=70,o='<svg viewBox="0 0 '+w+' '+h+'" width="100%" style="max-width:560px" role="img" aria-label="Number line from minus 10 to 10 with a dot at '+s+'">';
+    o+='<line x1="10" y1="40" x2="'+(w-10)+'" y2="40" stroke="#1B2430" stroke-width="2"/>';
+    for(var n=-10;n<=10;n++){var x=x0+(n+10)*step;
+      o+='<line x1="'+x+'" y1="'+(n===0?32:35)+'" x2="'+x+'" y2="'+(n===0?48:45)+'" stroke="#1B2430" stroke-width="'+(n===0?2.5:1.5)+'"/>';
+      if(n%2===0)o+='<text x="'+x+'" y="64" font-size="13" text-anchor="middle" fill="#5B6470" font-family="Inter,sans-serif">'+f(n)+'</text>';}
+    var sx=x0+(s+10)*step;o+='<circle cx="'+sx+'" cy="40" r="8" fill="#F6CF5A" stroke="#1B2430" stroke-width="2"/><text x="'+sx+'" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#1B2430" font-family="Inter,sans-serif">start</text>';
+    return o+'</svg>';}
+  function qHop(){
+    var s,m,right,ans;do{s=ri(-8,8);m=ri(3,9);right=Math.random()<.5;ans=right?s+m:s-m;}while(ans<-10||ans>10||ans===0);
+    return Q("Start at "+f(s)+". Hop "+m+" to the "+(right?"right":"left")+". Where do you land?","",ans,[right?s-m:s+m,-ans,ans+(right?-1:1)],
+      right?"Right means bigger: "+f(s)+" + "+m+" = "+f(ans)+".":"Left means smaller: "+f(s)+" − "+m+" = "+f(ans)+".",f,lineSVG(s));
+  }
+
+  /* ---------- × and ÷ ---------- */
+  function big(){var n=ri(2,12);return Math.random()<.6?-n:n;}
+  function qMul(){
+    var a=big(),b=big();if(a>0&&b>0)a=-a;var ans=a*b;
+    var why=(a<0&&b<0)?"Same signs (− and −) give a positive answer.":"Different signs give a negative answer.";
+    return Q("Work it out",p(a)+" × "+p(b),ans,[-ans,a+b,(a<0?a-1:a+1)*b],why);
+  }
+  function qDiv(){
+    var a=big(),b=big();if(a>0&&b>0)b=-b;var prod=a*b,ans=a;
+    var why=(prod<0)!==(b<0)?"Different signs give a negative answer.":"Same signs give a positive answer.";
+    return Q("Work it out",f(prod)+" ÷ "+p(b),ans,[-ans,b,prod-b,-b],why);
+  }
+  function qMul3(){
+    var a=nz(-5,5),b=nz(-4,4),c=nz(-3,3);var negs=(a<0)+(b<0)+(c<0);if(negs===0){a=-Math.abs(a);negs=1;}
+    var ans=a*b*c;
+    return Q("Work it out",p(a)+" × "+p(b)+" × "+p(c),ans,[-ans,a+b+c,a*b+c],"Count the minus signs: "+negs+" is "+(negs%2?"odd, so the answer is negative.":"even, so the answer is positive."));
+  }
+  function qSq(){
+    var a=ri(2,9);
+    return Q("Work it out","("+M+a+")²",a*a,[-a*a,-2*a,2*a],"(−"+a+")² = (−"+a+") × (−"+a+"): same signs, so positive.");
+  }
+
+  /* ---------- BIMDAS ---------- */
+  function qBim(){
+    var t=ri(1,12),a,b,c,d,ans,fr,c2,why;
+    switch(t){
+      case 1:a=ri(2,12);b=ri(2,9);c=ri(2,9);ans=a+b*c;fr=a+" + "+b+" × "+c;c2=[(a+b)*c,a+b+c];why="× before +: "+b+" × "+c+" = "+(b*c)+", then add "+a+".";break;
+      case 2:a=ri(10,30);b=ri(2,6);c=ri(2,6);ans=a-b*c;fr=a+" − "+b+" × "+c;c2=[(a-b)*c,a-b-c];why="× before −: "+b+" × "+c+" = "+(b*c)+", then "+a+" − "+(b*c)+".";break;
+      case 3:a=ri(2,9);b=ri(2,9);c=ri(2,6);ans=(a+b)*c;fr="("+a+" + "+b+") × "+c;c2=[a+b*c,a*c+b];why="Brackets first: "+a+" + "+b+" = "+(a+b)+", then × "+c+".";break;
+      case 4:a=ri(2,6);b=ri(2,6);c=ri(2,6);d=ri(2,6);ans=a*b+c*d;fr=a+" × "+b+" + "+c+" × "+d;c2=[(a*b+c)*d,a*(b+c)*d];why="Do both × first: "+(a*b)+" + "+(c*d)+".";break;
+      case 5:c=ri(2,6);b=c*ri(2,6);a=ri(b+1,b+20);ans=a-b/c;fr=a+" − "+b+" ÷ "+c;c2=[(a-b)/c,a-b+c,(a-b)*c];why="÷ before −: "+b+" ÷ "+c+" = "+(b/c)+".";break;
+      case 6:a=ri(2,12);b=ri(2,6);ans=a+b*b;fr=a+" + "+b+"²";c2=[(a+b)*(a+b),a+2*b];why="Indices before +: "+b+"² = "+(b*b)+".";break;
+      case 7:c=ri(2,5);b=ri(2,5);ans=c*b*b;fr=c+" × "+b+"²";c2=[(c*b)*(c*b),c*b*2];why="Indices before ×: "+b+"² = "+(b*b)+", then × "+c+".";break;
+      case 8:b=ri(2,5);c=ri(2,5);var k=ri(2,6)*c;a=b*k;ans=k*c;fr=a+" ÷ "+b+" × "+c;c2=[a/(b*c),a/b+c];why="÷ and × are equal partners: go left to right. "+a+" ÷ "+b+" = "+k+", then × "+c+".";break;
+      case 9:a=ri(10,20);b=ri(5,9);c=ri(1,4);ans=a-(b-c);fr=a+" − ("+b+" − "+c+")";c2=[a-b-c,a+b-c];why="Brackets first: "+b+" − "+c+" = "+(b-c)+".";break;
+      case 10:a=ri(2,9);b=ri(2,5);c=ri(2,6);ans=a+b*(-c);fr=a+" + "+b+" × ("+M+c+")";c2=[(a+b)*(-c),-ans,a+b-c];why="× first: "+b+" × (−"+c+") = −"+(b*c)+", then "+a+" − "+(b*c)+".";break;
+      case 11:c=ri(2,5);var s=c*ri(2,5);a=ri(1,s-1);b=s-a;ans=s/c;fr="("+a+" + "+b+") ÷ "+c;c2=[a+b/c,s*c];why="Brackets first: "+s+" ÷ "+c+".";break;
+      default:a=ri(15,30);b=ri(2,4);c=ri(2,4);d=ri(1,5);ans=a-b*c+d;fr=a+" − "+b+" × "+c+" + "+d;c2=[a-(b*c+d),(a-b)*c+d];why="× first, then + and − left to right: "+a+" − "+(b*c)+" + "+d+".";
+    }
+    return Q("Work it out (BIMDAS)",fr,ans,c2,why);
+  }
+  function qBrackets(){
+    var a=ri(2,6),b=ri(2,6),c=ri(2,6),target=(a+b)*c;if(target===a+b*c)return qBim();
+    var right="("+a+" + "+b+") × "+c,ws=[a+" + ("+b+" × "+c+")",a+" + "+b+" × "+c,"("+a+" × "+c+") + "+b];
+    return {en:"Which one equals "+target+"?",frame:"",answer:right,wrong:ws.filter(function(x){return x!==right;}).slice(0,3),why:"Brackets first: "+(a+b)+" × "+c+" = "+target+". Without brackets, × goes first: "+a+" + "+(b*c)+" = "+(a+b*c)+".",review:"Equals "+target+": "+right};
+  }
+  function qProp(){
+    var t=ri(1,3),a=ri(2,9),b=ri(2,9),c=ri(2,9),fr,ans;
+    if(t===1){fr=a+" × ("+b+" + "+c+") = "+a+" × "+b+" + "+a+" × "+c;ans="Distributive";}
+    else if(t===2){fr=f(a)+" + ("+M+b+") = ("+M+b+") + "+a;ans="Commutative";}
+    else{fr="("+a+" × "+b+") × "+c+" = "+a+" × ("+b+" × "+c+")";ans="Associative";}
+    var all=["Distributive","Commutative","Associative","BIMDAS"];
+    var why={Distributive:"Distributive: multiply everything inside the brackets.",Commutative:"Commutative: you can swap the order for + and ×.",Associative:"Associative: you can change the grouping for + and ×."}[ans];
+    return {en:"Which law does this show?",frame:fr,answer:ans,wrong:all.filter(function(x){return x!==ans;}),why:why,review:fr+": "+ans};
+  }
+
+  /* ---------- Real life & ordering ---------- */
+  var TOWNS=["Mullingar","Birr","Cavan","Athlone","Carlow","Letterkenny","Tullamore","Roscommon"];
+  function qReal(){
+    var t=ri(1,6),a,b,ans;
+    if(t===1){a=ri(-9,-1);b=ri(3,12);ans=a+b;if(ans===0)ans=a+(++b);
+      return Q("At 6 a.m. it was "+u(a," °C")+" in "+rnd(TOWNS)+". By noon it had risen by "+b+" degrees. What was the temperature at noon?","",ans,[a-b,-ans,-(a-b)],"Rising means add: "+f(a)+" + "+b+" = "+f(ans)+".",function(n){return u(n," °C");});}
+    if(t===2){a=ri(1,6);b=ri(a+2,a+11);ans=a-b;
+      return Q("It was "+a+" °C at 9 p.m. Overnight the temperature fell by "+b+" degrees. What was it in the morning?","",ans,[-ans,a+b,-(a+b)],"Falling means subtract: "+a+" − "+b+" = "+f(ans)+".",function(n){return u(n," °C");});}
+    if(t===3){a=ri(1,9);b=-ri(1,8);ans=a-b;
+      return Q("The warmest place in Ireland was "+a+" °C and the coldest was "+u(b," °C")+". What is the difference between them?","",ans,[a+b,-ans,-(a+b)],"Difference = "+a+" − ("+f(b)+") = "+a+" + "+Math.abs(b)+" = "+ans+". Count from "+f(b)+" up to 0, then on to "+a+".",function(n){return f(n)+" degrees";});}
+    if(t===4){a=ri(10,60);b=ri(a+5,a+60);ans=a-b;
+      return Q("Ciara has €"+a+" in her account. She pays a bill of €"+b+". What is her new balance?","",ans,[-ans,a+b,-(a+b)],"€"+a+" − €"+b+" = "+u(ans,"€")+": she is overdrawn.",function(n){return u(n,"€");});}
+    if(t===5){a=ri(0,4);b=ri(a+1,a+5);ans=a-b;
+      return Q("Tom gets into the lift at floor "+a+" and goes down "+b+" floors. Which floor is he on now? (0 is the ground floor.)","",ans,[-ans,a+b,ans-1],a+" − "+b+" = "+f(ans)+": below the ground floor.",function(n){return u(n,"floor");});}
+    a=-ri(12,30);b=ri(3,11);ans=a+b;
+    return Q("A diver is "+Math.abs(a)+" m below sea level ("+f(a)+" m). She swims up "+b+" m. Where is she now?","",ans,[a-b,-ans,-(a-b)],"Up means add: "+f(a)+" + "+b+" = "+f(ans)+".",function(n){return f(n)+" m";});
+  }
+  function qOrder(){
+    var s={};while(Object.keys(s).length<4)s[nz(-12,12)]=1;
+    var ns=Object.keys(s).map(Number);if(ns.every(function(x){return x>0;}))ns[0]=-ns[0];
+    var small=Math.random()<.5,ans=small?Math.min.apply(0,ns):Math.max.apply(0,ns);
+    return {en:"Which is the "+(small?"smallest":"biggest")+"?",frame:"",answer:f(ans),wrong:ns.filter(function(x){return x!==ans;}).map(f),
+      why:small?"On the number line, the smallest is furthest to the left.":"On the number line, the biggest is furthest to the right.",
+      review:(small?"Smallest":"Biggest")+" of "+ns.map(f).join(", ")+": "+f(ans)};
+  }
+  function qTrue(){
+    var a=ri(2,9),b=ri(a+1,12);
+    var right=M+a+" > "+M+b,ws=[M+b+" > "+M+a,M+a+" < "+M+b,"0 < "+M+a];
+    return {en:"Which is true?",frame:"",answer:right,wrong:ws,why:"−"+a+" is to the right of −"+b+" on the number line, so −"+a+" is bigger.",review:"True: "+right};
+  }
+
+  var MAKERS={
+    sums:[qAdd,qAdd,qAdd,qHop,qHop],
+    muldiv:[qMul,qMul,qDiv,qDiv,qMul3,qSq],
+    bimdas:[qBim,qBim,qBim,qBim,qBrackets,qProp],
+    real:[qReal,qReal,qReal,qOrder,qTrue,qHop],
+    mixed:[qAdd,qAdd,qHop,qMul,qDiv,qMul3,qSq,qBim,qBim,qBrackets,qProp,qReal,qReal,qOrder,qTrue]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",LEN=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;LEN=(m==="real")?75:60;score=0;streak=0;best=0;left=LEN;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=LEN+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=(left/LEN*100)+"%";
+      if(left<=10)$("bar").className="low";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?350:2200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=7?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS};window.__leimFinish=finish;
+})();
+</script>
+<script src="fun.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
