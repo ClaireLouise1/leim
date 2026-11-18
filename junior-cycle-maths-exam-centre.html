@@ -43,6 +43,19 @@
 .lvl button{font:inherit;font-weight:700;font-size:16px;padding:9px 18px;border-radius:999px;border:2px solid var(--green);background:#fff;color:var(--green);cursor:pointer}
 .lvl button[aria-pressed="true"]{background:var(--green);color:#fff}
 .js .lv[hidden]{display:none}
+.model-q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0;background:#fff}
+.model-q h3{margin:2px 0 6px;font-size:19px}
+.model-q details{border:0;padding:8px 0 0}
+.model-q details summary{font-size:16px;color:var(--green)}
+.mq-s{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--green);margin:0}
+.mq-w li{margin:3px 0}
+.mq-h{font-weight:700;color:var(--ink)!important;margin-top:12px}
+.mq-m{list-style:none;padding:0;margin:6px 0}
+.mq-m li{margin:6px 0;color:var(--ink);display:flex;gap:8px;align-items:baseline}
+.mq-m .mk{flex:none;width:112px;background:var(--mist);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:13px;font-weight:700}
+.ex-links{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.ex-links a{background:var(--mist);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:15px;font-weight:600;text-decoration:none;color:var(--ink)}
+.ex-links a:hover{border-color:var(--green);color:var(--green)}
 </style>
 </head>
 <body>
@@ -75,7 +88,7 @@
       <h1>The Maths <span class="hl">Exam Centre</span></h1>
       <p class="lede">How the June paper works, how every mark is given, and what to do when a question goes wrong. Based on the State Examinations Commission's published 2026 papers and marking schemes.</p>
       <nav class="toc" aria-label="On this page">
-        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
+        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#practice">Model answers</a><a href="#cba">CBAs</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
       </nav>
     </div>
   </div>
@@ -178,6 +191,69 @@
   </ol>
   <a class="card cardlink" href="junior-cycle-maths.html#games"><h3 style="margin:0">Practise topic by topic: free Maths games</h3><p>60-second games for each topic, each with the rules, a free printable sheet and an Exam corner of exam-style questions with worked answers.</p><p style="color:var(--green);font-weight:700">Play the Maths games →</p></a>
   <a class="card cardlink" href="exam-mix.html" style="margin-top:12px"><h3 style="margin:0">Mixed practice like the real paper: Exam Mix</h3><p>Questions from every topic, mixed together against the clock, plus two-step problems that join topics (area and cost, speed and arrival time).</p><p style="color:var(--green);font-weight:700">Play Exam Mix →</p></a>
+</section>
+
+<section id="practice">
+  <h2>Model answers</h2>
+  <p>Four exam-style questions, one from each part of the course, written by Léim. Try each one first, then open the model answer to see the working and where the marks would go.</p>
+  <div class="model-q">
+    <p class="mq-s">Number</p>
+    <h3>A bill with VAT</h3>
+    <p>A phone repair costs <strong>€84.60</strong> before VAT. VAT at <strong>23%</strong> is added. Find the total cost.</p>
+    <details><summary>Show the model answer</summary>
+      <ol class="mq-w"><li>VAT = 84.60 × 0.23 = 19.458 = <strong>€19.46</strong></li><li>Total = 84.60 + 19.46 = <strong>€104.06</strong></li><li>Check: 84.60 × 1.23 = 104.058 ≈ €104.06 ✓</li></ol>
+      <p class="mq-h">Where the marks would go</p>
+      <ul class="mq-m"><li><span class="mk">Low partial</span> 23% written as 0.23 (or 1% = €0.846), or any correct start</li><li><span class="mk">High partial</span> VAT of €19.46 found, but not added on</li><li><span class="mk">Full</span> €104.06</li><li><span class="mk">−1 (slip)</span> €104.058 not rounded to the cent, or no € sign</li></ul>
+      <p class="mq-t"><strong>Tip:</strong> Multiplying by 1.23 does it in one step, but writing the two steps keeps the partial credit safe if you slip.</p>
+    </details>
+  </div><div class="model-q">
+    <p class="mq-s">Algebra &amp; functions</p>
+    <h3>Tickets</h3>
+    <p>An adult ticket costs <strong>€x</strong>. A child ticket costs <strong>€4 less</strong>. Two adult tickets and three child tickets cost <strong>€58</strong>. Write an equation and find the price of each ticket.</p>
+    <details><summary>Show the model answer</summary>
+      <ol class="mq-w"><li>Child ticket = x − 4</li><li>2x + 3(x − 4) = 58</li><li>2x + 3x − 12 = 58</li><li>5x = 70, so x = 14</li><li>Adult <strong>€14</strong>, child <strong>€10</strong>. Check: 2(14) + 3(10) = 28 + 30 = 58 ✓</li></ol>
+      <p class="mq-h">Where the marks would go</p>
+      <ul class="mq-m"><li><span class="mk">Low partial</span> x − 4 for the child ticket, or 2x for two adults</li><li><span class="mk">Mid partial</span> The correct equation 2x + 3(x − 4) = 58</li><li><span class="mk">High partial</span> x = 14, but the child price not given</li><li><span class="mk">Full</span> Both prices, €14 and €10</li></ul>
+      <p class="mq-t"><strong>Tip:</strong> Always answer the question that was asked. Here it asks for each ticket, so x = 14 on its own isn't the end.</p>
+    </details>
+  </div><div class="model-q">
+    <p class="mq-s">Geometry &amp; trigonometry</p>
+    <h3>The ladder</h3>
+    <p>A ladder <strong>5 m</strong> long leans against a wall. Its foot is <strong>1.4 m</strong> from the wall, on level ground.<br>(a) How high up the wall does it reach?<br>(b) Find the angle the ladder makes with the ground, to the nearest degree.</p>
+    <details><summary>Show the model answer</summary>
+      <ol class="mq-w"><li>(a) Pythagoras: h² + 1.4² = 5²</li><li>h² = 25 − 1.96 = 23.04</li><li>h = √23.04 = <strong>4.8 m</strong></li><li>(b) cos A = adjacent ÷ hypotenuse = 1.4 ÷ 5 = 0.28</li><li>A = cos⁻¹(0.28) = 73.7…° = <strong>74°</strong></li></ol>
+      <p class="mq-h">Where the marks would go</p>
+      <ul class="mq-m"><li><span class="mk">(a) Low partial</span> Pythagoras written with the right numbers in</li><li><span class="mk">(a) Full</span> 4.8 m</li><li><span class="mk">(b) Low partial</span> A correct ratio, e.g. cos A = 1.4/5</li><li><span class="mk">(b) Full</span> 74°</li><li><span class="mk">−1 (slip)</span> 73.7° not rounded, or a missing unit</li></ul>
+      <p class="mq-t"><strong>Tip:</strong> Draw the triangle and label it first: the ladder is always the hypotenuse. Check your calculator is in degrees.</p>
+    </details>
+  </div><div class="model-q">
+    <p class="mq-s">Statistics &amp; probability</p>
+    <h3>Working backwards from a mean</h3>
+    <p>Seán's mean mark in <strong>5</strong> tests is <strong>62</strong>. After a sixth test his mean is <strong>65</strong>. What did he get in the sixth test?</p>
+    <details><summary>Show the model answer</summary>
+      <ol class="mq-w"><li>Total of 5 tests = 5 × 62 = 310</li><li>Total of 6 tests = 6 × 65 = 390</li><li>Sixth test = 390 − 310 = <strong>80</strong></li></ol>
+      <p class="mq-h">Where the marks would go</p>
+      <ul class="mq-m"><li><span class="mk">Low partial</span> One total found (310 or 390)</li><li><span class="mk">High partial</span> Both totals found</li><li><span class="mk">Full</span> 80</li></ul>
+      <p class="mq-t"><strong>Tip:</strong> Mean questions that give you the mean and ask for a missing value are always done with totals.</p>
+    </details>
+  </div>
+  <p class="small" style="color:var(--muted)">"Where the marks would go" shows how partial credit usually works on the scales above. It's our guide, not an official marking scheme.</p>
+  <h3>More exam-style questions, topic by topic</h3>
+  <p>Every Maths game has an <strong>Exam corner</strong> with exam-style questions and worked answers. Pick a topic:</p>
+  <p class="sl"><strong>Number</strong></p><div class="ex-links"><a href="integer-rush.html#exam">Integer Rush</a><a href="prime-smash.html#exam">Prime Smash</a><a href="fraction-match.html#exam">Fraction Match</a><a href="round-it.html#exam">Round It</a><a href="venn-sorter.html#exam">Venn Sorter</a><a href="percent-pop.html#exam">Percent Pop</a><a href="share-it-out.html#exam">Share It Out</a><a href="clock-dash.html#exam">Clock Dash</a><a href="power-up.html#exam">Power Up</a><a href="shop-keeper.html#exam">Shop Keeper</a><a href="payslip-puzzle.html#exam">Payslip Puzzle</a><a href="road-trip.html#exam">Road Trip</a><a href="surd-simplify.html#exam">Surd Simplify</a></div>
+  <p class="sl"><strong>Algebra &amp; functions</strong></p><div class="ex-links"><a href="like-term-sweep.html#exam">Like-Term Sweep</a><a href="pattern-builder.html#exam">Pattern Builder</a><a href="bracket-blaster.html#exam">Bracket Blaster</a><a href="balance-it.html#exam">Balance It</a><a href="factor-match.html#exam">Factor Match</a><a href="two-line-crossing.html#exam">Two-Line Crossing</a><a href="root-rush.html#exam">Root Rush</a><a href="graph-match.html#exam">Graph Match</a><a href="number-line-shade.html#exam">Number-Line Shade</a><a href="rearrange-race.html#exam">Rearrange Race</a><a href="growth-spotter.html#exam">Growth Spotter</a></div>
+  <p class="sl"><strong>Geometry &amp; trigonometry</strong></p><div class="ex-links"><a href="angle-chase.html#exam">Angle Chase</a><a href="construction-steps.html#exam">Construction Steps</a><a href="floor-planner.html#exam">Floor Planner</a><a href="mirror-move.html#exam">Mirror Move</a><a href="proof-builder.html#exam">Proof Builder</a><a href="ladder-lab.html#exam">Ladder Lab</a><a href="line-lab.html#exam">Line Lab</a><a href="clinometer-challenge.html#exam">Clinometer Challenge</a><a href="pack-it.html#exam">Pack It</a></div>
+  <p class="sl"><strong>Statistics &amp; probability</strong></p><div class="ex-links"><a href="spin-and-predict.html#exam">Spin &amp; Predict</a><a href="data-detective.html#exam">Data Detective</a><a href="average-ace.html#exam">Average Ace</a><a href="coin-dice-lab.html#exam">Coin &amp; Dice Lab</a></div>
+  <p>Then mix them up: <a href="exam-mix.html#exam">Exam Mix's Exam corner</a> has problems that join two topics, like the real paper.</p>
+</section>
+
+<section id="cba">
+  <h2>CBAs (Classroom-Based Assessments)</h2>
+  <p>The CBA is done in class, not in June, and it doesn't change the exam grade. In Maths it's a <strong>Mathematical Investigation</strong> or a <strong>Statistical Investigation</strong>: ask a question, collect or make the data, work it out, and say what you found.</p>
+  <ul>
+    <li><a href="junior-cycle-cbas.html#maths">CBAs explained, with example investigations</a></li>
+    <li>For a Statistical Investigation, practise the steps with <a href="data-detective.html#exam">Data Detective</a> (good questions, data and tables) and <a href="average-ace.html#exam">Average Ace</a> (graphs and averages).</li>
+  </ul>
 </section>
 
 <section id="grades">

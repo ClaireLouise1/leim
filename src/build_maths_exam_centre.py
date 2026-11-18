@@ -26,6 +26,19 @@ extra_css='''<style>
 .lvl button{font:inherit;font-weight:700;font-size:16px;padding:9px 18px;border-radius:999px;border:2px solid var(--green);background:#fff;color:var(--green);cursor:pointer}
 .lvl button[aria-pressed="true"]{background:var(--green);color:#fff}
 .js .lv[hidden]{display:none}
+.model-q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0;background:#fff}
+.model-q h3{margin:2px 0 6px;font-size:19px}
+.model-q details{border:0;padding:8px 0 0}
+.model-q details summary{font-size:16px;color:var(--green)}
+.mq-s{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--green);margin:0}
+.mq-w li{margin:3px 0}
+.mq-h{font-weight:700;color:var(--ink)!important;margin-top:12px}
+.mq-m{list-style:none;padding:0;margin:6px 0}
+.mq-m li{margin:6px 0;color:var(--ink);display:flex;gap:8px;align-items:baseline}
+.mq-m .mk{flex:none;width:112px;background:var(--mist);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:13px;font-weight:700}
+.ex-links{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.ex-links a{background:var(--mist);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:15px;font-weight:600;text-decoration:none;color:var(--ink)}
+.ex-links a:hover{border-color:var(--green);color:var(--green)}
 </style>
 </head>'''
 HL=[(1,15,'5C 10D',5),(2,25,'10D 5C 10C',10),(3,30,'15D 10D 5C',10),(4,20,'5B 5C 5D 5C',10),(5,15,'5C 10C',5),(6,10,'5C 5B',5),
@@ -51,6 +64,57 @@ def scales(k):
 used={'H':set(' '.join(q[2] for q in HL).split()),'O':set(' '.join(q[2] for q in OL).split())}
 assert used['H']<=set(SC['H']) and used['O']<=set(SC['O'])
 
+# MODEL ANSWERS (original questions, 18 Nov 2026) + strand practice links. Numbers asserted below.
+from fractions import Fraction as Fr
+import sys, os, math
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from checklist_data import MATHS
+from build_exam_mix import STRANDS
+_vat=Fr('84.60')*Fr(23,100); assert round(float(_vat),3)==19.458
+_tot=Fr('84.60')+Fr('19.46'); assert _tot==Fr('104.06') and abs(float(Fr('84.60')*Fr(123,100))-104.058)<1e-9
+_x=Fr(58+12,5); assert _x==14 and 2*_x+3*(_x-4)==58
+assert 5**2-Fr('1.4')**2==Fr('23.04') and Fr('4.8')**2==Fr('23.04')
+_t=math.degrees(math.acos(0.28)); assert 73.6<_t<73.9 and round(_t)==74
+assert 6*65-5*62==80
+GAME={g[5]:(g[4],g[2]) for g in MATHS}
+SNAME={"number":"Number","algebra":"Algebra &amp; functions","geometry":"Geometry &amp; trigonometry","stats":"Statistics &amp; probability"}
+for k,v in STRANDS.items():
+    for slug in v: assert slug+'.html' in GAME and os.path.exists(slug+'.html'), slug
+def strand_links(k):
+    return '<div class="ex-links">'+''.join(f'<a href="{sl}.html#exam">{GAME[sl+".html"][0].replace("&","&amp;")}</a>' for sl in STRANDS[k])+'</div>'
+def model(strand,title,q,steps,marks,tip):
+    st=''.join(f'<li>{x}</li>' for x in steps)
+    mk=''.join(f'<li><span class="mk">{a}</span> {b}</li>' for a,b in marks)
+    return f"""<div class="model-q">
+    <p class="mq-s">{strand}</p>
+    <h3>{title}</h3>
+    <p>{q}</p>
+    <details><summary>Show the model answer</summary>
+      <ol class="mq-w">{st}</ol>
+      <p class="mq-h">Where the marks would go</p>
+      <ul class="mq-m">{mk}</ul>
+      <p class="mq-t"><strong>Tip:</strong> {tip}</p>
+    </details>
+  </div>"""
+MODELS=''.join([
+ model('Number','A bill with VAT','A phone repair costs <strong>€84.60</strong> before VAT. VAT at <strong>23%</strong> is added. Find the total cost.',
+   ['VAT = 84.60 × 0.23 = 19.458 = <strong>€19.46</strong>','Total = 84.60 + 19.46 = <strong>€104.06</strong>','Check: 84.60 × 1.23 = 104.058 ≈ €104.06 ✓'],
+   [('Low partial','23% written as 0.23 (or 1% = €0.846), or any correct start'),('High partial','VAT of €19.46 found, but not added on'),('Full','€104.06'),('−1 (slip)','€104.058 not rounded to the cent, or no € sign')],
+   'Multiplying by 1.23 does it in one step, but writing the two steps keeps the partial credit safe if you slip.'),
+ model('Algebra &amp; functions','Tickets','An adult ticket costs <strong>€x</strong>. A child ticket costs <strong>€4 less</strong>. Two adult tickets and three child tickets cost <strong>€58</strong>. Write an equation and find the price of each ticket.',
+   ['Child ticket = x − 4','2x + 3(x − 4) = 58','2x + 3x − 12 = 58','5x = 70, so x = 14','Adult <strong>€14</strong>, child <strong>€10</strong>. Check: 2(14) + 3(10) = 28 + 30 = 58 ✓'],
+   [('Low partial','x − 4 for the child ticket, or 2x for two adults'),('Mid partial','The correct equation 2x + 3(x − 4) = 58'),('High partial','x = 14, but the child price not given'),('Full','Both prices, €14 and €10')],
+   'Always answer the question that was asked. Here it asks for each ticket, so x = 14 on its own isn\'t the end.'),
+ model('Geometry &amp; trigonometry','The ladder','A ladder <strong>5 m</strong> long leans against a wall. Its foot is <strong>1.4 m</strong> from the wall, on level ground.<br>(a) How high up the wall does it reach?<br>(b) Find the angle the ladder makes with the ground, to the nearest degree.',
+   ['(a) Pythagoras: h² + 1.4² = 5²','h² = 25 − 1.96 = 23.04','h = √23.04 = <strong>4.8 m</strong>','(b) cos A = adjacent ÷ hypotenuse = 1.4 ÷ 5 = 0.28','A = cos⁻¹(0.28) = 73.7…° = <strong>74°</strong>'],
+   [('(a) Low partial','Pythagoras written with the right numbers in'),('(a) Full','4.8 m'),('(b) Low partial','A correct ratio, e.g. cos A = 1.4/5'),('(b) Full','74°'),('−1 (slip)','73.7° not rounded, or a missing unit')],
+   'Draw the triangle and label it first: the ladder is always the hypotenuse. Check your calculator is in degrees.'),
+ model('Statistics &amp; probability','Working backwards from a mean','Seán\'s mean mark in <strong>5</strong> tests is <strong>62</strong>. After a sixth test his mean is <strong>65</strong>. What did he get in the sixth test?',
+   ['Total of 5 tests = 5 × 62 = 310','Total of 6 tests = 6 × 65 = 390','Sixth test = 390 − 310 = <strong>80</strong>'],
+   [('Low partial','One total found (310 or 390)'),('High partial','Both totals found'),('Full','80')],
+   'Mean questions that give you the mean and ask for a missing value are always done with totals.'),
+])
+
 main=f'''<main id="main">
 
 <section class="hero">
@@ -60,7 +124,7 @@ main=f'''<main id="main">
       <h1>The Maths <span class="hl">Exam Centre</span></h1>
       <p class="lede">How the June paper works, how every mark is given, and what to do when a question goes wrong. Based on the State Examinations Commission's published 2026 papers and marking schemes.</p>
       <nav class="toc" aria-label="On this page">
-        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
+        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#practice">Model answers</a><a href="#cba">CBAs</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
       </nav>
     </div>
   </div>
@@ -155,6 +219,29 @@ main=f'''<main id="main">
   </ol>
   <a class="card cardlink" href="junior-cycle-maths.html#games"><h3 style="margin:0">Practise topic by topic: free Maths games</h3><p>60-second games for each topic, each with the rules, a free printable sheet and an Exam corner of exam-style questions with worked answers.</p><p style="color:var(--green);font-weight:700">Play the Maths games →</p></a>
   <a class="card cardlink" href="exam-mix.html" style="margin-top:12px"><h3 style="margin:0">Mixed practice like the real paper: Exam Mix</h3><p>Questions from every topic, mixed together against the clock, plus two-step problems that join topics (area and cost, speed and arrival time).</p><p style="color:var(--green);font-weight:700">Play Exam Mix →</p></a>
+</section>
+
+<section id="practice">
+  <h2>Model answers</h2>
+  <p>Four exam-style questions, one from each part of the course, written by Léim. Try each one first, then open the model answer to see the working and where the marks would go.</p>
+  {MODELS}
+  <p class="small" style="color:var(--muted)">"Where the marks would go" shows how partial credit usually works on the scales above. It's our guide, not an official marking scheme.</p>
+  <h3>More exam-style questions, topic by topic</h3>
+  <p>Every Maths game has an <strong>Exam corner</strong> with exam-style questions and worked answers. Pick a topic:</p>
+  <p class="sl"><strong>{SNAME['number']}</strong></p>{strand_links('number')}
+  <p class="sl"><strong>{SNAME['algebra']}</strong></p>{strand_links('algebra')}
+  <p class="sl"><strong>{SNAME['geometry']}</strong></p>{strand_links('geometry')}
+  <p class="sl"><strong>{SNAME['stats']}</strong></p>{strand_links('stats')}
+  <p>Then mix them up: <a href="exam-mix.html#exam">Exam Mix's Exam corner</a> has problems that join two topics, like the real paper.</p>
+</section>
+
+<section id="cba">
+  <h2>CBAs (Classroom-Based Assessments)</h2>
+  <p>The CBA is done in class, not in June, and it doesn't change the exam grade. In Maths it's a <strong>Mathematical Investigation</strong> or a <strong>Statistical Investigation</strong>: ask a question, collect or make the data, work it out, and say what you found.</p>
+  <ul>
+    <li><a href="junior-cycle-cbas.html#maths">CBAs explained, with example investigations</a></li>
+    <li>For a Statistical Investigation, practise the steps with <a href="data-detective.html#exam">Data Detective</a> (good questions, data and tables) and <a href="average-ace.html#exam">Average Ace</a> (graphs and averages).</li>
+  </ul>
 </section>
 
 <section id="grades">
