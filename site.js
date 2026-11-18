@@ -63,3 +63,19 @@ document.querySelectorAll('.yr').forEach(function (el) { el.textContent = new Da
   s.setAttribute('data-goatcounter', 'https://leim.goatcounter.com/count');
   document.head.appendChild(s);
 })();
+
+// Phones: tables with 3+ columns become stacked cards (see styles.css), each value labelled with its column name
+document.querySelectorAll('.table-wrap > table').forEach(function (t) {
+  var heads = t.querySelectorAll('thead th');
+  if (heads.length < 3) return;
+  t.classList.add('stack');
+  t.querySelectorAll('tbody tr').forEach(function (tr) {
+    var col = 0;
+    Array.prototype.forEach.call(tr.children, function (td) {
+      var span = td.colSpan || 1;
+      var label = span > 1 ? '' : (heads[col] ? heads[col].textContent.trim() : '');
+      if (label) td.setAttribute('data-label', label);
+      col += span;
+    });
+  });
+});

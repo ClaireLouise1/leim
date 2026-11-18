@@ -163,3 +163,18 @@ details p{margin-top:10px;color:var(--muted);max-width:760px}
   .nav::-webkit-scrollbar{display:none}
   .nav a{padding:9px 12px;font-size:15px}
 }
+
+/* Phones: refresher tables never hide text off the right edge (18 Nov 2026).
+   Every table fits the screen; tables with 3+ columns stack into cards
+   (site.js adds class "stack" and the column labels). */
+@media (max-width:640px){
+  .table-wrap > table{min-width:0 !important;font-size:15px}
+  .table-wrap th,.table-wrap td{padding:10px 12px;overflow-wrap:break-word}
+  .table-wrap > table.stack thead{display:none}
+  .table-wrap > table.stack tr{display:block;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .table-wrap > table.stack tr:last-child{border-bottom:0}
+  .table-wrap > table.stack td{display:block;padding:3px 0;border:0;background:none !important}
+  .table-wrap > table.stack tbody tr:nth-child(even){background:#FAFAFA}
+  .table-wrap > table.stack td:first-child{font-weight:700;font-size:16px}
+  .table-wrap > table.stack td[data-label]:not(:first-child)::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--green);margin-top:6px}
+}
