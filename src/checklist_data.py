@@ -55,7 +55,7 @@ MATHS = [
   ("2nd year","Autumn","Money 1: bills, VAT, profit & loss","N.2c","Shop Keeper","shop-keeper.html","money-bills-vat-profit-loss"),
   ("2nd year","Spring","Money 2: income tax, net pay & compound interest","N.2c","Payslip Puzzle","payslip-puzzle.html","money-tax-net-pay-compound-interest"),
   ("2nd year","Spring","Speed, distance, time & currency","N.3b, GT.1","Road Trip","road-trip.html","speed-distance-time-currency"),
-  ("2nd year","Spring","Area, perimeter & scale drawings","GT.2a, GT.2c","Floor Planner","",""),
+  ("2nd year","Spring","Area, perimeter & scale drawings","GT.2a, GT.2c","Floor Planner","floor-planner.html","area-perimeter-scale-drawings"),
   ("2nd year","Spring","Statistics 2: graphs & averages","SP.3d, SP.3e, SP.3f","Chart Choice","",""),
   ("2nd year","Summer","Transformations & symmetry","GT.6","Mirror Move","",""),
   ("2nd year","Summer","Geometry 2: theorems, congruent & similar triangles","GT.3b–GT.3e, U.11, U.12","Proof Builder","",""),

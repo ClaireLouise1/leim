@@ -1,0 +1,468 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function isNice(x,dp){var k=Math.pow(10,dp==null?1:dp);return Math.abs(x*k-Math.round(x*k))<1e-7;}
+  function commas(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  /* numbers: up to dp decimal places (rounded half up), trailing zeros dropped, thousands commas */
+  function num(x,dp){dp=dp==null?2:dp;var k=Math.pow(10,dp),y=Math.round(x*k+1e-9)/k,s=String(y),p=s.split(".");return commas(p[0])+(p[1]?"."+p[1]:"");}
+  function U(u,dp){return function(x){return num(x,dp==null?2:dp)+" "+u;};}
+  function U2(u,dp){return function(x){return num(x,dp==null?2:dp)+" "+u+"²";};}
+  function cnt(w){return function(x){return num(x,0)+" "+w;};}
+  function mon(c){c=Math.round(c);return "€"+commas(String(Math.floor(c/100)))+"."+String(c%100).padStart(2,"0");}
+  /* a length: whole number, or (half) also .5 */
+  function dim(lo,hi,half){if(half&&Math.random()<.4)return ri(Math.ceil(lo*2),Math.floor(hi*2))/2;return ri(Math.ceil(lo),Math.floor(hi));}
+  /* numeric question: ans and slips are VALUES; f formats them. Wrong options never equal the answer, never ≤ 0, no duplicates */
+  function Q(en,frame,ans,slips,f,why,html,data){var A=f(ans),seen={},out=[];seen[A]=1;
+    slips.forEach(function(x){if(x==null||!isFinite(x)||x<=0)return;var s=f(x);if(/NaN|undefined|Infinity/.test(s)||seen[s]||/^0( |$)|^€0\.00/.test(s))return;if(out.length<3){seen[s]=1;out.push(s);}});
+    return {en:en,frame:frame,html:html||"",answer:A,wrong:out,why:why,review:(frame?en+" "+frame:en)+" → "+A,data:data||{}};}
+  /* choice question: pool must hold only definitely-wrong options */
+  function C(en,frame,ans,pool,why,review,html,data){
+    var seen={},w=[];seen[ans]=1;shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined/.test(x))return;if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:frame,html:html||"",answer:String(ans),wrong:w,why:why,review:review||((frame?en+" "+frame:en)+" → "+ans),data:data||{}};}
+
+  var NAMES=["Siobhán","Darragh","Niamh","Oisín","Aoife","Cian","Róisín","Eoin","Ciara","Seán","Méabh","Tadhg"];
+  var ROOMS=["kitchen","bedroom","sitting room","classroom","hall","garage","shop","office"];
+
+  /* ---------- figure kit: shapes in real units (y up), drawn to scale ---------- */
+  function r2(x){return Math.round(x*100)/100;}
+  function poly(kind,P,unit,show,qi,extra){   // polygon with edge labels: show = edge indices (edge i: P[i] → P[i+1])
+    extra=extra||{};var n=P.length,A=0,i;for(i=0;i<n;i++){var a=P[i],b=P[(i+1)%n];A+=a[0]*b[1]-b[0]*a[1];}
+    var sg=A>0?1:-1,labs=[];
+    (show||[]).forEach(function(i){var a=P[i],b=P[(i+1)%n],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.sqrt(dx*dx+dy*dy);
+      labs.push({a:a,b:b,t:i===qi?"?":num(L)+" "+unit,k:i===qi?"q":"e",n:[sg*dy/L,-sg*dx/L]});});
+    var xs=P.map(function(p){return p[0];}),ys=P.map(function(p){return p[1];});
+    return {kind:kind,P:P,bb:[Math.min.apply(null,xs),Math.min.apply(null,ys),Math.max.apply(null,xs),Math.max.apply(null,ys)],labs:labs.concat(extra.labs||[]),lines:extra.lines||[],rt:extra.rt||[],aria:extra.aria};
+  }
+  function rectFig(w,h,unit){return poly("rect",[[0,0],[w,0],[w,h],[0,h]],unit,[0,1],-1,{aria:"Rectangle "+num(w)+" "+unit+" by "+num(h)+" "+unit});}
+  function Lfig(L,unit,show,qi){
+    var W=L.W,H=L.H,cw=L.cw,ch=L.ch,P=[[0,0],[W,0],[W,H-ch],[W-cw,H-ch],[W-cw,H],[0,H]];
+    if(L.f&1)P=P.map(function(p){return [W-p[0],p[1]];});
+    if(L.f&2)P=P.map(function(p){return [p[0],H-p[1]];});
+    return poly("L",P,unit,show,qi,{aria:"L-shaped floor plan"});
+  }
+  function hLab(top,foot,t,side){return {a:top,b:foot,t:t,k:"h",n:[side,0]};}
+  function triFig(b,p,h,unit){   // base (0,0)-(b,0), apex (p,h); slant side = apex to (0,0)
+    var P=[[0,0],[b,0],[p,h]],side=p<b/2?1:-1;
+    return poly("tri",P,unit,[0,2],-1,{lines:[[[p,h],[p,0]]],labs:[hLab([p,h],[p,0],num(h)+" "+unit,side)],rt:[[[p,0],[p+side,0],[p,1]]],aria:"Triangle with its perpendicular height"});
+  }
+  function rtFig(a,b,unit){return poly("rtri",[[0,0],[a,0],[0,b]],unit,[0,1,2],-1,{rt:[[[0,0],[1,0],[0,1]]],aria:"Right-angled triangle"});}
+  function paraFig(b,p,h,unit){
+    var P=[[0,0],[b,0],[b+p,h],[p,h]];
+    return poly("para",P,unit,[0,3],-1,{lines:[[[p,h],[p,0]]],labs:[hLab([p,h],[p,0],num(h)+" "+unit,1)],rt:[[[p,0],[p+1,0],[p,1]]],aria:"Parallelogram with its perpendicular height"});
+  }
+  function gableFig(w,h1,H,unit){
+    var P=[[0,0],[w,0],[w,h1],[w/2,H],[0,h1]];
+    return poly("gable",P,unit,[0,1],-1,{lines:[[[w/2,H],[w/2,0]]],labs:[hLab([w/2,H],[w/2,0],num(H)+" "+unit,1)],rt:[[[w/2,0],[w/2+1,0],[w/2,1]]],aria:"End wall of a house with a pointed roof"});
+  }
+  /* round shapes: path in real units. seg: ["M",x,y] ["L",x,y] ["A",r,x,y,large,sweep] (sweep as drawn on screen) */
+  function circleFig(r,key,unit){
+    var lab=key==="d"?{a:[-r,0],b:[r,0],t:num(2*r)+" "+unit,k:"d",n:[0,1]}:{a:[0,0],b:[r,0],t:num(r)+" "+unit,k:"r",n:[0,1]};
+    return {kind:"circle",bb:[-r,-r,r,r],circle:r,dims:{r:r},lines:[[lab.a,lab.b,1]],labs:[lab],dot:[0,0],aria:"Circle"};
+  }
+  function semiFig(r,key,unit){
+    var lab=key==="d"?{a:[-r,0],b:[r,0],t:num(2*r)+" "+unit,k:"d",n:[0,-1]}:{a:[0,0],b:[0,r],t:num(r)+" "+unit,k:"r",n:[1,0]};
+    return {kind:"semi",bb:[-r,0,r,r],path:[["M",-r,0],["A",r,r,0,0,1],["Z"]],dims:{r:r},labs:[lab],lines:key==="r"?[[[0,0],[0,r],1]]:[],dot:[0,0],aria:"Semicircle"};
+  }
+  function quarterFig(r,unit){
+    return {kind:"quarter",bb:[0,0,r,r],path:[["M",0,0],["L",r,0],["A",r,0,r,0,0],["Z"]],dims:{r:r},labs:[{a:[0,0],b:[r,0],t:num(r)+" "+unit,k:"r",n:[0,-1]}],rt:[[[0,0],[1,0],[0,1]]],aria:"Quarter circle"};
+  }
+  function windowFig(w,h,unit){
+    return {kind:"window",bb:[0,0,w,h+w/2],path:[["M",0,0],["L",w,0],["L",w,h],["A",w/2,0,h,0,0],["Z"]],dims:{w:w,h:h},lines:[[[0,h],[w,h],1]],
+      labs:[{a:[0,0],b:[w,0],t:num(w)+" "+unit,k:"w",n:[0,-1]},{a:[w,0],b:[w,h],t:num(h)+" "+unit,k:"h",n:[1,0]}],aria:"Window: a rectangle with a semicircle on top"};
+  }
+  function trackFig(L,r,unit){
+    return {kind:"track",bb:[-r,0,L+r,2*r],path:[["M",0,0],["L",L,0],["A",r,L,2*r,0,0],["L",0,2*r],["A",r,0,0,0,0],["Z"]],dims:{l:L,r:r},lines:[[[L,0],[L,2*r],1],[[0,0],[0,2*r],1]],
+      labs:[{a:[0,0],b:[L,0],t:num(L)+" "+unit,k:"l",n:[0,-1]},{a:[L,0],b:[L,2*r],t:num(2*r)+" "+unit,k:"d",n:[-1,0]}],aria:"Running track: a rectangle with a semicircle at each end"};
+  }
+  function gridFig(G,cols,rows){   // G = polygon in grid squares
+    var f=poly("grid",G,"",[],-1,{aria:"Floor plan drawn on squared paper"});f.grid=[cols,rows];f.bb=[0,0,cols,rows];return f;}
+
+  function draw(f,box){
+    box=box||[250,150];var bb=f.bb,w=bb[2]-bb[0],h=bb[3]-bb[1],s=Math.min(box[0]/w,box[1]/h),pd=f.grid?10:46;
+    var X=function(x){return r2(pd+(x-bb[0])*s);},Y=function(y){return r2(pd+(bb[3]-y)*s);};
+    var W=r2(w*s+2*pd),H=r2(h*s+2*pd),o='<svg class="fig" viewBox="0 0 '+W+' '+H+'" style="max-width:'+Math.round(W*1.55)+'px" data-kind="'+f.kind+'" data-s="'+Math.round(s*1e6)/1e6+'" data-ox="'+X(0)+'" data-oy="'+Y(0)+'"';
+    if(f.dims)for(var k in f.dims)o+=' data-'+k+'="'+f.dims[k]+'"';
+    o+=' role="img" aria-label="'+(f.aria||"Diagram")+'">';
+    if(f.grid){for(var gx=0;gx<=f.grid[0];gx++)o+='<line class="gl" x1="'+X(gx)+'" y1="'+Y(0)+'" x2="'+X(gx)+'" y2="'+Y(f.grid[1])+'"/>';
+      for(var gy=0;gy<=f.grid[1];gy++)o+='<line class="gl" x1="'+X(0)+'" y1="'+Y(gy)+'" x2="'+X(f.grid[0])+'" y2="'+Y(gy)+'"/>';}
+    if(f.P)o+='<polygon class="sh'+(f.grid?' gp':'')+'" points="'+f.P.map(function(p){return X(p[0])+","+Y(p[1]);}).join(" ")+'" data-pts="'+f.P.map(function(p){return p[0]+","+p[1];}).join(" ")+'"/>';
+    if(f.circle)o+='<circle class="sh" cx="'+X(0)+'" cy="'+Y(0)+'" r="'+r2(f.circle*s)+'"/>';
+    if(f.path){var cur=[0,0];o+='<path class="sh" d="'+f.path.map(function(g){
+      if(g[0]==="M"||g[0]==="L"){cur=[g[1],g[2]];return g[0]+X(g[1])+" "+Y(g[2]);}
+      if(g[0]==="A"){cur=[g[2],g[3]];return "A"+r2(g[1]*s)+" "+r2(g[1]*s)+" 0 "+g[4]+" "+g[5]+" "+X(g[2])+" "+Y(g[3]);}
+      return "Z";}).join(" ")+'"/>';}
+    (f.lines||[]).forEach(function(l){o+='<line class="'+(l[2]?'fr':'fd')+'" x1="'+X(l[0][0])+'" y1="'+Y(l[0][1])+'" x2="'+X(l[1][0])+'" y2="'+Y(l[1][1])+'"/>';});
+    (f.rt||[]).forEach(function(m){var v=m[0],ux=m[1][0]-v[0],uy=m[1][1]-v[1],wx=m[2][0]-v[0],wy=m[2][1]-v[1],lu=Math.sqrt(ux*ux+uy*uy),lw=Math.sqrt(wx*wx+wy*wy),q=9;
+      var a=[X(v[0])+ux/lu*q,Y(v[1])-uy/lu*q],c=[X(v[0])+wx/lw*q,Y(v[1])-wy/lw*q],b=[a[0]+wx/lw*q,a[1]-wy/lw*q];
+      o+='<polyline class="rt" points="'+r2(a[0])+","+r2(a[1])+" "+r2(b[0])+","+r2(b[1])+" "+r2(c[0])+","+r2(c[1])+'"/>';});
+    if(f.dot)o+='<circle class="dt" cx="'+X(f.dot[0])+'" cy="'+Y(f.dot[1])+'" r="3"/>';
+    (f.labs||[]).forEach(function(l){var mx=(X(l.a[0])+X(l.b[0]))/2,my=(Y(l.a[1])+Y(l.b[1]))/2,tw=l.t.length*7.2,off=8+Math.abs(l.n[0])*tw/2+Math.abs(l.n[1])*7;
+      o+='<text class="fl'+(l.k==="q"?' q':'')+'" x="'+r2(mx+l.n[0]*off)+'" y="'+r2(my-l.n[1]*off)+'" text-anchor="middle" dominant-baseline="central" data-k="'+l.k+'" data-a="'+l.a.join(",")+'" data-b="'+l.b.join(",")+'">'+l.t+'</text>';});
+    return o+'</svg>';
+  }
+
+  /* ---------- Floor Planner: rectangles, L-shapes, real-life floors ---------- */
+  function rectPick(){var w=dim(3,12,1),h=dim(2,9,1);if(w===h)return rectPick();if(h>w){var t=w;w=h;h=t;}return [w,h];}
+  function qRect(){
+    var d=rectPick(),w=d[0],h=d[1],who=rnd(NAMES),room=rnd(ROOMS),g=draw(rectFig(w,h,"m"));
+    if(Math.random()<.5)return Q("This is the floor plan of "+who+"'s "+room+". What is the area of the floor?","",w*h,
+      [2*(w+h),w+h,2*w*h,w*h+w,w*h-h,w*h+h],U2("m"),"Area of a rectangle = length × width = "+num(w)+" × "+num(h)+" = "+num(w*h)+" m².",g,{t:"rarea",after:true});
+    return Q("This is the floor plan of "+who+"'s "+room+". What is the perimeter of the floor?","",2*(w+h),
+      [w*h,w+h,2*w+h,w+2*h,2*(w+h)+2,4*w],U("m"),"Perimeter = all the way round = "+num(w)+" + "+num(h)+" + "+num(w)+" + "+num(h)+" = "+num(2*(w+h))+" m.",g,{t:"rper",after:true});
+  }
+  function Lpick(){
+    for(var k=0;k<500;k++){var W=dim(6,14,1),H=dim(5,11,1),cw=dim(2,W-2,1),ch=dim(2,H-2,1);
+      if(cw<0.3*W||cw>0.7*W||ch<0.3*H||ch>0.7*H||W===H)continue;return {W:W,H:H,cw:cw,ch:ch,f:ri(0,3)};}
+    return {W:10,H:8,cw:4,ch:3,f:0};
+  }
+  function qLArea(){
+    var L=Lpick(),v=Math.random()<.5?[0,5,1,4]:[0,5,2,3],A=L.W*L.H-L.cw*L.ch,g=draw(Lfig(L,"m",v));
+    var how=v[2]===1?"The cut-out corner is "+num(L.W)+" − "+num(L.W-L.cw)+" = "+num(L.cw)+" m by "+num(L.H)+" − "+num(L.H-L.ch)+" = "+num(L.ch)+" m. ":"";
+    return Q("Here is the floor plan of an L-shaped room. What is the area of the floor?","",A,
+      [L.W*L.H,2*(L.W+L.H),L.W*L.H-(L.W-L.cw)*(L.H-L.ch),A+L.cw*L.ch/2,L.W*(L.H-L.ch)+(L.W-L.cw)*L.H,A+L.cw,A-L.ch],U2("m"),
+      how+"Big rectangle minus the cut-out corner: "+num(L.W)+" × "+num(L.H)+" − "+num(L.cw)+" × "+num(L.ch)+" = "+num(L.W*L.H)+" − "+num(L.cw*L.ch)+" = "+num(A)+" m².",g,{t:"larea",after:true});
+  }
+  function qLPer(){
+    var L=Lpick(),v=Math.random()<.5?[0,5,1,4]:[0,5,2,3],P=2*(L.W+L.H),g=draw(Lfig(L,"m",v));
+    var shown=v.map(function(i){return [L.W,L.H-L.ch,L.cw,L.ch,L.W-L.cw,L.H][i];}),part=shown.reduce(function(a,b){return a+b;},0);
+    return Q("Here is the floor plan of an L-shaped room. What is its perimeter?","",P,
+      [part,L.W*L.H-L.cw*L.ch,P-L.cw,P+2*L.ch,P-L.ch,P+L.cw],U("m"),
+      "Find the two missing sides first, then add all SIX sides. The total is "+num(P)+" m (the same as the "+num(L.W)+" by "+num(L.H)+" rectangle around it).",g,{t:"lper",after:true});
+  }
+  function qLMiss(){
+    var L=Lpick(),qi=ri(1,4),len=[L.W,L.H-L.ch,L.cw,L.ch,L.W-L.cw,L.H],v=[0,1,2,3,4,5],g=draw(Lfig(L,"m",v,qi));
+    var why=qi===1?num(L.H)+" − "+num(L.ch)+" = "+num(len[1]):qi===2?num(L.W)+" − "+num(L.W-L.cw)+" = "+num(L.cw):qi===3?num(L.H)+" − "+num(L.H-L.ch)+" = "+num(L.ch):num(L.W)+" − "+num(L.cw)+" = "+num(len[4]);
+    return Q("Here is the floor plan of an L-shaped room. How long is the side marked ?","",len[qi],
+      len.filter(function(x,i){return i!==qi;}).concat([len[qi]+1,len[qi]-1,len[qi]+2,L.W+L.H-len[qi]]),U("m"),
+      "Compare it with the side opposite it: "+why+" m.",g,{t:"lmiss",after:true});
+  }
+  var PRICE=[12,15,18,19.5,20,22.5,24,25,28,30,32.5,35,39.5,45];
+  function qPrice(){
+    for(var k=0;k<200;k++){
+      var p=rnd(PRICE),isL=Math.random()<.5,L=Lpick(),d=rectPick(),A=isL?L.W*L.H-L.cw*L.ch:d[0]*d[1],Pm=isL?2*(L.W+L.H):2*(d[0]+d[1]);
+      if(!isNice(A*p,2))continue;
+      var g=draw(isL?Lfig(L,"m",[0,5,1,4]):rectFig(d[0],d[1],"m")),c=Math.round(A*p*100);
+      return Q("New flooring costs "+mon(p*100)+" per m². How much will it cost to cover this floor?","",c,
+        [Math.round(Pm*p*100),isL?Math.round(L.W*L.H*p*100):null,Math.round(A*100*p/10),c+p*100,c-p*100,Math.round((A+Pm)*p*100)],mon,
+        "Area = "+num(A)+" m². Cost = area × price per m² = "+num(A)+" × "+num(p)+" = "+mon(c)+".",g,{t:"price",p:p,after:true});
+    }
+    return qPrice();
+  }
+  var PACK=[1.5,1.8,2,2.2,2.4,2.5,3];
+  function qPacks(){
+    for(var k=0;k<200;k++){var d=rectPick(),A=d[0]*d[1],c=rnd(PACK),x=A/c,n=Math.ceil(x-1e-9);
+      if(isNice(x,0)||n<3)continue;
+      return Q("Flooring is sold in packs. Each pack covers "+num(c)+" m². How many packs are needed for this floor?","",n,
+        [n-1,n+1,Math.round(A),n+2,Math.round(A/2)],cnt("packs"),
+        "Area = "+num(d[0])+" × "+num(d[1])+" = "+num(A)+" m². "+num(A)+" ÷ "+num(c)+" = "+num(x,2)+(isNice(x,2)?"":"…")+", so ROUND UP: "+n+" packs (with "+(n-1)+" you'd be short).",draw(rectFig(d[0],d[1],"m")),{t:"packs",c:c,after:true});}
+    return qPacks();
+  }
+  var TILE=[20,25,30,40,50,60];
+  function qTiles(){
+    for(var k=0;k<300;k++){var t=rnd(TILE),a=ri(4,30)*t,b=ri(4,30)*t,W=a/100,H=b/100;
+      if(W>8||H>8||W<1.5||H<1.5||a===b)continue;var n=(a/t)*(b/t);
+      return Q("A floor is "+num(W)+" m by "+num(H)+" m. Square tiles "+t+" cm by "+t+" cm cover it exactly. How many tiles are needed?","",n,
+        [W*H*100/t,(a/t)+(b/t),2*((a/t)+(b/t)),n/2,n+a/t,W*H/(t/100)],cnt("tiles"),
+        "Work in cm: "+a+" ÷ "+t+" = "+(a/t)+" tiles along, "+b+" ÷ "+t+" = "+(b/t)+" tiles across. "+(a/t)+" × "+(b/t)+" = "+num(n,0)+" tiles.","",{t:"tiles"});}
+    return qTiles();
+  }
+  function qSkirt(){
+    var d=rectPick(),dr=rnd([0.8,0.9,1,1.2]),P=2*(d[0]+d[1]);
+    return Q("Skirting board goes around the edge of this floor, except across the doorway, which is "+num(dr)+" m wide. How many metres of skirting board are needed?","",P-dr,
+      [P,P-2*dr,d[0]+d[1]-dr,d[0]*d[1]-dr,P+dr],U("m"),
+      "Perimeter = 2 × ("+num(d[0])+" + "+num(d[1])+") = "+num(P)+" m. Take away the doorway: "+num(P)+" − "+num(dr)+" = "+num(P-dr)+" m.",draw(rectFig(d[0],d[1],"m")),{t:"skirt",dr:dr,after:true});
+  }
+
+  /* ---------- Triangles & parallelograms ---------- */
+  var TRIP=[[3,4,5],[4,3,5],[6,8,10],[8,6,10],[5,12,13],[12,5,13],[9,12,15],[12,9,15],[8,15,17],[15,8,17],[6,4.5,7.5],[2.5,6,6.5],[4.5,6,7.5]];
+  function triPick(){
+    for(var k=0;k<300;k++){var t=rnd(TRIP),p=t[0],h=t[1],s=t[2],b=dim(p+2,p+16,1);
+      if(b===s||b===h||b<0.6*h||b>3*h||!isNice(b*h/2,2)||b+h+s===b*h/2)continue;return {b:b,p:p,h:h,s:s};}
+    return {b:10,p:3,h:4,s:5};
+  }
+  function qTri(){
+    var T=triPick(),A=T.b*T.h/2,g=draw(triFig(T.b,T.p,T.h,"cm"));
+    return Q("What is the area of this triangle?","",A,
+      [T.b*T.h,T.b*T.s/2,T.s*T.h/2,T.b*T.s,T.b+T.h+T.s,A+T.b],U2("cm"),
+      "Area of a triangle = ½ × base × PERPENDICULAR height = ½ × "+num(T.b)+" × "+num(T.h)+" = "+num(A)+" cm². (The sloping side, "+num(T.s)+" cm, isn't the height.)",g,{t:"tri",after:true});
+  }
+  function qWhichTri(){
+    var T=triPick(),ans="½ × "+num(T.b)+" × "+num(T.h);
+    return C("Which calculation gives the area of this triangle?","",ans,["½ × "+num(T.b)+" × "+num(T.s),num(T.b)+" × "+num(T.h),"½ × "+num(T.s)+" × "+num(T.h),num(T.b)+" + "+num(T.h)+" + "+num(T.s)],
+      "Area = ½ × base × perpendicular height. The height is the dashed line that meets the base at a right angle ("+num(T.h)+" cm).",null,draw(triFig(T.b,T.p,T.h,"cm")),{t:"whichtri",after:true});
+  }
+  function qRtTri(){
+    var t=rnd(TRIP.slice(0,10)),k=rnd([1,1,2]),a=t[0]*k,b=t[1]*k,c=t[2]*k,g=draw(rtFig(a,b,"cm"));
+    if(Math.random()<.55)return Q("What is the area of this right-angled triangle?","",a*b/2,
+      [a*b,a*c/2,b*c/2,a+b+c,a*b*c/2],U2("cm"),"The two sides at the right angle are the base and the height: ½ × "+a+" × "+b+" = "+num(a*b/2)+" cm².",g,{t:"rtarea",after:true});
+    return Q("What is the perimeter of this right-angled triangle?","",a+b+c,
+      [a*b/2,a+b,2*(a+b),a+b+c+c,a*b],U("cm"),"Add the three sides: "+a+" + "+b+" + "+c+" = "+num(a+b+c)+" cm.",g,{t:"rtper",after:true});
+  }
+  function qPara(){
+    for(var k=0;k<300;k++){var t=rnd(TRIP),p=t[0],h=t[1],s=t[2],b=dim(Math.max(p+2,5),p+14,1);
+      if(b===s||b===h||b<0.6*h||b>3*h)continue;
+      var g=draw(paraFig(b,p,h,"cm"));
+      if(Math.random()<.6)return Q("What is the area of this parallelogram?","",b*h,
+        [b*s,b*h/2,2*(b+s),s*h,b*h+h],U2("cm"),"Area of a parallelogram = base × PERPENDICULAR height = "+num(b)+" × "+num(h)+" = "+num(b*h)+" cm². (Not the sloping side.)",g,{t:"para",after:true});
+      return Q("What is the perimeter of this parallelogram?","",2*(b+s),
+        [b*h,2*(b+h),b+s,b*s,2*b+s],U("cm"),"Opposite sides are equal: 2 × ("+num(b)+" + "+num(s)+") = "+num(2*(b+s))+" cm. (The dashed height is not a side.)",g,{t:"paraper",after:true});}
+    return qPara();
+  }
+  function qFindH(){
+    var b=dim(4,16,1),h=dim(3,14,1);
+    if(Math.random()<.5){var A=b*h/2;if(!isNice(A,2))return qFindH();
+      return Q("A triangle has an area of "+num(A)+" cm² and a base of "+num(b)+" cm. What is its perpendicular height?","",h,
+        [A/b,2*A*b,A-b,2*A,A/(2*b),h+1],U("cm"),"Area = ½ × base × height, so height = 2 × area ÷ base = 2 × "+num(A)+" ÷ "+num(b)+" = "+num(h)+" cm.","",{t:"findht"});}
+    var A2=b*h;
+    return Q("A parallelogram has an area of "+num(A2)+" cm² and a base of "+num(b)+" cm. What is its perpendicular height?","",h,
+      [2*A2/b,A2-b,A2/2,h/2,h+2],U("cm"),"Area = base × height, so height = area ÷ base = "+num(A2)+" ÷ "+num(b)+" = "+num(h)+" cm.","",{t:"findhp"});
+  }
+  function qGable(){
+    for(var k=0;k<200;k++){var w=dim(5,10,1),h1=dim(2.5,5,1),h2=dim(1.5,4,1),H=h1+h2,A=w*h1+w*h2/2;
+      if(!isNice(A,2)||h2>w*0.8)continue;
+      return Q("This is the end wall of a house. It is going to be painted. What is its area?","",A,
+        [w*H,w*h1,w*H/2,w*h1+w*h2,w*h1+h2*h2/2],U2("m"),
+        "Rectangle + triangle. Rectangle: "+num(w)+" × "+num(h1)+" = "+num(w*h1)+" m². Triangle: height "+num(H)+" − "+num(h1)+" = "+num(h2)+" m, so ½ × "+num(w)+" × "+num(h2)+" = "+num(w*h2/2)+" m². Total "+num(A)+" m².",draw(gableFig(w,h1,H,"m")),{t:"gable",after:true});}
+    return qGable();
+  }
+
+  /* ---------- Circles ---------- */
+  var RS=[2,3,4,5,6,7,8,9,10,12,14,15,20,21,2.5,3.5,4.5,10.5];
+  var PIV={calc:Math.PI,"314":3.14,"227":22/7};
+  var PIT={calc:" Use the π button and give your answer to 1 decimal place.","314":" Use π = 3.14.","227":" Use π = 22/7.",inpi:" Give your answer in terms of π."};
+  function piMode(r,noInPi){var m=["calc","calc","314"];if(!noInPi)m.push("inpi","inpi");if(isNice(r*2/7,0))m.push("227","227");return rnd(m);}
+  function pf(mode,u){if(mode==="inpi")return function(c){return (Math.abs(c-1)<1e-9?"":num(c,2))+"π "+u;};var dp=mode==="calc"?1:2;return function(x){return num(x,dp)+" "+u;};}
+  function piQ(en,mode,coef,slips,u,head,html,data){
+    if((mode==="314"||mode==="227")&&!isNice(coef*PIV[mode],2)||mode==="inpi"&&!isNice(coef,2))mode="calc";
+    var f=pf(mode,u),val=function(c){return mode==="inpi"?c:c*PIV[mode];};
+    data=data||{};data.mode=mode;
+    return Q(en+PIT[mode],"",val(coef),slips.map(val),f,head+(mode==="314"?" (π = 3.14)":mode==="227"?" (π = 22/7)":"")+" = "+f(val(coef))+".",html,data);
+  }
+  function given(r,u){return Math.random()<.5?["radius",r,"r"]:["diameter",2*r,"d"];}
+  function qCirc(){
+    var r=rnd(RS),m=piMode(r),g=given(r),pic=Math.random()<.5,u="cm";
+    var en=pic?"What is the circumference (the distance around) of this circle?":"A circle has a "+g[0]+" of "+num(g[1])+" cm. What is its circumference?";
+    return piQ(en,m,2*r,[r,r*r,4*r,2*r+1,2*r-1,3*r,r*r/2],u,
+      "Circumference = 2πr = πd = π × "+num(2*r)+(g[2]==="d"?"":" (radius "+num(r)+", so diameter "+num(2*r)+")"),pic?draw(circleFig(r,g[2],u)):"",{t:"circ",r:r,after:true});
+  }
+  function qCArea(){
+    var r=rnd(RS),m=piMode(r),g=given(r),pic=Math.random()<.5,u="cm²";
+    var en=pic?"What is the area of this circle?":"A circle has a "+g[0]+" of "+num(g[1])+" cm. What is its area?";
+    return piQ(en,m,r*r,[2*r,4*r*r,r*r/2,r*r+1,2*r*r,r],u,
+      "Area = πr²"+(g[2]==="d"?" (use the RADIUS: "+num(2*r)+" ÷ 2 = "+num(r)+")":"")+" = π × "+num(r)+"²",pic?draw(circleFig(r,g[2],"cm")):"",{t:"carea",r:r,after:true});
+  }
+  function qSemi(){
+    var r=rnd(RS),key=Math.random()<.6?"d":"r",g=draw(semiFig(r,key,"m"));
+    if(Math.random()<.5){var m=piMode(r);
+      return piQ("What is the area of this semicircle?",m,r*r/2,[r*r,r,2*r,r*r/4,4*r*r/2],"m²","Half a circle: ½ × π × "+num(r)+"²",g,{t:"semiarea",r:r,after:true});}
+    var m2=piMode(r,true);if(!isNice(PIV[m2]*r,2))m2="calc";var P=PIV[m2],f=pf(m2,"m"),v=P*r+2*r;
+    return Q("What is the perimeter of this semicircle?"+PIT[m2],"",v,[P*r,2*P*r+2*r,P*r+r,P*r*r/2,2*P*r,P*r+4*r],f,
+      "Curved part = half of π × "+num(2*r)+" = "+num(P*r,2)+", plus the straight diameter "+num(2*r)+": total "+f(v)+".",g,{t:"semiper",r:r,mode:m2,after:true});
+  }
+  function qQuarter(){
+    var r=rnd([2,3,4,5,6,7,8,10,12,14,20]),g=draw(quarterFig(r,"m"));
+    if(Math.random()<.5){var m=piMode(r);
+      return piQ("This is a quarter of a circle. What is its area?",m,r*r/4,[r*r/2,r*r,r/2,2*r,r*r/4+1,r*r*3/4,r],"m²","A quarter of the circle: ¼ × π × "+num(r)+"²",g,{t:"quarea",r:r,after:true});}
+    var m2=piMode(r,true);if(!isNice(PIV[m2]*r/2,2))m2="calc";var P=PIV[m2],f=pf(m2,"m"),v=P*r/2+2*r;
+    return Q("This is a quarter of a circle. What is its perimeter?"+PIT[m2],"",v,[P*r/2,P*r/2+r,P*r+2*r,2*P*r,P*r*r/4,P*r/2+4*r],f,
+      "Curved part = ¼ × 2π × "+num(r)+" = "+num(P*r/2,2)+", plus two radii "+num(r)+" + "+num(r)+": total "+f(v)+".",g,{t:"quper",r:r,mode:m2,after:true});
+  }
+  function qRadius(){
+    var k=ri(1,4),r=rnd([2,3,4,5,6,7,8,9,10,11,12,15]),f=U("cm");
+    if(k===1)return Q("The circumference of a circle is "+num(2*r)+"π cm. What is its radius?","",r,[2*r,4*r,r*r,r+2,r+1],f,"2πr = "+num(2*r)+"π, so r = "+num(2*r)+" ÷ 2 = "+f(r)+".","",{t:"rad",kind:"cpi"});
+    if(k===2)return Q("The area of a circle is "+num(r*r)+"π cm². What is its radius?","",r,[r*r,r*r/2,2*r,r*r/4,r+1],f,"πr² = "+num(r*r)+"π, so r² = "+num(r*r)+" and r = √"+num(r*r)+" = "+f(r)+".","",{t:"rad",kind:"api"});
+    if(k===3)return Q("The circumference of a circle is "+num(2*r*3.14)+" cm. Use π = 3.14. What is its radius?","",r,[2*r,r/2,r*3.14,r+1,r*r],f,num(2*r*3.14)+" ÷ 3.14 = "+num(2*r)+" (the diameter), so r = "+f(r)+".","",{t:"rad",kind:"c314"});
+    return Q("The area of a circle is "+num(r*r*3.14)+" cm². Use π = 3.14. What is its radius?","",r,[r*r,r*r/2,2*r,r+1,r*3.14],f,num(r*r*3.14)+" ÷ 3.14 = "+num(r*r)+" = r², so r = √"+num(r*r)+" = "+f(r)+".","",{t:"rad",kind:"a314"});
+  }
+  function qWheel(){
+    var d=rnd([50,56,60,64,70,72,80]),n=rnd([100,200,250,500,1000]),who=rnd(NAMES);
+    if(Math.random()<.5){var m=isNice(d/7,0)&&Math.random()<.5?"227":"calc",P=PIV[m],D=P*d*n/100,f=m==="227"?U("m",2):U("m",0);
+      return Q("A bicycle wheel has a diameter of "+d+" cm. "+who+"'s wheel turns "+n+" times. How far does the bike travel, in metres?"+(m==="227"?" Use π = 22/7.":" Give your answer to the nearest metre."),"",D,
+        [P*d/2*n/100,d*n/100,P*d*n,2*P*d*n/100,P*d*d*n/100/100],f,
+        "One turn = the circumference = π × "+d+" = "+num(P*d,2)+" cm. × "+n+" turns = "+num(P*d*n,1)+" cm = "+f(D)+".","",{t:"wheel",mode:m});}
+    var Lm=rnd([50,100,150,200,250,300,400,500]),c=Math.PI*d/100,x=Lm/c,nn=Math.floor(x);
+    if(isNice(x,0))return qWheel();
+    return Q("A wheel has a diameter of "+d+" cm. How many COMPLETE turns does it make in "+Lm+" m? (Use the π button.)","",nn,
+      [nn+1,Math.floor(Lm/(c/2)),Math.floor(Lm*100/d),nn-1,Math.floor(Lm/(Math.PI*d*d/40000))],cnt("turns"),
+      "One turn = π × "+d+" cm = "+num(c,4)+" m. "+Lm+" ÷ "+num(c,4)+" = "+num(x,2)+", so "+nn+" complete turns.","",{t:"turns"});
+  }
+  function qRoundShape(){
+    var mode=rnd(["calc","314"]),P,f;
+    if(Math.random()<.5){var w=rnd([1,1.2,1.4,1.6,2,2.4]),h=rnd([1,1.2,1.5,1.8,2]),r=w/2,ar=Math.random()<.5;
+      if(!isNice(3.14*(ar?r*r/2:r),2))mode="calc";P=PIV[mode];
+      if(ar){f=U2("m",mode==="calc"?1:2);var A=w*h+P*r*r/2;
+        return Q("This window is a rectangle with a semicircle on top. What is its area?"+PIT[mode],"",A,[w*h+P*r*r,w*h+P*w*w/2,w*h,P*r*r/2,w*h+P*r],f,
+          "Rectangle "+num(w)+" × "+num(h)+" = "+num(w*h)+" m², plus half a circle of radius "+num(r)+": ½ × π × "+num(r)+"² = "+num(P*r*r/2,3)+" m². Total "+f(A)+".",draw(windowFig(w,h,"m")),{t:"winarea",mode:mode,after:true});}
+      f=U("m",mode==="calc"?1:2);var Pm=w+2*h+P*r;
+      return Q("This window is a rectangle with a semicircle on top. A strip of wood goes all the way around the OUTSIDE edge. How long is it?"+PIT[mode],"",Pm,[2*w+2*h+P*r,w+2*h+2*P*r,w+2*h,2*w+2*h,w+2*h+P*r*r/2],f,
+        "Bottom "+num(w)+" + two sides 2 × "+num(h)+" + the curved top (half of π × "+num(w)+" = "+num(P*r,3)+") = "+f(Pm)+". The dashed line is NOT on the outside.",draw(windowFig(w,h,"m")),{t:"winper",mode:mode,after:true});}
+    var L=rnd([40,60,80,84.4,100]),r2_=rnd([20,25,30,35]),pr=Math.random()<.5;
+    if(!isNice(3.14*(pr?2*r2_:r2_*r2_),2))mode="calc";P=PIV[mode];f=mode==="calc"?U("m",1):U("m",2);
+    if(pr){var Pt=2*L+2*P*r2_;
+      return Q("A running track is two straight parts with a semicircle at each end. How far is one lap of the inside edge?"+PIT[mode],"",Pt,[2*L+P*r2_,L+2*P*r2_,2*L+4*P*r2_,2*L+2*r2_*2,2*L+P*r2_*r2_],f,
+        "Two straights 2 × "+num(L)+" = "+num(2*L)+" m. Two semicircles = one whole circle of diameter "+num(2*r2_)+": π × "+num(2*r2_)+" = "+num(2*P*r2_,3)+" m. Total "+f(Pt)+".",draw(trackFig(L,r2_,"m")),{t:"trackper",mode:mode,after:true});}
+    f=U2("m",mode==="calc"?1:2);var At=L*2*r2_+P*r2_*r2_;
+    return Q("A running track is two straight parts with a semicircle at each end. What is the area inside the track?"+PIT[mode],"",At,[L*2*r2_+P*r2_*r2_/2,L*2*r2_,L*2*r2_+2*P*r2_*r2_,L*2*r2_+P*4*r2_*r2_],f,
+      "Rectangle "+num(L)+" × "+num(2*r2_)+" = "+num(L*2*r2_)+" m². The two ends make one whole circle of radius "+num(r2_)+": π × "+num(r2_)+"² = "+num(P*r2_*r2_,3)+" m². Total "+f(At)+".",draw(trackFig(L,r2_,"m")),{t:"trackarea",mode:mode,after:true});
+  }
+
+  /* ---------- Scale drawings ---------- */
+  var SCALES=[20,25,50,100,200,250,500];
+  function qPlanReal(){
+    for(var k=0;k<300;k++){var p=ri(15,150)/10,who=rnd(NAMES);
+      if(Math.random()<.6){var n=rnd(SCALES),R=p*n/100;if(!isNice(R,2)||R>60)continue;
+        return Q(who+" draws a plan to a scale of 1 : "+n+". A wall is "+num(p)+" cm long on the plan. How long is the real wall, in metres?","",R,
+          [p*n,p*n/10,p*n/1000,p/n*100,R*2],U("m"),
+          "1 : "+n+" means every 1 cm on the plan is "+n+" cm in real life. "+num(p)+" × "+n+" = "+num(p*n)+" cm = "+num(R)+" m (÷ 100).","",{t:"planreal",n:n});}
+      var km_=rnd([0.5,2,2.5,4,5,0.25]),R2=p*km_;if(!isNice(R2,2))continue;
+      return Q("On a plan, 1 cm represents "+num(km_)+" m. A room is "+num(p)+" cm long on the plan. How long is the real room?","",R2,
+        [p/km_,p*km_*100,p+km_,R2*10,p],U("m"),"Every 1 cm stands for "+num(km_)+" m, so "+num(p)+" × "+num(km_)+" = "+num(R2)+" m.","",{t:"cmrep",k:km_});}
+    return qPlanReal();
+  }
+  function qRealPlan(){
+    for(var k=0;k<300;k++){var n=rnd(SCALES),R=ri(10,240)/10,p=R*100/n;
+      if(!isNice(p,1)||p<1||p>30)continue;
+      return Q("A plan is drawn to a scale of 1 : "+n+". A real wall is "+num(R)+" m long. How long should it be on the plan?","",p,
+        [R*n,R/n,p*10,R*n/100,p/10,p*2,p+1,p/2],U("cm"),
+        "Change to cm first: "+num(R)+" m = "+num(R*100)+" cm. Real → plan: ÷ "+n+". "+num(R*100)+" ÷ "+n+" = "+num(p)+" cm.","",{t:"realplan",n:n});}
+    return qRealPlan();
+  }
+  function qFindScale(){
+    for(var k=0;k<300;k++){var p=rnd([2,2.5,3,4,5,6,7.5,8,10,12]),R=rnd([1,1.5,2,2.5,3,4,5,6,7.5,8,10,12,15,20]),n=R*100/p;
+      if(!isNice(n,0)||SCALES.concat([10,40,75,150,300,400,1000]).indexOf(n)<0)continue;
+      var pool=[n/100,n*10,n/10,R*p,100*p/R,n*100].filter(function(x){return isNice(x,0)&&x>=1&&x!==n;}).map(function(x){return "1 : "+commas(String(x));});
+      if(pool.length<3)continue;
+      return C("On a plan, a wall that is really "+num(R)+" m long is drawn "+num(p)+" cm long. What is the scale of the plan?","","1 : "+commas(String(n)),pool,
+        "Same units first: "+num(R)+" m = "+num(R*100)+" cm. "+num(R*100)+" ÷ "+num(p)+" = "+n+", so 1 cm on the plan is "+n+" cm in real life: 1 : "+n+".",null,"",{t:"findscale"});}
+    return qFindScale();
+  }
+  function qPlanArea(){
+    for(var k=0;k<300;k++){var n=rnd([20,25,50,100,200]),a=dim(4,14,1),b=dim(3,10,1),A=(a*n/100)*(b*n/100);
+      if(a===b||!isNice(A,2)||A>400)continue;
+      return Q("This rectangle is a room on a plan drawn to a scale of 1 : "+n+". What is the real area of the room, in m²?","",A,
+        [a*b*n/100,a*b*n/10000,a*b,a*b*n*n/100,2*(a+b)*n/100,A*2,A/2,A+a*n/100],U2("m"),
+        "Change each LENGTH first: "+num(a)+" cm → "+num(a*n/100)+" m and "+num(b)+" cm → "+num(b*n/100)+" m. Area = "+num(a*n/100)+" × "+num(b*n/100)+" = "+num(A)+" m². (Not the plan area × "+n+".)",draw(rectFig(a,b,"cm")),{t:"planarea",n:n,after:true});}
+    return qPlanArea();
+  }
+  var MAPS=[10000,20000,25000,50000,100000];
+  function qMap(){
+    for(var k=0;k<300;k++){var n=rnd(MAPS),d=ri(10,150)/10,D=d*n/100000;
+      if(!isNice(D,2))continue;
+      if(Math.random()<.6)return Q("A map has a scale of 1 : "+commas(String(n))+". Two towns are "+num(d)+" cm apart on the map. How far apart are they in real life, in km?","",D,
+        [D*10,D/10,d*n/1000,D*100,D*1000,D+1,D*2],U("km"),num(d)+" × "+commas(String(n))+" = "+commas(String(Math.round(d*n)))+" cm. ÷ 100 for m, ÷ 1,000 for km: "+num(D)+" km.","",{t:"map",n:n});
+      return Q("A map has a scale of 1 : "+commas(String(n))+". A walk is "+num(D)+" km long. How long is it on the map, in cm?","",d,
+        [d*10,d/10,D*n/1000,d*100,d*2,d+1,d/100],U("cm"),num(D)+" km = "+commas(String(Math.round(D*100000)))+" cm. ÷ "+commas(String(n))+" = "+num(d)+" cm.","",{t:"mapback",n:n});}
+    return qMap();
+  }
+  function gridPoly(){   // rectangle or L-shape on squares
+    var cols=ri(7,10),rows=ri(5,7),W=ri(4,cols-1),H=ri(3,rows-1),x0=ri(1,cols-W),y0=ri(1,rows-H);
+    if(x0+W>cols-0||y0+H>rows)return gridPoly();
+    var P=[[0,0],[W,0],[W,H],[0,H]];
+    if(Math.random()<.65&&W>=4&&H>=3){var cw=ri(1,W-2),ch=ri(1,H-2);P=[[0,0],[W,0],[W,H-ch],[W-cw,H-ch],[W-cw,H],[0,H]];if(Math.random()<.5)P=P.map(function(p){return [W-p[0],p[1]];});}
+    return {cols:cols+1,rows:rows+1,P:P.map(function(p){return [p[0]+x0,p[1]+y0];})};
+  }
+  function qGrid(){
+    var g=gridPoly(),sq=rnd([0.5,0.5,1,2,1.5]),P=g.P,n=P.length,A=0,Pr=0;
+    for(var i=0;i<n;i++){var a=P[i],b=P[(i+1)%n];A+=a[0]*b[1]-b[0]*a[1];Pr+=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]);}
+    A=Math.abs(A)/2;var html=draw(gridFig(P,g.cols,g.rows),[260,170]),lead="This plan is drawn on squared paper. Each square stands for "+num(sq)+" m by "+num(sq)+" m in real life. ";
+    if(Math.random()<.55)return Q(lead+"What is the real area of the room?","",A*sq*sq,[A*sq,A,Pr*sq,A*sq*sq*2,A*sq*sq+sq*sq*2,A*sq*sq/2,(A+1)*sq*sq],U2("m"),
+      "Count the squares inside: "+A+". Each square is "+num(sq)+" × "+num(sq)+" = "+num(sq*sq,4)+" m². "+A+" × "+num(sq*sq,4)+" = "+num(A*sq*sq)+" m².",html,{t:"gridarea",sq:sq,after:true});
+    return Q(lead+"What is the real perimeter of the room?","",Pr*sq,[Pr,A*sq,Pr*sq*sq,Pr*sq+2*sq,(Pr-2)*sq,Pr*sq*2,Pr*sq/2],U("m"),
+      "Count the square edges all the way round: "+Pr+". Each is "+num(sq)+" m, so "+Pr+" × "+num(sq)+" = "+num(Pr*sq)+" m.",html,{t:"gridper",sq:sq,after:true});
+  }
+
+  var MAKERS={
+    plan:[qRect,qRect,qLArea,qLArea,qLPer,qLMiss,qPrice,qPrice,qPacks,qTiles,qSkirt],
+    shapes:[qTri,qTri,qWhichTri,qRtTri,qPara,qPara,qFindH,qGable,qGable],
+    circles:[qCirc,qCirc,qCArea,qCArea,qSemi,qQuarter,qRadius,qWheel,qRoundShape,qRoundShape],
+    scale:[qPlanReal,qPlanReal,qRealPlan,qFindScale,qPlanArea,qPlanArea,qMap,qGrid,qGrid],
+    mixed:[qRect,qLArea,qLPer,qLMiss,qPrice,qPacks,qTiles,qSkirt,qTri,qWhichTri,qRtTri,qPara,qFindH,qGable,qCirc,qCArea,qSemi,qQuarter,qRadius,qWheel,qRoundShape,qPlanReal,qRealPlan,qFindScale,qPlanArea,qMap,qGrid]
+  };
+
+  /* fixed diagrams in the rules and the Exam corner */
+  var FIX={
+    patRect:function(){return draw(rectFig(8,4,"cm"),[170,100]);},
+    patTri:function(){return draw(triFig(8,3,4,"cm"),[170,100]);},
+    patPara:function(){return draw(paraFig(8,3,4,"cm"),[150,100]);},
+    ruleL:function(){return draw(Lfig({W:10,H:7,cw:4,ch:3,f:0},"m",[0,5,1,4]),[230,150]);},
+    ruleSemi:function(){return draw(semiFig(3,"d","m"),[180,90]);},
+    ex1:function(){return draw(Lfig({W:6.5,H:5,cw:2.5,ch:2,f:1},"m",[0,1,2,5]),[170,120]);},
+    ex2:function(){return draw(gableFig(8,5,8,"m"),[150,130]);},
+    ex3:function(){return draw(windowFig(1.4,1.6,"m"),[110,140]);}
+  };
+  [].forEach.call(document.querySelectorAll("[data-fig]"),function(el){try{el.innerHTML=FIX[el.getAttribute("data-fig")]();}catch(e){}});
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="plan"?75:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.data&&q.data.after?esc(q.frame||"")+(q.html||""):(q.html||"")+esc(q.frame||"");
+    $("frame").className="frame"+(q.frame&&q.frame.length>24?" long":"");
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    shuffle([q.answer].concat(q.wrong)).forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){pick(b,t);};box.appendChild(b);
+    });
+  }
+  function pick(btn,t){
+    if(locked||left<=0)return;locked=true;asked++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="plan"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="plan"&&streak%5===0?700:350):3400);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready speed.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimTest={MAKERS:MAKERS,draw:{draw:draw,rectFig:rectFig,Lfig:Lfig,triFig:triFig,rtFig:rtFig,paraFig:paraFig,gableFig:gableFig,circleFig:circleFig,semiFig:semiFig,quarterFig:quarterFig,windowFig:windowFig,trackFig:trackFig,gridFig:gridFig,FIX:FIX}};
+})();
+</script>
