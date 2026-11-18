@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 18 Nov 14:35 · Maths Order 29 Simultaneous equations · maths-d
