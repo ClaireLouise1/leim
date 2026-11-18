@@ -11,4 +11,5 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-18 13:02 · Game "fun layer" test (sounds, hearts, combos, stars) on integer-rush-test.html — new files fun.js + test page only · fun
 - 2026-11-18 12:55 · Maths Order 26 Probability 2 (relative frequency & counting) · maths-b
