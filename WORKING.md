@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-19 07:32 · E3 English Order 7 Paragraphs & topic sentences (Paragraph Builder) · english-p7
