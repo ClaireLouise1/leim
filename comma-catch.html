@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comma Catch: Punctuation Game (Commas, Capitals, Apostrophes) | Léim</title>
+<meta name="description" content="Free Junior Cycle English punctuation game: commas, capitals, apostrophes, its or it's, and full stops. Rules, exam corner and a printable practice sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choice .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+.own{font-size:52px;text-align:center;line-height:1.1;margin-top:4px}.own-l{text-align:center;font-weight:700;margin:2px 0 0;color:var(--muted)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Comma Catch</h1>
+        <p>Commas, capitals, apostrophes and full stops. Spot the right one against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="comma"><div><b>Comma Catch</b><span>eggs, milk and bread</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="caps"><div><b>Capitals</b><span>Monday · summer</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="own"><div><b>Apostrophes</b><span>dog's · dogs'</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="short"><div><b>It's or its?</b><span>don't · who's · your</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="end"><div><b>End marks</b><span>. ? !</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Comma Catch, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, W6 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Punctuation 1: capitals, full stops, commas and apostrophes</h2>
+        <p>Punctuation tells the reader where to pause, stop and look. Small marks, big difference.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>How many dogs in each one?</p>
+        <div class="tests">
+          <div class="note pun">the dog<b class="pu">'</b>s bone</div>
+          <div class="note pun">the dogs<b class="pu">'</b> bone</div>
+          <div class="note pun">the children<b class="pu">'</b>s toys</div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>dog's</b> = one dog. <b>dogs'</b> = more than one dog.<br>
+          The trick: write the owner first (dog, dogs, children), then add the apostrophe. If the owner word already ends in <b>s</b>, just add <b>'</b>. If not, add <b>'s</b>. So: children → <b>children's</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Capitals</h3>
+        <div class="wc">
+          <div class="note"><b class="h">✅ Capital</b>first word · I · names · places · days · months · languages · festivals<br><b>On Monday, Aoife and I speak French in Cork at Easter.</b></div>
+          <div class="note"><b class="h">❌ No capital</b>seasons · most school subjects · mum/dad after my<br><b>my mum loves summer and maths</b></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Full stops and end marks</h3>
+        <ul>
+          <li><b>.</b> ends a statement. <b>?</b> ends a question. <b>!</b> shows strong feeling: What a goal!</li>
+          <li>Careful: <i>She asked if I was hungry.</i> reports a question, so it's a full stop.</li>
+          <li>One idea finished = one full stop. Don't glue two sentences with a comma.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Commas</h3>
+        <div class="wc">
+          <div class="note pun"><b class="h">Lists</b>eggs<b class="pu">,</b> milk and bread<br><span style="font-size:14px">no comma before the last “and”</span></div>
+          <div class="note pun"><b class="h">Opening word</b>However<b class="pu">,</b> the bus was late.</div>
+          <div class="note pun"><b class="h">Names</b>Liam<b class="pu">,</b> are you coming?<br>Thanks<b class="pu">,</b> Dad.</div>
+          <div class="note pun"><b class="h">Yes / No / Well</b>Yes<b class="pu">,</b> I'd love to.</div>
+          <div class="note pun"><b class="h">Extra information</b>Mr Byrne<b class="pu">,</b> our maths teacher<b class="pu">,</b> was off.<br><span style="font-size:14px">take it out: the sentence still works</span></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Apostrophes</h3>
+        <div class="wc">
+          <div class="note pun"><b class="h">Missing letters</b>do not → don<b class="pu">'</b>t · it is → it<b class="pu">'</b>s · we are → we<b class="pu">'</b>re</div>
+          <div class="note pun"><b class="h">Belonging</b>one girl → girl<b class="pu">'</b>s · two girls → girls<b class="pu">'</b> · men → men<b class="pu">'</b>s</div>
+          <div class="note"><b class="h">Never</b>for plurals: <s>apple's for sale</s> → apples for sale<br>in <b>its, your, their, whose</b> (belonging words)</div>
+        </div>
+        <p style="margin-top:8px"><b>It's or its?</b> Say “it is” or “it has”. If that works → <b>it's</b>. If not → <b>its</b>. (The cat licked its paw.)</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Nobody asks you to name a comma, but punctuation counts in every piece you write: accuracy is part of how writing is judged, and careless slips (no capitals, its/it's, missing full stops) make an answer harder to read and cost marks.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Full stops</b> between sentences: the most common slip is joining two sentences with a comma.</li>
+            <li><b>Capitals</b> for names, places and I, every time.</li>
+            <li><b>Apostrophes</b>: its/it's, your/you're, their/they're are noticed straight away.</li>
+            <li><b>Leave 3 minutes</b> at the end to read your answer back and fix punctuation.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Rewrite this with correct capitals, full stops, commas and apostrophes: “on saturday aoife and i went to kinsale we bought chips ice cream and a kite its always windy there aoifes mum collected us at six”
+              <details><summary>Show a model answer</summary><p>On Saturday Aoife and I went to Kinsale. We bought chips, ice cream and a kite. It's always windy there. Aoife's mum collected us at six.<br><i>Where the marks would go:</i> capitals (On, Saturday, Aoife, I, Kinsale, We, It's, Aoife's), three full stops between the sentences, one list comma, apostrophes in it's and Aoife's.</p></details></li>
+            <li>Add the commas: “Before the race Niamh our best runner ate a banana drank some water and stretched.”
+              <details><summary>Show a model answer</summary><p>Before the race, Niamh, our best runner, ate a banana, drank some water and stretched.<br><i>Where the marks would go:</i> a comma after the opening phrase, two commas around the extra information (our best runner), one comma in the list of actions.</p></details></li>
+            <li>Add the apostrophes: “The girls coats were in the teachers office.” (a whole class of girls, one teacher)
+              <details><summary>Show the answer</summary><p>The <b>girls'</b> coats were in the <b>teacher's</b> office. Many girls → girls'. One teacher → teacher's.</p></details></li>
+            <li>Correct the two mistakes: “Its clear the school loves it's new pitch.”
+              <details><summary>Show the answer</summary><p><b>It's</b> clear the school loves <b>its</b> new pitch. “It is clear” works, so it's. “It is new pitch” doesn't, so its.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/punctuation-1-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/uTzPM" target="_blank" rel="noopener">Punctuation 1 Teacher Pack (€5)</a>: Fix-It Match mingle cards, Dictation Swap A/B cards, Punctuation Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* punctuation shown big and coloured on the buttons, so a comma is easy to see on a phone */
+  function pu(s){return esc(s).replace(/([,'.?!])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_comma_catch.py read this block: keep it valid JSON) ----------
+     comma: s = the correct sentence, c = rule (list / intro / address / yes / aside), k = the list items / opening words / name / extra info,
+            req = leaving out every comma is wrong too, ok = other correct versions (never offered as wrong answers)
+     caps:  ~word = lower case, but students often give it a capital
+     own:   [one owner, more than one owner, how many (1 or 2), the thing, emoji, use "the"]
+     short: [sentence with ___, answer, 3 wrong spellings, why]
+     end:   [sentence, end mark] */
+  var D=/*DATA*/{
+"comma": [
+{"s": "I packed a towel, sun cream, a hat and a book.", "c": "list", "k": ["a towel", "sun cream", "a hat", "a book"], "req": true},
+{"s": "We need eggs, flour, milk and butter.", "c": "list", "k": ["eggs", "flour", "milk", "butter"], "req": true},
+{"s": "Ciara plays hurling, camogie and basketball.", "c": "list", "k": ["hurling", "camogie", "basketball"], "req": true},
+{"s": "The flag is green, white and orange.", "c": "list", "k": ["green", "white", "orange"], "req": true},
+{"s": "We had soup, sandwiches and apple tart.", "c": "list", "k": ["soup", "sandwiches", "apple tart"], "req": true},
+{"s": "Seán, Orla, Dara and Aoife made the team.", "c": "list", "k": ["Seán", "Orla", "Dara", "Aoife"], "req": true},
+{"s": "My bag holds books, pens, a ruler and my lunch.", "c": "list", "k": ["books", "pens", "a ruler", "my lunch"], "req": true},
+{"s": "We drove through Kerry, Clare and Galway.", "c": "list", "k": ["Kerry", "Clare", "Galway"], "req": true},
+{"s": "She opened the box, took out the key and unlocked the door.", "c": "list", "k": ["opened the box", "took out the key", "unlocked the door"], "req": true},
+{"s": "The puppy was small, fluffy and very loud.", "c": "list", "k": ["small", "fluffy", "very loud"], "req": true},
+{"s": "However, the bus was late.", "c": "intro", "k": "However", "req": true},
+{"s": "Suddenly, the lights went out.", "c": "intro", "k": "Suddenly", "req": false},
+{"s": "Luckily, nobody in the car was hurt.", "c": "intro", "k": "Luckily", "req": false},
+{"s": "After the match, we went for chips.", "c": "intro", "k": "After the match", "req": false},
+{"s": "When the bell rang, everyone ran outside.", "c": "intro", "k": "When the bell rang", "req": false},
+{"s": "If it rains tomorrow, the game is off.", "c": "intro", "k": "If it rains tomorrow", "req": false, "ok": ["If it rains, tomorrow the game is off."]},
+{"s": "Finally, we reached the top.", "c": "intro", "k": "Finally", "req": false},
+{"s": "Ciara, close the door.", "c": "address", "k": "Ciara", "req": true},
+{"s": "Thanks for the lift, Dad.", "c": "address", "k": "Dad", "req": true},
+{"s": "Liam, are you coming?", "c": "address", "k": "Liam", "req": true},
+{"s": "Come back here, Rex.", "c": "address", "k": "Rex", "req": true},
+{"s": "Mam, where are my boots?", "c": "address", "k": "Mam", "req": true},
+{"s": "Yes, I'd love to come.", "c": "yes", "k": "Yes", "req": true},
+{"s": "No, the shop is closed.", "c": "yes", "k": "No", "req": true},
+{"s": "Well, that was a surprise.", "c": "yes", "k": "Well", "req": true},
+{"s": "My sister, who lives in Galway, is a nurse.", "c": "aside", "k": "who lives in Galway", "req": false},
+{"s": "Mr Byrne, our maths teacher, was off sick.", "c": "aside", "k": "our maths teacher", "req": true},
+{"s": "Croke Park, the biggest stadium in Ireland, was full.", "c": "aside", "k": "the biggest stadium in Ireland", "req": true},
+{"s": "Our dog, a tiny terrier, chased the fox.", "c": "aside", "k": "a tiny terrier", "req": true},
+{"s": "The old castle, which is very spooky, stands on a hill.", "c": "aside", "k": "which is very spooky", "req": true}
+],
+"caps": [
+"On Monday we have ~maths and Irish.",
+"My cousin Aoife lives in Limerick.",
+"We go to Spain every ~summer.",
+"In ~science we learned about Mars.",
+"Tom and I watched the match on Saturday.",
+"Her ~birthday is in March.",
+"My ~mum works in a hospital in Sligo.",
+"We read a poem by Seamus Heaney in English.",
+"Our ~school is beside the River Shannon.",
+"Last ~winter it snowed in Dublin.",
+"Can I borrow your French book?",
+"Dr Walsh is our new ~doctor.",
+"We went to Paris at Easter.",
+"My ~dad supports Kerry.",
+"Our ~teacher thinks Ireland will win on Sunday.",
+"Lisa and I love ~autumn in Kilkenny."
+],
+"own": [
+["dog", "dogs", 1, "bone", "🐕", true],
+["dog", "dogs", 2, "kennel", "🐕", true],
+["girl", "girls", 1, "schoolbag", "👧", true],
+["girl", "girls", 2, "changing room", "👧", true],
+["teacher", "teachers", 1, "desk", "🧑‍🏫", true],
+["teacher", "teachers", 2, "car park", "🧑‍🏫", true],
+["child", "children", 2, "toys", "🧒", true],
+["child", "children", 1, "coat", "🧒", true],
+["man", "men", 2, "team", "👨", true],
+["woman", "women", 2, "final", "👩", true],
+["cat", "cats", 1, "bowl", "🐈", true],
+["player", "players", 2, "boots", "⚽", true],
+["bird", "birds", 2, "nests", "🐦", true],
+["boy", "boys", 1, "bike", "👦", true],
+["Sarah", "", 1, "phone", "📱", false],
+["Niall", "", 1, "jersey", "👕", false]
+],
+"short": [
+["___ raining again.", "It's", ["Its", "Its'", "I'ts"], "It's = it is. It is raining."],
+["The dog wagged ___ tail.", "its", ["it's", "its'", "it is"], "Its = belonging to it. No apostrophe."],
+["I ___ find my keys.", "can't", ["cant", "ca'nt", "cann't"], "Can't = cannot. The apostrophe goes where the letters are missing."],
+["___ going to be late.", "We're", ["Were", "Wer'e", "We'r"], "We're = we are."],
+["___ my best friend.", "She's", ["Shes", "She'is", "Sh'es"], "She's = she is."],
+["Please ___ touch that.", "don't", ["dont", "do'nt", "dont'"], "Don't = do not. The apostrophe replaces the o."],
+["___ coming to the party?", "Who's", ["Whose", "Whos", "Who'se"], "Who's = who is."],
+["___ bag is this?", "Whose", ["Who's", "Whos", "Whose'"], "Whose = belonging to who. No apostrophe."],
+["___ late, so hurry up!", "You're", ["Your", "Youre", "Yo'ure"], "You're = you are."],
+["Is this ___ phone?", "your", ["you're", "your'", "yo'ur"], "Your = belonging to you. No apostrophe."],
+["The cat licked ___ paw.", "its", ["it's", "its'", "i'ts"], "Its = belonging to it. No apostrophe."],
+["___ been a long day.", "It's", ["Its", "Its'", "I'ts"], "It's = it has. It has been a long day."],
+["They said they ___ come.", "won't", ["wont", "wo'nt", "willn't"], "Won't = will not."],
+["___ going to win the cup.", "They're", ["Their", "There", "Theyr'e"], "They're = they are."],
+["The players left ___ boots outside.", "their", ["they're", "there", "thei'r"], "Their = belonging to them."],
+["I ___ know the answer.", "don't", ["dont", "do'nt", "dont'"], "Don't = do not."]
+],
+"end": [
+["Where is my phone", "?"],
+["Do you like pizza", "?"],
+["The match starts at six", "."],
+["What a brilliant goal", "!"],
+["How kind you are", "!"],
+["Can you help me", "?"],
+["I live in Cork", "."],
+["What time is it", "?"],
+["How old is your brother", "?"],
+["What a mess", "!"],
+["We missed the bus", "."],
+["Have you finished your homework", "?"],
+["How lucky we were", "!"],
+["My brother is taller than me", "."],
+["Why are you late", "?"],
+["Is it raining", "?"],
+["What a surprise", "!"],
+["I wonder where he is", "."],
+["She asked if I was hungry", "."],
+["How fast he runs", "!"]
+]
+}/*END*/;
+  var WHY={list:"Commas go between the items in a list. No comma before the last “and”.",
+    intro:"Put a comma after an opening word or phrase.",
+    address:"Use a comma to mark off the name of the person you're talking to.",
+    yes:"Put a comma after Yes, No or Well at the start.",
+    aside:"Extra information goes between two commas."};
+  var MARKS=["Full stop .","Question mark ?","Exclamation mark !","Comma ,"];
+  var MARK={".":"Full stop .","?":"Question mark ?","!":"Exclamation mark !",",":"Comma ,"};
+  /* a choice question */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function S(t){return '<p class="ws-s">'+t+'</p>';}
+
+  /* ================= COMMA CATCH ================= */
+  function commaQ(){var it=rnd(D.comma),words=it.s.split(" "),P=[];
+    var base=words.map(function(w,i){if(/,$/.test(w)){P.push(i);return w.slice(0,-1);}return w;});
+    function build(set){return base.map(function(w,i){return set.indexOf(i)>=0?w+",":w;}).join(" ");}
+    var cand=[];
+    if(it.req)cand.push([]);
+    if(P.length>=2)P.forEach(function(p){cand.push(P.filter(function(x){return x!==p;}));});
+    var ok=(it.ok||[]).concat([it.s]),pool;
+    /* move one comma up to 2 words away (3 if that gives fewer than 3 wrong versions) */
+    for(var r=2;r<=3;r++){var c2=cand.slice();
+      P.forEach(function(p){for(var q=p-r;q<=p+r;q++){
+        if(q<0||q>=base.length-1||q===p||P.indexOf(q)>=0)continue;
+        var rest=P.filter(function(x){return x!==p;});
+        if(rest.indexOf(q-1)>=0||rest.indexOf(q+1)>=0)continue;
+        c2.push(rest.concat([q]));}});
+      pool=c2.map(build).filter(function(x,i,a){return ok.indexOf(x)<0&&a.indexOf(x)===i;});
+      if(pool.length>=3)break;}
+    return C("✏️ Which is right?",it.s,pool,WHY[it.c],"",{t:"comma",c:it.c,k:it.k,rv:it.s});}
+  /* ================= CAPITALS ================= */
+  function capsQ(){var raw=rnd(D.caps),words=raw.split(" ");
+    var base=words.map(function(w){return w.replace("~","");}),ans=base.join(" "),pool=[];
+    function cap(w){return w.charAt(0).toUpperCase()+w.slice(1);}
+    function low(w){return w.charAt(0).toLowerCase()+w.slice(1);}
+    function swap(i,f){var b=base.slice();b[i]=f(b[i]);return b.join(" ");}
+    if(base[0]!=="I")pool.push(swap(0,low));
+    words.forEach(function(w,i){if(i>0&&/^[A-Z]/.test(w))pool.push(swap(i,low));if(w.charAt(0)==="~")pool.push(swap(i,cap));});
+    var traps=words.filter(function(w){return w.charAt(0)==="~";}).map(function(w){return w.slice(1).replace(/\W+$/,"");});
+    return C("🔠 Which is right?",ans,pool,
+      traps.length?"Capitals for names, places, days, months, languages and I. Not for "+traps.join(", ")+".":"Capitals for the first word, names, places, days, months, languages and I.",
+      "",{t:"caps",rv:ans});}
+  /* ================= APOSTROPHES: belonging ================= */
+  function ownQ(){var it=rnd(D.own),one=it[0],many=it[1],n=it[2],thing=it[3],the=it[5]?"the ":"";
+    var form=n===1?one+"'s":(/s$/.test(many)?many+"'":many+"'s");
+    var c=[one+"'s",one+"s'",one+"s"];
+    if(many)c=c.concat([many+"'s",many+"'",many]);else c.push(one+"'");
+    var pool=c.filter(function(f){return f!==form;}).map(function(f){return the+f+" "+thing;});
+    var who=n===1?(it[5]?"one "+one:one):"more than one: "+many;
+    var html='<div class="own">'+(n===1?it[4]:it[4]+it[4]+it[4])+'</div><p class="own-l">'+esc(who)+'</p>';
+    return C("Whose "+thing+"?",the+form+" "+thing,pool,
+      n===1?"One owner: add 's ("+one+"'s).":(/s$/.test(many)?"More than one, and the plural ends in s: add ' after the s ("+many+"').":"More than one, but the plural ("+many+") has no s: add 's ("+many+"'s)."),
+      html,{t:"own",n:n,one:one,many:many,rv:"Whose "+thing+"? "+who});}
+  /* ================= IT'S OR ITS? missing letters ================= */
+  function shortQ(){var it=rnd(D["short"]),s=it[0];
+    var html=S(esc(s).replace("___",'<mark class="hl">&nbsp;?&nbsp;</mark>'));
+    return C("✏️ Fill the gap",it[1],it[2],it[3],html,{t:"short",sent:s,rv:s.replace("___",it[1])});}
+  /* ================= END MARKS ================= */
+  function endQ(){var it=rnd(D.end);
+    return C("Which ending?",MARK[it[1]],MARKS.filter(function(m){return m!==MARK[it[1]];}),
+      it[1]==="?"?"It asks a question, so it needs a question mark.":it[1]==="!"?"“What a …” and “How …!” show strong feeling: exclamation mark.":"It's a statement (even if it talks about a question), so a full stop.",
+      S(esc(it[0])+'<mark class="hl">&nbsp;?&nbsp;</mark>'),{t:"end",sent:it[0],mark:it[1],rv:it[0]+it[1]});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    comma:[commaQ],
+    caps:[capsQ],
+    own:[ownQ],
+    "short":[shortQ],
+    end:[endQ],
+    mixed:[commaQ,commaQ,capsQ,ownQ,shortQ,endQ]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="comma"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong));
+    if(opts.every(function(o){return MARKS.indexOf(o)>=0;}))opts.sort(function(a,b){return MARKS.indexOf(a)-MARKS.indexOf(b);}); /* end-mark buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="comma"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="comma"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

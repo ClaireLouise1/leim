@@ -1,0 +1,146 @@
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choice .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+.own{font-size:52px;text-align:center;line-height:1.1;margin-top:4px}.own-l{text-align:center;font-weight:700;margin:2px 0 0;color:var(--muted)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Comma Catch</h1>
+        <p>Commas, capitals, apostrophes and full stops. Spot the right one against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="comma"><div><b>Comma Catch</b><span>eggs, milk and bread</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="caps"><div><b>Capitals</b><span>Monday · summer</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="own"><div><b>Apostrophes</b><span>dog's · dogs'</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="short"><div><b>It's or its?</b><span>don't · who's · your</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="end"><div><b>End marks</b><span>. ? !</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Comma Catch, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, W6 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Punctuation 1: capitals, full stops, commas and apostrophes</h2>
+        <p>Punctuation tells the reader where to pause, stop and look. Small marks, big difference.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>How many dogs in each one?</p>
+        <div class="tests">
+          <div class="note pun">the dog<b class="pu">'</b>s bone</div>
+          <div class="note pun">the dogs<b class="pu">'</b> bone</div>
+          <div class="note pun">the children<b class="pu">'</b>s toys</div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>dog's</b> = one dog. <b>dogs'</b> = more than one dog.<br>
+          The trick: write the owner first (dog, dogs, children), then add the apostrophe. If the owner word already ends in <b>s</b>, just add <b>'</b>. If not, add <b>'s</b>. So: children → <b>children's</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Capitals</h3>
+        <div class="wc">
+          <div class="note"><b class="h">✅ Capital</b>first word · I · names · places · days · months · languages · festivals<br><b>On Monday, Aoife and I speak French in Cork at Easter.</b></div>
+          <div class="note"><b class="h">❌ No capital</b>seasons · most school subjects · mum/dad after my<br><b>my mum loves summer and maths</b></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Full stops and end marks</h3>
+        <ul>
+          <li><b>.</b> ends a statement. <b>?</b> ends a question. <b>!</b> shows strong feeling: What a goal!</li>
+          <li>Careful: <i>She asked if I was hungry.</i> reports a question, so it's a full stop.</li>
+          <li>One idea finished = one full stop. Don't glue two sentences with a comma.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Commas</h3>
+        <div class="wc">
+          <div class="note pun"><b class="h">Lists</b>eggs<b class="pu">,</b> milk and bread<br><span style="font-size:14px">no comma before the last “and”</span></div>
+          <div class="note pun"><b class="h">Opening word</b>However<b class="pu">,</b> the bus was late.</div>
+          <div class="note pun"><b class="h">Names</b>Liam<b class="pu">,</b> are you coming?<br>Thanks<b class="pu">,</b> Dad.</div>
+          <div class="note pun"><b class="h">Yes / No / Well</b>Yes<b class="pu">,</b> I'd love to.</div>
+          <div class="note pun"><b class="h">Extra information</b>Mr Byrne<b class="pu">,</b> our maths teacher<b class="pu">,</b> was off.<br><span style="font-size:14px">take it out: the sentence still works</span></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Apostrophes</h3>
+        <div class="wc">
+          <div class="note pun"><b class="h">Missing letters</b>do not → don<b class="pu">'</b>t · it is → it<b class="pu">'</b>s · we are → we<b class="pu">'</b>re</div>
+          <div class="note pun"><b class="h">Belonging</b>one girl → girl<b class="pu">'</b>s · two girls → girls<b class="pu">'</b> · men → men<b class="pu">'</b>s</div>
+          <div class="note"><b class="h">Never</b>for plurals: <s>apple's for sale</s> → apples for sale<br>in <b>its, your, their, whose</b> (belonging words)</div>
+        </div>
+        <p style="margin-top:8px"><b>It's or its?</b> Say “it is” or “it has”. If that works → <b>it's</b>. If not → <b>its</b>. (The cat licked its paw.)</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Nobody asks you to name a comma, but punctuation counts in every piece you write: accuracy is part of how writing is judged, and careless slips (no capitals, its/it's, missing full stops) make an answer harder to read and cost marks.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Full stops</b> between sentences: the most common slip is joining two sentences with a comma.</li>
+            <li><b>Capitals</b> for names, places and I, every time.</li>
+            <li><b>Apostrophes</b>: its/it's, your/you're, their/they're are noticed straight away.</li>
+            <li><b>Leave 3 minutes</b> at the end to read your answer back and fix punctuation.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Rewrite this with correct capitals, full stops, commas and apostrophes: “on saturday aoife and i went to kinsale we bought chips ice cream and a kite its always windy there aoifes mum collected us at six”
+              <details><summary>Show a model answer</summary><p>On Saturday Aoife and I went to Kinsale. We bought chips, ice cream and a kite. It's always windy there. Aoife's mum collected us at six.<br><i>Where the marks would go:</i> capitals (On, Saturday, Aoife, I, Kinsale, We, It's, Aoife's), three full stops between the sentences, one list comma, apostrophes in it's and Aoife's.</p></details></li>
+            <li>Add the commas: “Before the race Niamh our best runner ate a banana drank some water and stretched.”
+              <details><summary>Show a model answer</summary><p>Before the race, Niamh, our best runner, ate a banana, drank some water and stretched.<br><i>Where the marks would go:</i> a comma after the opening phrase, two commas around the extra information (our best runner), one comma in the list of actions.</p></details></li>
+            <li>Add the apostrophes: “The girls coats were in the teachers office.” (a whole class of girls, one teacher)
+              <details><summary>Show the answer</summary><p>The <b>girls'</b> coats were in the <b>teacher's</b> office. Many girls → girls'. One teacher → teacher's.</p></details></li>
+            <li>Correct the two mistakes: “Its clear the school loves it's new pitch.”
+              <details><summary>Show the answer</summary><p><b>It's</b> clear the school loves <b>its</b> new pitch. “It is clear” works, so it's. “It is new pitch” doesn't, so its.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/punctuation-1-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="https://payhip.com/b/uTzPM" target="_blank" rel="noopener">Punctuation 1 Teacher Pack (€5)</a>: Fix-It Match mingle cards, Dictation Swap A/B cards, Punctuation Dominoes, poster and worksheet.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

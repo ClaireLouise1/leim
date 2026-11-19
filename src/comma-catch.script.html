@@ -1,0 +1,272 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* punctuation shown big and coloured on the buttons, so a comma is easy to see on a phone */
+  function pu(s){return esc(s).replace(/([,'.?!])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_comma_catch.py read this block: keep it valid JSON) ----------
+     comma: s = the correct sentence, c = rule (list / intro / address / yes / aside), k = the list items / opening words / name / extra info,
+            req = leaving out every comma is wrong too, ok = other correct versions (never offered as wrong answers)
+     caps:  ~word = lower case, but students often give it a capital
+     own:   [one owner, more than one owner, how many (1 or 2), the thing, emoji, use "the"]
+     short: [sentence with ___, answer, 3 wrong spellings, why]
+     end:   [sentence, end mark] */
+  var D=/*DATA*/{
+"comma": [
+{"s": "I packed a towel, sun cream, a hat and a book.", "c": "list", "k": ["a towel", "sun cream", "a hat", "a book"], "req": true},
+{"s": "We need eggs, flour, milk and butter.", "c": "list", "k": ["eggs", "flour", "milk", "butter"], "req": true},
+{"s": "Ciara plays hurling, camogie and basketball.", "c": "list", "k": ["hurling", "camogie", "basketball"], "req": true},
+{"s": "The flag is green, white and orange.", "c": "list", "k": ["green", "white", "orange"], "req": true},
+{"s": "We had soup, sandwiches and apple tart.", "c": "list", "k": ["soup", "sandwiches", "apple tart"], "req": true},
+{"s": "Seán, Orla, Dara and Aoife made the team.", "c": "list", "k": ["Seán", "Orla", "Dara", "Aoife"], "req": true},
+{"s": "My bag holds books, pens, a ruler and my lunch.", "c": "list", "k": ["books", "pens", "a ruler", "my lunch"], "req": true},
+{"s": "We drove through Kerry, Clare and Galway.", "c": "list", "k": ["Kerry", "Clare", "Galway"], "req": true},
+{"s": "She opened the box, took out the key and unlocked the door.", "c": "list", "k": ["opened the box", "took out the key", "unlocked the door"], "req": true},
+{"s": "The puppy was small, fluffy and very loud.", "c": "list", "k": ["small", "fluffy", "very loud"], "req": true},
+{"s": "However, the bus was late.", "c": "intro", "k": "However", "req": true},
+{"s": "Suddenly, the lights went out.", "c": "intro", "k": "Suddenly", "req": false},
+{"s": "Luckily, nobody in the car was hurt.", "c": "intro", "k": "Luckily", "req": false},
+{"s": "After the match, we went for chips.", "c": "intro", "k": "After the match", "req": false},
+{"s": "When the bell rang, everyone ran outside.", "c": "intro", "k": "When the bell rang", "req": false},
+{"s": "If it rains tomorrow, the game is off.", "c": "intro", "k": "If it rains tomorrow", "req": false, "ok": ["If it rains, tomorrow the game is off."]},
+{"s": "Finally, we reached the top.", "c": "intro", "k": "Finally", "req": false},
+{"s": "Ciara, close the door.", "c": "address", "k": "Ciara", "req": true},
+{"s": "Thanks for the lift, Dad.", "c": "address", "k": "Dad", "req": true},
+{"s": "Liam, are you coming?", "c": "address", "k": "Liam", "req": true},
+{"s": "Come back here, Rex.", "c": "address", "k": "Rex", "req": true},
+{"s": "Mam, where are my boots?", "c": "address", "k": "Mam", "req": true},
+{"s": "Yes, I'd love to come.", "c": "yes", "k": "Yes", "req": true},
+{"s": "No, the shop is closed.", "c": "yes", "k": "No", "req": true},
+{"s": "Well, that was a surprise.", "c": "yes", "k": "Well", "req": true},
+{"s": "My sister, who lives in Galway, is a nurse.", "c": "aside", "k": "who lives in Galway", "req": false},
+{"s": "Mr Byrne, our maths teacher, was off sick.", "c": "aside", "k": "our maths teacher", "req": true},
+{"s": "Croke Park, the biggest stadium in Ireland, was full.", "c": "aside", "k": "the biggest stadium in Ireland", "req": true},
+{"s": "Our dog, a tiny terrier, chased the fox.", "c": "aside", "k": "a tiny terrier", "req": true},
+{"s": "The old castle, which is very spooky, stands on a hill.", "c": "aside", "k": "which is very spooky", "req": true}
+],
+"caps": [
+"On Monday we have ~maths and Irish.",
+"My cousin Aoife lives in Limerick.",
+"We go to Spain every ~summer.",
+"In ~science we learned about Mars.",
+"Tom and I watched the match on Saturday.",
+"Her ~birthday is in March.",
+"My ~mum works in a hospital in Sligo.",
+"We read a poem by Seamus Heaney in English.",
+"Our ~school is beside the River Shannon.",
+"Last ~winter it snowed in Dublin.",
+"Can I borrow your French book?",
+"Dr Walsh is our new ~doctor.",
+"We went to Paris at Easter.",
+"My ~dad supports Kerry.",
+"Our ~teacher thinks Ireland will win on Sunday.",
+"Lisa and I love ~autumn in Kilkenny."
+],
+"own": [
+["dog", "dogs", 1, "bone", "🐕", true],
+["dog", "dogs", 2, "kennel", "🐕", true],
+["girl", "girls", 1, "schoolbag", "👧", true],
+["girl", "girls", 2, "changing room", "👧", true],
+["teacher", "teachers", 1, "desk", "🧑‍🏫", true],
+["teacher", "teachers", 2, "car park", "🧑‍🏫", true],
+["child", "children", 2, "toys", "🧒", true],
+["child", "children", 1, "coat", "🧒", true],
+["man", "men", 2, "team", "👨", true],
+["woman", "women", 2, "final", "👩", true],
+["cat", "cats", 1, "bowl", "🐈", true],
+["player", "players", 2, "boots", "⚽", true],
+["bird", "birds", 2, "nests", "🐦", true],
+["boy", "boys", 1, "bike", "👦", true],
+["Sarah", "", 1, "phone", "📱", false],
+["Niall", "", 1, "jersey", "👕", false]
+],
+"short": [
+["___ raining again.", "It's", ["Its", "Its'", "I'ts"], "It's = it is. It is raining."],
+["The dog wagged ___ tail.", "its", ["it's", "its'", "it is"], "Its = belonging to it. No apostrophe."],
+["I ___ find my keys.", "can't", ["cant", "ca'nt", "cann't"], "Can't = cannot. The apostrophe goes where the letters are missing."],
+["___ going to be late.", "We're", ["Were", "Wer'e", "We'r"], "We're = we are."],
+["___ my best friend.", "She's", ["Shes", "She'is", "Sh'es"], "She's = she is."],
+["Please ___ touch that.", "don't", ["dont", "do'nt", "dont'"], "Don't = do not. The apostrophe replaces the o."],
+["___ coming to the party?", "Who's", ["Whose", "Whos", "Who'se"], "Who's = who is."],
+["___ bag is this?", "Whose", ["Who's", "Whos", "Whose'"], "Whose = belonging to who. No apostrophe."],
+["___ late, so hurry up!", "You're", ["Your", "Youre", "Yo'ure"], "You're = you are."],
+["Is this ___ phone?", "your", ["you're", "your'", "yo'ur"], "Your = belonging to you. No apostrophe."],
+["The cat licked ___ paw.", "its", ["it's", "its'", "i'ts"], "Its = belonging to it. No apostrophe."],
+["___ been a long day.", "It's", ["Its", "Its'", "I'ts"], "It's = it has. It has been a long day."],
+["They said they ___ come.", "won't", ["wont", "wo'nt", "willn't"], "Won't = will not."],
+["___ going to win the cup.", "They're", ["Their", "There", "Theyr'e"], "They're = they are."],
+["The players left ___ boots outside.", "their", ["they're", "there", "thei'r"], "Their = belonging to them."],
+["I ___ know the answer.", "don't", ["dont", "do'nt", "dont'"], "Don't = do not."]
+],
+"end": [
+["Where is my phone", "?"],
+["Do you like pizza", "?"],
+["The match starts at six", "."],
+["What a brilliant goal", "!"],
+["How kind you are", "!"],
+["Can you help me", "?"],
+["I live in Cork", "."],
+["What time is it", "?"],
+["How old is your brother", "?"],
+["What a mess", "!"],
+["We missed the bus", "."],
+["Have you finished your homework", "?"],
+["How lucky we were", "!"],
+["My brother is taller than me", "."],
+["Why are you late", "?"],
+["Is it raining", "?"],
+["What a surprise", "!"],
+["I wonder where he is", "."],
+["She asked if I was hungry", "."],
+["How fast he runs", "!"]
+]
+}/*END*/;
+  var WHY={list:"Commas go between the items in a list. No comma before the last “and”.",
+    intro:"Put a comma after an opening word or phrase.",
+    address:"Use a comma to mark off the name of the person you're talking to.",
+    yes:"Put a comma after Yes, No or Well at the start.",
+    aside:"Extra information goes between two commas."};
+  var MARKS=["Full stop .","Question mark ?","Exclamation mark !","Comma ,"];
+  var MARK={".":"Full stop .","?":"Question mark ?","!":"Exclamation mark !",",":"Comma ,"};
+  /* a choice question */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function S(t){return '<p class="ws-s">'+t+'</p>';}
+
+  /* ================= COMMA CATCH ================= */
+  function commaQ(){var it=rnd(D.comma),words=it.s.split(" "),P=[];
+    var base=words.map(function(w,i){if(/,$/.test(w)){P.push(i);return w.slice(0,-1);}return w;});
+    function build(set){return base.map(function(w,i){return set.indexOf(i)>=0?w+",":w;}).join(" ");}
+    var cand=[];
+    if(it.req)cand.push([]);
+    if(P.length>=2)P.forEach(function(p){cand.push(P.filter(function(x){return x!==p;}));});
+    var ok=(it.ok||[]).concat([it.s]),pool;
+    /* move one comma up to 2 words away (3 if that gives fewer than 3 wrong versions) */
+    for(var r=2;r<=3;r++){var c2=cand.slice();
+      P.forEach(function(p){for(var q=p-r;q<=p+r;q++){
+        if(q<0||q>=base.length-1||q===p||P.indexOf(q)>=0)continue;
+        var rest=P.filter(function(x){return x!==p;});
+        if(rest.indexOf(q-1)>=0||rest.indexOf(q+1)>=0)continue;
+        c2.push(rest.concat([q]));}});
+      pool=c2.map(build).filter(function(x,i,a){return ok.indexOf(x)<0&&a.indexOf(x)===i;});
+      if(pool.length>=3)break;}
+    return C("✏️ Which is right?",it.s,pool,WHY[it.c],"",{t:"comma",c:it.c,k:it.k,rv:it.s});}
+  /* ================= CAPITALS ================= */
+  function capsQ(){var raw=rnd(D.caps),words=raw.split(" ");
+    var base=words.map(function(w){return w.replace("~","");}),ans=base.join(" "),pool=[];
+    function cap(w){return w.charAt(0).toUpperCase()+w.slice(1);}
+    function low(w){return w.charAt(0).toLowerCase()+w.slice(1);}
+    function swap(i,f){var b=base.slice();b[i]=f(b[i]);return b.join(" ");}
+    if(base[0]!=="I")pool.push(swap(0,low));
+    words.forEach(function(w,i){if(i>0&&/^[A-Z]/.test(w))pool.push(swap(i,low));if(w.charAt(0)==="~")pool.push(swap(i,cap));});
+    var traps=words.filter(function(w){return w.charAt(0)==="~";}).map(function(w){return w.slice(1).replace(/\W+$/,"");});
+    return C("🔠 Which is right?",ans,pool,
+      traps.length?"Capitals for names, places, days, months, languages and I. Not for "+traps.join(", ")+".":"Capitals for the first word, names, places, days, months, languages and I.",
+      "",{t:"caps",rv:ans});}
+  /* ================= APOSTROPHES: belonging ================= */
+  function ownQ(){var it=rnd(D.own),one=it[0],many=it[1],n=it[2],thing=it[3],the=it[5]?"the ":"";
+    var form=n===1?one+"'s":(/s$/.test(many)?many+"'":many+"'s");
+    var c=[one+"'s",one+"s'",one+"s"];
+    if(many)c=c.concat([many+"'s",many+"'",many]);else c.push(one+"'");
+    var pool=c.filter(function(f){return f!==form;}).map(function(f){return the+f+" "+thing;});
+    var who=n===1?(it[5]?"one "+one:one):"more than one: "+many;
+    var html='<div class="own">'+(n===1?it[4]:it[4]+it[4]+it[4])+'</div><p class="own-l">'+esc(who)+'</p>';
+    return C("Whose "+thing+"?",the+form+" "+thing,pool,
+      n===1?"One owner: add 's ("+one+"'s).":(/s$/.test(many)?"More than one, and the plural ends in s: add ' after the s ("+many+"').":"More than one, but the plural ("+many+") has no s: add 's ("+many+"'s)."),
+      html,{t:"own",n:n,one:one,many:many,rv:"Whose "+thing+"? "+who});}
+  /* ================= IT'S OR ITS? missing letters ================= */
+  function shortQ(){var it=rnd(D["short"]),s=it[0];
+    var html=S(esc(s).replace("___",'<mark class="hl">&nbsp;?&nbsp;</mark>'));
+    return C("✏️ Fill the gap",it[1],it[2],it[3],html,{t:"short",sent:s,rv:s.replace("___",it[1])});}
+  /* ================= END MARKS ================= */
+  function endQ(){var it=rnd(D.end);
+    return C("Which ending?",MARK[it[1]],MARKS.filter(function(m){return m!==MARK[it[1]];}),
+      it[1]==="?"?"It asks a question, so it needs a question mark.":it[1]==="!"?"“What a …” and “How …!” show strong feeling: exclamation mark.":"It's a statement (even if it talks about a question), so a full stop.",
+      S(esc(it[0])+'<mark class="hl">&nbsp;?&nbsp;</mark>'),{t:"end",sent:it[0],mark:it[1],rv:it[0]+it[1]});}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    comma:[commaQ],
+    caps:[capsQ],
+    own:[ownQ],
+    "short":[shortQ],
+    end:[endQ],
+    mixed:[commaQ,commaQ,capsQ,ownQ,shortQ,endQ]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="comma"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong));
+    if(opts.every(function(o){return MARKS.indexOf(o)>=0;}))opts.sort(function(a,b){return MARKS.indexOf(a)-MARKS.indexOf(b);}); /* end-mark buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="comma"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="comma"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D}};
+})();
+</script>

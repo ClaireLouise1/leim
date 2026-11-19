@@ -59,7 +59,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a> and <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a> and <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 
@@ -131,6 +131,7 @@ main = f'''<main id="main">
     <div class="grid">
       <a class="card" href="https://payhip.com/b/f97Ip" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Parts of Speech Teacher Pack · €5</h3><p>Upgrade Match mingle cards, Story Swap A/B cards, Word Class Dominoes, poster, worksheet + answers. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
       <a class="card" href="https://payhip.com/b/Usy2W" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Sentences Teacher Pack · €5</h3><p>Sentence Sort cards, Fix the Story relay, poster, worksheet + answers on fragments, run-ons and sentence types. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
+      <a class="card" href="https://payhip.com/b/uTzPM" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Punctuation 1 Teacher Pack · €5</h3><p>Fix-It Match mingle cards, Dictation Swap A/B cards, Punctuation Dominoes, poster, worksheet + answers on capitals, commas and apostrophes. About 60 minutes of class time.</p><p style="margin-top:10px;color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
     </div>
   </div>
 </section>

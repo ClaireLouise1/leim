@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 19 Nov 04:55 · E3 English Order 3 Punctuation 1 (Comma Catch) · english-p3
