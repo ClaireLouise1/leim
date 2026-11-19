@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 22:35 · E3 English Order 20 Media 1: advertising (Ad Breaker) · english-a20

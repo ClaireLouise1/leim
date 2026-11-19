@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad Breaker: Advertising and Media Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game on advertising: spot the trick (star power, free gift, bandwagon, statistic, exaggeration, hurry), find the target audience, sort fact from opinion, pick the best slogan and read the picture. Rules, exam corner and a printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<style>.ab-ad{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px 6px;max-width:520px;margin:8px auto 4px;text-align:center;box-shadow:0 3px 0 var(--line)}
+.ab-ad p{margin:0 0 6px;font-size:19px;line-height:1.4;font-weight:600}
+.ab-ad.one p{font-size:20px}
+.ab-ad .ab-pic{font-size:34px;line-height:1.1}
+.ab-ad .ab-brand{display:block;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2px 0 6px}
+.ab-ad.prod{background:#EEF6F1;border-color:#BFDCCB}.ab-ad.prod .ab-brand{font-size:22px;letter-spacing:.02em;text-transform:none;color:var(--ink)}
+.ab-ad.pic{background:#FFF6E5}.ab-ad .ab-big{font-size:48px;letter-spacing:6px;line-height:1.2;margin:2px 0 8px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.ab-ad p{font-size:17px}#choices .choice{font-size:15px}.ab-ad .ab-big{font-size:40px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Ad Breaker</h1>
+        <p>Every ad wants something from you. Spot the trick, work out who it's for, sort fact from opinion, pick the slogan and read the picture. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="trick"><div><b>Ad Breaker</b><span>🔍 What's the trick?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="who"><div><b>Who's it for?</b><span>🎯 Find the audience</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fo"><div><b>Fact or opinion?</b><span>📢 Can you check it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slogan"><div><b>Best slogan</b><span>🏷️ Short, catchy, named</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pic"><div><b>Picture power</b><span>🖼️ What does it say?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Ad Breaker, 5 in a row = 3 bonus seconds. Every brand in the game is made up.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R9, R8, OL8, W3 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Media 1: advertising</h2>
+        <p>An advert has one job: to make you <b>want</b> something and <b>buy</b> it (or do something, like book, join or vote). To read an ad well, ask three questions: <b>Who is it for? What is it selling? How does it try to persuade me?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">🅰️ Ad A</b>Refillo water bottle. Holds 500 ml. Made of steel. €12.</div>
+          <div class="note"><b class="h">🅱️ Ad B</b>Olympic swimmer Orla Breen never trains without her Refillo. Everyone on the team has one. The best bottle ever made! Today only: €12.</div>
+        </div>
+        <p style="margin-top:8px">Same bottle, same price. Which ad makes you want it more? Find four tricks Ad B uses that Ad A doesn't.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Ad B uses <b>star power</b> (an Olympic swimmer), the <b>bandwagon</b> (“Everyone on the team has one”), <b>exaggeration</b> (“The best bottle ever made!”) and <b>hurry</b> (“Today only”). Ad A only gives <b>facts</b> you can check. Ad B tells you almost nothing new about the bottle: it works on your feelings.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six tricks ads use</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⭐ Star power</b>Famous chef Gráinne Lynch cooks with Crispa oil.</div>
+          <div class="note"><b class="h">🎁 Free gift</b>Free delivery on all Plantly orders.</div>
+          <div class="note"><b class="h">👥 Bandwagon</b>All your friends are wearing Kicks trainers.</div>
+          <div class="note"><b class="h">📊 Statistic</b>9 out of 10 dogs prefer Waggo biscuits.</div>
+          <div class="note"><b class="h">🚀 Exaggeration</b>The greatest pizza in the universe!</div>
+          <div class="note"><b class="h">⏰ Hurry</b>While stocks last. Today only.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Ask about every statistic: who counted, and how many? “9 out of 10 dogs” might mean 10 dogs.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Who's it for? Fact or opinion?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🎯 The audience</b>Look at the words: “bedtime” and “ask your mum” = young children; “exams” and “your mates” = teenagers; “the school run” = parents; “your grandchildren” = older people.</div>
+          <div class="note"><b class="h">✅ Fact</b>Can be checked: €2.50 a cone, made in Donegal, opens at 6 am.</div>
+          <div class="note"><b class="h">💭 Opinion</b>A judgement nobody can prove: delicious, the best, really cool.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Slogans and pictures</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏷️ A good slogan</b>is short, names the brand and is catchy: alliteration (“Fizzpop: feel the fizz!”) or rhyme (“no mess, no stress”).</div>
+          <div class="note"><b class="h">🖼️ The picture</b>sends a message before you read a word: fruit and runners = healthy; diamonds = luxury; a family at a table = home; balloons = fun.</div>
+          <div class="note"><b class="h">🎨 Layout</b>The eye goes to the biggest thing first: usually the picture or the headline. Colours set the mood (green = natural, gold = luxury).</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper often includes a <b>visual or media text</b>: an advert, a poster, a web page or a leaflet. Questions ask who it is aimed at, how it tries to persuade, what the image adds, and whether it works. Writing tasks can ask you to <b>create</b> an ad, a slogan or a short promotional piece.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name it, quote it, explain it</b>: “The ad uses star power: ‘Olympic champion…’. Readers trust a winner.”</li>
+            <li><b>Talk about the picture and the layout</b>, not only the words.</li>
+            <li><b>Back up “who it's for”</b> with words from the ad.</li>
+            <li><b>Say whether it works</b> and why: a clear opinion, backed up, wins marks.</li>
+            <li>Don't just describe the ad. Explain the <b>effect</b> on the reader.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Every brand and place is made up. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>[Picture: three smiling teenagers on surfboards, riding one big wave, bright blue sky]</b><br>SEASPRAY SURF SCHOOL, KILBRACK STRAND<br><b>Catch the wave of your life!</b><br>Two-hour lessons for teens, Saturdays at 10 am. €25, wetsuit included.<br>Bring your mates: everyone's talking about Seaspray this summer.<br>Hurry, only 12 places a week!</div>
+          <ol class="eq">
+            <li>Who is this advert aimed at? Give <b>two</b> pieces of evidence.
+              <details><summary>Show a model answer</summary><p>It is aimed at <b>teenagers</b>. It says the lessons are “for teens”, it tells them to “Bring your mates”, and the picture shows three teenagers surfing together.<br><i>Where the marks would go:</i> the audience named; two pieces of evidence, at least one quoted (the picture counts as evidence).</p></details></li>
+            <li>Name <b>two</b> persuasive techniques in the advert and explain how one of them works.
+              <details><summary>Show a model answer</summary><p>The <b>bandwagon</b> (“everyone's talking about Seaspray this summer”) and <b>hurry</b> (“Hurry, only 12 places a week!”). Hurry works because it makes the reader feel they could miss out, so they book now instead of thinking it over.<br><i>Where the marks would go:</i> each technique named with a quote; the rest for explaining the effect on the reader.</p></details></li>
+            <li>Find <b>one fact</b> and <b>one opinion</b> in the advert.
+              <details><summary>Show a model answer</summary><p><b>Fact:</b> “€25, wetsuit included” (it can be checked). <b>Opinion:</b> “Catch the wave of your life!” (a claim nobody can prove).<br><i>Where the marks would go:</i> one mark each, with the right label.</p></details></li>
+            <li>Write a slogan and a <b>three-line advert</b> for a new reusable water bottle, Refillo, aimed at teenagers. Use two tricks.
+              <details><summary>Show a model answer</summary><p><i>Refillo: refill, reuse, rule the school.</i><br><i>Everyone in your year is swapping plastic for Refillo. Keeps water cold for 12 hours. Get a free sticker pack this week only!</i><br><i>Where the marks would go:</i> a short, catchy slogan with the brand (here alliteration); the audience clear (“your year”, “school”); two tricks used (bandwagon, statistic, free gift, hurry); at least one real fact.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/media-advertising-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_ad_breaker.py read this block: keep it valid JSON; one item per line) ----------
+     trick: [ad line, star / free / band / stat / exag / hurry] (each line shows ONE trick)
+     ads: {pic, brand, who: ki / te / pa / ol / sp, lines: 3 ad lines with clue words for ONE audience}
+     fo: [ad line, f / o]
+     slogan: [emoji + product, brand, best slogan (short, names the brand, alliteration or rhyme), too-long line, dull line]
+     pic: [emoji + product, [3 picture emojis], hea / lux / fam / nat / fun / coo] */
+  var D=/*DATA*/{
+ "trick": [
+  ["Olympic champion Aoife Brennan drinks Splashco every morning.", "star"],
+  ["Chosen by the Kilmore Rovers manager: Zoomz football boots.", "star"],
+  ["Singer Jamie Rourke takes Glo lip balm on every tour.", "star"],
+  ["Famous chef Gráinne Lynch cooks with Crispa oil.", "star"],
+  ["TV star Dara Quinn wears Cosytoes socks.", "star"],
+  ["Recommended by county hurler Cathal Dunne: Gripp hurleys.", "star"],
+  ["Buy a Munchbar and get a free sticker inside.", "free"],
+  ["Every Snugglo duvet comes with a free pillowcase.", "free"],
+  ["Sign up to the Pagez book club and your first book is free.", "free"],
+  ["A free water bottle with every pair of Strydz trainers.", "free"],
+  ["Open a Penny Pot savings account and get a gift for your room.", "free"],
+  ["Free delivery on all Plantly orders.", "free"],
+  ["Everyone in your class already has a Zapp phone case.", "band"],
+  ["Don't be left out: get the new Fizzpop flavour.", "band"],
+  ["Thousands of Irish families have switched to Brightway energy.", "band"],
+  ["All your friends are wearing Kicks trainers this summer.", "band"],
+  ["Join the whole school at the Spinz trampoline park.", "band"],
+  ["Everybody's talking about Crumbly cookies.", "band"],
+  ["9 out of 10 dogs prefer Waggo biscuits.", "stat"],
+  ["Brushwell toothpaste fights 99% of germs.", "stat"],
+  ["Sparkle spray cleans a whole kitchen in 30 seconds.", "stat"],
+  ["Cleano washing powder: 3 times the stain power.", "stat"],
+  ["In our survey, 8 in 10 teens chose Snackit crisps.", "stat"],
+  ["Glide scooters now go 20 per cent further on one charge.", "stat"],
+  ["The greatest pizza in the universe: Pizzazz!", "exag"],
+  ["Comfo trainers: the comfiest shoes ever made.", "exag"],
+  ["Wonderwash: a miracle for muddy jerseys.", "exag"],
+  ["Brainboost: the best study snack on the planet.", "exag"],
+  ["Sunny Bay ice cream: unbelievably creamy.", "exag"],
+  ["Shiny Floor polish works like magic.", "exag"],
+  ["Hurry! The Mega Sale ends tonight.", "hurry"],
+  ["Today only: half price on Rollo bikes.", "hurry"],
+  ["While stocks last: Frosty hoodies in every colour.", "hurry"],
+  ["Last chance to book a place at Splash Zone summer camp.", "hurry"],
+  ["Limited edition Choco Crunch: get it before it's gone.", "hurry"],
+  ["Don't miss out: tickets for the Fun Fair are selling fast.", "hurry"]
+ ],
+ "ads": [
+  {"pic": "🧸", "brand": "Bouncy Bear", "who": "ki", "lines": ["Meet Bouncy Bear, the cuddliest toy in the shop!", "He sings a song at bedtime.", "Ask your mum or dad for one this Christmas."]},
+  {"pic": "🖍️", "brand": "Rainbow Crayons", "who": "ki", "lines": ["Twelve bright crayons in every box.", "Draw rockets, dinosaurs and dragons.", "Make your playground pictures shine!"]},
+  {"pic": "🎪", "brand": "Puppet Palace", "who": "ki", "lines": ["Puppet Palace is coming to Tralee!", "Silly songs and a cartoon dragon.", "Shows every Saturday morning for little ones."]},
+  {"pic": "🎧", "brand": "Bassline", "who": "te", "lines": ["Block out the noise when you study.", "Bassline headphones: built for gaming, made for music.", "Ask your mates which colour to get."]},
+  {"pic": "📚", "brand": "Cramly", "who": "te", "lines": ["Exams coming up?", "Cramly has quick quizzes for every Junior Cycle subject.", "Made by teachers, loved by teens."]},
+  {"pic": "🛹", "brand": "Kerbz", "who": "te", "lines": ["New decks for teenagers who skate.", "Meet your mates at our Saturday jam.", "Kerbz: Main Street, Ennis."]},
+  {"pic": "🍱", "brand": "Lunchbox Hero", "who": "pa", "lines": ["Packing lunchboxes at seven in the morning?", "Lunchbox Hero snacks are ready in seconds.", "Your kids will actually eat them!"]},
+  {"pic": "🚙", "brand": "Roomy", "who": "pa", "lines": ["Plenty of space for the school run.", "Seven seats, so your children can bring a friend.", "Roomy: the car for busy parents."]},
+  {"pic": "🍲", "brand": "Quick Stew", "who": "pa", "lines": ["Family meals in twenty minutes.", "Just add water and stir.", "One less thing for busy mums and dads to worry about."]},
+  {"pic": "👓", "brand": "ClearView", "who": "ol", "lines": ["Struggling to read the paper?", "ClearView reading glasses, now in your chemist.", "See every photo of your grandchildren clearly."]},
+  {"pic": "🚌", "brand": "Golden Getaways", "who": "ol", "lines": ["Enjoying your retirement?", "Golden Getaways run day trips by coach all over Ireland.", "Just show your travel pass."]},
+  {"pic": "🌷", "brand": "Evergreen", "who": "ol", "lines": ["Retired, with more time for the garden?", "Evergreen tools are light and easy on the hands.", "Grow flowers for the grandkids to pick."]},
+  {"pic": "🥤", "brand": "Recharge", "who": "sp", "lines": ["Finished your workout?", "Recharge helps tired muscles recover.", "The drink for athletes who keep going."]},
+  {"pic": "👟", "brand": "Strydz Pro", "who": "sp", "lines": ["Strydz Pro: built for the marathon.", "Light, springy and tested on the track.", "Chase your personal best."]},
+  {"pic": "🏋️", "brand": "Fitfirst", "who": "sp", "lines": ["Fitfirst gym is open day and night.", "Training plans for every sport.", "Stay match fit all season."]}
+ ],
+ "fo": [
+  ["Sunny Bay ice cream costs €2.50 a cone.", "f"],
+  ["Comfo trainers come in sizes 3 to 12.", "f"],
+  ["The Splash Zone camp runs from 6 to 10 July.", "f"],
+  ["Crumbly cookies are made in Mullingar.", "f"],
+  ["Each Munchbar contains 12 grams of sugar.", "f"],
+  ["Rollo bikes have 21 gears.", "f"],
+  ["Pizzazz delivers until 11 pm.", "f"],
+  ["The Fitfirst gym opens at 6 am.", "f"],
+  ["Glide scooters weigh 9 kilos.", "f"],
+  ["Cosytoes socks are available in five colours.", "f"],
+  ["Kerbz skate shop is closed on Mondays.", "f"],
+  ["Cramly has 400 quiz questions for each subject.", "f"],
+  ["Frosty hoodies are made in Donegal.", "f"],
+  ["A Pagez book box costs €15 a month.", "f"],
+  ["Puppet Palace shows start at 11 am on Saturdays.", "f"],
+  ["The Brightway office in Athlone opens at 9 am.", "f"],
+  ["Sunny Bay ice cream is the tastiest treat around.", "o"],
+  ["Comfo trainers are the comfiest shoes you'll ever own.", "o"],
+  ["Everyone will love the Splash Zone camp.", "o"],
+  ["Crumbly cookies are absolutely delicious.", "o"],
+  ["Munchbars are the perfect snack.", "o"],
+  ["Rollo bikes look really cool.", "o"],
+  ["Pizzazz makes the best pizza in town.", "o"],
+  ["The Fitfirst gym is a fantastic place to train.", "o"],
+  ["Glide scooters are so much fun.", "o"],
+  ["Cosytoes socks are gorgeous.", "o"],
+  ["Kerbz is the coolest shop in Clare.", "o"],
+  ["Cramly makes revision brilliant.", "o"],
+  ["Frosty hoodies are a must-have this winter.", "o"],
+  ["Every child should have a Pagez book box.", "o"],
+  ["Puppet Palace is a wonderful day out.", "o"],
+  ["Bassline headphones sound amazing.", "o"]
+ ],
+ "slogan": [
+  ["🍫 Chocolate bar", "Munchbar", "Munchbar: a mega munch!", "Munchbar is a chocolate bar that you can buy in most shops.", "Buy a Munchbar today."],
+  ["🥤 Fizzy drink", "Fizzpop", "Fizzpop: feel the fizz!", "Fizzpop is an orange drink sold in cans and bottles.", "Fizzpop is a drink."],
+  ["🐕 Dog biscuits", "Waggo", "Waggo: what wags want.", "Waggo biscuits are dog treats made with chicken and rice.", "Waggo dog biscuits."],
+  ["🧦 Socks", "Cosytoes", "Cosytoes: cosy toes, happy feet.", "Cosytoes socks are made from wool and come in many colours.", "Cosytoes are warm."],
+  ["🛴 Scooters", "Glide", "Glide: go further, go greener.", "Glide makes electric scooters for people who need to get to work.", "Glide is a scooter."],
+  ["🍕 Pizza", "Pizzazz", "Pizzazz: pizza with pizzazz!", "Pizzazz sells pizzas with lots of different toppings every day of the week.", "Order from Pizzazz."],
+  ["🧴 Shampoo", "Shine", "Shine: hair that turns heads.", "Shine is a new shampoo that you can buy in the chemist.", "Use Shine on wet hair."],
+  ["🚲 Bikes", "Rollo", "Rollo: ready to roll!", "Rollo bikes are sold in our shop on the main street in Athlone.", "Rollo bikes are here."],
+  ["🍦 Ice cream", "Sunny Bay", "Sunny Bay: sweet summer scoops.", "Sunny Bay ice cream is sold in tubs and cones near the beach.", "Sunny Bay ice cream."],
+  ["🧽 Kitchen spray", "Sparkle", "Sparkle: no mess, no stress.", "Sparkle is a spray that you can use to clean your kitchen.", "Sparkle cleans kitchens."],
+  ["🍪 Cookies", "Crumbly", "Crumbly: crunch time!", "Crumbly cookies are baked in a small bakery in the middle of Mullingar.", "Get Crumbly today."],
+  ["🎧 Headphones", "Bassline", "Bassline: big bass, bold sound.", "Bassline headphones come with a case and a long cable for your phone.", "Get Bassline headphones."]
+ ],
+ "pic": [
+  ["🧃 Orange juice", ["🍎", "🏃", "💪"], "hea"],
+  ["🥣 Cereal", ["🍌", "🚴", "💪"], "hea"],
+  ["🥤 Smoothie", ["🥦", "🥕", "🏃"], "hea"],
+  ["🍞 Brown bread", ["🥗", "🍎", "🚴"], "hea"],
+  ["⌚ Watch", ["💎", "🥂", "✨"], "lux"],
+  ["🚗 Car", ["🛥️", "👑", "✨"], "lux"],
+  ["🧴 Perfume", ["💍", "🥂", "🏰"], "lux"],
+  ["🍫 Chocolates", ["👑", "💎", "🏰"], "lux"],
+  ["🍝 Pasta sauce", ["👨‍👩‍👧", "🍽️", "🤗"], "fam"],
+  ["🧺 Washing powder", ["👶", "🏡", "🧸"], "fam"],
+  ["🚙 Seven-seater car", ["👨‍👩‍👧", "🏡", "🎂"], "fam"],
+  ["🍪 Biscuits", ["🛋️", "🤗", "👶"], "fam"],
+  ["🧼 Soap", ["🌿", "🐝", "🌼"], "nat"],
+  ["💧 Bottled water", ["⛰️", "🌊", "🍃"], "nat"],
+  ["🍯 Honey", ["🐝", "🌳", "🦋"], "nat"],
+  ["🧻 Tissues", ["🌳", "🍃", "🦋"], "nat"],
+  ["🎟️ Theme park", ["🎢", "🎈", "🤩"], "fun"],
+  ["🍬 Sweets", ["🎉", "🎊", "🥳"], "fun"],
+  ["🎮 Video game", ["🎆", "🤩", "🎡"], "fun"],
+  ["🍿 Popcorn", ["🎈", "🎉", "🎡"], "fun"],
+  ["👟 Trainers", ["😎", "🛹", "🔥"], "coo"],
+  ["🧢 Caps", ["🕶️", "🎸", "🤙"], "coo"],
+  ["📱 Phone", ["🎧", "🏙️", "😎"], "coo"],
+  ["🥤 Energy drink", ["🛹", "🔥", "🤙"], "coo"]
+ ]
+}/*END*/;
+  var TRICK={star:"⭐ Star power",free:"🎁 Free gift",band:"👥 Bandwagon",stat:"📊 Statistic",exag:"🚀 Exaggeration",hurry:"⏰ Hurry"};
+  var TWHY={star:"Star power: a famous person (a champion, a singer, a TV star) is linked to the product, so you trust it.",
+    free:"Free gift: something for nothing makes you want to buy now.",
+    band:"Bandwagon: everyone else has it, so you don't want to be left out.",
+    stat:"Statistic: a number makes the claim sound proven. Ask: who counted, and how?",
+    exag:"Exaggeration: the best, the greatest, a miracle. Big claims that can't be proven.",
+    hurry:"Hurry: today only, while stocks last. The ad rushes you so you don't stop and think."};
+  var AUD={ki:"🧒 Young children",te:"🧑 Teenagers",pa:"👨‍👩‍👧 Parents",ol:"👵 Older people",sp:"🏃 Sporty people"};
+  var AWHY={ki:"Young children: toys, cartoons, bedtime, \u201cask your mum or dad\u201d.",
+    te:"Teenagers: exams, study, mates, gaming.",
+    pa:"Parents: your kids, the school run, family meals, busy mums and dads.",
+    ol:"Older people: retirement, grandchildren, reading glasses, the travel pass.",
+    sp:"Sporty people: training, the gym, workouts, a personal best."};
+  var MEAN={hea:"🥗 Healthy",lux:"💎 Luxury",fam:"🏡 Family",nat:"🌿 Natural",fun:"🎉 Fun",coo:"😎 Cool"};
+  var CLOSE={hea:"nat",nat:"hea",fun:"coo",coo:"fun"};
+  var MWHY={hea:"Fruit, vegetables and exercise in the picture say: this is good for you.",
+    lux:"Diamonds, crowns and champagne say: this is expensive and special.",
+    fam:"A family, a home and hugs say: this brings people together.",
+    nat:"Flowers, trees, bees and water say: this is pure and natural.",
+    fun:"Balloons, rides and fireworks say: this is exciting and fun.",
+    coo:"Sunglasses, skateboards and music say: this is cool and popular."};
+  var FO={f:"✅ Fact",o:"💭 Opinion"};
+  var FIXED=[].concat(Object.keys(TRICK).map(function(k){return TRICK[k];}),Object.keys(AUD).map(function(k){return AUD[k];}),Object.keys(MEAN).map(function(k){return MEAN[k];}),[FO.f,FO.o]);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function line(s){return '<div class="ab-ad one"><p>'+esc(s)+'</p></div>';}
+  function adCard(a){return '<div class="ab-ad"><div class="ab-pic">'+a.pic+'</div><b class="ab-brand">'+esc(a.brand)+'</b>'+a.lines.map(function(l){return '<p>'+esc(l)+'</p>';}).join("")+'</div>';}
+
+  /* ================= AD BREAKER: spot the trick ================= */
+  function qTrick(){var it=rnd(D.trick);
+    return C("🔍 What's the trick?",TRICK[it[1]],others(TRICK,it[1]),TWHY[it[1]],line(it[0]),{t:"trick",s:it[0],rv:it[0]},3);}
+  /* ================= WHO'S IT FOR? ================= */
+  function qWho(){var a=rnd(D.ads);
+    return C("🎯 Who's it for?",AUD[a.who],others(AUD,a.who),AWHY[a.who],adCard(a),{t:"who",brand:a.brand,rv:a.brand+" ad"},3);}
+  /* ================= FACT OR OPINION? ================= */
+  function qFo(){var it=rnd(D.fo);
+    return C("📢 Fact or opinion?",FO[it[1]],[FO[it[1]==="f"?"o":"f"]],it[1]==="f"?"Fact: it can be checked (a price, a number, a day, where it's made).":"Opinion: a judgement word (delicious, best, cool, should). Nobody can prove it.",line(it[0]),{t:"fo",s:it[0],rv:it[0]},1);}
+  /* ================= BEST SLOGAN ================= */
+  function qSlogan(){var i=Math.floor(Math.random()*D.slogan.length),it=D.slogan[i],
+      other=rnd(D.slogan.filter(function(x,j){return j!==i;}))[2];
+    var q=C("🏷️ Best slogan?",it[2],[it[3],it[4],other],"A good slogan is short, names the brand and is catchy: alliteration (feel the fizz) or rhyme (no mess, no stress).",
+      '<div class="ab-ad prod"><div class="ab-pic">'+it[0].split(" ")[0]+'</div><b class="ab-brand">'+esc(it[1])+'</b><p>'+esc(it[0].split(" ").slice(1).join(" "))+'</p></div>',{t:"slogan",brand:it[1],rv:it[1]},3);
+    return q;}
+  /* ================= PICTURE POWER ================= */
+  function qPic(){var it=rnd(D.pic),k=it[2];
+    var pool=Object.keys(MEAN).filter(function(x){return x!==k&&x!==CLOSE[k];}).map(function(x){return MEAN[x];});
+    return C("🖼️ What does the picture say?",MEAN[k],pool,MWHY[k],
+      '<div class="ab-ad pic"><b class="ab-brand">'+esc(it[0])+' ad</b><div class="ab-big">'+it[1].join(" ")+'</div></div>',{t:"pic",pics:it[1],rv:it[0]+" ad "+it[1].join("")},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    trick:[qTrick],
+    who:[qWho],
+    fo:[qFo],
+    slogan:[qSlogan],
+    pic:[qPic],
+    mixed:[qTrick,qTrick,qWho,qFo,qSlogan,qPic]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="trick"||m==="fo"||m==="pic")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="trick"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="trick"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! No ad can fool you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TRICK:TRICK,AUD:AUD,MEAN:MEAN}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

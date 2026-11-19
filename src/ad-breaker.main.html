@@ -1,0 +1,144 @@
+<style>.ab-ad{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px 6px;max-width:520px;margin:8px auto 4px;text-align:center;box-shadow:0 3px 0 var(--line)}
+.ab-ad p{margin:0 0 6px;font-size:19px;line-height:1.4;font-weight:600}
+.ab-ad.one p{font-size:20px}
+.ab-ad .ab-pic{font-size:34px;line-height:1.1}
+.ab-ad .ab-brand{display:block;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2px 0 6px}
+.ab-ad.prod{background:#EEF6F1;border-color:#BFDCCB}.ab-ad.prod .ab-brand{font-size:22px;letter-spacing:.02em;text-transform:none;color:var(--ink)}
+.ab-ad.pic{background:#FFF6E5}.ab-ad .ab-big{font-size:48px;letter-spacing:6px;line-height:1.2;margin:2px 0 8px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.ab-ad p{font-size:17px}#choices .choice{font-size:15px}.ab-ad .ab-big{font-size:40px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Ad Breaker</h1>
+        <p>Every ad wants something from you. Spot the trick, work out who it's for, sort fact from opinion, pick the slogan and read the picture. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="trick"><div><b>Ad Breaker</b><span>🔍 What's the trick?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="who"><div><b>Who's it for?</b><span>🎯 Find the audience</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fo"><div><b>Fact or opinion?</b><span>📢 Can you check it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slogan"><div><b>Best slogan</b><span>🏷️ Short, catchy, named</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pic"><div><b>Picture power</b><span>🖼️ What does it say?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Ad Breaker, 5 in a row = 3 bonus seconds. Every brand in the game is made up.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R9, R8, OL8, W3 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Media 1: advertising</h2>
+        <p>An advert has one job: to make you <b>want</b> something and <b>buy</b> it (or do something, like book, join or vote). To read an ad well, ask three questions: <b>Who is it for? What is it selling? How does it try to persuade me?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">🅰️ Ad A</b>Refillo water bottle. Holds 500 ml. Made of steel. €12.</div>
+          <div class="note"><b class="h">🅱️ Ad B</b>Olympic swimmer Orla Breen never trains without her Refillo. Everyone on the team has one. The best bottle ever made! Today only: €12.</div>
+        </div>
+        <p style="margin-top:8px">Same bottle, same price. Which ad makes you want it more? Find four tricks Ad B uses that Ad A doesn't.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Ad B uses <b>star power</b> (an Olympic swimmer), the <b>bandwagon</b> (“Everyone on the team has one”), <b>exaggeration</b> (“The best bottle ever made!”) and <b>hurry</b> (“Today only”). Ad A only gives <b>facts</b> you can check. Ad B tells you almost nothing new about the bottle: it works on your feelings.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six tricks ads use</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⭐ Star power</b>Famous chef Gráinne Lynch cooks with Crispa oil.</div>
+          <div class="note"><b class="h">🎁 Free gift</b>Free delivery on all Plantly orders.</div>
+          <div class="note"><b class="h">👥 Bandwagon</b>All your friends are wearing Kicks trainers.</div>
+          <div class="note"><b class="h">📊 Statistic</b>9 out of 10 dogs prefer Waggo biscuits.</div>
+          <div class="note"><b class="h">🚀 Exaggeration</b>The greatest pizza in the universe!</div>
+          <div class="note"><b class="h">⏰ Hurry</b>While stocks last. Today only.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Ask about every statistic: who counted, and how many? “9 out of 10 dogs” might mean 10 dogs.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Who's it for? Fact or opinion?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🎯 The audience</b>Look at the words: “bedtime” and “ask your mum” = young children; “exams” and “your mates” = teenagers; “the school run” = parents; “your grandchildren” = older people.</div>
+          <div class="note"><b class="h">✅ Fact</b>Can be checked: €2.50 a cone, made in Donegal, opens at 6 am.</div>
+          <div class="note"><b class="h">💭 Opinion</b>A judgement nobody can prove: delicious, the best, really cool.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Slogans and pictures</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏷️ A good slogan</b>is short, names the brand and is catchy: alliteration (“Fizzpop: feel the fizz!”) or rhyme (“no mess, no stress”).</div>
+          <div class="note"><b class="h">🖼️ The picture</b>sends a message before you read a word: fruit and runners = healthy; diamonds = luxury; a family at a table = home; balloons = fun.</div>
+          <div class="note"><b class="h">🎨 Layout</b>The eye goes to the biggest thing first: usually the picture or the headline. Colours set the mood (green = natural, gold = luxury).</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper often includes a <b>visual or media text</b>: an advert, a poster, a web page or a leaflet. Questions ask who it is aimed at, how it tries to persuade, what the image adds, and whether it works. Writing tasks can ask you to <b>create</b> an ad, a slogan or a short promotional piece.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name it, quote it, explain it</b>: “The ad uses star power: ‘Olympic champion…’. Readers trust a winner.”</li>
+            <li><b>Talk about the picture and the layout</b>, not only the words.</li>
+            <li><b>Back up “who it's for”</b> with words from the ad.</li>
+            <li><b>Say whether it works</b> and why: a clear opinion, backed up, wins marks.</li>
+            <li>Don't just describe the ad. Explain the <b>effect</b> on the reader.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Every brand and place is made up. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>[Picture: three smiling teenagers on surfboards, riding one big wave, bright blue sky]</b><br>SEASPRAY SURF SCHOOL, KILBRACK STRAND<br><b>Catch the wave of your life!</b><br>Two-hour lessons for teens, Saturdays at 10 am. €25, wetsuit included.<br>Bring your mates: everyone's talking about Seaspray this summer.<br>Hurry, only 12 places a week!</div>
+          <ol class="eq">
+            <li>Who is this advert aimed at? Give <b>two</b> pieces of evidence.
+              <details><summary>Show a model answer</summary><p>It is aimed at <b>teenagers</b>. It says the lessons are “for teens”, it tells them to “Bring your mates”, and the picture shows three teenagers surfing together.<br><i>Where the marks would go:</i> the audience named; two pieces of evidence, at least one quoted (the picture counts as evidence).</p></details></li>
+            <li>Name <b>two</b> persuasive techniques in the advert and explain how one of them works.
+              <details><summary>Show a model answer</summary><p>The <b>bandwagon</b> (“everyone's talking about Seaspray this summer”) and <b>hurry</b> (“Hurry, only 12 places a week!”). Hurry works because it makes the reader feel they could miss out, so they book now instead of thinking it over.<br><i>Where the marks would go:</i> each technique named with a quote; the rest for explaining the effect on the reader.</p></details></li>
+            <li>Find <b>one fact</b> and <b>one opinion</b> in the advert.
+              <details><summary>Show a model answer</summary><p><b>Fact:</b> “€25, wetsuit included” (it can be checked). <b>Opinion:</b> “Catch the wave of your life!” (a claim nobody can prove).<br><i>Where the marks would go:</i> one mark each, with the right label.</p></details></li>
+            <li>Write a slogan and a <b>three-line advert</b> for a new reusable water bottle, Refillo, aimed at teenagers. Use two tricks.
+              <details><summary>Show a model answer</summary><p><i>Refillo: refill, reuse, rule the school.</i><br><i>Everyone in your year is swapping plastic for Refillo. Keeps water cold for 12 hours. Get a free sticker pack this week only!</i><br><i>Where the marks would go:</i> a short, catchy slogan with the brand (here alliteration); the audience clear (“your year”, “school”); two tricks used (bandwagon, statistic, free gift, hurry); at least one real fact.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/media-advertising-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

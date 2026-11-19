@@ -1,0 +1,277 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_ad_breaker.py read this block: keep it valid JSON; one item per line) ----------
+     trick: [ad line, star / free / band / stat / exag / hurry] (each line shows ONE trick)
+     ads: {pic, brand, who: ki / te / pa / ol / sp, lines: 3 ad lines with clue words for ONE audience}
+     fo: [ad line, f / o]
+     slogan: [emoji + product, brand, best slogan (short, names the brand, alliteration or rhyme), too-long line, dull line]
+     pic: [emoji + product, [3 picture emojis], hea / lux / fam / nat / fun / coo] */
+  var D=/*DATA*/{
+ "trick": [
+  ["Olympic champion Aoife Brennan drinks Splashco every morning.", "star"],
+  ["Chosen by the Kilmore Rovers manager: Zoomz football boots.", "star"],
+  ["Singer Jamie Rourke takes Glo lip balm on every tour.", "star"],
+  ["Famous chef Gráinne Lynch cooks with Crispa oil.", "star"],
+  ["TV star Dara Quinn wears Cosytoes socks.", "star"],
+  ["Recommended by county hurler Cathal Dunne: Gripp hurleys.", "star"],
+  ["Buy a Munchbar and get a free sticker inside.", "free"],
+  ["Every Snugglo duvet comes with a free pillowcase.", "free"],
+  ["Sign up to the Pagez book club and your first book is free.", "free"],
+  ["A free water bottle with every pair of Strydz trainers.", "free"],
+  ["Open a Penny Pot savings account and get a gift for your room.", "free"],
+  ["Free delivery on all Plantly orders.", "free"],
+  ["Everyone in your class already has a Zapp phone case.", "band"],
+  ["Don't be left out: get the new Fizzpop flavour.", "band"],
+  ["Thousands of Irish families have switched to Brightway energy.", "band"],
+  ["All your friends are wearing Kicks trainers this summer.", "band"],
+  ["Join the whole school at the Spinz trampoline park.", "band"],
+  ["Everybody's talking about Crumbly cookies.", "band"],
+  ["9 out of 10 dogs prefer Waggo biscuits.", "stat"],
+  ["Brushwell toothpaste fights 99% of germs.", "stat"],
+  ["Sparkle spray cleans a whole kitchen in 30 seconds.", "stat"],
+  ["Cleano washing powder: 3 times the stain power.", "stat"],
+  ["In our survey, 8 in 10 teens chose Snackit crisps.", "stat"],
+  ["Glide scooters now go 20 per cent further on one charge.", "stat"],
+  ["The greatest pizza in the universe: Pizzazz!", "exag"],
+  ["Comfo trainers: the comfiest shoes ever made.", "exag"],
+  ["Wonderwash: a miracle for muddy jerseys.", "exag"],
+  ["Brainboost: the best study snack on the planet.", "exag"],
+  ["Sunny Bay ice cream: unbelievably creamy.", "exag"],
+  ["Shiny Floor polish works like magic.", "exag"],
+  ["Hurry! The Mega Sale ends tonight.", "hurry"],
+  ["Today only: half price on Rollo bikes.", "hurry"],
+  ["While stocks last: Frosty hoodies in every colour.", "hurry"],
+  ["Last chance to book a place at Splash Zone summer camp.", "hurry"],
+  ["Limited edition Choco Crunch: get it before it's gone.", "hurry"],
+  ["Don't miss out: tickets for the Fun Fair are selling fast.", "hurry"]
+ ],
+ "ads": [
+  {"pic": "🧸", "brand": "Bouncy Bear", "who": "ki", "lines": ["Meet Bouncy Bear, the cuddliest toy in the shop!", "He sings a song at bedtime.", "Ask your mum or dad for one this Christmas."]},
+  {"pic": "🖍️", "brand": "Rainbow Crayons", "who": "ki", "lines": ["Twelve bright crayons in every box.", "Draw rockets, dinosaurs and dragons.", "Make your playground pictures shine!"]},
+  {"pic": "🎪", "brand": "Puppet Palace", "who": "ki", "lines": ["Puppet Palace is coming to Tralee!", "Silly songs and a cartoon dragon.", "Shows every Saturday morning for little ones."]},
+  {"pic": "🎧", "brand": "Bassline", "who": "te", "lines": ["Block out the noise when you study.", "Bassline headphones: built for gaming, made for music.", "Ask your mates which colour to get."]},
+  {"pic": "📚", "brand": "Cramly", "who": "te", "lines": ["Exams coming up?", "Cramly has quick quizzes for every Junior Cycle subject.", "Made by teachers, loved by teens."]},
+  {"pic": "🛹", "brand": "Kerbz", "who": "te", "lines": ["New decks for teenagers who skate.", "Meet your mates at our Saturday jam.", "Kerbz: Main Street, Ennis."]},
+  {"pic": "🍱", "brand": "Lunchbox Hero", "who": "pa", "lines": ["Packing lunchboxes at seven in the morning?", "Lunchbox Hero snacks are ready in seconds.", "Your kids will actually eat them!"]},
+  {"pic": "🚙", "brand": "Roomy", "who": "pa", "lines": ["Plenty of space for the school run.", "Seven seats, so your children can bring a friend.", "Roomy: the car for busy parents."]},
+  {"pic": "🍲", "brand": "Quick Stew", "who": "pa", "lines": ["Family meals in twenty minutes.", "Just add water and stir.", "One less thing for busy mums and dads to worry about."]},
+  {"pic": "👓", "brand": "ClearView", "who": "ol", "lines": ["Struggling to read the paper?", "ClearView reading glasses, now in your chemist.", "See every photo of your grandchildren clearly."]},
+  {"pic": "🚌", "brand": "Golden Getaways", "who": "ol", "lines": ["Enjoying your retirement?", "Golden Getaways run day trips by coach all over Ireland.", "Just show your travel pass."]},
+  {"pic": "🌷", "brand": "Evergreen", "who": "ol", "lines": ["Retired, with more time for the garden?", "Evergreen tools are light and easy on the hands.", "Grow flowers for the grandkids to pick."]},
+  {"pic": "🥤", "brand": "Recharge", "who": "sp", "lines": ["Finished your workout?", "Recharge helps tired muscles recover.", "The drink for athletes who keep going."]},
+  {"pic": "👟", "brand": "Strydz Pro", "who": "sp", "lines": ["Strydz Pro: built for the marathon.", "Light, springy and tested on the track.", "Chase your personal best."]},
+  {"pic": "🏋️", "brand": "Fitfirst", "who": "sp", "lines": ["Fitfirst gym is open day and night.", "Training plans for every sport.", "Stay match fit all season."]}
+ ],
+ "fo": [
+  ["Sunny Bay ice cream costs €2.50 a cone.", "f"],
+  ["Comfo trainers come in sizes 3 to 12.", "f"],
+  ["The Splash Zone camp runs from 6 to 10 July.", "f"],
+  ["Crumbly cookies are made in Mullingar.", "f"],
+  ["Each Munchbar contains 12 grams of sugar.", "f"],
+  ["Rollo bikes have 21 gears.", "f"],
+  ["Pizzazz delivers until 11 pm.", "f"],
+  ["The Fitfirst gym opens at 6 am.", "f"],
+  ["Glide scooters weigh 9 kilos.", "f"],
+  ["Cosytoes socks are available in five colours.", "f"],
+  ["Kerbz skate shop is closed on Mondays.", "f"],
+  ["Cramly has 400 quiz questions for each subject.", "f"],
+  ["Frosty hoodies are made in Donegal.", "f"],
+  ["A Pagez book box costs €15 a month.", "f"],
+  ["Puppet Palace shows start at 11 am on Saturdays.", "f"],
+  ["The Brightway office in Athlone opens at 9 am.", "f"],
+  ["Sunny Bay ice cream is the tastiest treat around.", "o"],
+  ["Comfo trainers are the comfiest shoes you'll ever own.", "o"],
+  ["Everyone will love the Splash Zone camp.", "o"],
+  ["Crumbly cookies are absolutely delicious.", "o"],
+  ["Munchbars are the perfect snack.", "o"],
+  ["Rollo bikes look really cool.", "o"],
+  ["Pizzazz makes the best pizza in town.", "o"],
+  ["The Fitfirst gym is a fantastic place to train.", "o"],
+  ["Glide scooters are so much fun.", "o"],
+  ["Cosytoes socks are gorgeous.", "o"],
+  ["Kerbz is the coolest shop in Clare.", "o"],
+  ["Cramly makes revision brilliant.", "o"],
+  ["Frosty hoodies are a must-have this winter.", "o"],
+  ["Every child should have a Pagez book box.", "o"],
+  ["Puppet Palace is a wonderful day out.", "o"],
+  ["Bassline headphones sound amazing.", "o"]
+ ],
+ "slogan": [
+  ["🍫 Chocolate bar", "Munchbar", "Munchbar: a mega munch!", "Munchbar is a chocolate bar that you can buy in most shops.", "Buy a Munchbar today."],
+  ["🥤 Fizzy drink", "Fizzpop", "Fizzpop: feel the fizz!", "Fizzpop is an orange drink sold in cans and bottles.", "Fizzpop is a drink."],
+  ["🐕 Dog biscuits", "Waggo", "Waggo: what wags want.", "Waggo biscuits are dog treats made with chicken and rice.", "Waggo dog biscuits."],
+  ["🧦 Socks", "Cosytoes", "Cosytoes: cosy toes, happy feet.", "Cosytoes socks are made from wool and come in many colours.", "Cosytoes are warm."],
+  ["🛴 Scooters", "Glide", "Glide: go further, go greener.", "Glide makes electric scooters for people who need to get to work.", "Glide is a scooter."],
+  ["🍕 Pizza", "Pizzazz", "Pizzazz: pizza with pizzazz!", "Pizzazz sells pizzas with lots of different toppings every day of the week.", "Order from Pizzazz."],
+  ["🧴 Shampoo", "Shine", "Shine: hair that turns heads.", "Shine is a new shampoo that you can buy in the chemist.", "Use Shine on wet hair."],
+  ["🚲 Bikes", "Rollo", "Rollo: ready to roll!", "Rollo bikes are sold in our shop on the main street in Athlone.", "Rollo bikes are here."],
+  ["🍦 Ice cream", "Sunny Bay", "Sunny Bay: sweet summer scoops.", "Sunny Bay ice cream is sold in tubs and cones near the beach.", "Sunny Bay ice cream."],
+  ["🧽 Kitchen spray", "Sparkle", "Sparkle: no mess, no stress.", "Sparkle is a spray that you can use to clean your kitchen.", "Sparkle cleans kitchens."],
+  ["🍪 Cookies", "Crumbly", "Crumbly: crunch time!", "Crumbly cookies are baked in a small bakery in the middle of Mullingar.", "Get Crumbly today."],
+  ["🎧 Headphones", "Bassline", "Bassline: big bass, bold sound.", "Bassline headphones come with a case and a long cable for your phone.", "Get Bassline headphones."]
+ ],
+ "pic": [
+  ["🧃 Orange juice", ["🍎", "🏃", "💪"], "hea"],
+  ["🥣 Cereal", ["🍌", "🚴", "💪"], "hea"],
+  ["🥤 Smoothie", ["🥦", "🥕", "🏃"], "hea"],
+  ["🍞 Brown bread", ["🥗", "🍎", "🚴"], "hea"],
+  ["⌚ Watch", ["💎", "🥂", "✨"], "lux"],
+  ["🚗 Car", ["🛥️", "👑", "✨"], "lux"],
+  ["🧴 Perfume", ["💍", "🥂", "🏰"], "lux"],
+  ["🍫 Chocolates", ["👑", "💎", "🏰"], "lux"],
+  ["🍝 Pasta sauce", ["👨‍👩‍👧", "🍽️", "🤗"], "fam"],
+  ["🧺 Washing powder", ["👶", "🏡", "🧸"], "fam"],
+  ["🚙 Seven-seater car", ["👨‍👩‍👧", "🏡", "🎂"], "fam"],
+  ["🍪 Biscuits", ["🛋️", "🤗", "👶"], "fam"],
+  ["🧼 Soap", ["🌿", "🐝", "🌼"], "nat"],
+  ["💧 Bottled water", ["⛰️", "🌊", "🍃"], "nat"],
+  ["🍯 Honey", ["🐝", "🌳", "🦋"], "nat"],
+  ["🧻 Tissues", ["🌳", "🍃", "🦋"], "nat"],
+  ["🎟️ Theme park", ["🎢", "🎈", "🤩"], "fun"],
+  ["🍬 Sweets", ["🎉", "🎊", "🥳"], "fun"],
+  ["🎮 Video game", ["🎆", "🤩", "🎡"], "fun"],
+  ["🍿 Popcorn", ["🎈", "🎉", "🎡"], "fun"],
+  ["👟 Trainers", ["😎", "🛹", "🔥"], "coo"],
+  ["🧢 Caps", ["🕶️", "🎸", "🤙"], "coo"],
+  ["📱 Phone", ["🎧", "🏙️", "😎"], "coo"],
+  ["🥤 Energy drink", ["🛹", "🔥", "🤙"], "coo"]
+ ]
+}/*END*/;
+  var TRICK={star:"⭐ Star power",free:"🎁 Free gift",band:"👥 Bandwagon",stat:"📊 Statistic",exag:"🚀 Exaggeration",hurry:"⏰ Hurry"};
+  var TWHY={star:"Star power: a famous person (a champion, a singer, a TV star) is linked to the product, so you trust it.",
+    free:"Free gift: something for nothing makes you want to buy now.",
+    band:"Bandwagon: everyone else has it, so you don't want to be left out.",
+    stat:"Statistic: a number makes the claim sound proven. Ask: who counted, and how?",
+    exag:"Exaggeration: the best, the greatest, a miracle. Big claims that can't be proven.",
+    hurry:"Hurry: today only, while stocks last. The ad rushes you so you don't stop and think."};
+  var AUD={ki:"🧒 Young children",te:"🧑 Teenagers",pa:"👨‍👩‍👧 Parents",ol:"👵 Older people",sp:"🏃 Sporty people"};
+  var AWHY={ki:"Young children: toys, cartoons, bedtime, \u201cask your mum or dad\u201d.",
+    te:"Teenagers: exams, study, mates, gaming.",
+    pa:"Parents: your kids, the school run, family meals, busy mums and dads.",
+    ol:"Older people: retirement, grandchildren, reading glasses, the travel pass.",
+    sp:"Sporty people: training, the gym, workouts, a personal best."};
+  var MEAN={hea:"🥗 Healthy",lux:"💎 Luxury",fam:"🏡 Family",nat:"🌿 Natural",fun:"🎉 Fun",coo:"😎 Cool"};
+  var CLOSE={hea:"nat",nat:"hea",fun:"coo",coo:"fun"};
+  var MWHY={hea:"Fruit, vegetables and exercise in the picture say: this is good for you.",
+    lux:"Diamonds, crowns and champagne say: this is expensive and special.",
+    fam:"A family, a home and hugs say: this brings people together.",
+    nat:"Flowers, trees, bees and water say: this is pure and natural.",
+    fun:"Balloons, rides and fireworks say: this is exciting and fun.",
+    coo:"Sunglasses, skateboards and music say: this is cool and popular."};
+  var FO={f:"✅ Fact",o:"💭 Opinion"};
+  var FIXED=[].concat(Object.keys(TRICK).map(function(k){return TRICK[k];}),Object.keys(AUD).map(function(k){return AUD[k];}),Object.keys(MEAN).map(function(k){return MEAN[k];}),[FO.f,FO.o]);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function line(s){return '<div class="ab-ad one"><p>'+esc(s)+'</p></div>';}
+  function adCard(a){return '<div class="ab-ad"><div class="ab-pic">'+a.pic+'</div><b class="ab-brand">'+esc(a.brand)+'</b>'+a.lines.map(function(l){return '<p>'+esc(l)+'</p>';}).join("")+'</div>';}
+
+  /* ================= AD BREAKER: spot the trick ================= */
+  function qTrick(){var it=rnd(D.trick);
+    return C("🔍 What's the trick?",TRICK[it[1]],others(TRICK,it[1]),TWHY[it[1]],line(it[0]),{t:"trick",s:it[0],rv:it[0]},3);}
+  /* ================= WHO'S IT FOR? ================= */
+  function qWho(){var a=rnd(D.ads);
+    return C("🎯 Who's it for?",AUD[a.who],others(AUD,a.who),AWHY[a.who],adCard(a),{t:"who",brand:a.brand,rv:a.brand+" ad"},3);}
+  /* ================= FACT OR OPINION? ================= */
+  function qFo(){var it=rnd(D.fo);
+    return C("📢 Fact or opinion?",FO[it[1]],[FO[it[1]==="f"?"o":"f"]],it[1]==="f"?"Fact: it can be checked (a price, a number, a day, where it's made).":"Opinion: a judgement word (delicious, best, cool, should). Nobody can prove it.",line(it[0]),{t:"fo",s:it[0],rv:it[0]},1);}
+  /* ================= BEST SLOGAN ================= */
+  function qSlogan(){var i=Math.floor(Math.random()*D.slogan.length),it=D.slogan[i],
+      other=rnd(D.slogan.filter(function(x,j){return j!==i;}))[2];
+    var q=C("🏷️ Best slogan?",it[2],[it[3],it[4],other],"A good slogan is short, names the brand and is catchy: alliteration (feel the fizz) or rhyme (no mess, no stress).",
+      '<div class="ab-ad prod"><div class="ab-pic">'+it[0].split(" ")[0]+'</div><b class="ab-brand">'+esc(it[1])+'</b><p>'+esc(it[0].split(" ").slice(1).join(" "))+'</p></div>',{t:"slogan",brand:it[1],rv:it[1]},3);
+    return q;}
+  /* ================= PICTURE POWER ================= */
+  function qPic(){var it=rnd(D.pic),k=it[2];
+    var pool=Object.keys(MEAN).filter(function(x){return x!==k&&x!==CLOSE[k];}).map(function(x){return MEAN[x];});
+    return C("🖼️ What does the picture say?",MEAN[k],pool,MWHY[k],
+      '<div class="ab-ad pic"><b class="ab-brand">'+esc(it[0])+' ad</b><div class="ab-big">'+it[1].join(" ")+'</div></div>',{t:"pic",pics:it[1],rv:it[0]+" ad "+it[1].join("")},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    trick:[qTrick],
+    who:[qWho],
+    fo:[qFo],
+    slogan:[qSlogan],
+    pic:[qPic],
+    mixed:[qTrick,qTrick,qWho,qFo,qSlogan,qPic]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="trick"||m==="fo"||m==="pic")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="trick"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="trick"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! No ad can fool you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TRICK:TRICK,AUD:AUD,MEAN:MEAN}};
+})();
+</script>
