@@ -1,0 +1,503 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- sentence data (the PDFs and src/test_sentence_surgeon.py read this block: keep it valid JSON) ----------
+     sent: full sentences · frag: [fragment, kind: sub (because… alone) / nov (no verb) / ing (-ing, no helper) / who (who/that…, no main verb)]
+     run: two sentences, "|" marks the join · types: st/qu/cm/ex · struct: si/co/cx · join: [sentence with ___, answer, 3 wrong] */
+  var D=/*DATA*/{
+ "sent": [
+  "The bus was late again.",
+  "Ciara laughed.",
+  "We missed the start of the match.",
+  "When the bell rang, everyone rushed outside.",
+  "My granny grows tomatoes in her greenhouse.",
+  "The lights went out during the storm.",
+  "Because it was raining, we stayed indoors.",
+  "Our dog barks at the postman.",
+  "Oisín forgot his lunch, so he borrowed a sandwich.",
+  "The library closes at six.",
+  "After the concert, we walked home.",
+  "Our team lost the final.",
+  "Although she was nervous, Aisling sang beautifully.",
+  "The kettle is boiling.",
+  "My little brother hates Mondays.",
+  "The ferry left Rosslare at noon.",
+  "Nobody answered the phone.",
+  "The cat slept on the radiator all afternoon.",
+  "We were soaked by the time we got home.",
+  "Seán and Maeve built a sandcastle."
+ ],
+ "frag": [
+  [
+   "Because the bus was late.",
+   "sub"
+  ],
+  [
+   "When the match finished.",
+   "sub"
+  ],
+  [
+   "Although it was sunny.",
+   "sub"
+  ],
+  [
+   "If you finish your homework.",
+   "sub"
+  ],
+  [
+   "After we left the cinema.",
+   "sub"
+  ],
+  [
+   "Until the rain stopped.",
+   "sub"
+  ],
+  [
+   "While Dad was cooking dinner.",
+   "sub"
+  ],
+  [
+   "The old house at the end of the road.",
+   "nov"
+  ],
+  [
+   "A huge crowd outside the stadium.",
+   "nov"
+  ],
+  [
+   "My best friend from primary school.",
+   "nov"
+  ],
+  [
+   "Lots of rain and wind.",
+   "nov"
+  ],
+  [
+   "The boy with the red scarf.",
+   "nov"
+  ],
+  [
+   "A cold, wet Monday morning.",
+   "nov"
+  ],
+  [
+   "Running down the corridor.",
+   "ing"
+  ],
+  [
+   "Waiting for the bus in the rain.",
+   "ing"
+  ],
+  [
+   "Laughing at the joke.",
+   "ing"
+  ],
+  [
+   "Sitting by the fire with a book.",
+   "ing"
+  ],
+  [
+   "Eating chips on the pier.",
+   "ing"
+  ],
+  [
+   "The girl who won the race.",
+   "who"
+  ],
+  [
+   "The phone that I lost last week.",
+   "who"
+  ]
+ ],
+ "run": [
+  "It was raining|we stayed indoors.",
+  "The film was long|we enjoyed it.",
+  "Niamh missed the bus|she walked to school.",
+  "Pizza is my favourite|my sister hates it.",
+  "The shop was closed|we went home.",
+  "Dad burnt the toast|the smoke alarm went off.",
+  "The test was hard|we all passed it.",
+  "We climbed for hours|we never reached the top.",
+  "My phone died|nobody could ring me.",
+  "The crowd roared|nobody heard the whistle.",
+  "Tom studied all week|he still felt nervous.",
+  "The sea was rough|the ferry was cancelled.",
+  "The dog loves walks|the cat hates them.",
+  "It was very late|the shops were still open.",
+  "Mam lost her key|we climbed in the window.",
+  "Emma practised every day|she won the competition.",
+  "The water was freezing|we swam anyway.",
+  "The whistle blew|the players shook hands.",
+  "We waited for hours|nobody came.",
+  "The power went off|we lit candles."
+ ],
+ "types": {
+  "st": [
+   "The shop opens at nine.",
+   "My cousin lives in Sligo.",
+   "We have a maths test tomorrow.",
+   "The kettle has boiled.",
+   "Grandad loves old films.",
+   "It rained all weekend.",
+   "Our dog is afraid of cats.",
+   "Seán plays hurling."
+  ],
+  "qu": [
+   "Where is my jumper?",
+   "Did you feed the cat?",
+   "What time is it?",
+   "Are you coming to the match?",
+   "Can I borrow your pen?",
+   "Why is the sky blue?",
+   "Who ate my chocolate?",
+   "Have you seen my keys?"
+  ],
+  "cm": [
+   "Close the door.",
+   "Put your phones away.",
+   "Turn right at the bank.",
+   "Hand up your copies.",
+   "Mix the flour and the eggs.",
+   "Don't touch the oven.",
+   "Sit down, please.",
+   "Bring a coat."
+  ],
+  "ex": [
+   "What a brilliant goal!",
+   "How cold it is!",
+   "What a mess!",
+   "How beautiful the sunset is!",
+   "What a lovely surprise!",
+   "How fast she runs!",
+   "What a long day!",
+   "How lucky we were!"
+  ]
+ },
+ "struct": {
+  "si": [
+   "The cat slept on the mat.",
+   "Ciara and Jack walked to school.",
+   "We ate chips on the pier.",
+   "Thunder rumbled in the distance.",
+   "My brother plays football and basketball.",
+   "After dinner, we watched a film.",
+   "Rain fell all night.",
+   "The children laughed and shouted.",
+   "The bus stopped outside the school.",
+   "Grandad told us a story."
+  ],
+  "co": [
+   "I was hungry, so I made a sandwich.",
+   "The sun came out, and the snow melted.",
+   "Tom likes rugby, but Sam prefers soccer.",
+   "You can walk, or you can get the bus.",
+   "It was late, so we went home.",
+   "The film was long, but it was funny.",
+   "We knocked, but nobody answered.",
+   "The wind howled, and the windows rattled.",
+   "I studied hard, so I passed.",
+   "She called twice, but he didn't answer."
+  ],
+  "cx": [
+   "We stayed in because it was raining.",
+   "When the bell rang, we ran outside.",
+   "Although it was cold, we went swimming.",
+   "I'll text you if I'm late.",
+   "The baby cried until Mam picked her up.",
+   "While Mam was cooking, Dad set the table.",
+   "We waited until the rain stopped.",
+   "Because the road was icy, the bus was late.",
+   "If you hurry, you'll catch the train.",
+   "She smiled when she saw the cake."
+  ]
+ },
+ "join": [
+  [
+   "I was tired ___ I kept running.",
+   "but",
+   [
+    "so",
+    "because",
+    "until"
+   ]
+  ],
+  [
+   "It started to rain ___ we went inside.",
+   "so",
+   [
+    "but",
+    "although",
+    "until"
+   ]
+  ],
+  [
+   "We stayed in ___ it was raining.",
+   "because",
+   [
+    "but",
+    "so",
+    "although"
+   ]
+  ],
+  [
+   "Wait here ___ I come back.",
+   "until",
+   [
+    "because",
+    "but",
+    "so"
+   ]
+  ],
+  [
+   "The crowd cheered ___ Liam scored.",
+   "when",
+   [
+    "but",
+    "although",
+    "so"
+   ]
+  ],
+  [
+   "Aoife won the race ___ she had a sore leg.",
+   "although",
+   [
+    "so",
+    "because",
+    "until"
+   ]
+  ],
+  [
+   "You can come ___ you finish your homework.",
+   "if",
+   [
+    "so",
+    "but",
+    "although"
+   ]
+  ],
+  [
+   "Mam called ___ I was in the shower.",
+   "while",
+   [
+    "so",
+    "because",
+    "until"
+   ]
+  ],
+  [
+   "We were hungry ___ we made toast.",
+   "so",
+   [
+    "but",
+    "although",
+    "until"
+   ]
+  ],
+  [
+   "I like tea ___ my brother likes coffee.",
+   "but",
+   [
+    "so",
+    "because",
+    "until"
+   ]
+  ],
+  [
+   "The match was cancelled ___ the pitch was flooded.",
+   "because",
+   [
+    "but",
+    "so",
+    "until"
+   ]
+  ],
+  [
+   "Brush your teeth ___ you go to bed.",
+   "before",
+   [
+    "although",
+    "but",
+    "until"
+   ]
+  ],
+  [
+   "You can have chips ___ you can have a salad.",
+   "or",
+   [
+    "because",
+    "until",
+    "although"
+   ]
+  ],
+  [
+   "The road was icy ___ Dad drove slowly.",
+   "so",
+   [
+    "but",
+    "although",
+    "until"
+   ]
+  ],
+  [
+   "Ellie studied hard ___ she failed the test.",
+   "but",
+   [
+    "so",
+    "because",
+    "until"
+   ]
+  ],
+  [
+   "Keep stirring ___ the sauce thickens.",
+   "until",
+   [
+    "because",
+    "but",
+    "so"
+   ]
+  ]
+ ]
+}/*END*/;
+  var LAB={sent:"✅ Sentence",frag:"🧩 Fragment",run:"🚧 Run-on",st:"💬 Statement",qu:"❓ Question",cm:"📢 Command",ex:"😲 Exclamation",
+    si:"1️⃣ Simple",co:"➕ Compound",cx:"🔀 Complex"};
+  var FIXED=["sent","frag","run","st","qu","cm","ex","si","co","cx"].map(function(k){return LAB[k];});
+  var MARK=["because","when","although","if","after","until","while","before"];
+  function S(t,cls){return '<p class="ss-s'+(cls?" "+cls:"")+'">'+t+'</p>';}
+  /* a choice question; nw = how many wrong options (2 for the 3-way sorts) */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(keys,k){return keys.filter(function(x){return x!==k;}).map(function(x){return LAB[x];});}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function halves(r){var p=r.split("|");return [p[0],p[1]];}
+  function lastWord(s){return s.split(" ").pop();}
+  function firstWord(s){return s.split(" ")[0];}
+
+  /* ================= SENTENCE SURGEON: sentence, fragment or run-on ================= */
+  var K3=["sent","frag","run"];
+  var FRAGWHY={nov:"No verb: who did what? Add a verb to finish the thought.",ing:"An -ing word needs a helper: someone WAS running. Add who + was/is.",
+    who:"Who… and then what? The main verb is missing."};
+  function qSurgeon(){var k=rnd(K3),txt,why,d;
+    if(k==="sent"){txt=rnd(D.sent);var f=firstWord(txt).toLowerCase();
+      why=MARK.indexOf(f)>=0?"The “"+cap(f)+"…” part is joined to a main part ("+txt.slice(txt.indexOf(",")+2,-1)+"), so it's complete.":"Who + verb + a complete thought. It makes sense on its own.";
+      d={t:"surgeon",cls:"sent",sent:txt};}
+    else if(k==="frag"){var it=rnd(D.frag);txt=it[0];
+      why=it[1]==="sub"?"“"+txt.slice(0,-1)+"”… then what? Add a main part to finish the thought.":FRAGWHY[it[1]];
+      d={t:"surgeon",cls:"frag",kind:it[1],sent:txt};}
+    else{var r=rnd(D.run),h=halves(r),j=Math.random()<0.5?", ":" ";txt=h[0]+j+h[1];
+      why="Two sentences jammed together. Full stop after “"+lastWord(h[0])+"”, then a capital letter.";
+      d={t:"surgeon",cls:"run",sent:txt,join:j,run:r};}
+    d.rv=txt;
+    return C("Sentence, fragment or run-on?",LAB[k],others(K3,k),why,S(esc(txt)),d,2);}
+  /* ================= SENTENCE TYPES ================= */
+  var K4=["st","qu","cm","ex"],TWHY={st:"It gives information. It ends with a full stop.",qu:"It asks something. It ends with a question mark.",
+    cm:"It tells someone to do something. It starts with the verb.",ex:"What a… / How…! It shows strong feeling."};
+  function qTypes(){var k=rnd(K4),txt=rnd(D.types[k]);
+    return C("What type?",LAB[k],others(K4,k),TWHY[k],S(esc(txt)),{t:"types",cls:k,sent:txt,rv:txt},3);}
+  /* ================= FIX THE RUN-ON ================= */
+  function qFix(){var r=rnd(D.run),h=halves(r),a=lastWord(h[0]),b=firstWord(h[1]),j=Math.random()<0.5?", ":" ";
+    var pre=h[0].slice(0,h[0].length-a.length),post=h[1].slice(b.length);
+    var html=S(esc(pre)+'<mark class="hl">'+esc(a+j+b)+'</mark>'+esc(post));
+    var ans=a+". "+cap(b);
+    return C("🩹 Fix the join",ans,[a+", "+b,a+" "+b,a+". "+b],"Two full sentences: full stop after “"+a+"”, then a capital letter.",html,
+      {t:"fix",run:r,sent:h[0]+j+h[1],rv:h[0]+j+h[1]},3);}
+  /* ================= JOIN IT ================= */
+  var JWHY={but:"but = a surprise or contrast.",so:"so = what happened as a result.",because:"because = the reason.",until:"until = up to the time when.",
+    when:"when = at the time that.",although:"although = even though (a surprise).","if":"if = only on this condition.","while":"while = during the time that.",
+    before:"before = earlier than.",or:"or = a choice."};
+  function full(it,w){return it[0].replace(" ___ ",(["but","so","or","and"].indexOf(w)>=0?", ":" ")+w+" ");}
+  function qJoin(){var it=rnd(D.join),parts=it[0].split("___");
+    var html=S(esc(parts[0])+'<mark class="gap">?</mark>'+esc(parts[1]));
+    return C("🔗 Pick the joining word",it[1],it[2],JWHY[it[1]]+" "+full(it,it[1]),html,{t:"join",sent:it[0],rv:full(it,it[1])},3);}
+  /* ================= SIMPLE, COMPOUND OR COMPLEX ================= */
+  var K5=["si","co","cx"],SWHY={si:"One clause: one who-did-what. Two names or two verbs can still be simple.",
+    co:"Two main clauses joined by and / but / so / or.",cx:"A main clause + a because / when / if … clause."};
+  function qBuild(){var k=rnd(K5),txt=rnd(D.struct[k]);
+    return C("Simple, compound or complex?",LAB[k],others(K5,k),SWHY[k],S(esc(txt)),{t:"build",cls:k,sent:txt,rv:txt},2);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    surgeon:[qSurgeon],
+    types:[qTypes],
+    fix:[qFix],
+    join:[qJoin],
+    build:[qBuild],
+    mixed:[qSurgeon,qSurgeon,qTypes,qFix,qJoin,qBuild]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="surgeon"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="surgeon"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="surgeon"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D}};
+})();
+</script>

@@ -1,0 +1,149 @@
+<main id="main">
+<style>.ss-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ss-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ss-s mark.hl{background:#F6CF5A;color:var(--ink)}.ss-s mark.gap{background:#DDEFE5;color:var(--ink);padding:0 14px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:16px}
+#choices .choice{white-space:nowrap}@media(max-width:420px){#choices .choice{font-size:15px;padding-left:6px;padding-right:6px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Sentence Surgeon</h1>
+        <p>Sentence, fragment or run-on? Spot it, fix it, join it. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="surgeon"><div><b>Sentence Surgeon</b><span>✅ 🧩 🚧 ⏱️</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="types"><div><b>Sentence types</b><span>💬 ❓ 📢 😲</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fix"><div><b>Fix the run-on</b><span>rain we → rain. We</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="join"><div><b>Join it</b><span>but · so · because</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="build"><div><b>Simple or not?</b><span>1️⃣ ➕ 🔀</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Sentence Surgeon, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W10, W11, W12 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Sentences: types, fragments and run-ons</h2>
+        <p>Clear sentences are the base of every answer you write. Get them right and your writing is easier to read and earns more marks.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Read each one out loud. Which is a complete sentence?</p>
+        <div class="tests">
+          <div class="note">1. The bus was late.</div>
+          <div class="note">2. Because the bus was late.</div>
+          <div class="note">3. The bus was late we missed the film.</div>
+        </div>
+        <p style="margin-top:8px">Only one feels finished. What's missing from 2? What's too much in 3?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>1</b> is a <b>sentence</b>: who (the bus) + verb (was) + a complete thought.<br>
+          <b>2</b> is a <b>fragment</b>: because… then what? It needs a main part: <i>Because the bus was late, we missed the film.</i><br>
+          <b>3</b> is a <b>run-on</b>: two sentences jammed together. Fix: <i>The bus was late. We missed the film.</i> or <i>The bus was late, so we missed the film.</i></p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">What a sentence needs</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👤 Who or what</b>the subject<br><b>The bus</b> · <b>Ciara</b> · <b>We</b></div>
+          <div class="note"><b class="h">🏃 A verb</b>doing or being<br>was · laughed · missed</div>
+          <div class="note"><b class="h">✅ A complete thought</b>makes sense on its own<br>Capital letter at the start, end mark at the end.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Fragments and run-ons</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🧩 Fragment</b>half a sentence<br><i>Running down the corridor.</i><br>→ <b>I was</b> running down the corridor.</div>
+          <div class="note"><b class="h">🚧 Run-on</b>two sentences jammed together<br><i>It was raining, we stayed in.</i><br>→ It was raining<b>. W</b>e stayed in.</div>
+        </div>
+        <p style="margin-top:8px">A comma can't hold two sentences together. Use a <b>full stop</b>, or a comma + <b>and / but / so / or</b>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four types of sentence</h3>
+        <div class="wc">
+          <div class="note"><b class="h">💬 Statement</b>gives information<br>The shop opens at nine.</div>
+          <div class="note"><b class="h">❓ Question</b>asks something<br>Where is my jumper?</div>
+          <div class="note"><b class="h">📢 Command</b>tells someone to do something<br>Close the door.</div>
+          <div class="note"><b class="h">😲 Exclamation</b>strong feeling<br>What a goal! How cold it is!</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Simple, compound, complex</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1️⃣ Simple</b>one clause<br>Rain fell all night.</div>
+          <div class="note"><b class="h">➕ Compound</b>two main clauses + and / but / so / or<br>We knocked, but nobody answered.</div>
+          <div class="note"><b class="h">🔀 Complex</b>main clause + because / when / if …<br>When the bell rang, we ran outside.</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>The "because / when / if" part can go first. Then put a comma after it: <i>If you hurry, you'll catch the train.</i></li>
+          <li>Mix short and long sentences. A very short sentence after long ones creates tension: <i>Then the lights went out.</i></li>
+          <li>Writers sometimes use a fragment on purpose for effect: <i>The house was silent. Too silent.</i> In your own answers, use full sentences.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Every written answer is marked partly on how clearly and accurately you write. Run-ons and fragments are the most common slips. You may also be asked how a writer uses sentence length to create an effect.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Comma splices</b> ("It was late, we went home") cost accuracy marks in every piece.</li>
+            <li><b>Varied sentences</b> (short for drama, longer to explain) make your writing stand out.</li>
+            <li><b>Name the effect</b> when a writer uses a short sentence: tension, shock, a pause.</li>
+            <li><b>Read your work back</b> in your head: where you pause and drop your voice, you need a full stop.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Correct the punctuation: “We got to the beach at ten the sun was shining. My brother ran into the sea, he screamed because it was freezing.”
+              <details><summary>Show the answer</summary><p>We got to the beach at ten<b>. T</b>he sun was shining. My brother ran into the sea<b>. H</b>e screamed because it was freezing.<br>(Or: …ran into the sea<b>, and</b> he screamed…)<br><i>Where the marks would go:</i> one mark-earning fix per run-on: a full stop + capital, or a comma + joining word.</p></details></li>
+            <li>Turn each fragment into a complete sentence: (a) “Because the bus was late.” (b) “Running down the corridor.”
+              <details><summary>Show a model answer</summary><p>(a) Because the bus was late, <b>we missed the start of the film.</b><br>(b) <b>Jack was</b> running down the corridor <b>when the bell rang.</b><br><i>Where the marks would go:</i> each answer must have a main part (who + verb) that finishes the thought.</p></details></li>
+            <li>“The house was silent. Too silent. Then, slowly, the cellar door began to open.” How does the writer use sentences to build tension?
+              <details><summary>Show a model answer</summary><p>The writer uses very short sentences to slow the reader down. <b>“Too silent.”</b> is only two words; it sounds like a warning and makes us feel something is wrong. The last sentence is longer and slowed down by commas (“Then, slowly,”), so we wait anxiously to see what comes through the door.<br><i>Where the marks would go:</i> a point about sentence length, a short quote, and the effect on the reader (tension, fear, waiting).</p></details></li>
+            <li>Join these three short sentences into one good sentence: “The match ended. The fans went home. They were disappointed.”
+              <details><summary>Show a model answer</summary><p><b>When</b> the match ended, the disappointed fans went home.<br>(Or: The match ended, <b>and</b> the fans went home disappointed.)<br><i>Where the marks would go:</i> a correct joining word or a complex sentence, with all the information kept and correct punctuation.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/sentences-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

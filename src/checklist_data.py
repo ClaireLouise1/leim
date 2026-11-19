@@ -80,7 +80,7 @@ MATHS = [
 # CBA rows: game name "CBA guide" (a free guide page, no game).
 ENGLISH = [
   ("1st year","Autumn","Parts of speech: nouns, verbs, adjectives & adverbs","W10, W12, R11, OL12","Word Sort","word-sort.html","parts-of-speech"),
-  ("1st year","Autumn","Sentences: types, fragments & run-ons","W10, W11, W12","Sentence Surgeon","",""),
+  ("1st year","Autumn","Sentences: types, fragments & run-ons","W10, W11, W12","Sentence Surgeon","sentence-surgeon.html","sentences"),
   ("1st year","Autumn","Punctuation 1: capitals, full stops, commas & apostrophes","W11, W6","Comma Catch","",""),
   ("1st year","Autumn","Reading for meaning: comprehension skills","R1, R2, R3, OL4","Clue Hunt","",""),
   ("1st year","Autumn","The novel 1: character","R6, R7, R4, W8","Character Clues","",""),
