@@ -1,0 +1,163 @@
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choice .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+#choices .choice{font-size:19px;font-weight:700}
+.mx{width:100%;border-collapse:collapse;min-width:0}.mx td{padding:6px 8px;border-top:1px solid var(--line);font-size:16px;vertical-align:top}.mx td:first-child{font-weight:800;width:40%}.pp{white-space:nowrap;display:inline-block;margin-right:10px}
+.own{font-size:52px;text-align:center;line-height:1.1;margin-top:4px}.own-l{text-align:center;font-weight:700;margin:2px 0 0;color:var(--muted)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Spell Strike</h1>
+        <p>Tricky spellings and the words everyone mixes up. Pick the right one against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spell"><div><b>Spell Strike</b><span>definitely · necessary</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mix"><div><b>Mix-ups</b><span>there · their · they're</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="plural"><div><b>Plurals</b><span>baby → babies</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="add"><div><b>Add an ending</b><span>hop + ing</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Spell Strike, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, R10 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Spelling and commonly confused words</h2>
+        <p>Most spelling mistakes come from a handful of rules and a short list of mix-ups. Learn those and most of your slips disappear.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Why does one get two p's and the other only one?</p>
+        <div class="tests">
+          <div class="note"><span class="pp">hop → ho<b>pp</b>ing</span> <span class="pp">run → ru<b>nn</b>ing</span> <span class="pp">sit → si<b>tt</b>ing</span></div>
+          <div class="note"><span class="pp">hope → ho<b>p</b>ing</span> <span class="pp">ride → ri<b>d</b>ing</span> <span class="pp">write → wri<b>t</b>ing</span></div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Short word, short vowel, one consonant at the end (h<b>o</b>p, r<b>u</b>n): <b>double the last letter</b> before -ing, -ed, -er, -est.<br>
+          Word ending in a silent <b>e</b> (hope, ride): <b>drop the e</b> and add the ending. Only one consonant, so the vowel says its name: hoping.<br>
+          That's why <i>hopping</i> (jumping) and <i>hoping</i> (wishing) are two different words.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding endings</h3>
+        <div class="wc">
+          <div class="note"><b class="h">Double it</b>short vowel + 1 consonant<br><b>stop → stopped · big → biggest</b><br><span style="font-size:14px">two syllables, stress at the end: begin → beginning</span></div>
+          <div class="note"><b class="h">Drop the e</b>before a vowel ending<br><b>make → making · use → using</b><br><span style="font-size:14px">keep it before a consonant: careful, lovely</span></div>
+          <div class="note"><b class="h">y → i</b>consonant + y<br><b>happy → happiness · carry → carried</b><br><span style="font-size:14px">but keep y before -ing (crying) and after a vowel (played)</span></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Plurals</h3>
+        <div class="wc">
+          <div class="note"><b class="h">+ s</b>most words, and vowel + y<br><b>days · keys · photos</b></div>
+          <div class="note"><b class="h">+ es</b>after s, x, ch, sh<br><b>buses · boxes · churches · wishes</b><br><span style="font-size:14px">and potatoes, tomatoes, heroes</span></div>
+          <div class="note"><b class="h">y → ies</b>consonant + y<br><b>baby → babies · city → cities</b></div>
+          <div class="note"><b class="h">f → ves</b><b>knife → knives · leaf → leaves</b></div>
+          <div class="note"><b class="h">Learn these</b><b>child → children · mouse → mice · tooth → teeth · sheep → sheep</b></div>
+          <div class="note"><b class="h">Never</b>an apostrophe for a plural: <s>potato's</s> → potatoes</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Mix-ups</h3>
+        <div style="overflow-x:auto"><table class="mx">
+          <tr><td>there · their · they're</td><td>over <b>there</b> · <b>their</b> boots · <b>they're</b> = they are</td></tr>
+          <tr><td>your · you're</td><td><b>your</b> phone · <b>you're</b> = you are</td></tr>
+          <tr><td>to · too · two</td><td>go <b>to</b> school · <b>too</b> hot, me <b>too</b> · <b>two</b> sisters</td></tr>
+          <tr><td>could have</td><td>could <b>have</b>, should <b>have</b>, must <b>have</b>. Never “could of”.</td></tr>
+          <tr><td>where · were · wear</td><td><b>where</b> is it? · we <b>were</b> late · <b>wear</b> a coat</td></tr>
+          <tr><td>than · then</td><td>taller <b>than</b> me · and <b>then</b> we left</td></tr>
+          <tr><td>quiet · quite</td><td>be <b>quiet</b> · <b>quite</b> hard</td></tr>
+          <tr><td>lose · loose</td><td><b>lose</b> the match · a <b>loose</b> tooth</td></tr>
+          <tr><td>accept · except</td><td><b>accept</b> a gift · everyone <b>except</b> me</td></tr>
+          <tr><td>affect · effect</td><td>rain <b>affects</b> the match (verb) · special <b>effects</b> (noun)</td></tr>
+          <tr><td>weather · whether</td><td>sunny <b>weather</b> · <b>whether</b> to go</td></tr>
+          <tr><td>past · passed</td><td>walked <b>past</b>, half <b>past</b> three · she <b>passed</b> the test</td></tr>
+          <tr><td>bought · brought</td><td><b>bought</b> = buy (money) · <b>brought</b> = bring</td></tr>
+          <tr><td>hear · here</td><td><b>hear</b> with your ear · come <b>here</b></td></tr>
+          <tr><td>know · no</td><td>I <b>know</b> · <b>no</b> milk left</td></tr>
+          <tr><td>our · are</td><td><b>our</b> teacher · we <b>are</b> going</td></tr>
+        </table></div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Tricky words: memory tricks</h3>
+        <ul>
+          <li><b>i before e, except after c</b>: believe, friend, receive (but weird is weird).</li>
+          <li>Hidden words: de<b>finite</b>ly, sep<b>a rat</b>e, envi<b>ron</b>ment, <b>be lie</b>ve.</li>
+          <li>Silent letters: <b>k</b>nife, i<b>s</b>land, ans<b>w</b>er, We<b>d</b>nesday.</li>
+          <li>Doubles: ne<b>c</b>e<b>ss</b>ary (one collar, two sleeves), e<b>mb</b>a<b>rr</b>a<b>ss</b>ed, a<b>dd</b>re<b>ss</b>, to<b>m</b>o<b>rr</b>ow.</li>
+          <li>Say it the silly way: Wed-nes-day, Feb-ru-ary, li-brar-y.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's no separate spelling test, but spelling counts in every piece you write: accuracy is part of how writing is judged, and slips like “could of” or “there bags” are noticed straight away.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Mix-ups</b> (there/their/they're, your/you're, to/too) are the slips examiners notice first.</li>
+            <li><b>Spell key words from the question</b> correctly: they're printed on the paper, so copy them carefully.</li>
+            <li><b>Not sure of a word?</b> Use a simpler word you can spell rather than guessing.</li>
+            <li><b>Leave 3 minutes</b> to read your answer back, one word at a time.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Correct the six spelling mistakes: “Yesterday their was a wierd noise outside are house. I was quiet scared, but my freind said it was probly just the wind.”
+              <details><summary>Show a model answer</summary><p>Yesterday <b>there</b> was a <b>weird</b> noise outside <b>our</b> house. I was <b>quite</b> scared, but my <b>friend</b> said it was <b>probably</b> just the wind.<br><i>Where the marks would go:</i> one mark for each word found and fixed (6). Changing a word that was already right doesn't lose a mark, but wastes time.</p></details></li>
+            <li>Fill the gaps with there, their or they're: “___ coming to collect ___ bags from over ___.”
+              <details><summary>Show the answer</summary><p><b>They're</b> coming to collect <b>their</b> bags from over <b>there</b>. They are coming → they're. Belonging to them → their. A place → there.</p></details></li>
+            <li>Correct the two mistakes: “We should of left earlier then we did.”
+              <details><summary>Show the answer</summary><p>We should <b>have</b> left earlier <b>than</b> we did. “Should of” is always wrong. “Earlier than” compares two times.</p></details></li>
+            <li>Write the right form of each word in brackets: “The two (baby) were (cry) while the (lady) went (shop).”
+              <details><summary>Show the answer</summary><p>The two <b>babies</b> were <b>crying</b> while the <b>ladies</b> went <b>shopping</b>.<br><i>Where the marks would go:</i> babies and ladies (consonant + y → ies), crying (keep the y before -ing), shopping (short vowel: double the p).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/spelling-confused-words-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

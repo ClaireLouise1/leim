@@ -1,0 +1,256 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_spell_strike.py read this block: keep it valid JSON) ----------
+     spell:  [right spelling, sentence with ___, 3 common misspellings, memory trick]
+     mix:    [sentence with ___, answer, group]  (the other words of the group are the wrong options; groups in G)
+     plural: [one, more than one, emoji]
+     add:    [word, ending, answer] */
+  var D=/*DATA*/{
+"spell": [
+["definitely", "I'm ___ coming to the match.", ["definately", "definitly", "defenitely"], "Find the word finite inside: de-FINITE-ly."],
+["necessary", "Is it ___ to bring a lunch?", ["neccessary", "necesary", "neccesary"], "One collar, two sleeves: one c, two s's."],
+["separate", "Put the cards in ___ piles.", ["seperate", "separete", "seprate"], "There's a rat in sep-A-RAT-e."],
+["receive", "Did you ___ my text?", ["recieve", "receeve", "resieve"], "i before e, except after c: rec-EI-ve."],
+["believe", "I don't ___ a word he says.", ["beleive", "belive", "beleeve"], "Never beLIEve a LIE."],
+["friend", "My best ___ lives in Tralee.", ["freind", "frend", "freand"], "A FRIend to the END: fri + end."],
+["Wednesday", "We have PE on ___.", ["Wensday", "Wednsday", "Wendesday"], "Say it the silly way: Wed-nes-day."],
+["February", "My birthday is in ___.", ["Febuary", "Februry", "Febuery"], "Feb-RU-ary: don't drop the first r."],
+["beginning", "That was only the ___.", ["begining", "beggining", "beginnig"], "begin + ing: double the n."],
+["disappear", "Watch the coin ___!", ["dissapear", "disapear", "dissappear"], "dis + appear: one s, two p's."],
+["tomorrow", "See you ___ at nine.", ["tommorow", "tomorow", "tommorrow"], "One m, two r's: to-mor-row."],
+["because", "I stayed in ___ it rained.", ["becuase", "becase", "becouse"], "Big Elephants Can Always Understand Small Elephants."],
+["embarrassed", "I was so ___ I went red.", ["embarassed", "embarrased", "emberrassed"], "Two r's, two s's: Really Red, So Shy."],
+["government", "The ___ will build a new school.", ["goverment", "govermant", "guvernment"], "govern + ment: don't lose the n."],
+["environment", "We must protect the ___.", ["enviroment", "environmant", "envirnoment"], "There's IRON in envIRONment."],
+["library", "I borrowed it from the ___.", ["libary", "liberry", "librery"], "Say both r's: li-BRAR-y."],
+["interesting", "What an ___ book!", ["intresting", "interisting", "intristing"], "inter + est + ing."],
+["knife", "Cut the bread with a ___.", ["nife", "knif", "kniffe"], "Silent k: k-nife, like knee and know."],
+["island", "Tory is an ___ off Donegal.", ["iland", "islend", "iseland"], "Silent s: an IS-land IS land."],
+["answer", "Write your ___ in the box.", ["anser", "answar", "ansewr"], "Silent w: an-S-W-er."],
+["rhythm", "Clap to the ___.", ["rythm", "rhythem", "rythym"], "Rhythm Helps Your Two Hips Move."],
+["address", "What's your email ___?", ["adress", "addres", "adresse"], "Double d, double s: a-DD-re-SS."],
+["sincerely", "Yours ___, Aoife", ["sincerly", "sincerley", "sinserely"], "sincere + ly: keep the e."],
+["occasion", "A wedding is a special ___.", ["ocassion", "occassion", "ocasion"], "Two c's, one s."],
+["weird", "That's a ___ noise.", ["wierd", "weerd", "wiered"], "Weird is weird: it breaks i before e."],
+["immediately", "Come here ___!", ["imediately", "immediatly", "immedietly"], "immediate + ly: two m's, keep the e."],
+["different", "We wore ___ jerseys.", ["diffrent", "diferent", "differant"], "Say it slowly: dif-fer-ent."],
+["probably", "It will ___ rain later.", ["probly", "probaly", "probabley"], "probable → probably."],
+["until", "Wait ___ the bell rings.", ["untill", "untel", "intil"], "until has one l (but till has two)."],
+["argument", "We had an ___ about the remote.", ["arguement", "argumant", "arguemant"], "argue drops its e: argument."],
+["caught", "She ___ the ball with one hand.", ["cought", "caugt", "cawght"], "c-AUGHT, like taught and daughter."],
+["thought", "I ___ you had gone home.", ["thougt", "thaught", "thougth"], "th + ought, like bought and fought."]
+],
+"mix": [
+["The players left ___ boots in the dressing room.", "their", "there"],
+["Put the box over ___.", "there", "there"],
+["___ is a spider in the bath!", "There", "there"],
+["___ going to be late again.", "They're", "there"],
+["I hope ___ happy in the new house.", "they're", "there"],
+["Is this ___ phone?", "your", "your"],
+["___ my best friend.", "You're", "your"],
+["Tell me when ___ ready.", "you're", "your"],
+["We walked ___ the shop.", "to", "to"],
+["I have ___ sisters.", "two", "to"],
+["This tea is ___ hot.", "too", "to"],
+["Can I come ___?", "too", "to"],
+["She wants ___ learn the guitar.", "to", "to"],
+["I could ___ won that race.", "have", "of"],
+["You should ___ told me.", "have", "of"],
+["Would you like a cup ___ tea?", "of", "of"],
+["They must ___ missed the bus.", "have", "of"],
+["___ is the nearest bus stop?", "Where", "where"],
+["We ___ at the beach all day.", "were", "where"],
+["I will ___ my new jacket.", "wear", "where"],
+["You ___ right about the film.", "were", "where"],
+["My brother is taller ___ me.", "than", "then"],
+["We ate our dinner and ___ watched a film.", "then", "then"],
+["Cork is bigger ___ Galway.", "than", "then"],
+["Please be ___ in the library.", "quiet", "quiet"],
+["The test was ___ hard.", "quite", "quiet"],
+["Don't ___ your ticket.", "lose", "lose"],
+["My tooth is ___.", "loose", "lose"],
+["We might ___ the final.", "lose", "lose"],
+["I ___ your apology.", "accept", "accept"],
+["Everyone came ___ Seán.", "except", "accept"],
+["The rain didn't ___ the match.", "affect", "affect"],
+["The film had amazing special ___.", "effects", "effects"],
+["What is the ___ like in Kerry?", "weather", "weather"],
+["I don't know ___ to laugh or cry.", "whether", "weather"],
+["We walked ___ the old castle.", "past", "past"],
+["She ___ her driving test.", "passed", "past"],
+["It's half ___ three.", "past", "past"],
+["I ___ a hoodie in the sale for €20.", "bought", "bought"],
+["She ___ her dog to school for the day.", "brought", "bought"],
+["Can you ___ me at the back?", "hear", "hear"],
+["Come over ___ and sit down.", "here", "hear"],
+["I don't ___ the answer.", "know", "know"],
+["There is ___ milk left.", "no", "know"],
+["___ teacher is from Mayo.", "Our", "our"],
+["We ___ going to the cinema.", "are", "our"]
+],
+"plural": [
+["baby", "babies", "👶"], ["city", "cities", "🏙️"], ["party", "parties", "🎉"], ["lady", "ladies", "👩"],
+["day", "days", "📅"], ["key", "keys", "🔑"], ["monkey", "monkeys", "🐒"], ["toy", "toys", "🧸"],
+["knife", "knives", "🔪"], ["leaf", "leaves", "🍃"], ["wolf", "wolves", "🐺"], ["loaf", "loaves", "🍞"], ["shelf", "shelves", "📚"],
+["box", "boxes", "📦"], ["church", "churches", "⛪"], ["bus", "buses", "🚌"], ["wish", "wishes", "🌠"], ["fox", "foxes", "🦊"], ["glass", "glasses", "🥛"], ["watch", "watches", "⌚"],
+["potato", "potatoes", "🥔"], ["tomato", "tomatoes", "🍅"], ["hero", "heroes", "🦸"],
+["photo", "photos", "📷"], ["piano", "pianos", "🎹"], ["radio", "radios", "📻"],
+["child", "children", "🧒"], ["mouse", "mice", "🐭"], ["tooth", "teeth", "🦷"], ["foot", "feet", "🦶"], ["sheep", "sheep", "🐑"], ["woman", "women", "👩"], ["goose", "geese", "🪿"]
+],
+"add": [
+["hop", "ing", "hopping"], ["hope", "ing", "hoping"], ["run", "ing", "running"], ["ride", "ing", "riding"],
+["swim", "er", "swimmer"], ["make", "ing", "making"], ["stop", "ed", "stopped"], ["shop", "ing", "shopping"],
+["big", "est", "biggest"], ["sad", "ness", "sadness"], ["happy", "ness", "happiness"], ["carry", "ed", "carried"],
+["cry", "ing", "crying"], ["play", "ed", "played"], ["enjoy", "ment", "enjoyment"], ["beauty", "ful", "beautiful"],
+["care", "ful", "careful"], ["hope", "ful", "hopeful"], ["use", "ing", "using"], ["write", "ing", "writing"],
+["begin", "ing", "beginning"], ["forget", "ing", "forgetting"], ["prefer", "ed", "preferred"], ["visit", "ing", "visiting"],
+["open", "ing", "opening"], ["sit", "ing", "sitting"], ["plan", "ed", "planned"], ["fix", "ing", "fixing"],
+["snow", "ing", "snowing"], ["fun", "y", "funny"], ["easy", "ly", "easily"], ["sun", "y", "sunny"],
+["rain", "y", "rainy"], ["heat", "ed", "heated"], ["love", "ly", "lovely"], ["try", "ed", "tried"]
+]
+}/*END*/;
+  /* the words in each mix-up group, in a fixed order (buttons always sit in the same place) */
+  var G={there:["there","their","they're"],your:["your","you're"],to:["to","too","two"],of:["of","have"],where:["where","were","wear"],
+    then:["then","than"],quiet:["quiet","quite"],lose:["lose","loose"],accept:["accept","except"],affect:["affect","effect"],effects:["affects","effects"],
+    weather:["weather","whether"],past:["past","passed"],bought:["bought","brought"],hear:["hear","here"],know:["know","no"],our:["our","are"]};
+  var MEAN={there:"there = a place (over there) or “there is”.",their:"their = belonging to them (their boots).","they're":"they're = they are.",
+    your:"your = belonging to you.","you're":"you're = you are.",to:"to = towards, or to + a verb (to learn).",too:"too = also, or more than enough (too hot).",two:"two = the number 2.",
+    have:"could have, should have, must have. Never “could of”.",of:"of = a part of something (a cup of tea).",
+    where:"where = which place.",were:"were = the past of are (we were).",wear:"wear = put on clothes.",
+    than:"than compares two things (taller than).",then:"then = next, after that.",
+    quiet:"quiet = not loud.",quite:"quite = fairly, a bit (quite hard).",lose:"lose = not win, or not keep (lose a ticket).",loose:"loose = not tight.",
+    accept:"accept = say yes to, take.",except:"except = but not, leaving out.",affect:"affect = a verb: to change something.",effects:"effect = a noun: the result (special effects).",
+    weather:"weather = rain, sun, wind.",whether:"whether = if (whether to laugh or cry).",past:"past = by, or after (half past three).",passed:"passed = a verb: she passed the test.",
+    bought:"bought = from buy (money!).",brought:"brought = from bring (take along).",hear:"hear = with your ear.",here:"here = this place.",
+    know:"know = to have the answer in your head.",no:"no = not any, the opposite of yes.",our:"our = belonging to us.",are:"are = we are, they are."};
+  /* a choice question; nw = how many wrong options */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,fixed:data&&data.fixed,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function gapS(s){return '<p class="ws-s">'+esc(s).replace("___",'<mark class="hl">&nbsp;?&nbsp;</mark>')+'</p>';}
+  function cap(w){return w.charAt(0).toUpperCase()+w.slice(1);}
+
+  /* ================= SPELL STRIKE: which spelling? ================= */
+  function spellQ(){var it=rnd(D.spell);
+    return C("✏️ Which spelling?",it[0],it[2],it[3],gapS(it[1]),{t:"spell",sent:it[1],rv:it[1].replace("___",it[0])});}
+  /* ================= MIX-UPS ================= */
+  function mixQ(){var it=rnd(D.mix),s=it[0],a=it[1],g=G[it[2]],up=s.indexOf("___")===0;
+    var opts=g.map(function(x){return up?cap(x):x;});
+    return C("🔀 Which word?",a,opts,MEAN[a.toLowerCase()]||MEAN[it[2]],gapS(s),{t:"mix",sent:s,group:it[2],fixed:opts,rv:s.replace("___",a)},g.length-1);}
+  /* ================= PLURALS ================= */
+  /* wrong spellings are GENERATED from the word with the usual slips; the checker re-derives the right one with its own rules */
+  function pluralPool(w,ans){var c=[w+"s",w+"'s"];
+    if(!/e$/.test(w))c.push(w+"es");
+    if(/[^aeiou]y$/.test(w))c.push(w.slice(0,-1)+"eys");
+    if(/[aeiou]y$/.test(w))c.push(w.slice(0,-1)+"ies");
+    if(/fe?$/.test(w))c.push(w.replace(/fe?$/,"ves"),w.replace(/fe?$/,"fs"));
+    if(!/s$/.test(ans))c.push(ans+"s");                         /* irregular: mices, childrens */
+    return c.filter(function(x,i,a){return x!==ans&&a.indexOf(x)===i;});}
+  function pluralQ(){var it=rnd(D.plural),w=it[0],ans=it[1];
+    var html='<div class="own">'+it[2]+'&nbsp;→&nbsp;'+it[2]+it[2]+'</div><p class="own-l">one '+esc(w)+' → two …</p>';
+    var why=/[^aeiou]y$/.test(w)?"Consonant + y: change y to i and add es ("+ans+").":/[aeiou]y$/.test(w)?"Vowel + y: just add s ("+ans+").":
+      /fe?$/.test(w)&&/ves$/.test(ans)?"Many f / fe words change to ves ("+ans+").":/(s|x|z|ch|sh)$/.test(w)?"After s, x, ch, sh: add es ("+ans+").":
+      /o$/.test(w)?(/oes$/.test(ans)?"Some o words add es: potatoes, tomatoes, heroes.":"Short or music/tech o words add s: photos, pianos, radios."):
+      "This one doesn't follow a rule: one "+w+", two "+ans+".";
+    var pool=pluralPool(w,ans);return C("Two of them?",ans,pool,why,html,{t:"plural",one:w,rv:"one "+w+" → two "+ans},Math.min(3,pool.length));}
+  function addPool(w,e,ans){var L=w.length,last=w.charAt(L-1),c=[w+e];
+    if(!/[aeiouy]/.test(last))c.push(w+last+e);                  /* doubled: hopping / sadd... / snowwing */
+    if(/e$/.test(w)){c.push(w.slice(0,-1)+e);if(/^[aeiou]/.test(e))c.push(w.slice(0,-1)+w.charAt(L-2)+e);}  /* hopeing, writting */
+    if(/y$/.test(w))c.push(w.slice(0,-1)+"i"+e);
+    if(!/[ey]$/.test(w)&&!/^[aeiouy]/.test(e))c.push(w+"e"+e);   /* sadeness, enjoyement */
+    if(/(ful|ly|ness)$/.test(ans))c.push(ans.replace(/ful$/,"full").replace(/ly$/,"lly").replace(/ness$/,"nes"));
+    if(/(.)\1/.test(ans))c.push(ans.replace(/(.)\1/,"$1"));     /* begining, planed */
+    return c.filter(function(x,i,a){return x!==ans&&a.indexOf(x)===i;});}
+  function addQ(){var it=rnd(D.add),w=it[0],e=it[1],ans=it[2],L=w.length;
+    var html='<p class="ws-s">'+esc(w)+' <span style="color:var(--muted)">+</span> '+esc(e)+' <span style="color:var(--muted)">=</span> <mark class="hl">&nbsp;?&nbsp;</mark></p>';
+    var why=ans===w+e?"Nothing changes: just add "+e+".":
+      ans===w+w.charAt(L-1)+e?"Short vowel + one last consonant: double it ("+ans+").":
+      ans===w.slice(0,-1)+e?"Drop the e before an ending that starts with a vowel ("+ans+").":
+      "Consonant + y: change y to i ("+ans+").";
+    var pool=addPool(w,e,ans);return C("➕ Add the ending",ans,pool,why,html,{t:"add",w:w,e:e,rv:w+" + "+e+" = "+ans},Math.min(3,pool.length));}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spell:[spellQ],
+    mix:[mixQ],
+    plural:[pluralQ],
+    add:[addQ],
+    mixed:[spellQ,spellQ,mixQ,mixQ,pluralQ,addQ]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="spell"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=q.fixed?q.fixed.slice():shuffle([q.answer].concat(q.wrong));   /* mix-up buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spell"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spell"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,G:G,pluralPool:pluralPool,addPool:addPool}};
+})();
+</script>

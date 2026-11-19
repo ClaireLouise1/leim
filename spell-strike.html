@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spell Strike: Spelling Game (there, their, they're and more) | Léim</title>
+<meta name="description" content="Free Junior Cycle English spelling game: tricky words, there/their/they're, your/you're, to/too/two, plurals and adding endings. Rules, exam-style questions and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choice .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+#choices .choice{font-size:19px;font-weight:700}
+.mx{width:100%;border-collapse:collapse;min-width:0}.mx td{padding:6px 8px;border-top:1px solid var(--line);font-size:16px;vertical-align:top}.mx td:first-child{font-weight:800;width:40%}.pp{white-space:nowrap;display:inline-block;margin-right:10px}
+.own{font-size:52px;text-align:center;line-height:1.1;margin-top:4px}.own-l{text-align:center;font-weight:700;margin:2px 0 0;color:var(--muted)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Spell Strike</h1>
+        <p>Tricky spellings and the words everyone mixes up. Pick the right one against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spell"><div><b>Spell Strike</b><span>definitely · necessary</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mix"><div><b>Mix-ups</b><span>there · their · they're</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="plural"><div><b>Plurals</b><span>baby → babies</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="add"><div><b>Add an ending</b><span>hop + ing</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Spell Strike, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, R10 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Spelling and commonly confused words</h2>
+        <p>Most spelling mistakes come from a handful of rules and a short list of mix-ups. Learn those and most of your slips disappear.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Why does one get two p's and the other only one?</p>
+        <div class="tests">
+          <div class="note"><span class="pp">hop → ho<b>pp</b>ing</span> <span class="pp">run → ru<b>nn</b>ing</span> <span class="pp">sit → si<b>tt</b>ing</span></div>
+          <div class="note"><span class="pp">hope → ho<b>p</b>ing</span> <span class="pp">ride → ri<b>d</b>ing</span> <span class="pp">write → wri<b>t</b>ing</span></div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Short word, short vowel, one consonant at the end (h<b>o</b>p, r<b>u</b>n): <b>double the last letter</b> before -ing, -ed, -er, -est.<br>
+          Word ending in a silent <b>e</b> (hope, ride): <b>drop the e</b> and add the ending. Only one consonant, so the vowel says its name: hoping.<br>
+          That's why <i>hopping</i> (jumping) and <i>hoping</i> (wishing) are two different words.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Adding endings</h3>
+        <div class="wc">
+          <div class="note"><b class="h">Double it</b>short vowel + 1 consonant<br><b>stop → stopped · big → biggest</b><br><span style="font-size:14px">two syllables, stress at the end: begin → beginning</span></div>
+          <div class="note"><b class="h">Drop the e</b>before a vowel ending<br><b>make → making · use → using</b><br><span style="font-size:14px">keep it before a consonant: careful, lovely</span></div>
+          <div class="note"><b class="h">y → i</b>consonant + y<br><b>happy → happiness · carry → carried</b><br><span style="font-size:14px">but keep y before -ing (crying) and after a vowel (played)</span></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Plurals</h3>
+        <div class="wc">
+          <div class="note"><b class="h">+ s</b>most words, and vowel + y<br><b>days · keys · photos</b></div>
+          <div class="note"><b class="h">+ es</b>after s, x, ch, sh<br><b>buses · boxes · churches · wishes</b><br><span style="font-size:14px">and potatoes, tomatoes, heroes</span></div>
+          <div class="note"><b class="h">y → ies</b>consonant + y<br><b>baby → babies · city → cities</b></div>
+          <div class="note"><b class="h">f → ves</b><b>knife → knives · leaf → leaves</b></div>
+          <div class="note"><b class="h">Learn these</b><b>child → children · mouse → mice · tooth → teeth · sheep → sheep</b></div>
+          <div class="note"><b class="h">Never</b>an apostrophe for a plural: <s>potato's</s> → potatoes</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Mix-ups</h3>
+        <div style="overflow-x:auto"><table class="mx">
+          <tr><td>there · their · they're</td><td>over <b>there</b> · <b>their</b> boots · <b>they're</b> = they are</td></tr>
+          <tr><td>your · you're</td><td><b>your</b> phone · <b>you're</b> = you are</td></tr>
+          <tr><td>to · too · two</td><td>go <b>to</b> school · <b>too</b> hot, me <b>too</b> · <b>two</b> sisters</td></tr>
+          <tr><td>could have</td><td>could <b>have</b>, should <b>have</b>, must <b>have</b>. Never “could of”.</td></tr>
+          <tr><td>where · were · wear</td><td><b>where</b> is it? · we <b>were</b> late · <b>wear</b> a coat</td></tr>
+          <tr><td>than · then</td><td>taller <b>than</b> me · and <b>then</b> we left</td></tr>
+          <tr><td>quiet · quite</td><td>be <b>quiet</b> · <b>quite</b> hard</td></tr>
+          <tr><td>lose · loose</td><td><b>lose</b> the match · a <b>loose</b> tooth</td></tr>
+          <tr><td>accept · except</td><td><b>accept</b> a gift · everyone <b>except</b> me</td></tr>
+          <tr><td>affect · effect</td><td>rain <b>affects</b> the match (verb) · special <b>effects</b> (noun)</td></tr>
+          <tr><td>weather · whether</td><td>sunny <b>weather</b> · <b>whether</b> to go</td></tr>
+          <tr><td>past · passed</td><td>walked <b>past</b>, half <b>past</b> three · she <b>passed</b> the test</td></tr>
+          <tr><td>bought · brought</td><td><b>bought</b> = buy (money) · <b>brought</b> = bring</td></tr>
+          <tr><td>hear · here</td><td><b>hear</b> with your ear · come <b>here</b></td></tr>
+          <tr><td>know · no</td><td>I <b>know</b> · <b>no</b> milk left</td></tr>
+          <tr><td>our · are</td><td><b>our</b> teacher · we <b>are</b> going</td></tr>
+        </table></div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Tricky words: memory tricks</h3>
+        <ul>
+          <li><b>i before e, except after c</b>: believe, friend, receive (but weird is weird).</li>
+          <li>Hidden words: de<b>finite</b>ly, sep<b>a rat</b>e, envi<b>ron</b>ment, <b>be lie</b>ve.</li>
+          <li>Silent letters: <b>k</b>nife, i<b>s</b>land, ans<b>w</b>er, We<b>d</b>nesday.</li>
+          <li>Doubles: ne<b>c</b>e<b>ss</b>ary (one collar, two sleeves), e<b>mb</b>a<b>rr</b>a<b>ss</b>ed, a<b>dd</b>re<b>ss</b>, to<b>m</b>o<b>rr</b>ow.</li>
+          <li>Say it the silly way: Wed-nes-day, Feb-ru-ary, li-brar-y.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's no separate spelling test, but spelling counts in every piece you write: accuracy is part of how writing is judged, and slips like “could of” or “there bags” are noticed straight away.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Mix-ups</b> (there/their/they're, your/you're, to/too) are the slips examiners notice first.</li>
+            <li><b>Spell key words from the question</b> correctly: they're printed on the paper, so copy them carefully.</li>
+            <li><b>Not sure of a word?</b> Use a simpler word you can spell rather than guessing.</li>
+            <li><b>Leave 3 minutes</b> to read your answer back, one word at a time.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Correct the six spelling mistakes: “Yesterday their was a wierd noise outside are house. I was quiet scared, but my freind said it was probly just the wind.”
+              <details><summary>Show a model answer</summary><p>Yesterday <b>there</b> was a <b>weird</b> noise outside <b>our</b> house. I was <b>quite</b> scared, but my <b>friend</b> said it was <b>probably</b> just the wind.<br><i>Where the marks would go:</i> one mark for each word found and fixed (6). Changing a word that was already right doesn't lose a mark, but wastes time.</p></details></li>
+            <li>Fill the gaps with there, their or they're: “___ coming to collect ___ bags from over ___.”
+              <details><summary>Show the answer</summary><p><b>They're</b> coming to collect <b>their</b> bags from over <b>there</b>. They are coming → they're. Belonging to them → their. A place → there.</p></details></li>
+            <li>Correct the two mistakes: “We should of left earlier then we did.”
+              <details><summary>Show the answer</summary><p>We should <b>have</b> left earlier <b>than</b> we did. “Should of” is always wrong. “Earlier than” compares two times.</p></details></li>
+            <li>Write the right form of each word in brackets: “The two (baby) were (cry) while the (lady) went (shop).”
+              <details><summary>Show the answer</summary><p>The two <b>babies</b> were <b>crying</b> while the <b>ladies</b> went <b>shopping</b>.<br><i>Where the marks would go:</i> babies and ladies (consonant + y → ies), crying (keep the y before -ing), shopping (short vowel: double the p).</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/spelling-confused-words-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_spell_strike.py read this block: keep it valid JSON) ----------
+     spell:  [right spelling, sentence with ___, 3 common misspellings, memory trick]
+     mix:    [sentence with ___, answer, group]  (the other words of the group are the wrong options; groups in G)
+     plural: [one, more than one, emoji]
+     add:    [word, ending, answer] */
+  var D=/*DATA*/{
+"spell": [
+["definitely", "I'm ___ coming to the match.", ["definately", "definitly", "defenitely"], "Find the word finite inside: de-FINITE-ly."],
+["necessary", "Is it ___ to bring a lunch?", ["neccessary", "necesary", "neccesary"], "One collar, two sleeves: one c, two s's."],
+["separate", "Put the cards in ___ piles.", ["seperate", "separete", "seprate"], "There's a rat in sep-A-RAT-e."],
+["receive", "Did you ___ my text?", ["recieve", "receeve", "resieve"], "i before e, except after c: rec-EI-ve."],
+["believe", "I don't ___ a word he says.", ["beleive", "belive", "beleeve"], "Never beLIEve a LIE."],
+["friend", "My best ___ lives in Tralee.", ["freind", "frend", "freand"], "A FRIend to the END: fri + end."],
+["Wednesday", "We have PE on ___.", ["Wensday", "Wednsday", "Wendesday"], "Say it the silly way: Wed-nes-day."],
+["February", "My birthday is in ___.", ["Febuary", "Februry", "Febuery"], "Feb-RU-ary: don't drop the first r."],
+["beginning", "That was only the ___.", ["begining", "beggining", "beginnig"], "begin + ing: double the n."],
+["disappear", "Watch the coin ___!", ["dissapear", "disapear", "dissappear"], "dis + appear: one s, two p's."],
+["tomorrow", "See you ___ at nine.", ["tommorow", "tomorow", "tommorrow"], "One m, two r's: to-mor-row."],
+["because", "I stayed in ___ it rained.", ["becuase", "becase", "becouse"], "Big Elephants Can Always Understand Small Elephants."],
+["embarrassed", "I was so ___ I went red.", ["embarassed", "embarrased", "emberrassed"], "Two r's, two s's: Really Red, So Shy."],
+["government", "The ___ will build a new school.", ["goverment", "govermant", "guvernment"], "govern + ment: don't lose the n."],
+["environment", "We must protect the ___.", ["enviroment", "environmant", "envirnoment"], "There's IRON in envIRONment."],
+["library", "I borrowed it from the ___.", ["libary", "liberry", "librery"], "Say both r's: li-BRAR-y."],
+["interesting", "What an ___ book!", ["intresting", "interisting", "intristing"], "inter + est + ing."],
+["knife", "Cut the bread with a ___.", ["nife", "knif", "kniffe"], "Silent k: k-nife, like knee and know."],
+["island", "Tory is an ___ off Donegal.", ["iland", "islend", "iseland"], "Silent s: an IS-land IS land."],
+["answer", "Write your ___ in the box.", ["anser", "answar", "ansewr"], "Silent w: an-S-W-er."],
+["rhythm", "Clap to the ___.", ["rythm", "rhythem", "rythym"], "Rhythm Helps Your Two Hips Move."],
+["address", "What's your email ___?", ["adress", "addres", "adresse"], "Double d, double s: a-DD-re-SS."],
+["sincerely", "Yours ___, Aoife", ["sincerly", "sincerley", "sinserely"], "sincere + ly: keep the e."],
+["occasion", "A wedding is a special ___.", ["ocassion", "occassion", "ocasion"], "Two c's, one s."],
+["weird", "That's a ___ noise.", ["wierd", "weerd", "wiered"], "Weird is weird: it breaks i before e."],
+["immediately", "Come here ___!", ["imediately", "immediatly", "immedietly"], "immediate + ly: two m's, keep the e."],
+["different", "We wore ___ jerseys.", ["diffrent", "diferent", "differant"], "Say it slowly: dif-fer-ent."],
+["probably", "It will ___ rain later.", ["probly", "probaly", "probabley"], "probable → probably."],
+["until", "Wait ___ the bell rings.", ["untill", "untel", "intil"], "until has one l (but till has two)."],
+["argument", "We had an ___ about the remote.", ["arguement", "argumant", "arguemant"], "argue drops its e: argument."],
+["caught", "She ___ the ball with one hand.", ["cought", "caugt", "cawght"], "c-AUGHT, like taught and daughter."],
+["thought", "I ___ you had gone home.", ["thougt", "thaught", "thougth"], "th + ought, like bought and fought."]
+],
+"mix": [
+["The players left ___ boots in the dressing room.", "their", "there"],
+["Put the box over ___.", "there", "there"],
+["___ is a spider in the bath!", "There", "there"],
+["___ going to be late again.", "They're", "there"],
+["I hope ___ happy in the new house.", "they're", "there"],
+["Is this ___ phone?", "your", "your"],
+["___ my best friend.", "You're", "your"],
+["Tell me when ___ ready.", "you're", "your"],
+["We walked ___ the shop.", "to", "to"],
+["I have ___ sisters.", "two", "to"],
+["This tea is ___ hot.", "too", "to"],
+["Can I come ___?", "too", "to"],
+["She wants ___ learn the guitar.", "to", "to"],
+["I could ___ won that race.", "have", "of"],
+["You should ___ told me.", "have", "of"],
+["Would you like a cup ___ tea?", "of", "of"],
+["They must ___ missed the bus.", "have", "of"],
+["___ is the nearest bus stop?", "Where", "where"],
+["We ___ at the beach all day.", "were", "where"],
+["I will ___ my new jacket.", "wear", "where"],
+["You ___ right about the film.", "were", "where"],
+["My brother is taller ___ me.", "than", "then"],
+["We ate our dinner and ___ watched a film.", "then", "then"],
+["Cork is bigger ___ Galway.", "than", "then"],
+["Please be ___ in the library.", "quiet", "quiet"],
+["The test was ___ hard.", "quite", "quiet"],
+["Don't ___ your ticket.", "lose", "lose"],
+["My tooth is ___.", "loose", "lose"],
+["We might ___ the final.", "lose", "lose"],
+["I ___ your apology.", "accept", "accept"],
+["Everyone came ___ Seán.", "except", "accept"],
+["The rain didn't ___ the match.", "affect", "affect"],
+["The film had amazing special ___.", "effects", "effects"],
+["What is the ___ like in Kerry?", "weather", "weather"],
+["I don't know ___ to laugh or cry.", "whether", "weather"],
+["We walked ___ the old castle.", "past", "past"],
+["She ___ her driving test.", "passed", "past"],
+["It's half ___ three.", "past", "past"],
+["I ___ a hoodie in the sale for €20.", "bought", "bought"],
+["She ___ her dog to school for the day.", "brought", "bought"],
+["Can you ___ me at the back?", "hear", "hear"],
+["Come over ___ and sit down.", "here", "hear"],
+["I don't ___ the answer.", "know", "know"],
+["There is ___ milk left.", "no", "know"],
+["___ teacher is from Mayo.", "Our", "our"],
+["We ___ going to the cinema.", "are", "our"]
+],
+"plural": [
+["baby", "babies", "👶"], ["city", "cities", "🏙️"], ["party", "parties", "🎉"], ["lady", "ladies", "👩"],
+["day", "days", "📅"], ["key", "keys", "🔑"], ["monkey", "monkeys", "🐒"], ["toy", "toys", "🧸"],
+["knife", "knives", "🔪"], ["leaf", "leaves", "🍃"], ["wolf", "wolves", "🐺"], ["loaf", "loaves", "🍞"], ["shelf", "shelves", "📚"],
+["box", "boxes", "📦"], ["church", "churches", "⛪"], ["bus", "buses", "🚌"], ["wish", "wishes", "🌠"], ["fox", "foxes", "🦊"], ["glass", "glasses", "🥛"], ["watch", "watches", "⌚"],
+["potato", "potatoes", "🥔"], ["tomato", "tomatoes", "🍅"], ["hero", "heroes", "🦸"],
+["photo", "photos", "📷"], ["piano", "pianos", "🎹"], ["radio", "radios", "📻"],
+["child", "children", "🧒"], ["mouse", "mice", "🐭"], ["tooth", "teeth", "🦷"], ["foot", "feet", "🦶"], ["sheep", "sheep", "🐑"], ["woman", "women", "👩"], ["goose", "geese", "🪿"]
+],
+"add": [
+["hop", "ing", "hopping"], ["hope", "ing", "hoping"], ["run", "ing", "running"], ["ride", "ing", "riding"],
+["swim", "er", "swimmer"], ["make", "ing", "making"], ["stop", "ed", "stopped"], ["shop", "ing", "shopping"],
+["big", "est", "biggest"], ["sad", "ness", "sadness"], ["happy", "ness", "happiness"], ["carry", "ed", "carried"],
+["cry", "ing", "crying"], ["play", "ed", "played"], ["enjoy", "ment", "enjoyment"], ["beauty", "ful", "beautiful"],
+["care", "ful", "careful"], ["hope", "ful", "hopeful"], ["use", "ing", "using"], ["write", "ing", "writing"],
+["begin", "ing", "beginning"], ["forget", "ing", "forgetting"], ["prefer", "ed", "preferred"], ["visit", "ing", "visiting"],
+["open", "ing", "opening"], ["sit", "ing", "sitting"], ["plan", "ed", "planned"], ["fix", "ing", "fixing"],
+["snow", "ing", "snowing"], ["fun", "y", "funny"], ["easy", "ly", "easily"], ["sun", "y", "sunny"],
+["rain", "y", "rainy"], ["heat", "ed", "heated"], ["love", "ly", "lovely"], ["try", "ed", "tried"]
+]
+}/*END*/;
+  /* the words in each mix-up group, in a fixed order (buttons always sit in the same place) */
+  var G={there:["there","their","they're"],your:["your","you're"],to:["to","too","two"],of:["of","have"],where:["where","were","wear"],
+    then:["then","than"],quiet:["quiet","quite"],lose:["lose","loose"],accept:["accept","except"],affect:["affect","effect"],effects:["affects","effects"],
+    weather:["weather","whether"],past:["past","passed"],bought:["bought","brought"],hear:["hear","here"],know:["know","no"],our:["our","are"]};
+  var MEAN={there:"there = a place (over there) or “there is”.",their:"their = belonging to them (their boots).","they're":"they're = they are.",
+    your:"your = belonging to you.","you're":"you're = you are.",to:"to = towards, or to + a verb (to learn).",too:"too = also, or more than enough (too hot).",two:"two = the number 2.",
+    have:"could have, should have, must have. Never “could of”.",of:"of = a part of something (a cup of tea).",
+    where:"where = which place.",were:"were = the past of are (we were).",wear:"wear = put on clothes.",
+    than:"than compares two things (taller than).",then:"then = next, after that.",
+    quiet:"quiet = not loud.",quite:"quite = fairly, a bit (quite hard).",lose:"lose = not win, or not keep (lose a ticket).",loose:"loose = not tight.",
+    accept:"accept = say yes to, take.",except:"except = but not, leaving out.",affect:"affect = a verb: to change something.",effects:"effect = a noun: the result (special effects).",
+    weather:"weather = rain, sun, wind.",whether:"whether = if (whether to laugh or cry).",past:"past = by, or after (half past three).",passed:"passed = a verb: she passed the test.",
+    bought:"bought = from buy (money!).",brought:"brought = from bring (take along).",hear:"hear = with your ear.",here:"here = this place.",
+    know:"know = to have the answer in your head.",no:"no = not any, the opposite of yes.",our:"our = belonging to us.",are:"are = we are, they are."};
+  /* a choice question; nw = how many wrong options */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,fixed:data&&data.fixed,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function gapS(s){return '<p class="ws-s">'+esc(s).replace("___",'<mark class="hl">&nbsp;?&nbsp;</mark>')+'</p>';}
+  function cap(w){return w.charAt(0).toUpperCase()+w.slice(1);}
+
+  /* ================= SPELL STRIKE: which spelling? ================= */
+  function spellQ(){var it=rnd(D.spell);
+    return C("✏️ Which spelling?",it[0],it[2],it[3],gapS(it[1]),{t:"spell",sent:it[1],rv:it[1].replace("___",it[0])});}
+  /* ================= MIX-UPS ================= */
+  function mixQ(){var it=rnd(D.mix),s=it[0],a=it[1],g=G[it[2]],up=s.indexOf("___")===0;
+    var opts=g.map(function(x){return up?cap(x):x;});
+    return C("🔀 Which word?",a,opts,MEAN[a.toLowerCase()]||MEAN[it[2]],gapS(s),{t:"mix",sent:s,group:it[2],fixed:opts,rv:s.replace("___",a)},g.length-1);}
+  /* ================= PLURALS ================= */
+  /* wrong spellings are GENERATED from the word with the usual slips; the checker re-derives the right one with its own rules */
+  function pluralPool(w,ans){var c=[w+"s",w+"'s"];
+    if(!/e$/.test(w))c.push(w+"es");
+    if(/[^aeiou]y$/.test(w))c.push(w.slice(0,-1)+"eys");
+    if(/[aeiou]y$/.test(w))c.push(w.slice(0,-1)+"ies");
+    if(/fe?$/.test(w))c.push(w.replace(/fe?$/,"ves"),w.replace(/fe?$/,"fs"));
+    if(!/s$/.test(ans))c.push(ans+"s");                         /* irregular: mices, childrens */
+    return c.filter(function(x,i,a){return x!==ans&&a.indexOf(x)===i;});}
+  function pluralQ(){var it=rnd(D.plural),w=it[0],ans=it[1];
+    var html='<div class="own">'+it[2]+'&nbsp;→&nbsp;'+it[2]+it[2]+'</div><p class="own-l">one '+esc(w)+' → two …</p>';
+    var why=/[^aeiou]y$/.test(w)?"Consonant + y: change y to i and add es ("+ans+").":/[aeiou]y$/.test(w)?"Vowel + y: just add s ("+ans+").":
+      /fe?$/.test(w)&&/ves$/.test(ans)?"Many f / fe words change to ves ("+ans+").":/(s|x|z|ch|sh)$/.test(w)?"After s, x, ch, sh: add es ("+ans+").":
+      /o$/.test(w)?(/oes$/.test(ans)?"Some o words add es: potatoes, tomatoes, heroes.":"Short or music/tech o words add s: photos, pianos, radios."):
+      "This one doesn't follow a rule: one "+w+", two "+ans+".";
+    var pool=pluralPool(w,ans);return C("Two of them?",ans,pool,why,html,{t:"plural",one:w,rv:"one "+w+" → two "+ans},Math.min(3,pool.length));}
+  function addPool(w,e,ans){var L=w.length,last=w.charAt(L-1),c=[w+e];
+    if(!/[aeiouy]/.test(last))c.push(w+last+e);                  /* doubled: hopping / sadd... / snowwing */
+    if(/e$/.test(w)){c.push(w.slice(0,-1)+e);if(/^[aeiou]/.test(e))c.push(w.slice(0,-1)+w.charAt(L-2)+e);}  /* hopeing, writting */
+    if(/y$/.test(w))c.push(w.slice(0,-1)+"i"+e);
+    if(!/[ey]$/.test(w)&&!/^[aeiouy]/.test(e))c.push(w+"e"+e);   /* sadeness, enjoyement */
+    if(/(ful|ly|ness)$/.test(ans))c.push(ans.replace(/ful$/,"full").replace(/ly$/,"lly").replace(/ness$/,"nes"));
+    if(/(.)\1/.test(ans))c.push(ans.replace(/(.)\1/,"$1"));     /* begining, planed */
+    return c.filter(function(x,i,a){return x!==ans&&a.indexOf(x)===i;});}
+  function addQ(){var it=rnd(D.add),w=it[0],e=it[1],ans=it[2],L=w.length;
+    var html='<p class="ws-s">'+esc(w)+' <span style="color:var(--muted)">+</span> '+esc(e)+' <span style="color:var(--muted)">=</span> <mark class="hl">&nbsp;?&nbsp;</mark></p>';
+    var why=ans===w+e?"Nothing changes: just add "+e+".":
+      ans===w+w.charAt(L-1)+e?"Short vowel + one last consonant: double it ("+ans+").":
+      ans===w.slice(0,-1)+e?"Drop the e before an ending that starts with a vowel ("+ans+").":
+      "Consonant + y: change y to i ("+ans+").";
+    var pool=addPool(w,e,ans);return C("➕ Add the ending",ans,pool,why,html,{t:"add",w:w,e:e,rv:w+" + "+e+" = "+ans},Math.min(3,pool.length));}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spell:[spellQ],
+    mix:[mixQ],
+    plural:[pluralQ],
+    add:[addQ],
+    mixed:[spellQ,spellQ,mixQ,mixQ,pluralQ,addQ]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="spell"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=q.fixed?q.fixed.slice():shuffle([q.answer].concat(q.wrong));   /* mix-up buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spell"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spell"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,G:G,pluralPool:pluralPool,addPool:addPool}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
