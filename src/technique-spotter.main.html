@@ -1,0 +1,142 @@
+<main id="main">
+<style>.ts-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.ts-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600;font-style:italic}
+.ts-card.poem{text-align:left;padding:12px 14px 8px}
+.ts-card .ts-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px;font-style:normal}
+.ts-card.poem p{font-size:17px;display:flex;gap:8px;font-weight:500}
+.ts-card.poem p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px;font-style:normal}
+.ts-word{font-size:34px;font-weight:800;text-align:center;margin:12px auto}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+#choices .choice{white-space:nowrap}
+@media(max-width:420px){.ts-card p{font-size:18px}.ts-card.poem p{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Technique Spotter</h1>
+        <p>Poem lines. Name the technique, find the line, hear the sound. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spot"><div><b>Technique Spotter</b><span>🤝 🪞 🗣️ 🔤 💥 🎵 Which technique?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="line"><div><b>Which line?</b><span>📜 Find it in the poem</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sense"><div><b>Five senses</b><span>👀 👂 👃 👅 ✋ Imagery</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="comp"><div><b>What's compared?</b><span>🔍 moon ↔ coin</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rhyme"><div><b>Rhyme time</b><span>🎵 Sound, not spelling</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Each poem stays for 3 questions. Keys 1–4 work too. In Technique Spotter, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R8, R11, R4, OL8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Poetry 1: imagery &amp; sound</h2>
+        <p>Poets paint pictures (imagery) and play with sound. Spot the technique, then say what it does. The second part wins the marks.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="ts-card poem"><span class="ts-k">Three lines</span>
+          <p><b>1</b>The moon hung like a silver coin.</p>
+          <p><b>2</b>The moon is a lamp above our town.</p>
+          <p><b>3</b>The moon frowned down from behind a cloud.</p></div>
+        <p style="margin-top:8px">All three lines are about the moon. Which two compare it to something? What's the one small word that's different between those two? What is the moon doing in line 3 that a moon can't really do?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Lines 1 and 2</b> compare the moon to something. Line 1 uses <b>like</b>: that's a <b>simile</b>. Line 2 says the moon <b>is</b> a lamp: that's a <b>metaphor</b>.<br>
+          <b>Line 3:</b> only a person can frown. Giving a thing a human action is <b>personification</b>. It makes the moon seem cross or gloomy.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The six techniques</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🤝 Simile</b>compares with <i>like</i> or <i>as</i><br>Rain fell like tiny needles.</div>
+          <div class="note"><b class="h">🪞 Metaphor</b>says one thing <i>is</i> another<br>The classroom was a zoo.</div>
+          <div class="note"><b class="h">🗣️ Personification</b>a thing acts like a person<br>The wind whispered.</div>
+          <div class="note"><b class="h">🔤 Alliteration</b>same first sound, close together<br>Fierce flames flickered.</div>
+          <div class="note"><b class="h">💥 Onomatopoeia</b>the word sounds like the noise<br>sizzle, crash, creak</div>
+          <div class="note"><b class="h">🎵 Rhyme</b>same end sound<br>night / bright (not night / eight)</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Imagery: the five senses</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👀 Sight</b>colours, light, shapes</div>
+          <div class="note"><b class="h">👂 Sound</b>roared, echoed, rang</div>
+          <div class="note"><b class="h">👃 Smell</b>scent, stank, perfume</div>
+          <div class="note"><b class="h">👅 Taste</b>sour, salty, bitter</div>
+          <div class="note"><b class="h">✋ Touch</b>rough, icy, soft</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li><b>Name it, quote it, explain it.</b> “The wind whispered” is personification: it makes the wind sound gentle and secret.</li>
+          <li>Ask <b>“So what?”</b> What picture, mood or feeling does the technique create?</li>
+          <li>Rhyme is about <b>sound</b>, not spelling: <i>food</i> and <i>good</i> look alike but don't rhyme.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Poetry is a regular part of the Junior Cycle paper: a poem you studied, or an unseen poem printed on the paper. Questions ask what you notice about the language, the sounds and the mood, and how the poet creates them.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Naming a technique is only the start.</b> Most marks go for explaining its effect.</li>
+            <li><b>Quote the exact words</b>, short: three to six words.</li>
+            <li><b>Link to the mood or meaning</b> of the whole poem: calm, lonely, exciting, sad.</li>
+            <li>Don't list every technique you can find. Two well-explained points beat five names.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><p style="margin:0"><b>The Harbour at Night</b><br>The boats are sleeping side by side,<br>their ropes creak softly on the tide.<br>The lighthouse blinks its yellow eye,<br>a lonely star in a black sky.<br>Gulls grumble on the gleaming wall,<br>and slap, slap, slap, the waters fall.</p></div>
+          <ol class="eq">
+            <li>Find one example of personification in the poem and explain what it adds.
+              <details><summary>Show a model answer</summary><p>“The boats are <b>sleeping</b> side by side”. Boats can't sleep, so the poet gives them a human action. It makes the harbour feel peaceful and safe, like children tucked up in bed.<br><i>Where the marks would go:</i> a correct quote, the technique named, and what it makes us feel or picture.</p></details></li>
+            <li>Pick out one sound word (onomatopoeia). What does it help you hear?
+              <details><summary>Show a model answer</summary><p>“<b>slap, slap, slap</b>”: you can hear the small waves hitting the harbour wall. Repeating it three times gives a slow, steady rhythm, like the sea breathing.<br><i>Where the marks would go:</i> the sound word, what you hear, and one comment on the effect.</p></details></li>
+            <li>The lighthouse is called “a lonely star in a black sky”. What does this metaphor suggest?
+              <details><summary>Show a model answer</summary><p>It suggests the lighthouse is the only bright thing in the dark, like one star in an empty sky. “Lonely” adds a sad, quiet feeling: it is alone, watching over the boats all night.<br><i>Where the marks would go:</i> what is compared, the picture it creates, and a comment on one key word (lonely).</p></details></li>
+            <li>How does the poet make the poem sound calm? Refer to two techniques.
+              <details><summary>Show a model answer</summary><p>1. <b>Rhyming couplets</b> (side / tide, eye / sky, wall / fall) give it a gentle, regular beat, like a lullaby.<br>2. <b>Soft sounds</b>: the ropes “creak softly” and the alliteration in “gulls grumble on the gleaming wall” is low and murmuring, not sharp or loud.<br><i>Where the marks would go:</i> two separate techniques, each with a quote and a link to the calm mood.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/poetry-imagery-sound-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

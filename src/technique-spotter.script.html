@@ -1,0 +1,256 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_technique_spotter.py read this block: keep it valid JSON) ----------
+     spot: [line (a couplet is "line 1 / line 2"), technique key, (simile/metaphor:) thing described, what it's compared to]
+     poems: [{k: title, lines: 4, ask: [[technique key, line]]}]
+     senses: [line, see/hear/smell/taste/touch]
+     rhyme: [word, rhyme, [3 words that look or sound close but don't rhyme]] */
+  var D=/*DATA*/{
+ "spot": [
+  ["The moon hung like a silver coin above the town.", "sim", "moon", "coin"],
+  ["Her laugh rang out like a bell across the yard.", "sim", "laugh", "bell"],
+  ["The frost was as white as a sheet.", "sim", "frost", "sheet"],
+  ["Seán ran like a hare to the bus.", "sim", "Seán", "hare"],
+  ["The hall was as quiet as a church at midnight.", "sim", "hall", "church"],
+  ["Rain fell like tiny needles on the roof.", "sim", "rain", "needles"],
+  ["The waves rose like grey mountains out at sea.", "sim", "waves", "mountains"],
+  ["My little brother is as stubborn as a goat.", "sim", "brother", "goat"],
+  ["The fog lay over the field like a thick blanket.", "sim", "fog", "blanket"],
+  ["Her eyes shone like stars in the dark.", "sim", "eyes", "stars"],
+  ["The classroom was a zoo after lunch.", "met", "classroom", "zoo"],
+  ["The sun is a golden ball of fire.", "met", "sun", "ball"],
+  ["My bedroom is a jungle of clothes.", "met", "bedroom", "jungle"],
+  ["The road was a ribbon of black through the hills.", "met", "road", "ribbon"],
+  ["Time is a thief that takes our summers.", "met", "time", "thief"],
+  ["The stars were diamonds in the night sky.", "met", "stars", "diamonds"],
+  ["Grandad's garden is a rainbow in June.", "met", "garden", "rainbow"],
+  ["The frozen pond was a mirror for the trees.", "met", "pond", "mirror"],
+  ["His voice was thunder in the small room.", "met", "voice", "thunder"],
+  ["The snow was a white carpet on the lawn.", "met", "snow", "carpet"],
+  ["The wind whispered secrets to the trees.", "per"],
+  ["The old car refused to start again.", "per"],
+  ["The sun smiled down on the beach.", "per"],
+  ["The flowers danced in the breeze.", "per"],
+  ["The leaves waved goodbye to summer.", "per"],
+  ["My alarm clock shouted at me at seven.", "per"],
+  ["The stairs complained under his heavy boots.", "per"],
+  ["The kettle sang on the cooker.", "per"],
+  ["The moon frowned down from behind a cloud.", "per"],
+  ["The rain wept on the windows all day.", "per"],
+  ["Seven silver snakes slid silently south.", "all"],
+  ["Big brown bears bounced on the bed.", "all"],
+  ["Cold, crisp, clear air filled the yard.", "all"],
+  ["Peter packed a pink pencil case.", "all"],
+  ["The deep, dark dungeon was empty.", "all"],
+  ["Fierce flames flickered in the fireplace.", "all"],
+  ["Happy hens hurried home.", "all"],
+  ["Tired teachers trudged through the traffic.", "all"],
+  ["Mighty mountains met the misty morning.", "all"],
+  ["Lazy lions lay in the long grass.", "all"],
+  ["The bacon sizzled in the pan.", "ono"],
+  ["Bees buzzed around the roses.", "ono"],
+  ["The balloon went pop!", "ono"],
+  ["Crash! The plates hit the floor.", "ono"],
+  ["The snake hissed at the boy.", "ono"],
+  ["Water dripped from the tap all night.", "ono"],
+  ["The fire crackled in the grate.", "ono"],
+  ["Splash! Liam jumped into the pool.", "ono"],
+  ["The bag landed with a thud.", "ono"],
+  ["The train whooshed past the station.", "ono"],
+  ["The door creaked open.", "ono"],
+  ["The rain came down on Cork all day / And washed the summer dust away.", "rhy"],
+  ["I left my football in the hall / And Mam fell over it, that's all.", "rhy"],
+  ["The kitchen light was on till late / Dad burned the toast and dropped the plate.", "rhy"],
+  ["We waited at the stop for hours / In wind and rain and April showers.", "rhy"],
+  ["My little sister lost her shoe / And now she won't know what to do.", "rhy"],
+  ["The bus was late, the road was wet / The worst school morning I've had yet.", "rhy"],
+  ["Out on the hill the sheep lie still / Beneath the trees beside the mill.", "rhy"],
+  ["We scored the goal, the crowd went wild / And Granny cheered and laughed and smiled.", "rhy"],
+  ["I tried to read my book in bed / But fell asleep and dreamed instead.", "rhy"],
+  ["The ferry rocked from side to side / We held on tight and watched the tide.", "rhy"]
+ ],
+ "poems": [
+  {"k": "🌊 The Storm", "lines": ["The sea was a wild grey animal that night.", "The wind howled and banged on every door.", "Rain fell like stones upon the roof.", "Tall trees twisted, turned and tumbled."], "ask": [["met", 1], ["ono", 2], ["sim", 3], ["all", 4]]},
+  {"k": "🍂 Autumn", "lines": ["The leaves are as red as fire in October.", "They crunch beneath my boots on the way to school.", "The old oak tree sighs in the cold wind.", "Soon the branches will be bare."], "ask": [["sim", 1], ["ono", 2], ["per", 3]]},
+  {"k": "🌙 Night", "lines": ["The moon is a lamp above our town.", "Stars sparkle silently, scattered in the sky.", "Somewhere a dog goes woof, then all is still.", "The night sings a lullaby to the houses."], "ask": [["met", 1], ["all", 2], ["ono", 3], ["per", 4]]},
+  {"k": "🏫 Monday", "lines": ["My alarm screams at seven every Monday.", "I'm as slow as a snail on the way downstairs.", "The toaster pops and the kettle hisses.", "The school bus is a yellow monster at the gate."], "ask": [["per", 1], ["sim", 2], ["ono", 3], ["met", 4]]},
+  {"k": "☀️ The Beach", "lines": ["Sand slips softly through my sticky fingers.", "The waves giggle and tickle my toes.", "Seagulls squawk above the ice-cream van.", "The sun is a blazing torch above us."], "ask": [["all", 1], ["per", 2], ["ono", 3], ["met", 4]]},
+  {"k": "❄️ Snow Day", "lines": ["Snow fell like feathers from a pillow.", "The whole street was a white blanket.", "My boots go crunch, crunch, crunch.", "The snowman smiles at everyone who passes."], "ask": [["sim", 1], ["met", 2], ["ono", 3], ["per", 4]]}
+ ],
+ "senses": [
+  ["Golden light glowed in every window.", "see"],
+  ["The sky turned pink and orange at sunset.", "see"],
+  ["Shadows stretched across the empty yard.", "see"],
+  ["Bright red berries covered the bush.", "see"],
+  ["The lake glittered in the morning sun.", "see"],
+  ["A green door stood at the end of the lane.", "see"],
+  ["Thunder rumbled over the hills.", "hear"],
+  ["The crowd roared when the ball hit the net.", "hear"],
+  ["A phone rang somewhere down the hall.", "hear"],
+  ["Footsteps echoed in the empty corridor.", "hear"],
+  ["Birds chattered in the hedge at dawn.", "hear"],
+  ["The engine growled as the bus pulled away.", "hear"],
+  ["The bakery smelled of fresh bread.", "smell"],
+  ["The changing room stank of old socks.", "smell"],
+  ["The air smelled of smoke from the bonfire.", "smell"],
+  ["Mam's perfume filled the car.", "smell"],
+  ["We could smell the cut grass from the bedroom.", "smell"],
+  ["The bin reeked after the long weekend.", "smell"],
+  ["The medicine left a bitter taste in my mouth.", "taste"],
+  ["The sea water tasted of salt.", "taste"],
+  ["Granny's apple tart was sweet and delicious.", "taste"],
+  ["The curry was so spicy that I gulped my water.", "taste"],
+  ["The lemon tasted so sour that I winced.", "taste"],
+  ["The crisps were far too salty.", "taste"],
+  ["The stone wall felt rough and cold.", "touch"],
+  ["The icy water stung my feet.", "touch"],
+  ["The kitten's fur was soft and warm.", "touch"],
+  ["The pan was too hot to hold.", "touch"],
+  ["My wet socks were cold and soggy.", "touch"],
+  ["The sand burned the soles of our feet.", "touch"]
+ ],
+ "rhyme": [
+  ["night", "bright", ["eight", "knit", "nice"]],
+  ["rain", "train", ["ran", "ruin", "rail"]],
+  ["cold", "gold", ["could", "cool", "coal"]],
+  ["day", "play", ["dry", "dad", "dial"]],
+  ["moon", "spoon", ["moan", "mean", "moor"]],
+  ["sea", "tree", ["sew", "sat", "seed"]],
+  ["hall", "ball", ["hill", "hole", "heel"]],
+  ["fire", "wire", ["fear", "far", "fir"]],
+  ["snow", "grow", ["now", "cow", "snug"]],
+  ["blue", "through", ["blow", "glow", "bluff"]],
+  ["lake", "cake", ["lack", "like", "leak"]],
+  ["heart", "start", ["hurt", "heard", "hat"]],
+  ["friend", "send", ["fiend", "find", "fried"]],
+  ["home", "comb", ["come", "some", "hum"]],
+  ["wood", "good", ["food", "mood", "wool"]],
+  ["love", "glove", ["move", "prove", "live"]]
+ ]
+}/*END*/;
+  var LAB={sim:"🤝 Simile",met:"🪞 Metaphor",per:"🗣️ Personification",all:"🔤 Alliteration",ono:"💥 Onomatopoeia",rhy:"🎵 Rhyme"};
+  var SLAB={see:"👀 Sight",hear:"👂 Sound",smell:"👃 Smell",taste:"👅 Taste",touch:"✋ Touch"};
+  var WHY={sim:"Simile: it compares two things using “like” or “as”.",
+    met:"Metaphor: it says one thing IS another. No “like” or “as”.",
+    per:"Personification: a thing does something only a person can do.",
+    all:"Alliteration: words close together start with the same sound.",
+    ono:"Onomatopoeia: the word sounds like the noise it names.",
+    rhy:"Rhyme: the lines end with the same sound."};
+  var LINES=["Line 1","Line 2","Line 3","Line 4"];
+  var FIXED=LINES.concat(Object.keys(LAB).map(function(k){return LAB[k];}),Object.keys(SLAB).map(function(k){return SLAB[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(map,k){return Object.keys(map).filter(function(x){return x!==k;}).map(function(x){return map[x];});}
+  /* a line card: one line, or a couplet split at " / " */
+  function lineCard(s){return '<div class="ts-card">'+s.split(" / ").map(function(l){return '<p>'+esc(l)+'</p>';}).join("")+'</div>';}
+  function poemCard(P){var h='<div class="ts-card poem"><span class="ts-k">'+P.k+'</span>';
+    P.lines.forEach(function(l,i){h+='<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});return h+'</div>';}
+
+  /* ================= TECHNIQUE SPOTTER ================= */
+  function qSpot(){var it=rnd(D.spot);
+    return C("Which technique?",LAB[it[1]],others(LAB,it[1]),WHY[it[1]],lineCard(it[0]),{t:"spot",s:it[0],rv:it[0]},3);}
+  /* ================= WHICH LINE? (one poem stays for 3 questions) ================= */
+  var cur=null,asked=[];
+  function qLine(){if(!cur||!asked.length){var n;do{n=rnd(D.poems);}while(n===cur&&D.poems.length>1);cur=n;asked=shuffle(cur.ask.slice()).slice(0,3);}
+    var a=asked.pop(),P=cur;
+    return C("Which line? "+LAB[a[0]],"Line "+a[1],LINES,"Line "+a[1]+": “"+P.lines[a[1]-1]+"” "+WHY[a[0]].split(":")[1],poemCard(P),{t:"line",x:D.poems.indexOf(P),k:a[0],rv:P.k+": which line? "+LAB[a[0]]},3);}
+  /* ================= FIVE SENSES ================= */
+  function qSense(){var it=rnd(D.senses);
+    return C("Which sense?",SLAB[it[1]],others(SLAB,it[1]),"Imagery: words that let you "+{see:"see",hear:"hear",smell:"smell",taste:"taste",touch:"feel"}[it[1]]+" it.",lineCard(it[0]),{t:"sense",s:it[0],rv:it[0]},3);}
+  /* ================= WHAT'S COMPARED? ================= */
+  function qComp(){var L=D.spot.filter(function(x){return x[1]==="sim"||x[1]==="met";}),it=rnd(L),pool=[];
+    var o=shuffle(L.filter(function(x){return x!==it;}));
+    pool.push(it[2]+" ↔ "+o[0][3],it[2]+" ↔ "+o[1][3],o[2][2]+" ↔ "+it[3],o[3][2]+" ↔ "+it[3]);
+    return C("🔍 What's compared?",it[2]+" ↔ "+it[3],pool,(it[1]==="sim"?"Simile":"Metaphor")+": “"+it[2]+"” is compared to “"+it[3]+"”.",lineCard(it[0]),{t:"comp",s:it[0],rv:it[0]},3);}
+  /* ================= RHYME TIME ================= */
+  function qRhyme(){var it=rnd(D.rhyme);
+    return C("🎵 Rhymes with…",it[1],it[2],"“"+it[0]+"” and “"+it[1]+"” end with the same sound. Rhyme is about sound, not spelling.",'<p class="ts-word">'+esc(it[0])+'</p>',{t:"rhyme",w:it[0],rv:"Rhymes with “"+it[0]+"”"},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spot:[qSpot],
+    line:[qLine],
+    sense:[qSense],
+    comp:[qComp],
+    rhyme:[qRhyme],
+    mixed:[qSpot,qSpot,qSpot,qLine,qSense,qComp,qRhyme]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="line"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;cur=null;asked=[];
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spot"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spot"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You spot techniques like an examiner.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,LAB:LAB,SLAB:SLAB}};
+})();
+</script>
