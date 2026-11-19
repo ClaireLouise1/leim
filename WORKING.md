@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 19:00 · E3 English Order 18 Persuasive writing (Persuasion Power) · english-p18

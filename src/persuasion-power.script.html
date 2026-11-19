@@ -1,0 +1,211 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_persuasion_power.py read this block: keep it valid JSON; one item per line) ----------
+     tech: [line, rq / three / stat / emo / you / rep] (each line shows ONE technique)
+     back: [claim, best reason (shares a word with the claim + evidence), [rude, off-topic, goes round in circles]]
+     counter: [the other side's view, best reply (However / But / Yet …), [agrees, rude, off-topic]]
+     cta: [emoji + speech topic, call to action (starts with an order verb)] */
+  var D=/*DATA*/{
+ "tech": [
+  ["Who wants a town with nowhere safe to play?", "rq"],
+  ["Is a phone really more important than a good night's sleep?", "rq"],
+  ["Why should students pay for a bus that never comes?", "rq"],
+  ["Do we really want a park full of litter?", "rq"],
+  ["How can anyone learn in a freezing classroom?", "rq"],
+  ["What is a school without music?", "rq"],
+  ["Our new library would be bright, quiet and welcoming.", "three"],
+  ["Walking to school is cheap, healthy and good for the planet.", "three"],
+  ["Sport teaches teamwork, patience and respect.", "three"],
+  ["A school garden gives us clean air, healthy food and a place to relax.", "three"],
+  ["Reading builds focus, imagination and confidence.", "three"],
+  ["Longer lunch breaks mean happier students, calmer classes and better results.", "three"],
+  ["Our class survey found that 8 in 10 students skip breakfast.", "stat"],
+  ["In our survey of 200 students, 64 walk to school.", "stat"],
+  ["Half of the students we asked said the canteen was too small.", "stat"],
+  ["Our survey of 50 parents found that 41 want a pedestrian crossing.", "stat"],
+  ["The school bus was late on 12 of the last 20 mornings.", "stat"],
+  ["Our clean-up team says litter in the park has doubled since 2024.", "stat"],
+  ["Innocent animals are left cold and frightened in the shelter.", "emo"],
+  ["It is heartbreaking to see the old cinema boarded up.", "emo"],
+  ["Lonely pensioners sit at home with nobody to talk to.", "emo"],
+  ["Abandoned dogs shiver on the side of the road.", "emo"],
+  ["The river is choked with disgusting plastic.", "emo"],
+  ["Helpless chicks die when hedges are cut in spring.", "emo"],
+  ["You deserve a school that listens to students.", "you"],
+  ["Imagine your little brother crossing that busy road.", "you"],
+  ["Think about how you would feel on your first day.", "you"],
+  ["Your vote can change this town.", "you"],
+  ["You can make a difference this weekend.", "you"],
+  ["Picture yourself on a pitch with real floodlights.", "you"],
+  ["Every child deserves a chance. Every child deserves to be heard.", "rep"],
+  ["We need action. We need it now.", "rep"],
+  ["Not next year, not next month, but now.", "rep"],
+  ["Clean the beach today. Clean the beach tomorrow.", "rep"],
+  ["Plastic is everywhere. Plastic is in our seas. Plastic is in our food.", "rep"],
+  ["Small steps make big changes. Small steps start today.", "rep"]
+ ],
+ "back": [
+  ["Our school should have a longer lunch break.", "A longer break would give students time to eat and play sport, which means calmer classes in the afternoon.", ["Anyone who disagrees is just lazy.", "The canteen sells sandwiches, soup and pasta, and the queue moves quite fast on most days.", "It should be longer because it is just too short, and that is simply the way it is, whatever anyone else in the school might tell you."]],
+  ["Mobile phones should be banned in class.", "Phones distract students: for example, our class survey found 7 in 10 checked messages during lessons.", ["Only idiots would keep their phones in class.", "Many families have a dog or a cat at home.", "Phones should be banned because they should not be allowed in any classroom at any time of the day, and everyone knows that perfectly well."]],
+  ["Our town needs a skate park.", "A skate park would give teenagers a safe place to meet, so that fewer would skate on busy roads.", ["People who skate are a total waste of space.", "The library opens at ten on Saturdays and closes early on Sundays during the summer months.", "We need a skate park because we just need one, and anyone in this town can see that we need one more than anything else at the moment."]],
+  ["Homework should be limited to one hour a night.", "Too much homework leaves no time for sport or sleep: for example, many students in our survey go to bed after eleven.", ["Teachers who give homework are clueless.", "The new sports hall has a shiny red floor and a climbing wall that the first years love.", "Homework should be limited because limiting it is a good idea, and a limit is always better than no limit at all, in my own opinion anyway."]],
+  ["Every school should have a garden.", "A garden teaches students where food comes from, such as the potatoes and peas they eat at home.", ["Only boring people would say no to a garden.", "The bus to Cork leaves at eight.", "A garden would be good for every school because gardens are good and every school should have one."]],
+  ["Plastic bottles should be banned at school events.", "Plastic bottles end up in our rivers: for instance, our clean-up team collected 300 bottles from the Lee in one day.", ["Anyone who buys bottled water is stupid.", "The drama club meets on Fridays.", "Bottles should be banned at events because banning them is the right thing to do, and the right thing to do is always to ban them at events."]],
+  ["Students should wear their own clothes on Fridays.", "Own-clothes days raise money: for example, last year's day raised €400 for the local hospice.", ["Uniforms are only loved by losers.", "The maths test is on Wednesday.", "Students should wear their own clothes on Fridays because wearing them would be so much better than not wearing them."]],
+  ["The town needs more bins.", "More bins would cut litter: for example, the bin by the pier is full by noon every Saturday.", ["Litter louts are disgusting pigs.", "The cinema shows films in the evening and has a special cheap ticket for students on Tuesdays.", "The town needs more bins because there are not enough bins."]],
+  ["Our school should start a coding club.", "Coding is useful in many jobs, such as medicine, farming and music.", ["Kids who can't code are hopeless.", "The hockey team won on Saturday.", "We should start a coding club because a coding club is something we really should start this year."]],
+  ["Young people should be allowed to vote at sixteen.", "At sixteen, many young people already have part-time jobs, which means decisions about pay affect them too.", ["Older voters are clueless about the future.", "The beach was very crowded in July, and the car park was full by ten o'clock most mornings.", "Sixteen-year-olds should vote because they should be allowed to, and being allowed to vote is something they should be allowed to do as well."]],
+  ["Cars should be banned from the road outside our school.", "Traffic outside the gate is dangerous: for example, our survey counted 90 cars in ten minutes at home time.", ["Parents who drive are selfish idiots.", "The library has new computers, a printer and a quiet corner where students can study after class.", "Cars should be banned outside our school because they should not be there, and if they should not be there then they should be banned from there."]],
+  ["Our library should open on Saturdays.", "Many students have no quiet place to study at home, for example those who share a bedroom, so a Saturday library would help.", ["Anyone who disagrees is a fool.", "The swimming pool is very warm.", "The library should open on Saturdays because Saturday is a good day for the library to open its doors to everyone in the whole town who wants to visit."]]
+ ],
+ "counter": [
+  ["Some people say phones help students stay safe.", "However, students can stay safe with a phone kept in a locker until home time.", ["They are right: phones keep everyone safe.", "However, anyone who says that is an idiot.", "However, the canteen is far too small for the number of people who queue there every single day."]],
+  ["Some argue that homework teaches discipline.", "But discipline can also be learned through sport, music or a part-time job.", ["I agree that homework teaches discipline.", "But people who like homework are weird.", "But the bus that brings us to school is always late on cold, wet winter mornings, which is not fair."]],
+  ["Some say a skate park would attract trouble.", "However, a well-lit park with a camera would be safer than the streets teenagers use now.", ["That is true, skaters cause trouble.", "However, that is a pathetic thing to say.", "However, the library in the town centre needs new books, new computers and a longer opening time."]],
+  ["Some people think a school garden costs too much.", "Yet a garden costs very little: seeds are cheap and parents often donate tools.", ["They are right, a garden is too expensive.", "Yet only a fool would say that.", "Yet the hockey pitch behind the sports hall has needed new nets and new goalposts for over a year."]],
+  ["Some argue that uniforms stop bullying.", "However, bullying happens online too, where uniforms make no difference.", ["I agree, uniforms stop bullying.", "However, people who love uniforms are boring.", "However, the canteen should sell more fresh fruit and fewer fizzy drinks at break and at lunchtime."]],
+  ["Some say young people are too immature to vote.", "However, many young people already work, study hard and care about how the country is run.", ["That is true, teenagers are too immature.", "However, the real idiots are the older voters.", "However, the school tour this year should go to Galway instead of Dublin, because the trip is shorter."]],
+  ["Some people say a longer lunch break means less learning.", "But a longer break helps students focus better in the afternoon.", ["They are right, longer breaks waste time.", "But only lazy teachers would want a short break.", "But the swimming pool in the town should open on Saturdays and Sundays for families with small children."]],
+  ["Some argue that banning cars outside school is unfair on parents.", "However, parents could park at the church and walk the last few minutes.", ["I agree, it is unfair on parents.", "However, drivers who complain are selfish.", "However, the art room has needed new paint, new easels and better lights since the summer holidays."]],
+  ["Some people say reading for fun is a waste of time.", "But reading for fun builds vocabulary, which helps in every subject.", ["They are right, it takes up too much time.", "But anyone who says that is clueless.", "But the hockey pitch should have floodlights so that teams can train in the evenings in winter."]],
+  ["Some say a new library is too expensive for the town.", "However, a library is used by babies, students and pensioners, so the cost is shared by everyone.", ["That is true, the town cannot afford it.", "However, people who never read are stupid.", "However, the football team badly needs a new coach and new jerseys before the league starts again in September."]],
+  ["Some argue that plastic bottles are more convenient.", "However, a refillable bottle is just as convenient and saves money too.", ["I agree, plastic bottles are easier.", "However, anyone who buys plastic is a pig.", "However, the school play was a great success and the cast deserve a party at the end of term."]],
+  ["Some people think coding is only for computer experts.", "However, coding clubs start with simple games that any beginner can make.", ["They are right, coding is too hard for most people.", "However, people who can't code are hopeless.", "However, the town needs more bins along the main street and down by the pier, where litter builds up."]]
+ ],
+ "cta": [
+  ["🌳 Plant more trees in our town", "Sign our petition today and help us plant fifty new trees."],
+  ["🚲 Cycle to school", "Dust off your bike and cycle to school this Friday."],
+  ["📵 A phone-free lunchtime", "Leave your phone in your bag at lunchtime and talk to the person beside you."],
+  ["🐶 Adopt a dog from the shelter", "Visit the shelter this weekend and adopt a dog that needs a home."],
+  ["🗳️ Vote for me as class captain", "Vote for me on Thursday and I will make your voice heard."],
+  ["🏊 A swimming pool for the town", "Join us at the council meeting and ask for a swimming pool."],
+  ["📚 Read for ten minutes a day", "Pick up a book tonight and read for just ten minutes."],
+  ["♻️ Recycle at school", "Put every can in the green bin and let's make recycling a habit."],
+  ["🥤 Ban plastic bottles at school events", "Bring a refillable bottle on Monday and say no to plastic."],
+  ["🎵 Save the school choir", "Come to the concert on Friday and help us save the choir."],
+  ["🌊 Clean up the beach", "Grab a pair of gloves and join our beach clean-up on Saturday."],
+  ["🍎 Healthier food in the canteen", "Fill in the canteen survey today and ask for healthier food."],
+  ["🛹 A skate park for teenagers", "Write to the council this week and tell them we need a skate park."],
+  ["💤 A later start time for school", "Email the principal and ask for a later start time."]
+ ]
+}/*END*/;
+  var TECH={rq:"❓ Rhetorical question",three:"3️⃣ Rule of three",stat:"📊 Statistic",emo:"💔 Emotive language",you:"👉 Direct address",rep:"🔁 Repetition"};
+  var FIXED=Object.keys(TECH).map(function(k){return TECH[k];});
+  var TWHY={rq:"Rhetorical question: a question that doesn't need an answer. It makes the listener think.",
+    three:"Rule of three: three things in a list. It sounds complete and sticks in the mind.",
+    stat:"Statistic: a number or a fact from a survey. It makes the point sound proven.",
+    emo:"Emotive language: strong feeling words (innocent, heartbreaking, lonely) that stir the listener.",
+    you:"Direct address: “you” and “your” speak straight to the listener.",
+    rep:"Repetition: the same word or phrase again, to hammer the point home."};
+  var WEAK=["That's all I have to say. Thanks.","Anyway, that's my speech, I suppose.","I don't really know what else to say about it.","So yeah, it's up to you, I guess."];
+  var STOPW={that:1,with:1,this:1,they:1,their:1,them:1,were:1,very:1,from:1,have:1,after:1,every:1,would:1,before:1,there:1,been:1,also:1,what:1,when:1,where:1,which:1,"while":1,about:1,into:1,than:1,then:1,your:1,just:1,only:1,some:1,more:1,most:1,many:1,much:1,such:1,like:1,will:1,should:1,could:1};
+  function stem(w){w=w.toLowerCase().replace("'s","");var S=["ing","ed","es","s"];for(var i=0;i<S.length;i++){var x=S[i];if(w.slice(-x.length)===x&&w.length-x.length>=3){w=w.slice(0,-x.length);break;}}
+    return (w.slice(-1)==="e"&&w.length>3)?w.slice(0,-1):w;}
+  function words(s){var o={};(s.match(/[A-Za-z']+/g)||[]).forEach(function(w){if(w.length>=4&&!STOPW[w.toLowerCase()])o[stem(w)]=1;});return o;}
+  function shares(a,b){var A=words(a),B=words(b);return Object.keys(A).some(function(k){return B[k];});}
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s,cls,lab){return '<div class="pp-card'+(cls?" "+cls:"")+'">'+(lab?'<span class="pp-lab">'+lab+'</span>':'')+'<p>'+s+'</p></div>';}
+
+  /* ================= PERSUASION POWER: which technique? ================= */
+  function qTech(){var it=rnd(D.tech);
+    return C("🎤 Which technique?",TECH[it[1]],FIXED.filter(function(x){return x!==TECH[it[1]];}),TWHY[it[1]],card(esc(it[0])),{t:"tech",s:it[0],rv:it[0]},3);}
+  /* ================= BACK IT UP: best reason ================= */
+  function qBack(){var it=rnd(D.back);
+    return C("💪 Best reason?",it[1],it[2],"The best reason sticks to the point and backs it up with evidence: a number, an example, a result. Insults and “because it just is” win no one over.",card(esc(it[0]),"claim","Your point"),{t:"back",s:it[0],rv:it[0]},3);}
+  /* ================= ANSWER BACK: rebut the other side ================= */
+  function qCounter(){var it=rnd(D.counter);
+    return C("🥊 Best answer?",it[1],it[2],"Answer the other side: start with However / But / Yet, deal with THEIR point, and stay polite.",card(esc(it[0]),"other","The other side says"),{t:"counter",s:it[0],rv:it[0]},3);}
+  /* ================= CALL TO ACTION: best last line ================= */
+  function qCta(){var i=Math.floor(Math.random()*D.cta.length),it=D.cta[i],
+      others=D.cta.filter(function(x,j){return j!==i&&!shares(it[0],x[1]);}).map(function(x){return x[1];});
+    var q=C("📣 Best last line?",it[1],[],"End with a call to action: tell the audience exactly what to do (Sign…, Join…, Vote…).",card(esc(it[0]),"topic","Your speech"),{t:"cta",s:it[0],rv:it[0]},3);
+    q.wrong=shuffle(WEAK.slice()).slice(0,2).concat([rnd(others)]);return q;}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    power:[qTech],
+    back:[qBack],
+    counter:[qCounter],
+    cta:[qCta],
+    mixed:[qTech,qTech,qBack,qCounter,qCta]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="power"||m==="cta")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="power"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="power"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You could win any debate.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TECH:TECH,WEAK:WEAK,shares:shares}};
+})();
+</script>

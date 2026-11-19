@@ -96,7 +96,7 @@ ENGLISH = [
   ("2nd year","Autumn","Letters & emails: formal and informal","W4, W12, R13","Format Fixer","format-fixer.html","letters-emails"),
   ("2nd year","Autumn","Register & tone","OL12, R12, R13, W12","Register Switch","register-switch.html","register-tone"),
   ("2nd year","Autumn","Grammar 2: tenses, agreement & pronouns","W10, W12, OL12","Tense Trap","tense-trap.html","tenses-agreement-pronouns"),
-  ("2nd year","Spring","Persuasive writing & speeches","W3, OL5, OL7, OL10, R8","Persuasion Power","",""),
+  ("2nd year","Spring","Persuasive writing & speeches","W3, OL5, OL7, OL10, R8","Persuasion Power","persuasion-power.html","persuasive-writing-speeches"),
   ("2nd year","Spring","Oral Communication (CBA 1)","OL1, OL5, OL7, OL9, OL13, R3, W3, W5","CBA guide","",""),
   ("2nd year","Spring","Media 1: advertising","R9, R8, OL8, W3","Ad Breaker","",""),
   ("2nd year","Spring","Drama 1: how plays work","R6, R7, R9, OL8","Stage It","",""),

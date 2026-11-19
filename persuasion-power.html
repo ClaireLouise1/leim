@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Persuasion Power: Persuasive Writing &amp; Speeches Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game: persuasive techniques, backing up your point, answering the other side and a strong call to action. With rules, exam-style questions and a free printable.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<style>.pp-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.pp-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.pp-card.claim,.pp-card.topic{background:#EEF6F1;border-color:#BFDCCB}
+.pp-card.other{background:#FFF6E5}
+.pp-card .pp-lab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pp-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Persuasion Power</h1>
+        <p>Win them over: spot the techniques, back up your point, answer the other side and finish with a call to action. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="power"><div><b>Persuasion Power</b><span>🎤 Which technique?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="back"><div><b>Back it up</b><span>💪 Best reason</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="counter"><div><b>Answer back</b><span>🥊 Deal with the other side</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="cta"><div><b>Call to action</b><span>📣 Best last line</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Persuasion Power, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W3, OL5, OL7, OL10, R8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Persuasive writing &amp; speeches</h2>
+        <p>Persuasive writing tries to make the reader <b>agree</b> with you or <b>do</b> something. A speech, a letter to a newspaper, an article or a blog post can all be persuasive.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">🅰️ Opening A</b>Today I'm going to talk about the skate park. I think we should get one. It would be good.</div>
+          <div class="note"><b class="h">🅱️ Opening B</b>Where can a teenager go in this town on a Saturday? Our survey of 200 students found that 150 have nowhere to meet. You can change that tonight.</div>
+        </div>
+        <p style="margin-top:8px">Both openings want a skate park. Which one would make the council listen? Find three things Opening B does that Opening A doesn't.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Opening B starts with a <b>rhetorical question</b> (it makes the listener think), gives a <b>statistic</b> (it sounds proven) and uses <b>direct address</b> (“You can change that”). Opening A just announces the topic and gives an opinion with no reason: “It would be good” persuades nobody.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six techniques</h3>
+        <div class="wc">
+          <div class="note"><b class="h">❓ Rhetorical question</b>Who wants a town with nowhere safe to play?</div>
+          <div class="note"><b class="h">3️⃣ Rule of three</b>Sport teaches teamwork, patience and respect.</div>
+          <div class="note"><b class="h">📊 Statistic</b>Our survey found that 8 in 10 students skip breakfast.</div>
+          <div class="note"><b class="h">💔 Emotive language</b>Innocent animals are left cold and frightened.</div>
+          <div class="note"><b class="h">👉 Direct address</b>Your vote can change this town.</div>
+          <div class="note"><b class="h">🔁 Repetition</b>We need action. We need it now.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Use real facts, or make it clear where a number comes from (“our class survey”). Never invent a fact and pretend it's official.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How to build a persuasive speech</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1 🪝 Hook</b>A question, a fact or a short story.</div>
+          <div class="note"><b class="h">2 💪 Points</b>One point per paragraph, each backed up: a number, an example, a result.</div>
+          <div class="note"><b class="h">3 🥊 Answer back</b>“Some people say… However…”: deal with the other side, politely.</div>
+          <div class="note"><b class="h">4 📣 Call to action</b>Tell them exactly what to do: Sign… Join… Vote…</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A speech talks to a live audience (“Good morning, everyone”, “you”, “Thank you for listening”). A letter to a newspaper or an article is written for readers, but the same techniques work.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Writing tasks often ask you to <b>persuade</b>: a speech to your class or the council, a letter to a newspaper, an article or a blog post for teenagers. Reading questions ask how a writer <b>tries to persuade</b> the reader, so you need to name the techniques and explain their effect.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Back up every point</b>: an opinion with no reason or example wins few marks.</li>
+            <li><b>Name it, quote it, explain it</b>: “The rhetorical question ‘Who wants…?’ makes the reader think…”</li>
+            <li><b>Answer the other side</b> once: it shows you've thought it through.</li>
+            <li><b>Suit the reader</b>: a speech to the council is formal, polite but firm. No insults.</li>
+            <li><b>End strongly</b> with a clear call to action, not “That's all, thanks”.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Name <b>three</b> persuasive techniques in this extract from a speech, and explain how one of them works.
+              <div class="pass">Good morning, everyone. Is a bin by the pier really too much to ask? Every Saturday, the pier is covered in cans, crisp bags and bottles. Our clean-up team filled 14 bags last month alone. You walk past it. Your little brother plays beside it.</div>
+              <details><summary>Show a model answer</summary><p>A <b>rhetorical question</b> (“Is a bin by the pier really too much to ask?”), the <b>rule of three</b> (“cans, crisp bags and bottles”), a <b>statistic</b> (“14 bags last month”) and <b>direct address</b> (“You walk past it. Your little brother…”). The statistic makes the problem sound real and proven: 14 bags in one month is hard to argue with.<br><i>Where the marks would go:</i> a mark for each technique named with a quote; the rest for explaining the effect on the listener.</p></details></li>
+            <li>Write the <b>opening</b> of a speech to your school assembly: “Our school should have a phone-free lunchtime.” Use a rhetorical question and a statistic.
+              <details><summary>Show a model answer</summary><p><i>Good morning, everyone. When did you last have a real conversation at lunchtime? In our class survey, 18 of 25 students said they spend most of lunch on their phones. I believe a phone-free lunchtime would give us back that hour.</i><br><i>Where the marks would go:</i> a greeting for the audience; a rhetorical question as a hook; a clear statistic with its source (“our class survey”); the point stated clearly.</p></details></li>
+            <li>Someone says: “A phone-free lunchtime is unfair, because students need their phones to contact their parents.” Write <b>two</b> sentences that answer this point.
+              <details><summary>Show a model answer</summary><p><i>Some people say students need their phones to contact their parents. However, parents can still ring the school office, and phones would only be in lockers for one hour.</i><br><i>Where the marks would go:</i> the other side's point stated fairly; a counter word (However); a reason that deals with THAT point; polite, no insults.</p></details></li>
+            <li>Write the <b>last paragraph</b> of a speech to the county council asking for a skate park.
+              <details><summary>Show a model answer</summary><p><i>A skate park would give young people a safe place to meet, keep skaters off busy roads and bring the town together. Please vote for the skate park at next month's meeting. Thank you for listening.</i><br><i>Where the marks would go:</i> the main points pulled together (here as a rule of three); a clear call to action (“Please vote for…”); a polite, formal close for this audience.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/persuasive-writing-speeches-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_persuasion_power.py read this block: keep it valid JSON; one item per line) ----------
+     tech: [line, rq / three / stat / emo / you / rep] (each line shows ONE technique)
+     back: [claim, best reason (shares a word with the claim + evidence), [rude, off-topic, goes round in circles]]
+     counter: [the other side's view, best reply (However / But / Yet …), [agrees, rude, off-topic]]
+     cta: [emoji + speech topic, call to action (starts with an order verb)] */
+  var D=/*DATA*/{
+ "tech": [
+  ["Who wants a town with nowhere safe to play?", "rq"],
+  ["Is a phone really more important than a good night's sleep?", "rq"],
+  ["Why should students pay for a bus that never comes?", "rq"],
+  ["Do we really want a park full of litter?", "rq"],
+  ["How can anyone learn in a freezing classroom?", "rq"],
+  ["What is a school without music?", "rq"],
+  ["Our new library would be bright, quiet and welcoming.", "three"],
+  ["Walking to school is cheap, healthy and good for the planet.", "three"],
+  ["Sport teaches teamwork, patience and respect.", "three"],
+  ["A school garden gives us clean air, healthy food and a place to relax.", "three"],
+  ["Reading builds focus, imagination and confidence.", "three"],
+  ["Longer lunch breaks mean happier students, calmer classes and better results.", "three"],
+  ["Our class survey found that 8 in 10 students skip breakfast.", "stat"],
+  ["In our survey of 200 students, 64 walk to school.", "stat"],
+  ["Half of the students we asked said the canteen was too small.", "stat"],
+  ["Our survey of 50 parents found that 41 want a pedestrian crossing.", "stat"],
+  ["The school bus was late on 12 of the last 20 mornings.", "stat"],
+  ["Our clean-up team says litter in the park has doubled since 2024.", "stat"],
+  ["Innocent animals are left cold and frightened in the shelter.", "emo"],
+  ["It is heartbreaking to see the old cinema boarded up.", "emo"],
+  ["Lonely pensioners sit at home with nobody to talk to.", "emo"],
+  ["Abandoned dogs shiver on the side of the road.", "emo"],
+  ["The river is choked with disgusting plastic.", "emo"],
+  ["Helpless chicks die when hedges are cut in spring.", "emo"],
+  ["You deserve a school that listens to students.", "you"],
+  ["Imagine your little brother crossing that busy road.", "you"],
+  ["Think about how you would feel on your first day.", "you"],
+  ["Your vote can change this town.", "you"],
+  ["You can make a difference this weekend.", "you"],
+  ["Picture yourself on a pitch with real floodlights.", "you"],
+  ["Every child deserves a chance. Every child deserves to be heard.", "rep"],
+  ["We need action. We need it now.", "rep"],
+  ["Not next year, not next month, but now.", "rep"],
+  ["Clean the beach today. Clean the beach tomorrow.", "rep"],
+  ["Plastic is everywhere. Plastic is in our seas. Plastic is in our food.", "rep"],
+  ["Small steps make big changes. Small steps start today.", "rep"]
+ ],
+ "back": [
+  ["Our school should have a longer lunch break.", "A longer break would give students time to eat and play sport, which means calmer classes in the afternoon.", ["Anyone who disagrees is just lazy.", "The canteen sells sandwiches, soup and pasta, and the queue moves quite fast on most days.", "It should be longer because it is just too short, and that is simply the way it is, whatever anyone else in the school might tell you."]],
+  ["Mobile phones should be banned in class.", "Phones distract students: for example, our class survey found 7 in 10 checked messages during lessons.", ["Only idiots would keep their phones in class.", "Many families have a dog or a cat at home.", "Phones should be banned because they should not be allowed in any classroom at any time of the day, and everyone knows that perfectly well."]],
+  ["Our town needs a skate park.", "A skate park would give teenagers a safe place to meet, so that fewer would skate on busy roads.", ["People who skate are a total waste of space.", "The library opens at ten on Saturdays and closes early on Sundays during the summer months.", "We need a skate park because we just need one, and anyone in this town can see that we need one more than anything else at the moment."]],
+  ["Homework should be limited to one hour a night.", "Too much homework leaves no time for sport or sleep: for example, many students in our survey go to bed after eleven.", ["Teachers who give homework are clueless.", "The new sports hall has a shiny red floor and a climbing wall that the first years love.", "Homework should be limited because limiting it is a good idea, and a limit is always better than no limit at all, in my own opinion anyway."]],
+  ["Every school should have a garden.", "A garden teaches students where food comes from, such as the potatoes and peas they eat at home.", ["Only boring people would say no to a garden.", "The bus to Cork leaves at eight.", "A garden would be good for every school because gardens are good and every school should have one."]],
+  ["Plastic bottles should be banned at school events.", "Plastic bottles end up in our rivers: for instance, our clean-up team collected 300 bottles from the Lee in one day.", ["Anyone who buys bottled water is stupid.", "The drama club meets on Fridays.", "Bottles should be banned at events because banning them is the right thing to do, and the right thing to do is always to ban them at events."]],
+  ["Students should wear their own clothes on Fridays.", "Own-clothes days raise money: for example, last year's day raised €400 for the local hospice.", ["Uniforms are only loved by losers.", "The maths test is on Wednesday.", "Students should wear their own clothes on Fridays because wearing them would be so much better than not wearing them."]],
+  ["The town needs more bins.", "More bins would cut litter: for example, the bin by the pier is full by noon every Saturday.", ["Litter louts are disgusting pigs.", "The cinema shows films in the evening and has a special cheap ticket for students on Tuesdays.", "The town needs more bins because there are not enough bins."]],
+  ["Our school should start a coding club.", "Coding is useful in many jobs, such as medicine, farming and music.", ["Kids who can't code are hopeless.", "The hockey team won on Saturday.", "We should start a coding club because a coding club is something we really should start this year."]],
+  ["Young people should be allowed to vote at sixteen.", "At sixteen, many young people already have part-time jobs, which means decisions about pay affect them too.", ["Older voters are clueless about the future.", "The beach was very crowded in July, and the car park was full by ten o'clock most mornings.", "Sixteen-year-olds should vote because they should be allowed to, and being allowed to vote is something they should be allowed to do as well."]],
+  ["Cars should be banned from the road outside our school.", "Traffic outside the gate is dangerous: for example, our survey counted 90 cars in ten minutes at home time.", ["Parents who drive are selfish idiots.", "The library has new computers, a printer and a quiet corner where students can study after class.", "Cars should be banned outside our school because they should not be there, and if they should not be there then they should be banned from there."]],
+  ["Our library should open on Saturdays.", "Many students have no quiet place to study at home, for example those who share a bedroom, so a Saturday library would help.", ["Anyone who disagrees is a fool.", "The swimming pool is very warm.", "The library should open on Saturdays because Saturday is a good day for the library to open its doors to everyone in the whole town who wants to visit."]]
+ ],
+ "counter": [
+  ["Some people say phones help students stay safe.", "However, students can stay safe with a phone kept in a locker until home time.", ["They are right: phones keep everyone safe.", "However, anyone who says that is an idiot.", "However, the canteen is far too small for the number of people who queue there every single day."]],
+  ["Some argue that homework teaches discipline.", "But discipline can also be learned through sport, music or a part-time job.", ["I agree that homework teaches discipline.", "But people who like homework are weird.", "But the bus that brings us to school is always late on cold, wet winter mornings, which is not fair."]],
+  ["Some say a skate park would attract trouble.", "However, a well-lit park with a camera would be safer than the streets teenagers use now.", ["That is true, skaters cause trouble.", "However, that is a pathetic thing to say.", "However, the library in the town centre needs new books, new computers and a longer opening time."]],
+  ["Some people think a school garden costs too much.", "Yet a garden costs very little: seeds are cheap and parents often donate tools.", ["They are right, a garden is too expensive.", "Yet only a fool would say that.", "Yet the hockey pitch behind the sports hall has needed new nets and new goalposts for over a year."]],
+  ["Some argue that uniforms stop bullying.", "However, bullying happens online too, where uniforms make no difference.", ["I agree, uniforms stop bullying.", "However, people who love uniforms are boring.", "However, the canteen should sell more fresh fruit and fewer fizzy drinks at break and at lunchtime."]],
+  ["Some say young people are too immature to vote.", "However, many young people already work, study hard and care about how the country is run.", ["That is true, teenagers are too immature.", "However, the real idiots are the older voters.", "However, the school tour this year should go to Galway instead of Dublin, because the trip is shorter."]],
+  ["Some people say a longer lunch break means less learning.", "But a longer break helps students focus better in the afternoon.", ["They are right, longer breaks waste time.", "But only lazy teachers would want a short break.", "But the swimming pool in the town should open on Saturdays and Sundays for families with small children."]],
+  ["Some argue that banning cars outside school is unfair on parents.", "However, parents could park at the church and walk the last few minutes.", ["I agree, it is unfair on parents.", "However, drivers who complain are selfish.", "However, the art room has needed new paint, new easels and better lights since the summer holidays."]],
+  ["Some people say reading for fun is a waste of time.", "But reading for fun builds vocabulary, which helps in every subject.", ["They are right, it takes up too much time.", "But anyone who says that is clueless.", "But the hockey pitch should have floodlights so that teams can train in the evenings in winter."]],
+  ["Some say a new library is too expensive for the town.", "However, a library is used by babies, students and pensioners, so the cost is shared by everyone.", ["That is true, the town cannot afford it.", "However, people who never read are stupid.", "However, the football team badly needs a new coach and new jerseys before the league starts again in September."]],
+  ["Some argue that plastic bottles are more convenient.", "However, a refillable bottle is just as convenient and saves money too.", ["I agree, plastic bottles are easier.", "However, anyone who buys plastic is a pig.", "However, the school play was a great success and the cast deserve a party at the end of term."]],
+  ["Some people think coding is only for computer experts.", "However, coding clubs start with simple games that any beginner can make.", ["They are right, coding is too hard for most people.", "However, people who can't code are hopeless.", "However, the town needs more bins along the main street and down by the pier, where litter builds up."]]
+ ],
+ "cta": [
+  ["🌳 Plant more trees in our town", "Sign our petition today and help us plant fifty new trees."],
+  ["🚲 Cycle to school", "Dust off your bike and cycle to school this Friday."],
+  ["📵 A phone-free lunchtime", "Leave your phone in your bag at lunchtime and talk to the person beside you."],
+  ["🐶 Adopt a dog from the shelter", "Visit the shelter this weekend and adopt a dog that needs a home."],
+  ["🗳️ Vote for me as class captain", "Vote for me on Thursday and I will make your voice heard."],
+  ["🏊 A swimming pool for the town", "Join us at the council meeting and ask for a swimming pool."],
+  ["📚 Read for ten minutes a day", "Pick up a book tonight and read for just ten minutes."],
+  ["♻️ Recycle at school", "Put every can in the green bin and let's make recycling a habit."],
+  ["🥤 Ban plastic bottles at school events", "Bring a refillable bottle on Monday and say no to plastic."],
+  ["🎵 Save the school choir", "Come to the concert on Friday and help us save the choir."],
+  ["🌊 Clean up the beach", "Grab a pair of gloves and join our beach clean-up on Saturday."],
+  ["🍎 Healthier food in the canteen", "Fill in the canteen survey today and ask for healthier food."],
+  ["🛹 A skate park for teenagers", "Write to the council this week and tell them we need a skate park."],
+  ["💤 A later start time for school", "Email the principal and ask for a later start time."]
+ ]
+}/*END*/;
+  var TECH={rq:"❓ Rhetorical question",three:"3️⃣ Rule of three",stat:"📊 Statistic",emo:"💔 Emotive language",you:"👉 Direct address",rep:"🔁 Repetition"};
+  var FIXED=Object.keys(TECH).map(function(k){return TECH[k];});
+  var TWHY={rq:"Rhetorical question: a question that doesn't need an answer. It makes the listener think.",
+    three:"Rule of three: three things in a list. It sounds complete and sticks in the mind.",
+    stat:"Statistic: a number or a fact from a survey. It makes the point sound proven.",
+    emo:"Emotive language: strong feeling words (innocent, heartbreaking, lonely) that stir the listener.",
+    you:"Direct address: “you” and “your” speak straight to the listener.",
+    rep:"Repetition: the same word or phrase again, to hammer the point home."};
+  var WEAK=["That's all I have to say. Thanks.","Anyway, that's my speech, I suppose.","I don't really know what else to say about it.","So yeah, it's up to you, I guess."];
+  var STOPW={that:1,with:1,this:1,they:1,their:1,them:1,were:1,very:1,from:1,have:1,after:1,every:1,would:1,before:1,there:1,been:1,also:1,what:1,when:1,where:1,which:1,"while":1,about:1,into:1,than:1,then:1,your:1,just:1,only:1,some:1,more:1,most:1,many:1,much:1,such:1,like:1,will:1,should:1,could:1};
+  function stem(w){w=w.toLowerCase().replace("'s","");var S=["ing","ed","es","s"];for(var i=0;i<S.length;i++){var x=S[i];if(w.slice(-x.length)===x&&w.length-x.length>=3){w=w.slice(0,-x.length);break;}}
+    return (w.slice(-1)==="e"&&w.length>3)?w.slice(0,-1):w;}
+  function words(s){var o={};(s.match(/[A-Za-z']+/g)||[]).forEach(function(w){if(w.length>=4&&!STOPW[w.toLowerCase()])o[stem(w)]=1;});return o;}
+  function shares(a,b){var A=words(a),B=words(b);return Object.keys(A).some(function(k){return B[k];});}
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s,cls,lab){return '<div class="pp-card'+(cls?" "+cls:"")+'">'+(lab?'<span class="pp-lab">'+lab+'</span>':'')+'<p>'+s+'</p></div>';}
+
+  /* ================= PERSUASION POWER: which technique? ================= */
+  function qTech(){var it=rnd(D.tech);
+    return C("🎤 Which technique?",TECH[it[1]],FIXED.filter(function(x){return x!==TECH[it[1]];}),TWHY[it[1]],card(esc(it[0])),{t:"tech",s:it[0],rv:it[0]},3);}
+  /* ================= BACK IT UP: best reason ================= */
+  function qBack(){var it=rnd(D.back);
+    return C("💪 Best reason?",it[1],it[2],"The best reason sticks to the point and backs it up with evidence: a number, an example, a result. Insults and “because it just is” win no one over.",card(esc(it[0]),"claim","Your point"),{t:"back",s:it[0],rv:it[0]},3);}
+  /* ================= ANSWER BACK: rebut the other side ================= */
+  function qCounter(){var it=rnd(D.counter);
+    return C("🥊 Best answer?",it[1],it[2],"Answer the other side: start with However / But / Yet, deal with THEIR point, and stay polite.",card(esc(it[0]),"other","The other side says"),{t:"counter",s:it[0],rv:it[0]},3);}
+  /* ================= CALL TO ACTION: best last line ================= */
+  function qCta(){var i=Math.floor(Math.random()*D.cta.length),it=D.cta[i],
+      others=D.cta.filter(function(x,j){return j!==i&&!shares(it[0],x[1]);}).map(function(x){return x[1];});
+    var q=C("📣 Best last line?",it[1],[],"End with a call to action: tell the audience exactly what to do (Sign…, Join…, Vote…).",card(esc(it[0]),"topic","Your speech"),{t:"cta",s:it[0],rv:it[0]},3);
+    q.wrong=shuffle(WEAK.slice()).slice(0,2).concat([rnd(others)]);return q;}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    power:[qTech],
+    back:[qBack],
+    counter:[qCounter],
+    cta:[qCta],
+    mixed:[qTech,qTech,qBack,qCounter,qCta]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="power"||m==="cta")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="power"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="power"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You could win any debate.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TECH:TECH,WEAK:WEAK,shares:shares}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

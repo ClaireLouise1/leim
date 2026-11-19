@@ -1,0 +1,136 @@
+<style>.pp-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.pp-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.pp-card.claim,.pp-card.topic{background:#EEF6F1;border-color:#BFDCCB}
+.pp-card.other{background:#FFF6E5}
+.pp-card .pp-lab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pp-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Persuasion Power</h1>
+        <p>Win them over: spot the techniques, back up your point, answer the other side and finish with a call to action. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="power"><div><b>Persuasion Power</b><span>🎤 Which technique?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="back"><div><b>Back it up</b><span>💪 Best reason</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="counter"><div><b>Answer back</b><span>🥊 Deal with the other side</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="cta"><div><b>Call to action</b><span>📣 Best last line</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Persuasion Power, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W3, OL5, OL7, OL10, R8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Persuasive writing &amp; speeches</h2>
+        <p>Persuasive writing tries to make the reader <b>agree</b> with you or <b>do</b> something. A speech, a letter to a newspaper, an article or a blog post can all be persuasive.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">🅰️ Opening A</b>Today I'm going to talk about the skate park. I think we should get one. It would be good.</div>
+          <div class="note"><b class="h">🅱️ Opening B</b>Where can a teenager go in this town on a Saturday? Our survey of 200 students found that 150 have nowhere to meet. You can change that tonight.</div>
+        </div>
+        <p style="margin-top:8px">Both openings want a skate park. Which one would make the council listen? Find three things Opening B does that Opening A doesn't.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Opening B starts with a <b>rhetorical question</b> (it makes the listener think), gives a <b>statistic</b> (it sounds proven) and uses <b>direct address</b> (“You can change that”). Opening A just announces the topic and gives an opinion with no reason: “It would be good” persuades nobody.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six techniques</h3>
+        <div class="wc">
+          <div class="note"><b class="h">❓ Rhetorical question</b>Who wants a town with nowhere safe to play?</div>
+          <div class="note"><b class="h">3️⃣ Rule of three</b>Sport teaches teamwork, patience and respect.</div>
+          <div class="note"><b class="h">📊 Statistic</b>Our survey found that 8 in 10 students skip breakfast.</div>
+          <div class="note"><b class="h">💔 Emotive language</b>Innocent animals are left cold and frightened.</div>
+          <div class="note"><b class="h">👉 Direct address</b>Your vote can change this town.</div>
+          <div class="note"><b class="h">🔁 Repetition</b>We need action. We need it now.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Use real facts, or make it clear where a number comes from (“our class survey”). Never invent a fact and pretend it's official.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How to build a persuasive speech</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1 🪝 Hook</b>A question, a fact or a short story.</div>
+          <div class="note"><b class="h">2 💪 Points</b>One point per paragraph, each backed up: a number, an example, a result.</div>
+          <div class="note"><b class="h">3 🥊 Answer back</b>“Some people say… However…”: deal with the other side, politely.</div>
+          <div class="note"><b class="h">4 📣 Call to action</b>Tell them exactly what to do: Sign… Join… Vote…</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A speech talks to a live audience (“Good morning, everyone”, “you”, “Thank you for listening”). A letter to a newspaper or an article is written for readers, but the same techniques work.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Writing tasks often ask you to <b>persuade</b>: a speech to your class or the council, a letter to a newspaper, an article or a blog post for teenagers. Reading questions ask how a writer <b>tries to persuade</b> the reader, so you need to name the techniques and explain their effect.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Back up every point</b>: an opinion with no reason or example wins few marks.</li>
+            <li><b>Name it, quote it, explain it</b>: “The rhetorical question ‘Who wants…?’ makes the reader think…”</li>
+            <li><b>Answer the other side</b> once: it shows you've thought it through.</li>
+            <li><b>Suit the reader</b>: a speech to the council is formal, polite but firm. No insults.</li>
+            <li><b>End strongly</b> with a clear call to action, not “That's all, thanks”.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Name <b>three</b> persuasive techniques in this extract from a speech, and explain how one of them works.
+              <div class="pass">Good morning, everyone. Is a bin by the pier really too much to ask? Every Saturday, the pier is covered in cans, crisp bags and bottles. Our clean-up team filled 14 bags last month alone. You walk past it. Your little brother plays beside it.</div>
+              <details><summary>Show a model answer</summary><p>A <b>rhetorical question</b> (“Is a bin by the pier really too much to ask?”), the <b>rule of three</b> (“cans, crisp bags and bottles”), a <b>statistic</b> (“14 bags last month”) and <b>direct address</b> (“You walk past it. Your little brother…”). The statistic makes the problem sound real and proven: 14 bags in one month is hard to argue with.<br><i>Where the marks would go:</i> a mark for each technique named with a quote; the rest for explaining the effect on the listener.</p></details></li>
+            <li>Write the <b>opening</b> of a speech to your school assembly: “Our school should have a phone-free lunchtime.” Use a rhetorical question and a statistic.
+              <details><summary>Show a model answer</summary><p><i>Good morning, everyone. When did you last have a real conversation at lunchtime? In our class survey, 18 of 25 students said they spend most of lunch on their phones. I believe a phone-free lunchtime would give us back that hour.</i><br><i>Where the marks would go:</i> a greeting for the audience; a rhetorical question as a hook; a clear statistic with its source (“our class survey”); the point stated clearly.</p></details></li>
+            <li>Someone says: “A phone-free lunchtime is unfair, because students need their phones to contact their parents.” Write <b>two</b> sentences that answer this point.
+              <details><summary>Show a model answer</summary><p><i>Some people say students need their phones to contact their parents. However, parents can still ring the school office, and phones would only be in lockers for one hour.</i><br><i>Where the marks would go:</i> the other side's point stated fairly; a counter word (However); a reason that deals with THAT point; polite, no insults.</p></details></li>
+            <li>Write the <b>last paragraph</b> of a speech to the county council asking for a skate park.
+              <details><summary>Show a model answer</summary><p><i>A skate park would give young people a safe place to meet, keep skaters off busy roads and bring the town together. Please vote for the skate park at next month's meeting. Thank you for listening.</i><br><i>Where the marks would go:</i> the main points pulled together (here as a rule of three); a clear call to action (“Please vote for…”); a polite, formal close for this audience.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/persuasive-writing-speeches-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
