@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 10:45 · E3 English Order 11 Short stories (Twist Detector) · english-s11
