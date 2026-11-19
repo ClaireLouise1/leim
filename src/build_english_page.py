@@ -21,7 +21,7 @@ DESC = {
   "Sentence Surgeon": "statements, questions and commands, simple, compound and complex sentences, and fixing fragments and run-ons.",
   "Comma Catch": "capital letters, full stops, commas in lists and after openers, and apostrophes (its or it's?).",
   "Clue Hunt": "skimming, scanning, the main idea, reading between the lines and finding the line that proves your answer.",
-  "Character Clues": "how writers show a character through actions, speech, thoughts and how others react.",
+  "Character Clues": "what a character is like and how you know: speech, thoughts, effect on others, actions and looks (STEAL), the right trait word and the best quote.",
   "Spell Strike": "spelling rules and the words everyone mixes up: there / their / they're, your / you're, to / too / two.",
 }
 cards = []
@@ -59,7 +59,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a> and <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a> and <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 

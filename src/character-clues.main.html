@@ -1,0 +1,142 @@
+<main id="main">
+<style>.ch-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.ch-card .ch-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.ch-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.ch-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.ch-card p.hl{background:#FFF4CC;border-radius:8px;margin-left:-6px;margin-right:-6px;padding:2px 6px}
+.ch-claim{font-size:19px;font-weight:800;text-align:center;margin:4px auto 6px;max-width:560px}
+.ch-claim.big{font-size:22px;line-height:1.45;margin:10px auto}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.steal{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.steal .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tw{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tw span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:15px;font-weight:600}
+@media(max-width:420px){.ch-card p{font-size:16px}.ch-claim{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Character Clues</h1>
+        <p>Short story moments. What is the character like, and how do you know? Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="line"><div><b>Character Clues</b><span>🔎 Which line shows it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="how"><div><b>STEAL</b><span>💬 💭 👥 🎬 👀 How do we learn about them?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="trait"><div><b>What are they like?</b><span>🤝 🦁 🙈 Pick the word</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="quote"><div><b>Best quote</b><span>💬 Prove it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Each story stays for 3 questions. Number keys work too. In Character Clues, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R4, W8 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The novel 1: character</h2>
+        <p>Writers rarely tell you "Mia is kind". They show you, and leave the clues for you to find. Your job is to spot them.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="ch-card"><span class="ch-k">📖 Story · Mia</span>
+          <p><b>1</b>Mia gave half of her lunch to the new boy, who had forgotten his.</p>
+          <p><b>2</b>The boy stared at her, as if nobody had ever done that before.</p>
+          <p><b>3</b>“It's only a sandwich,” Mia said, going red.</p>
+          <p><b>4</b>Later, she wondered why nobody else had noticed him sitting alone.</p></div>
+        <p style="margin-top:8px">The word "kind" isn't there. So how do we know? In each line, where does the clue come from: something Mia <i>does</i>, <i>says</i>, <i>thinks</i>, or someone <i>else</i>?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Line 1</b> is an <b>action</b>: she shares her lunch → kind.<br>
+          <b>Line 2</b> is the <b>effect on others</b>: the boy can't believe it → kindness is rare here.<br>
+          <b>Line 3</b> is <b>speech</b>: she plays it down and goes red → modest, a bit shy.<br>
+          <b>Line 4</b> is her <b>thoughts</b>: she notices people who are left out → caring.<br>
+          Every line is a clue. Put them together and you know Mia without being told.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">STEAL: five ways writers show a character</h3>
+        <div class="steal">
+          <div class="note"><b class="h">💬 Speech</b>What do they say, and how?<br>“It should have been me.”</div>
+          <div class="note"><b class="h">💭 Thoughts</b>What goes on in their head?<br>He wished he had trained harder.</div>
+          <div class="note"><b class="h">👥 Effect on others</b>How do other people react?<br>The others groaned but did what she said.</div>
+          <div class="note"><b class="h">🎬 Actions</b>What do they do?<br>He handed the wallet in.</div>
+          <div class="note"><b class="h">👀 Looks</b>What do they look like or wear?<br>His jumper was creased.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Words for what a character is like</h3>
+        <div class="tw"><span>🤝 kind</span><span>🦁 brave</span><span>🙈 shy</span><span>📣 bossy</span><span>🙅 selfish</span><span>🛋️ lazy</span><span>💯 honest</span><span>😒 jealous</span><span>😂 funny</span><span>🧠 clever</span><span>🙄 rude</span></div>
+        <ul style="margin-top:10px">
+          <li><b>A trait lasts, a feeling passes.</b> "Scared" is how someone feels right now; "brave" is what they are like.</li>
+          <li><b>Characters can change.</b> Leah is shy in class but brave on stage. Saoirse is rude, then kind. Say what they're like at the start AND at the end.</li>
+          <li><b>Prove it: point + quote + explain.</b> Ciarán is selfish (point): he “grabbed the biggest slice” (quote), before anyone else had sat down, so he only thinks of himself (explain).</li>
+          <li><b>Short quotes win.</b> Three to six words that show the trait, not the whole sentence.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Character questions come up on the novel, the short stories and the unseen extracts. You might be asked what a character is like, how they change, how the writer shows them, or whether you admire them. Every time, the marks go to points backed up with the text.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the trait.</b> "Lorcan is shy" is a point; "Lorcan stared at the floor" is only a quote.</li>
+            <li><b>One trait per paragraph</b>, each with its own quote. "Two qualities" means two separate points.</li>
+            <li><b>Explain the quote.</b> Say what the words show about the character.</li>
+            <li><b>Look for change.</b> Many questions reward noticing how a character is different at the end.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><p style="margin:0"><b>The New Captain</b><br>Lorcan had never wanted to be captain. When Coach Byrne pinned the armband on him, he stared at the floor and mumbled, “Are you sure?” At the first training session he arrived twenty minutes early to put out the cones, and he stayed late to help the youngest player, Dara, with his free kicks. In the county final, with his team two points down, Lorcan was knocked flat. He picked himself up, wiped the mud from his knees and shouted, “Heads up, lads! We're not done yet!” The others stared at him. Nobody had ever heard Lorcan raise his voice before. Five minutes later, they were level.</p></div>
+          <ol class="eq">
+            <li>What kind of person is Lorcan? Give two qualities and support each with reference to the text.
+              <details><summary>Show a model answer</summary><p>1. Lorcan is <b>hard-working</b>. He “arrived twenty minutes early to put out the cones”, doing extra jobs nobody asked him to do.<br>2. He is also <b>kind</b>. He “stayed late to help the youngest player”, giving up his own time for someone who needed it.<br><i>Where the marks would go:</i> two different qualities, each with its own short quote and a few words explaining what it shows.</p></details></li>
+            <li>How does the writer use other characters to show us what Lorcan is like?
+              <details><summary>Show a model answer</summary><p>When Lorcan shouts, “The others stared at him” and “Nobody had ever heard Lorcan raise his voice before.” Their surprise tells us he is normally quiet, so this moment shows how much he has grown as a leader.<br><i>Where the marks would go:</i> a reaction from another character (quote), and what that reaction tells us about Lorcan.</p></details></li>
+            <li>Does Lorcan change during the extract? Explain your answer with reference to the text.
+              <details><summary>Show a model answer</summary><p>Yes. At the start he is <b>shy and unsure</b>: he “stared at the floor and mumbled”. By the end he is <b>confident</b>: he picks himself up and shouts, “Heads up, lads!” to lead his team back.<br><i>Where the marks would go:</i> what he is like at the start (with proof), what he is like at the end (with proof), and the word "change" made clear.</p></details></li>
+            <li>Would you like Lorcan to be your team captain? Give a reason based on the text.
+              <details><summary>Show a model answer</summary><p>Yes. He doesn't boss people around; he leads by example, arriving early and helping Dara. And when things go wrong he doesn't give up: “We're not done yet!” That is the kind of captain who makes a team better.<br><i>Where the marks would go:</i> a clear yes or no, a reason, and proof from the text. Either answer can score full marks if it is backed up.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/novel-character-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

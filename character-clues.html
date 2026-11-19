@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character Clues: Novel Character Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game on character: short original story moments, find the line that shows a trait, STEAL (speech, thoughts, effect on others, actions, looks), pick the trait word and the best quote. Rules, an Exam corner with model answers and a free printable.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ch-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.ch-card .ch-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.ch-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.ch-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.ch-card p.hl{background:#FFF4CC;border-radius:8px;margin-left:-6px;margin-right:-6px;padding:2px 6px}
+.ch-claim{font-size:19px;font-weight:800;text-align:center;margin:4px auto 6px;max-width:560px}
+.ch-claim.big{font-size:22px;line-height:1.45;margin:10px auto}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.steal{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.steal .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tw{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tw span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:15px;font-weight:600}
+@media(max-width:420px){.ch-card p{font-size:16px}.ch-claim{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Character Clues</h1>
+        <p>Short story moments. What is the character like, and how do you know? Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="line"><div><b>Character Clues</b><span>🔎 Which line shows it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="how"><div><b>STEAL</b><span>💬 💭 👥 🎬 👀 How do we learn about them?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="trait"><div><b>What are they like?</b><span>🤝 🦁 🙈 Pick the word</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="quote"><div><b>Best quote</b><span>💬 Prove it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Each story stays for 3 questions. Number keys work too. In Character Clues, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R4, W8 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The novel 1: character</h2>
+        <p>Writers rarely tell you "Mia is kind". They show you, and leave the clues for you to find. Your job is to spot them.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="ch-card"><span class="ch-k">📖 Story · Mia</span>
+          <p><b>1</b>Mia gave half of her lunch to the new boy, who had forgotten his.</p>
+          <p><b>2</b>The boy stared at her, as if nobody had ever done that before.</p>
+          <p><b>3</b>“It's only a sandwich,” Mia said, going red.</p>
+          <p><b>4</b>Later, she wondered why nobody else had noticed him sitting alone.</p></div>
+        <p style="margin-top:8px">The word "kind" isn't there. So how do we know? In each line, where does the clue come from: something Mia <i>does</i>, <i>says</i>, <i>thinks</i>, or someone <i>else</i>?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>Line 1</b> is an <b>action</b>: she shares her lunch → kind.<br>
+          <b>Line 2</b> is the <b>effect on others</b>: the boy can't believe it → kindness is rare here.<br>
+          <b>Line 3</b> is <b>speech</b>: she plays it down and goes red → modest, a bit shy.<br>
+          <b>Line 4</b> is her <b>thoughts</b>: she notices people who are left out → caring.<br>
+          Every line is a clue. Put them together and you know Mia without being told.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">STEAL: five ways writers show a character</h3>
+        <div class="steal">
+          <div class="note"><b class="h">💬 Speech</b>What do they say, and how?<br>“It should have been me.”</div>
+          <div class="note"><b class="h">💭 Thoughts</b>What goes on in their head?<br>He wished he had trained harder.</div>
+          <div class="note"><b class="h">👥 Effect on others</b>How do other people react?<br>The others groaned but did what she said.</div>
+          <div class="note"><b class="h">🎬 Actions</b>What do they do?<br>He handed the wallet in.</div>
+          <div class="note"><b class="h">👀 Looks</b>What do they look like or wear?<br>His jumper was creased.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Words for what a character is like</h3>
+        <div class="tw"><span>🤝 kind</span><span>🦁 brave</span><span>🙈 shy</span><span>📣 bossy</span><span>🙅 selfish</span><span>🛋️ lazy</span><span>💯 honest</span><span>😒 jealous</span><span>😂 funny</span><span>🧠 clever</span><span>🙄 rude</span></div>
+        <ul style="margin-top:10px">
+          <li><b>A trait lasts, a feeling passes.</b> "Scared" is how someone feels right now; "brave" is what they are like.</li>
+          <li><b>Characters can change.</b> Leah is shy in class but brave on stage. Saoirse is rude, then kind. Say what they're like at the start AND at the end.</li>
+          <li><b>Prove it: point + quote + explain.</b> Ciarán is selfish (point): he “grabbed the biggest slice” (quote), before anyone else had sat down, so he only thinks of himself (explain).</li>
+          <li><b>Short quotes win.</b> Three to six words that show the trait, not the whole sentence.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Character questions come up on the novel, the short stories and the unseen extracts. You might be asked what a character is like, how they change, how the writer shows them, or whether you admire them. Every time, the marks go to points backed up with the text.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the trait.</b> "Lorcan is shy" is a point; "Lorcan stared at the floor" is only a quote.</li>
+            <li><b>One trait per paragraph</b>, each with its own quote. "Two qualities" means two separate points.</li>
+            <li><b>Explain the quote.</b> Say what the words show about the character.</li>
+            <li><b>Look for change.</b> Many questions reward noticing how a character is different at the end.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><p style="margin:0"><b>The New Captain</b><br>Lorcan had never wanted to be captain. When Coach Byrne pinned the armband on him, he stared at the floor and mumbled, “Are you sure?” At the first training session he arrived twenty minutes early to put out the cones, and he stayed late to help the youngest player, Dara, with his free kicks. In the county final, with his team two points down, Lorcan was knocked flat. He picked himself up, wiped the mud from his knees and shouted, “Heads up, lads! We're not done yet!” The others stared at him. Nobody had ever heard Lorcan raise his voice before. Five minutes later, they were level.</p></div>
+          <ol class="eq">
+            <li>What kind of person is Lorcan? Give two qualities and support each with reference to the text.
+              <details><summary>Show a model answer</summary><p>1. Lorcan is <b>hard-working</b>. He “arrived twenty minutes early to put out the cones”, doing extra jobs nobody asked him to do.<br>2. He is also <b>kind</b>. He “stayed late to help the youngest player”, giving up his own time for someone who needed it.<br><i>Where the marks would go:</i> two different qualities, each with its own short quote and a few words explaining what it shows.</p></details></li>
+            <li>How does the writer use other characters to show us what Lorcan is like?
+              <details><summary>Show a model answer</summary><p>When Lorcan shouts, “The others stared at him” and “Nobody had ever heard Lorcan raise his voice before.” Their surprise tells us he is normally quiet, so this moment shows how much he has grown as a leader.<br><i>Where the marks would go:</i> a reaction from another character (quote), and what that reaction tells us about Lorcan.</p></details></li>
+            <li>Does Lorcan change during the extract? Explain your answer with reference to the text.
+              <details><summary>Show a model answer</summary><p>Yes. At the start he is <b>shy and unsure</b>: he “stared at the floor and mumbled”. By the end he is <b>confident</b>: he picks himself up and shouts, “Heads up, lads!” to lead his team back.<br><i>Where the marks would go:</i> what he is like at the start (with proof), what he is like at the end (with proof), and the word "change" made clear.</p></details></li>
+            <li>Would you like Lorcan to be your team captain? Give a reason based on the text.
+              <details><summary>Show a model answer</summary><p>Yes. He doesn't boss people around; he leads by example, arriving early and helping Dara. And when things go wrong he doesn't give up: “We're not done yet!” That is the kind of captain who makes a team better.<br><i>Where the marks would go:</i> a clear yes or no, a reason, and proof from the text. Either answer can score full marks if it is backed up.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/novel-character-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- extracts (the PDFs and src/test_character_clues.py read this block: keep it valid JSON) ----------
+     texts: {k: label, who: character, pr: he/she, lines: 4 lines,
+       how: STEAL method of each line (say, think, effect, act, look),
+       q: the short quote from each line (must be inside that line),
+       traits: [[trait, line]]  (one line per trait; that line's quote is the proof)} */
+  var D=/*DATA*/{
+ "texts": [
+  {"k": "📖 Story", "who": "Mia", "pr": "she",
+   "lines": ["Mia gave half of her lunch to the new boy, who had forgotten his.",
+             "The boy stared at her, as if nobody had ever done that before.",
+             "“It's only a sandwich,” Mia said, going red.",
+             "Later, she wondered why nobody else had noticed him sitting alone."],
+   "how": ["act", "effect", "say", "think"],
+   "q": ["gave half of her lunch", "stared at her", "going red", "nobody else had noticed him"],
+   "traits": [["kind", 1], ["shy", 3]]},
+  {"k": "📖 Story", "who": "Darragh", "pr": "he",
+   "lines": ["Darragh's school jumper was creased, and one shoelace was always open.",
+             "He stayed in bed until ten past eight and left his homework on the kitchen table.",
+             "His teacher sighed when she saw the empty page again.",
+             "“The dog ate it, Miss, and then he asked for seconds,” Darragh said, and the whole class laughed."],
+   "how": ["look", "act", "effect", "say"],
+   "q": ["one shoelace was always open", "stayed in bed until ten past eight", "sighed", "the whole class laughed"],
+   "traits": [["lazy", 2], ["funny", 4]]},
+  {"k": "📖 Story", "who": "Niamh", "pr": "she",
+   "lines": ["When the dog ran into the river, Niamh kicked off her shoes and waded in after it.",
+             "Her little brother screamed at her to come back.",
+             "She thought the current would pull her under, but the dog was nearer now.",
+             "“Got him!” Niamh shouted, holding the soaking dog up in the air."],
+   "how": ["act", "effect", "think", "say"],
+   "q": ["waded in after it", "screamed at her to come back", "the dog was nearer now", "Got him!"],
+   "traits": [["brave", 1]]},
+  {"k": "📖 Story", "who": "Conor", "pr": "he",
+   "lines": ["Conor wore his old runners and stood at the back with his arms folded.",
+             "When Sam lifted the trophy, Conor scowled and looked away.",
+             "He wished he had trained harder all season.",
+             "His mum squeezed his shoulder on the way to the car."],
+   "how": ["look", "act", "think", "effect"],
+   "q": ["arms folded", "scowled and looked away", "trained harder all season", "squeezed his shoulder"],
+   "traits": [["jealous", 2]]},
+  {"k": "📖 Story", "who": "Aisling", "pr": "she",
+   "lines": ["“You hold the map, you carry the bags, and nobody talks,” Aisling said.",
+             "The others groaned but did what she said.",
+             "At the crossroads she spotted the moss on the trees and worked out which way was north.",
+             "She hoped nobody would notice that her hands were shaking."],
+   "how": ["say", "effect", "act", "think"],
+   "q": ["and nobody talks", "did what she said", "worked out which way was north", "her hands were shaking"],
+   "traits": [["bossy", 1], ["clever", 3]]},
+  {"k": "📖 Story", "who": "Fionn", "pr": "he",
+   "lines": ["Fionn found a wallet with €50 in it outside the chipper.",
+             "For a second he thought about the new football boots he wanted.",
+             "Then he walked straight into the Garda station and handed it in.",
+             "The owner, an old man, shook his hand and called him a credit to his parents."],
+   "how": ["act", "think", "act", "effect"],
+   "q": ["found a wallet", "the new football boots he wanted", "handed it in", "a credit to his parents"],
+   "traits": [["honest", 3]]},
+  {"k": "📖 Story", "who": "Leah", "pr": "she",
+   "lines": ["Leah wore her hood up, even indoors.",
+             "When the teacher asked her name, she stared at her shoes and whispered it.",
+             "Nobody in the new class knew she could sing.",
+             "But at the talent show she walked on stage, took the microphone and sang."],
+   "how": ["look", "act", "effect", "act"],
+   "q": ["her hood up", "stared at her shoes", "Nobody in the new class knew", "walked on stage"],
+   "traits": [["shy", 2], ["brave", 4]]},
+  {"k": "📖 Story", "who": "Ciarán", "pr": "he",
+   "lines": ["Ciarán grabbed the biggest slice of pizza before anyone else sat down.",
+             "His little sister watched with her mouth open.",
+             "He thought it was fair, because he had paid for half.",
+             "Ciarán had tomato sauce on his chin and on his new white shirt."],
+   "how": ["act", "effect", "think", "look"],
+   "q": ["grabbed the biggest slice", "watched with her mouth open", "he had paid for half", "tomato sauce on his chin"],
+   "traits": [["selfish", 1]]},
+  {"k": "📖 Story", "who": "Saoirse", "pr": "she",
+   "lines": ["Saoirse rolled her eyes when her nan asked about school.",
+             "Her nan smiled and went back to her knitting.",
+             "Later, she remembered that her nan had come all the way from Sligo.",
+             "She made her nan a cup of tea and sat down beside her."],
+   "how": ["act", "effect", "think", "act"],
+   "q": ["rolled her eyes", "went back to her knitting", "come all the way from Sligo", "made her nan a cup of tea"],
+   "traits": [["rude", 1], ["kind", 4]]},
+  {"k": "📖 Story", "who": "Oisín", "pr": "he",
+   "lines": ["Oisín spotted the mistake in the teacher's sum before anyone else.",
+             "He had glasses held together with tape.",
+             "When he got full marks, he put up his hand and owned up to guessing one answer.",
+             "Ms Walsh gave him a gold star anyway."],
+   "how": ["act", "look", "act", "effect"],
+   "q": ["spotted the mistake", "glasses held together with tape", "owned up to guessing", "gave him a gold star"],
+   "traits": [["clever", 1], ["honest", 3]]},
+  {"k": "🎭 Story", "who": "Róisín", "pr": "she",
+   "lines": ["“It should have been me,” Róisín said when the cast list went up.",
+             "Her face was pale and her lips were pressed tight.",
+             "Grace, who got the lead, said nothing.",
+             "That night, lying awake, she thought of a way to help Grace learn her lines."],
+   "how": ["say", "look", "effect", "think"],
+   "q": ["It should have been me", "her lips were pressed tight", "said nothing", "help Grace learn her lines"],
+   "traits": [["jealous", 1], ["kind", 4]]},
+  {"k": "⚽ Story", "who": "Seán", "pr": "he",
+   "lines": ["Seán pointed at each player and told them exactly where to stand.",
+             "Nobody argued; they just shuffled into place.",
+             "He wore the captain's armband, although the real captain was off sick.",
+             "When the other team's striker went down injured, Seán ran over first to help."],
+   "how": ["act", "effect", "look", "act"],
+   "q": ["told them exactly where to stand", "shuffled into place", "the captain's armband", "ran over first to help"],
+   "traits": [["bossy", 1], ["kind", 4]]},
+  {"k": "🤸 Story", "who": "Tadhg", "pr": "he",
+   "lines": ["Tadhg spent the whole of PE lying on the crash mat.",
+             "“I'm doing the plank, Coach, just very slowly,” Tadhg said.",
+             "Even Coach Murphy had to laugh.",
+             "His runners were still spotless at the end of the class."],
+   "how": ["act", "say", "effect", "look"],
+   "q": ["lying on the crash mat", "just very slowly", "had to laugh", "still spotless"],
+   "traits": [["lazy", 1], ["funny", 3]]},
+  {"k": "🎵 Story", "who": "Éabha", "pr": "she",
+   "lines": ["Éabha knew there were only two tickets left for the concert.",
+             "She bought both, even though she had promised one to her cousin Kate.",
+             "Kate found out from a photo online and cried.",
+             "At the concert, Éabha wore Kate's borrowed jacket."],
+   "how": ["think", "act", "effect", "look"],
+   "q": ["only two tickets left", "bought both", "found out from a photo online and cried", "wore Kate's borrowed jacket"],
+   "traits": [["selfish", 2]]}
+ ]
+}/*END*/;
+  var TR={kind:"🤝 Kind",brave:"🦁 Brave",shy:"🙈 Shy",bossy:"📣 Bossy",selfish:"🙅 Selfish",lazy:"🛋️ Lazy",honest:"💯 Honest",jealous:"😒 Jealous",funny:"😂 Funny",clever:"🧠 Clever",rude:"🙄 Rude"};
+  var CLOSE={bossy:["rude"],rude:["bossy","selfish"],selfish:["jealous","rude"],jealous:["selfish"]};   /* look-alikes: never offered as wrong */
+  var HOW={say:"💬 Speech",think:"💭 Thoughts",effect:"👥 Effect on others",act:"🎬 Actions",look:"👀 Looks"};
+  var HOWWHY={say:"Speech: what the character SAYS (the words in “ ”).",think:"Thoughts: what goes on in their head (thought, wondered, wished, knew).",
+    effect:"Effect on others: how OTHER people react to them.",act:"Actions: what the character DOES.",look:"Looks: what they look like or wear."};
+  var LINES=["Line 1","Line 2","Line 3","Line 4"],HOWS=["say","think","effect","act","look"];
+  var FIXED=LINES.concat(HOWS.map(function(k){return HOW[k];}),Object.keys(TR).map(function(k){return TR[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* the extract card: numbered lines, an optional highlighted line */
+  function card(T,hl){var h='<div class="ch-card"><span class="ch-k">'+T.k+' · '+esc(T.who)+'</span>';
+    T.lines.forEach(function(l,i){h+='<p'+(hl===i+1?' class="hl"':'')+'><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    return h+'</div>';}
+  function claim(t){return '<p class="ch-claim">🔎 '+esc(t)+'</p>';}
+  function cq(s){return "“"+s+"”";}
+  function says(T,tr){return T.who+" is "+TR[tr].split(" ")[1].toLowerCase()+".";}
+  /* keep the same extract for 3 questions so players read it once */
+  var cur=null,uses=0;
+  function text(){if(!cur||uses<=0){var n;do{n=rnd(D.texts);}while(n===cur&&D.texts.length>1);cur=n;uses=3;}uses--;return cur;}
+  function idx(T){return D.texts.indexOf(T);}
+
+  /* ================= WHICH LINE SHOWS IT? ================= */
+  function qLine(){var T=text(),t=rnd(T.traits),ln=t[1];
+    return C("Which line shows it?","Line "+ln,LINES,"Line "+ln+": "+cq(T.q[ln-1]),claim(says(T,t[0]))+card(T),{t:"line",x:idx(T),tr:t[0],rv:says(T,t[0])},3);}
+  /* ================= STEAL: how does the writer show it? ================= */
+  function qHow(){var T=text(),i=Math.floor(Math.random()*4),m=T.how[i];
+    return C("How do we learn about "+T.who+"?",HOW[m],HOWS.map(function(k){return HOW[k];}),HOWWHY[m],card(T,i+1),{t:"how",x:idx(T),ln:i+1,rv:"Line "+(i+1)+": "+T.lines[i]},4);}
+  /* ================= WHAT ARE THEY LIKE? ================= */
+  function qTrait(){var T=text(),t=rnd(T.traits),bar=T.traits.map(function(x){return x[0];});
+    bar.forEach(function(k){bar=bar.concat(CLOSE[k]||[]);});
+    var pool=Object.keys(TR).filter(function(k){return bar.indexOf(k)<0;}).map(function(k){return TR[k];});
+    return C("🕵️ What is "+T.who+" like?",TR[t[0]],pool,"Clue: Line "+t[1]+" "+cq(T.q[t[1]-1]),card(T,t[1]),{t:"trait",x:idx(T),ln:t[1],rv:T.who+": "+T.lines[t[1]-1]},3);}
+  /* ================= BEST QUOTE ================= */
+  function qQuote(){var T=text(),t=rnd(T.traits),ln=t[1];
+    var pool=T.q.filter(function(s,i){return i!==ln-1;}).map(cq);
+    return C("💬 Best quote to prove it?",cq(T.q[ln-1]),pool,"Line "+ln+" shows it: "+T.lines[ln-1],claim(says(T,t[0]))+card(T),{t:"quote",x:idx(T),tr:t[0],rv:"Best proof: "+says(T,t[0])},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    line:[qLine],
+    how:[qHow],
+    trait:[qTrait],
+    quote:[qQuote],
+    mixed:[qLine,qHow,qHow,qTrait,qTrait,qQuote]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;cur=null;uses=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="line"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="line"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You read characters like a detective.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=5){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TR:TR,HOW:HOW}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
