@@ -1,0 +1,161 @@
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choices.one .choice{font-size:18px;text-align:left}
+#choices .choice{font-size:19px;font-weight:700}
+#choices.one .choice{white-space:normal}
+.wl-big{font-size:34px;font-weight:800;text-align:center;margin:6px 0 2px;line-height:1.2}
+.wl-dot{color:var(--muted);font-weight:400;margin:0 6px}
+.wl-emo{font-size:46px;text-align:center;line-height:1.1;margin-top:2px}
+.wl-gloss{text-align:center;font-weight:700;color:var(--muted);margin:0}
+.wl-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 2px}.wl-chips span{background:#F6CF5A;border-radius:8px;padding:4px 12px;font-size:20px;font-weight:800}
+.wl-guide{display:flex;justify-content:center;align-items:center;gap:8px;margin:8px 0}.wl-guide span:not(.wl-dot){border:2px solid var(--line);border-radius:8px;padding:4px 14px;font-size:21px;font-weight:800;background:#fff}
+.lad{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.lad .note{font-size:16px}.lad .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.fam{width:100%;border-collapse:collapse;min-width:0}.fam th,.fam td{padding:6px 6px;border-top:1px solid var(--line);font-size:15px;text-align:left}.fam th{color:var(--ink);text-transform:none;font-size:14px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}.pp{white-space:nowrap;display:inline-block;margin-right:10px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Word Ladder</h1>
+        <p>Climb from weak words to strong ones. Opposites, prefixes, word families and dictionary skills against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="ladder"><div><b>Word Ladder</b><span>warm → hot → boiling</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="same"><div><b>Same or opposite?</b><span>huge = enormous · huge ↔ tiny</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pre"><div><b>Prefixes</b><span>un · dis · im · re · mis</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fam"><div><b>Word families</b><span>happy · happily · happiness</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="dict"><div><b>Dictionary skills</b><span>ABC order · guide words · meanings</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Word Ladder, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R10, OL13, W5 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Vocabulary and dictionary skills</h2>
+        <p>Good writers don't know more words than everyone else: they pick the <b>exact</b> word. These are the tools for finding it.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>All of these mean “not”. Why does the prefix change?</p>
+        <div class="tests">
+          <div class="note"><span class="pp">im<b>p</b>ossible</span> <span class="pp">im<b>p</b>olite</span> <span class="pp">im<b>m</b>ature</span></div>
+          <div class="note"><span class="pp">il<b>l</b>egal</span> <span class="pp">il<b>l</b>ogical</span></div>
+          <div class="note"><span class="pp">ir<b>r</b>egular</span> <span class="pp">ir<b>r</b>esponsible</span></div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Look at the first letter of the root word. Before <b>p</b> or <b>m</b>, “not” is usually <b>im-</b>. Before <b>l</b> it's <b>il-</b>, before <b>r</b> it's <b>ir-</b>. That's why <i>illegal</i> has two l's and <i>irregular</i> has two r's: you keep the whole prefix AND the whole word.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Shades of meaning: the word ladder</h3>
+        <p>Words that mean nearly the same thing can be weaker or stronger, smaller or bigger. Put them on a ladder: the weakest at the bottom, the strongest at the top.</p>
+        <div class="lad">
+          <div class="note"><b class="h">🌡️ heat</b>warm → hot → boiling</div>
+          <div class="note"><b class="h">😠 anger</b>annoyed → angry → furious</div>
+          <div class="note"><b class="h">😴 tiredness</b>sleepy → tired → exhausted</div>
+          <div class="note"><b class="h">🏃 speed</b>walk → jog → sprint</div>
+        </div>
+        <p style="margin-top:8px"><b>Swap “very” + a weak word for one strong word:</b> very hot → <b>boiling</b> · very tired → <b>exhausted</b> · very funny → <b>hilarious</b>. Only use the strongest word when you mean it: “furious” about a lost pencil sounds silly.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Synonyms and antonyms</h3>
+        <div class="lad">
+          <div class="note"><b class="h">🟰 Synonym</b>same (or nearly the same) meaning<br><b>huge = enormous · begin = start</b></div>
+          <div class="note"><b class="h">↔️ Antonym</b>the opposite meaning<br><b>huge ↔ tiny · ancient ↔ modern</b></div>
+          <div class="note"><b class="h">📚 Thesaurus</b>a book or site of synonyms. Check the meaning in a dictionary before you use a new one.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Prefixes and suffixes</h3>
+        <div class="lad">
+          <div class="note"><b class="h">Prefix = at the start</b>un-, dis-, im-, in-, il-, ir- = not<br>re- = again · mis- = wrongly · pre- = before</div>
+          <div class="note"><b class="h">Suffix = at the end</b>it changes the word's job:<br>-ness, -ment, -tion → a noun<br>-ful, -ous, -ive, -able → an adjective<br>-ly → an adverb</div>
+        </div>
+        <p style="margin-top:12px"><b>Word families:</b> one root, many jobs. Pick the one the sentence needs.</p>
+        <div class="table-wrap"><table class="fam">
+          <thead><tr><th>Noun</th><th>Verb</th><th>Adjective</th><th>Adverb</th></tr></thead>
+          <tbody><tr><td>happiness</td><td>–</td><td>happy</td><td>happily</td></tr>
+          <tr><td>decision</td><td>decide</td><td>decisive</td><td>decisively</td></tr>
+          <tr><td>strength</td><td>strengthen</td><td>strong</td><td>strongly</td></tr>
+          <tr><td>danger</td><td>endanger</td><td>dangerous</td><td>dangerously</td></tr></tbody>
+        </table></div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Dictionary skills</h3>
+        <ul>
+          <li><b>ABC order:</b> same first letter? Look at the 2nd letter, then the 3rd: br<b>a</b>nd, br<b>a</b>ve, br<b>e</b>ad.</li>
+          <li><b>Guide words</b> at the top of a page show the first and last word on it. <i>fish … flag</i>: “five” is on the page, “fly” is not.</li>
+          <li><b>Many words have more than one meaning</b> (bat, bank, match). Read the whole sentence to pick the right one.</li>
+          <li>An entry tells you more than the meaning: how to say it, the word class (n, v, adj, adv) and an example.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's no vocabulary section, but the words you choose count in every piece of writing, and questions often ask what a word or phrase suggests, or why the writer chose it.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Precise words win marks:</b> “she trudged home” tells the examiner more than “she went home”.</li>
+            <li><b>“What does this word suggest?”</b> Give the meaning AND the feeling it creates.</li>
+            <li><b>Cut the “very”s:</b> one strong word reads better than very + a weak word.</li>
+            <li><b>Don't use a word you're not sure of:</b> a fancy word in the wrong place loses more than it gains.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Replace each “very” phrase with one stronger word.
+              <div class="pass">The walk up Carrauntoohil was very hard. By the top we were very tired, very hungry and very cold, but the view was very beautiful.</div>
+              <details><summary>Show a model answer</summary><p>The walk up Carrauntoohil was <b>gruelling</b>. By the top we were <b>exhausted</b>, <b>starving</b> and <b>freezing</b>, but the view was <b>stunning</b>.<br><i>Where the marks would go:</i> one mark for each strong word that keeps the meaning (5). “Gigantic” for hard, or “furious” for tired, would change the meaning and lose the mark.</p></details></li>
+            <li>Write the opposite of each word using a prefix: <b>possible, legal, honest, regular, kind</b>.
+              <details><summary>Show the answer</summary><p><b>impossible, illegal, dishonest, irregular, unkind</b>.<br><i>Where the marks would go:</i> one each, spelled right: keep the whole prefix and the whole word (il + legal = illegal).</p></details></li>
+            <li>Fill each gap with a word from the family in brackets: “The (decide) was made (quick) because of the (dangerous) of the storm.”
+              <details><summary>Show the answer</summary><p>The <b>decision</b> was made <b>quickly</b> because of the <b>danger</b> of the storm.<br><i>Where the marks would go:</i> a noun after “The”, an adverb to say how it was made, a noun after “the … of”.</p></details></li>
+            <li>“The old man <b>shuffled</b> across the kitchen.” What does the word “shuffled” suggest about him? Why is it better than “walked”?
+              <details><summary>Show a model answer</summary><p>“Shuffled” suggests he moves slowly, dragging his feet without lifting them, so he may be old, tired or unwell. It is better than “walked” because it shows us how he moves and makes us picture him, instead of just telling us he crossed the room.<br><i>Where the marks would go:</i> what the word means (slow, dragging steps), what it suggests about him (tired, frail), and why it works better than the plain word.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/vocabulary-dictionary-skills-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

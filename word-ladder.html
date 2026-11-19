@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Ladder: Vocabulary &amp; Dictionary Skills Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English vocabulary game: shades of meaning, synonyms and antonyms, prefixes, word families and dictionary skills, with rules, an Exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}
+.choices.one .choice{font-size:18px;text-align:left}
+#choices .choice{font-size:19px;font-weight:700}
+#choices.one .choice{white-space:normal}
+.wl-big{font-size:34px;font-weight:800;text-align:center;margin:6px 0 2px;line-height:1.2}
+.wl-dot{color:var(--muted);font-weight:400;margin:0 6px}
+.wl-emo{font-size:46px;text-align:center;line-height:1.1;margin-top:2px}
+.wl-gloss{text-align:center;font-weight:700;color:var(--muted);margin:0}
+.wl-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 2px}.wl-chips span{background:#F6CF5A;border-radius:8px;padding:4px 12px;font-size:20px;font-weight:800}
+.wl-guide{display:flex;justify-content:center;align-items:center;gap:8px;margin:8px 0}.wl-guide span:not(.wl-dot){border:2px solid var(--line);border-radius:8px;padding:4px 14px;font-size:21px;font-weight:800;background:#fff}
+.lad{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.lad .note{font-size:16px}.lad .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.fam{width:100%;border-collapse:collapse;min-width:0}.fam th,.fam td{padding:6px 6px;border-top:1px solid var(--line);font-size:15px;text-align:left}.fam th{color:var(--ink);text-transform:none;font-size:14px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.tests{display:grid;gap:6px}.tests .note{font-size:17px}.pp{white-space:nowrap;display:inline-block;margin-right:10px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Word Ladder</h1>
+        <p>Climb from weak words to strong ones. Opposites, prefixes, word families and dictionary skills against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="ladder"><div><b>Word Ladder</b><span>warm → hot → boiling</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="same"><div><b>Same or opposite?</b><span>huge = enormous · huge ↔ tiny</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pre"><div><b>Prefixes</b><span>un · dis · im · re · mis</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fam"><div><b>Word families</b><span>happy · happily · happiness</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="dict"><div><b>Dictionary skills</b><span>ABC order · guide words · meanings</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Word Ladder, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R10, OL13, W5 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Vocabulary and dictionary skills</h2>
+        <p>Good writers don't know more words than everyone else: they pick the <b>exact</b> word. These are the tools for finding it.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>All of these mean “not”. Why does the prefix change?</p>
+        <div class="tests">
+          <div class="note"><span class="pp">im<b>p</b>ossible</span> <span class="pp">im<b>p</b>olite</span> <span class="pp">im<b>m</b>ature</span></div>
+          <div class="note"><span class="pp">il<b>l</b>egal</span> <span class="pp">il<b>l</b>ogical</span></div>
+          <div class="note"><span class="pp">ir<b>r</b>egular</span> <span class="pp">ir<b>r</b>esponsible</span></div>
+        </div>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Look at the first letter of the root word. Before <b>p</b> or <b>m</b>, “not” is usually <b>im-</b>. Before <b>l</b> it's <b>il-</b>, before <b>r</b> it's <b>ir-</b>. That's why <i>illegal</i> has two l's and <i>irregular</i> has two r's: you keep the whole prefix AND the whole word.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Shades of meaning: the word ladder</h3>
+        <p>Words that mean nearly the same thing can be weaker or stronger, smaller or bigger. Put them on a ladder: the weakest at the bottom, the strongest at the top.</p>
+        <div class="lad">
+          <div class="note"><b class="h">🌡️ heat</b>warm → hot → boiling</div>
+          <div class="note"><b class="h">😠 anger</b>annoyed → angry → furious</div>
+          <div class="note"><b class="h">😴 tiredness</b>sleepy → tired → exhausted</div>
+          <div class="note"><b class="h">🏃 speed</b>walk → jog → sprint</div>
+        </div>
+        <p style="margin-top:8px"><b>Swap “very” + a weak word for one strong word:</b> very hot → <b>boiling</b> · very tired → <b>exhausted</b> · very funny → <b>hilarious</b>. Only use the strongest word when you mean it: “furious” about a lost pencil sounds silly.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Synonyms and antonyms</h3>
+        <div class="lad">
+          <div class="note"><b class="h">🟰 Synonym</b>same (or nearly the same) meaning<br><b>huge = enormous · begin = start</b></div>
+          <div class="note"><b class="h">↔️ Antonym</b>the opposite meaning<br><b>huge ↔ tiny · ancient ↔ modern</b></div>
+          <div class="note"><b class="h">📚 Thesaurus</b>a book or site of synonyms. Check the meaning in a dictionary before you use a new one.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Prefixes and suffixes</h3>
+        <div class="lad">
+          <div class="note"><b class="h">Prefix = at the start</b>un-, dis-, im-, in-, il-, ir- = not<br>re- = again · mis- = wrongly · pre- = before</div>
+          <div class="note"><b class="h">Suffix = at the end</b>it changes the word's job:<br>-ness, -ment, -tion → a noun<br>-ful, -ous, -ive, -able → an adjective<br>-ly → an adverb</div>
+        </div>
+        <p style="margin-top:12px"><b>Word families:</b> one root, many jobs. Pick the one the sentence needs.</p>
+        <div class="table-wrap"><table class="fam">
+          <thead><tr><th>Noun</th><th>Verb</th><th>Adjective</th><th>Adverb</th></tr></thead>
+          <tbody><tr><td>happiness</td><td>–</td><td>happy</td><td>happily</td></tr>
+          <tr><td>decision</td><td>decide</td><td>decisive</td><td>decisively</td></tr>
+          <tr><td>strength</td><td>strengthen</td><td>strong</td><td>strongly</td></tr>
+          <tr><td>danger</td><td>endanger</td><td>dangerous</td><td>dangerously</td></tr></tbody>
+        </table></div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Dictionary skills</h3>
+        <ul>
+          <li><b>ABC order:</b> same first letter? Look at the 2nd letter, then the 3rd: br<b>a</b>nd, br<b>a</b>ve, br<b>e</b>ad.</li>
+          <li><b>Guide words</b> at the top of a page show the first and last word on it. <i>fish … flag</i>: “five” is on the page, “fly” is not.</li>
+          <li><b>Many words have more than one meaning</b> (bat, bank, match). Read the whole sentence to pick the right one.</li>
+          <li>An entry tells you more than the meaning: how to say it, the word class (n, v, adj, adv) and an example.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's no vocabulary section, but the words you choose count in every piece of writing, and questions often ask what a word or phrase suggests, or why the writer chose it.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Precise words win marks:</b> “she trudged home” tells the examiner more than “she went home”.</li>
+            <li><b>“What does this word suggest?”</b> Give the meaning AND the feeling it creates.</li>
+            <li><b>Cut the “very”s:</b> one strong word reads better than very + a weak word.</li>
+            <li><b>Don't use a word you're not sure of:</b> a fancy word in the wrong place loses more than it gains.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Replace each “very” phrase with one stronger word.
+              <div class="pass">The walk up Carrauntoohil was very hard. By the top we were very tired, very hungry and very cold, but the view was very beautiful.</div>
+              <details><summary>Show a model answer</summary><p>The walk up Carrauntoohil was <b>gruelling</b>. By the top we were <b>exhausted</b>, <b>starving</b> and <b>freezing</b>, but the view was <b>stunning</b>.<br><i>Where the marks would go:</i> one mark for each strong word that keeps the meaning (5). “Gigantic” for hard, or “furious” for tired, would change the meaning and lose the mark.</p></details></li>
+            <li>Write the opposite of each word using a prefix: <b>possible, legal, honest, regular, kind</b>.
+              <details><summary>Show the answer</summary><p><b>impossible, illegal, dishonest, irregular, unkind</b>.<br><i>Where the marks would go:</i> one each, spelled right: keep the whole prefix and the whole word (il + legal = illegal).</p></details></li>
+            <li>Fill each gap with a word from the family in brackets: “The (decide) was made (quick) because of the (dangerous) of the storm.”
+              <details><summary>Show the answer</summary><p>The <b>decision</b> was made <b>quickly</b> because of the <b>danger</b> of the storm.<br><i>Where the marks would go:</i> a noun after “The”, an adverb to say how it was made, a noun after “the … of”.</p></details></li>
+            <li>“The old man <b>shuffled</b> across the kitchen.” What does the word “shuffled” suggest about him? Why is it better than “walked”?
+              <details><summary>Show a model answer</summary><p>“Shuffled” suggests he moves slowly, dragging his feet without lifting them, so he may be old, tired or unwell. It is better than “walked” because it shows us how he moves and makes us picture him, instead of just telling us he crossed the room.<br><i>Where the marks would go:</i> what the word means (slow, dragging steps), what it suggests about him (tired, frail), and why it works better than the plain word.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/vocabulary-dictionary-skills-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_word_ladder.py read this block: keep it valid JSON, one item per line) ----------
+     ladder: [emoji, [weakest, middle, strongest], sentence with "very <middle>" or null, (optional) other ladders' strong words that could ALSO fit the sentence: never offered]
+     syn:    [word, synonym, antonym]
+     pre:    [prefix, root, meaning shown, (optional) other prefixes that ALSO make a word with this root: never offered]
+     fam:    [sentence with ___, answer, [3 other words of the same family], word class the gap needs: n / v / a (adjective) / r (adverb)]
+     abc:    [4 words that start with the same letter]
+     guide:  [top guide word, bottom guide word, a word on the page, [3 words not on the page]]
+     mean:   [sentence with {word}, right meaning, [other meanings of the same word]] */
+  var D=/*DATA*/{
+"ladder": [
+["☀️", ["warm", "hot", "sweltering"], "The day was very hot.", ["furious"]],
+["🥶", ["chilly", "cold", "freezing"], "The water in the lake was very cold."],
+["🐘", ["big", "huge", "gigantic"], null],
+["🐜", ["small", "tiny", "microscopic"], null],
+["😊", ["pleased", "happy", "overjoyed"], "Gran was very happy with her present."],
+["😢", ["glum", "sad", "heartbroken"], "Liam was very sad when the holidays ended."],
+["😠", ["annoyed", "angry", "furious"], "Mam was very angry about the mess.", ["stormy"]],
+["😨", ["worried", "scared", "terrified"], "I was very scared of the dark."],
+["😴", ["sleepy", "tired", "exhausted"], "After the match we were very tired."],
+["🍽️", ["peckish", "hungry", "starving"], "I'm very hungry after training."],
+["😂", ["amusing", "funny", "hilarious"], "The film was very funny."],
+["⭐", ["okay", "good", "excellent"], "Your essay is very good.", ["brilliant", "delicious", "stunning"]],
+["🤫", ["soft", "quiet", "silent"], "The classroom was very quiet."],
+["🔊", ["noisy", "loud", "deafening"], "The music was very loud."],
+["💧", ["damp", "wet", "soaked"], "My jacket was very wet."],
+["🥾", ["grubby", "dirty", "filthy"], "Your boots are very dirty.", ["stormy"]],
+["🌬️", ["breezy", "windy", "stormy"], "It was very windy on the beach.", ["furious"]],
+["😋", ["pleasant", "tasty", "delicious"], "The cake was very tasty."],
+["🧠", ["bright", "clever", "brilliant"], "Aoife is very clever.", ["excellent"]],
+["🌅", ["pretty", "beautiful", "stunning"], "The view was very beautiful."],
+["❤️", ["like", "love", "adore"], null],
+["🍃", ["breeze", "wind", "gale"], null],
+["🌧️", ["drizzle", "rain", "downpour"], null],
+["🗣️", ["whisper", "talk", "shout"], null],
+["🏃", ["walk", "jog", "sprint"], null],
+["🥤", ["sip", "drink", "gulp"], null],
+["🍕", ["nibble", "eat", "devour"], null],
+["🚪", ["tap", "knock", "bang"], null],
+["⛰️", ["mound", "hill", "mountain"], null],
+["🌊", ["pond", "lake", "ocean"], null],
+["🏙️", ["village", "town", "city"], null]
+],
+"syn": [
+["ancient", "old", "modern"],
+["brave", "courageous", "cowardly"],
+["begin", "start", "finish"],
+["question", "query", "answer"],
+["difficult", "hard", "easy"],
+["huge", "enormous", "tiny"],
+["sharp", "pointed", "blunt"],
+["silent", "quiet", "noisy"],
+["happy", "cheerful", "sad"],
+["polite", "courteous", "rude"],
+["shut", "close", "open"],
+["permit", "allow", "forbid"],
+["victory", "win", "defeat"],
+["arrive", "reach", "leave"],
+["shout", "yell", "whisper"],
+["empty", "vacant", "full"],
+["hate", "detest", "love"],
+["friend", "ally", "enemy"],
+["dangerous", "risky", "safe"],
+["tidy", "neat", "messy"],
+["rise", "climb", "fall"],
+["correct", "right", "wrong"],
+["remember", "recall", "forget"]
+],
+"pre": [
+["un", "happy", "not happy"],
+["un", "kind", "not kind"],
+["un", "tidy", "not tidy"],
+["un", "fair", "not fair"],
+["un", "usual", "not usual"],
+["un", "lucky", "not lucky"],
+["dis", "agree", "not agree"],
+["dis", "honest", "not honest"],
+["dis", "like", "not like", ["un"]],
+["dis", "obey", "not obey"],
+["dis", "loyal", "not loyal"],
+["im", "possible", "not possible"],
+["im", "polite", "not polite"],
+["im", "patient", "not patient", ["in"]],
+["im", "mature", "not mature", ["pre"]],
+["in", "correct", "not correct"],
+["in", "visible", "not visible"],
+["in", "complete", "not complete", ["un"]],
+["il", "legal", "not legal"],
+["il", "logical", "not logical", ["un"]],
+["ir", "regular", "not regular"],
+["ir", "responsible", "not responsible"],
+["ir", "relevant", "not relevant"],
+["re", "build", "build again"],
+["re", "write", "write again"],
+["re", "fill", "fill again"],
+["re", "read", "read again", ["un", "mis"]],
+["mis", "spell", "spell wrongly", ["un"]],
+["mis", "understand", "understand wrongly"],
+["mis", "behave", "behave badly"],
+["pre", "heat", "heat before", ["re"]]
+],
+"fam": [
+["Her ___ was clear to see.", "happiness", ["happy", "happily", "unhappy"], "n"],
+["She sang ___ in the shower.", "happily", ["happy", "happiness", "unhappiness"], "r"],
+["The ___ of the pool is two metres.", "depth", ["deepen", "deeply", "deepest"], "n"],
+["The ___ of the pitch is 100 metres.", "length", ["lengthen", "lengthy", "lengthily"], "n"],
+["Lifting the car showed his ___.", "strength", ["strong", "strongly", "strengthen"], "n"],
+["Please drive ___ near the school.", "carefully", ["careful", "careless", "carelessness"], "r"],
+["The view from the top was ___.", "beautiful", ["beauty", "beautifully", "beautify"], "a"],
+["We need to ___ where to go.", "decide", ["decision", "decisive", "decisively"], "v"],
+["The team was ___ in the final.", "successful", ["success", "succeed", "successfully"], "a"],
+["Running across the road is ___.", "dangerous", ["danger", "dangerously", "endanger"], "a"],
+["Thanks for all your ___.", "help", ["helpful", "helpfully", "helpless"], "n"],
+["She waved ___ at the crowd.", "cheerfully", ["cheer", "cheerful", "cheerfulness"], "r"],
+["He spoke ___ to the new boy.", "kindly", ["kind", "kindness", "unkindness"], "r"],
+["The ___ of the storm shocked us.", "power", ["powerful", "powerfully", "powerless"], "n"],
+["Use your ___ in the story.", "imagination", ["imagine", "imaginative", "imaginatively"], "n"],
+["Our class is very ___.", "creative", ["create", "creation", "creatively"], "a"],
+["I ___ that we leave early.", "suggest", ["suggestion", "suggestive", "suggestively"], "v"],
+["The ___ of the river is ten metres.", "width", ["wide", "widen", "widely"], "n"],
+["The puppy was ___ asleep.", "peacefully", ["peace", "peaceful", "peacefulness"], "r"],
+["He has a great ___ in music.", "interest", ["interesting", "interestingly", "interested"], "n"],
+["The ___ in the hall was loud.", "noise", ["noisy", "noisily", "noisier"], "n"],
+["She was ___ that we were late.", "angry", ["anger", "angrily", "angers"], "a"],
+["The sofa was very ___.", "comfortable", ["comfort", "comfortably", "comforts"], "a"],
+["Try to ___ your answer.", "simplify", ["simple", "simply", "simplicity"], "v"]
+],
+"abc": [
+["bread", "brave", "break", "brand"],
+["chair", "cheap", "chase", "child"],
+["stone", "storm", "story", "stool"],
+["plane", "plant", "plate", "place"],
+["train", "trace", "track", "trade"],
+["shell", "shelf", "shelter", "shed"],
+["grass", "grape", "grant", "graph"],
+["light", "lift", "life", "lime"],
+["sweet", "swim", "swan", "sweep"],
+["money", "monkey", "month", "monster"],
+["water", "watch", "waste", "wave"],
+["clean", "clear", "class", "claim"],
+["front", "frost", "frog", "fridge"],
+["night", "nice", "nine", "niece"],
+["horse", "house", "hour", "hope"],
+["dream", "draw", "drop", "drink"]
+],
+"guide": [
+["fish", "flag", "five", ["fly", "first", "flat"]],
+["map", "mean", "match", ["meat", "magic", "melt"]],
+["rain", "rest", "real", ["rice", "radio", "rope"]],
+["sand", "sea", "school", ["seed", "salt", "seven"]],
+["bake", "beach", "bark", ["bean", "badge", "bed"]],
+["coat", "cold", "coin", ["comb", "coach", "cook"]],
+["hat", "help", "head", ["hen", "happy", "hill"]],
+["pen", "pie", "phone", ["pig", "peace", "pink"]],
+["tent", "tiny", "thumb", ["tip", "tea", "toy"]],
+["gold", "grab", "goose", ["grey", "goal", "great"]],
+["lamp", "leaf", "late", ["learn", "lake", "left"]],
+["wet", "wide", "white", ["wild", "west", "wing"]]
+],
+"mean": [
+["The {bat} flew out of the cave.", "🦇 an animal that flies at night", ["🏏 a stick for hitting a ball"]],
+["Hold the {bat} with both hands.", "🏏 a stick for hitting a ball", ["🦇 an animal that flies at night"]],
+["We sat on the river {bank} for lunch.", "🏞️ the land beside a river", ["💶 a place that keeps money"]],
+["I put my money in the {bank}.", "💶 a place that keeps money", ["🏞️ the land beside a river"]],
+["The {bark} of the old tree was rough.", "🌳 the outside of a tree", ["🐕 the sound a dog makes"]],
+["We heard a loud {bark} next door.", "🐕 the sound a dog makes", ["🌳 the outside of a tree"]],
+["She wore a gold {ring}.", "💍 a piece of jewellery for your finger", ["📞 the sound of a phone"]],
+["I waited for the {ring} of the phone.", "📞 the sound of a phone", ["💍 a piece of jewellery for your finger"]],
+["Turn {right} at the church.", "➡️ the opposite of left", ["✅ correct"]],
+["Your answer is {right}.", "✅ correct", ["➡️ the opposite of left"]],
+["My little brother can't {match} his socks.", "🧦 put together things that go together", ["⚽ a game between two teams", "🔥 a small stick for lighting a fire"]],
+["We won the {match} 3–1.", "⚽ a game between two teams", ["🔥 a small stick for lighting a fire", "🧦 put together things that go together"]],
+["Strike a {match} to light the candle.", "🔥 a small stick for lighting a fire", ["⚽ a game between two teams", "🧦 put together things that go together"]],
+["The {light} was too bright.", "💡 the brightness that helps you see", ["🪶 not heavy"]],
+["The box was {light} enough to carry.", "🪶 not heavy", ["💡 the brightness that helps you see"]],
+["We had a {fair} result: one each.", "⚖️ equal and right for everyone", ["🎡 a show with rides and games"]],
+["We went on the rides at the {fair}.", "🎡 a show with rides and games", ["⚖️ equal and right for everyone"]]
+]
+}/*END*/;
+  /* prefixes, always shown in this order */
+  var PRE=["un","dis","im","in","il","ir","re","mis","pre"];
+  var PREWHY={un:"un- = not (unhappy, unfair).",dis:"dis- = not, or the opposite (disagree, dishonest).",im:"im- = not, before p or m (impossible, immature).",
+    in:"in- = not (incorrect, invisible).",il:"il- = not, before l (illegal, illogical).",ir:"ir- = not, before r (irregular).",
+    re:"re- = again (rebuild, rewrite).",mis:"mis- = wrongly or badly (misspell, misbehave).",pre:"pre- = before (preheat, preschool)."};
+  /* a choice question; nw = how many wrong options */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,fixed:data&&data.fixed,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function big(s){return '<p class="wl-big">'+s+'</p>';}
+  function sentHTML(s,hl){return '<p class="ws-s">'+esc(s).replace(hl,'<mark class="hl">'+esc(hl)+'</mark>')+'</p>';}
+  function gapS(s){return '<p class="ws-s">'+esc(s).replace("___",'<mark class="hl">&nbsp;?&nbsp;</mark>')+'</p>';}
+  function chips(ws){return '<div class="wl-chips">'+ws.map(function(w){return '<span>'+esc(w)+'</span>';}).join("")+'</div>';}
+  var ARROW=" → ";
+  var PERMS=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+
+  /* ================= WORD LADDER: shades of meaning ================= */
+  function ladderCard(L){return '<div class="wl-emo">'+L[0]+'</div>'+chips(shuffle(L[1].slice()));}
+  function strongQ(){var L=rnd(D.ladder),w=L[1];
+    return C("🪜 Top of the ladder?",w[2],[w[0],w[1]],"Bottom → top: "+w.join(ARROW)+".",'<div class="wl-emo">'+L[0]+'</div>',{t:"strong",ladder:w,rv:w.join(ARROW)+" (top: "+w[2]+")"},2);}
+  function weakQ(){var L=rnd(D.ladder),w=L[1];
+    return C("🪜 Bottom of the ladder?",w[0],[w[1],w[2]],"Bottom → top: "+w.join(ARROW)+".",'<div class="wl-emo">'+L[0]+'</div>',{t:"weak",ladder:w,rv:w.join(ARROW)+" (bottom: "+w[0]+")"},2);}
+  function climbQ(){var L=rnd(D.ladder),w=L[1],ans=w.join(ARROW);
+    var pool=PERMS.map(function(p){return p.map(function(i){return w[i];}).join(ARROW);});
+    var q=C("🪜 Bottom → top",ans,pool,"Climb the ladder: "+ans+".",ladderCard(L),{t:"climb",ladder:w,rv:ans});
+    q.fixed=shuffle([q.answer].concat(q.wrong));return q;}
+  /* "very hot" → one stronger word; wrong = the weakest word of the same ladder + strongest words of two other ladders */
+  function veryQ(){var L=rnd(D.ladder.filter(function(x){return x[2];})),w=L[1],ph="very "+w[1];
+    var avoid=L[3]||[],others=shuffle(D.ladder.filter(function(x){return x!==L&&x[2]&&avoid.indexOf(x[1][2])<0;})).slice(0,2).map(function(x){return x[1][2];});
+    return C("💪 One stronger word",w[2],[w[0]].concat(others),"“"+ph+"” → "+w[2]+". One strong word beats “very” + a weak word.",sentHTML(L[2],ph),{t:"very",base:w[1],weak:w[0],sent:L[2],rv:L[2].replace(ph,w[2])});}
+
+  /* ================= SAME OR OPPOSITE: synonyms and antonyms ================= */
+  function sameQ(){var it=rnd(D.syn);var others=D.syn.filter(function(x){return x!==it;}).map(function(x){return x[1];});
+    var pool=[it[2]].concat(shuffle(others).slice(0,2));
+    return C("🟰 Same meaning?",it[1],pool,it[0]+" = "+it[1]+" (a synonym). "+it[2]+" is the opposite.",big(esc(it[0])),{t:"same",word:it[0],rv:it[0]+" = "+it[1]});}
+  function oppQ(){var it=rnd(D.syn);var others=D.syn.filter(function(x){return x!==it;}).map(function(x){return x[2];});
+    var pool=[it[1]].concat(shuffle(others).slice(0,2));
+    return C("↔️ Opposite?",it[2],pool,it[0]+" ↔ "+it[2]+" (an antonym). "+it[1]+" means the same.",big(esc(it[0])),{t:"opp",word:it[0],rv:it[0]+" ↔ "+it[2]});}
+  var SO=["🟰 Same","↔️ Opposite"];
+  function pairQ(){var it=rnd(D.syn),same=Math.random()<.5,b=same?it[1]:it[2],ans=same?SO[0]:SO[1];
+    return C("🟰 or ↔️?",ans,[same?SO[1]:SO[0]],it[0]+(same?" = ":" ↔ ")+b+(same?": a synonym.":": an antonym."),big(esc(it[0])+' <span class="wl-dot">·</span> '+esc(b)),{t:"pair",a:it[0],b:b,fixed:SO,rv:it[0]+(same?" = ":" ↔ ")+b},1);}
+
+  /* ================= PREFIXES ================= */
+  function preQ(){var it=rnd(D.pre),p=it[0],r=it[1];
+    var av=it[3]||[],pool=PRE.filter(function(x){return x!==p&&av.indexOf(x)<0&&!D.pre.some(function(y){return y[0]===x&&y[1]===r;});});
+    var q=C("➕ Which prefix?",p,pool,PREWHY[p]+" "+p+r+" = "+it[2]+".",'<p class="ws-s"><mark class="hl">&nbsp;?&nbsp;</mark>'+esc(r)+'</p><p class="wl-gloss">= '+esc(it[2])+'</p>',{t:"pre",root:r,rv:p+r+" = "+it[2]});
+    q.fixed=PRE.filter(function(x){return x===q.answer||q.wrong.indexOf(x)>=0;});return q;}
+
+  /* ================= WORD FAMILIES ================= */
+  var CLS={n:"a noun (a thing or idea)",v:"a verb (a doing word)",a:"an adjective (a describing word)",r:"an adverb (how? when?)"};
+  function famQ(){var it=rnd(D.fam);
+    return C("👪 Which word fits?",it[1],it[2],"The gap needs "+CLS[it[3]]+": "+it[0].replace("___",it[1]),gapS(it[0]),{t:"fam",sent:it[0],cls:it[3],rv:it[0].replace("___",it[1])});}
+
+  /* ================= DICTIONARY SKILLS ================= */
+  function abcFirst(ws){return ws.slice().sort()[0];}
+  function abcQ(){var ws=rnd(D.abc),last=Math.random()<.35,s=ws.slice().sort(),ans=last?s[3]:s[0];
+    return C(last?"🔤 Last in the dictionary?":"🔤 First in the dictionary?",ans,ws,"In ABC order: "+s.join(", ")+". Same first letters? Look at the next letter.","",{t:last?"abcLast":"abcFirst",words:ws,rv:s.join(", ")});}
+  function guideQ(){var g=rnd(D.guide);
+    return C("📖 On this page?",g[2],g[3],g[2]+" comes between "+g[0]+" and "+g[1]+" in ABC order.",'<div class="wl-guide"><span>'+esc(g[0])+'</span><span class="wl-dot">…</span><span>'+esc(g[1])+'</span></div>',{t:"guide",top:g[0],bottom:g[1],rv:g[0]+" … "+g[2]+" … "+g[1]});}
+  function meanQ(){var m=rnd(D.mean),w=m[0].match(/\{(\w+)\}/)[1],s=m[0].replace(/[{}]/g,"");
+    return C("🔎 Which meaning?",m[1],m[2],w+" here: "+m[1].replace(/^\S+ /,"")+".",sentHTML(s,w),{t:"mean",word:w,sent:s,rv:s+" ("+w+" = "+m[1].replace(/^\S+ /,"")+")"},m[2].length);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    ladder:[strongQ,weakQ,climbQ,veryQ,veryQ],
+    same:[sameQ,oppQ,pairQ],
+    pre:[preQ],
+    fam:[famQ],
+    dict:[abcQ,guideQ,meanQ],
+    mixed:[strongQ,climbQ,veryQ,sameQ,oppQ,preQ,famQ,abcQ,guideQ,meanQ]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="dict"||m==="mixed"?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=q.fixed?q.fixed.slice():shuffle([q.answer].concat(q.wrong));   /* prefix / same-opposite buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="ladder"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="ladder"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,PRE:PRE,abcFirst:abcFirst}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
