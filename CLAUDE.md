@@ -9,6 +9,8 @@ Claire-Louise has more than one Payhip store: **Léim** (payhip.com/Leim), **Spr
 
 (Rule added 15 Nov 2026 after 21 Léim products were created in the Spraoi Learning store by mistake.)
 
+**Duplicates (19 Nov 2026, 19:20):** two chats put the Register & Tone, Tenses and Persuasive Writing teacher packs on Payhip at the same time. The site uses SnLO0, 70GDz and sZUcO. The copies **zheIT, cLkp5 and j89KS** are set to **Invisible** (not deleted). Leave them alone, or delete them only if she asks. To stop this happening again, check WORKING.md right before ANY Payhip step, even in the middle of a job.
+
 The full Léim job list lives in the claude.ai project "LEIM REVISION" (claude/leim-todo.md).
 
 ## ⚠ More than one chat can work on Léim at once — claim your job first
