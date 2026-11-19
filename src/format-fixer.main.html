@@ -1,0 +1,150 @@
+<main id="main">
+<style>.ff-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.ff-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.ff-card.lt p{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+.ff-card.casual{background:#FFF6E5}
+.ff-card .ff-lab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-family:inherit}
+.ff-dots{color:var(--muted)}
+.ff-letter{background:#fff;border:2px solid var(--line);border-radius:6px;padding:14px 16px;max-width:520px;margin:8px auto 4px;text-align:left;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:15px;line-height:1.4;box-shadow:3px 3px 0 var(--line)}
+.ff-letter .ffl{margin:0 0 8px}
+.ff-letter .ffl.r{text-align:right}
+.ff-letter .ffl.em{font-family:inherit;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:6px}
+.ff-letter .ffl.gap{display:inline-block;background:#FFF3B0;border:2px dashed #E0B400;border-radius:6px;padding:2px 18px;font-weight:800;font-family:inherit}
+.ff-letter .ffl.gap.r{display:block;width:60px;margin-left:auto;text-align:center}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+.sx .ff-letter{margin:0;max-width:none;font-size:14px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.ff-card p{font-size:18px}#choices .choice{font-size:15px}.ff-letter{font-size:14px;padding:12px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Format Fixer</h1>
+        <p>Letters and emails: formal or informal, the right layout, the right sign-off, the right tone. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Format Fixer</b><span>📨 Formal or 😊 informal?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sign"><div><b>Sign it off</b><span>✍️ Faithfully, sincerely or Talk soon?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="layout"><div><b>Letter layout</b><span>🏠 📅 🏢 👋 Which part? What comes next?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tone"><div><b>Make it formal</b><span>🎩 Fix the tone</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="miss"><div><b>What's missing?</b><span>🔍 Letters and emails</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Format Fixer, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W4, W12, R13 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Letters &amp; emails: formal and informal</h2>
+        <p>Who are you writing to? That one question decides the layout, the greeting, the sign-off and every word in between.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="ff-letter"><div class="ffl r">12 Main Street<br>Bandon<br>Co. Cork</div><div class="ffl r">3 March 2026</div><div class="ffl">Hi Gran,</div><div class="ffl">Guess what! I'm going to Tramore with the school on Friday. Can't wait!</div><div class="ffl">Talk soon,<br>Aoife xx</div></div>
+          <div class="ff-letter"><div class="ffl r">12 Main Street<br>Bandon<br>Co. Cork</div><div class="ffl r">3 March 2026</div><div class="ffl">The Manager<br>Wave Zone<br>Tramore<br>Co. Waterford</div><div class="ffl">Dear Sir/Madam,</div><div class="ffl">I am writing to book a visit for our class on Friday 6 March. I look forward to hearing from you.</div><div class="ffl">Yours faithfully,<br>Aoife Murphy</div></div>
+        </div>
+        <p style="margin-top:8px">Same writer, same week. What does the second letter have that the first one doesn't? Compare the greetings, the sign-offs and the names. Find two short forms in the first letter.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The <b>formal</b> letter adds <b>their address</b> on the left, opens with <b>Dear Sir/Madam</b>, says <b>why</b> it is written in the first line, ends <b>Yours faithfully</b> and gives the <b>full name</b>. The <b>informal</b> letter uses short forms (<i>I'm</i>, <i>Can't</i>), a “!” and a friendly sign-off with just a first name. Both put <b>your address top right</b> with the <b>date</b> under it.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The layout of a formal letter</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏠 Your address</b>Top right. No name.</div>
+          <div class="note"><b class="h">📅 Date</b>Under your address: 3 March 2026.</div>
+          <div class="note"><b class="h">🏢 Their address</b>On the left, lower down: The Manager, …</div>
+          <div class="note"><b class="h">👋 Greeting</b>Dear Sir/Madam, · Dear Ms Kelly,</div>
+          <div class="note"><b class="h">🎯 Opening line</b>Why you are writing: I am writing to…</div>
+          <div class="note"><b class="h">🙏 Closing line</b>I look forward to hearing from you.</div>
+          <div class="note"><b class="h">✍️ Sign-off</b>Yours faithfully, / Yours sincerely, then your full name.</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Faithfully or sincerely?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">No name</b>Dear Sir/Madam, → <b>Yours faithfully,</b></div>
+          <div class="note"><b class="h">A name</b>Dear Mr Byrne, → <b>Yours sincerely,</b></div>
+          <div class="note"><b class="h">A friend</b>Hi Aoife, → Talk soon, / Love,</div>
+          <div class="note"><b class="h">💡 Memory trick</b><b>S</b>ir and <b>s</b>incerely never go together.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Capital Y on “Yours”, small f or s on “faithfully” / “sincerely”, then a comma.</p>
+        <h3 style="font-size:19px;margin:22px 0 8px">Formal or informal?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📨 Formal</b>Full words: I am, I cannot, I would like. Polite and clear. No slang, no “!!”, no emoji.</div>
+          <div class="note"><b class="h">😊 Informal</b>Chatty: I'm, can't, Guess what! Slang is fine. First names.</div>
+          <div class="note"><b class="h">📧 Emails</b>A short subject line. Greeting, opening line, paragraphs, sign-off and full name, like a letter. No addresses or date needed.</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper often asks you to <b>write</b> a letter or email: to complain, to apply, to ask, to thank, or to a friend. Some questions also ask you to <b>read</b> one and say who it is for and how you can tell. The marks reward the right <b>layout</b> and <b>register</b> (how formal you are) for your reader, as well as what you say.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Read the question twice:</b> who is it to, and why? That decides formal or informal.</li>
+            <li><b>Layout</b>: addresses, date, greeting and sign-off in the right places (a subject line for an email).</li>
+            <li><b>Say why you are writing</b> in your first line. One idea per paragraph.</li>
+            <li><b>Stay in one register</b>: one “gonna” or “!!” in a formal letter loses marks.</li>
+            <li><b>Faithfully or sincerely</b>: match it to your greeting.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>You ordered a bike helmet online from <b>Pedal Power</b> and it arrived cracked. Write the <b>subject line, greeting, opening line, closing line and sign-off</b> of a formal email to the shop.
+              <details><summary>Show a model answer</summary><p><i>Subject: Cracked helmet, order 4471</i><br>Dear Sir/Madam,<br>I am writing to complain about a bike helmet I ordered from your website, which arrived cracked on 9 May.<br>…<br>I would be grateful if you could send me a replacement or a full refund.<br>Yours faithfully,<br>Ella Byrne<br><i>Where the marks would go:</i> a short, clear subject line; Dear Sir/Madam with Yours faithfully (no name given); the reason for writing in the first line, with a detail (the date); a polite closing line that says what you want; your full name.</p></details></li>
+            <li>Find and fix <b>four</b> mistakes in this letter to a manager.
+              <div class="pass">Hi Manager,<br>I'm writing about the summer job in your window. I'd be well up for it!! I have helped in my aunt's shop for a year.<br>Yours sincerely,<br>Leah</div>
+              <details><summary>Show a model answer</summary><p>(1) “Hi Manager” → <b>Dear Sir/Madam,</b> (2) “I'm writing” / “I'd be well up for it!!” → <b>I am writing to apply for…</b> / <b>I would be very interested in the job.</b> (3) “Yours sincerely” → <b>Yours faithfully,</b> (no name was used in the greeting). (4) “Leah” → her <b>full name</b>, Leah Byrne. Also missing: her address and the date top right, the shop's address on the left.<br><i>Where the marks would go:</i> one mark for each mistake found and fixed, with the reason.</p></details></li>
+            <li>Rewrite in a <b>formal</b> register: “Hey, the bus was super late, like an hour. Can ye sort it out asap?”
+              <details><summary>Show a model answer</summary><p>“Your bus was an hour late on Tuesday morning. I would be grateful if you could look into this as soon as possible.”<br><i>Where the marks would go:</i> no slang (hey, super, like, ye, asap); full words; a polite request; the facts kept (an hour late).</p></details></li>
+            <li>Write a short <b>informal</b> email inviting your cousin to your birthday party. Then name <b>two</b> things that make it informal.
+              <details><summary>Show a model answer</summary><p><i>Subject: Party!</i><br>Hi Sam,<br>Guess what? I'm having a party on Saturday at the bowling alley in Tralee. Can you come? Mam says she'll collect you at two.<br>Talk soon,<br>Cian<br><i>Two things:</i> short forms (I'm, she'll) and a chatty greeting and sign-off with first names (Hi Sam, Talk soon, Cian).<br><i>Where the marks would go:</i> the details a guest needs (when, where, a question to answer), a friendly tone that suits a cousin, and two features named correctly.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/letters-emails-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

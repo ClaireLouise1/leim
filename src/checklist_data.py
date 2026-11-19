@@ -93,7 +93,7 @@ ENGLISH = [
   ("1st year","Summer","Narrative writing: your own story","W3, W7, W9, W1","Story Spine","story-spine.html","narrative-writing"),
   ("1st year","Summer","Vocabulary & dictionary skills","R10, OL13, W5","Word Ladder","word-ladder.html","vocabulary-dictionary-skills"),
   ("2nd year","Autumn","The novel 2: setting, plot, structure & theme","R6, R7, R9, W8","Plot Line","plot-line.html","novel-setting-plot-theme"),
-  ("2nd year","Autumn","Letters & emails: formal and informal","W4, W12, R13","Format Fixer","",""),
+  ("2nd year","Autumn","Letters & emails: formal and informal","W4, W12, R13","Format Fixer","format-fixer.html","letters-emails"),
   ("2nd year","Autumn","Register & tone","OL12, R12, R13, W12","Register Switch","",""),
   ("2nd year","Autumn","Grammar 2: tenses, agreement & pronouns","W10, W12, OL12","Tense Trap","",""),
   ("2nd year","Spring","Persuasive writing & speeches","W3, OL5, OL7, OL10, R8","Persuasion Power","",""),

@@ -1,0 +1,240 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_format_fixer.py read this block: keep it valid JSON; one item per line) ----------
+     sort: [a line from a letter or email, f (formal) / i (informal)]
+     greet: [greeting, fa (Yours faithfully) / si (Yours sincerely) / in (informal: Talk soon)]
+     letters: formal letters — addr (your address, lines), date, their (their address, lines), greet, open, body, close, sign, name
+     emails: formal emails — to, subj, greet, open, body, close, sign, name
+     tone: [too-casual line, the formal version, [3 versions that are still too casual]] */
+  var D=/*DATA*/{
+ "sort": [
+  ["Dear Sir/Madam,", "f"],
+  ["Yours faithfully,", "f"],
+  ["Yours sincerely,", "f"],
+  ["Dear Ms Kelly,", "f"],
+  ["Dear Mr Byrne,", "f"],
+  ["To whom it may concern,", "f"],
+  ["Dear Dr Ryan,", "f"],
+  ["Kind regards,", "f"],
+  ["I am writing to complain about my order.", "f"],
+  ["I would be grateful for a quick reply.", "f"],
+  ["I look forward to hearing from you.", "f"],
+  ["I wish to apply for the job of shop assistant.", "f"],
+  ["Thank you for your help with this matter.", "f"],
+  ["I would like to book a table for six.", "f"],
+  ["I would appreciate a full refund.", "f"],
+  ["I apologise for the late reply.", "f"],
+  ["Could you please send me a timetable?", "f"],
+  ["I regret that I cannot attend the meeting.", "f"],
+  ["Hi Aoife,", "i"],
+  ["Hey Cian!", "i"],
+  ["Dear Gran,", "i"],
+  ["Hiya Sam,", "i"],
+  ["Love,", "i"],
+  ["Talk soon,", "i"],
+  ["Chat soon,", "i"],
+  ["See you Saturday!", "i"],
+  ["Guess what happened at the match!!", "i"],
+  ["Thanks a mil for the birthday card.", "i"],
+  ["I'm so excited about the trip!", "i"],
+  ["Can't wait to see you!", "i"],
+  ["Loads of love, Mia xx", "i"],
+  ["The concert was deadly!", "i"],
+  ["BTW, Mam says hi.", "i"],
+  ["We're having a party on Friday.", "i"],
+  ["Hope you're keeping well.", "i"],
+  ["Cheers for the lift home.", "i"]
+ ],
+ "greet": [
+  ["Dear Sir/Madam,", "fa"],
+  ["Dear Sir or Madam,", "fa"],
+  ["To whom it may concern,", "fa"],
+  ["Dear Ms Kelly,", "si"],
+  ["Dear Mr Byrne,", "si"],
+  ["Dear Dr Ryan,", "si"],
+  ["Dear Mrs O'Brien,", "si"],
+  ["Dear Mr Doyle,", "si"],
+  ["Dear Ms Ní Bhriain,", "si"],
+  ["Dear Ms Murphy,", "si"],
+  ["Hi Aoife,", "in"],
+  ["Dear Gran,", "in"],
+  ["Hey Cian,", "in"],
+  ["Dear Auntie Rose,", "in"],
+  ["Hiya Sam,", "in"],
+  ["Dear Ellie,", "in"]
+ ],
+ "letters": [
+  {"addr": ["12 Main Street", "Bandon", "Co. Cork"], "date": "3 March 2026", "their": ["The Manager", "Wave Zone", "Tramore", "Co. Waterford"], "greet": "Dear Sir/Madam,", "open": "I am writing to complain about my visit to your water park on 28 February.", "body": "Two of the slides were closed and nobody told us at the ticket desk.", "close": "I look forward to hearing from you.", "sign": "Yours faithfully,", "name": "Aoife Murphy"},
+  {"addr": ["Rose Cottage", "Ballymore", "Co. Westmeath"], "date": "10 September 2026", "their": ["Ms Kelly", "Principal", "St Brigid's Community School", "Mullingar", "Co. Westmeath"], "greet": "Dear Ms Kelly,", "open": "I am writing to ask if our class could start a school garden.", "body": "We have found a sunny space behind the sports hall and twenty students would like to help.", "close": "Thank you for reading my letter.", "sign": "Yours sincerely,", "name": "Cian Doyle"},
+  {"addr": ["45 Harbour View", "Kinsale", "Co. Cork"], "date": "2 May 2026", "their": ["The Manager", "The Seaside Café", "Kinsale", "Co. Cork"], "greet": "Dear Sir/Madam,", "open": "I am writing to apply for the summer job advertised in your window.", "body": "I am fifteen and I have helped at my aunt's shop every Saturday for a year.", "close": "I would be grateful for the chance to meet you.", "sign": "Yours faithfully,", "name": "Leah Byrne"},
+  {"addr": ["8 Castle Road", "Athlone", "Co. Westmeath"], "date": "21 October 2026", "their": ["The Editor", "The Midlands Weekly", "Athlone", "Co. Westmeath"], "greet": "Dear Sir/Madam,", "open": "I am writing about the plan to close our town's swimming pool.", "body": "Over three hundred children learn to swim there every year.", "close": "I hope you will print my letter.", "sign": "Yours faithfully,", "name": "Darragh Walsh"},
+  {"addr": ["Hillside Farm", "Kilrush", "Co. Clare"], "date": "15 June 2026", "their": ["Dr Ryan", "Banner Science Centre", "Ennis", "Co. Clare"], "greet": "Dear Dr Ryan,", "open": "I am writing to thank you for the robotics workshop you gave our class.", "body": "Our team has already built a robot that can follow a line.", "close": "Thank you again for your time.", "sign": "Yours sincerely,", "name": "Niamh Hayes"},
+  {"addr": ["27 Oak Park", "Tralee", "Co. Kerry"], "date": "4 January 2026", "their": ["The Secretary", "Lakeside Youth Orchestra", "Killarney", "Co. Kerry"], "greet": "Dear Sir/Madam,", "open": "I am writing to ask about joining your orchestra.", "body": "I have played the violin for four years and I passed my Grade 5 exam.", "close": "I look forward to your reply.", "sign": "Yours faithfully,", "name": "Oisín Quinn"},
+  {"addr": ["3 Church Lane", "Tullow", "Co. Carlow"], "date": "9 November 2026", "their": ["Mr Brennan", "Town Engineer", "Town Hall", "Tullow", "Co. Carlow"], "greet": "Dear Mr Brennan,", "open": "I am writing to ask for a pedestrian crossing outside our school.", "body": "Cars drive very fast past the school gate every morning.", "close": "I look forward to hearing from you.", "sign": "Yours sincerely,", "name": "Ella Byrne"},
+  {"addr": ["19 Bridge Street", "Westport", "Co. Mayo"], "date": "30 August 2026", "their": ["Customer Service", "Top Kit Sports", "Unit 4, Ballybrit", "Co. Galway"], "greet": "Dear Sir/Madam,", "open": "I am writing to complain about a pair of football boots I bought online.", "body": "The left boot split open after only two matches.", "close": "I would be grateful if you could send me a new pair.", "sign": "Yours faithfully,", "name": "Tadhg Moran"},
+  {"addr": ["The Old Mill", "Bunclody", "Co. Wexford"], "date": "17 February 2026", "their": ["Mrs O'Brien", "Club Secretary", "Slaney Rowing Club", "Enniscorthy", "Co. Wexford"], "greet": "Dear Mrs O'Brien,", "open": "I am writing to ask if I could join the junior rowing team.", "body": "I can swim well and I train in the gym twice a week.", "close": "Thank you for considering my request.", "sign": "Yours sincerely,", "name": "Seán Kavanagh"},
+  {"addr": ["6 Fair Green", "Dungarvan", "Co. Waterford"], "date": "12 December 2026", "their": ["The Principal", "Greenfield National School", "Dungarvan", "Co. Waterford"], "greet": "Dear Sir/Madam,", "open": "I am writing to offer to help at your Christmas fair.", "body": "I am in Transition Year and I would love to run the face-painting stall.", "close": "I look forward to hearing from you.", "sign": "Yours faithfully,", "name": "Ciara Power"}
+ ],
+ "emails": [
+  {"to": "Lost Property, West Coast Buses", "subj": "Subject: Lost jacket on the 8:15 bus", "greet": "Dear Sir/Madam,", "open": "I am writing because I left my jacket on the 8:15 bus to Galway on Monday.", "body": "It is a navy rain jacket with a red zip.", "close": "I would be grateful if you could let me know if it has been found.", "sign": "Yours faithfully,", "name": "Saoirse Kane"},
+  {"to": "Ms O'Neill", "subj": "Subject: Late history project", "greet": "Dear Ms O'Neill,", "open": "I am writing to explain why my history project is late.", "body": "I was away at my cousin's wedding in Sligo from Thursday to Sunday.", "close": "Thank you for understanding.", "sign": "Yours sincerely,", "name": "Fionn Daly"},
+  {"to": "Bookings, Cliffside Hostel", "subj": "Subject: Rooms for a school trip", "greet": "Dear Sir/Madam,", "open": "I am writing to ask about rooms for twenty students on 12 May.", "body": "We would also need two rooms for our teachers.", "close": "I look forward to hearing from you.", "sign": "Yours faithfully,", "name": "Róisín Clarke"},
+  {"to": "Mr Foley", "subj": "Subject: Work experience", "greet": "Dear Mr Foley,", "open": "I am writing to ask if I could do my work experience at your vet clinic.", "body": "I help on my uncle's farm at weekends and I am good with animals.", "close": "Thank you for considering my request.", "sign": "Yours sincerely,", "name": "Conor Keane"},
+  {"to": "Events Team, Riverside Library", "subj": "Subject: Booking the meeting room", "greet": "Dear Sir/Madam,", "open": "I am writing to book your meeting room for our book club.", "body": "We meet on Thursdays from four to five o'clock.", "close": "I would be grateful if you could confirm the booking.", "sign": "Yours faithfully,", "name": "Grace Nolan"},
+  {"to": "Mr Hennessy", "subj": "Subject: Training on Saturday", "greet": "Dear Mr Hennessy,", "open": "I am writing to let you know that I cannot attend training on Saturday.", "body": "My family is going to my grandmother's eightieth birthday party in Cavan.", "close": "Thank you for understanding.", "sign": "Yours sincerely,", "name": "Liam Cronin"}
+ ],
+ "tone": [
+  ["Hey, gimme my money back asap!", "I would like a full refund, please.", ["Can I just get my money back, yeah?", "I'd love a refund, thanks!!", "Gimme a refund, please."]],
+  ["The boots are a total disaster lol.", "The boots are badly damaged.", ["The boots are wrecked, to be honest.", "The boots are a total mess lol.", "Ugh, the boots are falling apart!!"]],
+  ["Can't come to the meeting, sorry!", "I regret that I cannot attend the meeting.", ["I can't make the meeting, sorry about that.", "Not gonna make the meeting, sorry!", "Sorry, can't come to the meeting!!"]],
+  ["Thanks a mil for the workshop!", "Thank you for the excellent workshop.", ["Thanks loads for the workshop!", "Cheers for the workshop.", "The workshop was deadly, thanks!!"]],
+  ["Hiya, any jobs going?", "I wish to apply for a summer job.", ["Hi, are there any jobs going?", "Hey, I'd like a job, if that's OK.", "Any jobs going? Would be class!!"]],
+  ["Write back soon, OK?", "I look forward to hearing from you.", ["Write back soon, yeah?", "Hope to hear back from you soon, cheers!", "Text me back soon, OK?"]],
+  ["The food was rank and the chips were cold.", "The food was poor and the chips were cold.", ["The food was rank, to be honest, and the chips were cold.", "The food was gross and the chips were cold!!", "Ugh, the chips were cold and the food was rank."]],
+  ["We wanna use the hall on Friday.", "We would like to use the hall on Friday.", ["We wanna book the hall on Friday.", "We'd like to grab the hall on Friday.", "Can we get the hall on Friday, yeah?"]],
+  ["Loads of kids would come to the club.", "Many young people would join the club.", ["Loads of young people would join the club.", "Tons of kids would come to the club!!", "Heaps of kids would come, no worries."]],
+  ["The bus was super late, like an hour.", "The bus was an hour late.", ["The bus was, like, an hour late.", "The bus was super late, an hour!!", "The bus was soooo late, an hour."]],
+  ["Sorry for the late reply, been mad busy.", "I apologise for the late reply.", ["Sorry for the late reply, I've been busy.", "Soz for the late reply!!", "Sorry, been mad busy, late reply."]],
+  ["Tell me if ye found my jacket, thanks.", "I would be grateful if you could tell me if my jacket has been found.", ["Let me know if you found my jacket, cheers.", "Did ye find my jacket? Thanks!!", "Any sign of my jacket, yeah?"]],
+  ["Closing the pool? Total nightmare, like.", "Closing the pool would be a great loss to the town.", ["The pool closing would be a total nightmare, to be honest.", "Closing the pool? No way!!", "Closing the pool would be, like, so bad."]],
+  ["I'm well up for helping at the fair.", "I would be happy to help at the fair.", ["I'm well up for the fair!!", "I'd be well up for helping at the fair.", "Helping at the fair would be class, yeah."]],
+  ["Grand, see ya at the interview.", "I look forward to meeting you at the interview.", ["Grand, see you at the interview.", "See ya at the interview!!", "Cool, see you at the interview."]],
+  ["Can ye send me a timetable?", "Could you please send me a timetable?", ["Can ye send on a timetable, yeah?", "Send me a timetable, thanks!!", "Can u send me a timetable?"]]
+ ]
+}/*END*/;
+  var FI={f:"📨 Formal",i:"😊 Informal"};
+  var SO={fa:"Yours faithfully,",si:"Yours sincerely,","in":"Talk soon,"};
+  var PART={addr:"🏠 Your address",date:"📅 Date",their:"🏢 Their address",greet:"👋 Greeting",open:"🎯 Opening line",close:"🙏 Closing line",sign:"✍️ Sign-off"};
+  var MISS={addr:"🏠 Your address",date:"📅 Date",subj:"📌 Subject line",greet:"👋 Greeting",sign:"✍️ Sign-off",name:"🙋 Your name"};
+  var ORDER=["addr","date","their","greet","open","body","close","sign","name"];
+  var FIXED=[FI,SO,PART,MISS].reduce(function(a,L){return a.concat(Object.keys(L).map(function(k){return L[k];}));},[]);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls){return '<div class="ff-card'+(cls?" "+cls:"")+'"><p>'+s+'</p></div>';}
+  function lines(a){return a.map(esc).join("<br>");}
+  /* one part of a letter / email, drawn in its place */
+  function partHTML(L,k){var v=L[k];
+    if(k==="addr")return '<div class="ffl r">'+lines(v)+'</div>';
+    if(k==="date")return '<div class="ffl r">'+esc(v)+'</div>';
+    if(k==="their")return '<div class="ffl">'+lines(v)+'</div>';
+    if(k==="to")return '<div class="ffl em">To: '+esc(v)+'</div>';
+    if(k==="subj")return '<div class="ffl em">'+esc(v)+'</div>';
+    return '<div class="ffl">'+esc(v)+'</div>';}
+  function letterHTML(L,keys,gapAt){var h='<div class="ff-letter">';
+    keys.forEach(function(k){h+=partHTML(L,k);});
+    if(gapAt)h+='<div class="ffl gap'+(gapAt==="date"?" r":"")+'">?</div>';
+    return h+'</div>';}
+  var EMAIL=["to","subj","greet","open","body","close","sign","name"];
+  var SOWHY={fa:"Dear Sir/Madam (no name) → Yours faithfully.",si:"Dear + a title and surname (Ms Kelly) → Yours sincerely.","in":"A friend or family member → a friendly sign-off like Talk soon or Love."};
+  var PWHY={addr:"Your address goes top right, without your name.",date:"The date goes under your address, on the right.",their:"Their address (who you are writing to) goes on the left, below the date.",greet:"The greeting: Dear Sir/Madam or Dear + their name.",open:"The opening line says why you are writing.",close:"The closing line is polite and looks ahead.",sign:"The sign-off: Yours faithfully or Yours sincerely."};
+
+  /* ================= FORMAT FIXER: formal or informal? ================= */
+  function qSort(){var it=rnd(D.sort);
+    return C("Formal or informal?",FI[it[1]],others(FI,it[1]),it[1]==="f"?"Formal: polite, full words, no slang. For people you don't know well.":"Informal: chatty, short forms (I'm, can't), slang. For friends and family.",card(esc(it[0])),{t:"sort",s:it[0],rv:it[0]},1);}
+  /* ================= SIGN IT OFF ================= */
+  function qSign(){var it=rnd(D.greet);
+    return C("✍️ How do you sign off?",SO[it[1]],others(SO,it[1]),SOWHY[it[1]],card(esc(it[0])+'<br><span class="ff-dots">…</span>',"lt"),{t:"sign",s:it[0],rv:it[0]},2);}
+  /* ================= LETTER LAYOUT ================= */
+  var ASK=["date","their","greet","open","close","sign"];
+  function qPart(){var L=rnd(D.letters),k=rnd(Object.keys(PART)),v=L[k];
+    return C("Which part is this?",PART[k],others(PART,k),PWHY[k],card(Array.isArray(v)?lines(v):esc(v),"lt"),{t:"part",s:Array.isArray(v)?v.join(" / "):v,rv:Array.isArray(v)?v.join(", "):v},3);}
+  function qNext(){var L=rnd(D.letters),k=rnd(ASK),i=ORDER.indexOf(k);
+    return C("📮 What comes next?",PART[k],others(PART,k),PWHY[k],letterHTML(L,ORDER.slice(0,i),k),{t:"next",rv:"After the "+(ORDER[i-1]==="body"?"body":PART[ORDER[i-1]].replace(/^\S+ /,"").toLowerCase())},3);}
+  /* ================= MAKE IT FORMAL ================= */
+  function qTone(){var it=rnd(D.tone);
+    return C("🎩 Make it formal",it[1],it[2],"Formal: full words (I would, I cannot), no slang, no “!!”, polite and clear.",card('<span class="ff-lab">Too casual</span>'+esc(it[0]),"casual"),{t:"tone",s:it[0],rv:it[0]},3);}
+  /* ================= WHAT'S MISSING? ================= */
+  function qMiss(){var e=Math.random()<0.4,L=rnd(e?D.emails:D.letters),keys=e?EMAIL:ORDER,can=e?["subj","greet","sign","name"]:["addr","date","greet","sign"],k=rnd(can),q;
+    q=C("🔍 What's missing?",MISS[k],can.filter(function(x){return x!==k;}).map(function(x){return MISS[x];}),
+      {addr:"A letter needs your address, top right.",date:"A letter needs the date, under your address.",subj:"An email needs a short subject line.",greet:"Every letter and email needs a greeting: Dear …,",sign:"Every letter and email needs a sign-off: Yours faithfully / sincerely.",name:"Sign your full name under the sign-off."}[k],
+      letterHTML(L,keys.filter(function(x){return x!==k;})),{t:"miss",kind:e?"email":"letter",rv:(e?"Email: ":"Letter: ")+L.open.replace(/^I am writing (to |because |about )?/,"").replace(/\.$/,"").slice(0,48)+"…"},3);q.fixed=can.map(function(x){return MISS[x];});return q;}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    sort:[qSort],
+    sign:[qSign],
+    layout:[qPart,qNext],
+    tone:[qTone],
+    miss:[qMiss],
+    mixed:[qSort,qSign,qPart,qNext,qTone,qMiss]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="sort"||m==="sign")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sort"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sort"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You could run a post office.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,FI:FI,SO:SO,PART:PART,MISS:MISS,ORDER:ORDER,EMAIL:EMAIL,letterHTML:letterHTML}};
+})();
+</script>
