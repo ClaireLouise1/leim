@@ -1,0 +1,156 @@
+<main id="main">
+<style>.pb-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.pb-card .pb-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.pb-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.pb-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.pb-card p.pb-l b{background:#F6CF5A;color:var(--ink)}
+.pb-card p.pb-t{font-weight:800;display:block}
+.pb-card p.pb-end{display:block;color:var(--muted)}
+.pb-card p.pb-nl{display:block;font-size:13px;font-weight:800;color:var(--muted);border-top:2px dashed var(--line);padding-top:6px;margin-top:4px}
+.pb-card p.pb-new,.pb-card p.pb-a,.pb-card p.pb-b{display:block;font-weight:600}
+.pb-card mark.gap{background:#DDEFE5;color:var(--ink);border-radius:6px;padding:0 14px;font-weight:800}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:16px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pb-card p{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Paragraph Builder</h1>
+        <p>Find the topic sentence, spot what doesn't belong, put it in order, link it up. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="topic"><div><b>Paragraph Builder</b><span>⭐ Find the topic sentence ⏱️</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="odd"><div><b>Odd one out</b><span>🚫 Which line doesn't belong?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Order it</b><span>🔢 First → Then → Finally</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tip"><div><b>New paragraph?</b><span>⏰ 📍 💡 👤 TiPToP</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="link"><div><b>Link it</b><span>🔗 However · For example</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Paragraph Builder, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W1, W10, W3 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Paragraphs and topic sentences</h2>
+        <p>A paragraph is a group of sentences about <b>one main idea</b>. Good paragraphs make your writing easy to follow, and that earns marks in every piece you write.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>These four sentences are one paragraph, but they're jumbled. Which one should go first?</p>
+        <div class="tests">
+          <div class="note">1. Every spring, thousands of puffins arrive on the Saltee Islands.</div>
+          <div class="note">2. Their bright orange beaks make them look really unusual.</div>
+          <div class="note">3. Puffins are some of the most unusual birds in Ireland.</div>
+          <div class="note">4. These birds dig burrows in the soft soil at the top of the cliffs.</div>
+        </div>
+        <p style="margin-top:8px">Which sentence could be a title for all the others? Which words does it share with them?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>3</b> is the <b>topic sentence</b>. It gives the main idea, and every other sentence links back to it: <i>puffins</i> (1), <i>unusual</i> (2), <i>birds</i> (4). The other three are <b>supporting sentences</b>: they give details, facts or examples.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a paragraph is built</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⭐ Topic sentence</b>the main idea, usually first<br><i>Dogs are loyal and loving pets.</i></div>
+          <div class="note"><b class="h">🧱 Supporting sentences</b>details, facts, examples, reasons<br><i>A dog will often wait by the door for its owner.</i></div>
+          <div class="note"><b class="h">🔗 Link</b>a last line that sums up or leads into the next paragraph</div>
+        </div>
+        <p style="margin-top:8px"><b>One paragraph = one main idea.</b> A sentence about something else doesn't belong: move it or cut it.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">When to start a new paragraph: TiPToP</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⏰ Time</b>time moves on<br><i>The next morning, …</i></div>
+          <div class="note"><b class="h">📍 Place</b>a new place<br><i>Back at home, …</i></div>
+          <div class="note"><b class="h">💡 Topic</b>a new point or idea<br><i>Another reason …</i></div>
+          <div class="note"><b class="h">👤 Person</b>a new person comes in or speaks<br><i>Mr Byrne stood up.</i></div>
+        </div>
+        <p style="margin-top:8px">In handwriting, show a new paragraph by leaving a line or starting the first line further in (indenting).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Linking words</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🔢 Order</b>First · Next · Then · After that · Finally · In the end</div>
+          <div class="note"><b class="h">➕ Adding</b>In addition · Also · What's more</div>
+          <div class="note"><b class="h">↔️ Contrast</b>However · On the other hand</div>
+          <div class="note"><b class="h">👉 Example</b>For example · For instance</div>
+          <div class="note"><b class="h">➡️ Result</b>As a result · Because of this</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Put a comma after these words at the start of a sentence: <i>However, the rooms were not clean.</i></li>
+          <li>Don't start every sentence with one. One or two per paragraph is plenty.</li>
+          <li>In an argument, start each paragraph with a new point: <i>Firstly … Secondly … Finally …</i></li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Every writing task (a personal essay, a story, an article, a speech, a letter) is marked partly on how well it is organised. Clear paragraphs, each with one main idea and a strong topic sentence, are the quickest way to show that. Reading questions can also ask how a writer has structured a piece.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>One long block of writing</b> is hard to follow and loses marks for structure.</li>
+            <li><b>A clear topic sentence</b> tells the examiner your point straight away.</li>
+            <li><b>Support every point</b> with a detail, example or reason. A topic sentence on its own is not a paragraph.</li>
+            <li><b>Link your paragraphs</b> (However, As a result, In addition) so your answer flows.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Write a topic sentence for this paragraph: “… The 100 metres race was won by a first year. Ms Walsh's relay team came last but had the loudest cheers. The rain held off until the very last event.”
+              <details><summary>Show a model answer</summary><p><b>Our school sports day was full of surprises this year.</b><br><i>Where the marks would go:</i> one sentence that sums up all three details (the race, the relay, the weather) without repeating one of them.</p></details></li>
+            <li>Read this paragraph. Which sentence doesn't belong, and where should a new paragraph start? Use TiPToP to explain.
+              <div class="pass">We reached the campsite just as it got dark. Dad put up the tent while we collected sticks. My cousin has a new bike. The next morning, we woke to the sound of rain on the roof.</div>
+              <details><summary>Show the answer</summary><p>“My cousin has a new bike.” doesn't belong: it has nothing to do with the camping trip. A new paragraph should start at <b>“The next morning,”</b> because time moves on (the <b>T</b> in TiPToP).<br><i>Where the marks would go:</i> the right sentence + why it's off-topic; the right place + the TiPToP reason.</p></details></li>
+            <li>Fill each gap with a linking word: “Our town needs a skate park. (a) ___, teenagers have nowhere safe to go in the evenings. (b) ___, the skate park in Clonakilty is busy every night. (c) ___, the council should build one this year.”
+              <details><summary>Show the answer</summary><p>(a) <b>Firstly</b> / <b>First of all</b> (b) <b>For example</b> (c) <b>As a result</b> / <b>For these reasons</b><br><i>Where the marks would go:</i> a linking word that fits the job of each sentence (a point, an example, a conclusion), with a comma after it.</p></details></li>
+            <li>“Students should not have to wear a school uniform.” Write one well-built paragraph for or against this view.
+              <details><summary>Show a model answer</summary><p><b>School uniforms save families money and stress.</b> A uniform costs less than the new clothes many students would want to wear every week. For example, a jumper and two shirts can last a whole year. In addition, nobody is judged on what brand they are wearing, so mornings are calmer. For these reasons, uniforms should stay.<br><i>Where the marks would go:</i> a clear topic sentence (the point), supporting sentences with a reason and an example, linking words, and a last line that sums up.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/paragraphs-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

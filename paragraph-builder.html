@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paragraph Builder: Paragraphs & Topic Sentences Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game: find the topic sentence, spot the sentence that doesn't belong, order it, TiPToP new paragraphs and linking words. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.pb-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.pb-card .pb-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.pb-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.pb-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.pb-card p.pb-l b{background:#F6CF5A;color:var(--ink)}
+.pb-card p.pb-t{font-weight:800;display:block}
+.pb-card p.pb-end{display:block;color:var(--muted)}
+.pb-card p.pb-nl{display:block;font-size:13px;font-weight:800;color:var(--muted);border-top:2px dashed var(--line);padding-top:6px;margin-top:4px}
+.pb-card p.pb-new,.pb-card p.pb-a,.pb-card p.pb-b{display:block;font-weight:600}
+.pb-card mark.gap{background:#DDEFE5;color:var(--ink);border-radius:6px;padding:0 14px;font-weight:800}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:16px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pb-card p{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Paragraph Builder</h1>
+        <p>Find the topic sentence, spot what doesn't belong, put it in order, link it up. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="topic"><div><b>Paragraph Builder</b><span>⭐ Find the topic sentence ⏱️</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="odd"><div><b>Odd one out</b><span>🚫 Which line doesn't belong?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Order it</b><span>🔢 First → Then → Finally</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tip"><div><b>New paragraph?</b><span>⏰ 📍 💡 👤 TiPToP</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="link"><div><b>Link it</b><span>🔗 However · For example</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Paragraph Builder, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W1, W10, W3 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Paragraphs and topic sentences</h2>
+        <p>A paragraph is a group of sentences about <b>one main idea</b>. Good paragraphs make your writing easy to follow, and that earns marks in every piece you write.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>These four sentences are one paragraph, but they're jumbled. Which one should go first?</p>
+        <div class="tests">
+          <div class="note">1. Every spring, thousands of puffins arrive on the Saltee Islands.</div>
+          <div class="note">2. Their bright orange beaks make them look really unusual.</div>
+          <div class="note">3. Puffins are some of the most unusual birds in Ireland.</div>
+          <div class="note">4. These birds dig burrows in the soft soil at the top of the cliffs.</div>
+        </div>
+        <p style="margin-top:8px">Which sentence could be a title for all the others? Which words does it share with them?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>3</b> is the <b>topic sentence</b>. It gives the main idea, and every other sentence links back to it: <i>puffins</i> (1), <i>unusual</i> (2), <i>birds</i> (4). The other three are <b>supporting sentences</b>: they give details, facts or examples.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a paragraph is built</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⭐ Topic sentence</b>the main idea, usually first<br><i>Dogs are loyal and loving pets.</i></div>
+          <div class="note"><b class="h">🧱 Supporting sentences</b>details, facts, examples, reasons<br><i>A dog will often wait by the door for its owner.</i></div>
+          <div class="note"><b class="h">🔗 Link</b>a last line that sums up or leads into the next paragraph</div>
+        </div>
+        <p style="margin-top:8px"><b>One paragraph = one main idea.</b> A sentence about something else doesn't belong: move it or cut it.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">When to start a new paragraph: TiPToP</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⏰ Time</b>time moves on<br><i>The next morning, …</i></div>
+          <div class="note"><b class="h">📍 Place</b>a new place<br><i>Back at home, …</i></div>
+          <div class="note"><b class="h">💡 Topic</b>a new point or idea<br><i>Another reason …</i></div>
+          <div class="note"><b class="h">👤 Person</b>a new person comes in or speaks<br><i>Mr Byrne stood up.</i></div>
+        </div>
+        <p style="margin-top:8px">In handwriting, show a new paragraph by leaving a line or starting the first line further in (indenting).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Linking words</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🔢 Order</b>First · Next · Then · After that · Finally · In the end</div>
+          <div class="note"><b class="h">➕ Adding</b>In addition · Also · What's more</div>
+          <div class="note"><b class="h">↔️ Contrast</b>However · On the other hand</div>
+          <div class="note"><b class="h">👉 Example</b>For example · For instance</div>
+          <div class="note"><b class="h">➡️ Result</b>As a result · Because of this</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Put a comma after these words at the start of a sentence: <i>However, the rooms were not clean.</i></li>
+          <li>Don't start every sentence with one. One or two per paragraph is plenty.</li>
+          <li>In an argument, start each paragraph with a new point: <i>Firstly … Secondly … Finally …</i></li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Every writing task (a personal essay, a story, an article, a speech, a letter) is marked partly on how well it is organised. Clear paragraphs, each with one main idea and a strong topic sentence, are the quickest way to show that. Reading questions can also ask how a writer has structured a piece.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>One long block of writing</b> is hard to follow and loses marks for structure.</li>
+            <li><b>A clear topic sentence</b> tells the examiner your point straight away.</li>
+            <li><b>Support every point</b> with a detail, example or reason. A topic sentence on its own is not a paragraph.</li>
+            <li><b>Link your paragraphs</b> (However, As a result, In addition) so your answer flows.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Write a topic sentence for this paragraph: “… The 100 metres race was won by a first year. Ms Walsh's relay team came last but had the loudest cheers. The rain held off until the very last event.”
+              <details><summary>Show a model answer</summary><p><b>Our school sports day was full of surprises this year.</b><br><i>Where the marks would go:</i> one sentence that sums up all three details (the race, the relay, the weather) without repeating one of them.</p></details></li>
+            <li>Read this paragraph. Which sentence doesn't belong, and where should a new paragraph start? Use TiPToP to explain.
+              <div class="pass">We reached the campsite just as it got dark. Dad put up the tent while we collected sticks. My cousin has a new bike. The next morning, we woke to the sound of rain on the roof.</div>
+              <details><summary>Show the answer</summary><p>“My cousin has a new bike.” doesn't belong: it has nothing to do with the camping trip. A new paragraph should start at <b>“The next morning,”</b> because time moves on (the <b>T</b> in TiPToP).<br><i>Where the marks would go:</i> the right sentence + why it's off-topic; the right place + the TiPToP reason.</p></details></li>
+            <li>Fill each gap with a linking word: “Our town needs a skate park. (a) ___, teenagers have nowhere safe to go in the evenings. (b) ___, the skate park in Clonakilty is busy every night. (c) ___, the council should build one this year.”
+              <details><summary>Show the answer</summary><p>(a) <b>Firstly</b> / <b>First of all</b> (b) <b>For example</b> (c) <b>As a result</b> / <b>For these reasons</b><br><i>Where the marks would go:</i> a linking word that fits the job of each sentence (a point, an example, a conclusion), with a comma after it.</p></details></li>
+            <li>“Students should not have to wear a school uniform.” Write one well-built paragraph for or against this view.
+              <details><summary>Show a model answer</summary><p><b>School uniforms save families money and stress.</b> A uniform costs less than the new clothes many students would want to wear every week. For example, a jumper and two shirts can last a whole year. In addition, nobody is judged on what brand they are wearing, so mornings are calmer. For these reasons, uniforms should stay.<br><i>Where the marks would go:</i> a clear topic sentence (the point), supporting sentences with a reason and an example, linking words, and a last line that sums up.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/paragraphs-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- paragraph data (the PDFs and src/test_paragraph_builder.py read this block: keep it valid JSON) ----------
+     paras: {k: label, topic: topic sentence, sup: 3 supporting sentences (each shares a word with the topic sentence, not with each other much), odd: an off-topic sentence}
+     seq: [topic sentence, 1st, 2nd, 3rd] (each starts with an order word) · tip: [last sentence, next sentence, ti/pl/to/pe]
+     link: [sentence A, sentence B (starts lower case), linking word] */
+  var D=/*DATA*/{
+ "paras": [
+  {
+   "k": "🐦 Puffins",
+   "topic": "Puffins are some of the most unusual birds in Ireland.",
+   "sup": [
+    "Every spring, thousands of puffins arrive on the Saltee Islands.",
+    "These birds dig burrows in the soft soil at the top of the cliffs.",
+    "Their bright orange beaks make them look really unusual."
+   ],
+   "odd": "My uncle drives a taxi in Wexford."
+  },
+  {
+   "k": "🏑 Hurling",
+   "topic": "Hurling is one of the fastest field games in the world.",
+   "sup": [
+    "The sliotar can travel at over 150 kilometres an hour, so the game never slows down.",
+    "Hurling players need quick hands to catch the ball in mid-air.",
+    "Teams race from one end of the field to the other in seconds."
+   ],
+   "odd": "My sister prefers reading comics on a rainy afternoon."
+  },
+  {
+   "k": "📱 Phones in class",
+   "topic": "Mobile phones can be a big distraction in class.",
+   "sup": [
+    "A single buzz from a phone can pull attention away from the lesson.",
+    "Some students check social media under their desks during class.",
+    "This kind of distraction can lower test results."
+   ],
+   "odd": "The canteen sells toasties for two euro."
+  },
+  {
+   "k": "🏝️ Skellig Michael",
+   "topic": "Skellig Michael is a wild and amazing island off the Kerry coast.",
+   "sup": [
+    "Monks built stone huts on the island over 1,300 years ago.",
+    "Boats can only land there when the sea is calm, as the coast is so wild.",
+    "Visitors climb more than 600 steps to reach the top, and the view is amazing."
+   ],
+   "odd": "My favourite pizza topping is pineapple."
+  },
+  {
+   "k": "🐶 Dogs",
+   "topic": "Dogs are loyal and loving pets.",
+   "sup": [
+    "A dog will often wait by the door for its owner to come home.",
+    "Loyal dogs stay close to their family when someone is upset.",
+    "People with pets often feel less lonely."
+   ],
+   "odd": "The bus to Galway leaves at half past eight."
+  },
+  {
+   "k": "🌦️ Irish weather",
+   "topic": "The weather in Ireland changes very quickly.",
+   "sup": [
+    "Within minutes, sunshine can change to heavy rain.",
+    "Many people in Ireland carry an umbrella even on bright days.",
+    "Weather forecasters often joke about four seasons in one day."
+   ],
+   "odd": "My brother is learning to play the drums."
+  },
+  {
+   "k": "🚲 Cycling",
+   "topic": "Cycling to school has lots of benefits.",
+   "sup": [
+    "It is a free way to get to school.",
+    "Cycling for twenty minutes is good exercise.",
+    "Another benefit is less traffic outside the gates."
+   ],
+   "odd": "Pancakes are lovely with lemon and sugar."
+  },
+  {
+   "k": "📚 Libraries",
+   "topic": "Public libraries offer far more than books.",
+   "sup": [
+    "Most libraries lend films and audiobooks for free.",
+    "Many also offer computers for school projects.",
+    "Some public branches even run coding clubs and chess classes."
+   ],
+   "odd": "My granny was born in Leitrim."
+  },
+  {
+   "k": "🎄 Christmas",
+   "topic": "Irish families have some special Christmas traditions.",
+   "sup": [
+    "Many families put a candle in the window on Christmas Eve.",
+    "On St Stephen's Day, some people go to a special horse race.",
+    "A cold swim in the sea is another tradition."
+   ],
+   "odd": "Volcanoes form when hot rock rises from deep underground."
+  },
+  {
+   "k": "🥣 Breakfast",
+   "topic": "Breakfast is the most important meal of the day.",
+   "sup": [
+    "After a long night, your body needs fuel to start the day.",
+    "Students who eat breakfast find it easier to concentrate.",
+    "A good morning meal could be porridge, fruit or toast."
+   ],
+   "odd": "Our neighbours painted their front door bright red."
+  },
+  {
+   "k": "🏰 Blarney Castle",
+   "topic": "Blarney Castle is one of the most popular places to visit in Cork.",
+   "sup": [
+    "Every year, thousands of tourists visit the castle.",
+    "Most people come to kiss the famous Blarney Stone.",
+    "The gardens around it are also popular with walkers."
+   ],
+   "odd": "My brother broke his arm playing rugby."
+  },
+  {
+   "k": "🌊 Plastic",
+   "topic": "Plastic is a huge danger to sea life.",
+   "sup": [
+    "Turtles often mistake plastic bags for jellyfish.",
+    "Many birds at sea feed tiny pieces of rubbish to their chicks.",
+    "This danger grows every year as more rubbish ends up in the ocean."
+   ],
+   "odd": "The cinema in town has new comfy seats."
+  },
+  {
+   "k": "🎸 Music",
+   "topic": "Learning an instrument has many benefits for young people.",
+   "sup": [
+    "Learning music helps your memory.",
+    "Playing in a band is a great way for young people to meet friends.",
+    "Another benefit is the confidence you get from performing on stage."
+   ],
+   "odd": "The price of bread went up last month."
+  },
+  {
+   "k": "📖 Reading",
+   "topic": "Reading every day can improve your writing.",
+   "sup": [
+    "Daily reading shows you how other authors build sentences.",
+    "You pick up new words for your own writing.",
+    "Even ten minutes every day can help."
+   ],
+   "odd": "Our school bus has a flat tyre."
+  }
+ ],
+ "seq": [
+  [
+   "Making a cup of tea is easy.",
+   "First, boil the water in the kettle.",
+   "Next, pour the water over a tea bag in a mug.",
+   "Finally, add milk if you like it."
+  ],
+  [
+   "Our school tour to Dublin was a great day out.",
+   "First, we visited the zoo.",
+   "After that, we had lunch in a park.",
+   "In the end, we were so tired that we slept on the bus home."
+  ],
+  [
+   "Planting a seed takes only a few minutes.",
+   "First, fill a small pot with soil.",
+   "Then, push the seed into the soil with your finger.",
+   "Finally, water it and leave it in a sunny spot."
+  ],
+  [
+   "My first day at secondary school was a rollercoaster.",
+   "At first, I was too nervous to speak.",
+   "Then, a girl called Ava asked me to sit with her.",
+   "By the end of the day, I felt much more relaxed."
+  ],
+  [
+   "Getting ready for a match takes planning.",
+   "First, pack your boots and gumshield.",
+   "Next, eat a light meal two hours before the throw-in.",
+   "Finally, warm up with your team."
+  ],
+  [
+   "The storm last night got worse and worse.",
+   "At first, there was only a light breeze.",
+   "Then, the rain began to lash against the windows.",
+   "Finally, the power went out at midnight."
+  ],
+  [
+   "Writing a good paragraph is a step-by-step job.",
+   "First, write a topic sentence that gives the main idea.",
+   "Next, add two or three sentences with details.",
+   "Finally, end with a sentence that leads into the next paragraph."
+  ],
+  [
+   "Making toast is the easiest breakfast.",
+   "First, put two slices of bread in the toaster.",
+   "Then, spread butter on the toast while it is hot.",
+   "Last of all, cut it into triangles."
+  ],
+  [
+   "Our trip to the beach did not go to plan.",
+   "First, we got stuck in traffic for an hour.",
+   "Then, it started to rain as soon as we arrived.",
+   "In the end, we ate our sandwiches in the car."
+  ],
+  [
+   "Learning to swim took me a whole summer.",
+   "At first, I could only float with armbands.",
+   "After that, I learned to kick across the shallow end.",
+   "By the end of the summer, I could swim a full length."
+  ],
+  [
+   "Doing a jigsaw is easier if you have a plan.",
+   "To begin with, find all the edge pieces.",
+   "Next, build the frame.",
+   "Last of all, fill in the middle."
+  ],
+  [
+   "The fire drill went smoothly.",
+   "First, the alarm rang loudly.",
+   "Then, we lined up and walked out to the yard.",
+   "Finally, the teachers called the roll."
+  ]
+ ],
+ "tip": [
+  [
+   "We fell asleep in the tent at last.",
+   "The next morning, we woke to the sound of rain.",
+   "ti"
+  ],
+  [
+   "Mam waved goodbye as the bus pulled away.",
+   "Two hours later, the bus finally stopped for lunch.",
+   "ti"
+  ],
+  [
+   "The match ended in a draw.",
+   "That evening, the whole team met for pizza.",
+   "ti"
+  ],
+  [
+   "I handed in my test and hoped for the best.",
+   "A week later, the results came back.",
+   "ti"
+  ],
+  [
+   "We spent the whole day building the den.",
+   "On Sunday morning, we discovered it had blown down.",
+   "ti"
+  ],
+  [
+   "Everyone went to bed early.",
+   "At midnight, a loud bang woke us all.",
+   "ti"
+  ],
+  [
+   "We left the classroom in a hurry.",
+   "Out in the yard, the wind was howling.",
+   "pl"
+  ],
+  [
+   "The car park was packed with buses.",
+   "Inside the stadium, the noise was deafening.",
+   "pl"
+  ],
+  [
+   "I ran out of the shop with the bag.",
+   "Back at home, I opened it carefully.",
+   "pl"
+  ],
+  [
+   "The forest path ended suddenly.",
+   "At the edge of the cliff, the wind nearly knocked me over.",
+   "pl"
+  ],
+  [
+   "We said goodbye to the café owner.",
+   "Down at the harbour, the fishing boats were coming in.",
+   "pl"
+  ],
+  [
+   "The kitchen smelled of burnt toast.",
+   "Upstairs in the attic, the dog was fast asleep.",
+   "pl"
+  ],
+  [
+   "Phones help students find information quickly.",
+   "On the other hand, they can be a big distraction.",
+   "to"
+  ],
+  [
+   "School uniforms save families money.",
+   "Another reason for uniforms is that they stop bullying about clothes.",
+   "to"
+  ],
+  [
+   "Exercise keeps your heart healthy.",
+   "In addition, it is great for your mood.",
+   "to"
+  ],
+  [
+   "The first reason I love summer is the long evenings.",
+   "Secondly, there is no homework.",
+   "to"
+  ],
+  [
+   "Some people say homework is a waste of time.",
+   "However, it helps you practise what you learned in class.",
+   "to"
+  ],
+  [
+   "Cork has some of the best food markets in Ireland.",
+   "What's more, the city is full of music.",
+   "to"
+  ],
+  [
+   "I sat alone on the bench, waiting.",
+   "Suddenly, my friend Grace appeared with two hot chocolates.",
+   "pe"
+  ],
+  [
+   "The rest of the class went quiet.",
+   "Mr Byrne cleared his throat and stood up.",
+   "pe"
+  ],
+  [
+   "I thought I was the only one awake.",
+   "My little sister crept into the room with a torch.",
+   "pe"
+  ],
+  [
+   "Dad shouted that dinner was ready.",
+   "Aoife, my cousin from Mayo, arrived just as we sat down.",
+   "pe"
+  ],
+  [
+   "The shop seemed empty.",
+   "An old man behind the counter looked up from his newspaper.",
+   "pe"
+  ],
+  [
+   "Nobody knew what to say.",
+   "Liam broke the silence first.",
+   "pe"
+  ]
+ ],
+ "link": [
+  [
+   "The film got great reviews.",
+   "I found it boring and could not wait for it to end.",
+   "However"
+  ],
+  [
+   "Most people think sharks are dangerous.",
+   "most sharks never attack humans.",
+   "However"
+  ],
+  [
+   "The hotel looked lovely in the photos.",
+   "the rooms were not very clean.",
+   "On the other hand"
+  ],
+  [
+   "I don't usually like spicy food.",
+   "this curry was delicious.",
+   "However"
+  ],
+  [
+   "Our team trained hard all season.",
+   "we did not win a single match.",
+   "However"
+  ],
+  [
+   "The test seemed easy at first.",
+   "nobody finished the last question.",
+   "On the other hand"
+  ],
+  [
+   "Ireland has many beautiful islands.",
+   "Achill has huge cliffs and empty beaches.",
+   "For example"
+  ],
+  [
+   "Some animals sleep through the winter.",
+   "hedgehogs hibernate from November to March.",
+   "For example"
+  ],
+  [
+   "Our school runs lots of clubs.",
+   "the chess club meets every Tuesday at lunch.",
+   "For instance"
+  ],
+  [
+   "Irish writers are famous all over the world.",
+   "James Joyce's books are read in over 60 languages.",
+   "For example"
+  ],
+  [
+   "Small changes can save a lot of energy at home.",
+   "switching off one light can save up to 20 euro a year.",
+   "For instance"
+  ],
+  [
+   "Some sports need very little equipment.",
+   "running 5 kilometres needs only a pair of shoes.",
+   "For example"
+  ],
+  [
+   "Heavy snow fell all night.",
+   "the school was closed the next day.",
+   "As a result"
+  ],
+  [
+   "The river burst its banks.",
+   "many houses were flooded.",
+   "As a result"
+  ],
+  [
+   "The bus broke down on the motorway.",
+   "we had to walk the rest of the way.",
+   "Because of this"
+  ],
+  [
+   "Thick fog covered the airport.",
+   "all flights were delayed.",
+   "As a result"
+  ],
+  [
+   "Our star player was injured.",
+   "the coach had to change the whole team.",
+   "Because of this"
+  ],
+  [
+   "It rained for the whole festival.",
+   "the outdoor concert was cancelled.",
+   "As a result"
+  ],
+  [
+   "Walking is good for your body.",
+   "it gives your mind a rest.",
+   "In addition"
+  ],
+  [
+   "The new park has a skate ramp.",
+   "there is a café beside the playground.",
+   "Also"
+  ],
+  [
+   "Volunteering helps your community.",
+   "it teaches you new skills.",
+   "In addition"
+  ],
+  [
+   "Our class raised money for the hospital.",
+   "we collected toys for the children's ward.",
+   "Also"
+  ],
+  [
+   "Drinking water helps you concentrate.",
+   "it keeps your skin healthy.",
+   "What's more"
+  ],
+  [
+   "The museum has a dinosaur skeleton.",
+   "visitors can try on a suit of armour.",
+   "What's more"
+  ]
+ ]
+}/*END*/;
+  var LINES=["Line 1","Line 2","Line 3","Line 4"];
+  var TIP={ti:"⏰ Time",pl:"📍 Place",to:"💡 Topic",pe:"👤 Person"};
+  var GROUPS={add:["In addition","Also","What's more"],contrast:["However","On the other hand"],example:["For example","For instance"],result:["As a result","Because of this"]};
+  var GOF={};Object.keys(GROUPS).forEach(function(g){GROUPS[g].forEach(function(w){GOF[w]=g;});});
+  var FIXED=LINES.concat([TIP.ti,TIP.pl,TIP.to,TIP.pe],GROUPS.add,GROUPS.contrast,GROUPS.example,GROUPS.result);
+  /* a choice question; nw = how many wrong options */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(k,lines,start){var h='<div class="pb-card">'+(k?'<span class="pb-k">'+k+'</span>':'');
+    lines.forEach(function(l,i){h+='<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});return h+'</div>';}
+  function opener(s){var i=s.indexOf(",");return i>0&&i<34?s.slice(0,i):s.split(" ").slice(0,2).join(" ");}
+  var lastP=null;
+  function para(){var P;do{P=rnd(D.paras);}while(P===lastP&&D.paras.length>1);lastP=P;return P;}
+
+  /* ================= PARAGRAPH BUILDER: find the topic sentence ================= */
+  function qTopic(){var P=para(),L=shuffle([P.topic].concat(P.sup)),i=L.indexOf(P.topic);
+    return C("⭐ Topic sentence?",LINES[i],LINES,"The topic sentence sums up the whole paragraph: “"+P.topic+"” The other lines give details.",
+      card(P.k,L),{t:"topic",k:P.k,rv:P.topic},3);}
+  /* ================= ODD ONE OUT ================= */
+  function qOdd(){var P=para(),two=shuffle(P.sup.slice()).slice(0,2),rest=shuffle(two.concat([P.odd])),L=[P.topic].concat(rest),i=L.indexOf(P.odd);
+    return C("🚫 Doesn't belong?",LINES[i],LINES.slice(1),"“"+P.odd+"” has nothing to do with the topic sentence. One paragraph = one main idea.",
+      card(P.k,L),{t:"odd",k:P.k,rv:P.odd},2);}
+  /* ================= ORDER IT ================= */
+  var PERMS=["A → B → C","A → C → B","B → A → C","B → C → A","C → A → B","C → B → A"];
+  function qOrder(){var S=rnd(D.seq),idx=shuffle([1,2,3]),lets=["A","B","C"];
+    var h='<div class="pb-card"><p class="pb-t">⭐ '+esc(S[0])+'</p>';
+    idx.forEach(function(n,j){h+='<p class="pb-l"><b>'+lets[j]+'</b>'+esc(S[n])+'</p>';});h+='</div>';
+    var ans=[1,2,3].map(function(n){return lets[idx.indexOf(n)];}).join(" → ");
+    var why="Follow the order words: "+[1,2,3].map(function(n){return opener(S[n]);}).join(" → ")+".";
+    return C("🔢 Right order?",ans,PERMS,why,h,{t:"order",topic:S[0],rv:S[0]},3);}
+  /* ================= NEW PARAGRAPH? TiPToP ================= */
+  var TWHY={ti:"Time moves on",pl:"We move to a new place",to:"A new point or idea",pe:"A new person comes in"};
+  function qTip(){var it=rnd(D.tip),k=it[2];
+    var h='<div class="pb-card"><p class="pb-end">… '+esc(it[0])+'</p><p class="pb-nl">↩️ New paragraph</p><p class="pb-new">'+esc(it[1])+'</p></div>';
+    var why=TWHY[k]+(k==="pe"?".":": “"+opener(it[1])+"”.")+" TiPToP: new Time, Place, Topic or Person = new paragraph.";
+    return C("↩️ Why a new paragraph?",TIP[k],[TIP.ti,TIP.pl,TIP.to,TIP.pe],why,h,{t:"tip",before:it[0],after:it[1],rv:it[1]},3);}
+  /* ================= LINK IT ================= */
+  var GWHY={add:"adds another point",contrast:"shows the opposite of what you'd expect",example:"gives an example",result:"shows what happened because of it"};
+  function qLink(){var it=rnd(D.link),w=it[2],g=GOF[w],pool=[];
+    Object.keys(GROUPS).forEach(function(x){if(x!==g)pool.push(rnd(GROUPS[x]));});
+    var h='<div class="pb-card"><p class="pb-a">'+esc(it[0])+'</p><p class="pb-b"><mark class="gap">?</mark>, '+esc(it[1])+'</p></div>';
+    return C("🔗 Best link?",w,pool,"“"+w+"” "+GWHY[g]+": "+w+", "+it[1],h,{t:"link",a:it[0],b:it[1],rv:it[0]+" "+w+", "+it[1]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    topic:[qTopic],
+    odd:[qOdd],
+    order:[qOrder],
+    tip:[qTip],
+    link:[qLink],
+    mixed:[qTopic,qOdd,qOrder,qTip,qLink]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    else opts.sort(function(a,b){return PERMS.indexOf(a)-PERMS.indexOf(b);});
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="topic"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="topic"&&streak%5===0?700:350):3500);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready.":score>=11?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,GROUPS:GROUPS}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -23,9 +23,13 @@ DESC = {
   "Clue Hunt": "skimming, scanning, the main idea, reading between the lines and finding the line that proves your answer.",
   "Character Clues": "what a character is like and how you know: speech, thoughts, effect on others, actions and looks (STEAL), the right trait word and the best quote.",
   "Spell Strike": "spelling rules and the words everyone mixes up: there / their / they're, your / you're, to / too / two.",
+  "Paragraph Builder": "topic sentences, keeping to one idea, putting a paragraph in order, when to start a new one (TiPToP) and linking words.",
+  "Technique Spotter": "imagery and sound in poems: simile, metaphor, personification, alliteration, onomatopoeia and rhyme.",
+  "Show, Don't Tell": "personal and descriptive writing: the five senses, strong verbs and showing a feeling instead of naming it.",
 }
 cards = []
-for r in ENGLISH[:6]:
+# every live game + the next 2 "Coming soon" (CBA guide rows have no game)
+for r in [r for r in ENGLISH if r[5]] + [r for r in ENGLISH if not r[5] and r[4] != "CBA guide"][:2]:
     if r[5]:   # live: a link card (like build_maths_page.py)
         cards.append(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><span class="pill">Free game</span><h3>{e(r[4])}</h3><p style="font-size:14px;color:var(--muted);margin:0 0 6px">{e(r[2].split(":")[0])}</p><p>{e(DESC[r[4]][0].upper() + DESC[r[4]][1:])}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>')
         continue
@@ -59,7 +63,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a> and <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a> and <a href="paragraph-builder.html" style="color:#F6CF5A">Paragraph Builder</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 

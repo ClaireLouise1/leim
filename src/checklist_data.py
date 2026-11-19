@@ -85,7 +85,7 @@ ENGLISH = [
   ("1st year","Autumn","Reading for meaning: comprehension skills","R1, R2, R3, OL4","Clue Hunt","clue-hunt.html","reading-for-meaning"),
   ("1st year","Autumn","The novel 1: character","R6, R7, R4, W8","Character Clues","character-clues.html","novel-character"),
   ("1st year","Spring","Spelling & commonly confused words","W11, R10","Spell Strike","spell-strike.html","spelling-confused-words"),
-  ("1st year","Spring","Paragraphs & topic sentences","W1, W10, W3","Paragraph Builder","",""),
+  ("1st year","Spring","Paragraphs & topic sentences","W1, W10, W3","Paragraph Builder","paragraph-builder.html","paragraphs"),
   ("1st year","Spring","Poetry 1: imagery & sound","R8, R11, R4, OL8","Technique Spotter","",""),
   ("1st year","Spring","Personal & descriptive writing","W3, W4, W9, W7","Show, Don't Tell","",""),
   ("1st year","Spring","Speaking & listening: talking to a group","OL1, OL2, OL3, OL4, OL5, OL6, OL7","Talk Tips","",""),
