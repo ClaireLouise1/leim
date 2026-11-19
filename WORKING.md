@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 14:30 · P3 Plot Line pack onto Payhip, then E3 Order 15 Letters & emails (Format Fixer) · english-f15
