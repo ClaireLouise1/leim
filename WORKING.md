@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 19 Nov 05:15 · E3 English Order 4 Reading for meaning (Clue Hunt) · english-r4
