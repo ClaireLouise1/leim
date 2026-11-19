@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 05:45 · E3 English Order 5 The novel 1: character (Character Clues) · english-c5
