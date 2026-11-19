@@ -1,0 +1,221 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_twist_detector.py read this block: keep it valid JSON; one item per line) ----------
+     twists: {k: emoji title, lines: 3 lines of the story so far, clue: the line (1-3) that plants the clue,
+              twist: the twist ending (reaches back to the clue line only), plain: an ending with no surprise,
+              random: a surprise that nothing in the story set up}
+     stories: {k: emoji title, lines: [setting, problem, climax, ending]}
+     open: [what the story is about (for the weak openers), emoji, a strong first line, d (dialogue) / a (action) / m (mystery)]
+     place: [a line with setting clue words, be/sc/fo/ho/pi/ki/fa/ci] */
+  var D=/*DATA*/{
+ "twists": [
+  {"k": "👻 The Ghost in the Attic", "lines": ["Ella noticed that the bag of nuts in the kitchen kept getting lighter.", "Then, every night, she heard scratching above her bedroom ceiling.", "Her brother said it was the ghost of an old sailor."], "clue": 1, "twist": "It turned out to be a fat red squirrel with a stash of stolen nuts.", "plain": "She called her dad, who told her it was only the wind.", "random": "It turned out the house had been built by aliens."},
+  {"k": "🎁 The Secret Present", "lines": ["One evening, Tom found sawdust all over Dad's good shoes.", "After that, Dad kept disappearing into the shed after dinner.", "Mam said he was just fixing the lawnmower."], "clue": 1, "twist": "On his birthday, Tom realised the sawdust came from a brand-new treehouse.", "plain": "Tom shrugged and went back to his homework.", "random": "It turned out his teacher was a famous singer."},
+  {"k": "🏅 The Missing Medal", "lines": ["Before the race, Jack hung his lucky medal on a hook in the changing room.", "When he came back, the hook was empty.", "His friend Sam had a strange lump in his coat pocket."], "clue": 3, "twist": "It turned out Sam had hidden it in his pocket to keep it safe.", "plain": "Jack ran anyway and came fourth.", "random": "It turned out the coach was a secret agent."},
+  {"k": "📱 The Strange Messages", "lines": ["Orla's granny had just bought her first smartphone.", "All that week, Orla got messages from an unknown number.", "They said things like “Great goal today!”"], "clue": 1, "twist": "It turned out the secret texter was her granny, practising on her new smartphone.", "plain": "Orla blocked the number and forgot about it.", "random": "It turned out her cat could type."},
+  {"k": "☂️ The Umbrella", "lines": ["Every day for a month, a black umbrella sat by the school gate.", "Mr Burke the caretaker always smiled when the rain started.", "Nobody ever came to collect the umbrella."], "clue": 2, "twist": "It turned out the caretaker left it there for anyone caught in the rain.", "plain": "In the end, someone took it to lost property.", "random": "It turned out the principal was a pop star."},
+  {"k": "🐟 The Empty Tank", "lines": ["When Liam came home from school, his goldfish tank was empty.", "From the bathroom, Liam heard a tiny splash.", "His little sister was sitting on the sofa looking very guilty."], "clue": 2, "twist": "He realised she had given Goldie a swim in the bathroom sink.", "plain": "He made a poster and asked the neighbours if they had seen it.", "random": "It turned out the fish had flown away to Spain."},
+  {"k": "🔔 The Midnight Bell", "lines": ["Every night at midnight, the old church bell rang once.", "Old Mrs Walsh lived next door and kept a long rope in her garden shed.", "The church had been locked for years."], "clue": 2, "twist": "It turned out Mrs Walsh had been pulling a rope through the window to call her cat home.", "plain": "Nobody ever found out why.", "random": "It turned out the whole town was asleep."},
+  {"k": "🍰 The Cake Thief", "lines": ["Mam baked a chocolate cake for the school cake sale.", "In the morning, half of it was gone.", "Dad was very quiet at breakfast and kept licking his lips."], "clue": 3, "twist": "It turned out Dad had eaten it, and he still had crumbs stuck to his lips.", "plain": "Mam baked another cake and nobody said a word.", "random": "It turned out a giant had climbed in the window."},
+  {"k": "🚲 The Bike", "lines": ["Ruairí's bike had been missing from the back garden since Saturday.", "His older sister had come home that week with very muddy jeans.", "He had searched the whole street twice."], "clue": 2, "twist": "It turned out his sister had borrowed it to practise for a muddy mountain race.", "plain": "His mam bought him a new one for his birthday.", "random": "It turned out penguins had escaped from the zoo."},
+  {"k": "🎭 The Understudy", "lines": ["Aisling had practised the part of the queen for months, but only as the understudy.", "On opening night, the star of the play was sitting in the front row.", "She had a cast on her leg and a big smile on her face."], "clue": 3, "twist": "Aisling realised she would be on stage after all, because of that broken leg.", "plain": "Aisling watched from the side of the stage.", "random": "It turned out the theatre was underwater."},
+  {"k": "📦 The Parcel", "lines": ["A parcel with no name on it arrived at our house.", "It was heavy and it ticked quietly.", "Grandad had been talking about his broken alarm clock all week."], "clue": 3, "twist": "It turned out to be a new alarm clock that Grandad had ordered online.", "plain": "We left it in the hall and went to bed.", "random": "It turned out a famous footballer had sent it by mistake."},
+  {"k": "🌟 The New Girl", "lines": ["On the wall of the art room hung a poster for a comic-book competition.", "The new girl in our class never spoke a word.", "At lunch, she sat alone and drew pictures in a notebook."], "clue": 1, "twist": "It turned out she had won the comic-book competition, and her name was printed on the poster.", "plain": "We left her alone and she moved school after a month.", "random": "It turned out the school bus could fly."}
+ ],
+ "stories": [
+  {"k": "🐕 The Lost Dog", "lines": ["It was a wet Saturday morning on Kilkee beach, and the tide was going out.", "Max had chased a seagull over the rocks and now there was no sign of him.", "Suddenly, a muddy brown head popped up from behind a rock pool.", "In the end, we all walked home soaked, with Max proudly carrying a crab shell."]},
+  {"k": "🎤 The Talent Show", "lines": ["On the last Friday before Christmas, the school hall was packed for the talent show.", "Ten minutes before her song, Aoife realised her backing track was missing from her phone.", "Just then, the music teacher sat down at the piano and nodded at her.", "Finally, Aoife sang with just the piano, and the whole hall stood up and clapped."]},
+  {"k": "⛺ The Camping Trip", "lines": ["It was a warm July evening in the Wicklow Mountains, and our tent stood by the river.", "Then Dad discovered he had forgotten the matches, so we couldn't cook anything.", "All at once, a light appeared through the trees and a voice called out.", "In the end, a friendly farmer lent us a stove, and the sausages tasted amazing."]},
+  {"k": "🏈 The Final", "lines": ["On a freezing Sunday afternoon in October, our team ran out for the county final.", "With one minute left, we were losing by a point and our best player was injured.", "At that moment, Ciara caught a high ball and kicked it straight over the bar.", "From that day on, everyone in the town knew her name."]},
+  {"k": "🔑 Locked Out", "lines": ["It was a dark winter evening, and I was the first one home from school.", "I searched every pocket, but my key was gone and the house was locked.", "Without warning, the kitchen window above me slid open.", "At last, my little brother's grinning face appeared, holding up my key."]},
+  {"k": "🎂 The Surprise Party", "lines": ["On the morning of Gran's eightieth birthday, the sun was shining over Clonakilty.", "Our plan was ruined when Gran rang to say she wasn't coming out of the house.", "Suddenly, we had an idea: we would bring the whole party to her.", "By the time the candles were lit, Gran's tiny kitchen was full of singing neighbours."]},
+  {"k": "🚌 The Wrong Stop", "lines": ["It was a busy Monday morning in Galway, and the bus was full of students.", "Rory looked out the window and saw that he had missed his stop.", "Just then, the driver shouted that the bus was turning back.", "In the end, Rory arrived at school with two minutes to spare."]},
+  {"k": "🐱 The Cat in the Tree", "lines": ["On a windy autumn afternoon, a crowd gathered under the big oak in the park.", "A small grey kitten was stuck on the highest branch and wouldn't come down.", "All at once, the branch cracked and the kitten leapt into the air.", "Finally, it landed safely in Mr Daly's umbrella, to a huge cheer."]},
+  {"k": "📚 The Library Book", "lines": ["It was a quiet Tuesday evening in the town library, just before closing.", "Sinéad couldn't find the book she needed for her project anywhere.", "At that moment, a book fell from the top shelf and landed at her feet.", "From that day on, she always checked the top shelf first."]},
+  {"k": "🌊 The Storm", "lines": ["On a grey Saturday in March, we took the ferry out to Cape Clear.", "Halfway across, the engine broke down and the waves grew higher.", "Without warning, a lifeboat appeared out of the mist beside us.", "By the time we reached the harbour, we were all laughing about it."]},
+  {"k": "🎨 The Art Competition", "lines": ["It was a sunny June morning, and the art room smelled of fresh paint.", "Darragh knocked over a jar of water, and his painting was ruined.", "Suddenly, he noticed the blurry colours looked like a misty sunrise.", "In the end, his painting won first prize."]},
+  {"k": "🦔 The Night Visitor", "lines": ["On a still summer night, the back garden was silent except for the crickets.", "Something was stealing the cat food, but we couldn't catch it.", "Just then, a small hedgehog shuffled out from under the hedge.", "From that day on, we left out a bowl of water for our new friend."]},
+  {"k": "🎸 The First Gig", "lines": ["It was a Friday evening in a small hall in Kilkenny, and the band were about to play their first gig.", "During the first song, a string on Niamh's guitar broke.", "At that moment, the drummer started a long, loud solo to give her time.", "Finally, Niamh fixed the string and the band finished to wild cheers."]},
+  {"k": "❄️ The Snow Day", "lines": ["On a white January morning, the whole of Cork was covered in snow.", "The school bus couldn't get up our hill, and Mam was stuck at work.", "All at once, the neighbours came out with shovels and started clearing the road.", "By the time Mam got home, there was a snowman on every corner of our street."]}
+ ],
+ "open": [
+  ["a girl called Tara", "🚪", "“Don't open that door!” screamed Tara.", "d"],
+  ["two friends called Cian and Luke", "🌙", "“If we're caught, we're in big trouble,” whispered Cian, as the gate creaked.", "d"],
+  ["my gran's cooking", "🍳", "“Is it supposed to be smoking like that?” asked Gran, staring at the oven.", "d"],
+  ["a girl called Ciara", "🏐", "“Ten seconds left, Ciara!” yelled the coach.", "d"],
+  ["my brother", "📦", "“You'll never guess what I found in the attic,” said my brother.", "d"],
+  ["a boy called Oisín", "🏊", "Oisín dived into the freezing lake before anyone could stop him.", "a"],
+  ["a girl called Róisín", "🚲", "Róisín slammed the door, grabbed her bike and pedalled into the rain.", "a"],
+  ["a boy called Darragh", "⚽", "The ball crashed through Mrs Keane's window, and Darragh ran.", "a"],
+  ["a girl called Aoife", "🧱", "Aoife leapt off the wall and landed right in front of the principal.", "a"],
+  ["a boy called Seán", "🏃", "Seán sprinted for the bus, his schoolbag bouncing and his laces flying.", "a"],
+  ["an old lighthouse", "🗼", "Nobody in Ballydown had ever seen the old lighthouse lit, until that night.", "m"],
+  ["a new boy", "👤", "There was something strange about the new boy's shadow.", "m"],
+  ["a teacher called Ms Byrne", "🌹", "Every morning, a single red rose appeared on Ms Byrne's desk, and nobody knew who left it.", "m"],
+  ["my grandad", "🗝️", "My grandad never let anyone open the blue box under his bed.", "m"],
+  ["a ladder", "🪜", "Why was there a ladder leaning against our house at midnight?", "m"]
+ ],
+ "place": [
+  ["Cold waves rushed over my toes and the sand squelched.", "be"],
+  ["Gulls screamed overhead as we pulled the seaweed off our sandcastle.", "be"],
+  ["I spread out my towel and watched the tide creep closer.", "be"],
+  ["The bell rang and a stampede of feet filled the corridor.", "sc"],
+  ["Lockers slammed and a teacher shouted for quiet.", "sc"],
+  ["I hid my homework under the desk as the principal walked in.", "sc"],
+  ["Pine needles crunched under my boots and an owl hooted.", "fo"],
+  ["Thick moss covered the fallen branches.", "fo"],
+  ["Sunlight flickered through the leaves and twigs snapped behind me.", "fo"],
+  ["A nurse checked the beeping machine beside my bed.", "ho"],
+  ["The ward smelled of soap, and my arm was in plaster.", "ho"],
+  ["Doctors rushed past pushing a stretcher.", "ho"],
+  ["The referee blew his whistle and the crowd roared.", "pi"],
+  ["Rain soaked my jersey and the goalposts looked miles away.", "pi"],
+  ["The scoreboard flashed and the stands shook with every cheer.", "pi"],
+  ["Rashers sizzled in the frying pan while the kettle boiled.", "ki"],
+  ["Mam opened the oven and the smell of baking filled the room.", "ki"],
+  ["I grabbed toast and a carton of milk from the fridge.", "ki"],
+  ["The tractor rumbled past the barn, scattering the hens.", "fa"],
+  ["My wellies sank into the mud as the cows mooed.", "fa"],
+  ["We stacked the hay while the sheep watched us.", "fa"],
+  ["Horns blared and taxis crawled through the traffic.", "ci"],
+  ["Buses hissed at the traffic lights and people hurried along the footpath.", "ci"],
+  ["Skyscrapers towered over the crowded street.", "ci"]
+ ]
+}/*END*/;
+  var PART={se:"🏠 Setting",pr:"⚔️ Problem",cl:"💥 Climax",en:"🏁 Ending"},PK=["se","pr","cl","en"];
+  var OPEN={d:"💬 Dialogue",a:"🏃 Action",m:"❓ Mystery"};
+  var PLACE={be:"🏖️ Beach",sc:"🏫 School",fo:"🌲 Forest",ho:"🏥 Hospital",pi:"🏟️ Match",ki:"🍳 Kitchen",fa:"🐄 Farm",ci:"🏙️ City"};
+  var LINES=["Line 1","Line 2","Line 3"];
+  var DREAMS=["Then I woke up. It was all a dream.","Then the alarm went off. It had all been a dream."];
+  var FIXED=[PART,OPEN,PLACE].reduce(function(a,L){return a.concat(Object.keys(L).map(function(k){return L[k];}));},[]).concat(LINES);
+  var PERMS=["A → B → C","A → C → B","B → A → C","B → C → A","C → A → B","C → B → A"];
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(k,lines,end){var h='<div class="td-card">'+(k?'<span class="td-k">'+k+'</span>':'');
+    lines.forEach(function(l,i){h+='<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    if(end)h+='<p class="td-end"><i>🎁 The ending</i>'+esc(end)+'</p>';return h+'</div>';}
+  function one(k,s){return '<div class="td-card">'+(k?'<span class="td-k">'+k+'</span>':'')+'<p class="td-one">'+esc(s)+'</p></div>';}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  /* one story stays for 2 questions in a row, so players read it once */
+  var keepT=null,keepN=0;
+  function tw(){if(!keepT||keepN>=2){var T;do{T=rnd(D.twists);}while(T===keepT&&D.twists.length>1);keepT=T;keepN=0;}keepN++;return keepT;}
+
+  /* ================= TWIST DETECTOR ================= */
+  function qTwist(){var T=tw();
+    return C("🎁 Which ending is the twist?",T.twist,[T.plain,T.random,rnd(DREAMS)],"A twist surprises you, but it was set up by a clue in line "+T.clue+". Endings that come from nowhere, or “it was all a dream”, feel like a cheat.",
+      card(T.k,T.lines),{t:"twist",k:T.k,rv:T.k+": "+T.twist},3);}
+  function qClue(){var T=tw();keepN=2;
+    return C("🔎 Which line planted the clue?",LINES[T.clue-1],LINES,"Line "+T.clue+" plants the clue: “"+T.lines[T.clue-1]+"” A good twist reaches back to it.",
+      card(T.k,T.lines,T.twist),{t:"clue",k:T.k,rv:T.k+": clue"},2);}
+  /* ================= STORY PARTS ================= */
+  function qPart(){var S=rnd(D.stories),i=Math.floor(Math.random()*4),k=PK[i];
+    var WHY={se:"It sets the scene: where and when.",pr:"Something goes wrong: that's the problem.",cl:"The big moment where everything turns: the climax.",en:"It shows how things work out: the ending."};
+    return C("Which part of the story?",PART[k],others(PART,k),WHY[k],one(S.k,S.lines[i]),{t:"part",s:S.lines[i],rv:S.lines[i]},3);}
+  /* ================= ORDER IT ================= */
+  function qOrder(){var S=rnd(D.stories),idx=shuffle([1,2,3]),lets=["A","B","C"];
+    var h='<div class="td-card"><span class="td-k">'+S.k+'</span><p class="td-t">🏠 '+esc(S.lines[0])+'</p>';
+    idx.forEach(function(n,j){h+='<p class="td-l"><b>'+lets[j]+'</b>'+esc(S.lines[n])+'</p>';});h+='</div>';
+    var ans=[1,2,3].map(function(n){return lets[idx.indexOf(n)];}).join(" → ");
+    return C("🔢 Right order?",ans,PERMS,"Problem → climax → ending. Look for the problem words, then “Suddenly / Just then…”, then “In the end / Finally…”.",h,{t:"order",k:S.k,rv:S.k},3);}
+  /* ================= HOOK THEM ================= */
+  function weak(x){return ["This is a story about "+x+".","My story is about "+x+". I hope you like it.","Hi, I'm going to tell you a story about "+x+"."];}
+  var OWHY={d:"It starts with someone speaking, so we're dropped into the scene.",a:"It starts in the middle of the action.",m:"It starts with something strange we want explained."};
+  function qOpen(){var it=rnd(D.open);
+    return C("🎣 Best first line?",it[2],weak(it[0]),"A strong first line hooks the reader. "+OWHY[it[3]]+" “This is a story about…” gives them no reason to read on.",
+      one(it[1]+" A story about…",it[0]),{t:"open",about:it[0],rv:"First line for a story about "+it[0]},3);}
+  function qHook(){var it=rnd(D.open);
+    return C("Which kind of opening?",OPEN[it[3]],others(OPEN,it[3]),OWHY[it[3]],one("",it[2]),{t:"hook",s:it[2],rv:it[2]},2);}
+  /* ================= WHERE IS IT SET? ================= */
+  function qPlace(){var it=rnd(D.place);
+    return C("📍 Where is it set?",PLACE[it[1]],others(PLACE,it[1]),"The clue words show the place without naming it.",one("",it[0]),{t:"place",s:it[0],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    twist:[qTwist,qClue],
+    parts:[qPart],
+    order:[qOrder],
+    open:[qOpen,qOpen,qHook],
+    place:[qPlace],
+    mixed:[qTwist,qClue,qPart,qOrder,qOpen,qHook,qPlace]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="parts"||m==="place")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;keepT=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    if(mode==="twist"){q=(keepN%2===0||!keepT)?qTwist():qClue();}
+    else do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    else if(opts.every(function(o){return PERMS.indexOf(o)>=0;}))opts.sort(function(a,b){return PERMS.indexOf(a)-PERMS.indexOf(b);});
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="twist"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="twist"&&streak%5===0?800:500):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You read stories like a detective.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,PART:PART,OPEN:OPEN,PLACE:PLACE,LINES:LINES,DREAMS:DREAMS,weak:weak}};
+})();
+</script>

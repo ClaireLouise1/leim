@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twist Detector: Short Stories Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game on short stories: spot the twist ending and its clue, the parts of a plot, strong opening lines and setting clues. Rules, exam corner and a printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.td-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.td-card .td-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.td-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.td-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.td-card p.td-l b{background:#F6CF5A;color:var(--ink)}
+.td-card p.td-t{font-weight:800;display:block}
+.td-card p.td-one{display:block;font-size:19px;font-weight:600;text-align:center}
+.td-card p.td-end{display:block;font-weight:600;border-top:2px dashed var(--line);padding-top:6px;margin-top:4px}
+.td-card p.td-end i{display:block;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.td-card p{font-size:16px}.td-card p.td-one{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Twist Detector</h1>
+        <p>Short stories: spot the twist, the parts of a plot, a strong opening and the setting clues. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="twist"><div><b>Twist Detector</b><span>🎁 Which ending is the twist? 🔎 Where's the clue?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="parts"><div><b>Story parts</b><span>🏠 Setting · ⚔️ Problem · 💥 Climax · 🏁 Ending</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Order it</b><span>🔢 Put the plot in order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="open"><div><b>Hook them</b><span>🎣 Best first line? 💬 🏃 ❓</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="place"><div><b>Where is it set?</b><span>📍 Read the clue words</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Twist Detector, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R8, R9, W7 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Short stories</h2>
+        <p>A short story is small but it has a full shape: a setting, a problem, a moment where everything turns, and an ending.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="td-card"><span class="td-k">📦 The Parcel</span>
+          <p><b>1</b>A parcel with no name on it arrived at our house.</p>
+          <p><b>2</b>It was heavy and it ticked quietly.</p>
+          <p><b>3</b>Grandad had been talking about his broken alarm clock all week.</p></div>
+        <div class="sx" style="margin-top:8px">
+          <div class="td-card"><span class="td-k">Ending A</span><p class="td-one">It turned out a famous footballer had sent it by mistake.</p></div>
+          <div class="td-card"><span class="td-k">Ending B</span><p class="td-one">It turned out to be a new alarm clock that Grandad had ordered online.</p></div>
+        </div>
+        <p style="margin-top:8px">Both endings surprise you. Which one feels clever, and which one feels like a cheat? Which line of the story does the better ending reach back to?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>B</b> is a real twist: the clue was planted in line 3 (<i>the broken alarm clock</i>), so the ending surprises you but makes sense when you look back. The ticking was a clock all along.<br>
+          <b>A</b> comes from nowhere: nothing in the story set it up. “Then I woke up. It was all a dream.” is the same kind of cheat.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The shape of a story</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏠 Setting</b>Where and when: “It was a wet Saturday morning on Kilkee beach…”</div>
+          <div class="note"><b class="h">⚔️ Problem</b>Something goes wrong: lost, stuck, missing, broken.</div>
+          <div class="note"><b class="h">💥 Climax</b>The big moment: “Suddenly…”, “Just then…”, “At that moment…”</div>
+          <div class="note"><b class="h">🏁 Ending</b>How it works out: “In the end…”, “Finally…”, “From that day on…”</div>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px;margin-top:6px">Your teacher may call these exposition, rising action (the problem builds), climax and resolution.</p>
+        <h3 style="font-size:19px;margin:22px 0 8px">Openings and twists</h3>
+        <div class="wc">
+          <div class="note"><b class="h">💬 Dialogue</b>Start with someone speaking: “Don't open that door!”</div>
+          <div class="note"><b class="h">🏃 Action</b>Start in the middle of something happening.</div>
+          <div class="note"><b class="h">❓ Mystery</b>Start with something strange the reader wants explained.</div>
+          <div class="note"><b class="h">🎁 Twist</b>A surprise ending that was set up by a clue earlier.</div>
+          <div class="note"><b class="h">📍 Setting clues</b>Writers rarely say “at the beach”. They show it: sand, gulls, the tide.</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Short stories turn up in two ways. In <b>reading</b> questions you get an unseen extract and are asked about the setting, the characters, the tension or the ending, with evidence from the text. In <b>writing</b> you may be asked to write a short story, or the opening or ending of one.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Quote the clue words</b> when you talk about setting or mood: don't just say “it's scary”.</li>
+            <li><b>Name the part of the plot</b> and say what it does: “This is the climax because…”.</li>
+            <li><b>When you write:</b> one problem, a few characters, a strong first line and an ending you planned from the start.</li>
+            <li><b>Avoid</b> “It was all a dream” and endings that come from nowhere.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>The Lighthouse Key</b><br>It was a wild October night on the Beara peninsula, and rain hammered the windows of Gran's cottage. Gran had gone to bed early, leaving Cormac alone with the crackling fire. At ten o'clock, the lighthouse on the point went dark. Cormac knew the fishing boats depended on that light, and the old keeper had been sick all week. Suddenly, he remembered the heavy iron key that always hung on the hook by Gran's door. He grabbed his torch and ran out into the storm.</div>
+          <ol class="eq">
+            <li>Where and when is the story set? Quote <b>two</b> words or phrases that help you picture it.
+              <details><summary>Show a model answer</summary><p>It is set on a stormy October night in Gran's cottage on the Beara peninsula, near a lighthouse. “Rain hammered the windows” and “the crackling fire” help me picture the wild weather outside and the warm room inside.<br><i>Where the marks would go:</i> place and time both named, two short quotes, a word on what they help you picture.</p></details></li>
+            <li>What is the <b>problem</b> in this extract, and which sentence is the <b>turning point</b>?
+              <details><summary>Show a model answer</summary><p>The problem is that the lighthouse goes dark and the fishing boats depend on it, but the keeper is sick. The turning point is “Suddenly, he remembered the heavy iron key…”, because that is when Cormac decides to act.<br><i>Where the marks would go:</i> the problem in your own words, the turning point quoted, and a reason why it is the turning point.</p></details></li>
+            <li>How does the writer build <b>tension</b> in the extract? Make two points.
+              <details><summary>Show a model answer</summary><p>First, the storm and the dark: the rain “hammered” and the light “went dark”, so the night feels dangerous. Second, Cormac is “alone”, with Gran asleep and the keeper sick, so nobody else can help. The last sentence ends with him running “out into the storm”, so we want to know what happens next.<br><i>Where the marks would go:</i> two separate points, each with a short quote and a sentence explaining the effect on the reader.</p></details></li>
+            <li>Write an <b>ending</b> for the story (4–6 sentences) with a twist that is set up by a clue in the extract.
+              <details><summary>Show a model answer</summary><p>When Cormac reached the lighthouse, the heavy door was already open. Up the winding stairs, a figure in a dripping coat was winding the great lamp. Slowly, the beam swept out across the bay again. The figure turned around. It was Gran. It turned out that for forty years she had been the keeper's secret helper, and the key by her door had never been just for decoration.<br><i>Where the marks would go:</i> the ending follows on from the extract, the twist is set up by a clue that was already there (the key by Gran's door, Gran “gone to bed early”), and the sentences build to the reveal.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/short-stories-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_twist_detector.py read this block: keep it valid JSON; one item per line) ----------
+     twists: {k: emoji title, lines: 3 lines of the story so far, clue: the line (1-3) that plants the clue,
+              twist: the twist ending (reaches back to the clue line only), plain: an ending with no surprise,
+              random: a surprise that nothing in the story set up}
+     stories: {k: emoji title, lines: [setting, problem, climax, ending]}
+     open: [what the story is about (for the weak openers), emoji, a strong first line, d (dialogue) / a (action) / m (mystery)]
+     place: [a line with setting clue words, be/sc/fo/ho/pi/ki/fa/ci] */
+  var D=/*DATA*/{
+ "twists": [
+  {"k": "👻 The Ghost in the Attic", "lines": ["Ella noticed that the bag of nuts in the kitchen kept getting lighter.", "Then, every night, she heard scratching above her bedroom ceiling.", "Her brother said it was the ghost of an old sailor."], "clue": 1, "twist": "It turned out to be a fat red squirrel with a stash of stolen nuts.", "plain": "She called her dad, who told her it was only the wind.", "random": "It turned out the house had been built by aliens."},
+  {"k": "🎁 The Secret Present", "lines": ["One evening, Tom found sawdust all over Dad's good shoes.", "After that, Dad kept disappearing into the shed after dinner.", "Mam said he was just fixing the lawnmower."], "clue": 1, "twist": "On his birthday, Tom realised the sawdust came from a brand-new treehouse.", "plain": "Tom shrugged and went back to his homework.", "random": "It turned out his teacher was a famous singer."},
+  {"k": "🏅 The Missing Medal", "lines": ["Before the race, Jack hung his lucky medal on a hook in the changing room.", "When he came back, the hook was empty.", "His friend Sam had a strange lump in his coat pocket."], "clue": 3, "twist": "It turned out Sam had hidden it in his pocket to keep it safe.", "plain": "Jack ran anyway and came fourth.", "random": "It turned out the coach was a secret agent."},
+  {"k": "📱 The Strange Messages", "lines": ["Orla's granny had just bought her first smartphone.", "All that week, Orla got messages from an unknown number.", "They said things like “Great goal today!”"], "clue": 1, "twist": "It turned out the secret texter was her granny, practising on her new smartphone.", "plain": "Orla blocked the number and forgot about it.", "random": "It turned out her cat could type."},
+  {"k": "☂️ The Umbrella", "lines": ["Every day for a month, a black umbrella sat by the school gate.", "Mr Burke the caretaker always smiled when the rain started.", "Nobody ever came to collect the umbrella."], "clue": 2, "twist": "It turned out the caretaker left it there for anyone caught in the rain.", "plain": "In the end, someone took it to lost property.", "random": "It turned out the principal was a pop star."},
+  {"k": "🐟 The Empty Tank", "lines": ["When Liam came home from school, his goldfish tank was empty.", "From the bathroom, Liam heard a tiny splash.", "His little sister was sitting on the sofa looking very guilty."], "clue": 2, "twist": "He realised she had given Goldie a swim in the bathroom sink.", "plain": "He made a poster and asked the neighbours if they had seen it.", "random": "It turned out the fish had flown away to Spain."},
+  {"k": "🔔 The Midnight Bell", "lines": ["Every night at midnight, the old church bell rang once.", "Old Mrs Walsh lived next door and kept a long rope in her garden shed.", "The church had been locked for years."], "clue": 2, "twist": "It turned out Mrs Walsh had been pulling a rope through the window to call her cat home.", "plain": "Nobody ever found out why.", "random": "It turned out the whole town was asleep."},
+  {"k": "🍰 The Cake Thief", "lines": ["Mam baked a chocolate cake for the school cake sale.", "In the morning, half of it was gone.", "Dad was very quiet at breakfast and kept licking his lips."], "clue": 3, "twist": "It turned out Dad had eaten it, and he still had crumbs stuck to his lips.", "plain": "Mam baked another cake and nobody said a word.", "random": "It turned out a giant had climbed in the window."},
+  {"k": "🚲 The Bike", "lines": ["Ruairí's bike had been missing from the back garden since Saturday.", "His older sister had come home that week with very muddy jeans.", "He had searched the whole street twice."], "clue": 2, "twist": "It turned out his sister had borrowed it to practise for a muddy mountain race.", "plain": "His mam bought him a new one for his birthday.", "random": "It turned out penguins had escaped from the zoo."},
+  {"k": "🎭 The Understudy", "lines": ["Aisling had practised the part of the queen for months, but only as the understudy.", "On opening night, the star of the play was sitting in the front row.", "She had a cast on her leg and a big smile on her face."], "clue": 3, "twist": "Aisling realised she would be on stage after all, because of that broken leg.", "plain": "Aisling watched from the side of the stage.", "random": "It turned out the theatre was underwater."},
+  {"k": "📦 The Parcel", "lines": ["A parcel with no name on it arrived at our house.", "It was heavy and it ticked quietly.", "Grandad had been talking about his broken alarm clock all week."], "clue": 3, "twist": "It turned out to be a new alarm clock that Grandad had ordered online.", "plain": "We left it in the hall and went to bed.", "random": "It turned out a famous footballer had sent it by mistake."},
+  {"k": "🌟 The New Girl", "lines": ["On the wall of the art room hung a poster for a comic-book competition.", "The new girl in our class never spoke a word.", "At lunch, she sat alone and drew pictures in a notebook."], "clue": 1, "twist": "It turned out she had won the comic-book competition, and her name was printed on the poster.", "plain": "We left her alone and she moved school after a month.", "random": "It turned out the school bus could fly."}
+ ],
+ "stories": [
+  {"k": "🐕 The Lost Dog", "lines": ["It was a wet Saturday morning on Kilkee beach, and the tide was going out.", "Max had chased a seagull over the rocks and now there was no sign of him.", "Suddenly, a muddy brown head popped up from behind a rock pool.", "In the end, we all walked home soaked, with Max proudly carrying a crab shell."]},
+  {"k": "🎤 The Talent Show", "lines": ["On the last Friday before Christmas, the school hall was packed for the talent show.", "Ten minutes before her song, Aoife realised her backing track was missing from her phone.", "Just then, the music teacher sat down at the piano and nodded at her.", "Finally, Aoife sang with just the piano, and the whole hall stood up and clapped."]},
+  {"k": "⛺ The Camping Trip", "lines": ["It was a warm July evening in the Wicklow Mountains, and our tent stood by the river.", "Then Dad discovered he had forgotten the matches, so we couldn't cook anything.", "All at once, a light appeared through the trees and a voice called out.", "In the end, a friendly farmer lent us a stove, and the sausages tasted amazing."]},
+  {"k": "🏈 The Final", "lines": ["On a freezing Sunday afternoon in October, our team ran out for the county final.", "With one minute left, we were losing by a point and our best player was injured.", "At that moment, Ciara caught a high ball and kicked it straight over the bar.", "From that day on, everyone in the town knew her name."]},
+  {"k": "🔑 Locked Out", "lines": ["It was a dark winter evening, and I was the first one home from school.", "I searched every pocket, but my key was gone and the house was locked.", "Without warning, the kitchen window above me slid open.", "At last, my little brother's grinning face appeared, holding up my key."]},
+  {"k": "🎂 The Surprise Party", "lines": ["On the morning of Gran's eightieth birthday, the sun was shining over Clonakilty.", "Our plan was ruined when Gran rang to say she wasn't coming out of the house.", "Suddenly, we had an idea: we would bring the whole party to her.", "By the time the candles were lit, Gran's tiny kitchen was full of singing neighbours."]},
+  {"k": "🚌 The Wrong Stop", "lines": ["It was a busy Monday morning in Galway, and the bus was full of students.", "Rory looked out the window and saw that he had missed his stop.", "Just then, the driver shouted that the bus was turning back.", "In the end, Rory arrived at school with two minutes to spare."]},
+  {"k": "🐱 The Cat in the Tree", "lines": ["On a windy autumn afternoon, a crowd gathered under the big oak in the park.", "A small grey kitten was stuck on the highest branch and wouldn't come down.", "All at once, the branch cracked and the kitten leapt into the air.", "Finally, it landed safely in Mr Daly's umbrella, to a huge cheer."]},
+  {"k": "📚 The Library Book", "lines": ["It was a quiet Tuesday evening in the town library, just before closing.", "Sinéad couldn't find the book she needed for her project anywhere.", "At that moment, a book fell from the top shelf and landed at her feet.", "From that day on, she always checked the top shelf first."]},
+  {"k": "🌊 The Storm", "lines": ["On a grey Saturday in March, we took the ferry out to Cape Clear.", "Halfway across, the engine broke down and the waves grew higher.", "Without warning, a lifeboat appeared out of the mist beside us.", "By the time we reached the harbour, we were all laughing about it."]},
+  {"k": "🎨 The Art Competition", "lines": ["It was a sunny June morning, and the art room smelled of fresh paint.", "Darragh knocked over a jar of water, and his painting was ruined.", "Suddenly, he noticed the blurry colours looked like a misty sunrise.", "In the end, his painting won first prize."]},
+  {"k": "🦔 The Night Visitor", "lines": ["On a still summer night, the back garden was silent except for the crickets.", "Something was stealing the cat food, but we couldn't catch it.", "Just then, a small hedgehog shuffled out from under the hedge.", "From that day on, we left out a bowl of water for our new friend."]},
+  {"k": "🎸 The First Gig", "lines": ["It was a Friday evening in a small hall in Kilkenny, and the band were about to play their first gig.", "During the first song, a string on Niamh's guitar broke.", "At that moment, the drummer started a long, loud solo to give her time.", "Finally, Niamh fixed the string and the band finished to wild cheers."]},
+  {"k": "❄️ The Snow Day", "lines": ["On a white January morning, the whole of Cork was covered in snow.", "The school bus couldn't get up our hill, and Mam was stuck at work.", "All at once, the neighbours came out with shovels and started clearing the road.", "By the time Mam got home, there was a snowman on every corner of our street."]}
+ ],
+ "open": [
+  ["a girl called Tara", "🚪", "“Don't open that door!” screamed Tara.", "d"],
+  ["two friends called Cian and Luke", "🌙", "“If we're caught, we're in big trouble,” whispered Cian, as the gate creaked.", "d"],
+  ["my gran's cooking", "🍳", "“Is it supposed to be smoking like that?” asked Gran, staring at the oven.", "d"],
+  ["a girl called Ciara", "🏐", "“Ten seconds left, Ciara!” yelled the coach.", "d"],
+  ["my brother", "📦", "“You'll never guess what I found in the attic,” said my brother.", "d"],
+  ["a boy called Oisín", "🏊", "Oisín dived into the freezing lake before anyone could stop him.", "a"],
+  ["a girl called Róisín", "🚲", "Róisín slammed the door, grabbed her bike and pedalled into the rain.", "a"],
+  ["a boy called Darragh", "⚽", "The ball crashed through Mrs Keane's window, and Darragh ran.", "a"],
+  ["a girl called Aoife", "🧱", "Aoife leapt off the wall and landed right in front of the principal.", "a"],
+  ["a boy called Seán", "🏃", "Seán sprinted for the bus, his schoolbag bouncing and his laces flying.", "a"],
+  ["an old lighthouse", "🗼", "Nobody in Ballydown had ever seen the old lighthouse lit, until that night.", "m"],
+  ["a new boy", "👤", "There was something strange about the new boy's shadow.", "m"],
+  ["a teacher called Ms Byrne", "🌹", "Every morning, a single red rose appeared on Ms Byrne's desk, and nobody knew who left it.", "m"],
+  ["my grandad", "🗝️", "My grandad never let anyone open the blue box under his bed.", "m"],
+  ["a ladder", "🪜", "Why was there a ladder leaning against our house at midnight?", "m"]
+ ],
+ "place": [
+  ["Cold waves rushed over my toes and the sand squelched.", "be"],
+  ["Gulls screamed overhead as we pulled the seaweed off our sandcastle.", "be"],
+  ["I spread out my towel and watched the tide creep closer.", "be"],
+  ["The bell rang and a stampede of feet filled the corridor.", "sc"],
+  ["Lockers slammed and a teacher shouted for quiet.", "sc"],
+  ["I hid my homework under the desk as the principal walked in.", "sc"],
+  ["Pine needles crunched under my boots and an owl hooted.", "fo"],
+  ["Thick moss covered the fallen branches.", "fo"],
+  ["Sunlight flickered through the leaves and twigs snapped behind me.", "fo"],
+  ["A nurse checked the beeping machine beside my bed.", "ho"],
+  ["The ward smelled of soap, and my arm was in plaster.", "ho"],
+  ["Doctors rushed past pushing a stretcher.", "ho"],
+  ["The referee blew his whistle and the crowd roared.", "pi"],
+  ["Rain soaked my jersey and the goalposts looked miles away.", "pi"],
+  ["The scoreboard flashed and the stands shook with every cheer.", "pi"],
+  ["Rashers sizzled in the frying pan while the kettle boiled.", "ki"],
+  ["Mam opened the oven and the smell of baking filled the room.", "ki"],
+  ["I grabbed toast and a carton of milk from the fridge.", "ki"],
+  ["The tractor rumbled past the barn, scattering the hens.", "fa"],
+  ["My wellies sank into the mud as the cows mooed.", "fa"],
+  ["We stacked the hay while the sheep watched us.", "fa"],
+  ["Horns blared and taxis crawled through the traffic.", "ci"],
+  ["Buses hissed at the traffic lights and people hurried along the footpath.", "ci"],
+  ["Skyscrapers towered over the crowded street.", "ci"]
+ ]
+}/*END*/;
+  var PART={se:"🏠 Setting",pr:"⚔️ Problem",cl:"💥 Climax",en:"🏁 Ending"},PK=["se","pr","cl","en"];
+  var OPEN={d:"💬 Dialogue",a:"🏃 Action",m:"❓ Mystery"};
+  var PLACE={be:"🏖️ Beach",sc:"🏫 School",fo:"🌲 Forest",ho:"🏥 Hospital",pi:"🏟️ Match",ki:"🍳 Kitchen",fa:"🐄 Farm",ci:"🏙️ City"};
+  var LINES=["Line 1","Line 2","Line 3"];
+  var DREAMS=["Then I woke up. It was all a dream.","Then the alarm went off. It had all been a dream."];
+  var FIXED=[PART,OPEN,PLACE].reduce(function(a,L){return a.concat(Object.keys(L).map(function(k){return L[k];}));},[]).concat(LINES);
+  var PERMS=["A → B → C","A → C → B","B → A → C","B → C → A","C → A → B","C → B → A"];
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(k,lines,end){var h='<div class="td-card">'+(k?'<span class="td-k">'+k+'</span>':'');
+    lines.forEach(function(l,i){h+='<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    if(end)h+='<p class="td-end"><i>🎁 The ending</i>'+esc(end)+'</p>';return h+'</div>';}
+  function one(k,s){return '<div class="td-card">'+(k?'<span class="td-k">'+k+'</span>':'')+'<p class="td-one">'+esc(s)+'</p></div>';}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  /* one story stays for 2 questions in a row, so players read it once */
+  var keepT=null,keepN=0;
+  function tw(){if(!keepT||keepN>=2){var T;do{T=rnd(D.twists);}while(T===keepT&&D.twists.length>1);keepT=T;keepN=0;}keepN++;return keepT;}
+
+  /* ================= TWIST DETECTOR ================= */
+  function qTwist(){var T=tw();
+    return C("🎁 Which ending is the twist?",T.twist,[T.plain,T.random,rnd(DREAMS)],"A twist surprises you, but it was set up by a clue in line "+T.clue+". Endings that come from nowhere, or “it was all a dream”, feel like a cheat.",
+      card(T.k,T.lines),{t:"twist",k:T.k,rv:T.k+": "+T.twist},3);}
+  function qClue(){var T=tw();keepN=2;
+    return C("🔎 Which line planted the clue?",LINES[T.clue-1],LINES,"Line "+T.clue+" plants the clue: “"+T.lines[T.clue-1]+"” A good twist reaches back to it.",
+      card(T.k,T.lines,T.twist),{t:"clue",k:T.k,rv:T.k+": clue"},2);}
+  /* ================= STORY PARTS ================= */
+  function qPart(){var S=rnd(D.stories),i=Math.floor(Math.random()*4),k=PK[i];
+    var WHY={se:"It sets the scene: where and when.",pr:"Something goes wrong: that's the problem.",cl:"The big moment where everything turns: the climax.",en:"It shows how things work out: the ending."};
+    return C("Which part of the story?",PART[k],others(PART,k),WHY[k],one(S.k,S.lines[i]),{t:"part",s:S.lines[i],rv:S.lines[i]},3);}
+  /* ================= ORDER IT ================= */
+  function qOrder(){var S=rnd(D.stories),idx=shuffle([1,2,3]),lets=["A","B","C"];
+    var h='<div class="td-card"><span class="td-k">'+S.k+'</span><p class="td-t">🏠 '+esc(S.lines[0])+'</p>';
+    idx.forEach(function(n,j){h+='<p class="td-l"><b>'+lets[j]+'</b>'+esc(S.lines[n])+'</p>';});h+='</div>';
+    var ans=[1,2,3].map(function(n){return lets[idx.indexOf(n)];}).join(" → ");
+    return C("🔢 Right order?",ans,PERMS,"Problem → climax → ending. Look for the problem words, then “Suddenly / Just then…”, then “In the end / Finally…”.",h,{t:"order",k:S.k,rv:S.k},3);}
+  /* ================= HOOK THEM ================= */
+  function weak(x){return ["This is a story about "+x+".","My story is about "+x+". I hope you like it.","Hi, I'm going to tell you a story about "+x+"."];}
+  var OWHY={d:"It starts with someone speaking, so we're dropped into the scene.",a:"It starts in the middle of the action.",m:"It starts with something strange we want explained."};
+  function qOpen(){var it=rnd(D.open);
+    return C("🎣 Best first line?",it[2],weak(it[0]),"A strong first line hooks the reader. "+OWHY[it[3]]+" “This is a story about…” gives them no reason to read on.",
+      one(it[1]+" A story about…",it[0]),{t:"open",about:it[0],rv:"First line for a story about "+it[0]},3);}
+  function qHook(){var it=rnd(D.open);
+    return C("Which kind of opening?",OPEN[it[3]],others(OPEN,it[3]),OWHY[it[3]],one("",it[2]),{t:"hook",s:it[2],rv:it[2]},2);}
+  /* ================= WHERE IS IT SET? ================= */
+  function qPlace(){var it=rnd(D.place);
+    return C("📍 Where is it set?",PLACE[it[1]],others(PLACE,it[1]),"The clue words show the place without naming it.",one("",it[0]),{t:"place",s:it[0],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    twist:[qTwist,qClue],
+    parts:[qPart],
+    order:[qOrder],
+    open:[qOpen,qOpen,qHook],
+    place:[qPlace],
+    mixed:[qTwist,qClue,qPart,qOrder,qOpen,qHook,qPlace]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="parts"||m==="place")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;keepT=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    if(mode==="twist"){q=(keepN%2===0||!keepT)?qTwist():qClue();}
+    else do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    else if(opts.every(function(o){return PERMS.indexOf(o)>=0;}))opts.sort(function(a,b){return PERMS.indexOf(a)-PERMS.indexOf(b);});
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="twist"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="twist"&&streak%5===0?800:500):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You read stories like a detective.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,PART:PART,OPEN:OPEN,PLACE:PLACE,LINES:LINES,DREAMS:DREAMS,weak:weak}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

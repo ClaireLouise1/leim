@@ -1,0 +1,142 @@
+<main id="main">
+<style>.td-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.td-card .td-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.td-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.td-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.td-card p.td-l b{background:#F6CF5A;color:var(--ink)}
+.td-card p.td-t{font-weight:800;display:block}
+.td-card p.td-one{display:block;font-size:19px;font-weight:600;text-align:center}
+.td-card p.td-end{display:block;font-weight:600;border-top:2px dashed var(--line);padding-top:6px;margin-top:4px}
+.td-card p.td-end i{display:block;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.td-card p{font-size:16px}.td-card p.td-one{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Twist Detector</h1>
+        <p>Short stories: spot the twist, the parts of a plot, a strong opening and the setting clues. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="twist"><div><b>Twist Detector</b><span>🎁 Which ending is the twist? 🔎 Where's the clue?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="parts"><div><b>Story parts</b><span>🏠 Setting · ⚔️ Problem · 💥 Climax · 🏁 Ending</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Order it</b><span>🔢 Put the plot in order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="open"><div><b>Hook them</b><span>🎣 Best first line? 💬 🏃 ❓</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="place"><div><b>Where is it set?</b><span>📍 Read the clue words</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Twist Detector, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R8, R9, W7 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Short stories</h2>
+        <p>A short story is small but it has a full shape: a setting, a problem, a moment where everything turns, and an ending.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="td-card"><span class="td-k">📦 The Parcel</span>
+          <p><b>1</b>A parcel with no name on it arrived at our house.</p>
+          <p><b>2</b>It was heavy and it ticked quietly.</p>
+          <p><b>3</b>Grandad had been talking about his broken alarm clock all week.</p></div>
+        <div class="sx" style="margin-top:8px">
+          <div class="td-card"><span class="td-k">Ending A</span><p class="td-one">It turned out a famous footballer had sent it by mistake.</p></div>
+          <div class="td-card"><span class="td-k">Ending B</span><p class="td-one">It turned out to be a new alarm clock that Grandad had ordered online.</p></div>
+        </div>
+        <p style="margin-top:8px">Both endings surprise you. Which one feels clever, and which one feels like a cheat? Which line of the story does the better ending reach back to?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>B</b> is a real twist: the clue was planted in line 3 (<i>the broken alarm clock</i>), so the ending surprises you but makes sense when you look back. The ticking was a clock all along.<br>
+          <b>A</b> comes from nowhere: nothing in the story set it up. “Then I woke up. It was all a dream.” is the same kind of cheat.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The shape of a story</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏠 Setting</b>Where and when: “It was a wet Saturday morning on Kilkee beach…”</div>
+          <div class="note"><b class="h">⚔️ Problem</b>Something goes wrong: lost, stuck, missing, broken.</div>
+          <div class="note"><b class="h">💥 Climax</b>The big moment: “Suddenly…”, “Just then…”, “At that moment…”</div>
+          <div class="note"><b class="h">🏁 Ending</b>How it works out: “In the end…”, “Finally…”, “From that day on…”</div>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px;margin-top:6px">Your teacher may call these exposition, rising action (the problem builds), climax and resolution.</p>
+        <h3 style="font-size:19px;margin:22px 0 8px">Openings and twists</h3>
+        <div class="wc">
+          <div class="note"><b class="h">💬 Dialogue</b>Start with someone speaking: “Don't open that door!”</div>
+          <div class="note"><b class="h">🏃 Action</b>Start in the middle of something happening.</div>
+          <div class="note"><b class="h">❓ Mystery</b>Start with something strange the reader wants explained.</div>
+          <div class="note"><b class="h">🎁 Twist</b>A surprise ending that was set up by a clue earlier.</div>
+          <div class="note"><b class="h">📍 Setting clues</b>Writers rarely say “at the beach”. They show it: sand, gulls, the tide.</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Short stories turn up in two ways. In <b>reading</b> questions you get an unseen extract and are asked about the setting, the characters, the tension or the ending, with evidence from the text. In <b>writing</b> you may be asked to write a short story, or the opening or ending of one.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Quote the clue words</b> when you talk about setting or mood: don't just say “it's scary”.</li>
+            <li><b>Name the part of the plot</b> and say what it does: “This is the climax because…”.</li>
+            <li><b>When you write:</b> one problem, a few characters, a strong first line and an ending you planned from the start.</li>
+            <li><b>Avoid</b> “It was all a dream” and endings that come from nowhere.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>The Lighthouse Key</b><br>It was a wild October night on the Beara peninsula, and rain hammered the windows of Gran's cottage. Gran had gone to bed early, leaving Cormac alone with the crackling fire. At ten o'clock, the lighthouse on the point went dark. Cormac knew the fishing boats depended on that light, and the old keeper had been sick all week. Suddenly, he remembered the heavy iron key that always hung on the hook by Gran's door. He grabbed his torch and ran out into the storm.</div>
+          <ol class="eq">
+            <li>Where and when is the story set? Quote <b>two</b> words or phrases that help you picture it.
+              <details><summary>Show a model answer</summary><p>It is set on a stormy October night in Gran's cottage on the Beara peninsula, near a lighthouse. “Rain hammered the windows” and “the crackling fire” help me picture the wild weather outside and the warm room inside.<br><i>Where the marks would go:</i> place and time both named, two short quotes, a word on what they help you picture.</p></details></li>
+            <li>What is the <b>problem</b> in this extract, and which sentence is the <b>turning point</b>?
+              <details><summary>Show a model answer</summary><p>The problem is that the lighthouse goes dark and the fishing boats depend on it, but the keeper is sick. The turning point is “Suddenly, he remembered the heavy iron key…”, because that is when Cormac decides to act.<br><i>Where the marks would go:</i> the problem in your own words, the turning point quoted, and a reason why it is the turning point.</p></details></li>
+            <li>How does the writer build <b>tension</b> in the extract? Make two points.
+              <details><summary>Show a model answer</summary><p>First, the storm and the dark: the rain “hammered” and the light “went dark”, so the night feels dangerous. Second, Cormac is “alone”, with Gran asleep and the keeper sick, so nobody else can help. The last sentence ends with him running “out into the storm”, so we want to know what happens next.<br><i>Where the marks would go:</i> two separate points, each with a short quote and a sentence explaining the effect on the reader.</p></details></li>
+            <li>Write an <b>ending</b> for the story (4–6 sentences) with a twist that is set up by a clue in the extract.
+              <details><summary>Show a model answer</summary><p>When Cormac reached the lighthouse, the heavy door was already open. Up the winding stairs, a figure in a dripping coat was winding the great lamp. Slowly, the beam swept out across the bay again. The figure turned around. It was Gran. It turned out that for forty years she had been the keeper's secret helper, and the key by her door had never been just for decoration.<br><i>Where the marks would go:</i> the ending follows on from the extract, the twist is set up by a clue that was already there (the key by Gran's door, Gran “gone to bed early”), and the sentences build to the reveal.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/short-stories-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
