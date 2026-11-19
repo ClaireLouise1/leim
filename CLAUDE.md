@@ -13,3 +13,6 @@ The full Léim job list lives in the claude.ai project "LEIM REVISION" (claude/l
 
 ## ⚠ More than one chat can work on Léim at once — claim your job first
 Before starting ANY job (a Maths topic, a Payhip change, a page edit), read **WORKING.md** in this repo and follow its rules: claim the job with a pushed commit before you start, pick a different job if another chat has claimed it, and remove your line when you finish. (Rule added 16 Nov 2026 after two chats nearly built the same Maths topic.)
+
+## Subject display order (she asked 19 Nov 2026)
+Wherever subjects are listed on the site (cards, buttons, menus, page sections, titles), use the official Irish order: **Irish, English, Maths**, then other subjects (Spanish). Subjects not live yet (e.g. Irish "coming soon") still go in their place. This is the display order only; the build order (Spanish → Maths → English → Irish) is separate.
