@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-19 10:10 · E3 English Order 10 Speaking & listening (Talk Tips) · english-t10
