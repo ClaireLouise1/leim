@@ -1,0 +1,252 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_tense_trap.py read this block: keep it valid JSON; one item per line) ----------
+     tense: [sentence with ___ and a time cue, answer, [2 wrong forms in other tenses]]
+     slip:  a past-tense story with 4 {verbs}; exactly ONE of them slipped into the present
+     agree: [sentence with ___, answer, the other form (singular forms end in -s)]
+     irr:   [sentence with ___, base verb] — the answer (past or past participle) comes from IRR
+     pron:  [sentence with ___, pronoun key i/he/she/we/they, answer] */
+  var D=/*DATA*/{
+ "tense": [
+  ["Yesterday I ___ to school in the rain.", "walked", ["walk", "will walk"]],
+  ["Last night we ___ a film about sharks.", "watched", ["watch", "will watch"]],
+  ["Two years ago, my family ___ to Galway.", "moved", ["moves", "will move"]],
+  ["Last summer Aoife ___ her aunt in Spain.", "visited", ["visits", "will visit"]],
+  ["Yesterday the bus ___ twenty minutes late.", "arrived", ["arrives", "will arrive"]],
+  ["Last week our class ___ the Titanic museum in Cobh.", "visited", ["visits", "will visit"]],
+  ["An hour ago, Dad ___ the dinner.", "cooked", ["cooks", "will cook"]],
+  ["Last Saturday our team ___ the match by two points.", "won", ["wins", "will win"]],
+  ["Every morning, Gran ___ her dog on the beach.", "walks", ["walked", "will walk"]],
+  ["My sister always ___ her homework after dinner.", "does", ["did", "will do"]],
+  ["We usually ___ the bus to school.", "take", ["took", "will take"]],
+  ["Every Friday, the shop ___ early.", "closes", ["closed", "will close"]],
+  ["Ciarán often ___ the guitar in his room.", "plays", ["played", "will play"]],
+  ["I never ___ fizzy drinks.", "drink", ["drank", "will drink"]],
+  ["The ferry ___ every two hours in summer.", "leaves", ["left", "will leave"]],
+  ["My parents always ___ to the radio in the car.", "listen", ["listened", "will listen"]],
+  ["Tomorrow I ___ my room.", "will tidy", ["tidied", "have tidied"]],
+  ["Next year my cousin ___ secondary school.", "will start", ["started", "has started"]],
+  ["I think it ___ later.", "will rain", ["rained", "has rained"]],
+  ["Next Sunday, my uncle ___ the Cork marathon.", "will run", ["ran", "has run"]],
+  ["Soon the swallows ___ south for the winter.", "will fly", ["flew", "have flown"]],
+  ["Tomorrow the new shop ___ at nine.", "will open", ["opened", "has opened"]],
+  ["Next week we ___ our Christmas tests.", "will sit", ["sat", "have sat"]],
+  ["Tomorrow Mam ___ us to the airport.", "will drive", ["drove", "has driven"]]
+ ],
+ "slip": [
+  "Niamh {opened} the door, {looked} outside and {*sees} a fox. It {ran} away.",
+  "We {arrived} at the beach and Dad {*finds} a spot. We {ate} our sandwiches and {played} in the waves.",
+  "The referee {blew} the whistle and Darragh {*kicks} the ball. It {flew} past the keeper and the crowd {cheered}.",
+  "Gran {made} tea, {sat} down and {*tells} us a story about the old farm. We {laughed}.",
+  "The lights {went} out. Tom {grabbed} a torch and {*creeps} down the stairs. Something {moved}.",
+  "I {studied} all week, but on the day I {*forget} everything. My hands {shook} and my mind {went} blank.",
+  "The rain {poured} down, the river {*rises} and water {crept} under the door. We {waited} upstairs.",
+  "Leah {walked} into the hall, {*takes} a deep breath and {started} to sing. Everyone {clapped}.",
+  "Mam {parked} the car and we {*race} to the gate, but it {was} locked, so we {waited}.",
+  "The dog {barked}, the baby {woke} up and Dad {*shouts} at us. We {tiptoed} away.",
+  "Oisín {packed} his bag, {*says} goodbye and {walked} to the station. The train {was} late.",
+  "We {climbed} for hours. At the top we {*see} the whole of Kerry and we {felt} great. Then it {started} to rain.",
+  "The teacher {handed} out the tests and I {*look} at the first question. My heart {sank}, but I {kept} going.",
+  "Saoirse {found} a wallet on the path, {*picks} it up and {brought} it to the garda station. The owner {thanked} her.",
+  "The cat {jumped} onto the table, {*knocks} over the milk and {ran} off. Mam {was} not happy.",
+  "I {heard} a noise, so I {*switch} on the light. Nothing {was} there, but the window {stood} open."
+ ],
+ "agree": [
+  ["Each of the girls ___ a medal.", "has", "have"],
+  ["One of my friends ___ in a band.", "plays", "play"],
+  ["Everyone in my class ___ excited about the trip.", "is", "are"],
+  ["The players ___ tired after training.", "are", "is"],
+  ["My brother and I ___ to the same school.", "go", "goes"],
+  ["The box of apples ___ on the table.", "is", "are"],
+  ["There ___ three dogs in the garden.", "are", "is"],
+  ["There ___ a letter for you on the hall table.", "is", "are"],
+  ["Nobody ___ the answer.", "knows", "know"],
+  ["The children ___ playing in the yard.", "were", "was"],
+  ["Every student ___ a locker.", "has", "have"],
+  ["The bag of books ___ very heavy.", "was", "were"],
+  ["Aoife and Sinéad ___ in the choir.", "sing", "sings"],
+  ["One of the windows ___ broken.", "was", "were"],
+  ["Somebody ___ left the gate open.", "has", "have"],
+  ["My shoes ___ wet.", "are", "is"],
+  ["The list of names ___ on the wall.", "is", "are"],
+  ["Each of the boys ___ a packed lunch.", "brings", "bring"],
+  ["Everybody ___ the summer holidays.", "loves", "love"],
+  ["There ___ two buses every hour.", "are", "is"],
+  ["Dad and Grandad ___ fishing every Sunday.", "go", "goes"],
+  ["The noise of the cars ___ me awake.", "keeps", "keep"],
+  ["Each of these phones ___ a camera.", "has", "have"],
+  ["My friends ___ coming to the party.", "are", "is"]
+ ],
+ "irr": [
+  ["I ___ that film last week.", "see"],
+  ["I have ___ that film twice.", "see"],
+  ["We ___ our homework before tea.", "do"],
+  ["Have you ___ your homework?", "do"],
+  ["She has ___ home already.", "go"],
+  ["Dad ___ to work early.", "go"],
+  ["The bell has ___.", "ring"],
+  ["The bell ___ at four.", "ring"],
+  ["The ice-cream has ___ solid.", "freeze"],
+  ["The lake ___ last winter.", "freeze"],
+  ["Someone has ___ my bike!", "steal"],
+  ["Niamh ___ a poem for the competition.", "write"],
+  ["Have you ever ___ a horse?", "ride"],
+  ["He ___ the ball over the wall.", "throw"],
+  ["I have ___ my password again.", "forget"],
+  ["The match had already ___ when we arrived.", "begin"],
+  ["I ___ two glasses of water after the match.", "drink"],
+  ["The choir has ___ at Mass every Christmas.", "sing"],
+  ["The glass ___ when it hit the floor.", "break"],
+  ["Who has ___ all the biscuits?", "eat"],
+  ["Oisín ___ first in the race.", "come"],
+  ["They have ___ the long way home.", "take"],
+  ["Mam was ___ flowers for her birthday.", "give"],
+  ["The teacher ___ to us about the trip.", "speak"]
+ ],
+ "pron": [
+  ["Tom and ___ went to the match.", "i", "I"],
+  ["The coach picked Tom and ___ for the team.", "i", "me"],
+  ["Between you and ___, the test was easy.", "i", "me"],
+  ["My sister and ___ walked to school.", "i", "I"],
+  ["Gran gave my brother and ___ a fiver.", "i", "me"],
+  ["Aoife and ___ are in the same class.", "she", "she"],
+  ["The teacher asked Aoife and ___ to stay back.", "she", "her"],
+  ["Dad and ___ fixed the bike together.", "he", "he"],
+  ["I sat beside Conor and ___ on the bus.", "he", "him"],
+  ["Our friends and ___ are going camping.", "we", "we"],
+  ["The bus left without ___.", "we", "us"],
+  ["The Murphys invited ___ to tea.", "we", "us"],
+  ["The twins said ___ would come.", "they", "they"],
+  ["I gave ___ the tickets.", "they", "them"],
+  ["Mam and ___ baked a cake.", "i", "I"],
+  ["This photo is of Ciara and ___.", "i", "me"],
+  ["Can you come with Seán and ___?", "i", "me"],
+  ["Róisín and ___ won the quiz.", "i", "I"],
+  ["He shared his chips with ___.", "we", "us"],
+  ["Liam and ___ are cousins.", "he", "he"],
+  ["I waved at Niamh and ___.", "she", "her"],
+  ["Our cousins visited ___ at Christmas.", "they", "them"]
+ ]
+}/*END*/;
+  var IRR={go:["went","gone"],see:["saw","seen"],"do":["did","done"],come:["came","come"],run:["ran","run"],begin:["began","begun"],write:["wrote","written"],eat:["ate","eaten"],take:["took","taken"],give:["gave","given"],"break":["broke","broken"],drink:["drank","drunk"],swim:["swam","swum"],sing:["sang","sung"],ring:["rang","rung"],"throw":["threw","thrown"],choose:["chose","chosen"],freeze:["froze","frozen"],fall:["fell","fallen"],steal:["stole","stolen"],ride:["rode","ridden"],speak:["spoke","spoken"],forget:["forgot","forgotten"]};
+  var HELP=/\b(have|has|had|having|was|were|is|are|am|be|been)\s+(\w+\s+)?(\w+\s+)?$/i;
+  var SUBJ={i:"I",he:"he",she:"she",we:"we",they:"they"},OBJ={i:"me",he:"him",she:"her",we:"us",they:"them"};
+  var FIXED=["I","me","he","him","she","her","we","us","they","them"];
+  var CUE=/\b(yesterday|last|ago|every|always|usually|often|never|tomorrow|next|later|soon)\b/i;
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s){return '<div class="tt-card"><p>'+s+'</p></div>';}
+  function gapS(s,cue){var h=esc(s);if(cue)h=h.replace(CUE,'<b class="cue">$1</b>');return card(h.replace("___",'<mark class="gap">?</mark>'));}
+  function cueOf(s){var m=s.match(CUE);if(!m)return "";var w=m[1].toLowerCase();
+    return /yesterday|last|ago/.test(w)?"pa":/tomorrow|next|later|soon/.test(w)?"fu":"pr";}
+  var TWHY={pa:"⏰ Yesterday, last…, …ago → past: walked, visited, won.",pr:"🔁 Every, always, usually, often, never → present: walks, plays (he / she / it adds -s).",fu:"🔮 Tomorrow, next…, later, soon → future: will + verb."};
+
+  /* ================= TENSE TRAP: which verb fits the time? ================= */
+  function qTense(){var it=rnd(D.tense);
+    return C("⏰ Which verb fits?",it[1],it[2],TWHY[cueOf(it[0])],gapS(it[0],true),{t:"tense",s:it[0],rv:it[0].replace("___",it[1])},2);}
+  /* ================= SLIP-UP: one verb slipped into the present ================= */
+  function qSlip(){var s=rnd(D.slip),vs=(s.match(/\{\*?[^}]+\}/g)||[]).map(function(x){return x.replace(/[{}*]/g,"");}),
+      ans=s.match(/\{\*([^}]+)\}/)[1],plain=s.replace(/[{}*]/g,""),html=esc(s).replace(/\{\*?([^}]+)\}/g,'<u>$1</u>');
+    var q=C("🔎 Which verb slipped?",ans,vs,"The story is in the past, so “"+ans+"” should be past too.",card(html),{t:"slip",s:s,rv:plain},3);
+    q.fixed=vs;return q;} /* buttons in story order */
+  /* ================= AGREE: singular or plural verb? ================= */
+  function qAgree(){var it=rnd(D.agree),sing=/s$/.test(it[1]);
+    return C("✅ Which fits?",it[1],[it[2]],sing?"Singular subject (each, every, everyone, one of…, the box of…) → is, was, has, plays.":"Plural subject (two people with “and”, the players, there are three…) → are, were, have, play.",gapS(it[0]),{t:"agree",s:it[0],rv:it[0].replace("___",it[1])},1);}
+  /* ================= IRREGULAR VERBS: saw or seen? ================= */
+  function qIrr(){var it=rnd(D.irr),f=IRR[it[1]],pp=HELP.test(it[0].split("___")[0]),ans=pp?f[1]:f[0],
+      pool=[it[1],f[0],f[1]].filter(function(x,i,a){return a.indexOf(x)===i&&x!==ans;});
+    var q=C("🧩 Which form?",ans,pool,pp?"After has / have / had / was: "+f[1]+" ("+it[1]+" → "+f[0]+" → "+f[1]+").":"No helper verb: "+f[0]+" ("+it[1]+" → "+f[0]+" → "+f[1]+"). “I "+f[1]+" it” is not standard written English.",gapS(it[0]),{t:"irr",s:it[0],b:it[1],rv:it[0].replace("___",ans)},pool.length);
+    return q;}
+  /* ================= I OR ME? ================= */
+  function qPron(){var it=rnd(D.pron),sub=it[2]===SUBJ[it[1]];
+    var q=C("👤 Which one?",it[2],[sub?OBJ[it[1]]:SUBJ[it[1]]],"Take away the other person: “Tom and I went” → “I went”; “picked Tom and me” → “picked me”.",gapS(it[0]),{t:"pron",s:it[0],k:it[1],rv:it[0].replace("___",it[2])},1);
+    q.fixed=FIXED;return q;}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    tense:[qTense],
+    slip:[qSlip],
+    agree:[qAgree],
+    irr:[qIrr],
+    pron:[qPron],
+    mixed:[qTense,qSlip,qAgree,qIrr,qPron]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="slip"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="tense"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="tense"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! No trap can catch you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,IRR:IRR,SUBJ:SUBJ,OBJ:OBJ}};
+})();
+</script>

@@ -1,0 +1,147 @@
+<main id="main">
+<style>.tt-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.tt-card p{margin:0 0 6px;font-size:21px;line-height:1.5;font-weight:600}
+.tt-card mark.gap{background:#FFE58A;border-radius:6px;padding:0 10px}
+.tt-card b.cue{color:var(--night);background:#E3EEFF;border-radius:5px;padding:0 4px}
+.tt-card u{text-decoration-thickness:3px;text-decoration-color:#F2B705;text-underline-offset:4px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.vt{width:100%;border-collapse:collapse;min-width:0}.vt th,.vt td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left}.vt th{color:var(--ink);text-transform:none}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.tt-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Tense Trap</h1>
+        <p>Keep your verbs in the right time, make them agree, and pick I or me. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tense"><div><b>Tense Trap</b><span>⏰ Which verb fits the time?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Slip-up</b><span>🔎 Find the verb that slipped</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="agree"><div><b>Agree</b><span>✅ is or are? has or have?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="irr"><div><b>Saw or seen?</b><span>🧩 Tricky past forms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pron"><div><b>I or me?</b><span>👤 Pick the pronoun</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Tense Trap, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W10, W12, OL12 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Tenses, agreement &amp; pronouns</h2>
+        <p>Three checks to make on every piece of writing: <b>Is every verb in the right time?</b> <b>Does each verb agree with its subject?</b> <b>Is each pronoun the right one?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="note">Yesterday I <b>walked</b> to school.<br>Every day I <b>walk</b> to school.<br>Tomorrow I <b>will walk</b> to school.<br>Every day Gran <b>walks</b> to Mass.<br>Every day my cousins <b>walk</b> to school.</div>
+        <p style="margin-top:8px">Which word in each sentence tells you the time? When does the verb get an <b>-s</b>?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The <b>time words</b> (yesterday, every day, tomorrow) decide the tense: past <i>walked</i>, present <i>walk</i>, future <i>will walk</i>. In the present, the verb takes <b>-s</b> when the subject is one person or thing other than I or you: <i>Gran walks</i>, but <i>my cousins walk</i>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Keep the tense steady</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⏰ Past</b>yesterday, last week, two years ago → walked, saw, won</div>
+          <div class="note"><b class="h">🔁 Present</b>every day, always, usually, often → walks, plays</div>
+          <div class="note"><b class="h">🔮 Future</b>tomorrow, next year, soon → will walk</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A story in the past stays in the past. “I opened the door and <s>see</s> <b>saw</b> a fox.”</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Make it agree</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1️⃣ Singular</b>each, every, everyone, nobody, one of…, the box of apples → is, was, has, plays</div>
+          <div class="note"><b class="h">👥 Plural</b>Tom and Aoife, the players, there are three… → are, were, have, play</div>
+          <div class="note"><b class="h">💡 Watch out</b>“One of my friends <b>plays</b>”: the subject is <i>one</i>, not <i>friends</i>.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Saw or seen?</h3>
+        <div class="table-wrap"><table class="vt"><thead><tr><th>Verb</th><th>Past (no helper)</th><th>After has / have / had / was</th></tr></thead><tbody>
+          <tr><td>see</td><td>I saw it</td><td>I have seen it</td></tr>
+          <tr><td>do</td><td>I did it</td><td>I have done it</td></tr>
+          <tr><td>go</td><td>she went</td><td>she has gone</td></tr>
+          <tr><td>write</td><td>he wrote</td><td>he has written</td></tr>
+          <tr><td>break</td><td>it broke</td><td>it was broken</td></tr>
+        </tbody></table></div>
+        <p style="font-size:15px;color:var(--muted)">“I seen it” and “I done it” are common in spoken Irish English, but in standard written English (and in the exam) write <i>I saw it</i>, <i>I did it</i>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">I or me?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👤 Doing it</b>I, he, she, we, they: “Tom and <b>I</b> went.”</div>
+          <div class="note"><b class="h">🎯 Getting it</b>me, him, her, us, them: “The coach picked Tom and <b>me</b>.”</div>
+          <div class="note"><b class="h">✂️ The test</b>Take away the other person. “picked Tom and I” → “picked I”? No: “picked me”.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Clear pronouns: if “he” could mean two people, use the name. “Darragh told Seán he was picked” → “Darragh told Seán, ‘You're picked.’”</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There is no separate grammar question, but every writing task is marked partly on <b>accuracy</b>: tense, agreement and pronouns. A story that drifts between past and present, or “we was” in a speech, costs marks. Some questions ask you to <b>correct</b> or <b>edit</b> a short passage.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Choose a tense and stick to it</b>: most stories work best in the past.</li>
+            <li><b>Read your work back</b> and check every verb: one slip in each paragraph adds up.</li>
+            <li><b>Check “one of”, “each” and “everyone”</b>: they take a singular verb.</li>
+            <li><b>Write standard English</b> unless a character is speaking: <i>I saw</i>, not <i>I seen</i>.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>This story opening slips between tenses. Rewrite it in the <b>past tense</b>.
+              <div class="pass">The ferry left Schull at ten. The sea is calm at first, but halfway across the wind picks up. Ciara held the rail and watches the island come closer.</div>
+              <details><summary>Show a model answer</summary><p><i>The ferry left Schull at ten. The sea <b>was</b> calm at first, but halfway across the wind <b>picked</b> up. Ciara held the rail and <b>watched</b> the island come closer.</i><br><i>Where the marks would go:</i> all three slipped verbs (is, picks, watches) changed to the past; nothing else changed.</p></details></li>
+            <li>Correct the <b>four</b> mistakes in this notice.
+              <div class="pass">Each of the teams have a coach. The players was told to bring water. Me and Liam is collecting the money, so give it to Liam or I.</div>
+              <details><summary>Show a model answer</summary><p><i>Each of the teams <b>has</b> a coach. The players <b>were</b> told to bring water. <b>Liam and I are</b> collecting the money, so give it to Liam or <b>me</b>.</i><br><i>Where the marks would go:</i> one mark per fix: has (each = singular), were (players = plural), Liam and I are (subject, plural), me (after “to”). Putting yourself last (“Liam and I”) is good manners.</p></details></li>
+            <li>Fill each gap with the right form of the verb in brackets: “I have ___ (see) that film, but I ___ (do) my homework first, then I ___ (go) to bed.”
+              <details><summary>Show a model answer</summary><p><i>I have <b>seen</b> that film, but I <b>did</b> my homework first, then I <b>went</b> to bed.</i><br><i>Where the marks would go:</i> seen after “have”; did and went with no helper verb.</p></details></li>
+            <li>Why is this sentence unclear? Rewrite it so it is clear: “When Mam met Gran at the station, she was crying.”
+              <details><summary>Show a model answer</summary><p>We can't tell who “she” is: Mam or Gran. <i>Gran was crying when Mam met her at the station.</i><br><i>Where the marks would go:</i> naming the problem (two women, one “she”); a rewrite that uses a name so only one reading is possible.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/tenses-agreement-pronouns-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

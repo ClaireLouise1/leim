@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tense Trap: Tenses, Agreement &amp; Pronouns Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game: keep verbs in the right tense, make them agree, saw or seen, I or me. With rules, exam-style questions and a free printable.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.tt-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.tt-card p{margin:0 0 6px;font-size:21px;line-height:1.5;font-weight:600}
+.tt-card mark.gap{background:#FFE58A;border-radius:6px;padding:0 10px}
+.tt-card b.cue{color:var(--night);background:#E3EEFF;border-radius:5px;padding:0 4px}
+.tt-card u{text-decoration-thickness:3px;text-decoration-color:#F2B705;text-underline-offset:4px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.vt{width:100%;border-collapse:collapse;min-width:0}.vt th,.vt td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left}.vt th{color:var(--ink);text-transform:none}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.tt-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Tense Trap</h1>
+        <p>Keep your verbs in the right time, make them agree, and pick I or me. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tense"><div><b>Tense Trap</b><span>⏰ Which verb fits the time?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slip"><div><b>Slip-up</b><span>🔎 Find the verb that slipped</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="agree"><div><b>Agree</b><span>✅ is or are? has or have?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="irr"><div><b>Saw or seen?</b><span>🧩 Tricky past forms</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pron"><div><b>I or me?</b><span>👤 Pick the pronoun</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Tense Trap, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W10, W12, OL12 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Tenses, agreement &amp; pronouns</h2>
+        <p>Three checks to make on every piece of writing: <b>Is every verb in the right time?</b> <b>Does each verb agree with its subject?</b> <b>Is each pronoun the right one?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="note">Yesterday I <b>walked</b> to school.<br>Every day I <b>walk</b> to school.<br>Tomorrow I <b>will walk</b> to school.<br>Every day Gran <b>walks</b> to Mass.<br>Every day my cousins <b>walk</b> to school.</div>
+        <p style="margin-top:8px">Which word in each sentence tells you the time? When does the verb get an <b>-s</b>?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The <b>time words</b> (yesterday, every day, tomorrow) decide the tense: past <i>walked</i>, present <i>walk</i>, future <i>will walk</i>. In the present, the verb takes <b>-s</b> when the subject is one person or thing other than I or you: <i>Gran walks</i>, but <i>my cousins walk</i>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Keep the tense steady</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⏰ Past</b>yesterday, last week, two years ago → walked, saw, won</div>
+          <div class="note"><b class="h">🔁 Present</b>every day, always, usually, often → walks, plays</div>
+          <div class="note"><b class="h">🔮 Future</b>tomorrow, next year, soon → will walk</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A story in the past stays in the past. “I opened the door and <s>see</s> <b>saw</b> a fox.”</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Make it agree</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1️⃣ Singular</b>each, every, everyone, nobody, one of…, the box of apples → is, was, has, plays</div>
+          <div class="note"><b class="h">👥 Plural</b>Tom and Aoife, the players, there are three… → are, were, have, play</div>
+          <div class="note"><b class="h">💡 Watch out</b>“One of my friends <b>plays</b>”: the subject is <i>one</i>, not <i>friends</i>.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Saw or seen?</h3>
+        <div class="table-wrap"><table class="vt"><thead><tr><th>Verb</th><th>Past (no helper)</th><th>After has / have / had / was</th></tr></thead><tbody>
+          <tr><td>see</td><td>I saw it</td><td>I have seen it</td></tr>
+          <tr><td>do</td><td>I did it</td><td>I have done it</td></tr>
+          <tr><td>go</td><td>she went</td><td>she has gone</td></tr>
+          <tr><td>write</td><td>he wrote</td><td>he has written</td></tr>
+          <tr><td>break</td><td>it broke</td><td>it was broken</td></tr>
+        </tbody></table></div>
+        <p style="font-size:15px;color:var(--muted)">“I seen it” and “I done it” are common in spoken Irish English, but in standard written English (and in the exam) write <i>I saw it</i>, <i>I did it</i>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">I or me?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👤 Doing it</b>I, he, she, we, they: “Tom and <b>I</b> went.”</div>
+          <div class="note"><b class="h">🎯 Getting it</b>me, him, her, us, them: “The coach picked Tom and <b>me</b>.”</div>
+          <div class="note"><b class="h">✂️ The test</b>Take away the other person. “picked Tom and I” → “picked I”? No: “picked me”.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">Clear pronouns: if “he” could mean two people, use the name. “Darragh told Seán he was picked” → “Darragh told Seán, ‘You're picked.’”</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There is no separate grammar question, but every writing task is marked partly on <b>accuracy</b>: tense, agreement and pronouns. A story that drifts between past and present, or “we was” in a speech, costs marks. Some questions ask you to <b>correct</b> or <b>edit</b> a short passage.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Choose a tense and stick to it</b>: most stories work best in the past.</li>
+            <li><b>Read your work back</b> and check every verb: one slip in each paragraph adds up.</li>
+            <li><b>Check “one of”, “each” and “everyone”</b>: they take a singular verb.</li>
+            <li><b>Write standard English</b> unless a character is speaking: <i>I saw</i>, not <i>I seen</i>.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>This story opening slips between tenses. Rewrite it in the <b>past tense</b>.
+              <div class="pass">The ferry left Schull at ten. The sea is calm at first, but halfway across the wind picks up. Ciara held the rail and watches the island come closer.</div>
+              <details><summary>Show a model answer</summary><p><i>The ferry left Schull at ten. The sea <b>was</b> calm at first, but halfway across the wind <b>picked</b> up. Ciara held the rail and <b>watched</b> the island come closer.</i><br><i>Where the marks would go:</i> all three slipped verbs (is, picks, watches) changed to the past; nothing else changed.</p></details></li>
+            <li>Correct the <b>four</b> mistakes in this notice.
+              <div class="pass">Each of the teams have a coach. The players was told to bring water. Me and Liam is collecting the money, so give it to Liam or I.</div>
+              <details><summary>Show a model answer</summary><p><i>Each of the teams <b>has</b> a coach. The players <b>were</b> told to bring water. <b>Liam and I are</b> collecting the money, so give it to Liam or <b>me</b>.</i><br><i>Where the marks would go:</i> one mark per fix: has (each = singular), were (players = plural), Liam and I are (subject, plural), me (after “to”). Putting yourself last (“Liam and I”) is good manners.</p></details></li>
+            <li>Fill each gap with the right form of the verb in brackets: “I have ___ (see) that film, but I ___ (do) my homework first, then I ___ (go) to bed.”
+              <details><summary>Show a model answer</summary><p><i>I have <b>seen</b> that film, but I <b>did</b> my homework first, then I <b>went</b> to bed.</i><br><i>Where the marks would go:</i> seen after “have”; did and went with no helper verb.</p></details></li>
+            <li>Why is this sentence unclear? Rewrite it so it is clear: “When Mam met Gran at the station, she was crying.”
+              <details><summary>Show a model answer</summary><p>We can't tell who “she” is: Mam or Gran. <i>Gran was crying when Mam met her at the station.</i><br><i>Where the marks would go:</i> naming the problem (two women, one “she”); a rewrite that uses a name so only one reading is possible.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/tenses-agreement-pronouns-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_tense_trap.py read this block: keep it valid JSON; one item per line) ----------
+     tense: [sentence with ___ and a time cue, answer, [2 wrong forms in other tenses]]
+     slip:  a past-tense story with 4 {verbs}; exactly ONE of them slipped into the present
+     agree: [sentence with ___, answer, the other form (singular forms end in -s)]
+     irr:   [sentence with ___, base verb] — the answer (past or past participle) comes from IRR
+     pron:  [sentence with ___, pronoun key i/he/she/we/they, answer] */
+  var D=/*DATA*/{
+ "tense": [
+  ["Yesterday I ___ to school in the rain.", "walked", ["walk", "will walk"]],
+  ["Last night we ___ a film about sharks.", "watched", ["watch", "will watch"]],
+  ["Two years ago, my family ___ to Galway.", "moved", ["moves", "will move"]],
+  ["Last summer Aoife ___ her aunt in Spain.", "visited", ["visits", "will visit"]],
+  ["Yesterday the bus ___ twenty minutes late.", "arrived", ["arrives", "will arrive"]],
+  ["Last week our class ___ the Titanic museum in Cobh.", "visited", ["visits", "will visit"]],
+  ["An hour ago, Dad ___ the dinner.", "cooked", ["cooks", "will cook"]],
+  ["Last Saturday our team ___ the match by two points.", "won", ["wins", "will win"]],
+  ["Every morning, Gran ___ her dog on the beach.", "walks", ["walked", "will walk"]],
+  ["My sister always ___ her homework after dinner.", "does", ["did", "will do"]],
+  ["We usually ___ the bus to school.", "take", ["took", "will take"]],
+  ["Every Friday, the shop ___ early.", "closes", ["closed", "will close"]],
+  ["Ciarán often ___ the guitar in his room.", "plays", ["played", "will play"]],
+  ["I never ___ fizzy drinks.", "drink", ["drank", "will drink"]],
+  ["The ferry ___ every two hours in summer.", "leaves", ["left", "will leave"]],
+  ["My parents always ___ to the radio in the car.", "listen", ["listened", "will listen"]],
+  ["Tomorrow I ___ my room.", "will tidy", ["tidied", "have tidied"]],
+  ["Next year my cousin ___ secondary school.", "will start", ["started", "has started"]],
+  ["I think it ___ later.", "will rain", ["rained", "has rained"]],
+  ["Next Sunday, my uncle ___ the Cork marathon.", "will run", ["ran", "has run"]],
+  ["Soon the swallows ___ south for the winter.", "will fly", ["flew", "have flown"]],
+  ["Tomorrow the new shop ___ at nine.", "will open", ["opened", "has opened"]],
+  ["Next week we ___ our Christmas tests.", "will sit", ["sat", "have sat"]],
+  ["Tomorrow Mam ___ us to the airport.", "will drive", ["drove", "has driven"]]
+ ],
+ "slip": [
+  "Niamh {opened} the door, {looked} outside and {*sees} a fox. It {ran} away.",
+  "We {arrived} at the beach and Dad {*finds} a spot. We {ate} our sandwiches and {played} in the waves.",
+  "The referee {blew} the whistle and Darragh {*kicks} the ball. It {flew} past the keeper and the crowd {cheered}.",
+  "Gran {made} tea, {sat} down and {*tells} us a story about the old farm. We {laughed}.",
+  "The lights {went} out. Tom {grabbed} a torch and {*creeps} down the stairs. Something {moved}.",
+  "I {studied} all week, but on the day I {*forget} everything. My hands {shook} and my mind {went} blank.",
+  "The rain {poured} down, the river {*rises} and water {crept} under the door. We {waited} upstairs.",
+  "Leah {walked} into the hall, {*takes} a deep breath and {started} to sing. Everyone {clapped}.",
+  "Mam {parked} the car and we {*race} to the gate, but it {was} locked, so we {waited}.",
+  "The dog {barked}, the baby {woke} up and Dad {*shouts} at us. We {tiptoed} away.",
+  "Oisín {packed} his bag, {*says} goodbye and {walked} to the station. The train {was} late.",
+  "We {climbed} for hours. At the top we {*see} the whole of Kerry and we {felt} great. Then it {started} to rain.",
+  "The teacher {handed} out the tests and I {*look} at the first question. My heart {sank}, but I {kept} going.",
+  "Saoirse {found} a wallet on the path, {*picks} it up and {brought} it to the garda station. The owner {thanked} her.",
+  "The cat {jumped} onto the table, {*knocks} over the milk and {ran} off. Mam {was} not happy.",
+  "I {heard} a noise, so I {*switch} on the light. Nothing {was} there, but the window {stood} open."
+ ],
+ "agree": [
+  ["Each of the girls ___ a medal.", "has", "have"],
+  ["One of my friends ___ in a band.", "plays", "play"],
+  ["Everyone in my class ___ excited about the trip.", "is", "are"],
+  ["The players ___ tired after training.", "are", "is"],
+  ["My brother and I ___ to the same school.", "go", "goes"],
+  ["The box of apples ___ on the table.", "is", "are"],
+  ["There ___ three dogs in the garden.", "are", "is"],
+  ["There ___ a letter for you on the hall table.", "is", "are"],
+  ["Nobody ___ the answer.", "knows", "know"],
+  ["The children ___ playing in the yard.", "were", "was"],
+  ["Every student ___ a locker.", "has", "have"],
+  ["The bag of books ___ very heavy.", "was", "were"],
+  ["Aoife and Sinéad ___ in the choir.", "sing", "sings"],
+  ["One of the windows ___ broken.", "was", "were"],
+  ["Somebody ___ left the gate open.", "has", "have"],
+  ["My shoes ___ wet.", "are", "is"],
+  ["The list of names ___ on the wall.", "is", "are"],
+  ["Each of the boys ___ a packed lunch.", "brings", "bring"],
+  ["Everybody ___ the summer holidays.", "loves", "love"],
+  ["There ___ two buses every hour.", "are", "is"],
+  ["Dad and Grandad ___ fishing every Sunday.", "go", "goes"],
+  ["The noise of the cars ___ me awake.", "keeps", "keep"],
+  ["Each of these phones ___ a camera.", "has", "have"],
+  ["My friends ___ coming to the party.", "are", "is"]
+ ],
+ "irr": [
+  ["I ___ that film last week.", "see"],
+  ["I have ___ that film twice.", "see"],
+  ["We ___ our homework before tea.", "do"],
+  ["Have you ___ your homework?", "do"],
+  ["She has ___ home already.", "go"],
+  ["Dad ___ to work early.", "go"],
+  ["The bell has ___.", "ring"],
+  ["The bell ___ at four.", "ring"],
+  ["The ice-cream has ___ solid.", "freeze"],
+  ["The lake ___ last winter.", "freeze"],
+  ["Someone has ___ my bike!", "steal"],
+  ["Niamh ___ a poem for the competition.", "write"],
+  ["Have you ever ___ a horse?", "ride"],
+  ["He ___ the ball over the wall.", "throw"],
+  ["I have ___ my password again.", "forget"],
+  ["The match had already ___ when we arrived.", "begin"],
+  ["I ___ two glasses of water after the match.", "drink"],
+  ["The choir has ___ at Mass every Christmas.", "sing"],
+  ["The glass ___ when it hit the floor.", "break"],
+  ["Who has ___ all the biscuits?", "eat"],
+  ["Oisín ___ first in the race.", "come"],
+  ["They have ___ the long way home.", "take"],
+  ["Mam was ___ flowers for her birthday.", "give"],
+  ["The teacher ___ to us about the trip.", "speak"]
+ ],
+ "pron": [
+  ["Tom and ___ went to the match.", "i", "I"],
+  ["The coach picked Tom and ___ for the team.", "i", "me"],
+  ["Between you and ___, the test was easy.", "i", "me"],
+  ["My sister and ___ walked to school.", "i", "I"],
+  ["Gran gave my brother and ___ a fiver.", "i", "me"],
+  ["Aoife and ___ are in the same class.", "she", "she"],
+  ["The teacher asked Aoife and ___ to stay back.", "she", "her"],
+  ["Dad and ___ fixed the bike together.", "he", "he"],
+  ["I sat beside Conor and ___ on the bus.", "he", "him"],
+  ["Our friends and ___ are going camping.", "we", "we"],
+  ["The bus left without ___.", "we", "us"],
+  ["The Murphys invited ___ to tea.", "we", "us"],
+  ["The twins said ___ would come.", "they", "they"],
+  ["I gave ___ the tickets.", "they", "them"],
+  ["Mam and ___ baked a cake.", "i", "I"],
+  ["This photo is of Ciara and ___.", "i", "me"],
+  ["Can you come with Seán and ___?", "i", "me"],
+  ["Róisín and ___ won the quiz.", "i", "I"],
+  ["He shared his chips with ___.", "we", "us"],
+  ["Liam and ___ are cousins.", "he", "he"],
+  ["I waved at Niamh and ___.", "she", "her"],
+  ["Our cousins visited ___ at Christmas.", "they", "them"]
+ ]
+}/*END*/;
+  var IRR={go:["went","gone"],see:["saw","seen"],"do":["did","done"],come:["came","come"],run:["ran","run"],begin:["began","begun"],write:["wrote","written"],eat:["ate","eaten"],take:["took","taken"],give:["gave","given"],"break":["broke","broken"],drink:["drank","drunk"],swim:["swam","swum"],sing:["sang","sung"],ring:["rang","rung"],"throw":["threw","thrown"],choose:["chose","chosen"],freeze:["froze","frozen"],fall:["fell","fallen"],steal:["stole","stolen"],ride:["rode","ridden"],speak:["spoke","spoken"],forget:["forgot","forgotten"]};
+  var HELP=/\b(have|has|had|having|was|were|is|are|am|be|been)\s+(\w+\s+)?(\w+\s+)?$/i;
+  var SUBJ={i:"I",he:"he",she:"she",we:"we",they:"they"},OBJ={i:"me",he:"him",she:"her",we:"us",they:"them"};
+  var FIXED=["I","me","he","him","she","her","we","us","they","them"];
+  var CUE=/\b(yesterday|last|ago|every|always|usually|often|never|tomorrow|next|later|soon)\b/i;
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s){return '<div class="tt-card"><p>'+s+'</p></div>';}
+  function gapS(s,cue){var h=esc(s);if(cue)h=h.replace(CUE,'<b class="cue">$1</b>');return card(h.replace("___",'<mark class="gap">?</mark>'));}
+  function cueOf(s){var m=s.match(CUE);if(!m)return "";var w=m[1].toLowerCase();
+    return /yesterday|last|ago/.test(w)?"pa":/tomorrow|next|later|soon/.test(w)?"fu":"pr";}
+  var TWHY={pa:"⏰ Yesterday, last…, …ago → past: walked, visited, won.",pr:"🔁 Every, always, usually, often, never → present: walks, plays (he / she / it adds -s).",fu:"🔮 Tomorrow, next…, later, soon → future: will + verb."};
+
+  /* ================= TENSE TRAP: which verb fits the time? ================= */
+  function qTense(){var it=rnd(D.tense);
+    return C("⏰ Which verb fits?",it[1],it[2],TWHY[cueOf(it[0])],gapS(it[0],true),{t:"tense",s:it[0],rv:it[0].replace("___",it[1])},2);}
+  /* ================= SLIP-UP: one verb slipped into the present ================= */
+  function qSlip(){var s=rnd(D.slip),vs=(s.match(/\{\*?[^}]+\}/g)||[]).map(function(x){return x.replace(/[{}*]/g,"");}),
+      ans=s.match(/\{\*([^}]+)\}/)[1],plain=s.replace(/[{}*]/g,""),html=esc(s).replace(/\{\*?([^}]+)\}/g,'<u>$1</u>');
+    var q=C("🔎 Which verb slipped?",ans,vs,"The story is in the past, so “"+ans+"” should be past too.",card(html),{t:"slip",s:s,rv:plain},3);
+    q.fixed=vs;return q;} /* buttons in story order */
+  /* ================= AGREE: singular or plural verb? ================= */
+  function qAgree(){var it=rnd(D.agree),sing=/s$/.test(it[1]);
+    return C("✅ Which fits?",it[1],[it[2]],sing?"Singular subject (each, every, everyone, one of…, the box of…) → is, was, has, plays.":"Plural subject (two people with “and”, the players, there are three…) → are, were, have, play.",gapS(it[0]),{t:"agree",s:it[0],rv:it[0].replace("___",it[1])},1);}
+  /* ================= IRREGULAR VERBS: saw or seen? ================= */
+  function qIrr(){var it=rnd(D.irr),f=IRR[it[1]],pp=HELP.test(it[0].split("___")[0]),ans=pp?f[1]:f[0],
+      pool=[it[1],f[0],f[1]].filter(function(x,i,a){return a.indexOf(x)===i&&x!==ans;});
+    var q=C("🧩 Which form?",ans,pool,pp?"After has / have / had / was: "+f[1]+" ("+it[1]+" → "+f[0]+" → "+f[1]+").":"No helper verb: "+f[0]+" ("+it[1]+" → "+f[0]+" → "+f[1]+"). “I "+f[1]+" it” is not standard written English.",gapS(it[0]),{t:"irr",s:it[0],b:it[1],rv:it[0].replace("___",ans)},pool.length);
+    return q;}
+  /* ================= I OR ME? ================= */
+  function qPron(){var it=rnd(D.pron),sub=it[2]===SUBJ[it[1]];
+    var q=C("👤 Which one?",it[2],[sub?OBJ[it[1]]:SUBJ[it[1]]],"Take away the other person: “Tom and I went” → “I went”; “picked Tom and me” → “picked me”.",gapS(it[0]),{t:"pron",s:it[0],k:it[1],rv:it[0].replace("___",it[2])},1);
+    q.fixed=FIXED;return q;}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    tense:[qTense],
+    slip:[qSlip],
+    agree:[qAgree],
+    irr:[qIrr],
+    pron:[qPron],
+    mixed:[qTense,qSlip,qAgree,qIrr,qPron]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="slip"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="tense"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="tense"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! No trap can catch you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,IRR:IRR,SUBJ:SUBJ,OBJ:OBJ}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
