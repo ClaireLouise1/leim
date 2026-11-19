@@ -1,0 +1,518 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- word data (the PDFs and src/test_word_sort.py read this block: keep it valid JSON) ---------- */
+  var D=/*DATA*/{
+"sent": [
+"The {tired|adj} {fox|n} {slept|v} {soundly|adv} {under|prep} the {old|adj} {oak|n}.",
+"{Maya|n} {kicked|v} the {muddy|adj} {ball|n} {across|prep} the {pitch|n}.",
+"{We|pron} {waited|v} {nervously|adv} {for|prep} the {bus|n}, {but|conj} {it|pron} {never|adv} {came|v}.",
+"The {little|adj} {robin|n} {sang|v} {sweetly|adv} {on|prep} the {wall|n}.",
+"{Grandad|n} {told|v} {us|pron} a {spooky|adj} {story|n} {after|prep} {dinner|n}.",
+"{She|pron} {opened|v} the {creaky|adj} {door|n} {slowly|adv}.",
+"The {team|n} {celebrated|v} {loudly|adv} {because|conj} {they|pron} {won|v} the {cup|n}.",
+"Her {kindness|n} {surprised|v} {everyone|pron}.",
+"The {huge|adj} {wave|n} {crashed|v} {against|prep} the {rocks|n}.",
+"{I|pron} {always|adv} {forget|v} my {keys|n}.",
+"{Tom|n} {and|conj} {Aoife|n} {cycled|v} {to|prep} {Galway|n}.",
+"The {bright|adj} {moon|n} {shone|v} {through|prep} the {window|n}.",
+"{He|pron} {whispered|v} {quietly|adv}, {although|conj} the {room|n} was {empty|adj}.",
+"{Dad|n} {burnt|v} the {toast|n} {again|adv}.",
+"The {hungry|adj} {seagulls|n} {stole|v} our {chips|n}.",
+"{They|pron} {walked|v} {along|prep} the {beach|n} {at|prep} {sunset|n}.",
+"{Ella|n} {smiled|v} {shyly|adv} {and|conj} {waved|v}.",
+"The {test|n} was {difficult|adj}, {but|conj} {I|pron} {finished|v} {it|pron}.",
+"A {sudden|adj} {storm|n} {flooded|v} the {village|n}.",
+"The {puppy|n} {chewed|v} the {slipper|n} {happily|adv}.",
+"{Liam|n} {scored|v} a {brilliant|adj} {goal|n} {in|prep} the {final|adj} {minute|n}.",
+"The {children|n} {played|v} {happily|adv} {until|prep} {lunch|n}.",
+"{Snow|n} {covered|v} the {quiet|adj} {streets|n}.",
+"Do {you|pron} {want|v} {tea|n} {or|conj} {coffee|n}?",
+"The {nervous|adj} {actor|n} {forgot|v} his {lines|n}.",
+"{Sarah|n} {read|v} the {letter|n} {carefully|adv} {before|prep} {lunch|n}.",
+"The {wooden|adj} {bridge|n} {creaked|v} {loudly|adv} {in|prep} the {wind|n}.",
+"{She|pron} {ran|v} {quickly|adv} {towards|prep} the {gate|n}.",
+"The {grey|adj} {clouds|n} {drifted|v} {slowly|adv} {over|prep} the {hills|n}.",
+"{Mam|n} {laughed|v} {when|conj} {she|pron} {saw|v} the {mess|n}.",
+"A {fierce|adj} {dog|n} {guarded|v} the {farm|n}.",
+"{He|pron} {often|adv} {visits|v} his {cousins|n} {in|prep} {Cork|n}.",
+"The {wise|adj} {owl|n} {watched|v} {silently|adv} {from|prep} the {branch|n}.",
+"{Honesty|n} {matters|v} {to|prep} {me|pron}.",
+"{You|pron} will {pass|v} {if|conj} {you|pron} {study|v}.",
+"The {lazy|adj} {cat|n} {yawned|v} {and|conj} {stretched|v}.",
+"{Niamh|n} {painted|v} a {colourful|adj} {mural|n} {beside|prep} the {school|n}.",
+"{We|pron} {stayed|v} {inside|adv} {because|conj} the {rain|n} was {heavy|adj}.",
+"The {excited|adj} {fans|n} {cheered|v} {wildly|adv}.",
+"{Jack|n} {hid|v} the {present|n} {behind|prep} the {sofa|n}.",
+"{Fear|n} {kept|v} {them|pron} {silent|adj}.",
+"The {cold|adj} {water|n} {splashed|v} {over|prep} {him|pron}.",
+"{I|pron} {packed|v} my {bag|n}, {but|conj} {I|pron} {forgot|v} my {lunch|n}.",
+"The {tiny|adj} {spider|n} {climbed|v} {up|prep} the {drainpipe|n}.",
+"{Emma|n} {sings|v} {beautifully|adv}.",
+"The {angry|adj} {bull|n} {charged|v} {suddenly|adv}.",
+"{They|pron} {argued|v}, {so|conj} {Rory|n} {left|v}.",
+"{Freedom|n} {is|v} {precious|adj}.",
+"The {old|adj} {fisherman|n} {mended|v} his {nets|n} {patiently|adv}.",
+"{She|pron} {waited|v} {at|prep} the {station|n} {until|conj} the {train|n} {arrived|v}."
+],
+"strong": [
+[
+"The dog {went} across the road.",
+"bolted",
+[
+"went",
+"moved",
+"got"
+],
+"Bolted shows speed and fear. Went tells us nothing."
+],
+[
+"The food was {nice}.",
+"delicious",
+[
+"nice",
+"good",
+"okay"
+],
+"Delicious tells us exactly how it tasted."
+],
+[
+"The film was {good}.",
+"gripping",
+[
+"good",
+"okay",
+"fine"
+],
+"Gripping shows it held your attention."
+],
+[
+"He {ate} the pizza.",
+"devoured",
+[
+"ate",
+"had",
+"got"
+],
+"Devoured shows he ate it fast and hungrily."
+],
+[
+"The castle was {big}.",
+"enormous",
+[
+"big",
+"nice",
+"quite big"
+],
+"Enormous paints a clearer picture than big."
+],
+[
+"The baby {cried}.",
+"wailed",
+[
+"cried",
+"moved",
+"talked"
+],
+"Wailed lets you hear the sound."
+],
+[
+"I was {very tired}.",
+"exhausted",
+[
+"very tired",
+"a bit tired",
+"okay"
+],
+"Exhausted is one strong word instead of very + a weak word."
+],
+[
+"The man {walked} into the room.",
+"stormed",
+[
+"walked",
+"went",
+"came"
+],
+"Stormed shows he was angry."
+],
+[
+"The night was {very cold}.",
+"freezing",
+[
+"very cold",
+"cold",
+"not warm"
+],
+"Freezing is one strong word instead of two weak ones."
+],
+[
+"She {looked} at the cake.",
+"stared",
+[
+"looked",
+"saw",
+"checked"
+],
+"Stared shows she couldn't take her eyes off it."
+],
+[
+"The storm was {bad}.",
+"violent",
+[
+"bad",
+"big",
+"not nice"
+],
+"Violent shows how dangerous it was."
+],
+[
+"He {ran} to the line.",
+"sprinted",
+[
+"ran",
+"went",
+"moved"
+],
+"Sprinted shows he ran as fast as he could."
+],
+[
+"The music was {loud}.",
+"deafening",
+[
+"loud",
+"very loud",
+"big"
+],
+"Deafening shows just how loud it was."
+],
+[
+"The cat {got} onto the wall.",
+"leapt",
+[
+"got",
+"went",
+"came"
+],
+"Leapt shows how the cat moved."
+],
+[
+"The room was {dirty}.",
+"filthy",
+[
+"dirty",
+"not clean",
+"a bit dirty"
+],
+"Filthy is stronger and more exact."
+],
+[
+"The girl was {happy}.",
+"overjoyed",
+[
+"happy",
+"fine",
+"okay"
+],
+"Overjoyed shows how strong the feeling was."
+]
+],
+"switch": [
+[
+"I {run} every morning.",
+"v",
+"run",
+"Here run is an action (I run), so it's a verb. In 'a long run' it's a noun."
+],
+[
+"That was a long {run}.",
+"n",
+"run",
+"'A long run': run is a thing here, so it's a noun."
+],
+[
+"We {play} after school.",
+"v",
+"play",
+"We play: an action, so a verb."
+],
+[
+"The school {play} was great.",
+"n",
+"play",
+"The play: a thing (a show), so a noun."
+],
+[
+"Turn on the {light}.",
+"n",
+"light",
+"The light: a thing, so a noun."
+],
+[
+"My schoolbag is {light}.",
+"adj",
+"light",
+"Light describes the bag (not heavy), so an adjective."
+],
+[
+"{Light} the candles.",
+"v",
+"light",
+"Light the candles: an order to do something, so a verb."
+],
+[
+"She has a {fast} car.",
+"adj",
+"fast",
+"A fast car: fast describes the noun car, so an adjective."
+],
+[
+"She drives {fast}.",
+"adv",
+"fast",
+"Drives fast: fast tells us HOW she drives, so an adverb."
+],
+[
+"{Water} the plants.",
+"v",
+"water",
+"Water the plants: an action, so a verb."
+],
+[
+"Drink some {water}.",
+"n",
+"water",
+"Some water: a thing, so a noun."
+],
+[
+"We got the {early} bus.",
+"adj",
+"early",
+"The early bus: early describes the bus, so an adjective."
+],
+[
+"We left {early}.",
+"adv",
+"early",
+"Left early: early tells us WHEN we left, so an adverb."
+],
+[
+"It was a {hard} test.",
+"adj",
+"hard",
+"A hard test: hard describes the test, so an adjective."
+],
+[
+"She worked {hard}.",
+"adv",
+"hard",
+"Worked hard: hard tells us HOW she worked, so an adverb."
+],
+[
+"I {watch} TV at night.",
+"v",
+"watch",
+"I watch: an action, so a verb."
+],
+[
+"My {watch} stopped.",
+"n",
+"watch",
+"My watch: a thing, so a noun."
+],
+[
+"Don't {kick} the door.",
+"v",
+"kick",
+"Don't kick: an action, so a verb."
+],
+[
+"What a {kick}!",
+"n",
+"kick",
+"A kick: a thing that happened, so a noun."
+],
+[
+"It might {rain} later.",
+"v",
+"rain",
+"Might rain: an action, so a verb."
+],
+[
+"The {rain} stopped.",
+"n",
+"rain",
+"The rain: a thing, so a noun."
+],
+[
+"Give me a {smile}.",
+"n",
+"smile",
+"A smile: a thing, so a noun."
+],
+[
+"{Smile} for the photo.",
+"v",
+"smile",
+"Smile for the photo: an order to do something, so a verb."
+],
+[
+"We train {daily}.",
+"adv",
+"daily",
+"Train daily: daily tells us HOW OFTEN, so an adverb."
+],
+[
+"Read the {daily} news.",
+"adj",
+"daily",
+"The daily news: daily describes the news, so an adjective."
+],
+[
+"He was in the {final}.",
+"n",
+"final",
+"The final: a thing (the last match), so a noun."
+],
+[
+"It's the {final} day.",
+"adj",
+"final",
+"The final day: final describes the day, so an adjective."
+]
+]
+}/*END*/;
+  var NAME={n:"Noun",v:"Verb",adj:"Adjective",adv:"Adverb",pron:"Pronoun",prep:"Preposition",conj:"Conjunction"};
+  var ICON={n:"📦",v:"🏃",adj:"🎨",adv:"⏱️",pron:"👤",prep:"📍",conj:"🔗"};
+  var JOB={n:"names a person, place, thing or idea",v:"is an action or a state (doing or being)",adj:"describes a noun",adv:"tells you how, when, where or how often",
+    pron:"stands in for a noun (I, she, they, it …)",prep:"shows where or when: under, after, to …",conj:"joins words or ideas: and, but, because …"};
+  var BIG4=["n","v","adj","adv"],GLUE=["pron","prep","conj"];
+  /* parse "{word|tag}" sentences into tokens */
+  var SENT=D.sent.map(function(s){var out=[],re=/\{([^|}]+)\|([^}]+)\}|([^{]+)/g,m;
+    while((m=re.exec(s))){if(m[1])out.push({w:m[1],t:m[2]});else out.push({w:m[3]});}return out;});
+  function sentHTML(tok,k,cls){return '<p class="ws-s">'+tok.map(function(x,i){
+    return i===k?'<mark class="'+(cls||"hl")+'">'+esc(x.w)+'</mark>':esc(x.w);}).join("")+'</p>';}
+  function tagged(tok,set){var r=[];tok.forEach(function(x,i){if(x.t&&set.indexOf(x.t)>=0)r.push(i);});return r;}
+  /* a choice question */
+  function C(en,ans,pool,why,html,data){var seen={},w=[];seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<3){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function lab(t){return ICON[t]+" "+NAME[t];}
+  function plain(tok){return tok.map(function(x){return x.w;}).join("");}
+
+  /* ================= WORD SORT: noun, verb, adjective, adverb ================= */
+  function qSort(){var s,ix;do{s=rnd(SENT);ix=tagged(s,BIG4);}while(!ix.length);var k=rnd(ix),t=s[k].t;
+    return C("Which word class?",lab(t),BIG4.filter(function(x){return x!==t;}).map(lab),
+      "“"+s[k].w+"” "+JOB[t]+", so it's "+(t==="adj"||t==="adv"?"an ":"a ")+NAME[t].toLowerCase()+".",
+      sentHTML(s,k),{t:"sort",cls:t,word:s[k].w,sent:plain(s),rv:s[k].w+" in “"+plain(s).trim()+"”"});}
+  /* ================= FIND IT: tap the word ================= */
+  function qFind(set){return function(){var s,ix,t,ans,others;
+    do{s=rnd(SENT);ix=tagged(s,set);t=ix.length?s[rnd(ix)].t:null;
+      ans=ix.filter(function(i){return s[i].t===t;});
+      others=tagged(s,BIG4.concat(GLUE)).filter(function(i){return s[i].t!==t;});
+    }while(!t||ans.length!==1||others.length<3);
+    var k=ans[0],pool=others.map(function(i){return s[i].w;}).filter(function(w){return w.toLowerCase()!==s[k].w.toLowerCase();});
+    return C(ICON[t]+" Tap the "+NAME[t].toLowerCase(),s[k].w,pool,"“"+s[k].w+"” "+JOB[t]+".",sentHTML(s,-1),
+      {t:"find",cls:t,word:s[k].w,sent:plain(s),rv:"the "+NAME[t].toLowerCase()+" in “"+plain(s).trim()+"”"});};}
+  /* ================= GLUE WORDS: pronoun, preposition, conjunction ================= */
+  function qGlue(){var s,ix;do{s=rnd(SENT);ix=tagged(s,GLUE);}while(!ix.length);var k=rnd(ix),t=s[k].t;
+    var pool=GLUE.filter(function(x){return x!==t;}).map(lab);pool.push(lab(rnd(BIG4)));
+    return C("Which word class?",lab(t),pool,"“"+s[k].w+"” "+JOB[t]+", so it's a "+NAME[t].toLowerCase()+".",
+      sentHTML(s,k),{t:"glue",cls:t,word:s[k].w,sent:plain(s),rv:s[k].w+" in “"+plain(s).trim()+"”"});}
+  /* ================= STRONGER WORDS ================= */
+  function qStrong(){var it=rnd(D.strong),s=it[0],weak=s.match(/\{([^}]+)\}/)[1];
+    var html='<p class="ws-s">'+esc(s.slice(0,s.indexOf("{")))+'<mark class="weak">'+esc(weak)+'</mark>'+esc(s.slice(s.indexOf("}")+1))+'</p>';
+    return C("💪 Pick a stronger word",it[1],it[2],it[3],html,{t:"strong",word:weak,sent:s.replace(/[{}]/g,""),rv:weak+" → "+it[1]+" ("+s.replace(/[{}]/g,"")+")"});}
+  /* ================= WORD SWITCH: same word, different job ================= */
+  function qSwitch(){var it=rnd(D["switch"]),s=it[0],w=s.match(/\{([^}]+)\}/)[1];
+    var html='<p class="ws-s">'+esc(s.slice(0,s.indexOf("{")))+'<mark class="hl">'+esc(w)+'</mark>'+esc(s.slice(s.indexOf("}")+1))+'</p>';
+    return C("Which job here?",lab(it[1]),BIG4.filter(function(x){return x!==it[1];}).map(lab),it[3],html,
+      {t:"switch",cls:it[1],word:w,sent:s.replace(/[{}]/g,""),rv:w+" in “"+s.replace(/[{}]/g,"")+"”"});}
+
+  /* ---------- makers by mode ---------- */
+  var qFind4=qFind(BIG4),qFindG=qFind(GLUE);
+  var MAKERS={
+    sort:[qSort],
+    find:[qFind4,qFind4,qFind4,qFindG],
+    glue:[qGlue,qGlue,qFindG],
+    strong:[qStrong],
+    "switch":[qSwitch],
+    mixed:[qSort,qSort,qFind4,qGlue,qFindG,qStrong,qSwitch]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="sort"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"center"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<3)&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=Object.keys(NAME).map(lab);
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* word-class buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sort"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sort"&&streak%5===0?700:350):3000);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=22?"Brilliant! That's exam-ready speed.":score>=14?"Great work!":score>=6?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{SENT:SENT,D:D}};
+})();
+</script>

@@ -9,7 +9,7 @@ e = html.escape
 T = open("junior-cycle-spanish.html", encoding="utf-8").read()
 head = T[:T.index('<main id="main">')]
 head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle English revision | Léim</title>", head)
-head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Junior Cycle English revision mapped to the 2015 specification: how the 2-hour, 180-mark theme-based paper works, the two CBAs, the text-list rules and all 32 topics from 1st to 3rd year, with a free topic checklist. Games coming soon.">', head)
+head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Junior Cycle English revision mapped to the 2015 specification: how the 2-hour, 180-mark theme-based paper works, the two CBAs, the text-list rules and all 32 topics from 1st to 3rd year, with a free topic checklist and free games, starting with Word Sort (parts of speech).">', head)
 head = head.replace(' aria-current="page"', "")
 head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)
 signup = T[T.index('<div class="signup" id="join">'):T.index('</section>', T.index('<div class="signup" id="join">'))]
@@ -26,6 +26,9 @@ DESC = {
 }
 cards = []
 for r in ENGLISH[:6]:
+    if r[5]:   # live: a link card (like build_maths_page.py)
+        cards.append(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><span class="pill">Free game</span><h3>{e(r[4])}</h3><p style="font-size:14px;color:var(--muted);margin:0 0 6px">{e(r[2].split(":")[0])}</p><p>{e(DESC[r[4]][0].upper() + DESC[r[4]][1:])}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>')
+        continue
     cards.append(f'      <div class="card" style="opacity:.85"><span class="pill" style="background:var(--mist);color:var(--muted)">Coming soon</span><h3>{e(r[4])}</h3><p style="font-size:14px;color:var(--muted);margin:0 0 6px">{e(r[2].split(":")[0])}</p><p>{e(DESC[r[4]][0].upper() + DESC[r[4]][1:])}</p></div>')
 cards = "\n".join(cards)
 
@@ -56,7 +59,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games are on the way. Sign up and we'll tell you when they're live.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English game, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, is live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 
@@ -110,8 +113,8 @@ main = f'''<main id="main">
 <section class="block" id="games" style="scroll-margin-top:90px">
   <div class="wrap">
     <div class="sec-head">
-      <h2>English games: coming first</h2>
-      <p>Quick games with very little text on screen, each with the rules, an Exam corner and a free printable practice sheet underneath. No login needed. Topics are added in the order schools teach them, starting with these.</p>
+      <h2>English games</h2>
+      <p>Quick games with very little text on screen, each with the rules, an Exam corner and a free printable practice sheet underneath. No login needed. Topics are added in the order schools teach them.</p>
     </div>
     <div class="grid">
 {cards}

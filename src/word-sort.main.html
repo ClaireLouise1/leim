@@ -1,0 +1,139 @@
+<main id="main">
+<style>.ws-s{font-size:22px;line-height:1.55;font-weight:600;margin:6px auto 2px;max-width:560px;text-align:center}
+.ws-s mark{border-radius:6px;padding:0 5px;font-weight:800}.ws-s mark.hl{background:#F6CF5A;color:var(--ink)}.ws-s mark.weak{background:#F4D7D7;color:var(--ink);text-decoration:line-through 2px rgba(0,0,0,.25)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.tests{display:grid;gap:6px}.tests .note{font-size:16px}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Word Sort</h1>
+        <p>Noun, verb, adjective or adverb? Sort the words against the clock. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Word Sort</b><span>📦 🏃 🎨 ⏱️</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="find"><div><b>Find it</b><span>Tap the verb</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="glue"><div><b>Glue words</b><span>👤 📍 🔗</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="strong"><div><b>Stronger words</b><span>went → bolted</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="switch"><div><b>Word switch</b><span>a run · I run</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Word Sort, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W10, W12, R11, OL12 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Parts of speech (word classes)</h2>
+        <p>Every word in a sentence has a <b>job</b>. Knowing the jobs helps you write accurately and talk about a writer's language in the exam.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Try each test on the yellow word.</p>
+        <div class="tests">
+          <div class="note">Can you put <b>the</b> in front? &nbsp;the <b>fox</b> ✓ &nbsp;the <b>slept</b> ✗</div>
+          <div class="note">Can you put <b>they</b> in front? &nbsp;they <b>slept</b> ✓ &nbsp;they <b>fox</b> ✗</div>
+          <div class="note">Can you put <b>very</b> in front? &nbsp;very <b>tired</b> ✓ &nbsp;very <b>slowly</b> ✓</div>
+        </div>
+        <p style="margin-top:8px">Tired and slowly both pass the "very" test. So what's the difference? Look at what each one goes with: the <b>tired</b> fox, slept <b>slowly</b>.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>the ___</b> works → a <b>noun</b>. &nbsp;<b>they ___</b> works → a <b>verb</b>.<br>
+          <b>Tired</b> describes a noun (the fox) → <b>adjective</b>. <b>Slowly</b> tells you <i>how</i> it slept → <b>adverb</b>. Many adverbs end in <b>-ly</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The big four</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📦 Noun</b>a person, place, thing or idea<br><b>Maya, Cork, ball, courage</b></div>
+          <div class="note"><b class="h">🏃 Verb</b>an action or a state<br><b>kicked, slept, is, seems</b></div>
+          <div class="note"><b class="h">🎨 Adjective</b>describes a noun<br>the <b>muddy</b> ball · it was <b>empty</b></div>
+          <div class="note"><b class="h">⏱️ Adverb</b>how, when, where, how often<br>ran <b>quickly</b> · <b>never</b> came</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The glue words</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👤 Pronoun</b>stands in for a noun<br><b>I, you, she, it, we, them</b></div>
+          <div class="note"><b class="h">📍 Preposition</b>where or when<br><b>under</b> the oak · <b>after</b> dinner</div>
+          <div class="note"><b class="h">🔗 Conjunction</b>joins ideas<br><b>and, but, so, because, although</b></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Same word, different job</h3>
+        <p>A word's class depends on its job <b>in that sentence</b>: I <b>run</b> (verb) · a long <b>run</b> (noun) · a <b>fast</b> car (adjective) · she drives <b>fast</b> (adverb).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Stronger words</h3>
+        <ul>
+          <li>One strong verb beats a weak verb + adverb: ran very fast → <b>sprinted</b>.</li>
+          <li>Swap tired words: went, got, nice, good, big, very → <b>bolted, leapt, delicious, gripping, enormous</b>.</li>
+          <li>Adjective or adverb? He played <b>well</b> (not good). She sang <b>beautifully</b> (not beautiful).</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>You won't be asked to label grammar, but word choice earns marks all over the paper: questions on how a writer uses language ("pick two words that…"), and the accuracy and word choice in everything you write.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Quote the exact word</b>, then say what it shows. "The verb 'hammered' shows…"</li>
+            <li><b>Naming the word class</b> (verb, adjective) makes your point sharper.</li>
+            <li><b>Strong verbs</b> in your own writing: sprinted, not ran very fast.</li>
+            <li><b>Adjective for adverb</b> slips lose accuracy marks: "played good" → played well.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>“Thunder growled over the hills. Rain hammered the tin roof, and the old shed groaned in the wind.” Pick out two verbs that make the scene feel threatening. Explain your choice.
+              <details><summary>Show a model answer</summary><p>The verb <b>“growled”</b> makes the thunder sound like an angry animal about to attack. The verb <b>“hammered”</b> shows how hard and loud the rain was, as if it were trying to break in.<br><i>Where the marks would go:</i> one mark-earning point per verb: the exact word quoted + what it makes you see, hear or feel.</p></details></li>
+            <li>Rewrite this sentence with stronger verbs and adjectives: “The man went down the nice street and looked at the big house.”
+              <details><summary>Show a model answer</summary><p>The man <b>trudged</b> down the <b>leafy</b> street and <b>gazed</b> at the <b>towering</b> house.<br><i>Where the marks would go:</i> each weak word replaced by a stronger one that still makes sense.</p></details></li>
+            <li>Correct the two mistakes: “She sang beautiful and the crowd clapped loud.”
+              <details><summary>Show the answer</summary><p>She sang <b>beautifully</b> and the crowd clapped <b>loudly</b>. Both words tell us <i>how</i> something was done, so they must be adverbs.</p></details></li>
+            <li>“The nervous boy whispered quietly.” (a) Name the word class of <i>nervous</i>, <i>whispered</i> and <i>quietly</i>. (b) Which word could you cut? Why?
+              <details><summary>Show the answer</summary><p>(a) nervous: <b>adjective</b> · whispered: <b>verb</b> · quietly: <b>adverb</b>.<br>(b) Cut <b>quietly</b>: “whispered” already means speaking quietly, so the adverb adds nothing.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/parts-of-speech-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!-- TEACHER-PACK <p style="text-align:center;font-size:14px;margin-top:6px"><b>Teachers:</b> want a full class lesson on this? Get the <a href="PAYHIP_URL" target="_blank" rel="noopener">Parts of Speech Teacher Pack (€5)</a>: Upgrade Match mingle cards, Story Swap A/B cards, Word Class Dominoes, poster and worksheet.</p> TEACHER-PACK -->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

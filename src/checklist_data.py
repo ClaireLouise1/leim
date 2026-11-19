@@ -79,7 +79,7 @@ MATHS = [
 # year, term, title, LOs (2015 spec), planned game name, live game page ("" = coming soon), free sheet slug ("" = not yet)
 # CBA rows: game name "CBA guide" (a free guide page, no game).
 ENGLISH = [
-  ("1st year","Autumn","Parts of speech: nouns, verbs, adjectives & adverbs","W10, W12, R11, OL12","Word Sort","",""),
+  ("1st year","Autumn","Parts of speech: nouns, verbs, adjectives & adverbs","W10, W12, R11, OL12","Word Sort","word-sort.html","parts-of-speech"),
   ("1st year","Autumn","Sentences: types, fragments & run-ons","W10, W11, W12","Sentence Surgeon","",""),
   ("1st year","Autumn","Punctuation 1: capitals, full stops, commas & apostrophes","W11, W6","Comma Catch","",""),
   ("1st year","Autumn","Reading for meaning: comprehension skills","R1, R2, R3, OL4","Clue Hunt","",""),
