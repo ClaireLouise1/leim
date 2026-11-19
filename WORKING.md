@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 08:25 · E3 English Order 8 Poetry 1 (Technique Spotter) · english-t8
