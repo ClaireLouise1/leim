@@ -1,0 +1,138 @@
+<main id="main">
+<style>.tt-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.tt-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.tt-card.say{border-radius:18px 18px 18px 4px;background:#EEF4FF}
+.tt-card .tt-lab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+@media(max-width:420px){.tt-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Talk Tips</h1>
+        <p>Talk to a group with confidence and listen like a pro: habits, hooks, signposts, replies. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tips"><div><b>Talk Tips</b><span>👍 Do it or 👎 avoid it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="open"><div><b>Hook them</b><span>🎣 Best opening line? ❓ 📊 📖</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sign"><div><b>Signposts</b><span>🚀 Start · ➡️ Next point · 🏁 End</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="listen"><div><b>Listen well</b><span>👂 Best reply?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="discuss"><div><b>Discuss it</b><span>🤝 🙅 🙋 🤔 What is it for?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Talk Tips, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: OL1, OL2, OL3, OL4, OL5, OL6, OL7 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Speaking &amp; listening: talking to a group</h2>
+        <p>A good talk is easy to hear, easy to follow and starts with a hook. A good listener shows it.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="tt-card"><span class="tt-lab">A</span><p>“Em, so, today I'm going to talk about sharks. Em, they're, like, fish.”</p></div>
+          <div class="tt-card"><span class="tt-lab">B</span><p>“Sharks were swimming in the sea long before the dinosaurs. Today, I'll tell you three things about them. First of all…”</p></div>
+        </div>
+        <p style="margin-top:8px">Same topic, same speaker. Which one would you keep listening to? What does B do in its first line? What does it promise in its second? Count the “em”s.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A</b> announces the topic, fills gaps with <i>em</i> and <i>like</i>, and gives no reason to listen.<br>
+          <b>B</b> opens with a <b>hook</b> (a surprising fact), tells listeners the plan (<i>three things</i>) and uses a <b>signpost</b> (<i>First of all</i>) so they always know where they are. A short pause works better than “em”.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Talking to a group</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👀 Eyes</b>Look up and around the room, not at the floor or the page.</div>
+          <div class="note"><b class="h">🔊 Voice</b>Loud enough for the back row. Stress key words.</div>
+          <div class="note"><b class="h">🐢 Pace</b>Slow down. Pause instead of saying “em”.</div>
+          <div class="note"><b class="h">🧍 Body</b>Stand straight, feet still, no fidgeting.</div>
+          <div class="note"><b class="h">🗂️ Notes</b>Cue cards with key words, not a script to read.</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Plan it: hook, signposts, ending</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🎣 Hook</b>❓ a question · 📊 a surprising fact · 📖 a short story</div>
+          <div class="note"><b class="h">🚀 Start</b>First of all · To begin with · Firstly</div>
+          <div class="note"><b class="h">➡️ Next point</b>Moving on · Secondly · Another reason</div>
+          <div class="note"><b class="h">🏁 End</b>To sum up · In conclusion · To finish</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Listening and discussing</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👂 Listen well</b>Nod, let them finish, then ask about what <i>they</i> said.</div>
+          <div class="note"><b class="h">🤝 Agree</b>That's a great point. · I agree with…</div>
+          <div class="note"><b class="h">🙅 Disagree politely</b>I see what you mean, but… · With respect, I disagree.</div>
+          <div class="note"><b class="h">🙋 Join in</b>Can I come in here? · Could I say something?</div>
+          <div class="note"><b class="h">🤔 Ask for more</b>Can you give us an example? · Why do you think that?</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Speaking is assessed in the <a href="junior-cycle-cbas.html#english">Oral Communication CBA</a> in 2nd year. In the written paper, you may be asked to <b>write a talk or speech</b> for your class or school, and the same skills win the marks: a hook, a clear plan with signposts, and words that speak to your audience.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Open with a hook</b>, not “Today I'm going to talk about…”.</li>
+            <li><b>Speak to your audience:</b> “you”, “we”, “fellow students”, a question to them.</li>
+            <li><b>Signposts</b> make your points easy to follow; each point gets its own paragraph.</li>
+            <li><b>End strongly:</b> sum up and leave them with one last thought or a call to act.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Write the <b>opening two sentences</b> of a talk to your class called <b>“Why every school needs a garden”</b>.
+              <details><summary>Show a model answer</summary><p>“Have you ever eaten a strawberry you grew yourself? Today I want to convince you that our school needs a garden, for three reasons: our health, our planet and our exam stress.”<br><i>Where the marks would go:</i> a hook that speaks to the audience (a question), a clear point of view, and a plan the listener can follow (three reasons).</p></details></li>
+            <li>Fill the gaps with signpost words: “____, a garden gives us fresh food. ____, it helps bees and birds. ____, every school should have one.”
+              <details><summary>Show a model answer</summary><p>“<b>First of all</b>, a garden gives us fresh food. <b>Moving on</b> (or <b>Secondly</b>), it helps bees and birds. <b>To sum up</b> (or <b>In conclusion</b>), every school should have one.”<br><i>Where the marks would go:</i> a start word, a next-point word and an ending word, each in the right place.</p></details></li>
+            <li>A classmate says: “I've just joined the camogie team.” Write <b>two replies</b> that show you are listening well.
+              <details><summary>Show a model answer</summary><p>“That's brilliant! When is your first match?” · “What position are you playing?”<br><i>Where the marks would go:</i> both replies are about what she said (camogie, the team), both invite her to say more, neither changes the subject or turns it to you.</p></details></li>
+            <li>In a class discussion, someone says: <b>“Homework should be banned.”</b> Disagree politely and give one reason.
+              <details><summary>Show a model answer</summary><p>“I see what you mean, because we're all tired after school, but I'm not so sure. A little homework helps us remember what we learned that day.”<br><i>Where the marks would go:</i> you show you heard their point, you disagree without putting them down, and you give a clear reason.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/speaking-listening-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

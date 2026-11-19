@@ -88,7 +88,7 @@ ENGLISH = [
   ("1st year","Spring","Paragraphs & topic sentences","W1, W10, W3","Paragraph Builder","paragraph-builder.html","paragraphs"),
   ("1st year","Spring","Poetry 1: imagery & sound","R8, R11, R4, OL8","Technique Spotter","technique-spotter.html","poetry-imagery-sound"),
   ("1st year","Spring","Personal & descriptive writing","W3, W4, W9, W7","Show, Don't Tell","show-dont-tell.html","personal-descriptive-writing"),
-  ("1st year","Spring","Speaking & listening: talking to a group","OL1, OL2, OL3, OL4, OL5, OL6, OL7","Talk Tips","",""),
+  ("1st year","Spring","Speaking & listening: talking to a group","OL1, OL2, OL3, OL4, OL5, OL6, OL7","Talk Tips","talk-tips.html","speaking-listening"),
   ("1st year","Summer","Short stories","R6, R8, R9, W7","Twist Detector","",""),
   ("1st year","Summer","Narrative writing: your own story","W3, W7, W9, W1","Story Spine","",""),
   ("1st year","Summer","Vocabulary & dictionary skills","R10, OL13, W5","Word Ladder","",""),
