@@ -520,10 +520,8 @@ free_main = '''<main id="main">
 <section id="check">
   <h2>Self-check before the day</h2>
   <ul>''' + ck + '''</ul>
-  <!-- ORAL-PACK: switch on when the pack is on Payhip (job P1): replace the "coming soon" paragraph below with a Payhip button to PAYHIP_URL
-  <p style="margin-top:14px"><a class="btn" href="PAYHIP_URL" target="_blank" rel="noopener">Get the Oral CBA Prep Pack ↗</a></p>
-  ORAL-PACK -->
-  <p class="big"><b>Coming soon: the Léim Oral CBA Prep Pack.</b> 16 printable pages: all four formats with six full models (two presentations, an interview, two role-plays and a picture conversation), the teacher's likely questions with good answers, a 48-question bank, answer ladders, pronunciation, a planning sheet and reflection help, with every model read aloud online.</p>
+  <p class="big"><b>The Léim Oral CBA Prep Pack (€6).</b> 16 printable pages: all four formats with six full models (two presentations, an interview, two role-plays and a picture conversation), the teacher's likely questions with good answers, a 48-question bank, answer ladders, pronunciation, a planning sheet and reflection help, with every model read aloud online.</p>
+  <p style="margin-top:14px"><a class="btn" href="https://payhip.com/b/2K5MU" target="_blank" rel="noopener">Get the Oral CBA Prep Pack ↗</a></p>
 </section>
 
 <section id="parents">

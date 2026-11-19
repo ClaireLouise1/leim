@@ -233,6 +233,7 @@ main=f'''<main id="main">
   <p class="sl"><strong>{SNAME['geometry']}</strong></p>{strand_links('geometry')}
   <p class="sl"><strong>{SNAME['stats']}</strong></p>{strand_links('stats')}
   <p>Then mix them up: <a href="exam-mix.html#exam">Exam Mix's Exam corner</a> has problems that join two topics, like the real paper.</p>
+  <a class="card cardlink" href="https://payhip.com/b/e9F6G" target="_blank" rel="noopener" style="margin-top:12px;border:2px solid var(--green)"><h3 style="margin:0">Want two full mock papers? Junior Cycle Maths Exam Pack · €12</h3><p>A Higher and an Ordinary mock paper in the format of the June exam (2 hours, 270 marks, 13 questions), worked solutions for every part, where the marks would go, answer keys, score sheets, grades, a 4-week plan and an exam-day checklist. 26 printable pages, all original.</p><p style="color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
 </section>
 
 <section id="cba">

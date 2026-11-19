@@ -11,5 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 04:20 · P1 batch Payhip upload (all tmp- packs) · payhip-b
 - 2026-11-19 04:30 · E3 English Order 1 Parts of speech (Word Sort) · english-w
