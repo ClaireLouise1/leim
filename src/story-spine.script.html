@@ -1,0 +1,219 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_story_spine.py read this block: keep it valid JSON; one item per line) ----------
+     spines: {k: emoji title, lines: 5 lines opening with Once upon a time / Every day / But one day / Because of that / Until finally}
+             — every line's words link it to its own story, and no line links to another spine's story (the checker tests every pair)
+     plans: {k, lines: 4 on-track events of a story plan, odd: an event that has nothing to do with the story}
+     pov: [sentence, 1 (first person) / 3 (third person)]
+     steady: [first line, right next line (same tense + same narrator), wrong tense, wrong narrator, both wrong]
+     ends: {k, lines: [setting, problem], end: an ending that solves THIS problem, random: an ending from nowhere} */
+  var D=/*DATA*/{
+ "spines": [
+  {"k": "🍞 The Festival Bread", "lines": ["Once upon a time, a girl called Ava lived above a bakery in Dingle.", "Every day, Ava helped her dad knead the bread before breakfast.", "But one day, the bakery oven broke on the morning of the town festival.", "Because of that, Ava carried the dough to every kitchen on the street to bake.", "Until finally, the whole street had baked enough bread for the festival."]},
+  {"k": "🥅 The Nervous Keeper", "lines": ["Once upon a time, there was a boy called Fionn who was afraid of the ball.", "Every day, Fionn hid at the back of the pitch during PE.", "But one day, the goalkeeper was sick and the coach pointed at Fionn.", "Because of that, Fionn had to stand in goal for the cup final.", "Until finally, Fionn saved a penalty and his team lifted the cup."]},
+  {"k": "🐔 The Hungry Fox", "lines": ["Once upon a time, Molly lived in Leitrim with forty noisy hens.", "Every day, Molly collected the eggs and sold them at the gate.", "But one day, a fox crept into the henhouse and frightened the hens.", "Because of that, Molly put a tall fence around the henhouse.", "Until finally, the hens felt safe and laid more eggs than ever."]},
+  {"k": "📱 Eyes on the Screen", "lines": ["Once upon a time, a boy called Cian never looked up from his phone.", "Every day, Cian walked to school staring at the screen.", "But one day, Cian walked straight into a lamppost and cracked the screen.", "Because of that, Cian had to walk to school with no phone for a week.", "Until finally, Cian noticed the river, the swans and the friends he had been ignoring."]},
+  {"k": "🦭 The Lazy Seal", "lines": ["Once upon a time, an old seal called Sammy lived under the pier in Howth.", "Every day, Sammy waited for the fishermen to throw him scraps.", "But one day, a storm wrecked the fishing boats and the scraps stopped.", "Because of that, Sammy had to learn to catch his own dinner.", "Until finally, Sammy became the best hunter in the whole harbour, and the fishermen cheered him."]},
+  {"k": "📚 The Last Reader", "lines": ["Once upon a time, Grace was the only person who visited the tiny library in Kinsale.", "Every day, Grace read one book in the corner by the window.", "But one day, a sign on the door said the library would close for ever.", "Because of that, Grace started a book club and asked everyone she knew to join.", "Until finally, the library was so full that the council changed its mind."]},
+  {"k": "🤖 The Tidy Robot", "lines": ["Once upon a time, Tadhg wanted to build a robot that could tidy his room.", "Every day, Tadhg worked on the robot in the garage.", "But one day, the robot went wild and flung his socks all over the house.", "Because of that, Tadhg's mam banned the robot from his room.", "Until finally, Tadhg fixed the wires, and the robot folded every sock in the house."]},
+  {"k": "🎃 The Giant Pumpkin", "lines": ["Once upon a time, Róisín's grandad grew the biggest pumpkins in Kilkenny.", "Every day, Róisín watered the pumpkins with him.", "But one day, Grandad hurt his back just before the county show.", "Because of that, Róisín had to look after the pumpkins on her own.", "Until finally, Róisín wheeled a giant pumpkin into the show and won first prize."]},
+  {"k": "🐑 The Sleepy Sheepdog", "lines": ["Once upon a time, a lazy sheepdog called Bran lived high on a Wicklow mountain.", "Every day, Bran slept in the sun while the sheep wandered off.", "But one day, thick snow fell and the sheep were trapped on the mountain.", "Because of that, Bran had to climb through the snow to find them.", "Until finally, Bran led every sheep home and never slept on the job again."]},
+  {"k": "🥁 The Loud Drummer", "lines": ["Once upon a time, Leah played the drums so loudly that the neighbours complained.", "Every day, Leah practised the drums in the shed for two hours.", "But one day, the drummer in the youth band broke her wrist before the concert.", "Because of that, the band asked Leah to play at the concert.", "Until finally, Leah's loud drumming got the whole hall dancing."]},
+  {"k": "🚲 The Squeaky Bike", "lines": ["Once upon a time, Darragh had an old rusty bike with a squeaky bell.", "Every day, Darragh rode the bike down the hill while the other kids laughed at it.", "But one day, a poster at the shop announced a charity bike race.", "Because of that, Darragh oiled the chain and trained hard every evening.", "Until finally, Darragh rang the squeaky bell as he crossed the finish line first."]},
+  {"k": "🐢 The Runaway Tortoise", "lines": ["Once upon a time, a tortoise called Speedy lived in a classroom in Galway.", "Every day, Speedy watched the children from his glass tank.", "But one day, someone left the lid of the tank open.", "Because of that, Speedy set off on a slow adventure across the classroom floor.", "Until finally, the children found Speedy asleep in the teacher's handbag."]}
+ ],
+ "plans": [
+  {"k": "⛺ The Camping Trip", "lines": ["Our class pitches a tent on Inis Mór.", "A storm blows our tent into the sea.", "We shelter from the storm in the old fort all night.", "At dawn, a fisherman finds our tent on the rocks."], "odd": "My cousin gets a new puppy for Christmas."},
+  {"k": "🎤 The Talent Show", "lines": ["Aoife enters the talent show.", "Her guitar string snaps on stage.", "Aoife sings the song with no guitar.", "The whole hall claps for her song."], "odd": "Dad paints the kitchen yellow."},
+  {"k": "🐕 The Lost Dog", "lines": ["Max the dog runs off on Inch beach.", "We search the sand dunes until dark.", "A lifeguard hears barking in the dunes.", "Max is found asleep in a rowing boat."], "odd": "My sister starts a new job in a bank."},
+  {"k": "🏆 The Cup Final", "lines": ["Our team reaches the under-14 cup final.", "Our team captain sprains her ankle in training.", "Sophie, the sub, has to play in goal.", "Sophie saves the last penalty and we win the cup."], "odd": "The new cinema in town shows cartoons."},
+  {"k": "🎂 Gran's Party", "lines": ["We plan a surprise party for Gran's 80th.", "Gran finds the party invitations in a drawer.", "We pretend the invitations are for a neighbour.", "Gran walks into the hall and everyone shouts “Surprise!”"], "odd": "A huge whale is spotted off Kerry."},
+  {"k": "🔑 Locked Out", "lines": ["I come home from school to an empty house.", "My key is missing from my bag.", "I climb into the house through the bathroom window.", "Mam comes home and finds my key in the door."], "odd": "Our teacher wins a trip to Paris."},
+  {"k": "❄️ The Snow Day", "lines": ["Snow covers the whole of Cork.", "Snow traps the school bus on our hill.", "We build a giant snowman beside the bus.", "The driver takes a photo of the snowman for the paper."], "odd": "My brother learns to play the violin."},
+  {"k": "🎨 The Painting", "lines": ["Darragh paints a picture for the art competition.", "His little brother spills juice on the painting.", "Darragh turns the juice stains into flowers.", "His painting wins first prize at the competition."], "odd": "The swimming pool closes for the summer."},
+  {"k": "🦔 The Night Visitor", "lines": ["Something is eating the cat food every night.", "We set up a camera in the garden.", "The camera catches a hedgehog eating the food.", "We build a little house for the hedgehog."], "odd": "My aunt buys a red car."},
+  {"k": "🦁 The School Tour", "lines": ["Our class goes on a tour to Dublin Zoo.", "Liam gets lost near the lion house.", "A zookeeper finds Liam feeding the goats.", "Liam gets a zoo badge for being so brave."], "odd": "Mam's phone needs a new battery."}
+ ],
+ "pov": [
+  ["I pulled my hood up and ran for the bus.", 1],
+  ["She pulled her hood up and ran for the bus.", 3],
+  ["My heart thumped as I opened the envelope.", 1],
+  ["Tom's heart thumped as he opened the envelope.", 3],
+  ["We waited at the gate for an hour.", 1],
+  ["They waited at the gate for an hour.", 3],
+  ["Our dog barked at the postman.", 1],
+  ["Their dog barked at the postman.", 3],
+  ["The teacher handed me the trophy.", 1],
+  ["The teacher handed him the trophy.", 3],
+  ["I hid behind the curtain and held my breath.", 1],
+  ["Sam hid behind the curtain and held his breath.", 3],
+  ["The rain soaked us on the walk home.", 1],
+  ["The rain soaked them on the walk home.", 3],
+  ["Nobody told me the match was cancelled.", 1],
+  ["Nobody told Aoife the match was cancelled.", 3],
+  ["My hands shook as I stepped onto the stage.", 1],
+  ["His hands shook as he stepped onto the stage.", 3],
+  ["We laughed until our sides hurt.", 1],
+  ["They laughed until their sides hurt.", 3],
+  ["The old house frightened me.", 1],
+  ["The old house frightened the twins.", 3],
+  ["The bus left without us.", 1],
+  ["The bus left without the girls.", 3]
+ ],
+ "steady": [
+  ["I opened the back door slowly.", "I saw a fox in the garden.", "I see a fox in the garden.", "She saw a fox in the garden.", "She sees a fox in the garden."],
+  ["Ciara grabs her bag and runs.", "She jumps onto the bus just in time.", "She jumped onto the bus just in time.", "I jump onto the bus just in time.", "I jumped onto the bus just in time."],
+  ["We reached the top of the hill at noon.", "We ate our sandwiches beside the cairn.", "We eat our sandwiches beside the cairn.", "They ate their sandwiches beside the cairn.", "They eat their sandwiches beside the cairn."],
+  ["The lights go out in the hall.", "Someone screams at the back.", "Someone screamed at the back.", "I scream at the back.", "I screamed at the back."],
+  ["I wake up at six on the day of the match.", "I pull on my lucky socks.", "I pulled on my lucky socks.", "He pulls on his lucky socks.", "He pulled on his lucky socks."],
+  ["Dad parked the car outside the hospital.", "He ran inside to find Mam.", "He runs inside to find Mam.", "I ran inside to find Mam.", "I run inside to find Mam."],
+  ["We hear a knock at the window.", "We freeze under the blankets.", "We froze under the blankets.", "They freeze under the blankets.", "They froze under the blankets."],
+  ["The wind whistled around the tent.", "Tom held the pole with both hands.", "Tom holds the pole with both hands.", "I held the pole with both hands.", "I hold the pole with both hands."],
+  ["I walk into the exam hall.", "I find my seat near the window.", "I found my seat near the window.", "She finds her seat near the window.", "She found her seat near the window."],
+  ["Leah stepped onto the stage.", "She took a deep breath and started to sing.", "She takes a deep breath and starts to sing.", "I took a deep breath and started to sing.", "I take a deep breath and start to sing."],
+  ["The boat rocks from side to side.", "Oisín grips the rail.", "Oisín gripped the rail.", "I grip the rail.", "I gripped the rail."],
+  ["We searched the beach for an hour.", "We found Max asleep in a rowing boat.", "We find Max asleep in a rowing boat.", "They found Max asleep in a rowing boat.", "They find Max asleep in a rowing boat."],
+  ["The phone buzzed on the table.", "Aisling picked it up and read the message.", "Aisling picks it up and reads the message.", "I picked it up and read the message.", "I pick it up and read the message."],
+  ["I climb the ladder to the attic.", "I push open the dusty trapdoor.", "I pushed open the dusty trapdoor.", "He pushes open the dusty trapdoor.", "He pushed open the dusty trapdoor."]
+ ],
+ "ends": [
+  {"k": "🎒 The Lost Bag", "lines": ["On the first day of the school tour, we arrived in Galway.", "Halfway through the day, Jack realised his bag with all his money was gone."], "end": "In the end, the bus driver found Jack's bag under a seat and handed it back.", "random": "In the end, a famous singer turned up at the door and everyone forgot all about it."},
+  {"k": "🌧️ The Washed-out Match", "lines": ["It was the morning of the county final in Thurles.", "Heavy rain flooded the pitch and the referee called the match off."], "end": "In the end, the match went ahead the next week, and we won by a point.", "random": "In the end, a huge spaceship landed beside us and took everyone to Mars."},
+  {"k": "🎹 The Broken Piano", "lines": ["The school concert was on Friday night.", "On Thursday, the old piano in the hall broke a key."], "end": "In the end, Ms Byrne borrowed a piano from the church, and the concert went ahead.", "random": "In the end, my cousin in America won the lotto and bought a yacht."},
+  {"k": "🐈 The Cat on the Roof", "lines": ["It was a windy Sunday in our estate.", "Our cat climbed onto the roof and was too scared to come down."], "end": "In the end, Dad got the ladder and carried the cat down in a basket.", "random": "In the end, the whole town packed up and went on holiday to Spain."},
+  {"k": "🎂 The Burnt Cake", "lines": ["It was the morning of Mam's birthday.", "I baked her a cake, but I forgot it in the oven and it burnt."], "end": "In the end, I covered the burnt cake in chocolate and she said it was the best one ever.", "random": "In the end, a dragon flew over the town and nobody noticed a thing."},
+  {"k": "🚲 The Flat Tyre", "lines": ["We set off on a cycle to Kinsale on a sunny Saturday.", "Five miles from home, Ella's bike got a flat tyre."], "end": "In the end, a farmer fixed the tyre with his puncture kit, and we cycled on.", "random": "In the end, the sea turned into lemonade and the fish started to sing."},
+  {"k": "📱 The Cracked Phone", "lines": ["Tom got a new phone for his birthday.", "On the first day, he dropped it and cracked the screen."], "end": "In the end, Tom saved up for a new screen and a strong case.", "random": "In the end, aliens landed in the yard and asked us to be their friends."},
+  {"k": "🎭 The Forgotten Lines", "lines": ["It was opening night of the school play.", "In the middle of the first scene, Niamh forgot all her lines."], "end": "In the end, Niamh made up new lines on the spot and the audience loved them.", "random": "In the end, a giant octopus climbed out of the river and waved at us."},
+  {"k": "⛺ The Leaking Tent", "lines": ["We camped by Lough Derg on a summer night.", "At midnight, rain started dripping through a hole in our tent."], "end": "In the end, we patched the hole with tape and slept in our coats.", "random": "In the end, I became the king of Ireland and lived in a castle."},
+  {"k": "🐶 The Muddy Puppy", "lines": ["We were having visitors for dinner.", "Ten minutes before they came, the puppy jumped into the mud and ran through the house."], "end": "In the end, we washed the puppy in the bath, and the visitors never knew.", "random": "In the end, a rocket took off from the back garden and flew to the moon."},
+  {"k": "🔦 The Power Cut", "lines": ["It was a stormy night in January.", "In the middle of our film, the power went out."], "end": "In the end, we lit candles and Grandad told ghost stories until the power came back.", "random": "In the end, my teacher turned into a frog and hopped away."},
+  {"k": "🧩 The Missing Piece", "lines": ["We spent all Christmas doing a giant jigsaw.", "When we were nearly finished, one piece was missing."], "end": "In the end, the dog sneezed and the missing piece fell out from under the sofa.", "random": "In the end, it snowed chocolate buttons all over Ireland for a week."}
+ ]
+}/*END*/;
+  var STEPS=["Once upon a time","Every day","But one day","Because of that","Until finally"];
+  var POV={1:"🙋 First person (I)",3:"👀 Third person (he / she)"};
+  var LINES=["Line 2","Line 3","Line 4","Line 5"];
+  var DREAMS=["Then I woke up. It was all a dream.","Then the alarm went off. It had all been a dream."];
+  var FIXED=[POV[1],POV[3]].concat(LINES);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(k,lines){var h='<div class="sp-card">'+(k?'<span class="sp-k">'+k+'</span>':'');
+    lines.forEach(function(l,i){h+='<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});return h+'</div>';}
+  function body(l,i){return "…"+l.slice(STEPS[i].length+1).trim();}
+  /* one spine stays for 2 questions in a row (2 different gaps), so players read it once */
+  var keepS=null,keepN=0,lastGap=-1;
+  function sp(){if(!keepS||keepN>=2){var S;do{S=rnd(D.spines);}while(S===keepS&&D.spines.length>1);keepS=S;keepN=0;lastGap=-1;}keepN++;return keepS;}
+
+  /* ================= STORY SPINE ================= */
+  function qSpine(){var S=sp(),g;do{g=1+Math.floor(Math.random()*4);}while(g===lastGap);lastGap=g;
+    var h='<div class="sp-card"><span class="sp-k">'+S.k+'</span>';
+    S.lines.forEach(function(l,i){h+=i===g?'<p class="sp-gap"><b>?</b>'+esc(STEPS[i])+' …</p>':'<p><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    h+='</div>';
+    var pool=D.spines.filter(function(x){return x!==S;}).map(function(x){return body(x.lines[g],g);});
+    return C("🦴 What happens next?",body(S.lines[g],g),pool,"Every step of the spine follows on from the one before: same characters, same problem. “"+STEPS[g]+"…” has to fit THIS story.",
+      h,{t:"spine",k:S.k,rv:S.k+": "+STEPS[g]},3);}
+  /* ================= CUT IT ================= */
+  function qCut(){var P=rnd(D.plans),pos=1+Math.floor(Math.random()*4),L=P.lines.slice();L.splice(pos,0,P.odd);
+    return C("✂️ Which event doesn't belong?",LINES[pos-1],LINES,"“"+P.odd+"” has nothing to do with the rest of the story. A short story sticks to one problem.",
+      card(P.k+" · the plan",L),{t:"cut",k:P.k,rv:P.k+": cut “"+P.odd+"”"},3);}
+  /* ================= WHO'S TELLING? ================= */
+  function qPov(){var it=rnd(D.pov);
+    return C("Who's telling the story?",POV[it[1]],[POV[it[1]===1?3:1]],it[1]===1?"I, me, my, we, us, our: the narrator is in the story. That's first person.":"No I or we: the narrator tells us about he, she, they or a name. That's third person.",
+      '<div class="sp-card"><p class="sp-one">'+esc(it[0])+'</p></div>',{t:"pov",s:it[0],rv:it[0]},1);}
+  /* ================= KEEP IT STEADY ================= */
+  function qSteady(){var it=rnd(D.steady);
+    return C("🧭 Best next line?",it[1],[it[2],it[3],it[4]],"Keep the same tense (past or present) and the same narrator (I or he/she) all the way through.",
+      '<div class="sp-card"><p><b>1</b>'+esc(it[0])+'</p><p class="sp-gap"><b>?</b>Next line …</p></div>',{t:"steady",s:it[0],rv:it[0]},3);}
+  /* ================= PAY IT OFF ================= */
+  function qEnd(){var E=rnd(D.ends),other=rnd(D.ends.filter(function(x){return x!==E;}));
+    return C("🏁 Which ending works?",E.end,[E.random,rnd(DREAMS),other.end],"A good ending solves the problem you set up in line 2. Endings from nowhere, or “it was all a dream”, feel like a cheat.",
+      card(E.k,E.lines),{t:"end",k:E.k,rv:E.k+": the ending"},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    spine:[qSpine],
+    cut:[qCut],
+    pov:[qPov],
+    steady:[qSteady],
+    end:[qEnd],
+    mixed:[qSpine,qCut,qPov,qSteady,qEnd]
+  };
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="pov"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;keepS=null;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="spine"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="spine"&&streak%5===0?800:500):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You plan stories like a real writer.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,STEPS:STEPS,POV:POV,LINES:LINES,DREAMS:DREAMS}};
+})();
+</script>

@@ -1,0 +1,142 @@
+<main id="main">
+<style>.sp-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.sp-card .sp-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.sp-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.sp-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.sp-card p.sp-gap{font-weight:800;background:#FDF3D2;border:2px dashed #F6CF5A;border-radius:10px;padding:4px 8px}
+.sp-card p.sp-gap b{background:#F6CF5A;color:var(--ink)}
+.sp-card p.sp-one{display:block;font-size:19px;font-weight:600;text-align:center}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.spine{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}.spine li{background:#fff;border:2px solid var(--line);border-radius:10px;padding:6px 10px}.spine li b{display:inline-block;min-width:150px}
+@media(max-width:560px){.spine li b{display:block;min-width:0}}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.sp-card p{font-size:16px}.sp-card p.sp-one{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Story Spine</h1>
+        <p>Narrative writing: plan your own story, stick to one problem, keep the narrator and tense steady, and write an ending that works. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="spine"><div><b>Story Spine</b><span>🦴 What happens next? Fill the gap</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="cut"><div><b>Cut it</b><span>✂️ Which event doesn't belong?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pov"><div><b>Who's telling?</b><span>🙋 First person · 👀 Third person</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="steady"><div><b>Keep it steady</b><span>🧭 Same tense, same narrator</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="end"><div><b>Pay it off</b><span>🏁 Which ending works?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Story Spine, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W1, W3, W7, W9 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Narrative writing: your own story</h2>
+        <p>Good stories are planned. A five-minute plan stops you running out of ideas halfway, or ending with “and then I woke up”.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sp-card"><span class="sp-k">🥅 The Nervous Keeper</span>
+          <p><b>1</b>Once upon a time, there was a boy called Fionn who was afraid of the ball.</p>
+          <p><b>2</b>Every day, Fionn hid at the back of the pitch during PE.</p>
+          <p><b>3</b>But one day, the goalkeeper was sick and the coach pointed at Fionn.</p>
+          <p><b>4</b>Because of that, Fionn had to stand in goal for the cup final.</p>
+          <p><b>5</b>Until finally, Fionn saved a penalty and his team lifted the cup.</p></div>
+        <p style="margin-top:8px">Read the first words of each line. What job does each line do? Which line is the problem, and which line solves it? Could you swap lines 3 and 4?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">This is a <b>story spine</b>. Line 1 gives us <b>who</b> and their problem (Fionn is afraid of the ball). Line 2 is <b>normal life</b>. Line 3 is the <b>event that changes everything</b>. Line 4 is what happens <b>because of it</b> (you can have more than one “Because of that…”). Line 5 <b>solves the problem from line 1</b>: the boy who was afraid of the ball saves a penalty.<br>
+          You can't swap 3 and 4: each line is caused by the one before. When you write the story, the spine words disappear and each line grows into a paragraph.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Plan in five minutes</h3>
+        <ul class="spine">
+          <li><b>🌅 Once upon a time…</b>Who is it about, where are they, what do they want or fear?</li>
+          <li><b>🔁 Every day…</b>Their normal life, before anything happens.</li>
+          <li><b>⚡ But one day…</b>One problem or event changes everything.</li>
+          <li><b>➡️ Because of that…</b>What it leads to. The tension builds.</li>
+          <li><b>🏁 Until finally…</b>The ending: solve the problem you set up.</li>
+        </ul>
+        <h3 style="font-size:19px;margin:22px 0 8px">While you write</h3>
+        <div class="wc">
+          <div class="note"><b class="h">✂️ One problem</b>A short story has room for one problem and two or three characters. Cut events that don't belong.</div>
+          <div class="note"><b class="h">🙋 First person</b>The narrator is in the story: <i>I</i>, <i>we</i>, <i>my</i>.</div>
+          <div class="note"><b class="h">👀 Third person</b>The narrator tells us about others: <i>he</i>, <i>she</i>, <i>they</i>, a name.</div>
+          <div class="note"><b class="h">🧭 Keep it steady</b>Pick past or present tense, and I or he/she, and stick with it.</div>
+          <div class="note"><b class="h">💬 Dialogue</b>A few lines of speech bring a character to life. New speaker, new line.</div>
+          <div class="note"><b class="h">🏁 Pay it off</b>The ending solves the problem. No “it was all a dream”, nothing from nowhere.</div>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px;margin-top:6px">For openings and twists, play <a href="twist-detector.html">Twist Detector</a>. For description and feelings, play <a href="show-dont-tell.html">Show, Don't Tell</a>.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The Junior Cycle paper often asks you to <b>write a story</b>, or the opening or ending of one, linked to the theme of the paper. Narrative writing is also a good choice for your <b>Collection of the Student's Texts</b> in 3rd year.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Plan first:</b> a five-line spine takes five minutes and gives your story a shape.</li>
+            <li><b>Stick to the task:</b> if it asks for a story with a title or a first line, use it.</li>
+            <li><b>Keep control:</b> one problem, a few characters, the same tense and narrator all through.</li>
+            <li><b>Finish strong:</b> an ending you planned from the start. Leave time to read it over.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Plan a story called <b>“The Storm”</b> using the five steps of a story spine.
+              <details><summary>Show a model answer</summary><p><b>Once upon a time,</b> Orla lived with her gran on Achill Island and was terrified of the sea.<br><b>Every day,</b> she watched the fishing boats from the window but never went near the water.<br><b>But one day,</b> a storm blew in while Gran was out in the rowing boat checking her lobster pots.<br><b>Because of that,</b> Orla had to run to the pier in the rain and shine a torch so Gran could find her way.<br><b>Until finally,</b> Gran's boat bumped against the pier, and the next summer Orla learned to row.<br><i>Where the marks would go:</i> five clear steps, one problem, each step caused by the one before, and an ending that links back to the start (her fear of the sea).</p></details></li>
+            <li>This opening keeps changing tense and narrator. Rewrite it in the <b>past tense</b> and the <b>first person</b>.
+              <div class="pass">I walked into the kitchen and the lights are off. Then she hears a scratching noise behind the fridge. I grab the sweeping brush and edged closer.</div>
+              <details><summary>Show a model answer</summary><p>I walked into the kitchen and the lights were off. Then I heard a scratching noise behind the fridge. I grabbed the sweeping brush and edged closer.<br><i>Where the marks would go:</i> every verb in the past tense (were, heard, grabbed), and the narrator is “I” all the way through.</p></details></li>
+            <li>Here is a student's plan for a story called <b>“The Lost Dog”</b>. Which <b>two</b> events would you cut, and why?
+              <div class="pass">1. Max the dog runs off on Inch beach. 2. Mam buys a new car. 3. We search the sand dunes until dark. 4. A lifeguard hears barking in the dunes. 5. My cousin's birthday party is on Saturday. 6. Max is found asleep in a rowing boat.</div>
+              <details><summary>Show a model answer</summary><p>I would cut event 2 (Mam's new car) and event 5 (the birthday party). Neither has anything to do with finding Max, so they would slow the story down and take the reader away from the problem.<br><i>Where the marks would go:</i> the right two events, and a reason linked to the story's one problem.</p></details></li>
+            <li>Write an <b>ending</b> (3–5 sentences) that solves the problem in this opening.
+              <div class="pass">The last ferry from Cape Clear left at six o'clock. At ten to six, Orla realised her little brother Cathal was nowhere to be seen.</div>
+              <details><summary>Show a model answer</summary><p>Orla raced back up the hill, shouting Cathal's name into the wind. She found him at the old harbour wall, crouched over a rock pool with a crab in his hands. “Come on!” she gasped, and they sprinted down to the pier together. The ferryman was holding the rope, grinning. “I wasn't leaving without the crab boy,” he said.<br><i>Where the marks would go:</i> the ending solves THIS problem (Cathal is found and they catch the ferry), it follows on from the opening, it builds a little tension, and it doesn't come from nowhere.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/narrative-writing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

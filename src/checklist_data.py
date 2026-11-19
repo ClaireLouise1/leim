@@ -90,7 +90,7 @@ ENGLISH = [
   ("1st year","Spring","Personal & descriptive writing","W3, W4, W9, W7","Show, Don't Tell","show-dont-tell.html","personal-descriptive-writing"),
   ("1st year","Spring","Speaking & listening: talking to a group","OL1, OL2, OL3, OL4, OL5, OL6, OL7","Talk Tips","talk-tips.html","speaking-listening"),
   ("1st year","Summer","Short stories","R6, R8, R9, W7","Twist Detector","twist-detector.html","short-stories"),
-  ("1st year","Summer","Narrative writing: your own story","W3, W7, W9, W1","Story Spine","",""),
+  ("1st year","Summer","Narrative writing: your own story","W3, W7, W9, W1","Story Spine","story-spine.html","narrative-writing"),
   ("1st year","Summer","Vocabulary & dictionary skills","R10, OL13, W5","Word Ladder","",""),
   ("2nd year","Autumn","The novel 2: setting, plot, structure & theme","R6, R7, R9, W8","Plot Line","",""),
   ("2nd year","Autumn","Letters & emails: formal and informal","W4, W12, R13","Format Fixer","",""),
