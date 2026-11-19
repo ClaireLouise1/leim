@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-19 11:15 · E3 English Order 12 Narrative writing (Story Spine) · english-n12
