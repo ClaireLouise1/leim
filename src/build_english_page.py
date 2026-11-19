@@ -34,6 +34,7 @@ DESC = {
   "Format Fixer": "letters and emails: formal or informal, the right layout, greeting, sign-off and tone for each.",
   "Register Switch": "register and tone: formal or informal, polite or blunt, and matching your words to your reader.",
   "Tense Trap": "grammar 2: tenses that stay steady, subjects and verbs that agree, and pronouns that are clear.",
+  "Persuasion Power": "persuasive writing and speeches: hooks, rhetorical questions, facts and figures, and a strong call to action.",
 }
 cards = []
 # every live game + the next 2 "Coming soon" (CBA guide rows have no game)
@@ -71,7 +72,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a>, <a href="paragraph-builder.html" style="color:#F6CF5A">Paragraph Builder</a>, <a href="technique-spotter.html" style="color:#F6CF5A">Technique Spotter</a>, <a href="show-dont-tell.html" style="color:#F6CF5A">Show, Don't Tell</a>, <a href="talk-tips.html" style="color:#F6CF5A">Talk Tips</a>, <a href="twist-detector.html" style="color:#F6CF5A">Twist Detector</a>, <a href="story-spine.html" style="color:#F6CF5A">Story Spine</a>, <a href="word-ladder.html" style="color:#F6CF5A">Word Ladder</a> <a href="plot-line.html" style="color:#F6CF5A">Plot Line</a> and <a href="format-fixer.html" style="color:#F6CF5A">Format Fixer</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a>, <a href="paragraph-builder.html" style="color:#F6CF5A">Paragraph Builder</a>, <a href="technique-spotter.html" style="color:#F6CF5A">Technique Spotter</a>, <a href="show-dont-tell.html" style="color:#F6CF5A">Show, Don't Tell</a>, <a href="talk-tips.html" style="color:#F6CF5A">Talk Tips</a>, <a href="twist-detector.html" style="color:#F6CF5A">Twist Detector</a>, <a href="story-spine.html" style="color:#F6CF5A">Story Spine</a>, <a href="word-ladder.html" style="color:#F6CF5A">Word Ladder</a>, <a href="plot-line.html" style="color:#F6CF5A">Plot Line</a>, <a href="format-fixer.html" style="color:#F6CF5A">Format Fixer</a> and <a href="register-switch.html" style="color:#F6CF5A">Register Switch</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 

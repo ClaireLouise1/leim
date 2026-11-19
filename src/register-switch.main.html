@@ -1,0 +1,147 @@
+<main id="main">
+<style>.rs-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.rs-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.rs-card.sit{background:#EEF6F1;border-color:#BFDCCB}
+.rs-card.blunt{background:#FFF6E5}
+.rs-card .rs-lab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.rs-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Register Switch</h1>
+        <p>Match your words to your reader: formal or informal, polite or blunt, the right tone, no slang where it doesn't belong. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="switch"><div><b>Register Switch</b><span>🎯 Which line fits the reader?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="pol"><div><b>Polite or blunt?</b><span>😊 or 🙄</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mkpol"><div><b>Make it polite</b><span>🙏 Fix the order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tone"><div><b>Tone</b><span>😄 😢 😠 😟 How does it sound?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="slang"><div><b>Too slangy</b><span>🔍 Find the slang word</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Register Switch, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: OL12, R12, R13, W12 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Register &amp; tone</h2>
+        <p><b>Register</b> is how formal your words are. <b>Tone</b> is the feeling in them. Both change with your <b>reader</b> (who is it for?) and your <b>purpose</b> (why are you writing or speaking?).</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">📱 Text to a friend</b>Match's off Saturday, pitch is flooded. Gutted!! See ya Monday.</div>
+          <div class="note"><b class="h">📧 Email to the principal</b>I am writing to let you know that Saturday's match has been cancelled because the pitch is flooded.</div>
+          <div class="note"><b class="h">📻 Announcement for listeners</b>Good morning. We regret that Saturday's under-15 match in Kanturk has been cancelled due to a flooded pitch.</div>
+        </div>
+        <p style="margin-top:8px">The same news, three times. What stays the same? What changes? Look at the short forms, the “!!”, the greetings and how much detail each reader is given.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The <b>facts</b> stay the same: no match, flooded pitch. The <b>register</b> changes. The text uses short forms (<i>Match's</i>), slang (<i>Gutted</i>, <i>See ya</i>) and “!!”: fine for a friend. The email uses full words (<i>I am writing</i>, <i>has been cancelled</i>) and gives the reason politely. The announcement is formal too, and adds the details strangers need (<i>under-15</i>, <i>Kanturk</i>).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Who is it for?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📨 Formal</b>A principal, a manager, an editor, the council, an audience, judges, anyone you don't know. Full words (I am, I would like), polite, no slang.</div>
+          <div class="note"><b class="h">😊 Informal</b>Friends, family, your team chat. Short forms (I'm, can't), chatty words, “!” are fine.</div>
+          <div class="note"><b class="h">🎯 Purpose</b>To complain, to ask, to thank, to persuade, to entertain. The purpose decides how much detail and how firm you are.</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Polite or blunt?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🙄 Blunt</b>An order: Give me… Move! I want… now!</div>
+          <div class="note"><b class="h">😊 Polite</b>A question: Could you…? Would you mind…? Excuse me… Sorry… Thank you.</div>
+          <div class="note"><b class="h">💡 Watch out</b>“Move, please!” is still an order. Turn it into a question: “Excuse me, could I get past?”</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Tone</h3>
+        <div class="wc">
+          <div class="note"><b class="h">😄 Cheerful</b>brilliant, thrilled, can't wait</div>
+          <div class="note"><b class="h">😢 Sad</b>miss, lonely, tears, goodbye</div>
+          <div class="note"><b class="h">😠 Angry</b>furious, fed up, unacceptable, slammed</div>
+          <div class="note"><b class="h">😟 Worried</b>what if, nervous, anxious, afraid</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">To name a tone in the exam, quote the words that create it: “The word ‘furious’ shows an angry tone.”</p>
+        <h3 style="font-size:19px;margin:22px 0 8px">Slang to swap in formal writing</h3>
+        <div class="wc">
+          <div class="note"><b class="h">deadly / epic / awesome</b>→ excellent, very enjoyable</div>
+          <div class="note"><b class="h">loads / tons</b>→ many, a lot of</div>
+          <div class="note"><b class="h">wrecked</b>→ exhausted, badly damaged</div>
+          <div class="note"><b class="h">gonna / wanna</b>→ going to, want to</div>
+        </div>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Every writing task names a <b>reader</b> and a <b>purpose</b>: a talk to your class, a letter to a newspaper, a blog for teenagers, a speech to the council. The marks reward writing that suits that reader. Reading questions also ask about the <b>tone</b> of a text or <b>who it is aimed at</b>, and how you can tell.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the reader and purpose</b> before you write: it decides formal or informal.</li>
+            <li><b>Stay in one register</b>: one “gonna” in a speech to the council loses marks.</li>
+            <li><b>Tone questions</b>: name the tone, then quote the words that create it and explain.</li>
+            <li><b>Polite but firm</b> is the best tone for a complaint: no insults, no “!!”.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Your school's sports day has been moved to Friday. Write it as (a) a <b>text to your friend</b> and (b) an <b>announcement for the school intercom</b>.
+              <details><summary>Show a model answer</summary><p>(a) <i>Sports day's moved to Friday!! Bring your runners, it's gonna be class.</i><br>(b) <i>Good morning, everyone. Please note that sports day has been moved to Friday, 12 June. All students should bring a PE kit and a water bottle.</i><br><i>Where the marks would go:</i> the same facts in both; short forms, slang and “!!” in the text only; full words, a greeting and the details everyone needs in the announcement.</p></details></li>
+            <li>Read the two lines below. Which is more suitable for a <b>letter to a newspaper</b>? Give <b>two</b> reasons.
+              <div class="pass">A: The new car park is a total joke, like, nobody wanted it!!<br>B: I wish to express my concern about the new car park, which few residents asked for.</div>
+              <details><summary>Show a model answer</summary><p>Line B. (1) It uses full, formal words (“I wish to express my concern”), while A uses slang (“total joke”, “like”). (2) It is polite but firm and makes the point calmly; A uses “!!” and exaggerates (“nobody”).<br><i>Where the marks would go:</i> the right choice, plus two reasons, each backed up with words from the lines.</p></details></li>
+            <li>Rewrite this note to a neighbour so that it is <b>polite</b> but still clear: “Stop parking in front of our gate. We can't get the car out!!”
+              <details><summary>Show a model answer</summary><p><i>Sorry to bother you, but would you mind not parking in front of our gate? We sometimes can't get our car out in the mornings. Thank you.</i><br><i>Where the marks would go:</i> the order turned into a polite request (would you mind…?); softening words (Sorry to bother you, Thank you); the reason kept; no “!!”.</p></details></li>
+            <li>What is the tone of this passage? Quote <b>two</b> words that show it.
+              <div class="pass">Orla checked her phone again. Still nothing. What if the ferry had turned back? She paced the pier, her stomach in knots, and kept thinking about the storm warning.</div>
+              <details><summary>Show a model answer</summary><p>A <b>worried</b> (anxious) tone. “What if” shows she imagines the worst; “kept thinking” and “stomach in knots” show she can't stop worrying.<br><i>Where the marks would go:</i> one mark for naming the tone; a mark for each quote with a short explanation of how it creates the tone.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/register-tone-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

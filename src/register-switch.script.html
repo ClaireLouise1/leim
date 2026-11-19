@@ -1,0 +1,243 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_register_switch.py read this block: keep it valid JSON; one item per line) ----------
+     switch: [situation with a formal reader, the same news for an informal reader, formal line, informal line]
+     pol: [line, p (polite) / b (blunt)]
+     mkpol: [blunt line, polite version, [3 versions that are still blunt]]
+     tone: [line, ch (cheerful) / sa (sad) / an (angry) / wo (worried)]
+     slang: formal sentence with ONE slang word in {braces} */
+  var D=/*DATA*/{
+ "switch": [
+  ["🧑‍🏫 Email to your principal: you'll miss school on Friday", "👫 Text to your friend: you'll miss school on Friday", "I am writing to let you know that I will be absent on Friday for a dentist appointment.", "I'm off school Friday, gonna be at the dentist."],
+  ["🏢 Email to the hotel manager: your room was cold", "👵 Phone call to Gran: the hotel room was cold", "I regret to say that our room was very cold.", "Gran, the room was freezing, I'm not joking!"],
+  ["📰 Letter to the newspaper editor: the park needs bins", "👦 Chat with your brother: the park needs bins", "I would like to suggest that more bins are placed in the park.", "The park's a total mess, there's no bins!"],
+  ["🏛️ Speech to the county council: young people need a skate park", "📱 Message to your team chat: we need a skate park", "Good evening. I would like to ask the council to build a skate park.", "Lads, we seriously need a skate park, it'd be epic!"],
+  ["📻 Radio announcement for listeners: the concert is cancelled", "👫 Voice note to your friend: the concert is cancelled", "We regret that tonight's concert has been cancelled.", "Bad news, the concert's off tonight, I'm gutted."],
+  ["🩺 Phone call to the doctor's receptionist: you're running late", "🧒 Text to your cousin: you're running late", "I apologise, but I will be ten minutes late for my appointment.", "Running late, soz! Be there in ten mins."],
+  ["🏢 Email to the cinema manager: you left your phone there", "👫 Message to your best friend: you left your phone at the cinema", "I am writing because I left my phone in Screen 2 on Saturday.", "Left my phone in the cinema, I'm such an eejit!"],
+  ["🧑‍🏫 Note to your teacher: you need more time for your project", "👦 Message to your brother: you need more time for your project", "Would it be possible to have two more days for my project?", "I'm wrecked, I need two more days for this project."],
+  ["📰 Letter to the editor: the bus service is poor", "👵 Chat with Gran: the bus is always late", "I wish to complain about the poor bus service in our town.", "The bus is so late every day, it's a joke!"],
+  ["🏢 Email to the shop manager: you want the summer job", "👫 Text to your friend: you're going for a summer job", "I wish to apply for the summer job in your shop.", "Guess what, I'm going for that summer job in the shop!"],
+  ["🎤 Speech to the school assembly: the charity walk raised €900", "📱 Message to your class group chat: the charity walk raised €900", "Good morning, everyone. I am delighted to say that the charity walk raised €900.", "We raised €900 on the walk, deadly!!"],
+  ["🏛️ Email to the county council: the road has potholes", "👧 Chat with your sister: the road has potholes", "I am writing to report several dangerous potholes on Mill Road.", "Mill Road's full of holes, my bike's nearly wrecked!"],
+  ["📚 Email to the librarian: your book is overdue", "👫 Text to your friend: your library book is overdue", "I apologise for returning the book late.", "Oops, my library book's late again, cos I forgot!"],
+  ["🏢 Letter to the company: you want a refund", "🧒 Chat with your cousin: you want a refund", "I would be grateful for a full refund.", "I wanna get my money back, it's broken already!"],
+  ["🏆 Speech to the judges: thank them for the prize", "👵 Call to Gran: you won the prize", "Thank you very much for this award.", "Gran, I won!! Can't believe it!"],
+  ["🧑‍🏫 Email to the principal: ask to start a chess club", "👫 Chat with your friend: ask to start a chess club", "I would like to ask if we could start a chess club.", "We should start a chess club, it'd be class, yeah?"]
+ ],
+ "pol": [
+  ["Could you turn the music down, please?", "p"],
+  ["Would you mind closing the window?", "p"],
+  ["Excuse me, is this seat free?", "p"],
+  ["Could I borrow your pen, please?", "p"],
+  ["Sorry, could you say that again?", "p"],
+  ["Thank you for waiting.", "p"],
+  ["Would you like to join our team?", "p"],
+  ["Do you think you could help me with this box?", "p"],
+  ["I wonder if you could tell me the way to the station.", "p"],
+  ["Could you pass the salt, please?", "p"],
+  ["Would you be able to lend me a euro?", "p"],
+  ["Sorry to bother you, but your bag is open.", "p"],
+  ["If you don't mind, I'll sit here.", "p"],
+  ["Could you please wait a moment?", "p"],
+  ["Turn that music down.", "b"],
+  ["Close the window now.", "b"],
+  ["Move your bag.", "b"],
+  ["Give me your pen.", "b"],
+  ["What? Say it again.", "b"],
+  ["Hurry up!", "b"],
+  ["I want a burger.", "b"],
+  ["Pass the salt.", "b"],
+  ["Get out of my way!", "b"],
+  ["Stop talking!", "b"],
+  ["Tell me where the station is.", "b"],
+  ["Lend me a euro.", "b"],
+  ["Shut the door.", "b"],
+  ["Answer the phone now!", "b"]
+ ],
+ "mkpol": [
+  ["Give me that book.", "Could you pass me that book, please?", ["Give me that book, please!", "Give me that book now.", "Give me that book now, I need it for my English homework."]],
+  ["Turn the TV down.", "Would you mind turning the TV down?", ["Turn the TV down now!", "Turn the TV down, please!", "Turn the TV down now, I'm trying to do my homework here."]],
+  ["Move!", "Excuse me, could I get past?", ["Move, please!", "Get out of the way!", "Get out of my way now, I'm in a hurry to get to class."]],
+  ["Tell me the time.", "Sorry, could you tell me the time?", ["Tell me the time now.", "Tell me the time, please!", "Tell me the time right now, I think I'm late for the bus."]],
+  ["Shut the door.", "Could you close the door, please?", ["Shut the door now!", "Shut the door, please!", "Shut that door now, there's a cold wind blowing in here."]],
+  ["Lend me your charger.", "Would you be able to lend me your charger?", ["Lend me your charger now.", "Lend me your charger!", "Give me your charger now, my phone is nearly dead again."]],
+  ["Hurry up.", "Could you hurry, please? We're late.", ["Hurry up now!", "Hurry up, please!", "Hurry up now, we're going to miss the start of the film."]],
+  ["Answer my email.", "I would be grateful for a reply to my email.", ["Answer my email now.", "Answer my email, please!", "Answer my email now, I sent it to you three days ago."]],
+  ["Stop kicking my chair.", "Sorry, would you mind not kicking my chair?", ["Stop kicking my chair now!", "Stop kicking my chair, please!", "Stop kicking my chair now, I can't concentrate on my test."]],
+  ["Bring me a glass of water.", "Could I have a glass of water, please?", ["Bring me a glass of water now.", "Bring me water!", "Bring me a glass of water now, I'm really thirsty after training."]],
+  ["Send me the homework.", "Could you send me the homework, please?", ["Send me the homework now.", "Send me the homework!", "Send me the homework now, I was off sick and I need it."]],
+  ["Put your phone away.", "Would you mind putting your phone away?", ["Put your phone away now!", "Put your phone away, please!", "Put your phone away now, we're in the middle of dinner."]]
+ ],
+ "tone": [
+  ["Hooray, the sun is out and we're off to the beach!", "ch"],
+  ["I'm thrilled with my new bike.", "ch"],
+  ["What a wonderful day at the zoo!", "ch"],
+  ["Great news: our team made the final!", "ch"],
+  ["I can't wait for the summer holidays.", "ch"],
+  ["The party was brilliant from start to finish.", "ch"],
+  ["Gran was delighted with her flowers.", "ch"],
+  ["It was the best day of the whole year.", "ch"],
+  ["I miss my old school and my friends there.", "sa"],
+  ["The house feels empty since our dog died.", "sa"],
+  ["She cried all the way home on the bus.", "sa"],
+  ["We said goodbye at the airport.", "sa"],
+  ["I felt so lonely on my first night away.", "sa"],
+  ["Sadly, the old cinema closed last week.", "sa"],
+  ["He knew he would never see the farm again.", "sa"],
+  ["Tears ran down Dad's face as the boat left.", "sa"],
+  ["I'm sick of cleaning up after everyone!", "an"],
+  ["This is completely unacceptable.", "an"],
+  ["How dare you read my diary!", "an"],
+  ["She slammed the door and stormed upstairs.", "an"],
+  ["I'm fed up with the bus being late.", "an"],
+  ["The referee's decision was ridiculous!", "an"],
+  ["Dad was furious about the broken window.", "an"],
+  ["Never again will I lend him my bike!", "an"],
+  ["What if I fail the test tomorrow?", "wo"],
+  ["I'm worried that nobody will come to my party.", "wo"],
+  ["Mam was anxious when I wasn't home by ten.", "wo"],
+  ["I'm nervous about my first day at work.", "wo"],
+  ["I keep thinking I left the oven on.", "wo"],
+  ["I hope nothing has happened to Grandad.", "wo"],
+  ["I'm afraid the ice won't hold our weight.", "wo"],
+  ["He was scared the bus had already gone.", "wo"]
+ ],
+ "slang": [
+  "The school concert was {deadly} and the hall was full.",
+  "Our team trained for {loads} of hours before the final.",
+  "The new library is {super} quiet and very bright.",
+  "The food at the event was {rank} and the service was slow.",
+  "The museum has an {awesome} collection of old maps.",
+  "We are {gonna} raise money for the children's hospital.",
+  "The bus timetable is {totally} confusing for visitors.",
+  "The trip to Dublin was {epic} and everyone enjoyed it.",
+  "The old bridge looks {dodgy} after the storm.",
+  "The players were {wrecked} after extra time.",
+  "A new pitch would be {cool} for the whole town.",
+  "I {wanna} thank the committee for their support.",
+  "The festival attracts {tons} of visitors every August.",
+  "Please reply {asap} so that we can book the coach.",
+  "Our class was {buzzing} after the science fair.",
+  "The match was cancelled, so the fans were {gutted}.",
+  "The hotel rooms were {grand}, but the lift was broken.",
+  "Thank you for the {savage} workshop on Tuesday."
+ ]
+}/*END*/;
+  var POLL={p:"😊 Polite",b:"🙄 Blunt"};
+  var TONEL={ch:"😄 Cheerful",sa:"😢 Sad",an:"😠 Angry",wo:"😟 Worried"};
+  var FIXED=[POLL,TONEL].reduce(function(a,L){return a.concat(Object.keys(L).map(function(k){return L[k];}));},[]);
+  var STOP={that:1,with:1,this:1,they:1,their:1,were:1,very:1,from:1,have:1,after:1,every:1,would:1,before:1,there:1,been:1,also:1};
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls,lab){return '<div class="rs-card'+(cls?" "+cls:"")+'">'+(lab?'<span class="rs-lab">'+lab+'</span>':'')+'<p>'+s+'</p></div>';}
+  var TWHY={ch:"Cheerful: happy words like brilliant, thrilled, can't wait.",sa:"Sad: words like miss, lonely, tears, goodbye.",an:"Angry: words like furious, fed up, unacceptable, slammed.",wo:"Worried: words like what if, nervous, anxious, afraid."};
+
+  /* ================= REGISTER SWITCH: which line fits this reader? ================= */
+  function qSwitch(){var i=Math.floor(Math.random()*D["switch"].length),it=D["switch"][i],f=Math.random()<0.5,
+      sit=f?it[0]:it[1],ans=f?it[2]:it[3],other=f?it[3]:it[2],
+      q=C("🎯 Which line fits?",ans,[],f?"A principal, manager, editor or audience: formal. Full words, polite, no slang.":"A friend or family member: informal. Short forms and chatty words are fine.",card(esc(sit),"sit"),{t:"switch",s:sit,rv:sit},1);
+    q.wrong=[other];return q;}
+  /* ================= POLITE OR BLUNT? ================= */
+  function qPol(){var it=rnd(D.pol);
+    return C("Polite or blunt?",POLL[it[1]],others(POLL,it[1]),it[1]==="p"?"Polite: could you, would you mind, please, sorry, thank you.":"Blunt: an order with no softening words (Give me…, Move…), “I want”, “now” or “!”.",card(esc(it[0])),{t:"pol",s:it[0],rv:it[0]},1);}
+  /* ================= MAKE IT POLITE ================= */
+  function qMk(){var it=rnd(D.mkpol);
+    return C("🙏 Make it polite",it[1],it[2],"Ask, don't order: Could you…? Would you mind…? Adding “please!” to an order is still an order.",card(esc(it[0]),"blunt","Too blunt"),{t:"mkpol",s:it[0],rv:it[0]},3);}
+  /* ================= TONE ================= */
+  function qTone(){var it=rnd(D.tone);
+    return C("🎭 Which tone?",TONEL[it[1]],others(TONEL,it[1]),TWHY[it[1]],card(esc(it[0])),{t:"tone",s:it[0],rv:it[0]},3);}
+  /* ================= TOO SLANGY ================= */
+  function qSlang(){var s=rnd(D.slang),w=s.match(/\{(\w+)\}/)[1],plain=s.replace(/[{}]/g,""),
+      ws=(plain.match(/[A-Za-z']+/g)||[]).filter(function(x){return x!==w&&x.length>=4&&!STOP[x.toLowerCase()];});
+    return C("🔍 Which word is too slangy?",w,ws,"“"+w+"” is slang. In formal writing use a plain word instead.",card(esc(plain)),{t:"slang",s:s,rv:plain},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    "switch":[qSwitch],
+    pol:[qPol],
+    mkpol:[qMk],
+    tone:[qTone],
+    slang:[qSlang],
+    mixed:[qSwitch,qPol,qMk,qTone,qSlang]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="switch"||m==="pol"||m==="tone"||m==="slang")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="switch"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="switch"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You can talk to anyone.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,POLL:POLL,TONEL:TONEL}};
+})();
+</script>
