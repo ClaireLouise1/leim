@@ -1,0 +1,153 @@
+<main id="main">
+<style>.pl-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.pl-card .pl-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.pl-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.pl-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:#F6CF5A;color:var(--ink);font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.pl-card p.pl-t{font-weight:800;display:block}
+.pl-card p.pl-one{display:block;font-size:19px;font-weight:600;text-align:center}
+.pl-card p.pl-c{display:block;font-weight:600}
+.pl-card p.pl-c+p.pl-c{border-top:2px dashed var(--line);padding-top:6px;margin-top:4px}
+.pl-card p.pl-c i{display:block;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pl-hill{display:block;width:100%;max-width:300px;margin:0 auto}
+.pl-arc{display:block;width:100%;max-width:440px;margin:6px auto}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pl-card p{font-size:16px}.pl-card p.pl-one{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Plot Line</h1>
+        <p>The novel: the five stages of a plot, setting and mood, theme and how characters change. Works for whichever novel your class is reading. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="plot"><div><b>Plot Line</b><span>📈 Which stage of the plot?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Order it</b><span>🔢 Put the key moments in order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="theme"><div><b>Theme</b><span>💡 🤝 🦁 💔 🏡 🌱 ⚖️ 🕊️</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mood"><div><b>Setting &amp; mood</b><span>🌦️ 😨 😌 🎉 😔</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="change"><div><b>What changed?</b><span>🔄 Start → end</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Plot Line, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R9, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">The novel: plot, setting and theme</h2>
+        <p>A novel is long, but its plot has the same shape as a short story, just stretched out. Once you can see the shape, you can find the key moments in any novel.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pl-card"><span class="pl-k">🐦 The Robin</span>
+          <p><b>A</b>At last, he opened the box, and the robin flew to the top of the hedge.</p>
+          <p><b>B</b>Its wing was broken and it couldn't fly.</p>
+          <p><b>C</b>On a frosty January morning, Kevin found a robin on his doorstep in Tralee.</p>
+          <p><b>D</b>Afterwards, Kevin fed the robin every day for three weeks.</p>
+          <p><b>E</b>Just then, his sister came home with a shoebox and a warm towel.</p></div>
+        <p style="margin-top:8px">Put the five lines in order. Which line sets the scene? Which line is the turning point? Which words at the start of each line helped you?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>C → B → E → D → A.</b> <b>C</b> sets the scene: who, where and when (“a frosty January morning”, “Tralee”). <b>B</b> is the trouble. <b>E</b> is the turning point: “Just then…”. <b>D</b> is what happens after it: “Afterwards…”. <b>A</b> is how it ends: “At last…”.<br>
+          The time words and the first few words of each line do most of the work. Writers use them to move a plot along, and you can use them to find your way around a novel.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The five stages of a plot</h3>
+        <svg class="pl-arc" viewBox="0 0 400 170" role="img" aria-label="Plot line: exposition, rising action, climax, falling action, resolution">
+          <polyline points="20,130 110,88 200,24 290,88 380,130" fill="none" stroke="#c9d2e3" stroke-width="5" stroke-linejoin="round"/>
+          <g font-size="16" font-weight="800" fill="#1d2b4f" text-anchor="middle">
+            <circle cx="20" cy="130" r="7" fill="#fff" stroke="#1d2b4f" stroke-width="2.5"/><text x="4" y="160" text-anchor="start">Exposition</text>
+            <circle cx="110" cy="88" r="7" fill="#fff" stroke="#1d2b4f" stroke-width="2.5"/><text x="110" y="118">Rising action</text>
+            <circle cx="200" cy="24" r="9" fill="#F6CF5A" stroke="#1d2b4f" stroke-width="2.5"/><text x="200" y="58">Climax</text>
+            <circle cx="290" cy="88" r="7" fill="#fff" stroke="#1d2b4f" stroke-width="2.5"/><text x="290" y="118">Falling action</text>
+            <circle cx="380" cy="130" r="7" fill="#fff" stroke="#1d2b4f" stroke-width="2.5"/><text x="396" y="160" text-anchor="end">Resolution</text>
+          </g></svg>
+        <div class="wc">
+          <div class="note"><b class="h">🏠 Exposition</b>Meet the characters, the place and the time.</div>
+          <div class="note"><b class="h">📈 Rising action</b>Trouble starts and gets worse.</div>
+          <div class="note"><b class="h">💥 Climax</b>The turning point: “Suddenly…”, “Just then…”.</div>
+          <div class="note"><b class="h">📉 Falling action</b>What happens next: “After that…”, “Slowly…”.</div>
+          <div class="note"><b class="h">🏁 Resolution</b>How it ends: “In the end…”, “From that day on…”.</div>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px;margin-top:6px">In a novel, each stage can last for chapters, and there are smaller ups and downs inside each one. The climax is the moment the whole book has been building towards.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Setting, mood, theme and change</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📍 Setting</b>Where and when. Writers show it with details, not labels.</div>
+          <div class="note"><b class="h">🌦️ Mood</b>The feeling the setting creates: 😨 tense, 😌 peaceful, 🎉 joyful, 😔 gloomy. Look at sounds, weather and light.</div>
+          <div class="note"><b class="h">💡 Theme</b>The big idea about life. The <i>topic</i> is “a dog”; the <i>theme</i> is “friendship can be found anywhere”.</div>
+          <div class="note"><b class="h">🔄 Change</b>Compare a character at the start and at the end. What happened in between to change them?</div>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px;margin-top:6px">Common themes: friendship, courage, loss, belonging, growing up, fairness, forgiveness. Most novels have more than one.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Your novel comes up in the <b>studied texts</b> part of the paper. You may be asked about a <b>key moment</b>, the <b>setting</b>, a <b>theme</b>, how a character <b>changes</b>, or what you liked about the novel. You answer from memory, so learn a few short quotes for each key moment and theme.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the moment</b>: say what happens and where it comes in the plot (“the climax, when…”).</li>
+            <li><b>Back up every point</b> with a short quote or a close reference to the text.</li>
+            <li><b>Explain</b> why it matters: what it shows about the character or the theme.</li>
+            <li><b>Don't just retell the story.</b> A summary of the plot with no point earns very little.</li>
+            <li>Use the <b>name of your novel and the author</b> in your first sentence.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The extract is from an imaginary novel, so you can practise without knowing it. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>From the novel <i>The Keeper's Daughter</i></b><br>Grey rain dripped from the bare trees as Nell climbed the path to the empty lighthouse. Since her father's boat had gone down in the spring, nobody in Rossmore had come up here. The door creaked open. Inside, everything was just as he had left it: his coat on the hook, his cup on the table, the great lamp cold. Nell had promised herself she would never come back. But tonight the fishing boats were still out, the fog was rolling in, and someone had to light the lamp. Her hands were shaking as she struck the first match.</div>
+          <ol class="eq">
+            <li>Describe the <b>setting</b> and the <b>mood</b> it creates. Quote <b>two</b> details.
+              <details><summary>Show a model answer</summary><p>The extract is set at an empty lighthouse above Rossmore on a wet, foggy night. The mood is gloomy and lonely: “grey rain dripped from the bare trees” and the lighthouse is “empty”, with the lamp “cold”. The details make us feel how sad and abandoned the place has become since Nell's father died.<br><i>Where the marks would go:</i> place and time, the mood named in one word, two short quotes, and a sentence on what they make the reader feel.</p></details></li>
+            <li>Which <b>theme</b> is shown in this extract? Use the text to support your answer.
+              <details><summary>Show a model answer</summary><p>The extract shows the theme of courage. Nell “had promised herself she would never come back”, and her “hands were shaking”, so she is clearly afraid. But she goes in anyway because “someone had to light the lamp” for the fishing boats. Courage here means doing the right thing even when you are frightened. The theme of loss is there too, in her father's coat and cup left “just as he had left it”.<br><i>Where the marks would go:</i> the theme named, two references that show it, and an explanation of what the extract says about it.</p></details></li>
+            <li>Where in the <b>plot</b> do you think this moment comes? Explain your answer.
+              <details><summary>Show a model answer</summary><p>I think it comes near the climax. The exposition has already happened, because we know about her father's boat going down “in the spring”. Now the tension is at its highest: the boats are out, the fog is coming in, and Nell has to face the place she has avoided. Striking the first match feels like a turning point, the moment the whole story has been building towards.<br><i>Where the marks would go:</i> a stage named, a reason from the text, and an idea of what has come before and what might come next.</p></details></li>
+            <li><b>Your novel:</b> choose a key moment where a character changes. Describe the moment and explain how the character is different afterwards.
+              <details><summary>Show a model answer</summary><p><i>A plan that works for any novel:</i> (1) name the novel, the author, the character and the moment in one sentence; (2) describe the character before it, with a short quote; (3) describe the moment itself, saying where it comes in the plot; (4) describe the character after it, with a quote; (5) say what caused the change and what it shows about a theme.<br><i>Where the marks would go:</i> a clear moment (not the whole plot), before and after both described, a quote or close reference for each, and a point about why the change matters.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/novel-setting-plot-theme-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

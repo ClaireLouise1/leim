@@ -1,0 +1,230 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_plot_line.py read this block: keep it valid JSON; one item per line) ----------
+     arcs: {k: emoji title, lines: 5 lines in plot order — exposition, rising action, climax, falling action, resolution}
+     theme: [a moment from a story, fr/co/lo/be/gr/fa/fo]
+     mood: [a setting line, te/pe/jo/gl]
+     change: [emoji + name, a line from the start, a line from the end, trait at the start, trait at the end] */
+  var D=/*DATA*/{
+ "arcs": [
+  {"k": "🏫 The New School", "lines": ["It was a grey September morning in Dungarvan, and Maeve was starting at a brand-new school.", "At lunch, nobody saved her a seat, and things got worse when she lost her timetable.", "Suddenly, a girl in the art room held up Maeve's timetable and waved her over.", "After that, the two girls walked to every class together.", "In the end, Maeve wondered how she had ever felt like an outsider."]},
+  {"k": "⚽ The Cup Final", "lines": ["On a wet Saturday in April, Darragh's under-14 team travelled to Thurles for the cup final.", "At half-time they were losing by three goals, and their captain was injured.", "At that moment, Darragh, the smallest player on the team, was sent on.", "Slowly, the team fought back, point by point.", "Finally, the whistle blew, and the cup was theirs by a single point."]},
+  {"k": "🐴 The Pony", "lines": ["Every summer, Niamh stayed on her uncle's farm near Ennis.", "Then she found the gate open and her pony, Biscuit, gone.", "Just then, she heard hooves on the road and saw Biscuit trotting home beside a farmer.", "Afterwards, Niamh and her uncle fixed the latch on the gate.", "From that day on, she checked the gate twice before bed."]},
+  {"k": "🎻 The Concert", "lines": ["It was a cold December evening, and Oisín was about to play the fiddle at the school concert.", "Halfway through his tune, a string broke, and someone in the front row laughed.", "Without warning, his granny started clapping the beat from the back of the hall.", "Bit by bit, the whole hall joined in, and Oisín kept playing on three strings.", "At last, he took a bow to the loudest cheer of the concert."]},
+  {"k": "🌊 The Island", "lines": ["On a calm July morning, Cara and her dad rowed out to a tiny island off Connemara.", "While they explored, the rope came loose, and their boat was gone.", "Suddenly, Cara spotted the boat caught on a rock at the far end of the island.", "Afterwards, they waded out, soaked to the knees, and pulled it free.", "In the end, they rowed home laughing, with a story to tell everyone."]},
+  {"k": "🐶 The Neighbour", "lines": ["Every afternoon after school, Tadhg walked past old Mr Flynn's house in Mallow.", "Mr Flynn shouted at him for kicking a ball against his wall, and Tadhg refused to say sorry.", "Just then, Mr Flynn's dog slipped its lead and ran towards the busy road.", "After that, Tadhg carried the dog back, and Mr Flynn shook his hand.", "From that day on, Tadhg walked the dog for him every weekend."]},
+  {"k": "📖 The Diary", "lines": ["It was the first week of the summer holidays, and Aoife was clearing out Gran's attic in Sligo.", "She found an old diary, but the last pages were torn out.", "At that moment, a folded letter slipped out of the cover.", "Slowly, she read Gran's story of leaving home at fifteen.", "In the end, Aoife and Gran read the diary together over a pot of tea."]},
+  {"k": "⛰️ The Hike", "lines": ["On a misty October morning, Liam's scout group set off up Galtymore.", "Near the top, the fog grew thicker and Liam realised they were lost.", "All at once, the fog lifted and they saw the path below them.", "Slowly, the group picked its way back down the mountain.", "By the end of the hike, Liam was the one leading the way."]},
+  {"k": "🎭 The School Play", "lines": ["In the spring term, Shauna's class was putting on a play in the parish hall.", "Two days before the show, the lead actor missed rehearsal and rain ruined the scenery.", "Suddenly, the teacher handed the script to Shauna, who knew every line.", "After that, the class painted new scenery every lunchtime.", "Finally, the curtain came down and the whole hall rose to its feet."]},
+  {"k": "🐦 The Robin", "lines": ["On a frosty January morning, Kevin found a robin on his doorstep in Tralee.", "Its wing was broken and it couldn't fly.", "Just then, his sister came home with a shoebox and a warm towel.", "Afterwards, Kevin fed the robin every day for three weeks.", "At last, he opened the box, and the robin flew to the top of the hedge."]},
+  {"k": "🎨 The Mural", "lines": ["On the first Monday of the Easter holidays, Fionn started painting a mural on the youth-club wall.", "Overnight, someone sprayed paint across it, and the mural was ruined.", "Without warning, the boy who had sprayed it walked up and picked up a brush.", "Bit by bit, the two of them painted over the damage together.", "In the end, the mural had both their names in the corner."]},
+  {"k": "🧳 The Move", "lines": ["It was a hot August afternoon when Ellen's family moved from Dublin to a farm in Leitrim.", "She missed her friends, and the local girls ignored her at the bus stop.", "Suddenly, a calf got out onto the road, and only Ellen knew how to calm it.", "After that, the girls asked her to show them how she did it.", "From that day on, Leitrim felt like home."]}
+ ],
+ "theme": [
+  ["When Cian broke his leg, Jack carried his schoolbag every day for a month, like a true friend.", "fr"],
+  ["Even after the argument, Ruth still kept a seat for her best friend at lunch.", "fr"],
+  ["The two friends shared their last bar of chocolate on the long walk home.", "fr"],
+  ["Through the whole storm, the girls stood by each other.", "fr"],
+  ["Ali had only been in Ireland a week, but Sam already called him his friend.", "fr"],
+  ["Her legs were shaking, but Emma climbed the ladder to reach the trapped kitten.", "co"],
+  ["Although he was terrified of water, Tom jumped in to save his little brother.", "co"],
+  ["Maya was afraid of the dark, but she walked into the cellar to find the fuse box.", "co"],
+  ["It took all his courage, but Pádraig stood up and told the class about his stammer.", "co"],
+  ["Her voice was trembling, but Saoirse sang the first line alone.", "co"],
+  ["Every Christmas, Gran still set a place at the table for Grandad, who had died in the spring.", "lo"],
+  ["After the funeral, Rory sat in his dad's old car and cried.", "lo"],
+  ["The house felt silent now that the dog was gone forever.", "lo"],
+  ["Each night, Lucy looked at the empty chair where her brother used to sit.", "lo"],
+  ["Ben kept his mam's old scarf in his drawer, long after she passed away.", "lo"],
+  ["At the end of the match, Ella finally felt that she belonged in her new town.", "be"],
+  ["Nobody in the new class spoke to Karim, and he felt like an outsider.", "be"],
+  ["When the team chanted his name, Luke knew he was finally one of them.", "be"],
+  ["Ava always felt left out when the others talked about holidays abroad.", "be"],
+  ["Stepping off the plane in Shannon, Nana smiled and said she felt at home.", "be"],
+  ["For the first time, Mam let Orla take the bus into the city on her own.", "gr"],
+  ["Looking at his old toys, Eoin knew he was no longer a child.", "gr"],
+  ["Dad said Niall was old enough to look after the shop for the afternoon.", "gr"],
+  ["Sarah laughed at how childish her old diary sounded.", "gr"],
+  ["Finn took on the responsibility of minding his baby sister every evening.", "gr"],
+  ["The teacher blamed Ciara for the broken window, even though she was outside.", "fa"],
+  ["Josh shouted that it was unfair that only the big boys got to play.", "fa"],
+  ["Everyone knew the referee had wrongly sent off our captain.", "fa"],
+  ["Aisha would not cheat, even when the answers were passed around.", "fa"],
+  ["The whole class was punished for something one boy did.", "fa"],
+  ["After a week of silence, Mia said sorry, and her sister hugged her.", "fo"],
+  ["Grandad forgave the boys who had broken his fence and let them help fix it.", "fo"],
+  ["Kate decided to give her brother a second chance.", "fo"],
+  ["The two old enemies finally shook hands and made up.", "fo"],
+  ["Conor wrote a letter to apologise to his coach.", "fo"]
+ ],
+ "mood": [
+  ["The stairs creaked, and a long shadow moved across the landing.", "te"],
+  ["Somewhere in the darkness, footsteps stopped right outside the door.", "te"],
+  ["The torch began to flicker as the wind howled through the broken window.", "te"],
+  ["A heavy thud came from the attic, then nothing.", "te"],
+  ["Branches scraped the glass, and something whispered my name.", "te"],
+  ["The lights went out and a door slammed somewhere below.", "te"],
+  ["Small waves lapped gently against the side of the boat.", "pe"],
+  ["The lake was still, and a swan drifted past the reeds.", "pe"],
+  ["Bees hummed in the garden as the evening sun warmed the wall.", "pe"],
+  ["Snow fell softly on the quiet street.", "pe"],
+  ["A light breeze moved through the long grass by the river.", "pe"],
+  ["The cat slept calmly by the fire.", "pe"],
+  ["Bunting hung across the street, and music spilled out of every shop.", "jo"],
+  ["Children laughed and chased each other between the stalls.", "jo"],
+  ["Balloons bobbed above the crowd as the band played.", "jo"],
+  ["The kitchen was bright and full of the smell of birthday cake.", "jo"],
+  ["Everyone was dancing on the green as the sun went down.", "jo"],
+  ["Fireworks sparkled over the harbour, and the crowd cheered.", "jo"],
+  ["Grey clouds hung low over the empty playground.", "gl"],
+  ["Rain dripped from the bare trees in the park.", "gl"],
+  ["The old shop had faded posters and a rusty sign.", "gl"],
+  ["A cold drizzle fell on the lonely bus stop.", "gl"],
+  ["The damp cottage smelled of old newspapers.", "gl"],
+  ["The beach was empty, and a grey sea rolled in.", "gl"]
+ ],
+ "change": [
+  ["🎤 Leah", "At the start, Leah whispered her answers and hid at the back of the class.", "By the end, she volunteered to give the speech on the school tour.", "sh", "cf"],
+  ["🙋 Darragh", "In September, Darragh never spoke in class.", "By June, he spoke up in every debate.", "sh", "cf"],
+  ["🍬 Ciarán", "At first, Ciarán wouldn't share his sweets with anyone.", "At the end, he gave his last euro to the boy who had lost his lunch money.", "se", "ge"],
+  ["🚌 Róisín", "Róisín grabbed the best seat on every trip.", "By the last trip, she handed her seat to Mrs Hayes.", "se", "ge"],
+  ["🐕 Tomás", "At the start, Tomás froze whenever a dog barked.", "In the end, he stepped forward to catch the runaway puppy.", "sc", "br"],
+  ["🏊 Gemma", "Gemma was afraid of the deep end of the pool.", "By the summer, she faced the deep end and dived in.", "sc", "br"],
+  ["🍽️ Seán", "At the start, Seán sat alone in the canteen every day.", "By the end, his new classmates invited him to every match.", "lo", "ac"],
+  ["🎭 Hana", "Hana walked home on her own after school.", "At the end, she was welcomed into the drama club.", "lo", "ac"],
+  ["🧸 Eoin", "At first, Eoin shared everything with his little brother.", "After the fight, he kept every toy in his own room.", "ge", "se"],
+  ["🚲 Aoife", "Before the crash, Aoife bravely raced down every hill on her bike.", "Afterwards, she trembled at the top of the smallest slope.", "br", "sc"],
+  ["🏠 Jake", "In primary school, Jake was welcomed into every game.", "After the move, he ate lunch by himself.", "ac", "lo"],
+  ["📱 Megan", "At the start, Megan grinned and spoke loudly to everyone.", "After the video went round, she looked at the floor and blushed.", "cf", "sh"],
+  ["🏫 Noah", "Noah blushed whenever a teacher said his name.", "By the end of the year, he led the class assembly.", "sh", "cf"],
+  ["🐴 Ella", "Ella ran away the first time she saw the horse.", "In the end, she bravely rode it round the field.", "sc", "br"]
+ ]
+}/*END*/;
+  var STAGE={ex:"🏠 Exposition",ri:"📈 Rising action",cl:"💥 Climax",fa:"📉 Falling action",re:"🏁 Resolution"},SK=["ex","ri","cl","fa","re"];
+  var THEME={fr:"🤝 Friendship",co:"🦁 Courage",lo:"💔 Loss",be:"🏡 Belonging",gr:"🌱 Growing up",fa:"⚖️ Fairness",fo:"🕊️ Forgiveness"};
+  var CLOSE={fr:["be"],be:["fr"],co:["gr"],gr:["co"]}; /* look-alike themes are never offered as wrong */
+  var MOOD={te:"😨 Tense",pe:"😌 Peaceful",jo:"🎉 Joyful",gl:"😔 Gloomy"};
+  var TRAIT={sh:"🙈 Shy",cf:"😎 Confident",se:"🙅 Selfish",ge:"🎁 Generous",sc:"😨 Scared",br:"🦁 Brave",lo:"😔 Lonely",ac:"🤗 Accepted"};
+  var FIXED=[STAGE,THEME,MOOD].reduce(function(a,L){return a.concat(Object.keys(L).map(function(k){return L[k];}));},[]);
+  var PERMS=(function(){var out=[];function go(p,rest){if(!rest.length){out.push(p.join(" → "));return;}rest.forEach(function(x,i){go(p.concat(x),rest.slice(0,i).concat(rest.slice(i+1)));});}go([],["A","B","C","D"]);return out;})();
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function one(k,s){return '<div class="pl-card">'+(k?'<span class="pl-k">'+k+'</span>':'')+'<p class="pl-one">'+esc(s)+'</p></div>';}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  /* the plot-line picture: 5 dots on a mountain, one lit up */
+  function hill(i){var X=[20,75,130,185,240],Y=[62,40,12,40,62],h='<svg class="pl-hill" viewBox="0 0 260 74" aria-hidden="true"><polyline points="'+X.map(function(x,j){return x+","+Y[j];}).join(" ")+'" fill="none" stroke="#c9d2e3" stroke-width="4" stroke-linejoin="round"/>';
+    X.forEach(function(x,j){h+='<circle cx="'+x+'" cy="'+Y[j]+'" r="'+(j===i?9:6)+'" fill="'+(j===i?"#F6CF5A":"#fff")+'" stroke="#1d2b4f" stroke-width="2.5"/>'+(j===i?'<text x="'+x+'" y="'+(Y[j]+4)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#1d2b4f">?</text>':'');});
+    return h+'</svg>';}
+
+  /* ================= PLOT LINE: which stage? ================= */
+  var SWHY={ex:"It sets up the who, where and when: exposition.",ri:"Trouble starts and builds: rising action.",cl:"The turning point, the big moment: climax.",fa:"What happens after the big moment: falling action.",re:"How it all works out: resolution."};
+  function qStage(){var A=rnd(D.arcs),i=Math.floor(Math.random()*5),k=SK[i];
+    return C("📈 Which stage of the plot?",STAGE[k],others(STAGE,k),SWHY[k],hill(i)+one(A.k,A.lines[i]),{t:"stage",s:A.lines[i],rv:A.lines[i]},3);}
+  /* ================= ORDER IT ================= */
+  function qOrder(){var A=rnd(D.arcs),idx=shuffle([1,2,3,4]),lets=["A","B","C","D"];
+    var h='<div class="pl-card"><span class="pl-k">'+A.k+'</span><p class="pl-t">🏠 '+esc(A.lines[0])+'</p>';
+    idx.forEach(function(n,j){h+='<p class="pl-l"><b>'+lets[j]+'</b>'+esc(A.lines[n])+'</p>';});h+='</div>';
+    var ans=[1,2,3,4].map(function(n){return lets[idx.indexOf(n)];}).join(" → ");
+    return C("🔢 Right order?",ans,PERMS,"Rising action → climax → falling action → resolution. Trouble first, then “Suddenly…”, then “After that…”, then “In the end…”.",h,{t:"order",k:A.k,rv:A.k},3);}
+  /* ================= THEME ================= */
+  function qTheme(){var it=rnd(D.theme),k=it[1],pool=Object.keys(THEME).filter(function(x){return x!==k&&(CLOSE[k]||[]).indexOf(x)<0;}).map(function(x){return THEME[x];});
+    return C("💡 Which theme?",THEME[k],pool,"A theme is the big idea about life that a moment shows. Look for the words that point to it.",one("",it[0]),{t:"theme",s:it[0],rv:it[0]},3);}
+  /* ================= MOOD ================= */
+  function qMood(){var it=rnd(D.mood);
+    return C("🌦️ Which mood?",MOOD[it[1]],others(MOOD,it[1]),"The setting creates the mood. The sounds, the weather and the light words tell you.",one("📍 Setting",it[0]),{t:"mood",s:it[0],rv:it[0]},3);}
+  /* ================= CHANGE ================= */
+  function lab(a,b){return TRAIT[a]+" → "+TRAIT[b];}
+  function qChange(){var it=rnd(D.change),s=it[3],e=it[4],K=Object.keys(TRAIT),pool=[lab(e,s)];
+    K.forEach(function(x){K.forEach(function(y){if(x!==y&&!(x===s&&y===e)&&!(x===e&&y===s))pool.push(lab(x,y));});});
+    var other=shuffle(pool.slice(1));
+    var h='<div class="pl-card"><span class="pl-k">'+it[0]+'</span><p class="pl-c"><i>At the start</i>'+esc(it[1])+'</p><p class="pl-c"><i>At the end</i>'+esc(it[2])+'</p></div>';
+    return C("🔄 How did they change?",lab(s,e),[pool[0],other[0],other[1]],"Compare the start with the end: what they do tells you what they are like.",h,{t:"change",k:it[0],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    plot:[qStage],
+    order:[qOrder],
+    theme:[qTheme],
+    mood:[qMood],
+    change:[qChange],
+    mixed:[qStage,qOrder,qTheme,qMood,qChange]
+  };
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="order"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    else if(opts.every(function(o){return PERMS.indexOf(o)>=0;}))opts.sort(function(a,b){return PERMS.indexOf(a)-PERMS.indexOf(b);});
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="plot"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="plot"&&streak%5===0?800:500):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You read a plot like a pro.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,STAGE:STAGE,THEME:THEME,MOOD:MOOD,TRAIT:TRAIT,PERMS:PERMS}};
+})();
+</script>
