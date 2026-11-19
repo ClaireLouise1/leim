@@ -59,7 +59,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a> and <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a> and <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 

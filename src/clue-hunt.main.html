@@ -1,0 +1,140 @@
+<main id="main">
+<style>.ch-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.ch-card .ch-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.ch-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.ch-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.ch-card p.hl{background:#FFF4CC;border-radius:8px;margin-left:-6px;margin-right:-6px;padding:2px 6px}
+.ch-claim{font-size:19px;font-weight:800;text-align:center;margin:4px auto 6px;max-width:560px}
+.ch-claim.big{font-size:22px;line-height:1.45;margin:10px auto}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.ch-card p{font-size:16px}.ch-claim{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Clue Hunt</h1>
+        <p>Short texts. Find the fact, spot the clue, prove it. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="hunt"><div><b>Clue Hunt</b><span>🔎 Which line proves it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="scan"><div><b>Scan it</b><span>⏰ 💶 📅 Find the fact fast</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="main"><div><b>Big idea</b><span>🦅 Pick the best title</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="feel"><div><b>Read between the lines</b><span>😊 😨 😠 How do they feel?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fo"><div><b>Fact or opinion?</b><span>📏 💭</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Each text stays for 3 questions. Keys 1–4 work too. In Clue Hunt, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R1, R2, R3, OL4 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Reading for meaning: comprehension skills</h2>
+        <p>Every reading question is a hunt. Know what you're hunting for, and you don't have to read every word five times.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="ch-card"><span class="ch-k">📖 Story</span>
+          <p><b>1</b>The wind howled around the caravan all night.</p>
+          <p><b>2</b>Rua pulled the blanket over her head and lay still.</p>
+          <p><b>3</b>Every time the roof rattled, her hands started shaking.</p>
+          <p><b>4</b>At dawn the storm passed.</p></div>
+        <p style="margin-top:8px">Three questions: (a) When did the storm pass? (b) How does Rua feel? (c) What's the best title? Which one can you answer by finding one word? Which one needs a clue? Which one needs the whole text?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>(a)</b> is a <b>scan</b> question: hunt for a time word. Line 4: <i>At dawn</i>.<br>
+          <b>(b)</b> is an <b>inference</b> question: the text never says "scared". The clue is in line 3: <i>her hands started shaking</i>.<br>
+          <b>(c)</b> is a <b>big idea</b> question: skim all four lines. "A frightening night in a storm" covers them all; "A day at the beach" only fits one line.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four ways to read</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🦅 Skim</b>for the big idea<br>Title, first line, last line. What's it about? Who's it for?</div>
+          <div class="note"><b class="h">🔦 Scan</b>for one fact<br>When → time · How many → number · Who → name · Where → place</div>
+          <div class="note"><b class="h">🕵️ Infer</b>read between the lines<br>Shaking → scared. Face went red → embarrassed.</div>
+          <div class="note"><b class="h">🔎 Prove it</b>point + quote + explain<br>Rua is scared: “her hands started shaking”.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Fact or opinion?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📏 Fact</b>can be checked<br>The tickets cost €12.<br>Croke Park is in Dublin.</div>
+          <div class="note"><b class="h">💭 Opinion</b>what someone thinks<br>The tickets are too expensive.<br>Clue words: best, boring, should, I think</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Read the <b>questions first</b>, then the text. You'll know what to hunt for.</li>
+          <li>Watch for <b>traps</b>: the wrong answers are often real words from the text, from the wrong line.</li>
+          <li>Short quotes beat long ones: three to six words that prove your point.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The Junior Cycle paper is full of texts you've never seen: stories, articles, adverts, letters. Most questions ask what the text tells you, what it suggests, and how you know. You win the marks by backing up each point with the text.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question asked.</b> "Two reasons" means two separate points.</li>
+            <li><b>Quote or refer</b> to the text for every point. A point with no proof is only half an answer.</li>
+            <li><b>Explain</b> what the quote shows. Don't just copy a chunk of the text.</li>
+            <li><b>Use your own words</b> for the point; save the text's words for the quote.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><p style="margin:0"><b>The Night Bus</b><br>Niall hadn't meant to fall asleep. One minute he was watching the lights of Cork slide past; the next, the bus was dark and silent, parked in a yard full of empty buses. His phone showed 11.40 p.m. and 3% battery. He pressed the door button. Nothing. He knocked on the glass, softly at first, then harder, his breath coming in short gasps. At last a torch beam swung towards him. "You're the third one this month," the security guard said, grinning, as he pulled the doors open. Niall's cheeks burned all the way home.</p></div>
+          <ol class="eq">
+            <li>Find two details that show Niall was in a difficult situation.
+              <details><summary>Show a model answer</summary><p>1. The bus was <b>“dark and silent”</b> and locked in a yard, so he was trapped.<br>2. His phone had only <b>“3% battery”</b> late at night (11.40 p.m.), so he could hardly call for help.<br><i>Where the marks would go:</i> two separate details from the text, each with a word or two of explanation.</p></details></li>
+            <li>How does Niall feel when he can't get off the bus? Support your answer with reference to the text.
+              <details><summary>Show a model answer</summary><p>Niall feels <b>panicked</b>. He knocks “softly at first, then harder”, which shows his fear growing, and his “breath coming in short gasps” suggests he is close to panic.<br><i>Where the marks would go:</i> a clear feeling (point), a short quote (proof), and what the quote shows (explain).</p></details></li>
+            <li>How does Niall feel at the end of the story? How do you know?
+              <details><summary>Show a model answer</summary><p>He is <b>embarrassed</b>. The guard grins and says he's “the third one this month”, and Niall's “cheeks burned all the way home”: burning cheeks show he was blushing.<br><i>Where the marks would go:</i> the feeling, the clue, and the link between them.</p></details></li>
+            <li>Is “You're the third one this month” a fact or an opinion? Explain.
+              <details><summary>Show the answer</summary><p>A <b>fact</b>: it is something that could be checked (count the people found on buses this month). It doesn't say what anyone thinks or feels.<br><i>Where the marks would go:</i> the right answer plus a reason that uses the idea of checking.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/reading-for-meaning-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

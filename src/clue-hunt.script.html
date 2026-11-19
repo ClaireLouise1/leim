@@ -1,0 +1,269 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- texts (the PDFs and src/test_clue_hunt.py read this block: keep it valid JSON) ----------
+     texts: {k: type label, lines: 4 lines,
+       main: [best title, 3 detail titles],
+       facts: [[question, answer (in line ln), [3 wrong], ln]],
+       proofs: [[claim, ln, clue words (only in line ln)]],
+       feel: [[question, feeling key, [clue words], [lines]]]}
+     fo: {f: facts, o: opinions} */
+  var D=/*DATA*/{
+ "texts": [
+  {"k": "📖 Story",
+   "lines": ["The wind howled around the caravan all night.",
+             "Rua pulled the blanket over her head and lay still.",
+             "Every time the roof rattled, her hands started shaking.",
+             "At dawn the storm passed, and the beach was covered in seaweed."],
+   "main": ["A frightening night in a storm", "A day at the beach", "Collecting seaweed", "Buying a caravan"],
+   "facts": [["⏰ When did the storm pass?", "At dawn", ["At midnight", "At noon", "At teatime"], 4],
+             ["🌊 What covered the beach?", "seaweed", ["sand", "snow", "shells"], 4]],
+   "proofs": [["Rua was scared.", 3, "shaking"], ["It was very windy.", 1, "howled"], ["Rua hid.", 2, "blanket over her head"]],
+   "feel": [["How does Rua feel?", "scared", ["shaking"], [3]]]},
+  {"k": "🏝️ Information",
+   "lines": ["Skellig Michael is a rocky island off the coast of Kerry.",
+             "Monks lived there more than a thousand years ago.",
+             "Visitors climb over 600 stone steps to reach the top.",
+             "Boats usually sail there only from May to September, when the sea is calmer."],
+   "main": ["Visiting an old monks' island", "Boat trips around Ireland", "A storm off Kerry", "How to build stone steps"],
+   "facts": [["🪜 How many steps?", "over 600", ["about 60", "over 6,000", "about 16"], 3],
+             ["⛵ When do boats sail?", "May to September", ["all year", "June to August", "October to April"], 4]],
+   "proofs": [["The climb is hard work.", 3, "600 stone steps"], ["The sea is rough in winter.", 4, "calmer"], ["People lived there long ago.", 2, "Monks"]],
+   "feel": []},
+  {"k": "📧 Email",
+   "lines": ["Hi Jack, I'm sorry, but the class trip to Fota on Saturday is off.",
+             "The bus company rang this morning to say the bus has broken down.",
+             "The trip will now go ahead on the 14th, and your tickets are still valid.",
+             "Please tell the others in your group. Thanks, Ms Byrne"],
+   "main": ["A trip moved to a new date", "A new bus company", "Animals at Fota", "How to fix a bus"],
+   "facts": [["📅 New date for the trip?", "the 14th", ["Saturday", "the 4th", "the 24th"], 3],
+             ["🚌 Problem with the bus?", "broken down", ["late", "full", "lost"], 2]],
+   "proofs": [["Jack doesn't need new tickets.", 3, "still valid"], ["Jack has to pass on the news.", 4, "tell the others"], ["The trip was meant to be on a weekend.", 1, "Saturday"]],
+   "feel": []},
+  {"k": "📔 Diary",
+   "lines": ["Dear diary, today was my first day at secondary school.",
+             "My stomach was in knots all morning and I couldn't eat my breakfast.",
+             "Then a girl called Ava sat beside me in Maths and made me laugh.",
+             "By home time I was grinning, and I can't wait for tomorrow."],
+   "main": ["My first day: a worried morning, a happy home time", "Eating breakfast", "A Maths test", "A girl called Ava"],
+   "facts": [["📚 Which class was Ava in?", "Maths", ["Irish", "English", "PE"], 3]],
+   "proofs": [["The writer was nervous at the start.", 2, "stomach was in knots"], ["The writer made a friend.", 3, "made me laugh"], ["The writer is looking forward to school.", 4, "can't wait"]],
+   "feel": [["Feeling in the morning?", "nervous", ["stomach was in knots"], [2]], ["Feeling at home time?", "happy", ["grinning"], [4]]]},
+  {"k": "📰 News",
+   "lines": ["A dog missing for nine days was found safe in Ballycotton on Monday.",
+             "Bran, a black Labrador, vanished during a walk on the cliffs.",
+             "A fisherman spotted him on the rocks below the lighthouse.",
+             "His owner, Siobhán Daly, said she cried with relief."],
+   "main": ["Bran the dog is found after nine days", "A walk on the cliffs", "Life as a fisherman", "A new lighthouse"],
+   "facts": [["📆 Days missing?", "nine", ["five", "ten", "two"], 1],
+             ["🔍 Who spotted him?", "A fisherman", ["His owner", "A farmer", "A lifeguard"], 3]],
+   "proofs": [["Siobhán was very glad.", 4, "cried with relief"], ["Bran got lost near the sea.", 2, "cliffs"]],
+   "feel": [["How does Siobhán feel?", "happy", ["cried with relief"], [4]]]},
+  {"k": "📣 Advert",
+   "lines": ["Splash Camp runs every weekday in July at Youghal beach.",
+             "Children aged 8 to 14 can try kayaking, surfing and snorkelling.",
+             "Camp costs €95 a week, and wetsuits are included.",
+             "Book before 1 June to get 10% off!"],
+   "main": ["A water sports camp for children", "A trip to the beach", "Buying a wetsuit", "How to surf"],
+   "facts": [["💶 Cost a week?", "€95", ["€10", "€14", "€59"], 3],
+             ["🎂 Ages?", "8 to 14", ["10 to 14", "8 to 10", "6 to 12"], 2]],
+   "proofs": [["You don't need to bring a wetsuit.", 3, "wetsuits are included"], ["Booking early saves money.", 4, "10% off"], ["The camp isn't on at the weekend.", 1, "every weekday"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["With one minute left, the score was level.",
+             "Kate got the ball, took a deep breath and sprinted up the wing.",
+             "Her shot flew past the keeper into the top corner.",
+             "Her teammates jumped on her, screaming her name."],
+   "main": ["Kate scores the winning goal", "A deep breath", "The keeper's best save", "Buying a new ball"],
+   "facts": [["⏱️ Time left?", "one minute", ["two minutes", "ten minutes", "half an hour"], 1]],
+   "proofs": [["Kate scored.", 3, "top corner"], ["Kate's team were delighted.", 4, "jumped on her"], ["Kate ran fast.", 2, "sprinted"]],
+   "feel": [["How do her teammates feel?", "happy", ["jumped on her"], [4]]]},
+  {"k": "🦔 Information",
+   "lines": ["Hedgehogs sleep through the winter, from about November to March.",
+             "Before they hibernate, they eat as many beetles and worms as they can.",
+             "They are often hit by cars, because they roll into a ball instead of running.",
+             "A small gap at the bottom of your garden fence helps them travel safely."],
+   "main": ["Hedgehogs: how they sleep, eat and travel", "Building a garden fence", "Why cars are dangerous", "Beetles and worms"],
+   "facts": [["🍽️ What do they eat?", "beetles and worms", ["slugs and snails", "berries and seeds", "leaves and grass"], 2],
+             ["🚗 What often hits them?", "cars", ["dogs", "foxes", "bikes"], 3]],
+   "proofs": [["Hedgehogs don't run from danger.", 3, "instead of running"], ["Hedgehogs fill up before winter.", 2, "as many beetles"], ["Fences can block hedgehogs.", 4, "small gap"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["It had rained for three days, and Eoin had nothing to do.",
+             "He stared out the window, sighing, while the clock ticked slowly.",
+             "Then Grandad called him into the shed and pulled a dusty box off a shelf.",
+             "Inside was an old radio that Eoin's dad had built as a boy."],
+   "main": ["Rain, a dusty box and a surprise", "How to build a radio", "A new window", "Grandad's garden"],
+   "facts": [["🌧️ Days of rain?", "three", ["two", "four", "five"], 1]],
+   "proofs": [["Time passed slowly for Eoin.", 2, "ticked slowly"], ["Grandad keeps old things.", 3, "dusty box"], ["Eoin's dad was good with his hands.", 4, "had built"]],
+   "feel": [["How does Eoin feel at first?", "bored", ["nothing to do", "sighing"], [1, 2]]]},
+  {"k": "✉️ Letter",
+   "lines": ["I am writing to complain about the noise from the new car park.",
+             "Since it opened in May, car alarms have woken us up nearly every night.",
+             "My children are exhausted, and my son has fallen asleep in class twice.",
+             "I ask the council to put up a gate that locks at midnight."],
+   "main": ["A complaint about car park noise", "A new school for children", "How to lock a gate", "Opening day in May"],
+   "facts": [["📅 Opened when?", "May", ["June", "March", "midnight"], 2],
+             ["😴 Asleep in class how often?", "twice", ["once", "three times", "every night"], 3]],
+   "proofs": [["The noise happens at night.", 2, "woken us up"], ["The noise affects school work.", 3, "asleep in class"]],
+   "feel": [["How does the writer feel?", "angry", ["complain"], [1]]]},
+  {"k": "🌸 Information",
+   "lines": ["The Burren in County Clare is a huge area of bare grey rock.",
+             "Even so, plants from the Arctic and the Mediterranean grow side by side there.",
+             "In spring, the cracks in the rock fill with bright blue gentians.",
+             "Farmers move their cattle up onto the hills for the winter."],
+   "main": ["The rock, plants and farming of the Burren", "A holiday in the Arctic", "Raising cattle", "Blue paint for walls"],
+   "facts": [["🌸 Colour of the gentians?", "blue", ["grey", "yellow", "white"], 3],
+             ["🐄 Cattle on the hills when?", "winter", ["spring", "autumn", "all year"], 4]],
+   "proofs": [["Very different plants live together.", 2, "side by side"], ["The Burren has very little soil.", 1, "bare grey rock"], ["Flowers grow out of the rock.", 3, "cracks"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["Aoife jumped on the bus without looking up from her phone.",
+             "Twenty minutes later, she saw fields where her school should have been.",
+             "Her face went red, and she pressed the bell twice.",
+             "The driver laughed and told her the right bus stopped across the road."],
+   "main": ["Aoife gets on the wrong bus", "A new phone", "A day on a farm", "A friendly driver"],
+   "facts": [["⏱️ How long until she noticed?", "Twenty minutes", ["Two minutes", "An hour", "Ten minutes"], 2],
+             ["🔔 Bell pressed how often?", "twice", ["once", "three times", "four times"], 3]],
+   "proofs": [["Aoife wasn't paying attention.", 1, "without looking up"], ["Aoife was far from school.", 2, "fields"]],
+   "feel": [["How does Aoife feel?", "embarrassed", ["face went red"], [3]]]}
+ ],
+ "fo": {
+  "f": ["The Shannon is the longest river in Ireland.", "Cork is in the south of Ireland.", "The match starts at 3 p.m.",
+        "Water boils at 100 degrees Celsius.", "Our school has 640 students.", "The film lasts two hours.",
+        "Croke Park is in Dublin.", "The shop closes at six on Sundays.", "Spiders have eight legs.",
+        "The tickets cost €12.", "It rained on Saturday.", "Hurling is played with a hurley and a sliotar.",
+        "The library has a new reading room.", "The Irish flag is green, white and orange.", "There are 24 hours in a day.",
+        "The ferry takes three hours."],
+  "o": ["Cork is the best county in Ireland.", "That film was boring.", "Hurling is the most exciting sport.",
+        "Homework should be banned.", "The new uniform is ugly.", "Pizza is delicious.", "Maths is easier than Irish.",
+        "The concert was amazing.", "Everyone should learn to swim.", "Summer is the nicest season.",
+        "The tickets are too expensive.", "Dogs make better pets than cats.", "That song is annoying.",
+        "Our library is a lovely place to study.", "Rugby is more fun than soccer.", "I think the match was unfair."]
+ }
+}/*END*/;
+  var FEEL={happy:"😊 Happy",scared:"😨 Scared",nervous:"😬 Nervous",angry:"😠 Angry",sad:"😢 Sad",bored:"😴 Bored",embarrassed:"😳 Embarrassed"};
+  var CLOSE={scared:["nervous"],nervous:["scared"]};   /* never offered as a wrong answer to each other */
+  var LINES=["Line 1","Line 2","Line 3","Line 4"],FO=["📏 Fact","💭 Opinion"];
+  var FIXED=LINES.concat(FO,Object.keys(FEEL).map(function(k){return FEEL[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* the text card: numbered lines, an optional highlighted line */
+  function card(T,hl){var h='<div class="ch-card"><span class="ch-k">'+T.k+'</span>';
+    T.lines.forEach(function(l,i){h+='<p'+(hl===i+1?' class="hl"':'')+'><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    return h+'</div>';}
+  function claim(t){return '<p class="ch-claim">🔎 '+esc(t)+'</p>';}
+  function quote(T,ln,clue){var l=T.lines[ln-1],i=l.toLowerCase().indexOf(clue.toLowerCase());
+    return "Line "+ln+": “"+(i>=0?l.substr(i,clue.length):clue)+"”";}
+  /* keep the same text for 3 questions so players read it once */
+  var cur=null,uses=0;
+  function text(){if(!cur||uses<=0){var n;do{n=rnd(D.texts);}while(n===cur&&D.texts.length>1);cur=n;uses=3;}uses--;return cur;}
+  function idx(T){return D.texts.indexOf(T);}
+
+  /* ================= WHICH LINE PROVES IT? ================= */
+  function qProof(){var T=text(),p=rnd(T.proofs);
+    return C("Which line proves it?","Line "+p[1],LINES,quote(T,p[1],p[2]),claim(p[0])+card(T),{t:"proof",x:idx(T),claim:p[0],rv:p[0]},3);}
+  /* ================= SCAN IT: find the fact ================= */
+  function qScan(){var T=text(),f=rnd(T.facts);
+    return C(f[0],f[1],f[2],quote(T,f[3],f[1]),card(T),{t:"scan",x:idx(T),q:f[0],rv:f[0]},3);}
+  /* ================= BIG IDEA: best title ================= */
+  function qMain(){var T=text();
+    return C("🦅 Best title?",T.main[0],T.main.slice(1),"The best title covers the WHOLE text, not one line.",card(T),{t:"main",x:idx(T),rv:"Best title for “"+T.lines[0].slice(0,28)+"…”"},3);}
+  /* ================= READ BETWEEN THE LINES: feelings ================= */
+  function withFeel(){var L=D.texts.filter(function(t){return t.feel.length;});
+    var T=text();if(!T.feel.length){cur=rnd(L);uses=2;T=cur;}return T;}
+  function qFeel(){var T=withFeel(),f=rnd(T.feel),bar=[f[1]].concat(CLOSE[f[1]]||[]);
+    var pool=Object.keys(FEEL).filter(function(k){return bar.indexOf(k)<0;}).map(function(k){return FEEL[k];});
+    return C("🕵️ "+f[0],FEEL[f[1]],pool,"Clue: "+quote(T,f[3][f[3].length-1],f[2][f[2].length-1]),card(T,f[3][0]),{t:"feel",x:idx(T),q:f[0],rv:f[0]},3);}
+  /* ================= FACT OR OPINION ================= */
+  function qFO(){var o=Math.random()<0.5,s=rnd(o?D.fo.o:D.fo.f);
+    return C("Fact or opinion?",FO[o?1:0],[FO[o?0:1]],o?"An opinion is what someone thinks: words like best, boring, should.":"A fact can be checked: a number, a date, a place.",
+      '<p class="ch-claim big">'+esc(s)+'</p>',{t:"fo",s:s,o:o,rv:s},1);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    hunt:[qProof],
+    scan:[qScan],
+    main:[qMain],
+    feel:[qFeel],
+    fo:[qFO],
+    mixed:[qProof,qProof,qScan,qScan,qMain,qFeel,qFO]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="fo"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;cur=null;uses=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="hunt"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="hunt"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready reading.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,FEEL:FEEL}};
+})();
+</script>

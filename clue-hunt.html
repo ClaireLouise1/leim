@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clue Hunt: Reading Comprehension Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English reading game: short original texts, find the fact, spot the clue, prove it with a line. Skimming, scanning, inference, best title, fact or opinion, plus rules, an Exam corner with model answers and a free printable.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ch-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px 8px;max-width:560px;margin:8px auto 4px;text-align:left}
+.ch-card .ch-k{display:inline-block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:4px}
+.ch-card p{margin:0 0 6px;font-size:17px;line-height:1.45;display:flex;gap:8px;font-weight:500}
+.ch-card p b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--night);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+.ch-card p.hl{background:#FFF4CC;border-radius:8px;margin-left:-6px;margin-right:-6px;padding:2px 6px}
+.ch-claim{font-size:19px;font-weight:800;text-align:center;margin:4px auto 6px;max-width:560px}
+.ch-claim.big{font-size:22px;line-height:1.45;margin:10px auto}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.ch-card p{font-size:16px}.ch-claim{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Clue Hunt</h1>
+        <p>Short texts. Find the fact, spot the clue, prove it. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="hunt"><div><b>Clue Hunt</b><span>🔎 Which line proves it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="scan"><div><b>Scan it</b><span>⏰ 💶 📅 Find the fact fast</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="main"><div><b>Big idea</b><span>🦅 Pick the best title</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="feel"><div><b>Read between the lines</b><span>😊 😨 😠 How do they feel?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="fo"><div><b>Fact or opinion?</b><span>📏 💭</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Each text stays for 3 questions. Keys 1–4 work too. In Clue Hunt, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R1, R2, R3, OL4 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Reading for meaning: comprehension skills</h2>
+        <p>Every reading question is a hunt. Know what you're hunting for, and you don't have to read every word five times.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="ch-card"><span class="ch-k">📖 Story</span>
+          <p><b>1</b>The wind howled around the caravan all night.</p>
+          <p><b>2</b>Rua pulled the blanket over her head and lay still.</p>
+          <p><b>3</b>Every time the roof rattled, her hands started shaking.</p>
+          <p><b>4</b>At dawn the storm passed.</p></div>
+        <p style="margin-top:8px">Three questions: (a) When did the storm pass? (b) How does Rua feel? (c) What's the best title? Which one can you answer by finding one word? Which one needs a clue? Which one needs the whole text?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>(a)</b> is a <b>scan</b> question: hunt for a time word. Line 4: <i>At dawn</i>.<br>
+          <b>(b)</b> is an <b>inference</b> question: the text never says "scared". The clue is in line 3: <i>her hands started shaking</i>.<br>
+          <b>(c)</b> is a <b>big idea</b> question: skim all four lines. "A frightening night in a storm" covers them all; "A day at the beach" only fits one line.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four ways to read</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🦅 Skim</b>for the big idea<br>Title, first line, last line. What's it about? Who's it for?</div>
+          <div class="note"><b class="h">🔦 Scan</b>for one fact<br>When → time · How many → number · Who → name · Where → place</div>
+          <div class="note"><b class="h">🕵️ Infer</b>read between the lines<br>Shaking → scared. Face went red → embarrassed.</div>
+          <div class="note"><b class="h">🔎 Prove it</b>point + quote + explain<br>Rua is scared: “her hands started shaking”.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Fact or opinion?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📏 Fact</b>can be checked<br>The tickets cost €12.<br>Croke Park is in Dublin.</div>
+          <div class="note"><b class="h">💭 Opinion</b>what someone thinks<br>The tickets are too expensive.<br>Clue words: best, boring, should, I think</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li>Read the <b>questions first</b>, then the text. You'll know what to hunt for.</li>
+          <li>Watch for <b>traps</b>: the wrong answers are often real words from the text, from the wrong line.</li>
+          <li>Short quotes beat long ones: three to six words that prove your point.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The Junior Cycle paper is full of texts you've never seen: stories, articles, adverts, letters. Most questions ask what the text tells you, what it suggests, and how you know. You win the marks by backing up each point with the text.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question asked.</b> "Two reasons" means two separate points.</li>
+            <li><b>Quote or refer</b> to the text for every point. A point with no proof is only half an answer.</li>
+            <li><b>Explain</b> what the quote shows. Don't just copy a chunk of the text.</li>
+            <li><b>Use your own words</b> for the point; save the text's words for the quote.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><p style="margin:0"><b>The Night Bus</b><br>Niall hadn't meant to fall asleep. One minute he was watching the lights of Cork slide past; the next, the bus was dark and silent, parked in a yard full of empty buses. His phone showed 11.40 p.m. and 3% battery. He pressed the door button. Nothing. He knocked on the glass, softly at first, then harder, his breath coming in short gasps. At last a torch beam swung towards him. "You're the third one this month," the security guard said, grinning, as he pulled the doors open. Niall's cheeks burned all the way home.</p></div>
+          <ol class="eq">
+            <li>Find two details that show Niall was in a difficult situation.
+              <details><summary>Show a model answer</summary><p>1. The bus was <b>“dark and silent”</b> and locked in a yard, so he was trapped.<br>2. His phone had only <b>“3% battery”</b> late at night (11.40 p.m.), so he could hardly call for help.<br><i>Where the marks would go:</i> two separate details from the text, each with a word or two of explanation.</p></details></li>
+            <li>How does Niall feel when he can't get off the bus? Support your answer with reference to the text.
+              <details><summary>Show a model answer</summary><p>Niall feels <b>panicked</b>. He knocks “softly at first, then harder”, which shows his fear growing, and his “breath coming in short gasps” suggests he is close to panic.<br><i>Where the marks would go:</i> a clear feeling (point), a short quote (proof), and what the quote shows (explain).</p></details></li>
+            <li>How does Niall feel at the end of the story? How do you know?
+              <details><summary>Show a model answer</summary><p>He is <b>embarrassed</b>. The guard grins and says he's “the third one this month”, and Niall's “cheeks burned all the way home”: burning cheeks show he was blushing.<br><i>Where the marks would go:</i> the feeling, the clue, and the link between them.</p></details></li>
+            <li>Is “You're the third one this month” a fact or an opinion? Explain.
+              <details><summary>Show the answer</summary><p>A <b>fact</b>: it is something that could be checked (count the people found on buses this month). It doesn't say what anyone thinks or feels.<br><i>Where the marks would go:</i> the right answer plus a reason that uses the idea of checking.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/reading-for-meaning-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- texts (the PDFs and src/test_clue_hunt.py read this block: keep it valid JSON) ----------
+     texts: {k: type label, lines: 4 lines,
+       main: [best title, 3 detail titles],
+       facts: [[question, answer (in line ln), [3 wrong], ln]],
+       proofs: [[claim, ln, clue words (only in line ln)]],
+       feel: [[question, feeling key, [clue words], [lines]]]}
+     fo: {f: facts, o: opinions} */
+  var D=/*DATA*/{
+ "texts": [
+  {"k": "📖 Story",
+   "lines": ["The wind howled around the caravan all night.",
+             "Rua pulled the blanket over her head and lay still.",
+             "Every time the roof rattled, her hands started shaking.",
+             "At dawn the storm passed, and the beach was covered in seaweed."],
+   "main": ["A frightening night in a storm", "A day at the beach", "Collecting seaweed", "Buying a caravan"],
+   "facts": [["⏰ When did the storm pass?", "At dawn", ["At midnight", "At noon", "At teatime"], 4],
+             ["🌊 What covered the beach?", "seaweed", ["sand", "snow", "shells"], 4]],
+   "proofs": [["Rua was scared.", 3, "shaking"], ["It was very windy.", 1, "howled"], ["Rua hid.", 2, "blanket over her head"]],
+   "feel": [["How does Rua feel?", "scared", ["shaking"], [3]]]},
+  {"k": "🏝️ Information",
+   "lines": ["Skellig Michael is a rocky island off the coast of Kerry.",
+             "Monks lived there more than a thousand years ago.",
+             "Visitors climb over 600 stone steps to reach the top.",
+             "Boats usually sail there only from May to September, when the sea is calmer."],
+   "main": ["Visiting an old monks' island", "Boat trips around Ireland", "A storm off Kerry", "How to build stone steps"],
+   "facts": [["🪜 How many steps?", "over 600", ["about 60", "over 6,000", "about 16"], 3],
+             ["⛵ When do boats sail?", "May to September", ["all year", "June to August", "October to April"], 4]],
+   "proofs": [["The climb is hard work.", 3, "600 stone steps"], ["The sea is rough in winter.", 4, "calmer"], ["People lived there long ago.", 2, "Monks"]],
+   "feel": []},
+  {"k": "📧 Email",
+   "lines": ["Hi Jack, I'm sorry, but the class trip to Fota on Saturday is off.",
+             "The bus company rang this morning to say the bus has broken down.",
+             "The trip will now go ahead on the 14th, and your tickets are still valid.",
+             "Please tell the others in your group. Thanks, Ms Byrne"],
+   "main": ["A trip moved to a new date", "A new bus company", "Animals at Fota", "How to fix a bus"],
+   "facts": [["📅 New date for the trip?", "the 14th", ["Saturday", "the 4th", "the 24th"], 3],
+             ["🚌 Problem with the bus?", "broken down", ["late", "full", "lost"], 2]],
+   "proofs": [["Jack doesn't need new tickets.", 3, "still valid"], ["Jack has to pass on the news.", 4, "tell the others"], ["The trip was meant to be on a weekend.", 1, "Saturday"]],
+   "feel": []},
+  {"k": "📔 Diary",
+   "lines": ["Dear diary, today was my first day at secondary school.",
+             "My stomach was in knots all morning and I couldn't eat my breakfast.",
+             "Then a girl called Ava sat beside me in Maths and made me laugh.",
+             "By home time I was grinning, and I can't wait for tomorrow."],
+   "main": ["My first day: a worried morning, a happy home time", "Eating breakfast", "A Maths test", "A girl called Ava"],
+   "facts": [["📚 Which class was Ava in?", "Maths", ["Irish", "English", "PE"], 3]],
+   "proofs": [["The writer was nervous at the start.", 2, "stomach was in knots"], ["The writer made a friend.", 3, "made me laugh"], ["The writer is looking forward to school.", 4, "can't wait"]],
+   "feel": [["Feeling in the morning?", "nervous", ["stomach was in knots"], [2]], ["Feeling at home time?", "happy", ["grinning"], [4]]]},
+  {"k": "📰 News",
+   "lines": ["A dog missing for nine days was found safe in Ballycotton on Monday.",
+             "Bran, a black Labrador, vanished during a walk on the cliffs.",
+             "A fisherman spotted him on the rocks below the lighthouse.",
+             "His owner, Siobhán Daly, said she cried with relief."],
+   "main": ["Bran the dog is found after nine days", "A walk on the cliffs", "Life as a fisherman", "A new lighthouse"],
+   "facts": [["📆 Days missing?", "nine", ["five", "ten", "two"], 1],
+             ["🔍 Who spotted him?", "A fisherman", ["His owner", "A farmer", "A lifeguard"], 3]],
+   "proofs": [["Siobhán was very glad.", 4, "cried with relief"], ["Bran got lost near the sea.", 2, "cliffs"]],
+   "feel": [["How does Siobhán feel?", "happy", ["cried with relief"], [4]]]},
+  {"k": "📣 Advert",
+   "lines": ["Splash Camp runs every weekday in July at Youghal beach.",
+             "Children aged 8 to 14 can try kayaking, surfing and snorkelling.",
+             "Camp costs €95 a week, and wetsuits are included.",
+             "Book before 1 June to get 10% off!"],
+   "main": ["A water sports camp for children", "A trip to the beach", "Buying a wetsuit", "How to surf"],
+   "facts": [["💶 Cost a week?", "€95", ["€10", "€14", "€59"], 3],
+             ["🎂 Ages?", "8 to 14", ["10 to 14", "8 to 10", "6 to 12"], 2]],
+   "proofs": [["You don't need to bring a wetsuit.", 3, "wetsuits are included"], ["Booking early saves money.", 4, "10% off"], ["The camp isn't on at the weekend.", 1, "every weekday"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["With one minute left, the score was level.",
+             "Kate got the ball, took a deep breath and sprinted up the wing.",
+             "Her shot flew past the keeper into the top corner.",
+             "Her teammates jumped on her, screaming her name."],
+   "main": ["Kate scores the winning goal", "A deep breath", "The keeper's best save", "Buying a new ball"],
+   "facts": [["⏱️ Time left?", "one minute", ["two minutes", "ten minutes", "half an hour"], 1]],
+   "proofs": [["Kate scored.", 3, "top corner"], ["Kate's team were delighted.", 4, "jumped on her"], ["Kate ran fast.", 2, "sprinted"]],
+   "feel": [["How do her teammates feel?", "happy", ["jumped on her"], [4]]]},
+  {"k": "🦔 Information",
+   "lines": ["Hedgehogs sleep through the winter, from about November to March.",
+             "Before they hibernate, they eat as many beetles and worms as they can.",
+             "They are often hit by cars, because they roll into a ball instead of running.",
+             "A small gap at the bottom of your garden fence helps them travel safely."],
+   "main": ["Hedgehogs: how they sleep, eat and travel", "Building a garden fence", "Why cars are dangerous", "Beetles and worms"],
+   "facts": [["🍽️ What do they eat?", "beetles and worms", ["slugs and snails", "berries and seeds", "leaves and grass"], 2],
+             ["🚗 What often hits them?", "cars", ["dogs", "foxes", "bikes"], 3]],
+   "proofs": [["Hedgehogs don't run from danger.", 3, "instead of running"], ["Hedgehogs fill up before winter.", 2, "as many beetles"], ["Fences can block hedgehogs.", 4, "small gap"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["It had rained for three days, and Eoin had nothing to do.",
+             "He stared out the window, sighing, while the clock ticked slowly.",
+             "Then Grandad called him into the shed and pulled a dusty box off a shelf.",
+             "Inside was an old radio that Eoin's dad had built as a boy."],
+   "main": ["Rain, a dusty box and a surprise", "How to build a radio", "A new window", "Grandad's garden"],
+   "facts": [["🌧️ Days of rain?", "three", ["two", "four", "five"], 1]],
+   "proofs": [["Time passed slowly for Eoin.", 2, "ticked slowly"], ["Grandad keeps old things.", 3, "dusty box"], ["Eoin's dad was good with his hands.", 4, "had built"]],
+   "feel": [["How does Eoin feel at first?", "bored", ["nothing to do", "sighing"], [1, 2]]]},
+  {"k": "✉️ Letter",
+   "lines": ["I am writing to complain about the noise from the new car park.",
+             "Since it opened in May, car alarms have woken us up nearly every night.",
+             "My children are exhausted, and my son has fallen asleep in class twice.",
+             "I ask the council to put up a gate that locks at midnight."],
+   "main": ["A complaint about car park noise", "A new school for children", "How to lock a gate", "Opening day in May"],
+   "facts": [["📅 Opened when?", "May", ["June", "March", "midnight"], 2],
+             ["😴 Asleep in class how often?", "twice", ["once", "three times", "every night"], 3]],
+   "proofs": [["The noise happens at night.", 2, "woken us up"], ["The noise affects school work.", 3, "asleep in class"]],
+   "feel": [["How does the writer feel?", "angry", ["complain"], [1]]]},
+  {"k": "🌸 Information",
+   "lines": ["The Burren in County Clare is a huge area of bare grey rock.",
+             "Even so, plants from the Arctic and the Mediterranean grow side by side there.",
+             "In spring, the cracks in the rock fill with bright blue gentians.",
+             "Farmers move their cattle up onto the hills for the winter."],
+   "main": ["The rock, plants and farming of the Burren", "A holiday in the Arctic", "Raising cattle", "Blue paint for walls"],
+   "facts": [["🌸 Colour of the gentians?", "blue", ["grey", "yellow", "white"], 3],
+             ["🐄 Cattle on the hills when?", "winter", ["spring", "autumn", "all year"], 4]],
+   "proofs": [["Very different plants live together.", 2, "side by side"], ["The Burren has very little soil.", 1, "bare grey rock"], ["Flowers grow out of the rock.", 3, "cracks"]],
+   "feel": []},
+  {"k": "📖 Story",
+   "lines": ["Aoife jumped on the bus without looking up from her phone.",
+             "Twenty minutes later, she saw fields where her school should have been.",
+             "Her face went red, and she pressed the bell twice.",
+             "The driver laughed and told her the right bus stopped across the road."],
+   "main": ["Aoife gets on the wrong bus", "A new phone", "A day on a farm", "A friendly driver"],
+   "facts": [["⏱️ How long until she noticed?", "Twenty minutes", ["Two minutes", "An hour", "Ten minutes"], 2],
+             ["🔔 Bell pressed how often?", "twice", ["once", "three times", "four times"], 3]],
+   "proofs": [["Aoife wasn't paying attention.", 1, "without looking up"], ["Aoife was far from school.", 2, "fields"]],
+   "feel": [["How does Aoife feel?", "embarrassed", ["face went red"], [3]]]}
+ ],
+ "fo": {
+  "f": ["The Shannon is the longest river in Ireland.", "Cork is in the south of Ireland.", "The match starts at 3 p.m.",
+        "Water boils at 100 degrees Celsius.", "Our school has 640 students.", "The film lasts two hours.",
+        "Croke Park is in Dublin.", "The shop closes at six on Sundays.", "Spiders have eight legs.",
+        "The tickets cost €12.", "It rained on Saturday.", "Hurling is played with a hurley and a sliotar.",
+        "The library has a new reading room.", "The Irish flag is green, white and orange.", "There are 24 hours in a day.",
+        "The ferry takes three hours."],
+  "o": ["Cork is the best county in Ireland.", "That film was boring.", "Hurling is the most exciting sport.",
+        "Homework should be banned.", "The new uniform is ugly.", "Pizza is delicious.", "Maths is easier than Irish.",
+        "The concert was amazing.", "Everyone should learn to swim.", "Summer is the nicest season.",
+        "The tickets are too expensive.", "Dogs make better pets than cats.", "That song is annoying.",
+        "Our library is a lovely place to study.", "Rugby is more fun than soccer.", "I think the match was unfair."]
+ }
+}/*END*/;
+  var FEEL={happy:"😊 Happy",scared:"😨 Scared",nervous:"😬 Nervous",angry:"😠 Angry",sad:"😢 Sad",bored:"😴 Bored",embarrassed:"😳 Embarrassed"};
+  var CLOSE={scared:["nervous"],nervous:["scared"]};   /* never offered as a wrong answer to each other */
+  var LINES=["Line 1","Line 2","Line 3","Line 4"],FO=["📏 Fact","💭 Opinion"];
+  var FIXED=LINES.concat(FO,Object.keys(FEEL).map(function(k){return FEEL[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* the text card: numbered lines, an optional highlighted line */
+  function card(T,hl){var h='<div class="ch-card"><span class="ch-k">'+T.k+'</span>';
+    T.lines.forEach(function(l,i){h+='<p'+(hl===i+1?' class="hl"':'')+'><b>'+(i+1)+'</b>'+esc(l)+'</p>';});
+    return h+'</div>';}
+  function claim(t){return '<p class="ch-claim">🔎 '+esc(t)+'</p>';}
+  function quote(T,ln,clue){var l=T.lines[ln-1],i=l.toLowerCase().indexOf(clue.toLowerCase());
+    return "Line "+ln+": “"+(i>=0?l.substr(i,clue.length):clue)+"”";}
+  /* keep the same text for 3 questions so players read it once */
+  var cur=null,uses=0;
+  function text(){if(!cur||uses<=0){var n;do{n=rnd(D.texts);}while(n===cur&&D.texts.length>1);cur=n;uses=3;}uses--;return cur;}
+  function idx(T){return D.texts.indexOf(T);}
+
+  /* ================= WHICH LINE PROVES IT? ================= */
+  function qProof(){var T=text(),p=rnd(T.proofs);
+    return C("Which line proves it?","Line "+p[1],LINES,quote(T,p[1],p[2]),claim(p[0])+card(T),{t:"proof",x:idx(T),claim:p[0],rv:p[0]},3);}
+  /* ================= SCAN IT: find the fact ================= */
+  function qScan(){var T=text(),f=rnd(T.facts);
+    return C(f[0],f[1],f[2],quote(T,f[3],f[1]),card(T),{t:"scan",x:idx(T),q:f[0],rv:f[0]},3);}
+  /* ================= BIG IDEA: best title ================= */
+  function qMain(){var T=text();
+    return C("🦅 Best title?",T.main[0],T.main.slice(1),"The best title covers the WHOLE text, not one line.",card(T),{t:"main",x:idx(T),rv:"Best title for “"+T.lines[0].slice(0,28)+"…”"},3);}
+  /* ================= READ BETWEEN THE LINES: feelings ================= */
+  function withFeel(){var L=D.texts.filter(function(t){return t.feel.length;});
+    var T=text();if(!T.feel.length){cur=rnd(L);uses=2;T=cur;}return T;}
+  function qFeel(){var T=withFeel(),f=rnd(T.feel),bar=[f[1]].concat(CLOSE[f[1]]||[]);
+    var pool=Object.keys(FEEL).filter(function(k){return bar.indexOf(k)<0;}).map(function(k){return FEEL[k];});
+    return C("🕵️ "+f[0],FEEL[f[1]],pool,"Clue: "+quote(T,f[3][f[3].length-1],f[2][f[2].length-1]),card(T,f[3][0]),{t:"feel",x:idx(T),q:f[0],rv:f[0]},3);}
+  /* ================= FACT OR OPINION ================= */
+  function qFO(){var o=Math.random()<0.5,s=rnd(o?D.fo.o:D.fo.f);
+    return C("Fact or opinion?",FO[o?1:0],[FO[o?0:1]],o?"An opinion is what someone thinks: words like best, boring, should.":"A fact can be checked: a number, a date, a place.",
+      '<p class="ch-claim big">'+esc(s)+'</p>',{t:"fo",s:s,o:o,rv:s},1);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    hunt:[qProof],
+    scan:[qScan],
+    main:[qMain],
+    feel:[qFeel],
+    fo:[qFO],
+    mixed:[qProof,qProof,qScan,qScan,qMain,qFeel,qFO]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="fo"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;cur=null;uses=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="hunt"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="hunt"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! That's exam-ready reading.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,FEEL:FEEL}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
