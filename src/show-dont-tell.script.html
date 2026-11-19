@@ -1,0 +1,249 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_show_dont_tell.py read this block: keep it valid JSON; one item per line) ----------
+     show: [feeling key, a first-person line that SHOWS the feeling (body language, actions) without naming it]
+     verb: [sentence with ___, the weak verb it replaces, the strong verb that fits]
+     zoom: [sentence with ___, the most specific detail, [3 vaguer options]]
+     senses: [line, see/hear/smell/taste/touch] */
+  var D=/*DATA*/{
+ "show": [
+  ["hap", "I grinned all the way home from the match."],
+  ["hap", "I skipped down the path, humming my favourite song."],
+  ["hap", "I couldn't stop smiling when I opened the letter."],
+  ["hap", "I laughed so hard that my sides hurt."],
+  ["hap", "I beamed at Granny as she handed me the cake."],
+  ["exc", "I bounced on my toes at the gate."],
+  ["exc", "I couldn't sit still in the car on the way to the airport."],
+  ["exc", "I squealed and jumped up and down when I saw the tickets."],
+  ["exc", "I counted down the sleeps until Christmas."],
+  ["exc", "I ran to the window every five minutes to check for the van."],
+  ["sca", "I froze when the door creaked open behind me."],
+  ["sca", "My heart pounded and I gasped as the lights went out."],
+  ["sca", "The hairs on the back of my neck stood up."],
+  ["sca", "I screamed and grabbed my brother's arm."],
+  ["sca", "I trembled under the duvet as the thunder crashed."],
+  ["ner", "I bit my nails as I waited outside the principal's office."],
+  ["ner", "My palms were sweaty and I swallowed hard before my speech."],
+  ["ner", "I fidgeted with my sleeve while the teacher handed back the tests."],
+  ["ner", "I had butterflies in my stomach before the match."],
+  ["ner", "I tapped my foot and checked my phone again and again."],
+  ["ang", "I clenched my fists and stomped up the stairs."],
+  ["ang", "I slammed my bedroom door so hard that the walls shook."],
+  ["ang", "I gritted my teeth when he took my phone again."],
+  ["ang", "I glared at my brother across the table."],
+  ["ang", "I kicked the bin across the yard."],
+  ["sad", "Tears rolled down my face as the car drove away."],
+  ["sad", "I sniffed and wiped my eyes with my sleeve."],
+  ["sad", "There was a lump in my throat as I said goodbye to Bran."],
+  ["sad", "I slumped on the bench after we lost the final."],
+  ["sad", "I sobbed into my pillow all night."],
+  ["bor", "I yawned for the tenth time that lesson."],
+  ["bor", "I watched the hands of the clock crawl round."],
+  ["bor", "I rested my chin on my hand and stared at the board."],
+  ["bor", "I doodled on the back of my copy for the whole class."],
+  ["bor", "I counted the ceiling tiles while the speaker droned on."],
+  ["emb", "My cheeks burned when everyone turned to look at me."],
+  ["emb", "I blushed bright red when I tripped on the stage."],
+  ["emb", "I wanted the ground to swallow me up."],
+  ["emb", "I stared at my shoes and couldn't look anyone in the eye."],
+  ["emb", "My cheeks went red when the whole class giggled."]
+ ],
+ "verb": [
+  ["Exhausted after training, I ___ up the hill to our house.", "walked", "trudged"],
+  ["The baby was asleep, so I ___ across the landing.", "walked", "crept"],
+  ["I was late for the bus, so I ___ down the road.", "walked", "raced"],
+  ["It was a sunny afternoon with no rush, so we ___ along the beach.", "walked", "strolled"],
+  ["Furious after the row, Dad ___ out of the kitchen.", "walked", "stormed"],
+  ["Worn out after the long day, Granny ___ to the bench.", "walked", "plodded"],
+  ["I ___ past Mam's door so nobody would wake up.", "walked", "tiptoed"],
+  ["The bell was about to ring, so I ___ to class.", "walked", "dashed"],
+  ["“The baby's asleep,” I ___.", "said", "whispered"],
+  ["“Pass it!” I ___ across the pitch.", "said", "shouted"],
+  ["“It's not fair,” he ___ under his breath.", "said", "muttered"],
+  ["“I miss him,” she ___ through her tears.", "said", "sobbed"],
+  ["“Stop tickling me!” Ella ___.", "said", "giggled"],
+  ["“I-I forgot my lines,” he ___ nervously.", "said", "stammered"],
+  ["“Get out of my room!” my sister ___ from upstairs.", "said", "yelled"],
+  ["“Not homework again,” Liam ___ under his breath.", "said", "grumbled"],
+  ["I ___ at my watch for a second and kept running.", "looked", "glanced"],
+  ["I ___ at the painting for ages.", "looked", "stared"],
+  ["I ___ through the fog to find the gate.", "looked", "peered"],
+  ["Furious, she ___ at the boy in her seat.", "looked", "glared"],
+  ["Grandad ___ at the old photo for a long time.", "looked", "gazed"],
+  ["I ___ through the keyhole into the dark room.", "looked", "peered"],
+  ["I was starving, so I ___ my dinner in two minutes.", "ate", "gobbled"],
+  ["I wasn't hungry, so I ___ a corner of my toast.", "ate", "nibbled"],
+  ["Dad ___ his soup straight from the bowl.", "ate", "slurped"],
+  ["The starving dog ___ its food.", "ate", "wolfed"]
+ ],
+ "zoom": [
+  ["I saw ___ outside the shop.", "a scruffy brown terrier", ["an animal", "a dog", "a really nice sort of animal"]],
+  ["We drove there in ___.", "Dad's rusty red Fiesta", ["a car", "a vehicle", "a nice car that was quite old"]],
+  ["For lunch I had ___.", "a warm cheese and ham toastie", ["food", "a sandwich", "something nice to eat"]],
+  ["She wore ___.", "a faded green GAA jersey", ["clothes", "a top", "a top that was nice"]],
+  ["On the shelf there was ___.", "a dusty jar of clove drops", ["a thing", "a jar", "some stuff in a jar"]],
+  ["We heard ___.", "the low rumble of thunder", ["a noise", "a sound", "a really weird kind of noise"]],
+  ["At the end of the garden stood ___.", "an old oak tree with a rope swing", ["a tree", "a plant", "a really big tree in the garden"]],
+  ["My granny gave me ___.", "a soft purple woolly scarf", ["a present", "a thing", "a really nice present for me"]],
+  ["The room smelled of ___.", "burnt toast and wet dog", ["something", "a smell", "something really bad and smelly"]],
+  ["We stayed in ___.", "a tiny white cottage near Dingle", ["a house", "a building", "a nice place to stay"]],
+  ["At the cinema I ate ___.", "a huge tub of salty popcorn", ["food", "snacks", "some stuff to eat and drink"]],
+  ["He was reading ___.", "a battered old comic about pirates", ["a book", "something", "a good book about something"]],
+  ["Outside the window was ___.", "a grey car park full of puddles", ["a place", "a view", "a view of some things outside"]],
+  ["My little sister was holding ___.", "a one-eared pink teddy", ["a toy", "a thing", "a cute toy that she loved"]],
+  ["The teacher wrote ___ on the board.", "three long sums in red marker", ["some things", "some work", "some work for us to do"]],
+  ["For dessert we had ___.", "warm apple tart with cream", ["something sweet", "a pudding", "something sweet and nice"]]
+ ],
+ "senses": [
+  ["Orange street lights glowed along the empty road.", "see"],
+  ["The kitchen was painted a bright yellow.", "see"],
+  ["Grey clouds hung over the harbour.", "see"],
+  ["Shadows stretched across the classroom floor.", "see"],
+  ["A red kite flashed across the blue sky.", "see"],
+  ["Seagulls screamed above the harbour.", "hear"],
+  ["The fridge hummed in the silent kitchen.", "hear"],
+  ["Somewhere a radio played an old song.", "hear"],
+  ["A dog growled behind the gate.", "hear"],
+  ["The bell rang and the hall filled with noise.", "hear"],
+  ["The kitchen smelled of rashers and toast.", "smell"],
+  ["The hall reeked of floor polish.", "smell"],
+  ["A whiff of chips drifted from the van.", "smell"],
+  ["The scent of cut grass came through the window.", "smell"],
+  ["The bins stank after the long weekend.", "smell"],
+  ["The sea spray left salt on my lips.", "taste"],
+  ["The chocolate was rich and sweet.", "taste"],
+  ["The juice tasted sour after the toothpaste.", "taste"],
+  ["Granny's soup was salty and delicious.", "taste"],
+  ["The cough bottle was bitter.", "taste"],
+  ["The railing was icy under my fingers.", "touch"],
+  ["The sand felt soft between my toes.", "touch"],
+  ["Damp leaves stuck to my boots.", "touch"],
+  ["The radiator was too hot to hold.", "touch"],
+  ["My jumper felt rough against my neck.", "touch"]
+ ]
+}/*END*/;
+  var FL={hap:"😊 Happy",exc:"🤩 Excited",sca:"😨 Scared",ner:"😬 Nervous",ang:"😠 Angry",sad:"😢 Sad",bor:"🥱 Bored",emb:"😳 Embarrassed"};
+  var CLOSE={hap:["exc"],exc:["hap"],sca:["ner"],ner:["sca","emb"],emb:["ner"],ang:[],sad:[],bor:[]};
+  var SLAB={see:"👀 Sight",hear:"👂 Sound",smell:"👃 Smell",taste:"👅 Taste",touch:"✋ Touch"};
+  /* strong verbs: one list per weak verb, each inner list = verbs that mean the same thing */
+  var G={walked:[["trudged","plodded"],["crept","tiptoed"],["raced","dashed","sprinted"],["strolled","wandered"],["stormed","stomped"]],
+    said:[["whispered"],["shouted","yelled"],["muttered","grumbled"],["sobbed"],["giggled"],["stammered"]],
+    looked:[["glanced"],["stared","gazed"],["peered"],["glared"]],
+    ate:[["gobbled","wolfed"],["nibbled"],["slurped"]]};
+  var FIXED=Object.keys(FL).map(function(k){return FL[k];}).concat(Object.keys(SLAB).map(function(k){return SLAB[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s,cls){return '<div class="sd-card'+(cls?" "+cls:"")+'"><p>'+s+'</p></div>';}
+  function gap(s){return esc(s).replace("___",'<mark class="gap">?</mark>');}
+  var TELLW={hap:"happy",exc:"excited",sca:"scared",ner:"nervous",ang:"angry",sad:"sad",bor:"bored",emb:"embarrassed"};
+  function far(k){return Object.keys(FL).filter(function(x){return x!==k&&CLOSE[k].indexOf(x)<0;});}
+
+  /* ================= SHOW, DON'T TELL: tell card → pick the line that shows it ================= */
+  function qShow(){var it=rnd(D.show),k=it[0],o=far(k),pool=[];
+    shuffle(o).slice(0,2).forEach(function(x){pool.push(rnd(D.show.filter(function(y){return y[0]===x;}))[1]);});
+    pool.push("I was really, really "+TELLW[k]+".");
+    return C("👀 Show it, don't tell it",it[1],pool,"It shows "+TELLW[k]+" through what you do and feel in your body. “I was really, really "+TELLW[k]+"” still just tells.",
+      card('<span class="sd-tell">Tell</span>'+FL[k].split(" ")[0]+" I was "+TELLW[k]+".","tell"),{t:"show",rv:"Show “I was "+TELLW[k]+"”"},3);}
+  /* ================= FEEL IT: show line → which feeling? ================= */
+  function qFeel(){var it=rnd(D.show),k=it[0];
+    return C("Which feeling?",FL[k],far(k).map(function(x){return FL[x];}),"The clues show "+TELLW[k]+": the line never names the feeling.",card(esc(it[1])),{t:"feel",s:it[1],rv:it[1]},3);}
+  /* ================= FIVE SENSES ================= */
+  function qSense(){var it=rnd(D.senses);
+    return C("Which sense?",SLAB[it[1]],Object.keys(SLAB).filter(function(x){return x!==it[1];}).map(function(x){return SLAB[x];}),"Descriptive writing uses all five senses, not just sight.",card(esc(it[0])),{t:"sense",s:it[0],rv:it[0]},3);}
+  /* ================= STRONG VERBS ================= */
+  function qVerb(){var it=rnd(D.verb),sets=G[it[1]],pool=[];
+    sets.forEach(function(S){if(S.indexOf(it[2])<0)pool.push(rnd(S));});
+    var nw=Math.min(3,pool.length);
+    return C("💪 Stronger than “"+it[1]+"”?",it[2],pool,"“"+it[2]+"” shows HOW: it fits the clue in the sentence.",card(gap(it[0])+' <span class="sd-weak">'+it[1]+'</span>'),{t:"verb",s:it[0],w:it[1],rv:it[0].replace("___",it[1])},nw);}
+  /* ================= ZOOM IN ================= */
+  function qZoom(){var it=rnd(D.zoom);
+    return C("🔍 Zoom in: most detail?",it[1],it[2],"Specific details (“"+it[1]+"”) paint a picture. Vague words (nice, thing, stuff) don't.",card(gap(it[0])),{t:"zoom",rv:it[0].replace("___","…")},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    show:[qShow],
+    feel:[qFeel],
+    sense:[qSense],
+    verb:[qVerb],
+    zoom:[qZoom],
+    mixed:[qShow,qShow,qFeel,qSense,qVerb,qVerb,qZoom]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="show"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="show"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You write like an examiner wants.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,FL:FL,SLAB:SLAB,G:G}};
+})();
+</script>

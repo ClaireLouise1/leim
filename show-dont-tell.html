@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Show, Don't Tell: Descriptive Writing Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game on personal and descriptive writing: show feelings instead of naming them, use the five senses, pick strong verbs and zoom in on specific details. Rules, exam corner with model answers and a printable practice sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.sd-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.sd-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.sd-card.tell{border-style:dashed}
+.sd-card .sd-tell{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.sd-card .sd-weak{display:inline-block;font-size:15px;font-weight:700;color:var(--muted);text-decoration:line-through;margin-left:4px}
+.sd-card mark.gap{background:#D8F1E1;color:var(--green);border-radius:6px;padding:0 10px;font-weight:800}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+@media(max-width:420px){.sd-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Show, Don't Tell</h1>
+        <p>Make your writing come alive: feelings, senses, strong verbs, sharp details. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="show"><div><b>Show, Don't Tell</b><span>👀 “I was scared” → show it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="feel"><div><b>Feel it</b><span>😊 🤩 😨 😬 😠 😢 🥱 😳 Which feeling?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sense"><div><b>Five senses</b><span>👀 👂 👃 👅 ✋</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="verb"><div><b>Strong verbs</b><span>💪 walked → crept</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="zoom"><div><b>Zoom in</b><span>🔍 a dog → a scruffy brown terrier</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Show, Don't Tell, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W3, W4, W9, W7 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Personal &amp; descriptive writing</h2>
+        <p>Good writing lets the reader see, hear and feel what happened. Don't name the feeling: show it.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="sd-card tell"><span class="sd-tell" style="display:block;font-size:12px;font-weight:800;color:var(--muted)">A</span><p>I was scared. The house was dark.</p></div>
+          <div class="sd-card"><span style="display:block;font-size:12px;font-weight:800;color:var(--muted)">B</span><p>My heart pounded. I froze at the bottom of the stairs as the floorboards creaked above me.</p></div>
+        </div>
+        <p style="margin-top:8px">Both are about the same moment. Which one lets you picture it? What does B never say, but you still know? Find the words that show the fear.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A tells:</b> it names the feeling (scared) and gives a vague picture (dark).<br>
+          <b>B shows:</b> it never says “scared”, but the body gives it away: <i>heart pounded, froze</i>. The sound <i>floorboards creaked</i> puts you in the house. The reader works out the feeling, and that's what makes it gripping.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Show the feeling: body clues</h3>
+        <div class="wc">
+          <div class="note"><b class="h">😊 Happy</b>grinned, beamed, laughed</div>
+          <div class="note"><b class="h">🤩 Excited</b>bounced, squealed, couldn't sit still</div>
+          <div class="note"><b class="h">😨 Scared</b>froze, gasped, heart pounded</div>
+          <div class="note"><b class="h">😬 Nervous</b>bit my nails, fidgeted, butterflies</div>
+          <div class="note"><b class="h">😠 Angry</b>clenched fists, slammed, glared</div>
+          <div class="note"><b class="h">😢 Sad</b>tears, a lump in my throat, slumped</div>
+          <div class="note"><b class="h">🥱 Bored</b>yawned, doodled, watched the clock</div>
+          <div class="note"><b class="h">😳 Embarrassed</b>cheeks burned, blushed, stared at my shoes</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Your toolkit</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👀 👂 👃 👅 ✋ Senses</b>Not just sight: what could you hear, smell, taste, touch?</div>
+          <div class="note"><b class="h">💪 Strong verbs</b><i>walked</i> → trudged, crept, raced<br><i>said</i> → whispered, muttered</div>
+          <div class="note"><b class="h">🔍 Zoom in</b><i>a dog</i> → a scruffy brown terrier<br>Cut nice, thing, stuff.</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li><b>Personal writing</b> is about you: use “I”, real moments and how you felt. <b>Descriptive writing</b> paints a place or a moment so the reader is there.</li>
+          <li>Pick <b>one strong verb</b> instead of a weak verb + adverb: “ran quickly” → <i>raced</i>.</li>
+          <li>Don't pile on adjectives. Two sharp details beat five vague ones.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The Junior Cycle paper usually asks you to write: a personal piece, a description, a story or a diary entry, often linked to the paper's theme. Examiners reward writing that is vivid, clear and controlled, not long.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show feelings</b> through actions and body language instead of naming them.</li>
+            <li><b>Use more than sight:</b> one sound, smell or touch detail makes a scene real.</li>
+            <li><b>Precise words</b> (strong verbs, specific nouns) win marks; nice, good, thing and stuff lose them.</li>
+            <li>Stick to the task (diary? description?) and plan: a clear start, middle and ending.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Rewrite this sentence so it <b>shows</b> the feeling: “I was nervous before my first match.”
+              <details><summary>Show a model answer</summary><p>“I tied my laces three times. My stomach was full of butterflies and my hands were so sweaty that the ball slipped when the ref threw it in.”<br><i>Where the marks would go:</i> no feeling word, two or more clear body or action clues, and a detail that puts us at the match.</p></details></li>
+            <li>“The beach was nice.” Rewrite it using <b>three different senses</b>.
+              <details><summary>Show a model answer</summary><p>“Gulls screamed above the waves (sound). The sand was warm and soft under my feet (touch), and the air smelled of salt and suncream (smell).”<br><i>Where the marks would go:</i> three senses, each clearly different, and “nice” replaced by details.</p></details></li>
+            <li>Replace the weak verbs: “I <u>walked</u> to the door. ‘Hello?’ I <u>said</u>, and <u>looked</u> into the dark hall.”
+              <details><summary>Show a model answer</summary><p>“I <b>crept</b> to the door. ‘Hello?’ I <b>whispered</b>, and <b>peered</b> into the dark hall.”<br><i>Where the marks would go:</i> three strong verbs that all fit the tense, quiet mood (not “raced” or “shouted”).</p></details></li>
+            <li>Write the opening paragraph of a personal essay called <b>“The Last Day of Summer”</b>.
+              <details><summary>Show a model answer</summary><p>“The sun was already low over Inchydoney when I dragged my feet out of the sea for the last time. My towel was gritty with sand. Somewhere behind the dunes, Dad was beeping the car horn, and a lump rose in my throat. Tomorrow there would be uniforms, alarm clocks and the smell of new copybooks.”<br><i>Where the marks would go:</i> a clear setting, more than one sense, a feeling shown not told (dragged my feet, a lump in my throat), and a final line that hints at what comes next.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/personal-descriptive-writing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_show_dont_tell.py read this block: keep it valid JSON; one item per line) ----------
+     show: [feeling key, a first-person line that SHOWS the feeling (body language, actions) without naming it]
+     verb: [sentence with ___, the weak verb it replaces, the strong verb that fits]
+     zoom: [sentence with ___, the most specific detail, [3 vaguer options]]
+     senses: [line, see/hear/smell/taste/touch] */
+  var D=/*DATA*/{
+ "show": [
+  ["hap", "I grinned all the way home from the match."],
+  ["hap", "I skipped down the path, humming my favourite song."],
+  ["hap", "I couldn't stop smiling when I opened the letter."],
+  ["hap", "I laughed so hard that my sides hurt."],
+  ["hap", "I beamed at Granny as she handed me the cake."],
+  ["exc", "I bounced on my toes at the gate."],
+  ["exc", "I couldn't sit still in the car on the way to the airport."],
+  ["exc", "I squealed and jumped up and down when I saw the tickets."],
+  ["exc", "I counted down the sleeps until Christmas."],
+  ["exc", "I ran to the window every five minutes to check for the van."],
+  ["sca", "I froze when the door creaked open behind me."],
+  ["sca", "My heart pounded and I gasped as the lights went out."],
+  ["sca", "The hairs on the back of my neck stood up."],
+  ["sca", "I screamed and grabbed my brother's arm."],
+  ["sca", "I trembled under the duvet as the thunder crashed."],
+  ["ner", "I bit my nails as I waited outside the principal's office."],
+  ["ner", "My palms were sweaty and I swallowed hard before my speech."],
+  ["ner", "I fidgeted with my sleeve while the teacher handed back the tests."],
+  ["ner", "I had butterflies in my stomach before the match."],
+  ["ner", "I tapped my foot and checked my phone again and again."],
+  ["ang", "I clenched my fists and stomped up the stairs."],
+  ["ang", "I slammed my bedroom door so hard that the walls shook."],
+  ["ang", "I gritted my teeth when he took my phone again."],
+  ["ang", "I glared at my brother across the table."],
+  ["ang", "I kicked the bin across the yard."],
+  ["sad", "Tears rolled down my face as the car drove away."],
+  ["sad", "I sniffed and wiped my eyes with my sleeve."],
+  ["sad", "There was a lump in my throat as I said goodbye to Bran."],
+  ["sad", "I slumped on the bench after we lost the final."],
+  ["sad", "I sobbed into my pillow all night."],
+  ["bor", "I yawned for the tenth time that lesson."],
+  ["bor", "I watched the hands of the clock crawl round."],
+  ["bor", "I rested my chin on my hand and stared at the board."],
+  ["bor", "I doodled on the back of my copy for the whole class."],
+  ["bor", "I counted the ceiling tiles while the speaker droned on."],
+  ["emb", "My cheeks burned when everyone turned to look at me."],
+  ["emb", "I blushed bright red when I tripped on the stage."],
+  ["emb", "I wanted the ground to swallow me up."],
+  ["emb", "I stared at my shoes and couldn't look anyone in the eye."],
+  ["emb", "My cheeks went red when the whole class giggled."]
+ ],
+ "verb": [
+  ["Exhausted after training, I ___ up the hill to our house.", "walked", "trudged"],
+  ["The baby was asleep, so I ___ across the landing.", "walked", "crept"],
+  ["I was late for the bus, so I ___ down the road.", "walked", "raced"],
+  ["It was a sunny afternoon with no rush, so we ___ along the beach.", "walked", "strolled"],
+  ["Furious after the row, Dad ___ out of the kitchen.", "walked", "stormed"],
+  ["Worn out after the long day, Granny ___ to the bench.", "walked", "plodded"],
+  ["I ___ past Mam's door so nobody would wake up.", "walked", "tiptoed"],
+  ["The bell was about to ring, so I ___ to class.", "walked", "dashed"],
+  ["“The baby's asleep,” I ___.", "said", "whispered"],
+  ["“Pass it!” I ___ across the pitch.", "said", "shouted"],
+  ["“It's not fair,” he ___ under his breath.", "said", "muttered"],
+  ["“I miss him,” she ___ through her tears.", "said", "sobbed"],
+  ["“Stop tickling me!” Ella ___.", "said", "giggled"],
+  ["“I-I forgot my lines,” he ___ nervously.", "said", "stammered"],
+  ["“Get out of my room!” my sister ___ from upstairs.", "said", "yelled"],
+  ["“Not homework again,” Liam ___ under his breath.", "said", "grumbled"],
+  ["I ___ at my watch for a second and kept running.", "looked", "glanced"],
+  ["I ___ at the painting for ages.", "looked", "stared"],
+  ["I ___ through the fog to find the gate.", "looked", "peered"],
+  ["Furious, she ___ at the boy in her seat.", "looked", "glared"],
+  ["Grandad ___ at the old photo for a long time.", "looked", "gazed"],
+  ["I ___ through the keyhole into the dark room.", "looked", "peered"],
+  ["I was starving, so I ___ my dinner in two minutes.", "ate", "gobbled"],
+  ["I wasn't hungry, so I ___ a corner of my toast.", "ate", "nibbled"],
+  ["Dad ___ his soup straight from the bowl.", "ate", "slurped"],
+  ["The starving dog ___ its food.", "ate", "wolfed"]
+ ],
+ "zoom": [
+  ["I saw ___ outside the shop.", "a scruffy brown terrier", ["an animal", "a dog", "a really nice sort of animal"]],
+  ["We drove there in ___.", "Dad's rusty red Fiesta", ["a car", "a vehicle", "a nice car that was quite old"]],
+  ["For lunch I had ___.", "a warm cheese and ham toastie", ["food", "a sandwich", "something nice to eat"]],
+  ["She wore ___.", "a faded green GAA jersey", ["clothes", "a top", "a top that was nice"]],
+  ["On the shelf there was ___.", "a dusty jar of clove drops", ["a thing", "a jar", "some stuff in a jar"]],
+  ["We heard ___.", "the low rumble of thunder", ["a noise", "a sound", "a really weird kind of noise"]],
+  ["At the end of the garden stood ___.", "an old oak tree with a rope swing", ["a tree", "a plant", "a really big tree in the garden"]],
+  ["My granny gave me ___.", "a soft purple woolly scarf", ["a present", "a thing", "a really nice present for me"]],
+  ["The room smelled of ___.", "burnt toast and wet dog", ["something", "a smell", "something really bad and smelly"]],
+  ["We stayed in ___.", "a tiny white cottage near Dingle", ["a house", "a building", "a nice place to stay"]],
+  ["At the cinema I ate ___.", "a huge tub of salty popcorn", ["food", "snacks", "some stuff to eat and drink"]],
+  ["He was reading ___.", "a battered old comic about pirates", ["a book", "something", "a good book about something"]],
+  ["Outside the window was ___.", "a grey car park full of puddles", ["a place", "a view", "a view of some things outside"]],
+  ["My little sister was holding ___.", "a one-eared pink teddy", ["a toy", "a thing", "a cute toy that she loved"]],
+  ["The teacher wrote ___ on the board.", "three long sums in red marker", ["some things", "some work", "some work for us to do"]],
+  ["For dessert we had ___.", "warm apple tart with cream", ["something sweet", "a pudding", "something sweet and nice"]]
+ ],
+ "senses": [
+  ["Orange street lights glowed along the empty road.", "see"],
+  ["The kitchen was painted a bright yellow.", "see"],
+  ["Grey clouds hung over the harbour.", "see"],
+  ["Shadows stretched across the classroom floor.", "see"],
+  ["A red kite flashed across the blue sky.", "see"],
+  ["Seagulls screamed above the harbour.", "hear"],
+  ["The fridge hummed in the silent kitchen.", "hear"],
+  ["Somewhere a radio played an old song.", "hear"],
+  ["A dog growled behind the gate.", "hear"],
+  ["The bell rang and the hall filled with noise.", "hear"],
+  ["The kitchen smelled of rashers and toast.", "smell"],
+  ["The hall reeked of floor polish.", "smell"],
+  ["A whiff of chips drifted from the van.", "smell"],
+  ["The scent of cut grass came through the window.", "smell"],
+  ["The bins stank after the long weekend.", "smell"],
+  ["The sea spray left salt on my lips.", "taste"],
+  ["The chocolate was rich and sweet.", "taste"],
+  ["The juice tasted sour after the toothpaste.", "taste"],
+  ["Granny's soup was salty and delicious.", "taste"],
+  ["The cough bottle was bitter.", "taste"],
+  ["The railing was icy under my fingers.", "touch"],
+  ["The sand felt soft between my toes.", "touch"],
+  ["Damp leaves stuck to my boots.", "touch"],
+  ["The radiator was too hot to hold.", "touch"],
+  ["My jumper felt rough against my neck.", "touch"]
+ ]
+}/*END*/;
+  var FL={hap:"😊 Happy",exc:"🤩 Excited",sca:"😨 Scared",ner:"😬 Nervous",ang:"😠 Angry",sad:"😢 Sad",bor:"🥱 Bored",emb:"😳 Embarrassed"};
+  var CLOSE={hap:["exc"],exc:["hap"],sca:["ner"],ner:["sca","emb"],emb:["ner"],ang:[],sad:[],bor:[]};
+  var SLAB={see:"👀 Sight",hear:"👂 Sound",smell:"👃 Smell",taste:"👅 Taste",touch:"✋ Touch"};
+  /* strong verbs: one list per weak verb, each inner list = verbs that mean the same thing */
+  var G={walked:[["trudged","plodded"],["crept","tiptoed"],["raced","dashed","sprinted"],["strolled","wandered"],["stormed","stomped"]],
+    said:[["whispered"],["shouted","yelled"],["muttered","grumbled"],["sobbed"],["giggled"],["stammered"]],
+    looked:[["glanced"],["stared","gazed"],["peered"],["glared"]],
+    ate:[["gobbled","wolfed"],["nibbled"],["slurped"]]};
+  var FIXED=Object.keys(FL).map(function(k){return FL[k];}).concat(Object.keys(SLAB).map(function(k){return SLAB[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(s,cls){return '<div class="sd-card'+(cls?" "+cls:"")+'"><p>'+s+'</p></div>';}
+  function gap(s){return esc(s).replace("___",'<mark class="gap">?</mark>');}
+  var TELLW={hap:"happy",exc:"excited",sca:"scared",ner:"nervous",ang:"angry",sad:"sad",bor:"bored",emb:"embarrassed"};
+  function far(k){return Object.keys(FL).filter(function(x){return x!==k&&CLOSE[k].indexOf(x)<0;});}
+
+  /* ================= SHOW, DON'T TELL: tell card → pick the line that shows it ================= */
+  function qShow(){var it=rnd(D.show),k=it[0],o=far(k),pool=[];
+    shuffle(o).slice(0,2).forEach(function(x){pool.push(rnd(D.show.filter(function(y){return y[0]===x;}))[1]);});
+    pool.push("I was really, really "+TELLW[k]+".");
+    return C("👀 Show it, don't tell it",it[1],pool,"It shows "+TELLW[k]+" through what you do and feel in your body. “I was really, really "+TELLW[k]+"” still just tells.",
+      card('<span class="sd-tell">Tell</span>'+FL[k].split(" ")[0]+" I was "+TELLW[k]+".","tell"),{t:"show",rv:"Show “I was "+TELLW[k]+"”"},3);}
+  /* ================= FEEL IT: show line → which feeling? ================= */
+  function qFeel(){var it=rnd(D.show),k=it[0];
+    return C("Which feeling?",FL[k],far(k).map(function(x){return FL[x];}),"The clues show "+TELLW[k]+": the line never names the feeling.",card(esc(it[1])),{t:"feel",s:it[1],rv:it[1]},3);}
+  /* ================= FIVE SENSES ================= */
+  function qSense(){var it=rnd(D.senses);
+    return C("Which sense?",SLAB[it[1]],Object.keys(SLAB).filter(function(x){return x!==it[1];}).map(function(x){return SLAB[x];}),"Descriptive writing uses all five senses, not just sight.",card(esc(it[0])),{t:"sense",s:it[0],rv:it[0]},3);}
+  /* ================= STRONG VERBS ================= */
+  function qVerb(){var it=rnd(D.verb),sets=G[it[1]],pool=[];
+    sets.forEach(function(S){if(S.indexOf(it[2])<0)pool.push(rnd(S));});
+    var nw=Math.min(3,pool.length);
+    return C("💪 Stronger than “"+it[1]+"”?",it[2],pool,"“"+it[2]+"” shows HOW: it fits the clue in the sentence.",card(gap(it[0])+' <span class="sd-weak">'+it[1]+'</span>'),{t:"verb",s:it[0],w:it[1],rv:it[0].replace("___",it[1])},nw);}
+  /* ================= ZOOM IN ================= */
+  function qZoom(){var it=rnd(D.zoom);
+    return C("🔍 Zoom in: most detail?",it[1],it[2],"Specific details (“"+it[1]+"”) paint a picture. Vague words (nice, thing, stuff) don't.",card(gap(it[0])),{t:"zoom",rv:it[0].replace("___","…")},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    show:[qShow],
+    feel:[qFeel],
+    sense:[qSense],
+    verb:[qVerb],
+    zoom:[qZoom],
+    mixed:[qShow,qShow,qFeel,qSense,qVerb,qVerb,qZoom]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>14;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="show"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="show"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You write like an examiner wants.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,FL:FL,SLAB:SLAB,G:G}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

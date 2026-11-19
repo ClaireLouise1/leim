@@ -27,6 +27,7 @@ DESC = {
   "Technique Spotter": "imagery and sound in poems: simile, metaphor, personification, alliteration, onomatopoeia and rhyme.",
   "Show, Don't Tell": "personal and descriptive writing: the five senses, strong verbs and showing a feeling instead of naming it.",
   "Talk Tips": "speaking and listening: talking to a group, eye contact, voice, structure and listening well.",
+  "Twist Detector": "short stories: openings, setting, conflict, the turning point and twist endings.",
 }
 cards = []
 # every live game + the next 2 "Coming soon" (CBA guide rows have no game)
@@ -64,7 +65,7 @@ main = f'''<main id="main">
         <a class="btn" href="junior-cycle-english-checklist.html">My topic checklist</a>
         <a class="btn ghost" href="#exam">How the exam works</a>
       </div>
-      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a>, <a href="paragraph-builder.html" style="color:#F6CF5A">Paragraph Builder</a> and <a href="technique-spotter.html" style="color:#F6CF5A">Technique Spotter</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
+      <p style="margin-top:14px;font-size:15px;color:#C9D1DA">The first English games, <a href="word-sort.html" style="color:#F6CF5A">Word Sort</a>, <a href="sentence-surgeon.html" style="color:#F6CF5A">Sentence Surgeon</a>, <a href="comma-catch.html" style="color:#F6CF5A">Comma Catch</a>, <a href="clue-hunt.html" style="color:#F6CF5A">Clue Hunt</a>, <a href="character-clues.html" style="color:#F6CF5A">Character Clues</a>, <a href="spell-strike.html" style="color:#F6CF5A">Spell Strike</a>, <a href="paragraph-builder.html" style="color:#F6CF5A">Paragraph Builder</a>, <a href="technique-spotter.html" style="color:#F6CF5A">Technique Spotter</a> and <a href="show-dont-tell.html" style="color:#F6CF5A">Show, Don't Tell</a>, are live. More are on the way: sign up and we'll tell you when they're ready.</p>
     </div>
     {signup}</section>
 

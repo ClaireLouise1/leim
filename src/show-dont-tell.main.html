@@ -1,0 +1,141 @@
+<main id="main">
+<style>.sd-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:center}
+.sd-card p{margin:0 0 6px;font-size:20px;line-height:1.45;font-weight:600}
+.sd-card.tell{border-style:dashed}
+.sd-card .sd-tell{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.sd-card .sd-weak{display:inline-block;font-size:15px;font-weight:700;color:var(--muted);text-decoration:line-through;margin-left:4px}
+.sd-card mark.gap{background:#D8F1E1;color:var(--green);border-radius:6px;padding:0 10px;font-weight:800}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.exam .pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:1fr 1fr}@media(max-width:560px){.sx{grid-template-columns:1fr}}
+@media(max-width:420px){.sd-card p{font-size:18px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Show, Don't Tell</h1>
+        <p>Make your writing come alive: feelings, senses, strong verbs, sharp details. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="show"><div><b>Show, Don't Tell</b><span>👀 “I was scared” → show it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="feel"><div><b>Feel it</b><span>😊 🤩 😨 😬 😠 😢 🥱 😳 Which feeling?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sense"><div><b>Five senses</b><span>👀 👂 👃 👅 ✋</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="verb"><div><b>Strong verbs</b><span>💪 walked → crept</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="zoom"><div><b>Zoom in</b><span>🔍 a dog → a scruffy brown terrier</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Show, Don't Tell, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W3, W4, W9, W7 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Personal &amp; descriptive writing</h2>
+        <p>Good writing lets the reader see, hear and feel what happened. Don't name the feeling: show it.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="sd-card tell"><span class="sd-tell" style="display:block;font-size:12px;font-weight:800;color:var(--muted)">A</span><p>I was scared. The house was dark.</p></div>
+          <div class="sd-card"><span style="display:block;font-size:12px;font-weight:800;color:var(--muted)">B</span><p>My heart pounded. I froze at the bottom of the stairs as the floorboards creaked above me.</p></div>
+        </div>
+        <p style="margin-top:8px">Both are about the same moment. Which one lets you picture it? What does B never say, but you still know? Find the words that show the fear.</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A tells:</b> it names the feeling (scared) and gives a vague picture (dark).<br>
+          <b>B shows:</b> it never says “scared”, but the body gives it away: <i>heart pounded, froze</i>. The sound <i>floorboards creaked</i> puts you in the house. The reader works out the feeling, and that's what makes it gripping.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Show the feeling: body clues</h3>
+        <div class="wc">
+          <div class="note"><b class="h">😊 Happy</b>grinned, beamed, laughed</div>
+          <div class="note"><b class="h">🤩 Excited</b>bounced, squealed, couldn't sit still</div>
+          <div class="note"><b class="h">😨 Scared</b>froze, gasped, heart pounded</div>
+          <div class="note"><b class="h">😬 Nervous</b>bit my nails, fidgeted, butterflies</div>
+          <div class="note"><b class="h">😠 Angry</b>clenched fists, slammed, glared</div>
+          <div class="note"><b class="h">😢 Sad</b>tears, a lump in my throat, slumped</div>
+          <div class="note"><b class="h">🥱 Bored</b>yawned, doodled, watched the clock</div>
+          <div class="note"><b class="h">😳 Embarrassed</b>cheeks burned, blushed, stared at my shoes</div>
+        </div>
+        <h3 style="font-size:19px;margin:22px 0 8px">Your toolkit</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👀 👂 👃 👅 ✋ Senses</b>Not just sight: what could you hear, smell, taste, touch?</div>
+          <div class="note"><b class="h">💪 Strong verbs</b><i>walked</i> → trudged, crept, raced<br><i>said</i> → whispered, muttered</div>
+          <div class="note"><b class="h">🔍 Zoom in</b><i>a dog</i> → a scruffy brown terrier<br>Cut nice, thing, stuff.</div>
+        </div>
+        <ul style="margin-top:10px">
+          <li><b>Personal writing</b> is about you: use “I”, real moments and how you felt. <b>Descriptive writing</b> paints a place or a moment so the reader is there.</li>
+          <li>Pick <b>one strong verb</b> instead of a weak verb + adverb: “ran quickly” → <i>raced</i>.</li>
+          <li>Don't pile on adjectives. Two sharp details beat five vague ones.</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The Junior Cycle paper usually asks you to write: a personal piece, a description, a story or a diary entry, often linked to the paper's theme. Examiners reward writing that is vivid, clear and controlled, not long.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show feelings</b> through actions and body language instead of naming them.</li>
+            <li><b>Use more than sight:</b> one sound, smell or touch detail makes a scene real.</li>
+            <li><b>Precise words</b> (strong verbs, specific nouns) win marks; nice, good, thing and stuff lose them.</li>
+            <li>Stick to the task (diary? description?) and plan: a clear start, middle and ending.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Rewrite this sentence so it <b>shows</b> the feeling: “I was nervous before my first match.”
+              <details><summary>Show a model answer</summary><p>“I tied my laces three times. My stomach was full of butterflies and my hands were so sweaty that the ball slipped when the ref threw it in.”<br><i>Where the marks would go:</i> no feeling word, two or more clear body or action clues, and a detail that puts us at the match.</p></details></li>
+            <li>“The beach was nice.” Rewrite it using <b>three different senses</b>.
+              <details><summary>Show a model answer</summary><p>“Gulls screamed above the waves (sound). The sand was warm and soft under my feet (touch), and the air smelled of salt and suncream (smell).”<br><i>Where the marks would go:</i> three senses, each clearly different, and “nice” replaced by details.</p></details></li>
+            <li>Replace the weak verbs: “I <u>walked</u> to the door. ‘Hello?’ I <u>said</u>, and <u>looked</u> into the dark hall.”
+              <details><summary>Show a model answer</summary><p>“I <b>crept</b> to the door. ‘Hello?’ I <b>whispered</b>, and <b>peered</b> into the dark hall.”<br><i>Where the marks would go:</i> three strong verbs that all fit the tense, quiet mood (not “raced” or “shouted”).</p></details></li>
+            <li>Write the opening paragraph of a personal essay called <b>“The Last Day of Summer”</b>.
+              <details><summary>Show a model answer</summary><p>“The sun was already low over Inchydoney when I dragged my feet out of the sea for the last time. My towel was gritty with sand. Somewhere behind the dunes, Dad was beeping the car horn, and a lump rose in my throat. Tomorrow there would be uniforms, alarm clocks and the smell of new copybooks.”<br><i>Where the marks would go:</i> a clear setting, more than one sense, a feeling shown not told (dragged my feet, a lump in my throat), and a final line that hints at what comes next.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/personal-descriptive-writing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
