@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 20 Nov 19:36 · E3 English Order 28 Shakespeare (Who Said It?) · english-w28
