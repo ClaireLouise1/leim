@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-20 19:00 · Job 7 What Came Up grids on Exam Centres + Came up in lines · came-up
