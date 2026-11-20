@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speech Marks Sprint: Dialogue, Colons and Semicolons Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English punctuation game: punctuate dialogue with speech marks, pick the mark that goes inside, choose a colon or a semicolon, and turn direct speech into reported speech. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.sm-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.sm-card p{margin:0;font-size:21px;line-height:1.5;font-weight:600}
+.sm-card .sm-l{font-weight:800;font-size:14px;color:var(--muted);margin-bottom:2px}
+.sm-card mark.hl,.pun mark.hl{background:#F6CF5A;border-radius:6px;padding:0 4px}
+.choice .pu,.sm-card .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pun{font-size:18px;line-height:1.6}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.sm-card p{font-size:18px}#choices .choice{font-size:15px}.choices.one .choice{font-size:16px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Speech Marks Sprint</h1>
+        <p>Where does the comma go: inside the speech marks or out? Race through dialogue, pick the right mark, choose a colon or a semicolon, and turn direct speech into reported speech. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sprint"><div><b>Speech Marks Sprint</b><span>💬 Which is right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mark"><div><b>Inside the marks</b><span>✏️ Comma, full stop, ? or !</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="join"><div><b>Colon or semicolon?</b><span>🔗 : or ;</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="report"><div><b>Reported speech</b><span>📝 No speech marks</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Speech Marks Sprint, 5 in a row = 3 bonus seconds. Every sentence here is written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, W10 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Punctuation 2: dialogue, quotes, colons &amp; semicolons</h2>
+        <p>In 1st year you learned commas, capitals and apostrophes (<a href="comma-catch.html">Comma Catch</a>). Now for the marks that make dialogue and longer sentences work: <b>speech marks</b>, <b>colons</b> and <b>semicolons</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note pun"><b class="h">A</b><b class="pu">"</b>I'm starving<b class="pu">,"</b> said Dara<b class="pu">.</b><br><b class="pu">"</b>Can I come too<b class="pu">?"</b> asked Liam<b class="pu">.</b></div>
+          <div class="note pun"><b class="h">B</b>Mam said<b class="pu">, "</b>Dinner is ready<b class="pu">."</b><br>Dad asked<b class="pu">, "</b>Have you seen my keys<b class="pu">?"</b></div>
+        </div>
+        <p style="margin-top:8px">Where do the comma, the question mark and the full stop sit: inside the speech marks or outside? When does the sentence use a comma, and when a full stop?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The mark that ends the speech always goes <b>inside</b> the closing speech mark. In A the speech comes first, so a statement ends with a <b>comma</b> (not a full stop), because the sentence isn't finished yet: <i>said Dara.</i> A question keeps its <b>?</b>, and <i>asked</i> stays small. In B the speech comes last, so there's a <b>comma after said</b>, a <b>capital</b> to start the speech, and the full stop or ? <b>inside</b> the closing mark.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four rules for speech marks</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1. Only the spoken words</b>go inside the speech marks. <i>said Dara</i> stays outside.</div>
+          <div class="note"><b class="h">2. Capital to start</b>the speech, even in the middle of a sentence: <i>Mam said, "Dinner…"</i></div>
+          <div class="note"><b class="h">3. Mark inside</b>the closing speech mark: <i>,"</i> &nbsp;<i>?"</i> &nbsp;<i>!"</i> &nbsp;<i>."</i></div>
+          <div class="note"><b class="h">4. New speaker, new line</b>Every time someone new speaks, start a new line (a new paragraph).</div>
+        </div>
+        <p style="margin-top:8px">Single (<b>' '</b>) or double (<b>" "</b>) speech marks are both fine: pick one and stick with it. Speech marks are also called <b>inverted commas</b> or <b>quotation marks</b>. A split sentence keeps going after the tag: <i>"I know," said Ava, "but it's late."</i> (small <i>b</i>: it's the same sentence).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Direct and reported speech</h3>
+        <div class="sx">
+          <div class="note"><b class="h">💬 Direct speech</b>the exact words, in speech marks:<br><i>"I am tired," said Niamh.</i></div>
+          <div class="note"><b class="h">📝 Reported speech</b>tells what was said: no speech marks, <b>that</b> (or <b>if</b> for a question), I → she, am → was:<br><i>Niamh said that she was tired.</i></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Colon : and semicolon ;</h3>
+        <div class="sx">
+          <div class="note"><b class="h">Colon :</b>introduces a list (or an explanation) after a <b>complete</b> sentence:<br><i>I packed three things: a torch, a map and a flask of tea.</i><br>Not after <i>are</i> or <i>include</i>: <i>The colours are green, white and orange.</i></div>
+          <div class="note"><b class="h">Semicolon ;</b>joins two full sentences that belong together, often a contrast:<br><i>Dara loves hurling; his sister prefers soccer.</i><br>A comma can't do this (that's a run-on). A full stop could.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Quotation marks in your answers</h3>
+        <p>When you quote a text in an answer, put the exact words in quotation marks and keep the quote short: <i>The word "raging" makes the sea sound furious.</i> Titles of poems and short stories go in quotation marks too: <i>In "The Shop", the poet…</i></p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's rarely a question that says "punctuate this", but <b>every written answer is marked partly for accuracy</b>: spelling, grammar and punctuation. Stories almost always need dialogue, and short, well-punctuated dialogue makes a story come alive. In answers on texts, quotation marks around your quotes show the examiner exactly which words you're using.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Punctuate dialogue properly</b>: speech marks, the mark inside, a new line for each new speaker.</li>
+            <li><b>Don't overdo it</b>: a few short lines of dialogue are better than a page of it.</li>
+            <li>Use a <b>colon before a list</b> and a <b>semicolon</b> to link two ideas: it shows control of your writing.</li>
+            <li>Don't use a comma to join two sentences (a run-on).</li>
+            <li>Put <b>quotation marks</b> round every quote in an answer on a text.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass">where is the ferry asked Ella it left ten minutes ago said the man at the pier ella dropped her bag on the ground what am I going to do now she groaned</div>
+          <ol class="eq">
+            <li>Rewrite the passage above with the correct punctuation, starting a new line for each new speaker.
+              <details><summary>Show a model answer</summary><p class="pun">"Where is the ferry?" asked Ella.<br>"It left ten minutes ago," said the man at the pier.<br>Ella dropped her bag on the ground. "What am I going to do now?" she groaned.<br><i>Where the marks would go:</i> speech marks round only the spoken words; ? and , inside the closing marks; small <i>asked</i> / <i>said</i> / <i>she</i> after the speech; capitals for <i>Where</i>, <i>It</i>, <i>Ella</i>, <i>What</i>; a new line for each new speaker.</p></details></li>
+            <li>Add a colon or a semicolon to each sentence: (a) <i>The bag held two surprises a puppy and a note.</i> (b) <i>The morning was grey the afternoon was glorious.</i>
+              <details><summary>Show a model answer</summary><p>(a) <i>The bag held two surprises<b>:</b> a puppy and a note.</i> The colon introduces the list announced by "two surprises".<br>(b) <i>The morning was grey<b>;</b> the afternoon was glorious.</i> Two full sentences that contrast, so a semicolon.<br><i>Where the marks would go:</i> the right mark in each; a short reason.</p></details></li>
+            <li>Change this into reported speech: <i>"I have never seen a puffin," said Conor.</i>
+              <details><summary>Show a model answer</summary><p><i>Conor said that he had never seen a puffin.</i><br><i>Where the marks would go:</i> no speech marks; <i>that</i>; I → he; have → had.</p></details></li>
+            <li>Write four lines of dialogue between two friends who have just missed the bus. Use the punctuation rules from this page.
+              <details><summary>Show a model answer</summary><p class="pun">"Run!" shouted Cian.<br>"It's no use," said Ruth, stopping at the corner. "It's gone."<br>"Mam is going to kill me," Cian groaned.<br>"Not if we walk fast," Ruth said. "Come on."<br><i>Where the marks would go:</i> a new line for each speaker; the right mark inside each closing speech mark; capitals; a mix of tags placed before, after and in the middle; dialogue that moves the story on.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/punctuation-2-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* punctuation shown big and red on the buttons and cards, so a comma or a speech mark is easy to see on a phone */
+  function pu(s){return esc(s).replace(/([,.?!;:"])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_speech_marks.py read this block: keep it valid JSON; one item per line) ----------
+     dlg:  [spoken words with no end mark, the tag ("said Dara" / "Mam said"), a = tag after the speech, b = tag before it]
+           the reporting verb decides the mark: asked / wondered -> ?, shouted / yelled / screamed / cried / roared -> !, else a statement
+     join: [two parts with ___ between, c = colon (a list announced by three / the following / these ...), s = semicolon (two sentences)]
+     rep:  [spoken words, tag after the speech ("said Niamh" / "asked Liam"), the speaker: f / m / p (more than one)] */
+  var D=/*DATA*/
+{
+ "dlg": [
+  ["I'm starving", "said Dara", "a"],
+  ["The bus is late again", "Mam said", "a"],
+  ["Can I come too", "asked Liam", "a"],
+  ["Where are my boots", "asked Ciara", "a"],
+  ["Watch out", "shouted Dad", "a"],
+  ["We won the cup", "yelled Aoife", "a"],
+  ["It's freezing out there", "she whispered", "a"],
+  ["Is the shop still open", "he asked", "a"],
+  ["Get that dog off the couch", "roared Gran", "a"],
+  ["I left my phone on the bus", "Niamh admitted", "a"],
+  ["The match starts at three", "explained the coach", "a"],
+  ["Who ate the last biscuit", "asked Mr Byrne", "a"],
+  ["Help me", "screamed Orla", "a"],
+  ["Nobody tells me anything", "muttered Seán", "a"],
+  ["Did you feed the hens", "Grandad asked", "a"],
+  ["My dog can swim", "said Tadhg proudly", "a"],
+  ["What time is it", "wondered Róisín", "a"],
+  ["Run", "cried Fionn", "a"],
+  ["Can we have pizza", "the twins asked", "a"],
+  ["That was the best day ever", "replied Emma", "a"],
+  ["Dinner is ready", "Mam said", "b"],
+  ["Have you seen my keys", "Dad asked", "b"],
+  ["That was the best day ever", "Aisling said", "b"],
+  ["Stop the bus", "Cian shouted", "b"],
+  ["Are we nearly there", "My little brother asked", "b"],
+  ["The library closes at five", "The librarian said", "b"],
+  ["We have a new puppy", "Leah told us", "b"],
+  ["Why is the sky blue", "Sam asked", "b"],
+  ["Look at the size of that wave", "Grace yelled", "b"],
+  ["I forgot my lunch", "Oisín whispered", "b"],
+  ["How much is a ticket", "The man at the gate asked", "b"],
+  ["Goal", "The commentator roared", "b"],
+  ["Training is cancelled", "Our coach announced", "b"],
+  ["Pass the ball", "Darragh shouted", "b"]
+ ],
+ "join": [
+  ["I packed three things ___ a torch, a map and a flask of tea.", "c"],
+  ["You will need the following ___ a pencil, a ruler and a calculator.", "c"],
+  ["We saw four animals on the farm ___ cows, sheep, goats and a donkey.", "c"],
+  ["Bring these to the match ___ a scarf, a flag and your ticket.", "c"],
+  ["There are three colours on the flag ___ green, white and orange.", "c"],
+  ["The recipe needs only four things ___ flour, eggs, milk and butter.", "c"],
+  ["Gran grows three vegetables ___ potatoes, carrots and cabbage.", "c"],
+  ["I have two favourite subjects ___ art and history.", "c"],
+  ["The shop sells everything for camping ___ tents, stoves, torches and sleeping bags.", "c"],
+  ["We visited three counties on holiday ___ Kerry, Cork and Clare.", "c"],
+  ["Pack the basics for the trip ___ socks, a jumper and a rain jacket.", "c"],
+  ["Our team has two great forwards ___ Aoife and Siobhán.", "c"],
+  ["Dara loves hurling ___ his sister prefers soccer.", "s"],
+  ["Some students walk to school ___ others get the bus.", "s"],
+  ["The first half was dull ___ the second half was brilliant.", "s"],
+  ["Mam likes tea ___ Dad drinks coffee.", "s"],
+  ["The front garden is tidy ___ the back garden is a jungle.", "s"],
+  ["Niamh was nervous before the race ___ her brother was totally relaxed.", "s"],
+  ["I finished my homework early ___ my friend was still working at midnight.", "s"],
+  ["The town was busy on Saturday ___ the beach was nearly empty.", "s"],
+  ["Cats like to sleep all day ___ dogs want to play.", "s"],
+  ["Last year we went to Kerry ___ this year we are going to Donegal.", "s"],
+  ["The old phone was slow ___ the new one is lightning fast.", "s"],
+  ["Grandad grew up in Mayo ___ Gran grew up in Dublin.", "s"]
+ ],
+ "rep": [
+  ["I am tired", "said Niamh", "f"],
+  ["I have lost my key", "said Cian", "m"],
+  ["I can swim fifty lengths", "said Leah", "f"],
+  ["I will help with the dishes", "said Tadhg", "m"],
+  ["My bike is broken", "said Orla", "f"],
+  ["We are going to the cinema", "said the twins", "p"],
+  ["I don't like spiders", "said Fionn", "m"],
+  ["My team has won the league", "said Aoife", "f"],
+  ["I am not scared of the dark", "said Seán", "m"],
+  ["We have finished our project", "said the girls", "p"],
+  ["I can't find my glasses", "said Grandad", "m"],
+  ["My sister is in hospital", "said Ella", "f"],
+  ["Can I come to the party", "asked Liam", "m"],
+  ["Is my dinner ready", "asked Ciara", "f"],
+  ["Am I in the team", "asked Oisín", "m"],
+  ["Will I need a coat", "asked Róisín", "f"],
+  ["Have I missed the bus", "asked Darragh", "m"],
+  ["Are we late", "asked the boys", "p"],
+  ["Can we keep the puppy", "asked the children", "p"],
+  ["Has my parcel arrived", "asked Gran", "f"]
+ ]
+}/*END*/;
+  var QV=["asked","wondered"],EV=["shouted","yelled","screamed","cried","roared"];
+  function kind(tag){var w=tag.toLowerCase().split(" ");
+    if(w.some(function(x){return QV.indexOf(x)>=0;}))return "q";
+    if(w.some(function(x){return EV.indexOf(x)>=0;}))return "e";return "s";}
+  var END_A={s:",",q:"?",e:"!"},END_B={s:".",q:"?",e:"!"};
+  var MARKS=["Comma ,","Full stop .","Question mark ?","Exclamation mark !"],MK={",":"Comma ,",".":"Full stop .","?":"Question mark ?","!":"Exclamation mark !"};
+  var JL={c:"Colon :",s:"Semicolon ;"};
+  var FIXED=MARKS.concat(["Colon :","Semicolon ;"]);
+  function low(s){return s.charAt(0).toLowerCase()+s.slice(1);}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(inner,lab){return '<div class="sm-card">'+(lab?'<div class="sm-l">'+lab+'</div>':'')+'<p>'+inner+'</p></div>';}
+  var GAP='<mark class="hl">&nbsp;&nbsp;&nbsp;</mark>';
+  function build(it){var sp=it[0],tag=it[1],k=kind(tag);
+    return it[2]==="a"?'"'+sp+END_A[k]+'" '+tag+".":tag+', "'+sp+END_B[k]+'"';}
+  var WHY={
+    as:"The comma goes INSIDE the speech marks, before the closing ”.",
+    aq:"The question mark goes INSIDE the speech marks, and the next word (asked) stays small.",
+    ae:"The exclamation mark goes INSIDE the speech marks, and the next word stays small.",
+    bs:"Comma after “said”, then a capital to start the speech, and the full stop INSIDE the closing ”.",
+    bq:"Comma after “asked”, a capital to start the speech, and the question mark INSIDE the closing ”.",
+    be:"Comma before the speech opens, a capital to start it, and the ! INSIDE the closing ”."};
+
+  /* ================= SPEECH MARKS SPRINT: which is right? ================= */
+  function qSprint(){var it=rnd(D.dlg),sp=it[0],tag=it[1],k=kind(tag),ans=build(it),pool=[];
+    if(it[2]==="a"){var m=END_A[k];
+      pool.push('"'+sp+'"'+m+" "+tag+".");              /* mark outside the speech marks */
+      pool.push('"'+sp+m+" "+tag+'."');                 /* the tag inside the speech marks */
+      pool.push(sp+m+" "+tag+".");                      /* no speech marks */
+      pool.push('"'+low(sp)+m+'" '+tag+".");            /* no capital to start the speech */
+      pool.push('"'+sp+'" '+tag+".");                   /* no mark at all */
+      if(k==="s")pool.push('"'+sp+'." '+tag+".");       /* full stop where the comma goes */
+      if(k!=="s"&&tag.charAt(0)===tag.charAt(0).toLowerCase())pool.push('"'+sp+m+'" '+cap(tag)+".");  /* capital after ? or ! */
+    } else {var n=END_B[k];
+      pool.push(tag+' "'+sp+n+'"');                     /* no comma before the speech */
+      pool.push(tag+', "'+sp+'"'+n);                    /* mark outside */
+      pool.push(tag+', "'+low(sp)+n+'"');               /* no capital to start the speech */
+      pool.push(tag+", "+sp+n);                         /* no speech marks */
+      pool.push('"'+tag+", "+sp+n+'"');                 /* speech marks round the tag too */
+      if(k==="s")pool.push(tag+', "'+sp+',"');          /* comma at the very end */
+    }
+    return C("💬 Which is right?",ans,pool,WHY[it[2]+k],"",{t:"sprint",it:it,rv:ans},3);}
+  /* ================= INSIDE THE MARKS: which mark? ================= */
+  function qMark(){var it=rnd(D.dlg),sp=it[0],tag=it[1],k=kind(tag),a=it[2]==="a",mk=(a?END_A:END_B)[k];
+    /* never offered: ! for a statement or question; for a shout, the comma (after) / full stop (before) some books allow */
+    var pool=Object.keys(MK).filter(function(x){return x!==mk&&(k==="e"?x!==(a?",":"."):x!=="!");}).map(function(x){return MK[x];});
+    var html=card(a?pu('"'+sp)+GAP+pu('" '+tag+"."):pu(tag+', "'+sp)+GAP+pu('"'));
+    return C("✏️ Which mark goes inside?",MK[mk],pool,WHY[it[2]+k],html,{t:"mark",it:it,rv:build(it)},2);}
+  /* ================= COLON OR SEMICOLON? ================= */
+  function qJoin(){var it=rnd(D.join),s=it[0],k=it[1];
+    var html=card(esc(s.split(" ___ ")[0])+" "+GAP+" "+esc(s.split(" ___ ")[1]));
+    return C("🔗 Which mark?",JL[k],[k==="c"?JL.s:JL.c,"Comma ,"],
+      k==="c"?"A colon : introduces a list after a complete sentence (“three things:”).":"A semicolon ; joins two full sentences that belong together. A comma can't do that job.",
+      html,{t:"join",s:s,rv:s.replace("___",k==="c"?":":";")},2);}
+  /* ================= REPORTED SPEECH ================= */
+  var PR={f:{I:"she",me:"her",my:"her",My:"Her"},m:{I:"he",me:"him",my:"his",My:"His"},p:{}};
+  var PL={we:"they",We:"They",us:"them",our:"their",Our:"Their"};
+  var BACK={am:"was",is:"was",are:"were",have:"had",has:"had",can:"could",will:"would","don't":"didn't","doesn't":"didn't","can't":"couldn't","won't":"wouldn't","do":"did"};
+  var AGREE={am:"is",have:"has","do":"does","don't":"doesn't"}; /* "she am" is never offered: a kept verb agrees with she / he */
+  function sw(w,g){return PR[g][w]||PL[w]||w;}
+  function who(tag){return cap(tag.split(" ").slice(1).join(" "));}
+  /* mode: 0 = right, 1 = I / my kept, 2 = verb kept (agreeing), 3 = speech marks (statement) or ? (question) kept */
+  function rep(it,mode){var ws=it[0].split(" "),g=it[2],q=it[1].indexOf("asked")===0,out;
+    function verb(w,prev){var lw=w.toLowerCase();if(mode===2){return prev==="I"&&g!=="p"&&AGREE[lw]?AGREE[lw]:lw;}return BACK[lw]||lw;}
+    function pro(w){return mode===1?(w==="My"?"my":w==="We"?"we":w==="Our"?"our":w):sw(w,g);}
+    if(q){var n=(ws[1]==="my"||ws[1]==="our"||ws[1]==="the")?2:1,subj=ws.slice(1,1+n);
+      out=subj.map(pro).concat([verb(ws[0],subj[subj.length-1])]).concat(ws.slice(1+n).map(function(w,i,a){return BACK[w]&&mode!==2?BACK[w]:pro(w);}));
+      if(mode===1){out[out.length-1-ws.slice(1+n).length]=BACK[ws[0].toLowerCase()];}
+      return who(it[1])+" asked if "+out.join(" ")+(mode===3?"?":".");}
+    out=ws.map(function(w,i){return BACK[w]||BACK[w.toLowerCase()]?verb(w,ws[i-1]):pro(w);});
+    if(out[0]!=="I")out[0]=low(out[0]);
+    var body=out.join(" ");
+    if(mode===3)body='"'+cap(it[0])+'."';
+    return who(it[1])+" said that "+body+(mode===3?"":".");}
+  function qReport(){var it=rnd(D.rep),ans=rep(it,0);
+    var html=card(pu(build([it[0],it[1],"a"])),"💬 Direct speech");
+    return C("📝 Which is reported speech?",ans,[rep(it,1),rep(it,2),rep(it,3)],
+      "Reported speech: no speech marks, “that” or “if”, I → "+(it[2]==="f"?"she":it[2]==="m"?"he":"they")+", and the verb moves back (is → was, can → could).",
+      html,{t:"report",it:it,rv:ans},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    sprint:[qSprint],
+    mark:[qMark],
+    join:[qJoin],
+    report:[qReport],
+    mixed:[qSprint,qSprint,qMark,qJoin,qReport]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="report"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sprint"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sprint"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! Your speech marks are spot on.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,rep:rep,build:build,kind:kind}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

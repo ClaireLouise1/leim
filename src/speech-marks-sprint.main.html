@@ -1,0 +1,142 @@
+<main id="main">
+<style>.sm-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.sm-card p{margin:0;font-size:21px;line-height:1.5;font-weight:600}
+.sm-card .sm-l{font-weight:800;font-size:14px;color:var(--muted);margin-bottom:2px}
+.sm-card mark.hl,.pun mark.hl{background:#F6CF5A;border-radius:6px;padding:0 4px}
+.choice .pu,.sm-card .pu,.pun .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+.choices.one .choice{font-size:18px;text-align:left}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pun{font-size:18px;line-height:1.6}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.sm-card p{font-size:18px}#choices .choice{font-size:15px}.choices.one .choice{font-size:16px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Speech Marks Sprint</h1>
+        <p>Where does the comma go: inside the speech marks or out? Race through dialogue, pick the right mark, choose a colon or a semicolon, and turn direct speech into reported speech. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sprint"><div><b>Speech Marks Sprint</b><span>💬 Which is right?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mark"><div><b>Inside the marks</b><span>✏️ Comma, full stop, ? or !</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="join"><div><b>Colon or semicolon?</b><span>🔗 : or ;</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="report"><div><b>Reported speech</b><span>📝 No speech marks</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Speech Marks Sprint, 5 in a row = 3 bonus seconds. Every sentence here is written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W11, W10 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Punctuation 2: dialogue, quotes, colons &amp; semicolons</h2>
+        <p>In 1st year you learned commas, capitals and apostrophes (<a href="comma-catch.html">Comma Catch</a>). Now for the marks that make dialogue and longer sentences work: <b>speech marks</b>, <b>colons</b> and <b>semicolons</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note pun"><b class="h">A</b><b class="pu">"</b>I'm starving<b class="pu">,"</b> said Dara<b class="pu">.</b><br><b class="pu">"</b>Can I come too<b class="pu">?"</b> asked Liam<b class="pu">.</b></div>
+          <div class="note pun"><b class="h">B</b>Mam said<b class="pu">, "</b>Dinner is ready<b class="pu">."</b><br>Dad asked<b class="pu">, "</b>Have you seen my keys<b class="pu">?"</b></div>
+        </div>
+        <p style="margin-top:8px">Where do the comma, the question mark and the full stop sit: inside the speech marks or outside? When does the sentence use a comma, and when a full stop?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The mark that ends the speech always goes <b>inside</b> the closing speech mark. In A the speech comes first, so a statement ends with a <b>comma</b> (not a full stop), because the sentence isn't finished yet: <i>said Dara.</i> A question keeps its <b>?</b>, and <i>asked</i> stays small. In B the speech comes last, so there's a <b>comma after said</b>, a <b>capital</b> to start the speech, and the full stop or ? <b>inside</b> the closing mark.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four rules for speech marks</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1. Only the spoken words</b>go inside the speech marks. <i>said Dara</i> stays outside.</div>
+          <div class="note"><b class="h">2. Capital to start</b>the speech, even in the middle of a sentence: <i>Mam said, "Dinner…"</i></div>
+          <div class="note"><b class="h">3. Mark inside</b>the closing speech mark: <i>,"</i> &nbsp;<i>?"</i> &nbsp;<i>!"</i> &nbsp;<i>."</i></div>
+          <div class="note"><b class="h">4. New speaker, new line</b>Every time someone new speaks, start a new line (a new paragraph).</div>
+        </div>
+        <p style="margin-top:8px">Single (<b>' '</b>) or double (<b>" "</b>) speech marks are both fine: pick one and stick with it. Speech marks are also called <b>inverted commas</b> or <b>quotation marks</b>. A split sentence keeps going after the tag: <i>"I know," said Ava, "but it's late."</i> (small <i>b</i>: it's the same sentence).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Direct and reported speech</h3>
+        <div class="sx">
+          <div class="note"><b class="h">💬 Direct speech</b>the exact words, in speech marks:<br><i>"I am tired," said Niamh.</i></div>
+          <div class="note"><b class="h">📝 Reported speech</b>tells what was said: no speech marks, <b>that</b> (or <b>if</b> for a question), I → she, am → was:<br><i>Niamh said that she was tired.</i></div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Colon : and semicolon ;</h3>
+        <div class="sx">
+          <div class="note"><b class="h">Colon :</b>introduces a list (or an explanation) after a <b>complete</b> sentence:<br><i>I packed three things: a torch, a map and a flask of tea.</i><br>Not after <i>are</i> or <i>include</i>: <i>The colours are green, white and orange.</i></div>
+          <div class="note"><b class="h">Semicolon ;</b>joins two full sentences that belong together, often a contrast:<br><i>Dara loves hurling; his sister prefers soccer.</i><br>A comma can't do this (that's a run-on). A full stop could.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Quotation marks in your answers</h3>
+        <p>When you quote a text in an answer, put the exact words in quotation marks and keep the quote short: <i>The word "raging" makes the sea sound furious.</i> Titles of poems and short stories go in quotation marks too: <i>In "The Shop", the poet…</i></p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's rarely a question that says "punctuate this", but <b>every written answer is marked partly for accuracy</b>: spelling, grammar and punctuation. Stories almost always need dialogue, and short, well-punctuated dialogue makes a story come alive. In answers on texts, quotation marks around your quotes show the examiner exactly which words you're using.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Punctuate dialogue properly</b>: speech marks, the mark inside, a new line for each new speaker.</li>
+            <li><b>Don't overdo it</b>: a few short lines of dialogue are better than a page of it.</li>
+            <li>Use a <b>colon before a list</b> and a <b>semicolon</b> to link two ideas: it shows control of your writing.</li>
+            <li>Don't use a comma to join two sentences (a run-on).</li>
+            <li>Put <b>quotation marks</b> round every quote in an answer on a text.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass">where is the ferry asked Ella it left ten minutes ago said the man at the pier ella dropped her bag on the ground what am I going to do now she groaned</div>
+          <ol class="eq">
+            <li>Rewrite the passage above with the correct punctuation, starting a new line for each new speaker.
+              <details><summary>Show a model answer</summary><p class="pun">"Where is the ferry?" asked Ella.<br>"It left ten minutes ago," said the man at the pier.<br>Ella dropped her bag on the ground. "What am I going to do now?" she groaned.<br><i>Where the marks would go:</i> speech marks round only the spoken words; ? and , inside the closing marks; small <i>asked</i> / <i>said</i> / <i>she</i> after the speech; capitals for <i>Where</i>, <i>It</i>, <i>Ella</i>, <i>What</i>; a new line for each new speaker.</p></details></li>
+            <li>Add a colon or a semicolon to each sentence: (a) <i>The bag held two surprises a puppy and a note.</i> (b) <i>The morning was grey the afternoon was glorious.</i>
+              <details><summary>Show a model answer</summary><p>(a) <i>The bag held two surprises<b>:</b> a puppy and a note.</i> The colon introduces the list announced by "two surprises".<br>(b) <i>The morning was grey<b>;</b> the afternoon was glorious.</i> Two full sentences that contrast, so a semicolon.<br><i>Where the marks would go:</i> the right mark in each; a short reason.</p></details></li>
+            <li>Change this into reported speech: <i>"I have never seen a puffin," said Conor.</i>
+              <details><summary>Show a model answer</summary><p><i>Conor said that he had never seen a puffin.</i><br><i>Where the marks would go:</i> no speech marks; <i>that</i>; I → he; have → had.</p></details></li>
+            <li>Write four lines of dialogue between two friends who have just missed the bus. Use the punctuation rules from this page.
+              <details><summary>Show a model answer</summary><p class="pun">"Run!" shouted Cian.<br>"It's no use," said Ruth, stopping at the corner. "It's gone."<br>"Mam is going to kill me," Cian groaned.<br>"Not if we walk fast," Ruth said. "Come on."<br><i>Where the marks would go:</i> a new line for each speaker; the right mark inside each closing speech mark; capitals; a mix of tags placed before, after and in the middle; dialogue that moves the story on.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/punctuation-2-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

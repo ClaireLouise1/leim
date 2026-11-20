@@ -1,0 +1,264 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* punctuation shown big and red on the buttons and cards, so a comma or a speech mark is easy to see on a phone */
+  function pu(s){return esc(s).replace(/([,.?!;:"])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_speech_marks.py read this block: keep it valid JSON; one item per line) ----------
+     dlg:  [spoken words with no end mark, the tag ("said Dara" / "Mam said"), a = tag after the speech, b = tag before it]
+           the reporting verb decides the mark: asked / wondered -> ?, shouted / yelled / screamed / cried / roared -> !, else a statement
+     join: [two parts with ___ between, c = colon (a list announced by three / the following / these ...), s = semicolon (two sentences)]
+     rep:  [spoken words, tag after the speech ("said Niamh" / "asked Liam"), the speaker: f / m / p (more than one)] */
+  var D=/*DATA*/
+{
+ "dlg": [
+  ["I'm starving", "said Dara", "a"],
+  ["The bus is late again", "Mam said", "a"],
+  ["Can I come too", "asked Liam", "a"],
+  ["Where are my boots", "asked Ciara", "a"],
+  ["Watch out", "shouted Dad", "a"],
+  ["We won the cup", "yelled Aoife", "a"],
+  ["It's freezing out there", "she whispered", "a"],
+  ["Is the shop still open", "he asked", "a"],
+  ["Get that dog off the couch", "roared Gran", "a"],
+  ["I left my phone on the bus", "Niamh admitted", "a"],
+  ["The match starts at three", "explained the coach", "a"],
+  ["Who ate the last biscuit", "asked Mr Byrne", "a"],
+  ["Help me", "screamed Orla", "a"],
+  ["Nobody tells me anything", "muttered Seán", "a"],
+  ["Did you feed the hens", "Grandad asked", "a"],
+  ["My dog can swim", "said Tadhg proudly", "a"],
+  ["What time is it", "wondered Róisín", "a"],
+  ["Run", "cried Fionn", "a"],
+  ["Can we have pizza", "the twins asked", "a"],
+  ["That was the best day ever", "replied Emma", "a"],
+  ["Dinner is ready", "Mam said", "b"],
+  ["Have you seen my keys", "Dad asked", "b"],
+  ["That was the best day ever", "Aisling said", "b"],
+  ["Stop the bus", "Cian shouted", "b"],
+  ["Are we nearly there", "My little brother asked", "b"],
+  ["The library closes at five", "The librarian said", "b"],
+  ["We have a new puppy", "Leah told us", "b"],
+  ["Why is the sky blue", "Sam asked", "b"],
+  ["Look at the size of that wave", "Grace yelled", "b"],
+  ["I forgot my lunch", "Oisín whispered", "b"],
+  ["How much is a ticket", "The man at the gate asked", "b"],
+  ["Goal", "The commentator roared", "b"],
+  ["Training is cancelled", "Our coach announced", "b"],
+  ["Pass the ball", "Darragh shouted", "b"]
+ ],
+ "join": [
+  ["I packed three things ___ a torch, a map and a flask of tea.", "c"],
+  ["You will need the following ___ a pencil, a ruler and a calculator.", "c"],
+  ["We saw four animals on the farm ___ cows, sheep, goats and a donkey.", "c"],
+  ["Bring these to the match ___ a scarf, a flag and your ticket.", "c"],
+  ["There are three colours on the flag ___ green, white and orange.", "c"],
+  ["The recipe needs only four things ___ flour, eggs, milk and butter.", "c"],
+  ["Gran grows three vegetables ___ potatoes, carrots and cabbage.", "c"],
+  ["I have two favourite subjects ___ art and history.", "c"],
+  ["The shop sells everything for camping ___ tents, stoves, torches and sleeping bags.", "c"],
+  ["We visited three counties on holiday ___ Kerry, Cork and Clare.", "c"],
+  ["Pack the basics for the trip ___ socks, a jumper and a rain jacket.", "c"],
+  ["Our team has two great forwards ___ Aoife and Siobhán.", "c"],
+  ["Dara loves hurling ___ his sister prefers soccer.", "s"],
+  ["Some students walk to school ___ others get the bus.", "s"],
+  ["The first half was dull ___ the second half was brilliant.", "s"],
+  ["Mam likes tea ___ Dad drinks coffee.", "s"],
+  ["The front garden is tidy ___ the back garden is a jungle.", "s"],
+  ["Niamh was nervous before the race ___ her brother was totally relaxed.", "s"],
+  ["I finished my homework early ___ my friend was still working at midnight.", "s"],
+  ["The town was busy on Saturday ___ the beach was nearly empty.", "s"],
+  ["Cats like to sleep all day ___ dogs want to play.", "s"],
+  ["Last year we went to Kerry ___ this year we are going to Donegal.", "s"],
+  ["The old phone was slow ___ the new one is lightning fast.", "s"],
+  ["Grandad grew up in Mayo ___ Gran grew up in Dublin.", "s"]
+ ],
+ "rep": [
+  ["I am tired", "said Niamh", "f"],
+  ["I have lost my key", "said Cian", "m"],
+  ["I can swim fifty lengths", "said Leah", "f"],
+  ["I will help with the dishes", "said Tadhg", "m"],
+  ["My bike is broken", "said Orla", "f"],
+  ["We are going to the cinema", "said the twins", "p"],
+  ["I don't like spiders", "said Fionn", "m"],
+  ["My team has won the league", "said Aoife", "f"],
+  ["I am not scared of the dark", "said Seán", "m"],
+  ["We have finished our project", "said the girls", "p"],
+  ["I can't find my glasses", "said Grandad", "m"],
+  ["My sister is in hospital", "said Ella", "f"],
+  ["Can I come to the party", "asked Liam", "m"],
+  ["Is my dinner ready", "asked Ciara", "f"],
+  ["Am I in the team", "asked Oisín", "m"],
+  ["Will I need a coat", "asked Róisín", "f"],
+  ["Have I missed the bus", "asked Darragh", "m"],
+  ["Are we late", "asked the boys", "p"],
+  ["Can we keep the puppy", "asked the children", "p"],
+  ["Has my parcel arrived", "asked Gran", "f"]
+ ]
+}/*END*/;
+  var QV=["asked","wondered"],EV=["shouted","yelled","screamed","cried","roared"];
+  function kind(tag){var w=tag.toLowerCase().split(" ");
+    if(w.some(function(x){return QV.indexOf(x)>=0;}))return "q";
+    if(w.some(function(x){return EV.indexOf(x)>=0;}))return "e";return "s";}
+  var END_A={s:",",q:"?",e:"!"},END_B={s:".",q:"?",e:"!"};
+  var MARKS=["Comma ,","Full stop .","Question mark ?","Exclamation mark !"],MK={",":"Comma ,",".":"Full stop .","?":"Question mark ?","!":"Exclamation mark !"};
+  var JL={c:"Colon :",s:"Semicolon ;"};
+  var FIXED=MARKS.concat(["Colon :","Semicolon ;"]);
+  function low(s){return s.charAt(0).toLowerCase()+s.slice(1);}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(inner,lab){return '<div class="sm-card">'+(lab?'<div class="sm-l">'+lab+'</div>':'')+'<p>'+inner+'</p></div>';}
+  var GAP='<mark class="hl">&nbsp;&nbsp;&nbsp;</mark>';
+  function build(it){var sp=it[0],tag=it[1],k=kind(tag);
+    return it[2]==="a"?'"'+sp+END_A[k]+'" '+tag+".":tag+', "'+sp+END_B[k]+'"';}
+  var WHY={
+    as:"The comma goes INSIDE the speech marks, before the closing ”.",
+    aq:"The question mark goes INSIDE the speech marks, and the next word (asked) stays small.",
+    ae:"The exclamation mark goes INSIDE the speech marks, and the next word stays small.",
+    bs:"Comma after “said”, then a capital to start the speech, and the full stop INSIDE the closing ”.",
+    bq:"Comma after “asked”, a capital to start the speech, and the question mark INSIDE the closing ”.",
+    be:"Comma before the speech opens, a capital to start it, and the ! INSIDE the closing ”."};
+
+  /* ================= SPEECH MARKS SPRINT: which is right? ================= */
+  function qSprint(){var it=rnd(D.dlg),sp=it[0],tag=it[1],k=kind(tag),ans=build(it),pool=[];
+    if(it[2]==="a"){var m=END_A[k];
+      pool.push('"'+sp+'"'+m+" "+tag+".");              /* mark outside the speech marks */
+      pool.push('"'+sp+m+" "+tag+'."');                 /* the tag inside the speech marks */
+      pool.push(sp+m+" "+tag+".");                      /* no speech marks */
+      pool.push('"'+low(sp)+m+'" '+tag+".");            /* no capital to start the speech */
+      pool.push('"'+sp+'" '+tag+".");                   /* no mark at all */
+      if(k==="s")pool.push('"'+sp+'." '+tag+".");       /* full stop where the comma goes */
+      if(k!=="s"&&tag.charAt(0)===tag.charAt(0).toLowerCase())pool.push('"'+sp+m+'" '+cap(tag)+".");  /* capital after ? or ! */
+    } else {var n=END_B[k];
+      pool.push(tag+' "'+sp+n+'"');                     /* no comma before the speech */
+      pool.push(tag+', "'+sp+'"'+n);                    /* mark outside */
+      pool.push(tag+', "'+low(sp)+n+'"');               /* no capital to start the speech */
+      pool.push(tag+", "+sp+n);                         /* no speech marks */
+      pool.push('"'+tag+", "+sp+n+'"');                 /* speech marks round the tag too */
+      if(k==="s")pool.push(tag+', "'+sp+',"');          /* comma at the very end */
+    }
+    return C("💬 Which is right?",ans,pool,WHY[it[2]+k],"",{t:"sprint",it:it,rv:ans},3);}
+  /* ================= INSIDE THE MARKS: which mark? ================= */
+  function qMark(){var it=rnd(D.dlg),sp=it[0],tag=it[1],k=kind(tag),a=it[2]==="a",mk=(a?END_A:END_B)[k];
+    /* never offered: ! for a statement or question; for a shout, the comma (after) / full stop (before) some books allow */
+    var pool=Object.keys(MK).filter(function(x){return x!==mk&&(k==="e"?x!==(a?",":"."):x!=="!");}).map(function(x){return MK[x];});
+    var html=card(a?pu('"'+sp)+GAP+pu('" '+tag+"."):pu(tag+', "'+sp)+GAP+pu('"'));
+    return C("✏️ Which mark goes inside?",MK[mk],pool,WHY[it[2]+k],html,{t:"mark",it:it,rv:build(it)},2);}
+  /* ================= COLON OR SEMICOLON? ================= */
+  function qJoin(){var it=rnd(D.join),s=it[0],k=it[1];
+    var html=card(esc(s.split(" ___ ")[0])+" "+GAP+" "+esc(s.split(" ___ ")[1]));
+    return C("🔗 Which mark?",JL[k],[k==="c"?JL.s:JL.c,"Comma ,"],
+      k==="c"?"A colon : introduces a list after a complete sentence (“three things:”).":"A semicolon ; joins two full sentences that belong together. A comma can't do that job.",
+      html,{t:"join",s:s,rv:s.replace("___",k==="c"?":":";")},2);}
+  /* ================= REPORTED SPEECH ================= */
+  var PR={f:{I:"she",me:"her",my:"her",My:"Her"},m:{I:"he",me:"him",my:"his",My:"His"},p:{}};
+  var PL={we:"they",We:"They",us:"them",our:"their",Our:"Their"};
+  var BACK={am:"was",is:"was",are:"were",have:"had",has:"had",can:"could",will:"would","don't":"didn't","doesn't":"didn't","can't":"couldn't","won't":"wouldn't","do":"did"};
+  var AGREE={am:"is",have:"has","do":"does","don't":"doesn't"}; /* "she am" is never offered: a kept verb agrees with she / he */
+  function sw(w,g){return PR[g][w]||PL[w]||w;}
+  function who(tag){return cap(tag.split(" ").slice(1).join(" "));}
+  /* mode: 0 = right, 1 = I / my kept, 2 = verb kept (agreeing), 3 = speech marks (statement) or ? (question) kept */
+  function rep(it,mode){var ws=it[0].split(" "),g=it[2],q=it[1].indexOf("asked")===0,out;
+    function verb(w,prev){var lw=w.toLowerCase();if(mode===2){return prev==="I"&&g!=="p"&&AGREE[lw]?AGREE[lw]:lw;}return BACK[lw]||lw;}
+    function pro(w){return mode===1?(w==="My"?"my":w==="We"?"we":w==="Our"?"our":w):sw(w,g);}
+    if(q){var n=(ws[1]==="my"||ws[1]==="our"||ws[1]==="the")?2:1,subj=ws.slice(1,1+n);
+      out=subj.map(pro).concat([verb(ws[0],subj[subj.length-1])]).concat(ws.slice(1+n).map(function(w,i,a){return BACK[w]&&mode!==2?BACK[w]:pro(w);}));
+      if(mode===1){out[out.length-1-ws.slice(1+n).length]=BACK[ws[0].toLowerCase()];}
+      return who(it[1])+" asked if "+out.join(" ")+(mode===3?"?":".");}
+    out=ws.map(function(w,i){return BACK[w]||BACK[w.toLowerCase()]?verb(w,ws[i-1]):pro(w);});
+    if(out[0]!=="I")out[0]=low(out[0]);
+    var body=out.join(" ");
+    if(mode===3)body='"'+cap(it[0])+'."';
+    return who(it[1])+" said that "+body+(mode===3?"":".");}
+  function qReport(){var it=rnd(D.rep),ans=rep(it,0);
+    var html=card(pu(build([it[0],it[1],"a"])),"💬 Direct speech");
+    return C("📝 Which is reported speech?",ans,[rep(it,1),rep(it,2),rep(it,3)],
+      "Reported speech: no speech marks, “that” or “if”, I → "+(it[2]==="f"?"she":it[2]==="m"?"he":"they")+", and the verb moves back (is → was, can → could).",
+      html,{t:"report",it:it,rv:ans},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    sprint:[qSprint],
+    mark:[qMark],
+    join:[qJoin],
+    report:[qReport],
+    mixed:[qSprint,qSprint,qMark,qJoin,qReport]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="report"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sprint"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sprint"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! Your speech marks are spot on.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,rep:rep,build:build,kind:kind}};
+})();
+</script>
