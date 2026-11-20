@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 20 Nov 01:40 · E3 English Order 21 Drama 1: how plays work (Stage It) · english-d21
