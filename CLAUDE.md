@@ -13,7 +13,7 @@ Claire-Louise has more than one Payhip store: **Léim** (payhip.com/Leim), **Spr
 
 The full Léim job list lives in the claude.ai project "LEIM REVISION" (claude/leim-todo.md).
 
-**Scheduled auto-build runs log their work in claude/leim-autobuild-log.md (newer than leim-todo.md, which is too long for them to retype). Read it right after leim-todo.md. 20 Nov 04:45: Orders 20 Ad Breaker, 21 Stage It and 22 Format Sort are LIVE; their packs are held as P7 (tmp-839010c8), P8 (tmp-d196610c) and P9 (tmp-30c15d86); next build job is Order 23 Mood Match.**
+**Scheduled auto-build runs log their work in claude/leim-autobuild-log.md (newer than leim-todo.md, which is too long for them to retype). Read it right after leim-todo.md. 20 Nov 07:50: Orders 20 Ad Breaker, 21 Stage It, 22 Format Sort and 23 Mood Match are LIVE; their packs are held as P7 (tmp-839010c8), P8 (tmp-d196610c), P9 (tmp-30c15d86) and P10 (tmp-038768ad); next build job is Order 24 Speech Marks Sprint.**
 
 ## ⚠ More than one chat can work on Léim at once — claim your job first
 Before starting ANY job (a Maths topic, a Payhip change, a page edit), read **WORKING.md** in this repo and follow its rules: claim the job with a pushed commit before you start, pick a different job if another chat has claimed it, and remove your line when you finish. (Rule added 16 Nov 2026 after two chats nearly built the same Maths topic.)
