@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PQE Builder: Point, Quote, Explain Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English game for answering on texts: pick the quote that proves a point, choose the best explanation, quote short and exact, and answer the question asked. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.pq-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;max-width:560px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.pq-card p{margin:5px 0;font-size:18px;line-height:1.4;font-weight:500}.pq-card.one p{font-size:19px}
+.pq-k{display:inline-block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.pq-pt,.pq-qt,.pq-ask{max-width:560px;margin:8px auto 4px;text-align:left;border-radius:12px;padding:8px 14px;font-size:18px;line-height:1.4;font-weight:600}
+.pq-pt{background:#FFF6D6;border:2px dashed #E7C04B}.pq-pt b,.pq-qt b{display:block;font-size:13px;color:var(--muted);letter-spacing:.3px}
+.pq-qt{background:#EAF6EF;border:2px solid #9BD3B4;font-family:Georgia,serif;font-style:italic}.pq-qt b{font-family:Inter,sans-serif;font-style:normal}
+.pq-ask{background:var(--night);color:#fff}
+.pqe3{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.pqe3{grid-template-columns:1fr}}
+.pqe3 .note{margin:0;font-size:15px}.pqe3 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+@media(max-width:420px){.pq-card p{font-size:16px}.pq-card.one p{font-size:17px}.pq-pt,.pq-qt,.pq-ask{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">PQE Builder</h1>
+        <p>Answering on texts: make a point, back it up with a short quote, and explain how the words prove it. Works for any novel, poem, play or film you study. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="pqe"><div><b>PQE Builder</b><span>🔎 Which quote proves the point?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="point"><div><b>Answer the question</b><span>❓ Pick the point that answers it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="part"><div><b>Which part?</b><span>💡 Point, 🔎 quote or 🧠 explain?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="explain"><div><b>Explain it</b><span>🧠 Pick the best explanation</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="exact"><div><b>Short &amp; exact</b><span>✂️ The best way to quote</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In PQE Builder, 5 in a row = 3 bonus seconds. All the texts are written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R3, R4, R7, W7, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Answering on texts: point, quote, explain</h2>
+        <p>Almost every question on a text (an unseen extract, a poem, your novel, play or film) wants the same three things: a clear <b>point</b> that answers the question, a <b>quote</b> that proves it, and an <b>explanation</b> of how the words prove it. Some schools call it PQE, PEE or PIE: it's the same idea.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>Answer 1:</b> Aoife is nervous. She is waiting outside the music room and then she goes in and plays her violin and afterwards she is happy.</span><span class="sp"><b>Answer 2:</b> Aoife is nervous before her audition. As she opens the case, “her hands trembled”. The word ‘trembled’ shows how anxious she is: her body gives her away.</span></div>
+        <p style="margin-top:8px">Both answers make the same point. Which one would get more marks? What does it have that the other doesn't?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Answer 2. Answer 1 makes a point and then <b>retells the story</b>: there's no evidence. Answer 2 has a <b>point</b> (Aoife is nervous), a short, exact <b>quote</b> (“her hands trembled”) and an <b>explanation</b> that zooms in on one word (‘trembled’) and links it back to the point (anxious). That's PQE.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The three parts</h3>
+        <div class="pqe3">
+          <div class="note"><b class="h">💡 Point</b>Answer the question in your own words, in one sentence. Use the question's key word: “Cian is lonely at his new school.”</div>
+          <div class="note"><b class="h">🔎 Quote</b>A few words, copied exactly, in quotation marks, built into your sentence: On his first day he “ate his lunch alone”.</div>
+          <div class="note"><b class="h">🧠 Explain</b>Zoom in on one word and say how it proves the point: “The word ‘alone’ suggests nobody wants to know him yet.”</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Quoting well</h3>
+        <ul>
+          <li><b>Short:</b> 2–6 words is usually enough. A whole line copied out wastes time and hides the key word.</li>
+          <li><b>Exact:</b> copy the words as they are. “hands were shaking” is not the same as “hands trembled”.</li>
+          <li><b>Marked:</b> put quotation marks around the writer's words, so the examiner can see what's yours and what's theirs.</li>
+          <li><b>Built in:</b> When the ref gave a free, Saoirse “clenched” her fists. The sentence still reads well.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Explaining well</h3>
+        <p>Useful starters: <b>The word ‘…’ suggests …</b> · <b>This shows …</b> · <b>The verb ‘…’ makes … sound …</b> · <b>This tells us …</b>. Three ways an explanation goes wrong:</p>
+        <ul>
+          <li><b>Retelling:</b> “This means her hands were trembling while she opened the case.” (It only says the quote again.)</li>
+          <li><b>Off the point:</b> “‘Trembled’ shows she is angry.” (It argues a different point.)</li>
+          <li><b>Vague:</b> “This is a good quote because it shows what she is like.” (Which word? Like what?)</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Everywhere you answer on a text: questions on an <b>unseen extract</b> (a story, a poem, a non-fiction piece), and questions on the <b>novel, drama, poetry and film</b> you studied. The questions say things like “Use evidence from the text”, “Support your answer with reference to…” or “Explain your answer”. Marks go to a <b>clear point</b> that answers the question, <b>evidence</b> (a short quote or a precise reference) and an <b>explanation</b>, not to retelling the story.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question asked</b>: use its key word in your first sentence.</li>
+            <li><b>One point, one quote, one explanation</b>, then the next point. Two or three PQEs beat one long paragraph.</li>
+            <li><b>Quote briefly and exactly</b>, in quotation marks.</li>
+            <li><b>Explain the words</b>: name the word that matters and what it suggests.</li>
+            <li>Don't retell the story, and don't just drop a quote in with no explanation.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The extract is original. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>The Ferry</b>
+            <span class="sp">Niamh stood at the rail as the ferry pulled away from Cape Clear. Her grandmother was a small shape on the pier, waving and waving. Niamh's throat tightened, and she gripped the cold rail until her knuckles turned white. Behind her, her little brother was already chattering about the chipper in Baltimore. She didn't turn round. She watched the island until the mist swallowed it.</span></div>
+          <ol class="eq">
+            <li>How does Niamh feel as the ferry leaves? Support your answer with one short quote.
+              <details><summary>Show a model answer</summary><p>Niamh is <b>sad to leave</b> her grandmother. Her “throat tightened”, as if she is trying not to cry. The verb ‘tightened’ suggests she is holding back tears, so we can feel how hard the goodbye is for her.<br><i>Where the marks would go:</i> a clear point (sad / upset to leave); a short, exact quote; an explanation of one word that links back to the feeling.</p></details></li>
+            <li>The writer says Niamh “gripped the cold rail until her knuckles turned white”. What does this tell us? Explain.
+              <details><summary>Show a model answer</summary><p>It shows how <b>tense and upset</b> she is. Gripping something until your knuckles go white takes real force, so the writer <b>shows</b> her feelings through her body instead of telling us. ‘Cold’ adds to the sad, bleak mood of the goodbye.<br><i>Where the marks would go:</i> the feeling named; how the action shows it (show, don't tell); a comment on another word (‘cold’).</p></details></li>
+            <li>Here are a student's point and quote: <i>“Niamh's brother is not upset. He is ‘already chattering about the chipper in Baltimore’.”</i> Write the explanation.
+              <details><summary>Show a model answer</summary><p>The word ‘already’ suggests he has forgotten about the goodbye straight away, and ‘chattering’ makes him sound cheerful and carefree. This <b>contrasts</b> with Niamh's silence, so her sadness stands out even more.<br><i>Where the marks would go:</i> zooming in on a word (‘already’ or ‘chattering’); what it suggests; the link to the point (not upset), with credit for spotting the contrast.</p></details></li>
+            <li>Choose a character from a novel or play you studied. Make one point about them, and back it up with a short quote and an explanation. Then add a second PQE.
+              <details><summary>Show a model answer</summary><p><i>Plan for any text:</i> (1) Point: “[Character] is [quality] in [this moment].” (2) Quote: 2–6 words you know exactly, in quotation marks. (3) Explain: “The word ‘…’ suggests …, which shows ….” (4) Second point on a different quality or moment, with its own quote and explanation. (5) A closing line on whether the character changes.<br><i>Where the marks would go:</i> two clear points that answer the question; accurate short quotes; explanations that zoom in on words; no plot retelling.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> 2026 (H4, H8, O6, O9) · 2025 (H3, H6, O6, O12) · 2024 (H4, H8, O7, O11) · 2023 (H5, O4, O10) · 2022 (H5–6, H10, O10, O13) (H = Higher level question, O = Ordinary level question). See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/answering-on-texts-pqe-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_pqe_builder.py read this block: keep it valid JSON; one item per line) ----------
+     texts:   {k, title, lines: 4, q: a short quote from each line, keys: the feeling/mood each line shows ("" = none), pts: the point each line proves}
+     answers: [point sentence, quote sentence, explain sentence]
+     explain: [point, quote, good explanation, retell, explains a different feeling, vague]
+     exact:   [point, line, short exact quote, misquote, no quotation marks]
+     qs:      [question, the point that answers it, [3 points that don't]]
+     src/test_pqe_builder.py re-checks everything with its own word lists (it never reads keys). */
+  var D=/*DATA*/{
+ "texts": [
+  {"k": "📖 Story", "title": "The Audition", "lines": ["Aoife waited outside the music room in Ennis with her violin case.", "Her hands trembled as she undid the clasp of the case.", "When her name was called, she gritted her teeth and walked straight in.", "Afterwards she grinned all the way down the corridor."], "q": ["waited outside the music room", "Her hands trembled", "she gritted her teeth", "grinned all the way down the corridor"], "keys": ["", "nervous", "determined", "joyful"], "pts": ["", "Aoife is nervous before the audition.", "Aoife is determined to go through with it.", "Aoife is delighted when it is over."]},
+  {"k": "📖 Story", "title": "The New School", "lines": ["On his first day in Athlone, Cian ate his lunch alone on the wall.", "The yard was grey and puddles covered the cracked concrete.", "Then a girl called Hana sat down and offered him half her orange.", "Cian smiled for the first time that week."], "q": ["ate his lunch alone on the wall", "The yard was grey", "offered him half her orange", "smiled for the first time"], "keys": ["lonely", "gloomy", "kind", "joyful"], "pts": ["Cian feels lonely at his new school.", "The yard is a dreary place.", "Hana is kind to Cian.", "Cian is happy at the end."]},
+  {"k": "📔 Diary", "title": "The County Final", "lines": ["Saturday. The bus to the county final left Thurles at nine.", "I couldn't stop fidgeting with my gumshield the whole way.", "When the ref gave the other team a free, I clenched my fists.", "We won by a point and I danced around the pitch with the cup."], "q": ["left Thurles at nine", "fidgeting with my gumshield", "I clenched my fists", "danced around the pitch"], "keys": ["", "nervous", "angry", "joyful"], "pts": ["", "Saoirse is anxious before the final.", "Saoirse is angry at the referee's decision.", "Saoirse is overjoyed when they win."]},
+  {"k": "📝 Poem", "title": "Lough Gur at Dusk", "lines": ["The water lapped against the reeds", "A heron fished beside the jetty", "Then footsteps crunched on the path behind me", "The sky turned grey and the rain began"], "q": ["The water lapped", "A heron fished", "footsteps crunched", "the rain began"], "keys": ["peaceful", "", "tense", "gloomy"], "pts": ["The poet creates a peaceful mood at the start.", "", "The footsteps create tension.", "The ending feels dreary."]},
+  {"k": "📖 Story", "title": "The Castle", "lines": ["Darragh built a model of Bunratty Castle for the history project.", "Twice the tower collapsed, but he glued it back and kept going.", "When his little sister knocked it over, he slammed the door.", "On Friday he held it up for the whole class to see."], "q": ["a model of Bunratty Castle", "glued it back and kept going", "he slammed the door", "held it up for the whole class"], "keys": ["", "determined", "angry", "proud"], "pts": ["", "Darragh won't give up on his model.", "Darragh is furious with his sister.", "Darragh is proud of his model."]},
+  {"k": "📖 Story", "title": "Next Door", "lines": ["Every Tuesday, Mr Daly walked to the shop in the drizzle.", "Since his wife died, he spoke to no one all week.", "One day Ellen from next door helped him carry his bags home.", "Now he waits at the gate, grinning."], "q": ["in the drizzle", "he spoke to no one", "helped him carry his bags", "waits at the gate, grinning"], "keys": ["gloomy", "lonely", "kind", "joyful"], "pts": ["The weather is dreary.", "Mr Daly is lonely.", "Ellen is kind.", "Mr Daly is happy now."]},
+  {"k": "📝 Poem", "title": "Storm Night", "lines": ["The wind howled round the chimney", "Mam lit a candle on the table", "My little brother giggled under the blanket", "and the rain beat grey against the glass"], "q": ["The wind howled", "Mam lit a candle", "giggled under the blanket", "the rain beat grey"], "keys": ["tense", "", "joyful", "gloomy"], "pts": ["The wind makes the night tense.", "", "The little brother is happy.", "The weather is gloomy."]},
+  {"k": "📖 Story", "title": "Galtymore", "lines": ["The fog came down as Kevin and his dad reached the ridge.", "Every rock looked the same and his stomach churned.", "His dad put an arm around him and shared his last biscuit.", "They reached the car at six, tired and laughing."], "q": ["The fog came down", "his stomach churned", "shared his last biscuit", "tired and laughing"], "keys": ["gloomy", "nervous", "kind", "joyful"], "pts": ["The fog makes the mountain gloomy.", "Kevin is worried.", "His dad is caring.", "They are happy at the end."]},
+  {"k": "📔 Diary", "title": "The Talent Show", "lines": ["Wednesday. Ms Walsh put up the list for the talent show.", "My name was missing, and I sat by myself at break.", "So I asked again and again until she let me audition.", "Tonight I sang in front of the whole school and they cheered."], "q": ["put up the list", "I sat by myself at break", "I asked again and again", "they cheered"], "keys": ["", "lonely", "determined", "joyful"], "pts": ["", "Leah feels left out.", "Leah refuses to give up.", "Leah is delighted at the end."]},
+  {"k": "📖 Story", "title": "Grandad's Kitchen", "lines": ["Oisín stormed into the kitchen and threw his bag on the floor.", "His grandad was peeling potatoes by the window.", "He handed Oisín a cup of tea and listened to the whole story.", "By the end, Oisín stood a little taller."], "q": ["stormed into the kitchen", "peeling potatoes", "handed Oisín a cup of tea", "stood a little taller"], "keys": ["angry", "", "kind", "proud"], "pts": ["Oisín is furious.", "", "Grandad is thoughtful.", "Oisín feels proud by the end."]},
+  {"k": "📝 Poem", "title": "Inchydoney, June", "lines": ["Soft waves fold onto the sand", "A dog races after a ball", "Children whoop and splash", "and an ice-cream van plays its tune"], "q": ["Soft waves", "A dog races", "Children whoop and splash", "an ice-cream van"], "keys": ["peaceful", "", "joyful", ""], "pts": ["The beach is calm.", "", "The children are happy.", ""]},
+  {"k": "📖 Story", "title": "The Empty House", "lines": ["Róisín pushed open the door of the old cottage near Clonmel.", "The floorboards creaked under her feet in the silence.", "Dust lay thick on the bare, faded chairs.", "But under the stairs she found her grandmother's letters, and she beamed."], "q": ["pushed open the door", "floorboards creaked", "the bare, faded chairs", "and she beamed"], "keys": ["", "tense", "gloomy", "joyful"], "pts": ["", "The writer builds tension.", "The house is dreary.", "Róisín is delighted."]}
+ ],
+ "answers": [
+  ["Aoife is nervous before her audition.", "As she opens the case, “her hands trembled”.", "The word ‘trembled’ shows how anxious she is."],
+  ["Cian feels lonely at his new school.", "On his first day he “ate his lunch alone on the wall”.", "The word ‘alone’ suggests that nobody wants to know him yet."],
+  ["Darragh refuses to give up on his model.", "When the tower falls, he “glued it back and kept going”.", "This shows how determined he is to finish it."],
+  ["Ellen is a kind neighbour.", "She “helped him carry his bags home”.", "This tells us she notices Mr Daly needs help."],
+  ["The poet makes the start of the poem peaceful.", "We hear that “the water lapped against the reeds”.", "The verb ‘lapped’ is soft and gentle, which creates a calm mood."],
+  ["Saoirse is furious with the referee.", "When he gives a free, she says, “I clenched my fists”.", "This suggests she is trying to hold her temper in."],
+  ["Leah will not take no for an answer.", "She tells us she “asked again and again”.", "The repeated word ‘again’ shows she is stubborn."],
+  ["Oisín is very angry when he gets home.", "He “stormed into the kitchen”.", "The verb ‘stormed’ makes him sound like a wild storm."],
+  ["The old cottage feels tense and eerie.", "The writer tells us the “floorboards creaked” in the silence.", "Here the sound suggests that someone could be there."],
+  ["The storm makes the night feel frightening.", "In the first line “the wind howled round the chimney”.", "The word ‘howled’ makes the wind sound like a wild animal."],
+  ["Kevin is worried when the fog comes down.", "We are told that “his stomach churned”.", "This shows that his fear is physical: he feels sick with worry."],
+  ["The beach is a happy, lively place.", "In the poem the “Children whoop and splash”.", "These sounds suggest fun and freedom on a summer day."],
+  ["Mr Daly's life is empty since his wife died.", "The writer tells us “he spoke to no one all week”.", "The phrase ‘no one’ shows how cut off he is."],
+  ["Hana is generous to Cian.", "She “offered him half her orange”.", "This small act suggests that she wants him to feel welcome."],
+  ["Róisín is delighted by what she finds.", "When she finds the letters, “she beamed”.", "The word ‘beamed’ suggests a big, bright smile."],
+  ["Darragh is proud of his work.", "On Friday he “held it up for the whole class to see”.", "This tells us he wants everyone to admire what he made."]
+ ],
+ "explain": [
+  ["Aoife is nervous.", "Her hands trembled as she undid the clasp", "The word ‘trembled’ shows how nervous she is: her body gives her away.", "This means that her hands were trembling while she was undoing the clasp of her case.", "The word ‘trembled’ shows that she is angry with her teacher.", "This quote is a good one because it shows what Aoife is like."],
+  ["Cian feels lonely.", "ate his lunch alone on the wall", "The word ‘alone’ suggests he feels lonely and shut out.", "This tells us that on his first day Cian ate his lunch on the wall by himself.", "The word ‘wall’ shows that Cian is proud of his new school.", "This is a really good quote and it proves my point about Cian."],
+  ["Darragh is determined.", "he glued it back and kept going", "The phrase ‘kept going’ shows he is determined: one setback won't stop him.", "Darragh glued the tower back on when it collapsed and then he kept on going with the model.", "The word ‘glued’ suggests that Darragh is lonely and has no friends.", "Darragh is a character who does a lot of things in this story."],
+  ["Mr Daly is lonely.", "he spoke to no one all week", "The phrase ‘no one all week’ makes his life sound empty and lonely.", "Since his wife died he did not talk to anybody at all for the whole week.", "The phrase ‘no one’ shows that Mr Daly is calm and relaxed.", "This shows a lot about him and it is very effective."],
+  ["The opening is peaceful.", "The water lapped against the reeds", "The soft verb ‘lapped’ creates a calm, peaceful mood.", "The poet says that the water of the lake was lapping against the reeds at the edge.", "The verb ‘lapped’ creates a tense mood full of suspense.", "The poet uses lovely words in this line of the poem."],
+  ["Saoirse is angry.", "I clenched my fists", "‘Clenched’ suggests she is furious but trying to hold it in.", "She clenched her fists when the referee gave the free to the other team in the final.", "‘Clenched’ suggests she is nervous before the match starts.", "This quote shows how the writer feels at that moment."],
+  ["Leah won't give up.", "I asked again and again", "Repeating ‘again’ shows how stubborn she is.", "Leah went back to Ms Walsh and asked her many times if she could audition.", "Repeating ‘again’ shows how lonely she feels at break.", "This is an important line in the diary entry."],
+  ["The storm night is tense.", "The wind howled round the chimney", "‘Howled’ makes the wind sound like a wild animal and adds tension.", "In the poem the wind is howling around the chimney of the house all night.", "‘Howled’ makes the night sound peaceful and calm.", "The poet describes the weather in this line."],
+  ["Ellen is kind.", "helped him carry his bags home", "The word ‘helped’ shows she is kind: she notices he needs a hand.", "Ellen, who lives next door, helped Mr Daly to carry all of his shopping bags back home.", "The word ‘bags’ shows that Ellen is angry and impatient.", "This tells us what Ellen did one day in the story."],
+  ["Kevin is worried.", "his stomach churned", "‘Churned’ suggests he feels sick with worry.", "When the fog came down Kevin's stomach churned because every rock looked the same.", "‘Churned’ suggests he is proud of climbing the mountain.", "This is a great example of good writing."],
+  ["Róisín is delighted.", "and she beamed", "‘Beamed’ suggests a smile so wide it lights up her face: she is overjoyed.", "At the end of the story Róisín finds her grandmother's letters under the stairs and she beams.", "‘Beamed’ suggests she is tense and frightened in the dark.", "This shows the ending of the story."],
+  ["The house is gloomy.", "Dust lay thick on the bare, faded chairs", "The words ‘bare’ and ‘faded’ make the room feel gloomy and forgotten.", "The chairs in the cottage were covered in thick dust and they were bare and faded.", "The word ‘dust’ makes the room feel calm and peaceful.", "The writer describes the furniture in the house."],
+  ["Oisín is proud at the end.", "he stood a little taller", "‘Stood a little taller’ suggests his pride has come back.", "By the end of the story Oisín was standing up a bit taller than before.", "‘Taller’ suggests he is lonely and left out.", "This is how the story ends."],
+  ["Hana is kind.", "offered him half her orange", "The word ‘offered’ shows she is generous and thoughtful.", "Hana sat down beside Cian and gave him half of her orange to eat.", "The word ‘offered’ shows she is nervous about talking to him.", "This is a nice moment in the story."]
+ ],
+ "exact": [
+  ["Aoife is nervous.", "Her hands trembled as she undid the clasp of the case.", "hands trembled", "hands were shaking", "her hands were shaky"],
+  ["Cian is lonely.", "On his first day in Athlone, Cian ate his lunch alone on the wall.", "ate his lunch alone", "ate his dinner alone", "he had lunch on his own"],
+  ["Darragh won't give up.", "Twice the tower collapsed, but he glued it back and kept going.", "kept going", "kept on going", "he kept at it"],
+  ["Saoirse is angry.", "When the ref gave the other team a free, I clenched my fists.", "I clenched my fists", "I clenched my hands", "she made fists"],
+  ["The opening is peaceful.", "The water lapped gently against the reeds at the edge of the lake.", "lapped gently", "lapped softly", "the water was calm"],
+  ["Mr Daly is lonely.", "Since his wife died, he spoke to no one from Monday to Sunday.", "spoke to no one", "talked to no one", "he didn't talk to people"],
+  ["The storm is tense.", "All night the wind howled round the chimney like a hungry wolf.", "the wind howled", "the wind roared", "the wind was loud"],
+  ["Kevin is worried.", "Every rock on the ridge looked the same, and his stomach churned.", "his stomach churned", "his stomach turned", "he felt sick"],
+  ["Leah won't give up.", "So I asked again and again until Ms Walsh let me audition.", "asked again and again", "asked over and over", "she kept asking"],
+  ["Róisín is delighted.", "Under the stairs she found her grandmother's letters, and she beamed.", "she beamed", "she smiled", "she was really happy"],
+  ["Oisín is furious.", "Oisín stormed into the kitchen and threw his bag on the floor.", "stormed into the kitchen", "stomped into the kitchen", "he came in angry"],
+  ["The cottage is gloomy.", "Dust lay thick on the bare, faded chairs in the front room.", "bare, faded chairs", "bare, old chairs", "the chairs were old"],
+  ["Ellen is kind.", "One day Ellen from next door helped him carry his bags home.", "helped him carry his bags", "helped carry his shopping", "she helps him"],
+  ["The children are happy.", "Down at the water the children whoop and splash in the waves.", "whoop and splash", "shout and splash", "they play in the sea"]
+ ],
+ "qs": [
+  ["How does the writer show that Aoife is nervous?", "Aoife is anxious: her hands shake as she opens the case.", ["Aoife is excited about playing her violin for the judges.", "Aoife plays the violin.", "Aoife is cross with the judges for keeping her waiting."]],
+  ["How does the writer show that Cian is lonely?", "Cian is isolated: he eats his lunch on the wall by himself.", ["Cian is proud of his new uniform on his first day.", "Cian is new in Athlone.", "Cian is angry with his parents for moving house."]],
+  ["How does the writer show that Ellen is kind?", "Ellen is caring towards Mr Daly.", ["Ellen is nervous about meeting her new neighbour, Mr Daly.", "Ellen lives next door.", "Ellen gets very cross when Mr Daly's bags are heavy."]],
+  ["How does the poet create a peaceful mood at the start?", "Gentle sounds make the lake calm.", ["The heron standing in the reeds makes the lake feel tense.", "It is set at Lough Gur.", "The rain at the end makes the whole lake feel gloomy."]],
+  ["How does the writer build tension in the cottage?", "The creaking floor and the silence put us on edge.", ["Finding the letters under the stairs makes Róisín happy.", "It is near Clonmel.", "The bare, faded chairs make the front room dreary."]],
+  ["How does the writer show that Darragh is determined?", "Darragh won't give up.", ["Darragh is angry with his little sister for knocking it over.", "He makes a castle.", "Darragh is proud when he shows the class on Friday."]],
+  ["How does the writer show that Saoirse is angry?", "Saoirse is furious with the ref.", ["Saoirse is nervous on the long bus journey from Thurles.", "The final is on Saturday.", "Saoirse is overjoyed when her team wins the cup."]],
+  ["How does the poet make the storm night gloomy?", "Grey rain against the glass makes the night dreary.", ["The giggling little brother makes the night feel joyful.", "Mam lights a candle.", "The howling wind round the chimney makes the night tense."]],
+  ["How does the writer show that Leah is happy at the end?", "Leah is delighted by the cheers.", ["Leah feels left out when she sits by herself at break.", "The list goes up.", "Leah is stubborn and keeps asking Ms Walsh again and again."]],
+  ["How does the writer show that Oisín is proud at the end?", "Oisín's pride comes back.", ["Oisín is furious when he storms into the kitchen.", "Grandad peels potatoes.", "Grandad is a thoughtful listener who makes him a cup of tea."]],
+  ["How does the writer show that Kevin's dad is caring?", "Kevin's dad is kind: he comforts him and shares his food.", ["Kevin's dad is worried when the fog comes down on the ridge.", "They climb Galtymore.", "Kevin's dad is delighted when they reach the car at six."]],
+  ["How does the writer show that Mr Daly is happy at the end?", "Mr Daly is joyful now.", ["Mr Daly has been lonely since his wife died.", "He walks to the shop.", "The weather in the story is grey and dreary."]]
+ ]
+}/*END*/;
+  var LAB={p:"💡 Point",q:"🔎 Quote",e:"🧠 Explain"};
+  var FIXED=[LAB.p,LAB.q,LAB.e];
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function dq(s){return "“"+s+"”";}
+  function textCard(T){return '<div class="pq-card"><span class="pq-k">'+esc(T.k)+' · '+esc(T.title)+'</span>'+T.lines.map(function(l){return '<p>'+esc(l)+'</p>';}).join("")+'</div>';}
+  function pointCard(p){return '<div class="pq-pt"><b>💡 Point</b> '+esc(p)+'</div>';}
+  function quoteCard(q){return '<div class="pq-qt"><b>🔎 Quote</b> “'+esc(q)+'”</div>';}
+  function lineCard(l){return '<div class="pq-card one"><p>'+esc(l)+'</p></div>';}
+
+  /* ================= PQE BUILDER: which quote proves the point? ================= */
+  var keepT=null,keepN=0;
+  function pickText(){if(keepT!==null&&keepN<2){keepN++;return keepT;}keepT=Math.floor(Math.random()*D.texts.length);keepN=1;return keepT;}
+  function qPQE(){var ti=pickText(),T=D.texts[ti],ks=[];T.keys.forEach(function(k,i){if(k)ks.push(i);});var li=rnd(ks);
+    var pool=T.q.filter(function(q,i){return i!==li&&T.keys[i]!==T.keys[li];}).map(dq);
+    return C("🔎 Which quote proves it?",dq(T.q[li]),pool,"“"+T.q[li]+"” is the evidence: "+T.pts[li].replace(/\.$/,"")+".",textCard(T)+pointCard(T.pts[li]),{t:"pqe",ti:ti,li:li,rv:T.title+": "+T.pts[li]},3);}
+  /* ================= ANSWER THE QUESTION ================= */
+  function qPoint(){var it=rnd(D.qs);
+    return C("❓ Which point answers it?",it[1],it[2],"Answer the question you're asked: “"+it[0]+"”",'<div class="pq-ask">'+esc(it[0])+'</div>',{t:"point",q:it[0],rv:it[0]},3);}
+  /* ================= WHICH PART? ================= */
+  var PWHY={p:"The point answers the question in your own words. No quote yet.",q:"The quote: the writer's exact words, in quotation marks.",e:"The explanation: how the words prove the point (“The word … shows …”)."};
+  function qPart(){var a=rnd(D.answers),i=Math.floor(Math.random()*3),k="pqe"[i];
+    return C("Which part is this?",LAB[k],[LAB.p,LAB.q,LAB.e].filter(function(x){return x!==LAB[k];}),PWHY[k],'<div class="pq-card one"><p>'+esc(a[i])+'</p></div>',{t:"part",s:a[i],rv:a[i]},2);}
+  /* ================= EXPLAIN IT ================= */
+  function qExplain(){var ei=Math.floor(Math.random()*D.explain.length),it=D.explain[ei];
+    return C("🧠 Best explanation?",it[2],it.slice(3),"A good explanation picks out a word from the quote and says how it proves the point.",pointCard(it[0])+quoteCard(it[1]),{t:"explain",p:it[0],q:it[1],rv:it[0]+" “"+it[1]+"”"},3);}
+  /* ================= SHORT & EXACT ================= */
+  function qExact(){var it=rnd(D.exact);
+    return C("✂️ Best way to quote it?",dq(it[2]),[dq(it[1]),dq(it[3]),it[4]],"Quote a few words, exactly as written, in quotation marks.",lineCard(it[1])+pointCard(it[0]),{t:"exact",p:it[0],line:it[1],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    pqe:[qPQE],
+    point:[qPoint],
+    part:[qPart],
+    explain:[qExplain],
+    exact:[qExact],
+    mixed:[qPQE,qPQE,qPoint,qPart,qExplain,qExact]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="pqe"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="pqe"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! Point, quote, explain: sorted.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){var key=m.review+"|"+m.said;if(seen[key])return;seen[key]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,LAB:LAB}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

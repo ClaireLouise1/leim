@@ -107,7 +107,7 @@ ENGLISH = [
   ("3rd year","Autumn","Editing & redrafting: proofreading your own work","W1, W6, W13, W2","Proofread Patrol","proofread-patrol.html","editing-redrafting"),
   ("3rd year","Autumn","Film: camera shots, sound & key scenes","R9, R7, OL8, W8","Shot Spotter","shot-spotter.html","film-shots-sound-key-scenes"),
   ("3rd year","Autumn","Shakespeare (Higher Level only)","R6, R7, R8, R4, OL8","Who Said It?","who-said-it.html","shakespeare"),
-  ("3rd year","Spring","Answering on texts: point, quote, explain","R3, R4, R7, W7, W8","PQE Builder","",""),
+  ("3rd year","Spring","Answering on texts: point, quote, explain","R3, R4, R7, W7, W8","PQE Builder","pqe-builder.html","answering-on-texts-pqe"),
   ("3rd year","Spring","Comparing texts & characters","R6, R7, R9, W8","Compare Cards","",""),
   ("3rd year","Spring","Non-literary & visual texts","R3, R9, R12, OL8","Fact or Opinion","",""),
   ("3rd year","Summer","Exam technique & exam mix","R3, R7, W1, W3, W4, W11","Exam Mix","",""),

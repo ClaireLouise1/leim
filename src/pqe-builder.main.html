@@ -1,0 +1,141 @@
+<main id="main">
+<style>.pq-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;max-width:560px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.pq-card p{margin:5px 0;font-size:18px;line-height:1.4;font-weight:500}.pq-card.one p{font-size:19px}
+.pq-k{display:inline-block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.pq-pt,.pq-qt,.pq-ask{max-width:560px;margin:8px auto 4px;text-align:left;border-radius:12px;padding:8px 14px;font-size:18px;line-height:1.4;font-weight:600}
+.pq-pt{background:#FFF6D6;border:2px dashed #E7C04B}.pq-pt b,.pq-qt b{display:block;font-size:13px;color:var(--muted);letter-spacing:.3px}
+.pq-qt{background:#EAF6EF;border:2px solid #9BD3B4;font-family:Georgia,serif;font-style:italic}.pq-qt b{font-family:Inter,sans-serif;font-style:normal}
+.pq-ask{background:var(--night);color:#fff}
+.pqe3{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.pqe3{grid-template-columns:1fr}}
+.pqe3 .note{margin:0;font-size:15px}.pqe3 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+@media(max-width:420px){.pq-card p{font-size:16px}.pq-card.one p{font-size:17px}.pq-pt,.pq-qt,.pq-ask{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">PQE Builder</h1>
+        <p>Answering on texts: make a point, back it up with a short quote, and explain how the words prove it. Works for any novel, poem, play or film you study. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="pqe"><div><b>PQE Builder</b><span>🔎 Which quote proves the point?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="point"><div><b>Answer the question</b><span>❓ Pick the point that answers it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="part"><div><b>Which part?</b><span>💡 Point, 🔎 quote or 🧠 explain?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="explain"><div><b>Explain it</b><span>🧠 Pick the best explanation</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="exact"><div><b>Short &amp; exact</b><span>✂️ The best way to quote</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In PQE Builder, 5 in a row = 3 bonus seconds. All the texts are written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R3, R4, R7, W7, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Answering on texts: point, quote, explain</h2>
+        <p>Almost every question on a text (an unseen extract, a poem, your novel, play or film) wants the same three things: a clear <b>point</b> that answers the question, a <b>quote</b> that proves it, and an <b>explanation</b> of how the words prove it. Some schools call it PQE, PEE or PIE: it's the same idea.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>Answer 1:</b> Aoife is nervous. She is waiting outside the music room and then she goes in and plays her violin and afterwards she is happy.</span><span class="sp"><b>Answer 2:</b> Aoife is nervous before her audition. As she opens the case, “her hands trembled”. The word ‘trembled’ shows how anxious she is: her body gives her away.</span></div>
+        <p style="margin-top:8px">Both answers make the same point. Which one would get more marks? What does it have that the other doesn't?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Answer 2. Answer 1 makes a point and then <b>retells the story</b>: there's no evidence. Answer 2 has a <b>point</b> (Aoife is nervous), a short, exact <b>quote</b> (“her hands trembled”) and an <b>explanation</b> that zooms in on one word (‘trembled’) and links it back to the point (anxious). That's PQE.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The three parts</h3>
+        <div class="pqe3">
+          <div class="note"><b class="h">💡 Point</b>Answer the question in your own words, in one sentence. Use the question's key word: “Cian is lonely at his new school.”</div>
+          <div class="note"><b class="h">🔎 Quote</b>A few words, copied exactly, in quotation marks, built into your sentence: On his first day he “ate his lunch alone”.</div>
+          <div class="note"><b class="h">🧠 Explain</b>Zoom in on one word and say how it proves the point: “The word ‘alone’ suggests nobody wants to know him yet.”</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Quoting well</h3>
+        <ul>
+          <li><b>Short:</b> 2–6 words is usually enough. A whole line copied out wastes time and hides the key word.</li>
+          <li><b>Exact:</b> copy the words as they are. “hands were shaking” is not the same as “hands trembled”.</li>
+          <li><b>Marked:</b> put quotation marks around the writer's words, so the examiner can see what's yours and what's theirs.</li>
+          <li><b>Built in:</b> When the ref gave a free, Saoirse “clenched” her fists. The sentence still reads well.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Explaining well</h3>
+        <p>Useful starters: <b>The word ‘…’ suggests …</b> · <b>This shows …</b> · <b>The verb ‘…’ makes … sound …</b> · <b>This tells us …</b>. Three ways an explanation goes wrong:</p>
+        <ul>
+          <li><b>Retelling:</b> “This means her hands were trembling while she opened the case.” (It only says the quote again.)</li>
+          <li><b>Off the point:</b> “‘Trembled’ shows she is angry.” (It argues a different point.)</li>
+          <li><b>Vague:</b> “This is a good quote because it shows what she is like.” (Which word? Like what?)</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Everywhere you answer on a text: questions on an <b>unseen extract</b> (a story, a poem, a non-fiction piece), and questions on the <b>novel, drama, poetry and film</b> you studied. The questions say things like “Use evidence from the text”, “Support your answer with reference to…” or “Explain your answer”. Marks go to a <b>clear point</b> that answers the question, <b>evidence</b> (a short quote or a precise reference) and an <b>explanation</b>, not to retelling the story.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question asked</b>: use its key word in your first sentence.</li>
+            <li><b>One point, one quote, one explanation</b>, then the next point. Two or three PQEs beat one long paragraph.</li>
+            <li><b>Quote briefly and exactly</b>, in quotation marks.</li>
+            <li><b>Explain the words</b>: name the word that matters and what it suggests.</li>
+            <li>Don't retell the story, and don't just drop a quote in with no explanation.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The extract is original. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>The Ferry</b>
+            <span class="sp">Niamh stood at the rail as the ferry pulled away from Cape Clear. Her grandmother was a small shape on the pier, waving and waving. Niamh's throat tightened, and she gripped the cold rail until her knuckles turned white. Behind her, her little brother was already chattering about the chipper in Baltimore. She didn't turn round. She watched the island until the mist swallowed it.</span></div>
+          <ol class="eq">
+            <li>How does Niamh feel as the ferry leaves? Support your answer with one short quote.
+              <details><summary>Show a model answer</summary><p>Niamh is <b>sad to leave</b> her grandmother. Her “throat tightened”, as if she is trying not to cry. The verb ‘tightened’ suggests she is holding back tears, so we can feel how hard the goodbye is for her.<br><i>Where the marks would go:</i> a clear point (sad / upset to leave); a short, exact quote; an explanation of one word that links back to the feeling.</p></details></li>
+            <li>The writer says Niamh “gripped the cold rail until her knuckles turned white”. What does this tell us? Explain.
+              <details><summary>Show a model answer</summary><p>It shows how <b>tense and upset</b> she is. Gripping something until your knuckles go white takes real force, so the writer <b>shows</b> her feelings through her body instead of telling us. ‘Cold’ adds to the sad, bleak mood of the goodbye.<br><i>Where the marks would go:</i> the feeling named; how the action shows it (show, don't tell); a comment on another word (‘cold’).</p></details></li>
+            <li>Here are a student's point and quote: <i>“Niamh's brother is not upset. He is ‘already chattering about the chipper in Baltimore’.”</i> Write the explanation.
+              <details><summary>Show a model answer</summary><p>The word ‘already’ suggests he has forgotten about the goodbye straight away, and ‘chattering’ makes him sound cheerful and carefree. This <b>contrasts</b> with Niamh's silence, so her sadness stands out even more.<br><i>Where the marks would go:</i> zooming in on a word (‘already’ or ‘chattering’); what it suggests; the link to the point (not upset), with credit for spotting the contrast.</p></details></li>
+            <li>Choose a character from a novel or play you studied. Make one point about them, and back it up with a short quote and an explanation. Then add a second PQE.
+              <details><summary>Show a model answer</summary><p><i>Plan for any text:</i> (1) Point: “[Character] is [quality] in [this moment].” (2) Quote: 2–6 words you know exactly, in quotation marks. (3) Explain: “The word ‘…’ suggests …, which shows ….” (4) Second point on a different quality or moment, with its own quote and explanation. (5) A closing line on whether the character changes.<br><i>Where the marks would go:</i> two clear points that answer the question; accurate short quotes; explanations that zoom in on words; no plot retelling.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> 2026 (H4, H8, O6, O9) · 2025 (H3, H6, O6, O12) · 2024 (H4, H8, O7, O11) · 2023 (H5, O4, O10) · 2022 (H5–6, H10, O10, O13) (H = Higher level question, O = Ordinary level question). See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/answering-on-texts-pqe-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
