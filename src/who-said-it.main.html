@@ -1,0 +1,161 @@
+<main id="main">
+<style>.ws-q{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;max-width:540px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.ws-play{display:inline-block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.ws-t{display:block;font-family:Georgia,serif;font-style:italic;font-size:21px;line-height:1.4}
+.ws-t mark.hl{background:#F6CF5A;font-style:normal;font-weight:700;padding:0 3px;border-radius:4px}
+.ws-ord{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;max-width:540px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.ws-ord p{margin:6px 0;font-size:18px;line-height:1.35;font-weight:500}.ws-ord p b{display:inline-block;min-width:26px;background:#F6CF5A;border-radius:6px;text-align:center;margin-right:6px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sb{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.sb{grid-template-columns:1fr}}
+.sb .note{margin:0;font-size:15px}.sb .note b.h{display:block;font-size:16px;margin-bottom:4px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}.pass .sp b{font-variant:small-caps;letter-spacing:.5px}
+@media(max-width:420px){.ws-t{font-size:18px}.ws-ord p{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Higher Level · Free game</span>
+        <h1 style="margin-top:12px">Who Said It?</h1>
+        <p>Shakespeare for Higher Level. Match famous lines to the character, put the key moments in order, crack the old words and name the technique. Lines from <i>Romeo and Juliet</i>, <i>The Merchant of Venice</i> and <i>Julius Caesar</i>. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="who"><div><b>Who Said It?</b><span>🎭 Match the line to the character</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Plot order</b><span>🔢 Put the key moments in order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="old"><div><b>Old words</b><span>📜 Thou, thee, wherefore…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tech"><div><b>Techniques</b><span>🖋️ Oxymoron, simile, couplet…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Who Said It?, 5 in a row = 3 bonus seconds. Every line is checked against the text of the play.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R8, R4, OL8 (2015 specification) · Higher Level</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Shakespeare (Higher Level)</h2>
+        <p>At Higher Level you study <b>one full Shakespeare play</b>. The plays on the Department's list for the 2028–2030 exams are <i>As You Like It</i>, <i>Julius Caesar</i>, <i>The Merchant of Venice</i> and <i>Romeo and Juliet</i> (check with your teacher which list your year uses). The game uses the last three. You don't need to learn the whole play off by heart: you need to know the <b>story</b>, the <b>characters</b>, a handful of <b>key scenes</b> and some <b>short quotes</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>Juliet:</b> “Deny <u>thy</u> father and refuse <u>thy</u> name.”</span><span class="sp"><b>Tybalt:</b> “<u>Thou</u> art a villain.”</span><span class="sp"><b>Tybalt:</b> “I hate … all Montagues, and <u>thee</u>.”</span></div>
+        <p style="margin-top:8px">Thou, thee and thy all mean one thing in modern English. What is it? When do you think each one is used?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">They all mean <b>you</b>. They follow the same pattern as I / me / my: <b>thou</b> = you doing the action (like I), <b>thee</b> = you on the receiving end (like me), <b>thy</b> = your (like my). Shakespeare's characters use thou to friends, family and people below them, and the more formal “you” to people above them, so a sudden switch can show anger or affection. The verbs change too: thou <b>art</b> (are), thou <b>dost</b> (do), he <b>doth</b> (does), he <b>hath</b> (has).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Old words to know</h3>
+        <div class="wc">
+          <div class="note"><b class="h">wherefore</b>why (not where!)</div>
+          <div class="note"><b class="h">'tis · ere · oft</b>it is · before · often</div>
+          <div class="note"><b class="h">ay · nay</b>yes · no</div>
+          <div class="note"><b class="h">anon · tarry</b>in a moment · wait</div>
+          <div class="note"><b class="h">hence · yond</b>go away / from here · that … over there</div>
+          <div class="note"><b class="h">prithee · sooth</b>please · truth</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How Shakespeare writes</h3>
+        <div class="wc">
+          <div class="note"><b class="h">Verse</b>lines with a beat (often 10 syllables, da-DUM × 5). Noble characters and big feelings.</div>
+          <div class="note"><b class="h">Prose</b>ordinary sentences. Servants, jokes, and characters who've lost control.</div>
+          <div class="note"><b class="h">Soliloquy</b>a character alone on stage speaks their thoughts: we hear the truth.</div>
+          <div class="note"><b class="h">Aside</b>a quick comment to the audience that the others on stage can't hear.</div>
+          <div class="note"><b class="h">Dramatic irony</b>we know something a character doesn't (we know Juliet isn't really dead).</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Techniques to spot</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🔀 Oxymoron</b>two opposites side by side: “sweet sorrow”, “loving hate”.</div>
+          <div class="note"><b class="h">🤝 Simile</b>a comparison with like or as: “as boundless as the sea”.</div>
+          <div class="note"><b class="h">🎵 Rhyming couplet</b>two rhyming lines, often at the end of a scene.</div>
+          <div class="note"><b class="h">❓ Rhetorical question</b>asked for effect: “Hath not a Jew eyes?”</div>
+          <div class="note"><b class="h">🔁 Repetition</b>“For Brutus is an honourable man” said again and again until it sounds like a lie.</div>
+          <div class="note"><b class="h">😏 Pun</b>a play on words: the dying Mercutio's “a grave man”.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Key moments</h3>
+        <div class="sb">
+          <div class="note"><b class="h">📕 Romeo and Juliet</b>The party → the balcony → the secret wedding → Mercutio and Tybalt die → Capulet's fury → the potion → the tomb.</div>
+          <div class="note"><b class="h">💰 The Merchant of Venice</b>The loan and the bond → Jessica runs away → Shylock's revenge → the caskets → the trial: mercy, then “no blood” → Belmont.</div>
+          <div class="note"><b class="h">🗡️ Julius Caesar</b>The Soothsayer's warning → Cassius works on Brutus → the plot → Caesar is stabbed → Antony's speech → war → Brutus dies.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Answering on Shakespeare</h3>
+        <p>Make a <b>point</b>, back it with a <b>short quote</b> (a few words is best), and <b>explain</b> what the words show. Name the scene (“in Act 3, Scene 1”), say how the audience feels, and mention <b>staging</b> when it helps: what would we see and hear on stage? Learn 3–4 short quotes for each main character and for each big theme (love and hate, fate, revenge, mercy, ambition, loyalty).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Higher Level only. The paper can give you an <b>extract from a Shakespeare play</b> (sometimes one you haven't studied) and ask about character, language and staging, and it can ask about <b>the Shakespeare play you studied</b>: a key scene, a character, a theme, or how you would stage a moment. Marks go to <b>short, accurate quotes</b>, a clear <b>point</b> each time and an <b>explanation</b> of how the language or staging works, not to retelling the plot.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Quote briefly and accurately</b>: a few words, in quotation marks, spelt right.</li>
+            <li><b>Explain every quote</b>: what do the words show? Why that word?</li>
+            <li><b>Know where it happens</b>: the act, the scene, what has just happened.</li>
+            <li><b>Think like a director</b>: how would you stage it? Lighting, movement, tone of voice.</li>
+            <li>Don't retell the story. One sentence of plot is enough.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The extract is from <i>Romeo and Juliet</i>, Act 3, Scene 1. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><i>Tybalt has just stabbed Mercutio under Romeo's arm, as Romeo tried to stop the fight.</i>
+            <span class="sp"><b>Mercutio:</b> I am hurt. A plague o' both your houses! I am sped.</span>
+            <span class="sp"><b>Benvolio:</b> What, art thou hurt?</span>
+            <span class="sp"><b>Mercutio:</b> Ay, ay, a scratch, a scratch; marry, 'tis enough. Where is my page? Go, villain, fetch a surgeon.</span>
+            <span class="sp"><b>Romeo:</b> Courage, man; the hurt cannot be much.</span>
+            <span class="sp"><b>Mercutio:</b> No, 'tis not so deep as a well, nor so wide as a church-door; but 'tis enough, 'twill serve: ask for me to-morrow, and you shall find me a grave man. … Why the devil came you between us? I was hurt under your arm.</span>
+            <span class="sp"><b>Romeo:</b> I thought all for the best.</span></div>
+          <ol class="eq">
+            <li>Mercutio calls his wound “a scratch, a scratch”. What does this show about him?
+              <details><summary>Show a model answer</summary><p>It shows Mercutio is <b>brave and proud</b>, and still joking: he plays down a deadly wound as “a scratch”. But “'tis enough” and “fetch a surgeon” tell us he knows it is serious. The audience realises before Romeo does that he is dying (dramatic irony), so the joke makes the moment sadder.<br><i>Where the marks would go:</i> a clear quality; the quote; the gap between what he says and what he knows; the effect on the audience.</p></details></li>
+            <li>Explain the pun in “you shall find me a grave man”. Why do you think Shakespeare gives Mercutio a joke here?
+              <details><summary>Show a model answer</summary><p>“Grave” means <b>serious</b> and also a <b>grave</b> to be buried in: tomorrow he'll be a serious man because he'll be dead. Mercutio has joked all through the play, so he dies as he lived, with wordplay. The joke also shows the turn in the play: the comedy stops here and the tragedy begins.<br><i>Where the marks would go:</i> both meanings; what it shows about Mercutio; why it matters at this point in the play.</p></details></li>
+            <li>“A plague o' both your houses!” Why is this line so important to the play as a whole?
+              <details><summary>Show a model answer</summary><p>Mercutio is neither a Capulet nor a Montague, yet the <b>feud</b> has killed him, so he curses <b>both</b> families. The curse seems to come true: from this moment everything goes wrong (Tybalt's death, Romeo's banishment, the deaths in the tomb). He repeats it three times, so the audience can't miss it.<br><i>Where the marks would go:</i> who he blames and why; the link to later events (fate, the feud); the effect of the repetition.</p></details></li>
+            <li>Choose a key scene from the Shakespeare play you studied. Explain why it is a turning point, and how you would stage one moment from it.
+              <details><summary>Show a model answer</summary><p><i>Plan for any play:</i> (1) Name the play, the act and scene, and what happens, in two sentences. (2) Why it is a turning point: what changes for the characters afterwards? (3) Two short quotes, each explained. (4) Staging one moment: lighting, sound, where the actors stand, a tone of voice, and the effect on the audience. (5) One line linking the scene to a big theme (love and hate, fate, mercy, ambition).<br><i>Where the marks would go:</i> a specific scene; a clear reason it is a turning point; accurate short quotes explained; detailed staging ideas with their effect; no long plot summary.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> 2026 (H5–6, O10–11) · 2025 (H4–5) · 2024 (H1–4) · 2023 (H6) (H = Higher level question, O = Ordinary level question). See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/shakespeare-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Said It? Shakespeare Quotes Game (Higher Level) | Léim</title>
+<meta name="description" content="Free Junior Cycle English Higher Level Shakespeare game: match famous lines from Romeo and Juliet, The Merchant of Venice and Julius Caesar to the character, put key moments in order, crack the old words and name the technique. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.ws-q{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;max-width:540px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.ws-play{display:inline-block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.ws-t{display:block;font-family:Georgia,serif;font-style:italic;font-size:21px;line-height:1.4}
+.ws-t mark.hl{background:#F6CF5A;font-style:normal;font-weight:700;padding:0 3px;border-radius:4px}
+.ws-ord{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;max-width:540px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.ws-ord p{margin:6px 0;font-size:18px;line-height:1.35;font-weight:500}.ws-ord p b{display:inline-block;min-width:26px;background:#F6CF5A;border-radius:6px;text-align:center;margin-right:6px}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sb{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.sb{grid-template-columns:1fr}}
+.sb .note{margin:0;font-size:15px}.sb .note b.h{display:block;font-size:16px;margin-bottom:4px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}.pass .sp b{font-variant:small-caps;letter-spacing:.5px}
+@media(max-width:420px){.ws-t{font-size:18px}.ws-ord p{font-size:16px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Higher Level · Free game</span>
+        <h1 style="margin-top:12px">Who Said It?</h1>
+        <p>Shakespeare for Higher Level. Match famous lines to the character, put the key moments in order, crack the old words and name the technique. Lines from <i>Romeo and Juliet</i>, <i>The Merchant of Venice</i> and <i>Julius Caesar</i>. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="who"><div><b>Who Said It?</b><span>🎭 Match the line to the character</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="order"><div><b>Plot order</b><span>🔢 Put the key moments in order</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="old"><div><b>Old words</b><span>📜 Thou, thee, wherefore…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="tech"><div><b>Techniques</b><span>🖋️ Oxymoron, simile, couplet…</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Who Said It?, 5 in a row = 3 bonus seconds. Every line is checked against the text of the play.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R8, R4, OL8 (2015 specification) · Higher Level</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Shakespeare (Higher Level)</h2>
+        <p>At Higher Level you study <b>one full Shakespeare play</b>. The plays on the Department's list for the 2028–2030 exams are <i>As You Like It</i>, <i>Julius Caesar</i>, <i>The Merchant of Venice</i> and <i>Romeo and Juliet</i> (check with your teacher which list your year uses). The game uses the last three. You don't need to learn the whole play off by heart: you need to know the <b>story</b>, the <b>characters</b>, a handful of <b>key scenes</b> and some <b>short quotes</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>Juliet:</b> “Deny <b>thy</b> father and refuse <b>thy</b> name.”</span><span class="sp"><b>Tybalt:</b> “<b>Thou</b> art a villain.”</span><span class="sp"><b>Tybalt:</b> “I hate … all Montagues, and <b>thee</b>.”</span></div>
+        <p style="margin-top:8px">Thou, thee and thy all mean one thing in modern English. What is it? When do you think each one is used?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">They all mean <b>you</b>. They follow the same pattern as I / me / my: <b>thou</b> = you doing the action (like I), <b>thee</b> = you on the receiving end (like me), <b>thy</b> = your (like my). Shakespeare's characters use thou to friends, family and people below them, and the more formal “you” to people above them, so a sudden switch can show anger or affection. The verbs change too: thou <b>art</b> (are), thou <b>dost</b> (do), he <b>doth</b> (does), he <b>hath</b> (has).</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Old words to know</h3>
+        <div class="wc">
+          <div class="note"><b class="h">wherefore</b>why (not where!)</div>
+          <div class="note"><b class="h">'tis · ere · oft</b>it is · before · often</div>
+          <div class="note"><b class="h">ay · nay</b>yes · no</div>
+          <div class="note"><b class="h">anon · tarry</b>in a moment · wait</div>
+          <div class="note"><b class="h">hence · yond</b>go away / from here · that … over there</div>
+          <div class="note"><b class="h">prithee · sooth</b>please · truth</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How Shakespeare writes</h3>
+        <div class="wc">
+          <div class="note"><b class="h">Verse</b>lines with a beat (often 10 syllables, da-DUM × 5). Noble characters and big feelings.</div>
+          <div class="note"><b class="h">Prose</b>ordinary sentences. Servants, jokes, and characters who've lost control.</div>
+          <div class="note"><b class="h">Soliloquy</b>a character alone on stage speaks their thoughts: we hear the truth.</div>
+          <div class="note"><b class="h">Aside</b>a quick comment to the audience that the others on stage can't hear.</div>
+          <div class="note"><b class="h">Dramatic irony</b>we know something a character doesn't (we know Juliet isn't really dead).</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Techniques to spot</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🔀 Oxymoron</b>two opposites side by side: “sweet sorrow”, “loving hate”.</div>
+          <div class="note"><b class="h">🤝 Simile</b>a comparison with like or as: “as boundless as the sea”.</div>
+          <div class="note"><b class="h">🎵 Rhyming couplet</b>two rhyming lines, often at the end of a scene.</div>
+          <div class="note"><b class="h">❓ Rhetorical question</b>asked for effect: “Hath not a Jew eyes?”</div>
+          <div class="note"><b class="h">🔁 Repetition</b>“For Brutus is an honourable man” said again and again until it sounds like a lie.</div>
+          <div class="note"><b class="h">😏 Pun</b>a play on words: the dying Mercutio's “a grave man”.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Key moments</h3>
+        <div class="sb">
+          <div class="note"><b class="h">📕 Romeo and Juliet</b>The party → the balcony → the secret wedding → Mercutio and Tybalt die → Capulet's fury → the potion → the tomb.</div>
+          <div class="note"><b class="h">💰 The Merchant of Venice</b>The loan and the bond → Jessica runs away → Shylock's revenge → the caskets → the trial: mercy, then “no blood” → Belmont.</div>
+          <div class="note"><b class="h">🗡️ Julius Caesar</b>The Soothsayer's warning → Cassius works on Brutus → the plot → Caesar is stabbed → Antony's speech → war → Brutus dies.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Answering on Shakespeare</h3>
+        <p>Make a <b>point</b>, back it with a <b>short quote</b> (a few words is best), and <b>explain</b> what the words show. Name the scene (“in Act 3, Scene 1”), say how the audience feels, and mention <b>staging</b> when it helps: what would we see and hear on stage? Learn 3–4 short quotes for each main character and for each big theme (love and hate, fate, revenge, mercy, ambition, loyalty).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Higher Level only. The paper can give you an <b>extract from a Shakespeare play</b> (sometimes one you haven't studied) and ask about character, language and staging, and it can ask about <b>the Shakespeare play you studied</b>: a key scene, a character, a theme, or how you would stage a moment. Marks go to <b>short, accurate quotes</b>, a clear <b>point</b> each time and an <b>explanation</b> of how the language or staging works, not to retelling the plot.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Quote briefly and accurately</b>: a few words, in quotation marks, spelt right.</li>
+            <li><b>Explain every quote</b>: what do the words show? Why that word?</li>
+            <li><b>Know where it happens</b>: the act, the scene, what has just happened.</li>
+            <li><b>Think like a director</b>: how would you stage it? Lighting, movement, tone of voice.</li>
+            <li>Don't retell the story. One sentence of plot is enough.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The extract is from <i>Romeo and Juliet</i>, Act 3, Scene 1. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><i>Tybalt has just stabbed Mercutio under Romeo's arm, as Romeo tried to stop the fight.</i>
+            <span class="sp"><b>Mercutio:</b> I am hurt. A plague o' both your houses! I am sped.</span>
+            <span class="sp"><b>Benvolio:</b> What, art thou hurt?</span>
+            <span class="sp"><b>Mercutio:</b> Ay, ay, a scratch, a scratch; marry, 'tis enough. Where is my page? Go, villain, fetch a surgeon.</span>
+            <span class="sp"><b>Romeo:</b> Courage, man; the hurt cannot be much.</span>
+            <span class="sp"><b>Mercutio:</b> No, 'tis not so deep as a well, nor so wide as a church-door; but 'tis enough, 'twill serve: ask for me to-morrow, and you shall find me a grave man. … Why the devil came you between us? I was hurt under your arm.</span>
+            <span class="sp"><b>Romeo:</b> I thought all for the best.</span></div>
+          <ol class="eq">
+            <li>Mercutio calls his wound “a scratch, a scratch”. What does this show about him?
+              <details><summary>Show a model answer</summary><p>It shows Mercutio is <b>brave and proud</b>, and still joking: he plays down a deadly wound as “a scratch”. But “'tis enough” and “fetch a surgeon” tell us he knows it is serious. The audience realises before Romeo does that he is dying (dramatic irony), so the joke makes the moment sadder.<br><i>Where the marks would go:</i> a clear quality; the quote; the gap between what he says and what he knows; the effect on the audience.</p></details></li>
+            <li>Explain the pun in “you shall find me a grave man”. Why do you think Shakespeare gives Mercutio a joke here?
+              <details><summary>Show a model answer</summary><p>“Grave” means <b>serious</b> and also a <b>grave</b> to be buried in: tomorrow he'll be a serious man because he'll be dead. Mercutio has joked all through the play, so he dies as he lived, with wordplay. The joke also shows the turn in the play: the comedy stops here and the tragedy begins.<br><i>Where the marks would go:</i> both meanings; what it shows about Mercutio; why it matters at this point in the play.</p></details></li>
+            <li>“A plague o' both your houses!” Why is this line so important to the play as a whole?
+              <details><summary>Show a model answer</summary><p>Mercutio is neither a Capulet nor a Montague, yet the <b>feud</b> has killed him, so he curses <b>both</b> families. The curse seems to come true: from this moment everything goes wrong (Tybalt's death, Romeo's banishment, the deaths in the tomb). He repeats it three times, so the audience can't miss it.<br><i>Where the marks would go:</i> who he blames and why; the link to later events (fate, the feud); the effect of the repetition.</p></details></li>
+            <li>Choose a key scene from the Shakespeare play you studied. Explain why it is a turning point, and how you would stage one moment from it.
+              <details><summary>Show a model answer</summary><p><i>Plan for any play:</i> (1) Name the play, the act and scene, and what happens, in two sentences. (2) Why it is a turning point: what changes for the characters afterwards? (3) Two short quotes, each explained. (4) Staging one moment: lighting, sound, where the actors stand, a tone of voice, and the effect on the audience. (5) One line linking the scene to a big theme (love and hate, fate, mercy, ambition).<br><i>Where the marks would go:</i> a specific scene; a clear reason it is a turning point; accurate short quotes explained; detailed staging ideas with their effect; no long plot summary.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> 2026 (H5–6, O10–11) · 2025 (H4–5) · 2024 (H1–4) · 2023 (H6) (H = Higher level question, O = Ordinary level question). See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/shakespeare-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_who_said_it.py read this block: keep it valid JSON; one item per line) ----------
+     lines: [play rj / mv / jc, quote (spelt as in the play), speaker key, act.scene, what it shows]
+     tech:  [play, quote (" / " between the two lines of a couplet), ox / si / co / qu]
+     old:   [play, quote with the old word in {braces}, modern meaning]
+     plot:  [play, key moment in plain words, a quote from that moment]   (the checker finds each quote in the play to order them)
+     Every quote is checked against the text of the play (NLTK Shakespeare corpus) by src/test_who_said_it.py. */
+  var D=/*DATA*/{
+ "lines": [
+  ["rj", "But, soft! what light through yonder window breaks?", "ro", "2.2", "Romeo, under Juliet's window: he can't stop thinking about her."],
+  ["rj", "O Romeo, Romeo! wherefore art thou Romeo?", "ju", "2.2", "Juliet wishes Romeo wasn't a Montague (\"wherefore\" means why)."],
+  ["rj", "A plague o' both your houses!", "me", "3.1", "Mercutio, dying, curses both families: the feud has killed him."],
+  ["rj", "Good night, good night! parting is such sweet sorrow", "ju", "2.2", "Juliet can hardly bear to let Romeo go."],
+  ["rj", "I hate the word, As I hate hell, all Montagues, and thee", "ty", "1.1", "Tybalt: hot-headed and full of hate for the Montagues."],
+  ["rj", "Thus with a kiss I die.", "ro", "5.3", "Romeo's last words, in the tomb beside Juliet."],
+  ["rj", "O happy dagger!", "ju", "5.3", "Juliet wakes, finds Romeo dead and takes his dagger."],
+  ["rj", "My only love sprung from my only hate!", "ju", "1.5", "Juliet learns that the boy she loves is a Montague."],
+  ["rj", "Wisely and slow; they stumble that run fast.", "fr", "2.3", "Friar Laurence warns Romeo not to rush."],
+  ["rj", "O, I am fortune's fool!", "ro", "3.1", "Romeo, after killing Tybalt, blames fate."],
+  ["rj", "Hang thee, young baggage! disobedient wretch!", "ca", "3.5", "Capulet explodes when Juliet refuses to marry Paris."],
+  ["rj", "I think it best you married with the county.", "nu", "3.5", "The Nurse tells Juliet to marry Paris: Juliet feels betrayed."],
+  ["rj", "For never was a story of more woe Than this of Juliet and her Romeo.", "pr", "5.3", "The Prince closes the play."],
+  ["rj", "Ask for me tomorrow, and you shall find me a grave man.", "me", "3.1", "Mercutio jokes even as he dies (a pun on \"grave\")."],
+  ["mv", "If you prick us, do we not bleed?", "sh", "3.1", "Shylock: Jews are human, just like Christians."],
+  ["mv", "The quality of mercy is not strain'd", "po", "4.1", "Portia, dressed as a lawyer, asks Shylock for mercy."],
+  ["mv", "In sooth, I know not why I am so sad", "an", "1.1", "Antonio's sadness opens the play."],
+  ["mv", "I will buy with you, sell with you, talk with you", "sh", "1.3", "Shylock will do business with Christians, but not eat with them."],
+  ["mv", "The devil can cite Scripture for his purpose.", "an", "1.3", "Antonio sneers at Shylock."],
+  ["mv", "Tarry a little; there is something else.", "po", "4.1", "Portia's twist: the bond gives no right to blood."],
+  ["mv", "I am a tainted wether of the flock", "an", "4.1", "Antonio expects to die: the weakest sheep in the flock."],
+  ["mv", "my little body is aweary of this great world", "po", "1.2", "Portia is tired of her father's casket test."],
+  ["mv", "How far that little candle throws his beams!", "po", "5.1", "Portia, home in Belmont: a small good deed shines out."],
+  ["mv", "But love is blind and lovers cannot see", "je", "2.6", "Jessica, in disguise, runs away with Lorenzo."],
+  ["mv", "In Belmont is a lady richly left", "ba", "1.1", "Bassanio tells Antonio about Portia."],
+  ["mv", "Let me play the fool", "gr", "1.1", "Gratiano: the joker of the group."],
+  ["mv", "A Daniel come to judgment!", "sh", "4.1", "Shylock praises the young \"lawyer\" (too soon)."],
+  ["mv", "Three thousand ducats; well.", "sh", "1.3", "Shylock weighs up the loan."],
+  ["jc", "Et tu, Brute! Then fall, Caesar!", "cs", "3.1", "Caesar's last words: even Brutus has stabbed him."],
+  ["jc", "Friends, Romans, countrymen, lend me your ears", "at", "3.2", "Antony begins the funeral speech that turns the crowd."],
+  ["jc", "Not that I loved Caesar less, but that I loved Rome more.", "br", "3.2", "Brutus explains to the crowd why he killed Caesar."],
+  ["jc", "The fault, dear Brutus, is not in our stars", "cu", "1.2", "Cassius: we can change our fate ourselves."],
+  ["jc", "Yond Cassius has a lean and hungry look", "cs", "1.2", "Caesar doesn't trust Cassius."],
+  ["jc", "Cowards die many times before their deaths", "cs", "2.2", "Caesar refuses to be afraid and goes to the Senate."],
+  ["jc", "This was the noblest Roman of them all", "at", "5.5", "Antony praises Brutus, his dead enemy."],
+  ["jc", "Cry 'Havoc,' and let slip the dogs of war", "at", "3.1", "Antony, alone with Caesar's body, swears revenge."],
+  ["jc", "There is a tide in the affairs of men", "br", "4.3", "Brutus: act now, or lose the chance."],
+  ["jc", "It must be by his death", "br", "2.1", "Brutus, alone at night, decides Caesar must die."],
+  ["jc", "For Brutus is an honourable man", "at", "3.2", "Antony repeats it until the crowd hears it as a lie."],
+  ["jc", "Think you I am no stronger than my sex", "pt", "2.1", "Portia demands that Brutus tell her his secret."],
+  ["jc", "it was Greek to me", "ca", "1.2", "Casca couldn't follow Cicero's speech."],
+  ["jc", "Why, man, he doth bestride the narrow world Like a Colossus", "cu", "1.2", "Cassius: Caesar has grown too big."]
+ ],
+ "tech": [
+  ["rj", "O brawling love! O loving hate!", "ox"],
+  ["rj", "Beautiful tyrant! fiend angelical!", "ox"],
+  ["rj", "Feather of lead, bright smoke, cold fire, sick health!", "ox"],
+  ["rj", "O heavy lightness! serious vanity!", "ox"],
+  ["rj", "My only love sprung from my only hate!", "ox"],
+  ["rj", "parting is such sweet sorrow", "ox"],
+  ["rj", "Love goes toward love, as schoolboys from their books", "si"],
+  ["rj", "My bounty is as boundless as the sea", "si"],
+  ["rj", "Too like the lightning, which doth cease to be Ere one can say 'It lightens.'", "si"],
+  ["jc", "Why, man, he doth bestride the narrow world Like a Colossus", "si"],
+  ["mv", "It droppeth as the gentle rain from heaven", "si"],
+  ["rj", "For never was a story of more woe / Than this of Juliet and her Romeo.", "co"],
+  ["jc", "Caesar, now be still: / I kill'd not thee with half so good a will.", "co"],
+  ["jc", "And after this let Caesar seat him sure; / For we will shake him, or worse days endure.", "co"],
+  ["rj", "Sleep dwell upon thine eyes, peace in thy breast! / Would I were sleep and peace, so sweet to rest!", "co"],
+  ["mv", "You that choose not by the view, / Chance as fair and choose as true!", "co"],
+  ["mv", "All that glitters is not gold; / Often have you heard that told", "co"],
+  ["mv", "Hath not a Jew eyes?", "qu"],
+  ["mv", "If you prick us, do we not bleed?", "qu"],
+  ["rj", "What's in a name?", "qu"],
+  ["jc", "Who is here so base that would be a bondman?", "qu"],
+  ["jc", "Was this ambition?", "qu"],
+  ["jc", "O mighty Caesar! dost thou lie so low?", "qu"],
+  ["jc", "Upon what meat doth this our Caesar feed, That he is grown so great?", "qu"]
+ ],
+ "old": [
+  ["rj", "O Romeo, Romeo! {wherefore} art thou Romeo?", "why"],
+  ["rj", "Deny {thy} father and refuse thy name", "your"],
+  ["rj", "{'Tis} but thy name that is my enemy", "it is"],
+  ["rj", "{Wilt} thou be gone? it is not yet near day", "will"],
+  ["rj", "all Montagues, and {thee}", "you"],
+  ["rj", "{Anon}, good nurse!", "in a moment"],
+  ["rj", "Thou {art} a villain.", "are"],
+  ["rj", "{Nay}, I'll conjure too.", "no"],
+  ["rj", "{Ay}, pilgrim, lips that they must use in prayer.", "yes"],
+  ["rj", "{Ere} one can say 'It lightens.'", "before"],
+  ["mv", "In {sooth}, I know not why I am so sad", "truth"],
+  ["mv", "{Hath} not a Jew eyes?", "has"],
+  ["mv", "many a time and {oft}", "often"],
+  ["mv", "{Tarry} a little; there is something else.", "wait"],
+  ["jc", "{Yond} Cassius has a lean and hungry look", "that (over there)"],
+  ["jc", "{Hence}! home, you idle creatures", "go away"],
+  ["jc", "Why {dost} thou lead these men about the streets?", "do"],
+  ["jc", "he {doth} bestride the narrow world", "does"],
+  ["jc", "I {prithee}, boy, run to the senate-house", "please"]
+ ],
+ "plot": [
+  ["rj", "Romeo sees Juliet at the Capulet party.", "Did my heart love till now?"],
+  ["rj", "On the balcony, they agree to marry.", "O Romeo, Romeo! wherefore art thou Romeo?"],
+  ["rj", "Friar Laurence marries them in secret.", "These violent delights have violent ends"],
+  ["rj", "Mercutio is killed. Romeo kills Tybalt.", "O, I am fortune's fool!"],
+  ["rj", "Capulet orders Juliet to marry Paris.", "Hang thee, young baggage!"],
+  ["rj", "Juliet drinks the Friar's potion.", "Romeo, I come! this do I drink to thee."],
+  ["rj", "Romeo dies in the tomb.", "Thus with a kiss I die."],
+  ["mv", "Antonio borrows money from Shylock.", "Three thousand ducats; well."],
+  ["mv", "Jessica runs away with Lorenzo.", "But love is blind and lovers cannot see"],
+  ["mv", "Shylock swears revenge on Antonio.", "Hath not a Jew eyes?"],
+  ["mv", "Bassanio picks the lead casket.", "You that choose not by the view"],
+  ["mv", "Portia, as a lawyer, asks for mercy.", "The quality of mercy is not strain'd"],
+  ["mv", "Portia says the bond allows no blood.", "Tarry a little; there is something else."],
+  ["mv", "Back in Belmont, all ends well.", "How far that little candle throws his beams!"],
+  ["jc", "Caesar ignores the Soothsayer.", "He is a dreamer; let us leave him: pass."],
+  ["jc", "Cassius works on Brutus.", "The fault, dear Brutus, is not in our stars"],
+  ["jc", "Brutus decides Caesar must die.", "It must be by his death"],
+  ["jc", "Caesar goes to the Senate anyway.", "Cowards die many times before their deaths"],
+  ["jc", "Caesar is stabbed.", "Et tu, Brute! Then fall, Caesar!"],
+  ["jc", "Antony turns the crowd.", "Friends, Romans, countrymen, lend me your ears"],
+  ["jc", "Brutus dies at Philippi.", "I kill'd not thee with half so good a will."]
+ ]
+}/*END*/;
+  var PLAY={rj:"📕 Romeo and Juliet",mv:"💰 The Merchant of Venice",jc:"🗡️ Julius Caesar"};
+  var CH={rj:{ro:"Romeo",ju:"Juliet",me:"Mercutio",ty:"Tybalt",nu:"Nurse",fr:"Friar Laurence",ca:"Capulet",pr:"Prince"},
+    mv:{sh:"Shylock",po:"Portia",an:"Antonio",ba:"Bassanio",je:"Jessica",gr:"Gratiano"},
+    jc:{cs:"Caesar",br:"Brutus",cu:"Cassius",at:"Antony",pt:"Portia",ca:"Casca"}};
+  var TECH={ox:"🔀 Oxymoron",si:"🤝 Simile",co:"🎵 Rhyming couplet",qu:"❓ Rhetorical question"};
+  var TWHY={ox:"Oxymoron: two opposite words side by side (\"sweet sorrow\", \"loving hate\").",
+    si:"Simile: a comparison using \"like\" or \"as\".",
+    co:"Rhyming couplet: two lines in a row that rhyme. Shakespeare often ends a scene or a big moment with one.",
+    qu:"Rhetorical question: asked for effect, not for an answer. It makes the listener think."};
+  var CLOSE=[["do","does"],["you","your"],["has","does"],["in a moment","wait"]];
+  function close(a,b){return CLOSE.some(function(p){return (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a);});}
+  var PERMS=(function(){var out=[];function go(a,r){if(!a.length){out.push(r.join(" → "));return;}a.forEach(function(x,i){go(a.slice(0,i).concat(a.slice(i+1)),r.concat(x));});}go(["A","B","C","D"],[]);return out;})();
+  var FIXED=[].concat(Object.keys(PLAY).map(function(k){return PLAY[k];}),Object.keys(TECH).map(function(k){return TECH[k];}),PERMS);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function vals(L){return Object.keys(L).map(function(x){return L[x];});}
+  function quote(q,play){if(/^[a-z]/.test(q))q="…"+q;return '<div class="ws-q">'+(play?'<span class="ws-play">'+esc(PLAY[play])+'</span>':'')+'<span class="ws-t">“'+esc(q).replace(/ \/ /g,"<br>").replace(/\{([^}]*)\}/g,'<mark class="hl">$1</mark>')+'”</span></div>';}
+  function act(s){var p=s.split(".");return "Act "+p[0]+", Scene "+p[1];}
+
+  /* ================= WHO SAID IT? ================= */
+  function qWho(){var it=rnd(D.lines),p=it[0],L=CH[p],ans=L[it[2]];
+    var q=C("🎭 Who said it?",ans,others(L,it[2]).filter(function(x){return x!==ans;}),ans+" ("+act(it[3])+"): "+it[4],quote(it[1],p),{t:"who",p:p,q:it[1],rv:"“"+it[1]+"”"},3);
+    q.fixed=vals(L);return q;}
+  function qPlay(){var it=rnd(D.lines.concat(D.tech));
+    return C("📚 Which play?",PLAY[it[0]],others(PLAY,it[0]),"From "+PLAY[it[0]].replace(/^\S+ /,"")+".",quote(it[1]),{t:"play",q:it[1],rv:"“"+it[1].replace(/ \/ /g," ")+"”"},2);}
+  /* ================= PLOT ORDER ================= */
+  function qOrder(){var p=rnd(Object.keys(PLAY)),evs=D.plot.filter(function(e){return e[0]===p;});
+    var idx=shuffle(evs.map(function(e,i){return i;})).slice(0,4).sort(function(a,b){return a-b;});
+    var shown=shuffle(idx.slice()),letters=shown.map(function(i){return idx.indexOf(i);}); /* letters[k] = true place of the moment shown as letter k */
+    var ans=[0,1,2,3].map(function(r){return "ABCD"[letters.indexOf(r)];}).join(" → ");
+    var html='<div class="ws-ord"><span class="ws-play">'+esc(PLAY[p])+'</span>'+shown.map(function(i,k){return '<p><b>'+"ABCD"[k]+'</b> '+esc(evs[i][1])+'</p>';}).join("")+'</div>';
+    var why=PLAY[p].replace(/^\S+ /,"")+": "+idx.map(function(i){return evs[i][1].replace(/\.$/,"");}).join(" → ")+".";
+    return C("🔢 Put them in order",ans,PERMS.filter(function(x){return x!==ans;}),why,html,{t:"order",p:p,ev:shown.map(function(i){return evs[i][1];}),rv:PLAY[p].replace(/^\S+ /,"")+": the order"},3);}
+  /* ================= OLD WORDS ================= */
+  function qOld(){var it=rnd(D.old),m=it[2],w=it[1].match(/\{([^}]*)\}/)[1];
+    var pool=D.old.map(function(x){return x[2];}).filter(function(x){return x!==m&&!close(x,m);});
+    return C("📜 What does it mean?",m,pool,"“"+w+"” = "+m+".",quote(it[1],it[0]),{t:"old",p:it[0],q:it[1],rv:"“"+w+"”"},3);}
+  /* ================= TECHNIQUES ================= */
+  function qTech(){var it=rnd(D.tech);
+    return C("🖋️ Which technique?",TECH[it[2]],others(TECH,it[2]),TWHY[it[2]],quote(it[1],it[0]),{t:"tech",p:it[0],q:it[1],rv:"“"+it[1].replace(/ \/ /g," ")+"”"},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    who:[qWho,qWho,qWho,qPlay],
+    order:[qOrder],
+    old:[qOld],
+    tech:[qTech],
+    mixed:[qWho,qWho,qPlay,qOrder,qOld,qTech]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="who"||m==="old")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="who"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="who"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You know your Shakespeare.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){var key=m.review+"|"+m.said;if(seen[key])return;seen[key]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,PLAY:PLAY,CH:CH,TECH:TECH,PERMS:PERMS}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
