@@ -1,0 +1,286 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+    /* ---------- data (the PDFs and src/test_stage_it.py read this block: keep it valid JSON; one item per line) ----------
+     scene: [scene card, sp / ha / sa / da / pe] (spooky, happy, sad, danger, peaceful: ONE mood's clue words)
+     dir: [stage direction in brackets, voi / mov / act / face]
+     back: [production note, set / cos / lig / sou / pro]
+     con: [situation, per / self / nat / soc]
+     feel: [stage direction, line, an / sc / ha / sa / ne] */
+  var D=/*DATA*/{
+ "scene": [
+  ["🏰 Midnight in an abandoned castle. A ghost drifts across the hall.", "sp"],
+  ["🪦 Two friends sneak through the graveyard on Halloween night.", "sp"],
+  ["🕸️ The attic is full of cobwebs, and a rocking chair creaks on its own.", "sp"],
+  ["🏚️ A girl knocks on the door of the haunted house at the end of the lane.", "sp"],
+  ["🧙 A witch stirs her pot in an eerie forest clearing.", "sp"],
+  ["💒 The whole village is dancing at Nora and Pádraig's wedding.", "ha"],
+  ["🏆 The team lifts the trophy and the crowd goes wild.", "ha"],
+  ["🎂 Mam walks in to a surprise birthday party.", "ha"],
+  ["🎉 Ciara opens the letter: she has won first prize.", "ha"],
+  ["🎊 The town square is packed for the New Year celebrations.", "ha"],
+  ["⚱️ The family stand together at Granda's funeral.", "sa"],
+  ["🚢 Seán says goodbye to his mother before he emigrates to Boston.", "sa"],
+  ["🪑 An old man sits alone in his empty kitchen.", "sa"],
+  ["💌 Róisín reads her brother's last letter, in tears.", "sa"],
+  ["🌧️ A boy sits on the steps, crying for his lost dog.", "sa"],
+  ["🔥 Smoke fills the corridor and the fire alarm is ringing.", "da"],
+  ["🏃 A thief races over the rooftops with the police behind him.", "da"],
+  ["🛗 Two children are trapped in a lift that is falling.", "da"],
+  ["🚨 The prisoners escape over the wall as searchlights sweep the yard.", "da"],
+  ["⛵ The boat is sinking and the crew are running out of time.", "da"],
+  ["🌅 Sunrise over a calm lake. A heron stands in the reeds.", "pe"],
+  ["🧺 Two old friends share a picnic in a sunny meadow.", "pe"],
+  ["🎣 Grandad and Liam are fishing on a quiet river bank.", "pe"],
+  ["🐑 A shepherd rests under a tree while his sheep graze.", "pe"],
+  ["🛏️ A baby sleeps peacefully in her cot.", "pe"]
+ ],
+ "dir": [
+  ["(whispering)", "voi"],
+  ["(shouting up the stairs)", "voi"],
+  ["(softly, to herself)", "voi"],
+  ["(in a low voice)", "voi"],
+  ["(muttering under his breath)", "voi"],
+  ["(sarcastically)", "voi"],
+  ["(She crosses to the window.)", "mov"],
+  ["(He exits stage left.)", "mov"],
+  ["(Nuala enters, out of breath.)", "mov"],
+  ["(He sits on the edge of the bed.)", "mov"],
+  ["(She backs away from the door.)", "mov"],
+  ["(Tom steps forward to the front of the stage.)", "mov"],
+  ["(He picks up the phone.)", "act"],
+  ["(She hands Mick the envelope.)", "act"],
+  ["(Dan throws the keys on the table.)", "act"],
+  ["(She pours two cups of tea.)", "act"],
+  ["(He tears the letter in half.)", "act"],
+  ["(Gran puts down her knitting.)", "act"],
+  ["(She smiles.)", "face"],
+  ["(He glares at his brother.)", "face"],
+  ["(Aisling rolls her eyes.)", "face"],
+  ["(He frowns at the clock.)", "face"],
+  ["(She raises an eyebrow.)", "face"],
+  ["(Liam grins.)", "face"]
+ ],
+ "back": [
+  ["A painted backdrop of the Cliffs of Moher.", "set"],
+  ["A farmhouse kitchen with a fireplace and a dresser.", "set"],
+  ["A bus shelter at the side of the stage.", "set"],
+  ["A staircase leading up to a bedroom door.", "set"],
+  ["Walls painted to look like an old classroom.", "set"],
+  ["A long red cloak for the queen.", "cos"],
+  ["A muddy school uniform for Darragh.", "cos"],
+  ["A grey wig and glasses for Granny.", "cos"],
+  ["A wedding dress with a long veil.", "cos"],
+  ["Wellington boots and a farmer's coat.", "cos"],
+  ["A spotlight on Maeve as she sings.", "lig"],
+  ["A blackout at the end of the scene.", "lig"],
+  ["The lights slowly fade to dark.", "lig"],
+  ["A red glow from the fire.", "lig"],
+  ["Moonlight shines in through the window.", "lig"],
+  ["The sound of waves crashing.", "sou"],
+  ["A doorbell rings offstage.", "sou"],
+  ["Loud music from a party next door.", "sou"],
+  ["Thunder rumbles overhead.", "sou"],
+  ["Knocking at the front door.", "sou"],
+  ["A suitcase for Seán to carry.", "pro"],
+  ["A letter that Róisín tears open.", "pro"],
+  ["A hurley and sliotar for Tadhg.", "pro"],
+  ["A cup and saucer for the priest.", "pro"],
+  ["A bunch of keys for the landlady.", "pro"]
+ ],
+ "con": [
+  ["Niamh blames her best friend for losing the match.", "per"],
+  ["Two brothers fight over the family farm.", "per"],
+  ["Conor's rival on the team spreads lies about him.", "per"],
+  ["A bully takes Ella's lunch money every day.", "per"],
+  ["Grace accuses her neighbour of stealing her bike.", "per"],
+  ["Darragh can't decide whether to tell the truth or protect his friend.", "self"],
+  ["Aoife is torn between staying at home and taking the job in Dublin.", "self"],
+  ["Liam is eaten up with guilt after he breaks Gran's window.", "self"],
+  ["Part of Sinéad wants to sing, but she is terrified of the stage.", "self"],
+  ["Tom doubts himself before the big audition.", "self"],
+  ["A fisherman battles a storm to get back to the harbour.", "nat"],
+  ["A family is cut off by flood water for three days.", "nat"],
+  ["Two climbers are caught in a blizzard on the mountain.", "nat"],
+  ["A farmer struggles to save his cattle in the drought.", "nat"],
+  ["The ferry can't leave the island because of the gale.", "nat"],
+  ["Maura wants to play hurling, but the club rules say girls can't.", "soc"],
+  ["The council plans to knock down the youth club where Jack hangs out.", "soc"],
+  ["A new law says Kate's family must leave their home.", "soc"],
+  ["In the village, tradition says the eldest son must take over the farm.", "soc"],
+  ["Phones are banned at school, and Ruairí leads a protest.", "soc"]
+ ],
+ "feel": [
+  ["slamming the door", "Don't talk to me ever again!", "an"],
+  ["thumping the table", "That's not fair and you know it!", "an"],
+  ["stamping her foot", "I said no!", "an"],
+  ["red in the face", "Who told you that?", "an"],
+  ["fists clenched", "Say that again. I dare you.", "an"],
+  ["trembling", "Did you hear that? Something's upstairs.", "sc"],
+  ["backing away from the window", "There's someone out there.", "sc"],
+  ["clutching his torch", "Hello? Is anyone there?", "sc"],
+  ["hiding behind the sofa", "Is it gone?", "sc"],
+  ["gasping", "The door opened by itself.", "sc"],
+  ["beaming", "We won! We actually won!", "ha"],
+  ["hugging her sister", "You're home! You're really home!", "ha"],
+  ["laughing", "That's the best news I've heard all year.", "ha"],
+  ["jumping for joy", "I got the part!", "ha"],
+  ["clapping her hands", "A puppy? For me?", "ha"],
+  ["sobbing", "He's not coming back, is he?", "sa"],
+  ["wiping her eyes", "I'll miss you every single day.", "sa"],
+  ["head in his hands", "I've lost everything.", "sa"],
+  ["sighing heavily", "Nobody remembered my birthday.", "sa"],
+  ["in tears", "The house feels so empty now.", "sa"],
+  ["biting her nails", "What if I forget my lines?", "ne"],
+  ["pacing up and down", "The results come out in five minutes.", "ne"],
+  ["stammering", "I just wanted to say… um…", "ne"],
+  ["wringing his hands", "Do you think she'll say yes?", "ne"],
+  ["tapping his foot", "Where is that bus?", "ne"]
+ ]
+}/*END*/;
+  var LIGHT={sp:"🌑 Dim, cold blue light",ha:"☀️ Bright, warm light",sa:"🌫️ Soft, grey light",da:"🔴 Flashing red light",pe:"🌅 Gentle golden light"};
+  var SOUND={sp:"🦉 An owl and a creaking door",ha:"🎉 Cheering and lively music",sa:"🎻 A slow, sad violin",da:"🥁 A fast, pounding drum",pe:"🐦 Birdsong and gentle waves"};
+  var MWHY={sp:"Spooky scene (ghost, midnight, haunted): dim, cold light and eerie sounds make the audience shiver.",
+    ha:"Happy scene (party, wedding, a win): bright, warm light and lively sound lift the mood.",
+    sa:"Sad scene (goodbye, alone, tears): soft, grey light and slow music let the audience feel the loss.",
+    da:"Danger (fire, chase, trapped): flashing red light and a pounding beat build tension.",
+    pe:"Peaceful scene (calm, sunrise, a picnic): gentle golden light and soft natural sounds."};
+  var DIR={voi:"🗣️ How to say it",mov:"🚶 Where to move",act:"✋ What to do",face:"🙂 Face"};
+  var DWHY={voi:"How to say it: whispering, shouting, softly, sarcastically. It tells the actor how to use their voice.",
+    mov:"Where to move: enters, exits, crosses, sits, backs away. It tells the actor where to go on stage.",
+    act:"What to do: picks up, hands, throws, pours. It tells the actor what to do with a prop.",
+    face:"Face: smiles, glares, frowns, rolls her eyes. It tells the actor what their face shows."};
+  var DEPT={set:"🏠 Set",cos:"👗 Costume",lig:"💡 Lighting",sou:"🔊 Sound",pro:"🧰 Props"};
+  var BWHY={set:"Set: the place on stage (backdrop, walls, furniture, a staircase).",
+    cos:"Costume: what the actors wear (cloak, uniform, wig, boots).",
+    lig:"Lighting: spotlights, blackouts, a glow, moonlight.",
+    sou:"Sound: effects and music the audience hears (thunder, a doorbell, knocking).",
+    pro:"Props: objects the actors hold or use (a letter, a suitcase, keys, a cup)."};
+  var CON={per:"🥊 Person vs person",self:"🧠 Person vs self",nat:"🌪️ Person vs nature",soc:"🏛️ Person vs society"};
+  var CWHY={per:"Person vs person: two characters clash (a rival, a bully, an argument, blame).",
+    self:"Person vs self: the fight is inside one character (can't decide, guilt, self-doubt).",
+    nat:"Person vs nature: a storm, a flood, snow or the sea stands in the way.",
+    soc:"Person vs society: rules, laws, the council or tradition stand in the way."};
+  var FEEL={an:"😠 Angry",sc:"😨 Scared",ha:"😄 Happy",sa:"😢 Sad",ne:"😬 Nervous"};
+  var CLOSE={sc:"ne",ne:"sc"};
+  var FWHY={an:"Angry: slamming, stamping, thumping, fists clenched.",
+    sc:"Scared: trembling, gasping, hiding, backing away.",
+    ha:"Happy: beaming, laughing, hugging, clapping.",
+    sa:"Sad: sobbing, tears, sighing, head in hands.",
+    ne:"Nervous: biting nails, pacing, stammering, tapping a foot, \u201cwhat if\u201d."};
+  var FIXED=[].concat(Object.keys(LIGHT).map(function(k){return LIGHT[k];}),Object.keys(SOUND).map(function(k){return SOUND[k];}),
+    Object.keys(DIR).map(function(k){return DIR[k];}),Object.keys(DEPT).map(function(k){return DEPT[k];}),
+    Object.keys(CON).map(function(k){return CON[k];}),Object.keys(FEEL).map(function(k){return FEEL[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls){return '<div class="si-card'+(cls?" "+cls:"")+'"><p>'+esc(s)+'</p></div>';}
+  function scene(s){var e=s.split(" ")[0];return '<div class="si-card scene"><div class="si-pic">'+e+'</div><p>'+esc(s.slice(e.length+1))+'</p></div>';}
+
+  /* ================= STAGE IT: lighting and sound for the scene ================= */
+  function qLight(){var it=rnd(D.scene),k=it[1];
+    return C("💡 Pick the lighting",LIGHT[k],others(LIGHT,k),MWHY[k],scene(it[0]),{t:"light",s:it[0].slice(it[0].indexOf(" ")+1),rv:it[0]},3);}
+  function qSound(){var it=rnd(D.scene),k=it[1];
+    return C("🔊 Pick the sound",SOUND[k],others(SOUND,k),MWHY[k],scene(it[0]),{t:"sound",s:it[0].slice(it[0].indexOf(" ")+1),rv:it[0]},3);}
+  /* ================= STAGE DIRECTIONS ================= */
+  function qDir(){var it=rnd(D.dir),k=it[1];
+    return C("🎬 What does it tell the actor?",DIR[k],others(DIR,k),DWHY[k],card(it[0],"dir"),{t:"dir",s:it[0],rv:it[0]},3);}
+  /* ================= BACKSTAGE ================= */
+  function qBack(){var it=rnd(D.back),k=it[1];
+    return C("🎭 Whose job?",DEPT[k],others(DEPT,k),BWHY[k],card(it[0],"note"),{t:"back",s:it[0],rv:it[0]},3);}
+  /* ================= CONFLICT ================= */
+  function qCon(){var it=rnd(D.con),k=it[1];
+    return C("⚡ What's the conflict?",CON[k],others(CON,k),CWHY[k],card(it[0]),{t:"con",s:it[0],rv:it[0]},3);}
+  /* ================= READ THE LINE ================= */
+  function qFeel(){var it=rnd(D.feel),k=it[2];
+    var pool=Object.keys(FEEL).filter(function(x){return x!==k&&x!==CLOSE[k];}).map(function(x){return FEEL[x];});
+    return C("🎭 How does the character feel?",FEEL[k],pool,FWHY[k],
+      '<div class="si-card line"><p><i>('+esc(it[0])+')</i> '+esc(it[1])+'</p></div>',{t:"feel",d:it[0],l:it[1],rv:"("+it[0]+") "+it[1]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    stage:[qLight,qSound],
+    dir:[qDir],
+    back:[qBack],
+    con:[qCon],
+    feel:[qFeel],
+    mixed:[qLight,qSound,qDir,qBack,qCon,qFeel]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="con"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="stage"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="stage"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You're ready to direct.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,LIGHT:LIGHT,SOUND:SOUND,DIR:DIR,DEPT:DEPT,CON:CON,FEEL:FEEL}};
+})();
+</script>

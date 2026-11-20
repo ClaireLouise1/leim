@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stage It: Drama and Stagecraft Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English drama game: choose the lighting and sound for a scene, read stage directions, sort set, costume, lighting, sound and props, and find the conflict. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<style>.si-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px 6px;max-width:520px;margin:8px auto 4px;text-align:center;box-shadow:0 3px 0 var(--line)}
+.si-card p{margin:0 0 6px;font-size:19px;line-height:1.4;font-weight:600}
+.si-card.scene{background:#1B2430;border-color:#1B2430;box-shadow:0 3px 0 #0E141B}.si-card.scene p{color:#fff}
+.si-card .si-pic{font-size:38px;line-height:1.1;margin-bottom:4px}
+.si-card.dir p{font-style:italic;font-size:21px}
+.si-card.note{background:#FFF6E5;text-align:left}.si-card.note p:before{content:"📋 ";font-style:normal}
+.si-card.line{text-align:left;font-family:Georgia,serif}.si-card.line p{font-weight:500}.si-card.line i{color:var(--muted)}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.script{font-family:Georgia,serif;line-height:1.6}.script i{color:var(--muted)}.script b{letter-spacing:.04em}
+.stagemap{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:420px;margin:8px auto 2px;text-align:center;font-size:14px;font-weight:700}
+.stagemap div{background:#EEF6F1;border:1px solid #BFDCCB;border-radius:6px;padding:10px 2px}
+.stagemap .aud{grid-column:1/4;background:#FFF6E5;border-color:#F0D9A8}
+@media(max-width:420px){.si-card p{font-size:17px}#choices .choice{font-size:15px}.si-card.dir p{font-size:19px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Stage It</h1>
+        <p>You're the director. Light the scene, add the sound, read the stage directions, run the backstage team and find the conflict. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="stage"><div><b>Stage It</b><span>💡 🔊 Light it and add the sound</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="dir"><div><b>Stage directions</b><span>🎬 What do they tell the actor?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="back"><div><b>Backstage</b><span>🎭 Set, costume, lighting, sound or props?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="con"><div><b>Conflict</b><span>⚡ Who or what is in the way?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="feel"><div><b>Read the line</b><span>🎭 How does the character feel?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Stage It, 5 in a row = 3 bonus seconds. Every scene and character is made up, so it works with whatever play your class is studying.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R9, OL8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Drama 1: how plays work</h2>
+        <p>A play is written to be <b>seen and heard</b>, not just read. The script gives the actors their words (<b>dialogue</b>) and tells everyone how to bring it to life (<b>stage directions</b>). When you read a play, picture it on a stage: <b>What do we see? What do we hear? How do the characters move and speak?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note script"><b class="h">🅰️</b><b>ORLA:</b> <i>(smiling, hugging her mam)</i> I'm fine.</div>
+          <div class="note script"><b class="h">🅱️</b><b>ORLA:</b> <i>(slamming the bedroom door)</i> I'm fine.</div>
+        </div>
+        <p style="margin-top:8px">Same two words. Is Orla fine in both? What changes the meaning?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">In A, Orla really is fine: she's <b>happy</b>. In B she is clearly <b>not</b> fine: she's <b>angry</b> (or upset) and doesn't want to talk. The words are the same; the <b>stage direction</b> changes everything. In a play, what characters <b>do</b> often tells us more than what they <b>say</b>.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Reading a script</h3>
+        <div class="pass script"><i>(A kitchen, late at night. Rain against the window. DAN sits at the table.)</i><br><b>NUALA:</b> <i>(entering, out of breath)</i> Did you hear that?<br><b>DAN:</b> <i>(not looking up)</i> Hear what?</div>
+        <div class="wc">
+          <div class="note"><b class="h">🧑 Character names</b>in capitals, before each line.</div>
+          <div class="note"><b class="h">💬 Dialogue</b>the words the actors say. No speech marks.</div>
+          <div class="note"><b class="h">🎬 Stage directions</b>in brackets and italics: where we are, how to move, how to speak, what the face shows. Written in the present tense.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">The stage</h3>
+        <div class="stagemap"><div>Upstage right</div><div>Upstage centre</div><div>Upstage left</div><div>Stage right</div><div>Centre stage</div><div>Stage left</div><div>Downstage right</div><div>Downstage centre</div><div>Downstage left</div><div class="aud">👀 Audience</div></div>
+        <p style="font-size:15px;color:var(--muted);text-align:center">Upstage = the back. Downstage = nearest the audience. Stage left and right are the <b>actor's</b> left and right as they face the audience.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Five backstage jobs</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏠 Set</b>the place: backdrop, walls, furniture.</div>
+          <div class="note"><b class="h">👗 Costume</b>what the actors wear.</div>
+          <div class="note"><b class="h">💡 Lighting</b>spotlights, blackouts, a glow.</div>
+          <div class="note"><b class="h">🔊 Sound</b>effects and music: thunder, a doorbell.</div>
+          <div class="note"><b class="h">🧰 Props</b>objects actors hold: a letter, keys, a cup.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Lighting and sound set the mood</h3>
+        <div class="wc">
+          <div class="note"><b class="h">👻 Spooky</b>dim, cold blue light · an owl, a creaking door</div>
+          <div class="note"><b class="h">🎉 Happy</b>bright, warm light · cheering, lively music</div>
+          <div class="note"><b class="h">😢 Sad</b>soft, grey light · a slow violin</div>
+          <div class="note"><b class="h">🔥 Danger</b>flashing red light · a pounding drum</div>
+          <div class="note"><b class="h">🌅 Peaceful</b>gentle golden light · birdsong, waves</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A <b>blackout</b> (all lights off) ends a scene with a shock. A <b>spotlight</b> on one character shows they matter most, or that they're alone.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Conflict drives every play</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🥊 Person vs person</b>two characters clash.</div>
+          <div class="note"><b class="h">🧠 Person vs self</b>a fight inside: guilt, doubt, a hard choice.</div>
+          <div class="note"><b class="h">🌪️ Person vs nature</b>a storm, a flood, the sea.</div>
+          <div class="note"><b class="h">🏛️ Person vs society</b>rules, laws, tradition.</div>
+        </div>
+        <p style="font-size:15px;color:var(--muted)">A key scene is usually where the conflict comes to a head. To <b>stage</b> it, decide: where are they, what do we see, what do we hear, and how do they move and speak?</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Drama comes up in two ways: a <b>studied drama</b> question (a key scene, a character, conflict, what makes it work on stage) and sometimes an <b>unseen extract</b> from a play. Questions often ask you to imagine you are the <b>director</b>: how would you stage this moment?</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Use the stage directions as evidence</b>, not just the dialogue: “<i>(her hands shaking)</i> shows she is frightened.”</li>
+            <li><b>Think like an audience</b>: what do they see and hear? Say what the lighting, sound, set or costume adds.</li>
+            <li><b>Name the conflict</b> and say who or what is in the way.</li>
+            <li><b>Give reasons</b> for every staging choice: “a single spotlight, to show how alone he is.”</li>
+            <li>Don't retell the plot. Pick a moment and explain <b>why it works</b> on stage.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). The play is made up. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass script"><b>THE LAST FERRY</b> <span style="color:var(--muted)">(an extract from an imaginary play)</span><br>
+            <i>(A small ferry waiting room on Inis Glas, late evening. Rain lashes the window. A single bulb flickers. MAEVE, fourteen, sits on her suitcase. Her father, PEADAR, stands at the door, looking out at the sea.)</i><br>
+            <b>PEADAR:</b> <i>(without turning round)</i> It's not coming, Maeve.<br>
+            <b>MAEVE:</b> <i>(jumping up)</i> It has to come. School in Galway starts on Monday.<br>
+            <b>PEADAR:</b> The sea doesn't care about Monday.<br>
+            <i>(A long pause. The wind howls. MAEVE crosses to the window.)</i><br>
+            <b>MAEVE:</b> <i>(quietly)</i> You don't want me to go. Do you?<br>
+            <b>PEADAR:</b> <i>(turning at last, his voice breaking)</i> I want you to go. I just don't want you to leave.<br>
+            <i>(Far off, a ship's horn sounds. The lights fade slowly to a single beam from the lighthouse.)</i></div>
+          <ol class="eq">
+            <li>What do the opening stage directions tell us about the <b>setting</b> and the <b>mood</b>? Use two details.
+              <details><summary>Show a model answer</summary><p>We are in a small ferry waiting room on an island, late in the evening, in a storm. “Rain lashes the window” and “A single bulb flickers” create a <b>tense, lonely</b> mood: the weather is wild, and the flickering bulb makes the room feel cold and uncertain, like Maeve's future.<br><i>Where the marks would go:</i> the setting (place and time); the mood named; two details quoted from the stage directions, each linked to the mood.</p></details></li>
+            <li>What is the <b>conflict</b> in this scene?
+              <details><summary>Show a model answer</summary><p>There are two. On the surface it is <b>person vs nature</b>: the storm stops the ferry, so Maeve may miss the start of school. Underneath it is between Maeve and her father, and inside Peadar himself: he wants her to have her chance in Galway, but he can't bear to lose her (“I want you to go. I just don't want you to leave.”).<br><i>Where the marks would go:</i> the conflict named and explained; a quote; extra credit for seeing more than one layer.</p></details></li>
+            <li>What does Peadar's last line, and the stage direction before it, tell us about him?
+              <details><summary>Show a model answer</summary><p>“<i>(turning at last, his voice breaking)</i>” shows he has been hiding his face because he is upset; now he finally lets Maeve see. His line shows he loves her and is proud of her, but is heartbroken that she is growing up and leaving the island.<br><i>Where the marks would go:</i> a point about his character; the stage direction used as evidence; the line explained.</p></details></li>
+            <li>You are directing this scene. Choose the <b>lighting</b> and <b>one sound effect</b> for the final moment and explain your choices.
+              <details><summary>Show a model answer</summary><p>I would fade the room to near darkness, with one slow, sweeping beam from the lighthouse passing over Maeve and Peadar. It shows how small and alone they are against the dark sea, but the beam gives a little hope. For sound, the ship's horn, faint and far away: the audience wonders whether the ferry is coming after all, so the scene ends on a question.<br><i>Where the marks would go:</i> a clear lighting choice and a sound choice; a reason for each, linked to the mood or the characters' feelings.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/drama-how-plays-work-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+    /* ---------- data (the PDFs and src/test_stage_it.py read this block: keep it valid JSON; one item per line) ----------
+     scene: [scene card, sp / ha / sa / da / pe] (spooky, happy, sad, danger, peaceful: ONE mood's clue words)
+     dir: [stage direction in brackets, voi / mov / act / face]
+     back: [production note, set / cos / lig / sou / pro]
+     con: [situation, per / self / nat / soc]
+     feel: [stage direction, line, an / sc / ha / sa / ne] */
+  var D=/*DATA*/{
+ "scene": [
+  ["🏰 Midnight in an abandoned castle. A ghost drifts across the hall.", "sp"],
+  ["🪦 Two friends sneak through the graveyard on Halloween night.", "sp"],
+  ["🕸️ The attic is full of cobwebs, and a rocking chair creaks on its own.", "sp"],
+  ["🏚️ A girl knocks on the door of the haunted house at the end of the lane.", "sp"],
+  ["🧙 A witch stirs her pot in an eerie forest clearing.", "sp"],
+  ["💒 The whole village is dancing at Nora and Pádraig's wedding.", "ha"],
+  ["🏆 The team lifts the trophy and the crowd goes wild.", "ha"],
+  ["🎂 Mam walks in to a surprise birthday party.", "ha"],
+  ["🎉 Ciara opens the letter: she has won first prize.", "ha"],
+  ["🎊 The town square is packed for the New Year celebrations.", "ha"],
+  ["⚱️ The family stand together at Granda's funeral.", "sa"],
+  ["🚢 Seán says goodbye to his mother before he emigrates to Boston.", "sa"],
+  ["🪑 An old man sits alone in his empty kitchen.", "sa"],
+  ["💌 Róisín reads her brother's last letter, in tears.", "sa"],
+  ["🌧️ A boy sits on the steps, crying for his lost dog.", "sa"],
+  ["🔥 Smoke fills the corridor and the fire alarm is ringing.", "da"],
+  ["🏃 A thief races over the rooftops with the police behind him.", "da"],
+  ["🛗 Two children are trapped in a lift that is falling.", "da"],
+  ["🚨 The prisoners escape over the wall as searchlights sweep the yard.", "da"],
+  ["⛵ The boat is sinking and the crew are running out of time.", "da"],
+  ["🌅 Sunrise over a calm lake. A heron stands in the reeds.", "pe"],
+  ["🧺 Two old friends share a picnic in a sunny meadow.", "pe"],
+  ["🎣 Grandad and Liam are fishing on a quiet river bank.", "pe"],
+  ["🐑 A shepherd rests under a tree while his sheep graze.", "pe"],
+  ["🛏️ A baby sleeps peacefully in her cot.", "pe"]
+ ],
+ "dir": [
+  ["(whispering)", "voi"],
+  ["(shouting up the stairs)", "voi"],
+  ["(softly, to herself)", "voi"],
+  ["(in a low voice)", "voi"],
+  ["(muttering under his breath)", "voi"],
+  ["(sarcastically)", "voi"],
+  ["(She crosses to the window.)", "mov"],
+  ["(He exits stage left.)", "mov"],
+  ["(Nuala enters, out of breath.)", "mov"],
+  ["(He sits on the edge of the bed.)", "mov"],
+  ["(She backs away from the door.)", "mov"],
+  ["(Tom steps forward to the front of the stage.)", "mov"],
+  ["(He picks up the phone.)", "act"],
+  ["(She hands Mick the envelope.)", "act"],
+  ["(Dan throws the keys on the table.)", "act"],
+  ["(She pours two cups of tea.)", "act"],
+  ["(He tears the letter in half.)", "act"],
+  ["(Gran puts down her knitting.)", "act"],
+  ["(She smiles.)", "face"],
+  ["(He glares at his brother.)", "face"],
+  ["(Aisling rolls her eyes.)", "face"],
+  ["(He frowns at the clock.)", "face"],
+  ["(She raises an eyebrow.)", "face"],
+  ["(Liam grins.)", "face"]
+ ],
+ "back": [
+  ["A painted backdrop of the Cliffs of Moher.", "set"],
+  ["A farmhouse kitchen with a fireplace and a dresser.", "set"],
+  ["A bus shelter at the side of the stage.", "set"],
+  ["A staircase leading up to a bedroom door.", "set"],
+  ["Walls painted to look like an old classroom.", "set"],
+  ["A long red cloak for the queen.", "cos"],
+  ["A muddy school uniform for Darragh.", "cos"],
+  ["A grey wig and glasses for Granny.", "cos"],
+  ["A wedding dress with a long veil.", "cos"],
+  ["Wellington boots and a farmer's coat.", "cos"],
+  ["A spotlight on Maeve as she sings.", "lig"],
+  ["A blackout at the end of the scene.", "lig"],
+  ["The lights slowly fade to dark.", "lig"],
+  ["A red glow from the fire.", "lig"],
+  ["Moonlight shines in through the window.", "lig"],
+  ["The sound of waves crashing.", "sou"],
+  ["A doorbell rings offstage.", "sou"],
+  ["Loud music from a party next door.", "sou"],
+  ["Thunder rumbles overhead.", "sou"],
+  ["Knocking at the front door.", "sou"],
+  ["A suitcase for Seán to carry.", "pro"],
+  ["A letter that Róisín tears open.", "pro"],
+  ["A hurley and sliotar for Tadhg.", "pro"],
+  ["A cup and saucer for the priest.", "pro"],
+  ["A bunch of keys for the landlady.", "pro"]
+ ],
+ "con": [
+  ["Niamh blames her best friend for losing the match.", "per"],
+  ["Two brothers fight over the family farm.", "per"],
+  ["Conor's rival on the team spreads lies about him.", "per"],
+  ["A bully takes Ella's lunch money every day.", "per"],
+  ["Grace accuses her neighbour of stealing her bike.", "per"],
+  ["Darragh can't decide whether to tell the truth or protect his friend.", "self"],
+  ["Aoife is torn between staying at home and taking the job in Dublin.", "self"],
+  ["Liam is eaten up with guilt after he breaks Gran's window.", "self"],
+  ["Part of Sinéad wants to sing, but she is terrified of the stage.", "self"],
+  ["Tom doubts himself before the big audition.", "self"],
+  ["A fisherman battles a storm to get back to the harbour.", "nat"],
+  ["A family is cut off by flood water for three days.", "nat"],
+  ["Two climbers are caught in a blizzard on the mountain.", "nat"],
+  ["A farmer struggles to save his cattle in the drought.", "nat"],
+  ["The ferry can't leave the island because of the gale.", "nat"],
+  ["Maura wants to play hurling, but the club rules say girls can't.", "soc"],
+  ["The council plans to knock down the youth club where Jack hangs out.", "soc"],
+  ["A new law says Kate's family must leave their home.", "soc"],
+  ["In the village, tradition says the eldest son must take over the farm.", "soc"],
+  ["Phones are banned at school, and Ruairí leads a protest.", "soc"]
+ ],
+ "feel": [
+  ["slamming the door", "Don't talk to me ever again!", "an"],
+  ["thumping the table", "That's not fair and you know it!", "an"],
+  ["stamping her foot", "I said no!", "an"],
+  ["red in the face", "Who told you that?", "an"],
+  ["fists clenched", "Say that again. I dare you.", "an"],
+  ["trembling", "Did you hear that? Something's upstairs.", "sc"],
+  ["backing away from the window", "There's someone out there.", "sc"],
+  ["clutching his torch", "Hello? Is anyone there?", "sc"],
+  ["hiding behind the sofa", "Is it gone?", "sc"],
+  ["gasping", "The door opened by itself.", "sc"],
+  ["beaming", "We won! We actually won!", "ha"],
+  ["hugging her sister", "You're home! You're really home!", "ha"],
+  ["laughing", "That's the best news I've heard all year.", "ha"],
+  ["jumping for joy", "I got the part!", "ha"],
+  ["clapping her hands", "A puppy? For me?", "ha"],
+  ["sobbing", "He's not coming back, is he?", "sa"],
+  ["wiping her eyes", "I'll miss you every single day.", "sa"],
+  ["head in his hands", "I've lost everything.", "sa"],
+  ["sighing heavily", "Nobody remembered my birthday.", "sa"],
+  ["in tears", "The house feels so empty now.", "sa"],
+  ["biting her nails", "What if I forget my lines?", "ne"],
+  ["pacing up and down", "The results come out in five minutes.", "ne"],
+  ["stammering", "I just wanted to say… um…", "ne"],
+  ["wringing his hands", "Do you think she'll say yes?", "ne"],
+  ["tapping his foot", "Where is that bus?", "ne"]
+ ]
+}/*END*/;
+  var LIGHT={sp:"🌑 Dim, cold blue light",ha:"☀️ Bright, warm light",sa:"🌫️ Soft, grey light",da:"🔴 Flashing red light",pe:"🌅 Gentle golden light"};
+  var SOUND={sp:"🦉 An owl and a creaking door",ha:"🎉 Cheering and lively music",sa:"🎻 A slow, sad violin",da:"🥁 A fast, pounding drum",pe:"🐦 Birdsong and gentle waves"};
+  var MWHY={sp:"Spooky scene (ghost, midnight, haunted): dim, cold light and eerie sounds make the audience shiver.",
+    ha:"Happy scene (party, wedding, a win): bright, warm light and lively sound lift the mood.",
+    sa:"Sad scene (goodbye, alone, tears): soft, grey light and slow music let the audience feel the loss.",
+    da:"Danger (fire, chase, trapped): flashing red light and a pounding beat build tension.",
+    pe:"Peaceful scene (calm, sunrise, a picnic): gentle golden light and soft natural sounds."};
+  var DIR={voi:"🗣️ How to say it",mov:"🚶 Where to move",act:"✋ What to do",face:"🙂 Face"};
+  var DWHY={voi:"How to say it: whispering, shouting, softly, sarcastically. It tells the actor how to use their voice.",
+    mov:"Where to move: enters, exits, crosses, sits, backs away. It tells the actor where to go on stage.",
+    act:"What to do: picks up, hands, throws, pours. It tells the actor what to do with a prop.",
+    face:"Face: smiles, glares, frowns, rolls her eyes. It tells the actor what their face shows."};
+  var DEPT={set:"🏠 Set",cos:"👗 Costume",lig:"💡 Lighting",sou:"🔊 Sound",pro:"🧰 Props"};
+  var BWHY={set:"Set: the place on stage (backdrop, walls, furniture, a staircase).",
+    cos:"Costume: what the actors wear (cloak, uniform, wig, boots).",
+    lig:"Lighting: spotlights, blackouts, a glow, moonlight.",
+    sou:"Sound: effects and music the audience hears (thunder, a doorbell, knocking).",
+    pro:"Props: objects the actors hold or use (a letter, a suitcase, keys, a cup)."};
+  var CON={per:"🥊 Person vs person",self:"🧠 Person vs self",nat:"🌪️ Person vs nature",soc:"🏛️ Person vs society"};
+  var CWHY={per:"Person vs person: two characters clash (a rival, a bully, an argument, blame).",
+    self:"Person vs self: the fight is inside one character (can't decide, guilt, self-doubt).",
+    nat:"Person vs nature: a storm, a flood, snow or the sea stands in the way.",
+    soc:"Person vs society: rules, laws, the council or tradition stand in the way."};
+  var FEEL={an:"😠 Angry",sc:"😨 Scared",ha:"😄 Happy",sa:"😢 Sad",ne:"😬 Nervous"};
+  var CLOSE={sc:"ne",ne:"sc"};
+  var FWHY={an:"Angry: slamming, stamping, thumping, fists clenched.",
+    sc:"Scared: trembling, gasping, hiding, backing away.",
+    ha:"Happy: beaming, laughing, hugging, clapping.",
+    sa:"Sad: sobbing, tears, sighing, head in hands.",
+    ne:"Nervous: biting nails, pacing, stammering, tapping a foot, \u201cwhat if\u201d."};
+  var FIXED=[].concat(Object.keys(LIGHT).map(function(k){return LIGHT[k];}),Object.keys(SOUND).map(function(k){return SOUND[k];}),
+    Object.keys(DIR).map(function(k){return DIR[k];}),Object.keys(DEPT).map(function(k){return DEPT[k];}),
+    Object.keys(CON).map(function(k){return CON[k];}),Object.keys(FEEL).map(function(k){return FEEL[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls){return '<div class="si-card'+(cls?" "+cls:"")+'"><p>'+esc(s)+'</p></div>';}
+  function scene(s){var e=s.split(" ")[0];return '<div class="si-card scene"><div class="si-pic">'+e+'</div><p>'+esc(s.slice(e.length+1))+'</p></div>';}
+
+  /* ================= STAGE IT: lighting and sound for the scene ================= */
+  function qLight(){var it=rnd(D.scene),k=it[1];
+    return C("💡 Pick the lighting",LIGHT[k],others(LIGHT,k),MWHY[k],scene(it[0]),{t:"light",s:it[0].slice(it[0].indexOf(" ")+1),rv:it[0]},3);}
+  function qSound(){var it=rnd(D.scene),k=it[1];
+    return C("🔊 Pick the sound",SOUND[k],others(SOUND,k),MWHY[k],scene(it[0]),{t:"sound",s:it[0].slice(it[0].indexOf(" ")+1),rv:it[0]},3);}
+  /* ================= STAGE DIRECTIONS ================= */
+  function qDir(){var it=rnd(D.dir),k=it[1];
+    return C("🎬 What does it tell the actor?",DIR[k],others(DIR,k),DWHY[k],card(it[0],"dir"),{t:"dir",s:it[0],rv:it[0]},3);}
+  /* ================= BACKSTAGE ================= */
+  function qBack(){var it=rnd(D.back),k=it[1];
+    return C("🎭 Whose job?",DEPT[k],others(DEPT,k),BWHY[k],card(it[0],"note"),{t:"back",s:it[0],rv:it[0]},3);}
+  /* ================= CONFLICT ================= */
+  function qCon(){var it=rnd(D.con),k=it[1];
+    return C("⚡ What's the conflict?",CON[k],others(CON,k),CWHY[k],card(it[0]),{t:"con",s:it[0],rv:it[0]},3);}
+  /* ================= READ THE LINE ================= */
+  function qFeel(){var it=rnd(D.feel),k=it[2];
+    var pool=Object.keys(FEEL).filter(function(x){return x!==k&&x!==CLOSE[k];}).map(function(x){return FEEL[x];});
+    return C("🎭 How does the character feel?",FEEL[k],pool,FWHY[k],
+      '<div class="si-card line"><p><i>('+esc(it[0])+')</i> '+esc(it[1])+'</p></div>',{t:"feel",d:it[0],l:it[1],rv:"("+it[0]+") "+it[1]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    stage:[qLight,qSound],
+    dir:[qDir],
+    back:[qBack],
+    con:[qCon],
+    feel:[qFeel],
+    mixed:[qLight,qSound,qDir,qBack,qCon,qFeel]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="con"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="stage"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="stage"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You're ready to direct.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,LIGHT:LIGHT,SOUND:SOUND,DIR:DIR,DEPT:DEPT,CON:CON,FEEL:FEEL}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
