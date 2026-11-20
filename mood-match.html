@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mood Match: Poetry Theme, Tone and Comparing Poems Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English poetry game: name the mood of a poem, find the word that sets it, spot the theme, see where the mood turns and compare two poems. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<style>.mm-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px 4px;max-width:520px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line);font-family:Georgia,serif}
+.mm-card p{margin:0 0 6px;font-size:20px;line-height:1.4;font-style:italic}
+.mm-card .mm-t{font-family:Inter,sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;color:var(--muted)}
+.mm-card.shift p:nth-child(4){border-top:2px dashed #E0B400;padding-top:4px}
+.mm-two{display:grid;gap:8px;grid-template-columns:1fr 1fr;max-width:620px;margin:0 auto}.mm-two .mm-card{margin:4px 0}.mm-card.sm p{font-size:17px}
+@media(max-width:560px){.mm-two{grid-template-columns:1fr}}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass.poem{font-family:Georgia,serif;font-style:italic;line-height:1.55}.pass.poem b{font-style:normal;font-family:Inter,sans-serif}
+@media(max-width:420px){.mm-card p{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Mood Match</h1>
+        <p>Joyful, sad, peaceful, tense, angry or nostalgic? Read the mood of a poem, find the word that sets it, name the theme, spot where the mood turns, and compare two poems. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="mood"><div><b>Mood Match</b><span>🎭 Which mood?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="word"><div><b>Mood words</b><span>🎯 Which word sets the mood?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="theme"><div><b>Theme</b><span>💡 What's the poem about?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="shift"><div><b>Mood shift</b><span>🔄 How does the mood change?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="compare"><div><b>Compare</b><span>🤝 Two poems: same and different</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Mood Match, 5 in a row = 3 bonus seconds. Every poem here is written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R7, R8, R9, R4, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Poetry 2: theme, tone &amp; comparing poems</h2>
+        <p>In 1st year you learned <b>how</b> poets write: similes, metaphors, sound. In 2nd year the questions go deeper: <b>What is the poem really about? How does it make you feel? How does it compare with another poem?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Two short poems about the same thing.</p>
+        <div class="sx">
+          <div class="note"><b class="h">A</b><i>The sea is calm this morning,<br>a silver sheet out to the island.</i></div>
+          <div class="note"><b class="h">B</b><i>The sea is raging at the harbour,<br>spitting foam across the pier.</i></div>
+        </div>
+        <p style="margin-top:8px">What do the two poems have in common? What is different? Which words make the difference?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Both are about the <b>sea</b>, so they share a <b>theme</b>: nature. But the <b>mood</b> is opposite: A is <b>peaceful</b> (“calm”, “silver sheet”), B is <b>angry</b> (“raging”, “spitting”). One or two words change everything. That is how you compare poems: <b>same theme, different mood</b>, and you <b>quote the words</b> that prove it.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Theme, mood and tone</h3>
+        <div class="wc">
+          <div class="note"><b class="h">💡 Theme</b>the big idea the poem is about: friendship, loss, nature, home, growing up. Say it in a few words.</div>
+          <div class="note"><b class="h">🎭 Mood</b>the feeling the poem creates in <b>you</b>, the reader: joyful, peaceful, tense…</div>
+          <div class="note"><b class="h">🗣️ Tone</b>the poet's <b>attitude</b>, like a tone of voice: fond, angry, sad, playful.</div>
+        </div>
+        <p style="margin-top:8px">The <b>topic</b> is what the poem describes (a dog, a kitchen). The <b>theme</b> is what it says about life (“losing a pet shows how much we loved it”).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six moods and the words that make them</h3>
+        <div class="wc">
+          <div class="note"><b class="h">😊 Joyful</b>laughter, danced, cheered, giggled</div>
+          <div class="note"><b class="h">😢 Sad</b>tears, lonely, sighed, wept</div>
+          <div class="note"><b class="h">😌 Peaceful</b>calm, hush, softly, gentle</div>
+          <div class="note"><b class="h">😨 Tense</b>lurking, pounding, dread, crept</div>
+          <div class="note"><b class="h">😠 Angry</b>slammed, raging, glared, snarled</div>
+          <div class="note"><b class="h">🕰️ Nostalgic</b>remember, memories, recall: looking back fondly</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">When the mood turns</h3>
+        <p>Many poems change mood halfway. Watch for a <b>turn word</b> at the start of a line: <b>But</b>, <b>Then</b>, <b>Now</b>, <b>Until</b>. In “The Beach”, the kites are dancing… <i>“But then the tide came rushing in / and fear went through me like ice.”</i> Joyful → tense. Say where the turn comes and quote the words on each side.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Comparing two poems</h3>
+        <p>Use a frame: <b>Both poems</b> are about … <b>However</b>, poem A feels …, because “…”, <b>whereas</b> poem B feels …, because “…”. <b>I prefer</b> … because … Always quote from <b>both</b> poems.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper usually prints an <b>unseen poem</b> (sometimes two) and asks about its theme, mood and language, and there is often a question on a poem <b>you studied</b>: what it is about, how it makes you feel, why you like it. Comparing two poems, or a poem and another text on the same theme, comes up too. Marks go to a <b>clear point</b>, a <b>short quote</b>, and an <b>explanation</b> of how the words create the effect.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the mood or theme in one word</b>, then prove it with a quote.</li>
+            <li><b>Explain the word</b>: “raging” makes the sea sound like a furious person.</li>
+            <li>When comparing, <b>talk about both poems</b> in every paragraph, with words like <b>both</b>, <b>whereas</b>, <b>however</b>.</li>
+            <li>Don't just retell the poem line by line.</li>
+            <li>Don't confuse <b>topic</b> (a shop) with <b>theme</b> (how places change).</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="sx">
+            <div class="pass poem"><b>A · Saturday in Ennis</b><br>The market fills the square by nine,<br>striped awnings flapping in the breeze,<br>a man selling cheese and jokes,<br>a girl with a fiddle by the bank.<br>We buy warm bread and eat it walking,<br>laughing at nothing at all.<br>This town on a Saturday<br>is the best place in the world.</div>
+            <div class="pass poem"><b>B · The Shop</b><br>Mr Kelly's shop is closed now.<br>The sign still says OPEN,<br>faded to the colour of tea.<br>I remember the jars of sweets,<br>the bell that rang above the door,<br>the way he called me “young lad”.<br>Now dust settles on the counter<br>and nobody rings the bell.</div>
+          </div>
+          <ol class="eq">
+            <li>What theme do both poems share? Explain briefly.
+              <details><summary>Show a model answer</summary><p>Both poems are about <b>home and place</b>: what a town and its shops mean to the people who live there. Poem A celebrates the town as “the best place in the world”, while poem B shows how a place we love can change.<br><i>Where the marks would go:</i> one clear theme named; a link to both poems; a brief reference to each.</p></details></li>
+            <li>What is the mood of poem A? Support your answer with two quotations.
+              <details><summary>Show a model answer</summary><p>The mood is <b>joyful</b> and lively. The market is full of movement and fun: “striped awnings flapping in the breeze” and “a man selling cheese and jokes”. The friends are “laughing at nothing at all”, which shows a carefree happiness.<br><i>Where the marks would go:</i> a mood word; two short, accurate quotes; a sentence explaining how each one creates the mood.</p></details></li>
+            <li>How does the mood change in poem B? Refer to the poem.
+              <details><summary>Show a model answer</summary><p>The middle of the poem is <b>nostalgic</b>: the speaker fondly remembers “the jars of sweets” and the bell above the door. The turn comes with “Now”: “dust settles on the counter / and nobody rings the bell”. The mood becomes <b>sad and empty</b>, because the bell that once welcomed customers is silent.<br><i>Where the marks would go:</i> both moods named; the turn word or line identified; a quote from each part.</p></details></li>
+            <li>Which poem do you prefer? Compare both poems in your answer.
+              <details><summary>Show a model answer</summary><p><b>Both</b> poems are about a town, <b>but</b> I prefer poem B. Poem A is cheerful and full of sounds, <b>whereas</b> poem B is quieter and more moving. The detail of the sign that “still says OPEN” is clever, because the shop is closed, and it made me think of shops in my own town. Poem A is fun, <b>however</b> poem B stays with you after you read it.<br><i>Where the marks would go:</i> a clear preference; reference to BOTH poems; comparing words (both, whereas, however); a personal response with reasons.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/poetry-theme-tone-comparing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_mood_match.py read this block: keep it valid JSON; one item per line) ----------
+     tone:  [couplet "line / line" with its ONE mood word in {braces}, jo / sa / ca / te / an / no]
+            (joyful, sad, peaceful, tense, angry, nostalgic)
+     theme: {k: title, t: fr / lo / na / ho / gr (friendship, loss, nature, home & place, growing up), lines: 4}
+     shift: {k, a: tone of lines 1-2, b: tone of lines 3-4 (line 3 opens with But / Then / Now / Until / By morning), lines: 4}
+     pair:  {t: shared theme, ka, a: 2 lines, ta: tone, kb, b: 2 lines, tb: a different tone} */
+  var D=/*DATA*/{
+ "tone": [
+  ["The children {danced} across the yard / as the first snow tumbled down.", "jo"],
+  ["Our {laughter} filled the packed car / all the long road to Bundoran.", "jo"],
+  ["The crowd {cheered} as the final whistle blew / and hats flew high into the air.", "jo"],
+  ["My sister {giggled} at the puppy / chasing its own tail round the garden.", "jo"],
+  ["The whole street was {celebrating} / with bunting, music and a bonfire.", "jo"],
+  ["We {whooped} and splashed in the rolling waves / on the first warm day of June.", "jo"],
+  ["The swing hangs {lonely} in the park, / its chains cold in the evening.", "sa"],
+  ["Rain runs down the window / like the {tears} upon my cheek.", "sa"],
+  ["Mam {sighed} as she folded / the baby jumper into the drawer.", "sa"],
+  ["The old dog lies beside the door, / {aching} for a step that never comes.", "sa"],
+  ["Grandad's chair sits in the corner / and the whole house is in {mourning}.", "sa"],
+  ["I {wept} at the station / as the train pulled slowly away.", "sa"],
+  ["The lake lies {calm} at evening, / a mirror for the hills.", "ca"],
+  ["Snow falls {softly} on the fields / and covers every path.", "ca"],
+  ["A {hush} settles on the harbour / as the boats come in.", "ca"],
+  ["The baby sleeps, {peaceful}, / in the warm curve of my arm.", "ca"],
+  ["{Gentle} waves lap the shore / and the gulls rest on the pier.", "ca"],
+  ["The tabby cat lies {drowsy} by the fire, / one paw across her nose.", "ca"],
+  ["Something is {lurking} in the hedge, / its eyes two points of light.", "te"],
+  ["My heart is {pounding} in the dark / as the attic stairs begin to creak.", "te"],
+  ["I {trembled} at the cliff edge / with the black water far below.", "te"],
+  ["A shadow {crept} along the landing / and stopped outside my door.", "te"],
+  ["The {dread} grows with every step / down the long and narrow lane.", "te"],
+  ["A {scream} cut through the forest, / then only the wind in the trees.", "te"],
+  ["He {slammed} the door behind him / and the kitchen windows rattled.", "an"],
+  ["The sea is {raging} at the rocks, / hurling spray across the road.", "an"],
+  ["She {glared} at the broken window / and the football on the floor.", "an"],
+  ["His {fists} were clenched and white / as the referee walked away.", "an"],
+  ["The dog {snarled} at the gate, / showing every yellow tooth.", "an"],
+  ["{Furious}, the farmer stood / in the field the cattle trampled.", "an"],
+  ["I {remember} Gran's kitchen, / the smell of bread on Saturdays.", "no"],
+  ["These faded photos hold the {memories} / of summers spent in Kilkee.", "no"],
+  ["I {recall} the long walk to school / and the puddles on the way.", "no"],
+  ["Dad {remembered} the old ballroom / where he first met my mother at a céilí.", "no"],
+  ["My {memory} of that summer / is salt and sun and sand.", "no"],
+  ["Mam {recalled} the little school / with one teacher and a fire.", "no"]
+ ],
+ "theme": [
+  {"k": "🪑 The Bench", "t": "fr", "lines": ["Every lunchtime on the same old bench", "we swap our crisps and secrets,", "my best friend and I,", "two halves of one bad joke."]},
+  {"k": "📱 The Text", "t": "fr", "lines": ["One text at midnight: you OK?", "Three small words that mean", "someone is on your side,", "my friend, my lighthouse."]},
+  {"k": "🚌 The Bus Back", "t": "fr", "lines": ["We were beaten by a point", "but my mates linked arms", "and sang the whole bus back", "as if we'd won the cup."]},
+  {"k": "🍟 Fridays", "t": "fr", "lines": ["Different schools now, different buses,", "but every Friday, without fail,", "my old pal is at the chipper", "saving me a seat."]},
+  {"k": "🧢 The Cap", "t": "lo", "lines": ["Grandad's cap still hangs on the hook", "beside the back door,", "though he is gone since March", "and nobody will move it."]},
+  {"k": "🍽️ Four Places", "t": "lo", "lines": ["At dinner we set four places", "then quietly take one away.", "Nobody says a word", "about the empty chair."]},
+  {"k": "🐕 Bran", "t": "lo", "lines": ["We said goodbye to Bran on Tuesday,", "his lead still on its nail,", "his bowl still by the cooker,", "waiting for a dog who isn't coming."]},
+  {"k": "🐈 Smudge", "t": "lo", "lines": ["The poster on the lamppost says MISSING:", "a tabby cat called Smudge.", "A little girl stops every morning", "and reads it one more time."]},
+  {"k": "🟫 The Bog in October", "t": "na", "lines": ["The bog is brown and gold in October,", "heather fading on the hills,", "a curlew calling over the water", "and the wind combing the grass."]},
+  {"k": "🐦 Blackbird", "t": "na", "lines": ["A blackbird on the wall at dawn", "sings the sun up over the field,", "the frost still white on the grass", "and the sky turning blue."]},
+  {"k": "🏞️ The River", "t": "na", "lines": ["The river runs brown after the rain,", "tumbling over stones and branches,", "past the meadow and the willow trees", "all the way to the sea."]},
+  {"k": "❄️ First Snow", "t": "na", "lines": ["Snow on the mountain this morning,", "snow on every branch in the forest,", "the stream half frozen", "and the robin puffed up like a ball."]},
+  {"k": "🚪 Our Street", "t": "ho", "lines": ["Our street has nineteen houses", "and I know every one:", "the blue door, the barking terrier,", "Mrs Daly's roses."]},
+  {"k": "🫖 The Kitchen", "t": "ho", "lines": ["The kitchen is where it all happens:", "homework, rows and toast,", "the radio on, the kettle singing,", "everyone talking at once."]},
+  {"k": "☎️ Sunday Call", "t": "ho", "lines": ["My uncle emigrated to Sydney", "but every phone call ends the same:", "tell me about the village,", "is the shop still open on Sundays?"]},
+  {"k": "🧳 Back Again", "t": "ho", "lines": ["After a week in Spain", "the front door sticks the way it always does", "and the hall smells of polish and dog.", "It's good to be back."]},
+  {"k": "👔 The Blazer", "t": "gr", "lines": ["On my first day I wore a blazer", "two sizes too big,", "and Mam fixed my tie at the gate", "as if I was off to war."]},
+  {"k": "📏 Pencil Marks", "t": "gr", "lines": ["The pencil marks on the wall", "climb year by year.", "This summer I'm taller than Dad", "and he pretends he doesn't mind."]},
+  {"k": "🧸 The Box", "t": "gr", "lines": ["Growing up means my teddy lives in a box", "under the stairs with the Lego.", "I'm too big for him, I tell myself,", "then check he's still there."]},
+  {"k": "🎒 Thirteen", "t": "gr", "lines": ["Thirteen, and suddenly a teenager,", "my voice cracking in the middle of class,", "my feet too big for everything", "and nobody's baby any more."]}
+ ],
+ "shift": [
+  {"k": "🏖️ The Beach", "a": "jo", "b": "te", "lines": ["We laughed and raced along the sand,", "kites dancing overhead.", "But then the tide came rushing in", "and fear went through me like ice."]},
+  {"k": "🌙 Night Walk", "a": "ca", "b": "te", "lines": ["The lane was quiet under the moon,", "the hedges calm and dark.", "Then a twig snapped behind me", "and my heart began pounding."]},
+  {"k": "⚽ The Match", "a": "an", "b": "jo", "lines": ["I stomped off at half-time,", "furious with the referee.", "Then Aoife scored in the last minute", "and the whole pitch was cheering."]},
+  {"k": "🎂 The Party", "a": "jo", "b": "sa", "lines": ["Balloons and cake and laughter,", "Gran dancing in the hall.", "But when the guests had left", "she sat by the window and sighed."]},
+  {"k": "🌊 The Storm", "a": "an", "b": "ca", "lines": ["All night the sea was raging,", "hurling stones against the wall.", "By morning it lay calm", "and the gulls were gently floating."]},
+  {"k": "📦 Moving Day", "a": "no", "b": "ca", "lines": ["I remember every corner", "of the house where I was small.", "Now the empty rooms are hushed", "and the boxes wait beside the van."]},
+  {"k": "🐶 The Search", "a": "te", "b": "jo", "lines": ["We searched the woods in terror,", "calling his name till dark.", "Then a bark came from the ditch", "and we were laughing in the mud."]},
+  {"k": "📝 The Exam", "a": "te", "b": "ca", "lines": ["My hands were trembling at the door,", "the clock too loud, the hall too cold.", "But once I started writing", "I felt calm, and the words came."]},
+  {"k": "🎻 The Concert", "a": "sa", "b": "jo", "lines": ["Lonely in the wings,", "I watched the others play.", "Then the crowd began to cheer my name", "and I bowed, grinning."]},
+  {"k": "🍂 Autumn", "a": "ca", "b": "sa", "lines": ["The garden lies peaceful in the evening,", "leaves drifting softly down.", "Now the swallows have flown south", "and the empty nest makes me sigh."]},
+  {"k": "🚲 The Bike", "a": "no", "b": "jo", "lines": ["I remember my first bike,", "the wobbles and the falls.", "Now I watch my little brother", "whooping down the hill on it."]},
+  {"k": "🏟️ Final Whistle", "a": "jo", "b": "an", "lines": ["We cheered the team onto the pitch,", "flags and faces green.", "Until the referee's last decision", "left us bitter all the way back."]}
+ ],
+ "pair": [
+  {"t": "ho", "ka": "🫖 Our Kitchen", "a": ["Our kitchen rings with laughter", "when the cousins come for tea."], "ta": "jo", "kb": "🏚️ The Old House", "b": ["The old house stands lonely,", "its windows dark and broken."], "tb": "sa"},
+  {"t": "na", "ka": "🌊 Summer Sea", "a": ["The sea is calm this morning,", "a silver sheet out to the island."], "ta": "ca", "kb": "🌊 Winter Sea", "b": ["The sea is raging at the harbour,", "spitting foam across the pier."], "tb": "an"},
+  {"t": "fr", "ka": "🤝 Best Friend", "a": ["My best friend and I", "giggled through the whole of maths."], "ta": "jo", "kb": "🤝 The Fall-out", "b": ["My friend walked past me in the yard", "and I glared at her back."], "tb": "an"},
+  {"t": "lo", "ka": "💔 Goodbye", "a": ["We said goodbye at the airport", "and I wept into his coat."], "ta": "sa", "kb": "💔 Grandad", "b": ["Grandad is gone, but we still laugh", "about his whistle and his cap."], "tb": "jo"},
+  {"t": "gr", "ka": "🌱 Taller", "a": ["Now I'm taller than my brother", "and I'm laughing all the way to school."], "ta": "jo", "kb": "🌱 Too Fast", "b": ["Growing up is lonely sometimes,", "when the old games stop."], "tb": "sa"},
+  {"t": "na", "ka": "🌲 Forest at Noon", "a": ["Sun through the forest,", "a hush among the ferns."], "ta": "ca", "kb": "🌲 Forest at Night", "b": ["The forest at night is menacing,", "every branch a reaching hand."], "tb": "te"},
+  {"t": "ho", "ka": "🚗 Coming Back", "a": ["The village lights come into view", "and we cheer from the back seat."], "ta": "jo", "kb": "🧳 Leaving", "b": ["I emigrated on a Tuesday,", "sobbing at the gate."], "tb": "sa"},
+  {"t": "fr", "ka": "🎣 Side by Side", "a": ["Side by side on the pier,", "two pals fishing in the quiet."], "ta": "ca", "kb": "🛖 The Den", "b": ["I remember my old pal Seán", "and the den we built behind the shed."], "tb": "no"},
+  {"t": "gr", "ka": "🏫 First Day", "a": ["My first day, and I'm trembling", "at the gate of the big school."], "ta": "te", "kb": "🎓 Last Day", "b": ["On my last day I remember", "how young I was when I came."], "tb": "no"},
+  {"t": "lo", "ka": "⛪ The Funeral", "a": ["At the funeral we stood in grey,", "Mam sighing at my shoulder."], "ta": "sa", "kb": "🚪 Gone", "b": ["He's gone, and I'm furious", "that nobody told me why."], "tb": "an"}
+ ]
+}/*END*/;
+  var TONE={jo:"😊 Joyful",sa:"😢 Sad",ca:"😌 Peaceful",te:"😨 Tense",an:"😠 Angry",no:"🕰️ Nostalgic"};
+  var TWHY={jo:"Joyful: happy, lively words (laughter, danced, cheered).",sa:"Sad: words of hurt and loss (tears, lonely, sighed).",
+    ca:"Peaceful: soft, still, quiet words (calm, hush, gently).",te:"Tense: words of fear and danger (lurking, pounding, dread).",
+    an:"Angry: hard, violent words (slammed, raging, glared).",no:"Nostalgic: looking back fondly at the past (remember, memories)."};
+  var THEME={fr:"🤝 Friendship",lo:"💔 Loss",na:"🌿 Nature",ho:"🏡 Home & place",gr:"🌱 Growing up"};
+  var HWHY={fr:"Friendship: the poem is about friends: being there for each other.",lo:"Loss: someone or something is gone, and missed.",
+    na:"Nature: the poem looks closely at the natural world: weather, birds, rivers, hills.",ho:"Home & place: where we belong, and what a place means to us.",
+    gr:"Growing up: changing from a child into a teenager."};
+  var CLOSE={sa:"no",no:"sa"}; /* look-alike tones: never offered as wrong for each other */
+  var STOP=("this that with from have has been were they their them then than into over under after before about also just very when what where which while "+
+    "will would could should there here your yours ours some such only every most more much many other another again across along around being does doing done "+
+    "each onto upon like down first away come comes lies these through nothing begin round something never time last long hold whole little high only behind").split(" ");
+  var MOODY="dark black cold shadow shadows clenched broken warm slowly faded trampled hurling rattled creak gloom grey bright sunny storm empty silent alone rain".split(" ");
+  var FIXED=[].concat(Object.keys(TONE).map(function(k){return TONE[k];}),Object.keys(THEME).map(function(k){return THEME[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function plain(s){return s.replace(/[{}]/g,"");}
+  function toneOthers(k){return Object.keys(TONE).filter(function(x){return x!==k&&CLOSE[k]!==x;});}
+  function couplet(s){return '<div class="mm-card">'+plain(s).split(" / ").map(function(l){return "<p>"+esc(l)+"</p>";}).join("")+'</div>';}
+  function poem(k,lines,cls){return '<div class="mm-card'+(cls?" "+cls:"")+'"><div class="mm-t">'+esc(k)+'</div>'+lines.map(function(l){return "<p>"+esc(l)+"</p>";}).join("")+'</div>';}
+
+  /* ================= MOOD MATCH: which mood? ================= */
+  function qMood(){var it=rnd(D.tone),k=it[1];
+    return C("🎭 Which mood?",TONE[k],toneOthers(k).map(function(x){return TONE[x];}),TWHY[k],couplet(it[0]),{t:"mood",s:it[0],rv:plain(it[0])},3);}
+  /* ================= MOOD WORDS: which word sets the mood? ================= */
+  function qWord(){var it=rnd(D.tone),s=it[0],ans=s.match(/\{([^}]+)\}/)[1].toLowerCase(),seen={},pool=[];
+    /* options are shown in lower case (a capital would give the answer away); names (a capital inside a line) are never offered */
+    plain(s).split(" / ").forEach(function(line){line.match(/[A-Za-zÀ-ÿ']+/g).forEach(function(w,i){var lw=w.toLowerCase();
+      if(i>0&&w!==lw)return;
+      if(lw.length>=4&&STOP.indexOf(lw)<0&&MOODY.indexOf(lw)<0&&lw.indexOf("'")<0&&lw!==ans&&!seen[lw]){seen[lw]=1;pool.push(lw);}});});
+    return C("🎯 Which word sets the mood?",ans,pool,"\u201c"+ans+"\u201d sets the mood: "+TWHY[it[1]],couplet(s),{t:"word",s:s,rv:plain(s)},3);}
+  /* ================= THEME ================= */
+  function qTheme(){var P=rnd(D.theme);
+    return C("💡 What's the theme?",THEME[P.t],Object.keys(THEME).filter(function(x){return x!==P.t;}).map(function(x){return THEME[x];}),HWHY[P.t],
+      poem(P.k,P.lines),{t:"theme",lines:P.lines,rv:P.k},3);}
+  /* ================= MOOD SHIFT: how does the mood change? ================= */
+  function arrow(a,b){return TONE[a]+" → "+TONE[b];}
+  function qShift(){var P=rnd(D.shift),a=P.a,b=P.b,pool=[arrow(b,a)];
+    toneOthers(b).filter(function(z){return z!==a&&CLOSE[a]!==z;}).forEach(function(z){pool.push(arrow(a,z));});
+    toneOthers(a).filter(function(z){return z!==b&&CLOSE[b]!==z;}).forEach(function(z){pool.push(arrow(z,b));});
+    var q=C("🔄 How does the mood change?",arrow(a,b),[pool[0]].concat(shuffle(pool.slice(1)).slice(0,2)),
+      "Lines 1\u20132 are "+TONE[a].split(" ")[1].toLowerCase()+"; the turn word \u201c"+P.lines[2].match(/^(By morning|At last|\S+)/)[1]+"\u201d changes it to "+TONE[b].split(" ")[1].toLowerCase()+".",
+      poem(P.k,P.lines,"shift"),{t:"shift",lines:P.lines,rv:P.k},3);
+    return q;}
+  /* ================= COMPARE: two poems on one theme ================= */
+  function pair(P){return '<div class="mm-two">'+poem("A · "+P.ka,P.a,"sm")+poem("B · "+P.kb,P.b,"sm")+'</div>';}
+  function lab(a,b){return "A "+TONE[a]+" · B "+TONE[b];}
+  function qShare(){var P=rnd(D.pair);
+    return C("🤝 What do both poems share?",THEME[P.t],Object.keys(THEME).filter(function(x){return x!==P.t;}).map(function(x){return THEME[x];}),
+      "Both poems are about "+THEME[P.t].replace(/^\S+ /,"").toLowerCase()+", even though the moods are different.",pair(P),{t:"share",a:P.a,b:P.b,rv:P.ka+" + "+P.kb},3);}
+  function qDiff(){var P=rnd(D.pair),a=P.ta,b=P.tb,pool=[lab(b,a)];
+    toneOthers(b).filter(function(z){return z!==a&&CLOSE[a]!==z;}).forEach(function(z){pool.push(lab(a,z));});
+    toneOthers(a).filter(function(z){return z!==b&&CLOSE[b]!==z;}).forEach(function(z){pool.push(lab(z,b));});
+    return C("🔀 How are the moods different?",lab(a,b),[pool[0]].concat(shuffle(pool.slice(1)).slice(0,2)),
+      "Same theme, different mood: A is "+TONE[a].split(" ")[1].toLowerCase()+", B is "+TONE[b].split(" ")[1].toLowerCase()+".",pair(P),{t:"diff",a:P.a,b:P.b,rv:P.ka+" + "+P.kb},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    mood:[qMood],
+    word:[qWord],
+    theme:[qTheme],
+    shift:[qShift],
+    compare:[qShare,qDiff],
+    mixed:[qMood,qMood,qWord,qTheme,qShift,qShare,qDiff]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="mood"||m==="word")?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="mood"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="mood"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You can read a poem's mood.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TONE:TONE,THEME:THEME}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

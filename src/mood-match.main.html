@@ -1,0 +1,148 @@
+<style>.mm-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px 4px;max-width:520px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line);font-family:Georgia,serif}
+.mm-card p{margin:0 0 6px;font-size:20px;line-height:1.4;font-style:italic}
+.mm-card .mm-t{font-family:Inter,sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;color:var(--muted)}
+.mm-card.shift p:nth-child(4){border-top:2px dashed #E0B400;padding-top:4px}
+.mm-two{display:grid;gap:8px;grid-template-columns:1fr 1fr;max-width:620px;margin:0 auto}.mm-two .mm-card{margin:4px 0}.mm-card.sm p{font-size:17px}
+@media(max-width:560px){.mm-two{grid-template-columns:1fr}}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass.poem{font-family:Georgia,serif;font-style:italic;line-height:1.55}.pass.poem b{font-style:normal;font-family:Inter,sans-serif}
+@media(max-width:420px){.mm-card p{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Mood Match</h1>
+        <p>Joyful, sad, peaceful, tense, angry or nostalgic? Read the mood of a poem, find the word that sets it, name the theme, spot where the mood turns, and compare two poems. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="mood"><div><b>Mood Match</b><span>🎭 Which mood?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="word"><div><b>Mood words</b><span>🎯 Which word sets the mood?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="theme"><div><b>Theme</b><span>💡 What's the poem about?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="shift"><div><b>Mood shift</b><span>🔄 How does the mood change?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="compare"><div><b>Compare</b><span>🤝 Two poems: same and different</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Mood Match, 5 in a row = 3 bonus seconds. Every poem here is written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R7, R8, R9, R4, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Poetry 2: theme, tone &amp; comparing poems</h2>
+        <p>In 1st year you learned <b>how</b> poets write: similes, metaphors, sound. In 2nd year the questions go deeper: <b>What is the poem really about? How does it make you feel? How does it compare with another poem?</b></p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>Two short poems about the same thing.</p>
+        <div class="sx">
+          <div class="note"><b class="h">A</b><i>The sea is calm this morning,<br>a silver sheet out to the island.</i></div>
+          <div class="note"><b class="h">B</b><i>The sea is raging at the harbour,<br>spitting foam across the pier.</i></div>
+        </div>
+        <p style="margin-top:8px">What do the two poems have in common? What is different? Which words make the difference?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Both are about the <b>sea</b>, so they share a <b>theme</b>: nature. But the <b>mood</b> is opposite: A is <b>peaceful</b> (“calm”, “silver sheet”), B is <b>angry</b> (“raging”, “spitting”). One or two words change everything. That is how you compare poems: <b>same theme, different mood</b>, and you <b>quote the words</b> that prove it.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Theme, mood and tone</h3>
+        <div class="wc">
+          <div class="note"><b class="h">💡 Theme</b>the big idea the poem is about: friendship, loss, nature, home, growing up. Say it in a few words.</div>
+          <div class="note"><b class="h">🎭 Mood</b>the feeling the poem creates in <b>you</b>, the reader: joyful, peaceful, tense…</div>
+          <div class="note"><b class="h">🗣️ Tone</b>the poet's <b>attitude</b>, like a tone of voice: fond, angry, sad, playful.</div>
+        </div>
+        <p style="margin-top:8px">The <b>topic</b> is what the poem describes (a dog, a kitchen). The <b>theme</b> is what it says about life (“losing a pet shows how much we loved it”).</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Six moods and the words that make them</h3>
+        <div class="wc">
+          <div class="note"><b class="h">😊 Joyful</b>laughter, danced, cheered, giggled</div>
+          <div class="note"><b class="h">😢 Sad</b>tears, lonely, sighed, wept</div>
+          <div class="note"><b class="h">😌 Peaceful</b>calm, hush, softly, gentle</div>
+          <div class="note"><b class="h">😨 Tense</b>lurking, pounding, dread, crept</div>
+          <div class="note"><b class="h">😠 Angry</b>slammed, raging, glared, snarled</div>
+          <div class="note"><b class="h">🕰️ Nostalgic</b>remember, memories, recall: looking back fondly</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">When the mood turns</h3>
+        <p>Many poems change mood halfway. Watch for a <b>turn word</b> at the start of a line: <b>But</b>, <b>Then</b>, <b>Now</b>, <b>Until</b>. In “The Beach”, the kites are dancing… <i>“But then the tide came rushing in / and fear went through me like ice.”</i> Joyful → tense. Say where the turn comes and quote the words on each side.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Comparing two poems</h3>
+        <p>Use a frame: <b>Both poems</b> are about … <b>However</b>, poem A feels …, because “…”, <b>whereas</b> poem B feels …, because “…”. <b>I prefer</b> … because … Always quote from <b>both</b> poems.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper usually prints an <b>unseen poem</b> (sometimes two) and asks about its theme, mood and language, and there is often a question on a poem <b>you studied</b>: what it is about, how it makes you feel, why you like it. Comparing two poems, or a poem and another text on the same theme, comes up too. Marks go to a <b>clear point</b>, a <b>short quote</b>, and an <b>explanation</b> of how the words create the effect.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the mood or theme in one word</b>, then prove it with a quote.</li>
+            <li><b>Explain the word</b>: “raging” makes the sea sound like a furious person.</li>
+            <li>When comparing, <b>talk about both poems</b> in every paragraph, with words like <b>both</b>, <b>whereas</b>, <b>however</b>.</li>
+            <li>Don't just retell the poem line by line.</li>
+            <li>Don't confuse <b>topic</b> (a shop) with <b>theme</b> (how places change).</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="sx">
+            <div class="pass poem"><b>A · Saturday in Ennis</b><br>The market fills the square by nine,<br>striped awnings flapping in the breeze,<br>a man selling cheese and jokes,<br>a girl with a fiddle by the bank.<br>We buy warm bread and eat it walking,<br>laughing at nothing at all.<br>This town on a Saturday<br>is the best place in the world.</div>
+            <div class="pass poem"><b>B · The Shop</b><br>Mr Kelly's shop is closed now.<br>The sign still says OPEN,<br>faded to the colour of tea.<br>I remember the jars of sweets,<br>the bell that rang above the door,<br>the way he called me “young lad”.<br>Now dust settles on the counter<br>and nobody rings the bell.</div>
+          </div>
+          <ol class="eq">
+            <li>What theme do both poems share? Explain briefly.
+              <details><summary>Show a model answer</summary><p>Both poems are about <b>home and place</b>: what a town and its shops mean to the people who live there. Poem A celebrates the town as “the best place in the world”, while poem B shows how a place we love can change.<br><i>Where the marks would go:</i> one clear theme named; a link to both poems; a brief reference to each.</p></details></li>
+            <li>What is the mood of poem A? Support your answer with two quotations.
+              <details><summary>Show a model answer</summary><p>The mood is <b>joyful</b> and lively. The market is full of movement and fun: “striped awnings flapping in the breeze” and “a man selling cheese and jokes”. The friends are “laughing at nothing at all”, which shows a carefree happiness.<br><i>Where the marks would go:</i> a mood word; two short, accurate quotes; a sentence explaining how each one creates the mood.</p></details></li>
+            <li>How does the mood change in poem B? Refer to the poem.
+              <details><summary>Show a model answer</summary><p>The middle of the poem is <b>nostalgic</b>: the speaker fondly remembers “the jars of sweets” and the bell above the door. The turn comes with “Now”: “dust settles on the counter / and nobody rings the bell”. The mood becomes <b>sad and empty</b>, because the bell that once welcomed customers is silent.<br><i>Where the marks would go:</i> both moods named; the turn word or line identified; a quote from each part.</p></details></li>
+            <li>Which poem do you prefer? Compare both poems in your answer.
+              <details><summary>Show a model answer</summary><p><b>Both</b> poems are about a town, <b>but</b> I prefer poem B. Poem A is cheerful and full of sounds, <b>whereas</b> poem B is quieter and more moving. The detail of the sign that “still says OPEN” is clever, because the shop is closed, and it made me think of shops in my own town. Poem A is fun, <b>however</b> poem B stays with you after you read it.<br><i>Where the marks would go:</i> a clear preference; reference to BOTH poems; comparing words (both, whereas, however); a personal response with reasons.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/poetry-theme-tone-comparing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

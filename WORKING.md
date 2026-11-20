@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-20 07:36 · E3 English Order 23 Poetry 2 (Mood Match) · english-m23
