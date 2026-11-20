@@ -69,6 +69,8 @@ for i, yr in enumerate(["1st year", "2nd year", "3rd year"], 1):
         rows += f'<tr><td class="num">{n}</td><td><b>{e(r[2])}</b>{tag}{soon}</td><td>{e(r[1])}</td><td>{e(r[3])}</td><td>{game}</td></tr>'
     tabs += f'    <div id="y{i}" role="tabpanel" aria-label="{yr}"{"" if i == 1 else " hidden"}>\n<div class="table-wrap"><table><thead><tr><th>#</th><th>Topic</th><th>Term</th><th>Learning outcomes</th><th>Game</th></tr></thead><tbody>{rows}</tbody></table></div>\n    </div>\n'
 
+import build_came_up as _CU
+CAMEUP = _CU.english_section()
 main = f'''<main id="main">
 
 <section class="hero">
@@ -97,9 +99,11 @@ main = f'''<main id="main">
       <div class="stat"><b>1 theme</b><span>every question links to the paper's theme, and the sections and their marks change from year to year</span></div>
       <div class="stat"><b>2 CBAs</b><span>Oral Communication (2nd year) and the Collection of the Student's Texts (3rd year); students sitting in 2027 and 2028 do only one</span></div>
     </div>
-    <p style="color:#C9D1DA;margin-top:24px;font-size:15px">Because the layout changes every year, you can't learn the paper off by heart. What you can learn are the skills it always tests: reading closely, answering the exact question, backing up a point with a short quote, and writing clearly for a reader. That's what every Léim English topic practises.</p>
+    <p style="color:#C9D1DA;margin-top:24px;font-size:15px">Because the layout changes every year, you can't learn the paper off by heart. What you can learn are the skills it always tests: reading closely, answering the exact question, backing up a point with a short quote, and writing clearly for a reader. That's what every Léim English topic practises. <a href="#came-up" style="color:#F6CF5A">See what came up in 2022–2026</a>.</p>
   </div>
 </section>
+
+{CAMEUP}
 
 <section class="block" id="texts" style="scroll-margin-top:90px">
   <div class="wrap">

@@ -14,6 +14,14 @@ HEAD = TPL[:TPL.index('<main id="main">')]
 FOOT = TPL[TPL.index("</main>"):]
 e = html.escape
 
+def _came(subject, i):
+    # "Came up in" line from src/came_up_data.py (facts only: year + question numbers)
+    import came_up_data as D
+    line = D.came_line(subject, i)
+    if not line or line.startswith("every") or line.startswith("the writing") or line.startswith("Q17"):
+        return line or ""
+    return line + " (" + D.KEYS[subject].replace(" level question", "").rstrip(".") + ")"
+
 def norm(rows, subject):
     out = []
     for i, r in enumerate(rows, 1):
@@ -25,7 +33,7 @@ def norm(rows, subject):
             yr, term, title, lo, game, url, sheet = r
             lo_short = lo
         out.append(dict(n=i, year=yr, term=term, title=title, lo=lo, lo_short=lo_short, game=game,
-                        url=url, sheet=f"printables/{sheet}-rules-and-practice.pdf" if sheet and url else "", came=""))
+                        url=url, sheet=f"printables/{sheet}-rules-and-practice.pdf" if sheet and url else "", came=_came(subject, i)))
     return out
 
 SUBJ = {

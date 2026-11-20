@@ -115,6 +115,8 @@ MODELS=''.join([
    'Mean questions that give you the mean and ask for a missing value are always done with totals.'),
 ])
 
+import build_came_up as _CU
+CAMEUP=_CU.maths_section()
 main=f'''<main id="main">
 
 <section class="hero">
@@ -124,7 +126,7 @@ main=f'''<main id="main">
       <h1>The Maths <span class="hl">Exam Centre</span></h1>
       <p class="lede">How the June paper works, how every mark is given, and what to do when a question goes wrong. Based on the State Examinations Commission's published 2026 papers and marking schemes.</p>
       <nav class="toc" aria-label="On this page">
-        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#practice">Model answers</a><a href="#cba">CBAs</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
+        <a href="#paper">The paper</a><a href="#marks">Marks per question</a><a href="#marking">How it's marked</a><a href="#wrong">If you go wrong</a><a href="#strategies">Strategies</a><a href="#practice">Model answers</a><a href="#came-up">What came up</a><a href="#cba">CBAs</a><a href="#grades">Grades</a><a href="#parents">For parents</a>
       </nav>
     </div>
   </div>
@@ -235,6 +237,8 @@ main=f'''<main id="main">
   <p>Then mix them up: <a href="exam-mix.html#exam">Exam Mix's Exam corner</a> has problems that join two topics, like the real paper.</p>
   <a class="card cardlink" href="https://payhip.com/b/e9F6G" target="_blank" rel="noopener" style="margin-top:12px;border:2px solid var(--green)"><h3 style="margin:0">Want two full mock papers? Junior Cycle Maths Exam Pack · €12</h3><p>A Higher and an Ordinary mock paper in the format of the June exam (2 hours, 270 marks, 13 questions), worked solutions for every part, where the marks would go, answer keys, score sheets, grades, a 4-week plan and an exam-day checklist. 26 printable pages, all original.</p><p style="color:var(--green);font-weight:700">Get the pack on Payhip ↗</p></a>
 </section>
+
+{CAMEUP}
 
 <section id="cba">
   <h2>CBAs (Classroom-Based Assessments)</h2>
