@@ -1,0 +1,269 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* brackets and dashes shown big and red on the buttons, so they're easy to see on a phone */
+  function pu(s){return esc(s).replace(/([()–])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_proofread_patrol.py read this block: keep it valid JSON; one item per line) ----------
+     spot: [sentence with ONE slip written {slip>fix}, kind sp (spelling) / cw (mix-up word) / gr (grammar), memory tip]
+     pass: [emoji title, a 3-sentence passage with 0-3 slips {slip>fix}]
+     few:  [sentence with ___, fewer / less]
+     who:  [sentence with ___, who / whom]
+     brk:  sentence with the extra information in [square brackets] (shown with brackets or a pair of dashes) */
+  var D=/*DATA*/
+{
+ "spot": [
+   ["We had a really {wierd>weird} dream about the island.", "sp", "weird breaks the i before e rule: we-i-rd."],
+   ["I will {definately>definitely} be at the match on Saturday.", "sp", "definitely has finite in it: de-fin-ite-ly."],
+   ["Keep the two piles of paper {seperate>separate} for now.", "sp", "There's a rat in separate: sep-a-rat-e."],
+   ["Did you {recieve>receive} my letter last week?", "sp", "i before e except after c: receive."],
+   ["We have to wait {untill>until} the rain stops.", "sp", "until has only one l at the end."],
+   ["The {begining>beginning} of the film was very slow.", "sp", "begin + ing doubles the n: beginning."],
+   ["My best {freind>friend} lives two doors down.", "sp", "A friend to the end: fri-end."],
+   ["I could not {beleive>believe} how cold the water was.", "sp", "Never believe a lie: be-lie-ve."],
+   ["It is {neccessary>necessary} to bring a packed lunch.", "sp", "One collar, two sleeves: one c, two s in necessary."],
+   ["The accident {occured>occurred} on the main road.", "sp", "occur + ed doubles the r: occurred."],
+   ["We had a big {arguement>argument} about the remote.", "sp", "argue drops its e before -ment: argument."],
+   ["Aoife wanted to {suprise>surprise} her mother.", "sp", "There's an r after the u: sur-prise."],
+   ["The old {libary>library} is closing next month.", "sp", "library has two r's: li-brar-y."],
+   ["My birthday is in {Febuary>February} this year.", "sp", "February has an r after the b: Feb-ru-ary."],
+   ["We need to protect the {enviroment>environment} for the future.", "sp", "environment has iron in it: env-iron-ment."],
+   ["The magician made the coin {dissapear>disappear} in a second.", "sp", "dis + appear: one s, two p's."],
+   ["Look, {their>there} is a spider in the bath.", "cw", "there is / there are: there points to a place or says something exists."],
+   ["The students left {there>their} bags in the hall.", "cw", "their = belonging to them: their bags."],
+   ["Tell me when {your>you're} ready to go.", "cw", "you're = you are: when you are ready."],
+   ["This soup is far {to>too} hot for me.", "cw", "too = more than you want: too hot."],
+   ["We should {of>have} left the house earlier.", "cw", "should have, never should of: it only sounds like \"of\"."],
+   ["My brother is taller {then>than} my dad now.", "cw", "Compare with than: taller than."],
+   ["The library was {quite>quiet} after the bell rang.", "cw", "quiet = no noise; quite = fairly."],
+   ["Hold the rope tight or you will {loose>lose} it.", "cw", "lose = not have it any more; loose = not tight."],
+   ["We are not sure {weather>whether} the trip is on.", "cw", "whether = if; weather = rain and sun."],
+   ["We drove {passed>past} the old castle on the way home.", "cw", "past = beyond (drove past); passed is a verb (she passed the ball)."],
+   ["I can't {here>hear} you over the music.", "cw", "You hear with your ear: hear."],
+   ["There is {know>no} milk left in the fridge.", "cw", "no = not any; know = you know a fact."],
+   ["Mam {bought>brought} the dog with her to the beach.", "cw", "brought = carried along; bought = paid for."],
+   ["I have {saw>seen} that film three times.", "gr", "have seen (with have); saw stands alone: I saw it."],
+   ["Liam {done>did} all his homework before tea.", "gr", "did stands alone; done needs has or have."],
+   ["She has {went>gone} to the shop for bread.", "gr", "has gone (with has); went stands alone: she went."],
+   ["The box of apples {are>is} on the table.", "gr", "The box is (one box), even with apples after it."],
+   ["Each of the players {have>has} a new jersey.", "gr", "each = one at a time, so each has."],
+   ["There {is>are} three dogs in the garden.", "gr", "three dogs = more than one, so there are."],
+   ["Liam and {me>I} went to the cinema.", "gr", "Take away Liam: I went, not me went."],
+   ["The teacher gave the prize to Ella and {I>me}.", "gr", "Take away Ella: gave it to me, not to I."],
+   ["There were {less>fewer} people at the match this year.", "gr", "fewer for things you can count (people); less for things you can't (milk)."],
+   ["The girl {whom>who} won the race is my cousin.", "gr", "who does the action (she won); whom has it done to them."],
+   ["My cousins {was>were} late for the wedding.", "gr", "cousins = more than one, so were."]
+ ],
+ "pass": [
+   ["🏖️ The beach", "We went to the beach on {Saterday>Saturday}. {Their>There} was a strong wind all day. My little brother lost his hat in the waves."],
+   ["⚽ The match", "Our team played really well in the final. Each of the players {were>was} brilliant. We won by two points."],
+   ["🐕 The dog", "My dog Rex is {to>too} lazy to chase the ball. He sleeps on the couch all day. Mam says he is the laziest dog in {Irland>Ireland}."],
+   ["🎂 The party", "I had a party for my birthday last week. All my friends came to the house. We ate cake and played games in the garden."],
+   ["🚌 The bus", "The bus was late again this morning. I should {of>have} walked to school. My teacher was not {to>too} happy when I arrived."],
+   ["🎒 The trip", "Our class went on a trip to the museum. We saw the {skeleten>skeleton} of a giant deer. It was {quiet>quite} amazing."],
+   ["🍕 The pizza", "Dad brought home a pizza for {dinnar>dinner}. My sister and {me>I} ate it all. {Their>There} was none left for Dad."],
+   ["🌧️ The storm", "The storm hit the town {durring>during} the night. Trees fell {accross>across} the roads. The school was closed the {nex>next} day."],
+   ["📱 The phone", "I lost my phone at the park. I looked everywhere for it. In the end it was in my pocket the whole time."],
+   ["🎻 The concert", "Niamh played the fiddle at the school concert. She was nervous at the {begining>beginning}. By the end the hall was cheering."],
+   ["🏊 The swim", "I swam ten lengths of the pool on Monday. My coach said I {done>did} really well. Next week I will try for twenty."],
+   ["🍎 The garden", "Gran grows apples in her garden. There {is>are} four trees near the wall. Every autumn we pick them together."],
+   ["🎨 The art room", "The art room is the {brightist>brightest} room in the school. {Their>There} are paints and brushes everywhere. I could stay {their>there} all day."],
+   ["🚲 The bike", "My bike has a flat tyre. Dad says he will fix it at the weekend. Until then I have to walk."]
+ ],
+ "few": [
+   ["There were ___ people at the concert than last year.", "fewer"],
+   ["I drink ___ milk than my brother does.", "less"],
+   ["We have ___ homework on Fridays.", "less"],
+   ["This shop has ___ customers since the new one opened.", "fewer"],
+   ["Our team scored ___ goals in the second half.", "fewer"],
+   ["You should use ___ salt in the soup.", "less"],
+   ["There is ___ traffic on the roads in summer.", "less"],
+   ["Gran has ___ hens now that the fox came.", "fewer"],
+   ["I spend ___ time on my phone than my sister.", "less"],
+   ["The new bus makes ___ stops on the way to town.", "fewer"],
+   ["We got ___ rain this week than last week.", "less"],
+   ["There are ___ cars outside the school today.", "fewer"],
+   ["My little brother eats ___ vegetables than me.", "fewer"],
+   ["The garden needs ___ water in the winter.", "less"],
+   ["This year we have ___ students in the choir.", "fewer"],
+   ["Please make ___ noise in the library.", "less"],
+   ["I made ___ mistakes in this test.", "fewer"],
+   ["There was ___ snow on the mountain this year.", "less"],
+   ["We have ___ days off at Easter this year.", "fewer"],
+   ["My new phone uses ___ power than the old one.", "less"]
+ ],
+ "who": [
+   ["The girl ___ won the race is my cousin.", "who"],
+   ["The man ___ we met at the shop was very friendly.", "whom"],
+   ["I know a boy ___ can juggle five balls.", "who"],
+   ["To ___ should I send the letter?", "whom"],
+   ["The teacher ___ runs the choir is retiring.", "who"],
+   ["The player ___ the coach picked was delighted.", "whom"],
+   ["She is the friend with ___ I share my lunch.", "whom"],
+   ["The farmer ___ owns the field is very kind.", "who"],
+   ["The boy ___ I sat beside on the bus was asleep.", "whom"],
+   ["My aunt, ___ lives in Galway, is coming to stay.", "who"],
+   ["The writer ___ we read in class is visiting the school.", "whom"],
+   ["The children ___ found the puppy got a reward.", "who"],
+   ["The woman for ___ we waited never came.", "whom"],
+   ["Anyone ___ wants to play should sign up today.", "who"],
+   ["The doctor ___ Mam phoned was very helpful.", "whom"],
+   ["The lifeguard ___ saved the swimmer was on the news.", "who"],
+   ["The singer ___ everyone loves is playing in Cork.", "whom"],
+   ["The neighbour ___ fixed our gate would not take any money.", "who"]
+ ],
+ "brk": [
+   "My cousin [who lives in Galway] is coming to stay.",
+   "The concert [which lasted three hours] was brilliant.",
+   "Our dog [a very lazy spaniel] slept through the storm.",
+   "The new pool [opened last June] is always busy.",
+   "Mr Byrne [our geography teacher] has a pet snake.",
+   "The castle [built in the twelfth century] is still standing.",
+   "My sister [who hates spiders] screamed at the bath.",
+   "The bus [the last one of the night] was packed.",
+   "Our school play [a musical about pirates] sold out in a day.",
+   "The cake [still warm from the oven] smelled amazing.",
+   "My best friend [a brilliant goalkeeper] saved the penalty.",
+   "The island [only two miles long] has one shop.",
+   "Grandad [now eighty years old] still walks every day.",
+   "The film [based on a true story] made me cry.",
+   "Our coach [a former county player] knows every trick.",
+   "The library [closed for a month] opens again on Monday."
+ ]
+}/*END*/;
+  var MARK=/\{([^>{}]+)>([^{}]+)\}/g;
+  function shown(t){return t.replace(MARK,function(m,a){return a;});}
+  function fixed(t){return t.replace(MARK,function(m,a,b){return b;});}
+  function words(t){return t.match(/[A-Za-z][A-Za-z']*/g)||[];}
+  var COUNT=["None","1 slip","2 slips","3 slips"],FEW=["fewer","less"],WHO=["who","whom"];
+  var FIXED=COUNT.concat(FEW,WHO);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(inner,lab){return '<div class="pp-card">'+(lab?'<div class="pp-l">'+lab+'</div>':'')+'<p>'+inner+'</p></div>';}
+  var GAP='<mark class="hl">&nbsp;?&nbsp;</mark>';
+  function gapS(s){var p=s.split("___");return esc(p[0])+GAP+esc(p[1]);}
+
+  /* ================= PROOFREAD PATROL: tap the slip ================= */
+  function qPatrol(){var it=rnd(D.spot),s=it[0],m=/\{([^>{}]+)>([^{}]+)\}/.exec(s),slip=m[1],fix=m[2];
+    var ws=words(shown(s)).slice(1),seen={},pool=[];
+    ws.forEach(function(w){if(w!==slip&&!seen[w]&&!/^(a|an|the)$/i.test(w)){seen[w]=1;pool.push(w);}});
+    var q=C("🔎 Tap the slip",slip,pool,it[2]+" ("+slip+" → "+fix+")",card(esc(shown(s))),{t:"patrol",s:s,rv:fixed(s)},3);
+    var order=words(shown(s));q.fixed=[q.answer].concat(q.wrong).sort(function(a,b){return order.indexOf(a)-order.indexOf(b);}); /* buttons in sentence order */
+    return q;}
+  /* ================= HOW MANY SLIPS? ================= */
+  function qCount(){var it=rnd(D.pass),t=it[1],n=(t.match(MARK)||[]).length;
+    var fx=[];t.replace(MARK,function(m,a,b){fx.push(a+" → "+b);});
+    return C("🔢 How many slips?",COUNT[n],COUNT,n?"The slips: "+fx.join(", ")+".":"No slips: this one is clean. Checking and finding nothing is part of proofreading too.",
+      card(esc(shown(t)),esc(it[0])),{t:"count",text:t,rv:it[0]},3);}
+  /* ================= FEWER OR LESS? ================= */
+  function qFew(){var it=rnd(D.few),s=it[0],a=it[1];
+    return C("⚖️ fewer or less?",a,[a==="fewer"?"less":"fewer"],a==="fewer"?"fewer for things you can count (fewer cars, fewer goals).":"less for things you can't count (less milk, less time).",
+      card(gapS(s)),{t:"few",s:s,rv:s.replace("___",a)},1);}
+  /* ================= WHO OR WHOM? ================= */
+  function qWho(){var it=rnd(D.who),s=it[0],a=it[1];
+    return C("👤 who or whom?",a,[a==="who"?"whom":"who"],a==="who"?"who does the action: try he / she in its place (she won → who won).":"whom has the action done to it, or comes after a word like to / with / for: try him / her (we met him → whom we met).",
+      card(gapS(s)),{t:"who",s:s,rv:s.replace("___",a)},1);}
+  /* ================= BRACKETS & DASHES ================= */
+  /* wrong versions are made from the one correct sentence: a bracket or dash missing, moved one word, or mixed with a comma or the other mark */
+  function brkPool(s,style){var m=/^(.*) \[([^\]]+)\] (.*)$/.exec(s),A=m[1],X=m[2],B=m[3];
+    var a=A.split(" "),x=X.split(" "),b=B.split(" "),o,c,out=[];
+    if(style==="b"){o="(";c=")";}else{o="– ";c=" –";}
+    function v(pre,ins,post,op,cl){return pre.join(" ")+" "+op+ins.join(" ")+cl+" "+post.join(" ");}
+    out.push(v(a,x,b,o,""));                                   /* closing mark missing */
+    out.push(v(a,x.concat(b.slice(0,1)),b.slice(1),o,c));      /* closing mark one word too late */
+    if(x.length>2)out.push(v(a,x.slice(0,-1),[x[x.length-1]].concat(b),o,c)); /* closing mark one word too early */
+    if(a.length>1)out.push(v(a.slice(0,-1),[a[a.length-1]].concat(x),b,o,c)); /* opening mark one word too early */
+    out.push(a.join(" ")+", "+o+x.join(" ")+c+", "+b.join(" "));/* commas as well as the marks */
+    out.push(v(a,x,b,o,style==="b"?" –":")"));                 /* one bracket, one dash */
+    return out;}
+  function qBrk(){var s=rnd(D.brk),style=rnd(["b","d"]);
+    var ans=style==="b"?s.replace("[","(").replace("]",")"):s.replace("[","– ").replace("]"," –");
+    return C("➖ Which is right?",ans,brkPool(s,style),"Brackets ( ) or a pair of dashes – – go round the extra information. Take it out and the sentence still works.",
+      "",{t:"brk",s:s,rv:ans},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    patrol:[qPatrol],
+    count:[qCount],
+    few:[qFew],
+    who:[qWho],
+    brk:[qBrk],
+    mixed:[qPatrol,qPatrol,qCount,qFew,qWho,qBrk]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="count"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="patrol"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="patrol"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! Nothing gets past you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,shown:shown,fixed:fixed,brkPool:brkPool}};
+})();
+</script>

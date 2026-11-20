@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 20 Nov 13:40 · E3 English Order 26 Editing & redrafting (Proofread Patrol) · english-e26

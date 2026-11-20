@@ -104,7 +104,7 @@ ENGLISH = [
   ("2nd year","Summer","Poetry 2: theme, tone & comparing poems","R7, R8, R9, R4, W8","Mood Match","mood-match.html","poetry-theme-tone-comparing"),
   ("2nd year","Summer","Punctuation 2: dialogue, quotes, colons & semicolons","W11, W10","Speech Marks Sprint","speech-marks-sprint.html","punctuation-2"),
   ("3rd year","Autumn","Collection of the Student's Texts (CBA 2)","OL1, R2, R6, R8, W1, W2, W3, W4, W6, W9, W11","CBA guide","",""),
-  ("3rd year","Autumn","Editing & redrafting: proofreading your own work","W1, W6, W13, W2","Proofread Patrol","",""),
+  ("3rd year","Autumn","Editing & redrafting: proofreading your own work","W1, W6, W13, W2","Proofread Patrol","proofread-patrol.html","editing-redrafting"),
   ("3rd year","Autumn","Film: camera shots, sound & key scenes","R9, R7, OL8, W8","Shot Spotter","",""),
   ("3rd year","Autumn","Shakespeare (Higher Level only)","R6, R7, R8, R4, OL8","Who Said It?","",""),
   ("3rd year","Spring","Answering on texts: point, quote, explain","R3, R4, R7, W7, W8","PQE Builder","",""),

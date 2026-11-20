@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proofread Patrol: Editing and Proofreading Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English editing game: tap the spelling, mix-up or grammar slip, count the slips in a passage, choose fewer or less and who or whom, and use brackets and dashes. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.pp-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px 8px;max-width:560px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.pp-card p{margin:0;font-size:21px;line-height:1.5;font-weight:600}
+.pp-card .pp-l{font-weight:800;font-size:14px;color:var(--muted);margin-bottom:2px}
+.pp-card mark.hl{background:#F6CF5A;border-radius:6px;padding:0 4px}
+.choice .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1}
+.choices.one .choice{font-size:18px;text-align:left}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.slip{background:#FDE2DF;border-radius:5px;padding:0 3px;text-decoration:line-through;text-decoration-color:#C0392B}
+.fixd{background:#DDF3E4;border-radius:5px;padding:0 3px;font-weight:700}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.pp-card p{font-size:18px}#choices .choice{font-size:15px}.choices.one .choice{font-size:16px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Proofread Patrol</h1>
+        <p>Every piece of writing has slips. Hunt them down: tap the misspelled or wrong word, count the slips in a short passage, pick fewer or less, who or whom, and get brackets and dashes right. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="patrol"><div><b>Proofread Patrol</b><span>🔎 Tap the slip</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="count"><div><b>How many slips?</b><span>🔢 Check a whole passage</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="few"><div><b>Fewer or less?</b><span>⚖️ Count it or not?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="who"><div><b>Who or whom?</b><span>👤 He or him?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="brk"><div><b>Brackets &amp; dashes</b><span>➖ ( ) and – –</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Proofread Patrol, 5 in a row = 3 bonus seconds. Every sentence here is written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W1, W6, W13, W2 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Editing &amp; redrafting: proofreading your own work</h2>
+        <p>Proofreading means reading your own writing again to catch the slips: spelling, mix-up words, grammar and punctuation. Redrafting goes further: you make the writing <b>better</b>, not just correct. Both are part of the Junior Cycle, and both win marks.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="sx">
+          <div class="note"><b class="h">✏️ First draft</b>My brother and <span class="slip">me</span> went to the beach. <span class="slip">Their</span> was nobody else there. We should <span class="slip">of</span> brought a coat because it was <span class="slip">freezeing</span>.</div>
+          <div class="note"><b class="h">✅ Proofread</b>My brother and <span class="fixd">I</span> went to the beach. <span class="fixd">There</span> was nobody else there. We should <span class="fixd">have</span> brought a coat because it was <span class="fixd">freezing</span>.</div>
+        </div>
+        <p style="margin-top:8px">Four slips in three sentences. What kind of slip is each one? Which would a spell checker miss?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><i>me → I</i> is <b>grammar</b> (take away "my brother": <i>I went</i>). <i>Their → There</i> and <i>of → have</i> are <b>mix-up words</b>: real words in the wrong place. <i>freezeing → freezing</i> is <b>spelling</b> (drop the e before -ing). A spell checker would only catch the last one, because the other three are real words. That's why you have to read it yourself.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Four passes: what to look for</h3>
+        <div class="wc">
+          <div class="note"><b class="h">1. 🔤 Spelling</b>Your own tricky words (definitely, separate, beginning). Read slowly, word by word.</div>
+          <div class="note"><b class="h">2. 🔀 Mix-ups</b>there / their / they're, to / too, then / than, should <i>have</i> (not <i>of</i>).</div>
+          <div class="note"><b class="h">3. ⚙️ Grammar</b>Same tense all the way, subject and verb agree (<i>each of them <b>has</b></i>), I or me, saw or seen.</div>
+          <div class="note"><b class="h">4. ✒️ Punctuation</b>Capitals, full stops (no run-ons), apostrophes, speech marks.</div>
+        </div>
+        <p style="margin-top:8px"><b>Tips:</b> read it in your head as if you were reading it <b>aloud</b>; you hear slips you don't see. Keep a list of <b>your own</b> usual slips and check for those first. Leave a couple of minutes at the end of every answer to read it back.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Fewer or less? Who or whom?</h3>
+        <div class="sx">
+          <div class="note"><b class="h">⚖️ fewer / less</b><b>fewer</b> for things you can count: <i>fewer cars, fewer goals</i>.<br><b>less</b> for things you can't: <i>less milk, less time, less noise</i>.</div>
+          <div class="note"><b class="h">👤 who / whom</b><b>who</b> does the action: <i>the girl who won</i> (she won).<br><b>whom</b> has it done to them: <i>the man whom we met</i> (we met him), and after <i>to / with / for</i>: <i>to whom</i>.</div>
+        </div>
+        <p style="margin-top:8px">Memory trick: <b>him</b> and <b>whom</b> both end in <b>m</b>. If you'd say <i>him</i>, write <i>whom</i>.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Brackets and dashes</h3>
+        <p>Brackets <b>( )</b> or a pair of dashes <b>– –</b> hold extra information in the middle of a sentence. Take it out and the sentence still works:</p>
+        <div class="sx">
+          <div class="note"><i>Our dog (a very lazy spaniel) slept through the storm.</i></div>
+          <div class="note"><i>Our dog – a very lazy spaniel – slept through the storm.</i></div>
+        </div>
+        <p style="margin-top:8px">Always use them in <b>pairs</b>, and don't add commas as well.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Redrafting: make it better</h3>
+        <div class="sx">
+          <div class="note"><b class="h">Draft</b>The match was good. It was good because the crowd was good and the goals were good.</div>
+          <div class="note"><b class="h">Redraft</b>The match was thrilling. A roaring crowd watched four goals, each one better than the last.</div>
+        </div>
+        <p style="margin-top:8px">When you redraft: cut words you've repeated, swap weak words for stronger ones (<a href="word-ladder.html">Word Ladder</a>), start sentences in different ways, and check each paragraph has one main idea (<a href="paragraph-builder.html">Paragraph Builder</a>). In your Collection of Texts (CBA 2) you show your redrafting, so keep your drafts.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>There's rarely a question that says "proofread this", but <b>every written answer is marked partly for accuracy</b>: spelling, grammar and punctuation. The students who keep those marks are the ones who leave time to read their answers back. A careful read can catch four or five slips in a page.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Plan your time</b> so you have a couple of minutes at the end of each longer answer to read it back.</li>
+            <li>Check for <b>your own</b> usual slips first (there / their, should of, a missing full stop).</li>
+            <li>Cross out neatly with <b>one line</b> and write the fix above: examiners don't mind neat corrections.</li>
+            <li>Watch the <b>tense</b>: a story that slips from past to present loses marks.</li>
+            <li>Don't rewrite a whole answer at the end: fix the slips and move on.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass">Last Saturday my cousin and me went to the races in Galway. We should of left earlier because their was a huge queue at the gate. Each of the horses were beautiful. We stayed untill the last race. I definately want to go back next year.</div>
+          <ol class="eq">
+            <li>The paragraph above has six slips. Find each one and write the correction.
+              <details><summary>Show a model answer</summary><p><i>me → I</i> (my cousin and I went); <i>of → have</i> (should have); <i>their → there</i> (there was); <i>were → was</i> (each of the horses was); <i>untill → until</i>; <i>definately → definitely</i>.<br><i>Where the marks would go:</i> one mark for each slip found and fixed; a short reason helps (e.g. "each = one, so was").</p></details></li>
+            <li>Fill the gaps: (a) There were ___ people on the bus today. (fewer / less) (b) We had ___ rain this summer. (fewer / less) (c) The woman ___ we helped sent us a card. (who / whom)
+              <details><summary>Show a model answer</summary><p>(a) <i>fewer</i>: you can count people. (b) <i>less</i>: you can't count rain. (c) <i>whom</i>: we helped <b>her</b>, so whom.<br><i>Where the marks would go:</i> the right word in each gap, with the reason.</p></details></li>
+            <li>Add brackets or a pair of dashes to this sentence: <i>My uncle a fisherman from Kinsale caught a huge crab.</i>
+              <details><summary>Show a model answer</summary><p><i>My uncle (a fisherman from Kinsale) caught a huge crab.</i> or <i>My uncle – a fisherman from Kinsale – caught a huge crab.</i> Take the extra information out and the sentence still works: <i>My uncle caught a huge crab.</i><br><i>Where the marks would go:</i> a pair of marks round exactly the extra information.</p></details></li>
+            <li>Redraft this paragraph to make it better: <i>The walk was nice. We walked up the hill and it was nice. At the top the view was nice and we had a nice picnic.</i>
+              <details><summary>Show a model answer</summary><p><i>The walk up Knocknarea was steep but worth every step. At the top, the whole of Sligo Bay spread out below us, silver in the sun. We sat on the cairn and ate squashed sandwiches that tasted like a feast.</i><br><i>Where the marks would go:</i> no repeated "nice"; stronger, more exact words; detail you can picture; sentences that start in different ways; still the same walk.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/editing-redrafting-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* brackets and dashes shown big and red on the buttons, so they're easy to see on a phone */
+  function pu(s){return esc(s).replace(/([()–])/g,'<b class="pu">$1</b>');}
+  /* ---------- data (the PDFs and src/test_proofread_patrol.py read this block: keep it valid JSON; one item per line) ----------
+     spot: [sentence with ONE slip written {slip>fix}, kind sp (spelling) / cw (mix-up word) / gr (grammar), memory tip]
+     pass: [emoji title, a 3-sentence passage with 0-3 slips {slip>fix}]
+     few:  [sentence with ___, fewer / less]
+     who:  [sentence with ___, who / whom]
+     brk:  sentence with the extra information in [square brackets] (shown with brackets or a pair of dashes) */
+  var D=/*DATA*/
+{
+ "spot": [
+   ["We had a really {wierd>weird} dream about the island.", "sp", "weird breaks the i before e rule: we-i-rd."],
+   ["I will {definately>definitely} be at the match on Saturday.", "sp", "definitely has finite in it: de-fin-ite-ly."],
+   ["Keep the two piles of paper {seperate>separate} for now.", "sp", "There's a rat in separate: sep-a-rat-e."],
+   ["Did you {recieve>receive} my letter last week?", "sp", "i before e except after c: receive."],
+   ["We have to wait {untill>until} the rain stops.", "sp", "until has only one l at the end."],
+   ["The {begining>beginning} of the film was very slow.", "sp", "begin + ing doubles the n: beginning."],
+   ["My best {freind>friend} lives two doors down.", "sp", "A friend to the end: fri-end."],
+   ["I could not {beleive>believe} how cold the water was.", "sp", "Never believe a lie: be-lie-ve."],
+   ["It is {neccessary>necessary} to bring a packed lunch.", "sp", "One collar, two sleeves: one c, two s in necessary."],
+   ["The accident {occured>occurred} on the main road.", "sp", "occur + ed doubles the r: occurred."],
+   ["We had a big {arguement>argument} about the remote.", "sp", "argue drops its e before -ment: argument."],
+   ["Aoife wanted to {suprise>surprise} her mother.", "sp", "There's an r after the u: sur-prise."],
+   ["The old {libary>library} is closing next month.", "sp", "library has two r's: li-brar-y."],
+   ["My birthday is in {Febuary>February} this year.", "sp", "February has an r after the b: Feb-ru-ary."],
+   ["We need to protect the {enviroment>environment} for the future.", "sp", "environment has iron in it: env-iron-ment."],
+   ["The magician made the coin {dissapear>disappear} in a second.", "sp", "dis + appear: one s, two p's."],
+   ["Look, {their>there} is a spider in the bath.", "cw", "there is / there are: there points to a place or says something exists."],
+   ["The students left {there>their} bags in the hall.", "cw", "their = belonging to them: their bags."],
+   ["Tell me when {your>you're} ready to go.", "cw", "you're = you are: when you are ready."],
+   ["This soup is far {to>too} hot for me.", "cw", "too = more than you want: too hot."],
+   ["We should {of>have} left the house earlier.", "cw", "should have, never should of: it only sounds like \"of\"."],
+   ["My brother is taller {then>than} my dad now.", "cw", "Compare with than: taller than."],
+   ["The library was {quite>quiet} after the bell rang.", "cw", "quiet = no noise; quite = fairly."],
+   ["Hold the rope tight or you will {loose>lose} it.", "cw", "lose = not have it any more; loose = not tight."],
+   ["We are not sure {weather>whether} the trip is on.", "cw", "whether = if; weather = rain and sun."],
+   ["We drove {passed>past} the old castle on the way home.", "cw", "past = beyond (drove past); passed is a verb (she passed the ball)."],
+   ["I can't {here>hear} you over the music.", "cw", "You hear with your ear: hear."],
+   ["There is {know>no} milk left in the fridge.", "cw", "no = not any; know = you know a fact."],
+   ["Mam {bought>brought} the dog with her to the beach.", "cw", "brought = carried along; bought = paid for."],
+   ["I have {saw>seen} that film three times.", "gr", "have seen (with have); saw stands alone: I saw it."],
+   ["Liam {done>did} all his homework before tea.", "gr", "did stands alone; done needs has or have."],
+   ["She has {went>gone} to the shop for bread.", "gr", "has gone (with has); went stands alone: she went."],
+   ["The box of apples {are>is} on the table.", "gr", "The box is (one box), even with apples after it."],
+   ["Each of the players {have>has} a new jersey.", "gr", "each = one at a time, so each has."],
+   ["There {is>are} three dogs in the garden.", "gr", "three dogs = more than one, so there are."],
+   ["Liam and {me>I} went to the cinema.", "gr", "Take away Liam: I went, not me went."],
+   ["The teacher gave the prize to Ella and {I>me}.", "gr", "Take away Ella: gave it to me, not to I."],
+   ["There were {less>fewer} people at the match this year.", "gr", "fewer for things you can count (people); less for things you can't (milk)."],
+   ["The girl {whom>who} won the race is my cousin.", "gr", "who does the action (she won); whom has it done to them."],
+   ["My cousins {was>were} late for the wedding.", "gr", "cousins = more than one, so were."]
+ ],
+ "pass": [
+   ["🏖️ The beach", "We went to the beach on {Saterday>Saturday}. {Their>There} was a strong wind all day. My little brother lost his hat in the waves."],
+   ["⚽ The match", "Our team played really well in the final. Each of the players {were>was} brilliant. We won by two points."],
+   ["🐕 The dog", "My dog Rex is {to>too} lazy to chase the ball. He sleeps on the couch all day. Mam says he is the laziest dog in {Irland>Ireland}."],
+   ["🎂 The party", "I had a party for my birthday last week. All my friends came to the house. We ate cake and played games in the garden."],
+   ["🚌 The bus", "The bus was late again this morning. I should {of>have} walked to school. My teacher was not {to>too} happy when I arrived."],
+   ["🎒 The trip", "Our class went on a trip to the museum. We saw the {skeleten>skeleton} of a giant deer. It was {quiet>quite} amazing."],
+   ["🍕 The pizza", "Dad brought home a pizza for {dinnar>dinner}. My sister and {me>I} ate it all. {Their>There} was none left for Dad."],
+   ["🌧️ The storm", "The storm hit the town {durring>during} the night. Trees fell {accross>across} the roads. The school was closed the {nex>next} day."],
+   ["📱 The phone", "I lost my phone at the park. I looked everywhere for it. In the end it was in my pocket the whole time."],
+   ["🎻 The concert", "Niamh played the fiddle at the school concert. She was nervous at the {begining>beginning}. By the end the hall was cheering."],
+   ["🏊 The swim", "I swam ten lengths of the pool on Monday. My coach said I {done>did} really well. Next week I will try for twenty."],
+   ["🍎 The garden", "Gran grows apples in her garden. There {is>are} four trees near the wall. Every autumn we pick them together."],
+   ["🎨 The art room", "The art room is the {brightist>brightest} room in the school. {Their>There} are paints and brushes everywhere. I could stay {their>there} all day."],
+   ["🚲 The bike", "My bike has a flat tyre. Dad says he will fix it at the weekend. Until then I have to walk."]
+ ],
+ "few": [
+   ["There were ___ people at the concert than last year.", "fewer"],
+   ["I drink ___ milk than my brother does.", "less"],
+   ["We have ___ homework on Fridays.", "less"],
+   ["This shop has ___ customers since the new one opened.", "fewer"],
+   ["Our team scored ___ goals in the second half.", "fewer"],
+   ["You should use ___ salt in the soup.", "less"],
+   ["There is ___ traffic on the roads in summer.", "less"],
+   ["Gran has ___ hens now that the fox came.", "fewer"],
+   ["I spend ___ time on my phone than my sister.", "less"],
+   ["The new bus makes ___ stops on the way to town.", "fewer"],
+   ["We got ___ rain this week than last week.", "less"],
+   ["There are ___ cars outside the school today.", "fewer"],
+   ["My little brother eats ___ vegetables than me.", "fewer"],
+   ["The garden needs ___ water in the winter.", "less"],
+   ["This year we have ___ students in the choir.", "fewer"],
+   ["Please make ___ noise in the library.", "less"],
+   ["I made ___ mistakes in this test.", "fewer"],
+   ["There was ___ snow on the mountain this year.", "less"],
+   ["We have ___ days off at Easter this year.", "fewer"],
+   ["My new phone uses ___ power than the old one.", "less"]
+ ],
+ "who": [
+   ["The girl ___ won the race is my cousin.", "who"],
+   ["The man ___ we met at the shop was very friendly.", "whom"],
+   ["I know a boy ___ can juggle five balls.", "who"],
+   ["To ___ should I send the letter?", "whom"],
+   ["The teacher ___ runs the choir is retiring.", "who"],
+   ["The player ___ the coach picked was delighted.", "whom"],
+   ["She is the friend with ___ I share my lunch.", "whom"],
+   ["The farmer ___ owns the field is very kind.", "who"],
+   ["The boy ___ I sat beside on the bus was asleep.", "whom"],
+   ["My aunt, ___ lives in Galway, is coming to stay.", "who"],
+   ["The writer ___ we read in class is visiting the school.", "whom"],
+   ["The children ___ found the puppy got a reward.", "who"],
+   ["The woman for ___ we waited never came.", "whom"],
+   ["Anyone ___ wants to play should sign up today.", "who"],
+   ["The doctor ___ Mam phoned was very helpful.", "whom"],
+   ["The lifeguard ___ saved the swimmer was on the news.", "who"],
+   ["The singer ___ everyone loves is playing in Cork.", "whom"],
+   ["The neighbour ___ fixed our gate would not take any money.", "who"]
+ ],
+ "brk": [
+   "My cousin [who lives in Galway] is coming to stay.",
+   "The concert [which lasted three hours] was brilliant.",
+   "Our dog [a very lazy spaniel] slept through the storm.",
+   "The new pool [opened last June] is always busy.",
+   "Mr Byrne [our geography teacher] has a pet snake.",
+   "The castle [built in the twelfth century] is still standing.",
+   "My sister [who hates spiders] screamed at the bath.",
+   "The bus [the last one of the night] was packed.",
+   "Our school play [a musical about pirates] sold out in a day.",
+   "The cake [still warm from the oven] smelled amazing.",
+   "My best friend [a brilliant goalkeeper] saved the penalty.",
+   "The island [only two miles long] has one shop.",
+   "Grandad [now eighty years old] still walks every day.",
+   "The film [based on a true story] made me cry.",
+   "Our coach [a former county player] knows every trick.",
+   "The library [closed for a month] opens again on Monday."
+ ]
+}/*END*/;
+  var MARK=/\{([^>{}]+)>([^{}]+)\}/g;
+  function shown(t){return t.replace(MARK,function(m,a){return a;});}
+  function fixed(t){return t.replace(MARK,function(m,a,b){return b;});}
+  function words(t){return t.match(/[A-Za-z][A-Za-z']*/g)||[];}
+  var COUNT=["None","1 slip","2 slips","3 slips"],FEW=["fewer","less"],WHO=["who","whom"];
+  var FIXED=COUNT.concat(FEW,WHO);
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function card(inner,lab){return '<div class="pp-card">'+(lab?'<div class="pp-l">'+lab+'</div>':'')+'<p>'+inner+'</p></div>';}
+  var GAP='<mark class="hl">&nbsp;?&nbsp;</mark>';
+  function gapS(s){var p=s.split("___");return esc(p[0])+GAP+esc(p[1]);}
+
+  /* ================= PROOFREAD PATROL: tap the slip ================= */
+  function qPatrol(){var it=rnd(D.spot),s=it[0],m=/\{([^>{}]+)>([^{}]+)\}/.exec(s),slip=m[1],fix=m[2];
+    var ws=words(shown(s)).slice(1),seen={},pool=[];
+    ws.forEach(function(w){if(w!==slip&&!seen[w]&&!/^(a|an|the)$/i.test(w)){seen[w]=1;pool.push(w);}});
+    var q=C("🔎 Tap the slip",slip,pool,it[2]+" ("+slip+" → "+fix+")",card(esc(shown(s))),{t:"patrol",s:s,rv:fixed(s)},3);
+    var order=words(shown(s));q.fixed=[q.answer].concat(q.wrong).sort(function(a,b){return order.indexOf(a)-order.indexOf(b);}); /* buttons in sentence order */
+    return q;}
+  /* ================= HOW MANY SLIPS? ================= */
+  function qCount(){var it=rnd(D.pass),t=it[1],n=(t.match(MARK)||[]).length;
+    var fx=[];t.replace(MARK,function(m,a,b){fx.push(a+" → "+b);});
+    return C("🔢 How many slips?",COUNT[n],COUNT,n?"The slips: "+fx.join(", ")+".":"No slips: this one is clean. Checking and finding nothing is part of proofreading too.",
+      card(esc(shown(t)),esc(it[0])),{t:"count",text:t,rv:it[0]},3);}
+  /* ================= FEWER OR LESS? ================= */
+  function qFew(){var it=rnd(D.few),s=it[0],a=it[1];
+    return C("⚖️ fewer or less?",a,[a==="fewer"?"less":"fewer"],a==="fewer"?"fewer for things you can count (fewer cars, fewer goals).":"less for things you can't count (less milk, less time).",
+      card(gapS(s)),{t:"few",s:s,rv:s.replace("___",a)},1);}
+  /* ================= WHO OR WHOM? ================= */
+  function qWho(){var it=rnd(D.who),s=it[0],a=it[1];
+    return C("👤 who or whom?",a,[a==="who"?"whom":"who"],a==="who"?"who does the action: try he / she in its place (she won → who won).":"whom has the action done to it, or comes after a word like to / with / for: try him / her (we met him → whom we met).",
+      card(gapS(s)),{t:"who",s:s,rv:s.replace("___",a)},1);}
+  /* ================= BRACKETS & DASHES ================= */
+  /* wrong versions are made from the one correct sentence: a bracket or dash missing, moved one word, or mixed with a comma or the other mark */
+  function brkPool(s,style){var m=/^(.*) \[([^\]]+)\] (.*)$/.exec(s),A=m[1],X=m[2],B=m[3];
+    var a=A.split(" "),x=X.split(" "),b=B.split(" "),o,c,out=[];
+    if(style==="b"){o="(";c=")";}else{o="– ";c=" –";}
+    function v(pre,ins,post,op,cl){return pre.join(" ")+" "+op+ins.join(" ")+cl+" "+post.join(" ");}
+    out.push(v(a,x,b,o,""));                                   /* closing mark missing */
+    out.push(v(a,x.concat(b.slice(0,1)),b.slice(1),o,c));      /* closing mark one word too late */
+    if(x.length>2)out.push(v(a,x.slice(0,-1),[x[x.length-1]].concat(b),o,c)); /* closing mark one word too early */
+    if(a.length>1)out.push(v(a.slice(0,-1),[a[a.length-1]].concat(x),b,o,c)); /* opening mark one word too early */
+    out.push(a.join(" ")+", "+o+x.join(" ")+c+", "+b.join(" "));/* commas as well as the marks */
+    out.push(v(a,x,b,o,style==="b"?" –":")"));                 /* one bracket, one dash */
+    return out;}
+  function qBrk(){var s=rnd(D.brk),style=rnd(["b","d"]);
+    var ans=style==="b"?s.replace("[","(").replace("]",")"):s.replace("[","– ").replace("]"," –");
+    return C("➖ Which is right?",ans,brkPool(s,style),"Brackets ( ) or a pair of dashes – – go round the extra information. Take it out and the sentence still works.",
+      "",{t:"brk",s:s,rv:ans},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    patrol:[qPatrol],
+    count:[qCount],
+    few:[qFew],
+    who:[qWho],
+    brk:[qBrk],
+    mixed:[qPatrol,qPatrol,qCount,qFew,qWho,qBrk]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=60;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="count"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.innerHTML=pu(t);b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="patrol"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="patrol"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! Nothing gets past you.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,shown:shown,fixed:fixed,brkPool:brkPool}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
