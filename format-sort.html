@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Format Sort: Reports, Reviews, Articles and Blogs Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English functional writing game: spot a report, review, article, blog or speech from one line, pick the best headline, and sort the parts of a report and a review. Rules, exam corner and a free printable sheet.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <a class="shop" href="https://payhip.com/Leim">Shop</a>
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<style>.fs-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px 6px;max-width:520px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.fs-card p{margin:0 0 6px;font-size:19px;line-height:1.4;font-weight:600}
+.fs-card.news{font-family:Georgia,serif;border-top:6px solid var(--ink)}.fs-card.news p{font-weight:500}
+.fs-card .fs-gap{background:#FFF1B8;border:2px dashed #E0B400;border-radius:8px;text-align:center;font-weight:800;font-size:20px;letter-spacing:.2em;padding:4px;margin-bottom:8px;font-family:Inter,sans-serif}
+.fs-card.rep{background:#EEF6F1}.fs-card.rep p:before{content:"📊 ";font-weight:400}
+.fs-card.rev{background:#FFF6E5}.fs-card.rev p:before{content:"📝 ";font-weight:400}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.lay{font-family:Georgia,serif;line-height:1.55;font-size:15px}.lay .t{font-weight:800;font-size:17px;font-family:Inter,sans-serif}.lay .lab{font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-top:6px}
+@media(max-width:420px){.fs-card p{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Format Sort</h1>
+        <p>Report, review, article, blog or speech? Spot the text type from one line, pick the best headline, and sort the parts of a report and a review. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Format Sort</b><span>🗂️ Report, review, article, blog or speech?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="head"><div><b>Headlines</b><span>📰 Pick the best headline</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rep"><div><b>Report parts</b><span>📊 Title, findings or recommendation?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rev"><div><b>Review it</b><span>⭐ Details, praise, criticism or verdict?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Format Sort, 5 in a row = 3 bonus seconds. Every story, film, book and game here is made up by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W4, W3, R13 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Functional writing: reports, reviews, articles &amp; blogs</h2>
+        <p>Functional writing does a job: it informs, reports, judges or persuades a real reader. Before you write, ask three questions: <b>What type of text is it? Who is reading it? What does it need to do?</b> The answers decide your layout, your opening and your tone.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>The same news, four ways: the school's new skate park opens on Friday.</p>
+        <div class="sx">
+          <div class="note"><b class="h">A</b>Of the 120 students surveyed, 85% said they would use a skate park. I recommend that it opens at lunchtime.</div>
+          <div class="note"><b class="h">B</b><b>Skate Park Opens at Last</b><br>By Ellen Daly: Students in Carrick will finally get to skate at school from Friday, according to the principal.</div>
+          <div class="note"><b class="h">C</b>Hi everyone! Guess what? Our skate park opens on Friday and I literally can't wait. Comment below if you're coming! #skatelife</div>
+          <div class="note"><b class="h">D</b>Good morning, everyone. Fellow students, on Friday our skate park opens, and it belongs to all of us. Thank you for listening.</div>
+        </div>
+        <p style="margin-top:8px">Which one is a report, an article, a blog and a speech? What gave each one away?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A is a report</b>: findings with numbers (“surveyed”, 85%) and a recommendation. <b>B is an article</b>: a headline, a byline (“By Ellen Daly”) and a source (“according to the principal”). <b>C is a blog</b>: chatty, talks to its readers, asks for comments, uses a hashtag. <b>D is a speech</b>: it greets a live audience and thanks them at the end. Same facts; the <b>features</b> change with the text type.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Five text types and their features</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📊 Report</b>“Report on …” title, terms of reference, findings (often numbers), recommendations, signed + dated. Formal, factual, often with headings.</div>
+          <div class="note"><b class="h">⭐ Review</b>details (title, director or author, price), a little plot (no spoilers!), praise, criticism, a verdict or star rating.</div>
+          <div class="note"><b class="h">📰 Article</b>headline, byline, an opening that answers who, what, where and when; facts and quotes; subheadings.</div>
+          <div class="note"><b class="h">💻 Blog</b>a catchy title and date, first person, chatty, talks to readers, asks for comments, links and hashtags.</div>
+          <div class="note"><b class="h">🎤 Speech</b>greets the audience, signposts, rhetorical questions, ends with “Thank you for listening.”</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a report is laid out</h3>
+        <div class="pass lay"><span class="t">Report on Lunchtime Litter at St Brigid's College</span>
+          <span class="lab">📋 Introduction (terms of reference)</span>This report was requested by the principal, Ms Byrne, to find out why the yard is so full of litter, and to suggest solutions.
+          <span class="lab">🔍 Findings</span>Of the 150 students surveyed, 90 said there are not enough bins. I found that the bins in the yard are full by eleven o'clock.
+          <span class="lab">💡 Recommendations</span>I recommend that four more bins are placed in the yard and emptied at lunchtime.
+          <span class="lab">✍️ Sign-off</span>Signed: Aoife Byrne, Student Council Secretary, 12 May 2026</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a review works</h3>
+        <div class="wc">
+          <div class="note"><b class="h">ℹ️ Details</b>title, director / author, length, price, where to get it.</div>
+          <div class="note"><b class="h">👍 Praise</b>what's good, with a reason.</div>
+          <div class="note"><b class="h">👎 Criticism</b>what's weak, fairly.</div>
+          <div class="note"><b class="h">⭐ Verdict</b>stars or a score, and who would enjoy it.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Headlines</h3>
+        <p>A good headline is <b>short</b> (usually under eight words), names the <b>main fact</b> and grabs attention: <b>“Bees Close Bray Playground”</b>. Headlines drop little words (the, a, is) and use the present tense. “Big News Today” tells the reader nothing.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The writing questions on the paper often name a <b>text type</b> and a <b>reader</b>: write a report for the board of management, a review for the school magazine, an article for a local newspaper, a blog post, a speech. Marks go to writing that <b>does the job</b>: the right layout and features, the right tone for the reader, clear paragraphs and accurate English.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the format</b> from the first line: a report title, a headline + byline, a blog title and date, a greeting for a speech.</li>
+            <li><b>Match the tone to the reader</b>: formal for a board of management, chatty for a blog.</li>
+            <li><b>Use the features</b>: findings and recommendations in a report; a verdict in a review; quotes in an article.</li>
+            <li><b>Answer the task</b>: if it asks for two recommendations, give two.</li>
+            <li>Don't write a story when the task asks for a report or an article.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Your student council has asked you to write a <b>report</b> on lunchtime in your school. Write the title, the terms of reference and two findings.
+              <details><summary>Show a model answer</summary><p><b>Report on Lunchtime at Scoil Mhuire, Carlow</b><br><i>Terms of reference:</i> This report was requested by the student council to find out how students spend lunchtime and what would improve it.<br><i>Findings:</i> Of the 120 students surveyed, 74 said the canteen queue takes more than ten minutes. Most first years said they have nowhere to go when it rains.<br><i>Where the marks would go:</i> a clear “Report on …” title; terms of reference saying who asked and why; findings that are factual, specific (numbers) and formal in tone.</p></details></li>
+            <li>Write a <b>headline</b> and the <b>opening paragraph</b> of a newspaper article about a local teenager who has raised €5,000 for the hospital by swimming in the sea every day in January.
+              <details><summary>Show a model answer</summary><p><b>Teen's Winter Swims Raise €5,000</b><br>By Niamh Kearney<br>A fourteen-year-old from Tramore has raised €5,000 for the children's ward at the local hospital by swimming in the sea every single day of January. Seán Power braved storms, hail and a water temperature of nine degrees. “Some mornings I nearly turned back,” he told our reporter.<br><i>Where the marks would go:</i> a short headline with the main fact; a byline; who, what, where and when in the first paragraph; a quote.</p></details></li>
+            <li>Write the <b>verdict</b> paragraph of a review of a film, book or game you know, for your school magazine.
+              <details><summary>Show a model answer</summary><p>Overall, this is a gripping, funny and surprisingly moving film. The middle drags a little, but the last half-hour more than makes up for it. I'd recommend it to anyone aged ten and up, especially if you like a good twist. Four stars out of five.<br><i>Where the marks would go:</i> a clear judgement; one strength and one weakness, fairly balanced; who would enjoy it; a rating; a lively tone for a school-magazine reader.</p></details></li>
+            <li>The skate-park news in “Spot the pattern” has to go on the school <b>blog</b>. Name three features you would change from the newspaper article, and why.
+              <details><summary>Show a model answer</summary><p>1. Swap the headline and byline for a catchy blog title and a date: “Our Skate Park Is Finally Here! (20 November)”. 2. Write in the first person and talk to the reader (“I can't wait, can you?”) instead of reporting facts from a distance. 3. End by inviting comments (“Tell us your best trick below!”) so readers join in.<br><i>Where the marks would go:</i> three clear changes; each linked to the blog's reader and purpose; an example of each.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/functional-writing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+    /* ---------- data (the PDFs and src/test_format_sort.py read this block: keep it valid JSON; one item per line) ----------
+     type: [extract, rep / rev / art / blo / spe] (report, review, article, blog, speech: ONE type's markers)
+     heads: [opening of a news story, its headline] (a headline shares words ONLY with its own story)
+     vague: headlines that say nothing
+     rep: [line from a report, ti / in / fi / re / si] (title, introduction, findings, recommendation, sign-off)
+     rev: [line from a review, de / pr / cr / ve] (details, praise, criticism, verdict) */
+  var D=/*DATA*/{
+ "type": [
+  ["This report looks at how students travel to school each morning.", "rep"],
+  ["Report on Litter in the School Yard, for the Board of Management.", "rep"],
+  ["Of the 200 students surveyed, 62% said the canteen queue is too slow.", "rep"],
+  ["I recommend that a second bike shed is built beside the sports hall.", "rep"],
+  ["Findings: most first years do not know where the library is.", "rep"],
+  ["The student council was asked to find out why the recycling bins are not used.", "rep"],
+  ["Recommendations: the computer room should open at lunchtime.", "rep"],
+  ["Terms of reference: to find out whether students would use a breakfast club.", "rep"],
+  ["Storm Island, directed by Orla Healy, is the scariest film I've seen this year.", "rev"],
+  ["The acting is superb, especially from the young girl who plays Nell.", "rev"],
+  ["Four stars out of five: a gripping read from start to finish.", "rev"],
+  ["The gameplay in Bog Racer 3 is fast, but the levels repeat too often.", "rev"],
+  ["My verdict: The Silver Hurley is worth every cent of the €12.", "rev"],
+  ["The plot drags in the middle, but the ending is brilliant.", "rev"],
+  ["I'd recommend this book to anyone who loves a good mystery.", "rev"],
+  ["The soundtrack, by a Galway band, is the best thing about the film.", "rev"],
+  ["By Ciara Walsh: Bantry is celebrating after the town won the Tidy Towns award.", "art"],
+  ["According to the county council, the new swimming pool will open in May.", "art"],
+  ["Locals in Dingle say the harbour has never been so busy.", "art"],
+  ["A spokesperson for the hospital said yesterday that parking will be free from Monday.", "art"],
+  ["Speaking to our reporter, the principal said the school would reopen on Thursday.", "art"],
+  ["By Darragh Nolan: A Kerry teenager has rowed across Lough Leane for charity.", "art"],
+  ["Residents say the road has flooded four times since September.", "art"],
+  ["According to the weather service, last night was the coldest of the year.", "art"],
+  ["Hi everyone, and welcome back to my blog!", "blo"],
+  ["Let me know in the comments what I should cook next.", "blo"],
+  ["Thanks to all my followers for 1,000 likes this week!", "blo"],
+  ["Hey guys, today I'm trying a vegan dinner for the first time.", "blo"],
+  ["Drop a comment below if you've ever been to Achill.", "blo"],
+  ["Don't forget to subscribe so you never miss a new post.", "blo"],
+  ["Today's bake was a total disaster #fail", "blo"],
+  ["In this week's post, I'm sharing my five favourite walks in Wicklow.", "blo"],
+  ["Good morning, everyone, and thank you for coming to assembly.", "spe"],
+  ["Ladies and gentlemen, tonight we celebrate fifty years of our club.", "spe"],
+  ["Fellow students, I want to talk to you about something that matters.", "spe"],
+  ["Thank you for listening, and please vote for me on Friday.", "spe"],
+  ["Principal, teachers and parents, I am proud to stand here today.", "spe"],
+  ["I stand before you today as your new head girl.", "spe"],
+  ["Good afternoon, everyone. My name is Aoife and I'm running for class captain.", "spe"],
+  ["Members of the council, I am here to ask you to save our youth club.", "spe"]
+ ],
+ "heads": [
+  ["A Clare teenager has rescued a seal pup that was trapped in fishing nets on Fanore beach.", "Teen Saves Seal Pup on Fanore Beach"],
+  ["Students at a Sligo school have built a robot that sorts plastic from paper in the recycling bins.", "Sligo Pupils Build Recycling Robot"],
+  ["The main street in Kilrush was under water on Tuesday after the river burst its banks.", "Kilrush Main Street Under Water"],
+  ["A Tipperary grandmother has finished her first marathon at the age of seventy-two.", "Tipperary Gran Completes Marathon at 72"],
+  ["A bakery in Westport is giving free bread to anyone who brings back an empty bag.", "Westport Bakery Rewards Bag Returns"],
+  ["Mayo's under-14 camogie team has won the All-Ireland final in front of a huge crowd.", "Mayo Camogie Girls Win All-Ireland"],
+  ["A family in Donegal found a gold coin from the 1700s while digging their vegetable garden.", "Donegal Family Digs Up Gold Coin"],
+  ["The library in Navan will stay open until nine o'clock every evening during exam time.", "Navan Library Opens Late for Exams"],
+  ["A swarm of bees closed the playground in Bray for most of Saturday.", "Bees Close Bray Playground"],
+  ["Wexford's new cycle path along the coast was used by five thousand people in its opening week.", "Wexford Coastal Cycle Path a Hit"],
+  ["Hundreds of starlings put on a stunning display over Lough Ennell at sunset last night.", "Starlings Dance Over Lough Ennell"],
+  ["A school in Athlone has banned phones at lunchtime to get students talking again.", "Athlone Bans Phones at Lunchtime"],
+  ["A lost dog walked forty kilometres home to his owners in Longford.", "Lost Dog Walks Home to Longford"],
+  ["Galway's oldest cinema is closing its doors after ninety years.", "Galway Cinema Closes After 90 Years"]
+ ],
+ "vague": ["Big News Today", "You Won't Believe This", "Something Happened", "Read All About It", "Things Are Changing"],
+ "rep": [
+  ["Report on Lunchtime Litter at St Brigid's College", "ti"],
+  ["Report on Healthy Eating in the School Canteen", "ti"],
+  ["Report on Student Use of the School Library", "ti"],
+  ["Report on Safety at the School Gate", "ti"],
+  ["Report on After-School Clubs", "ti"],
+  ["This report was requested by the principal, Ms Byrne.", "in"],
+  ["The aim of this report is to find out why fewer students walk to school.", "in"],
+  ["I was asked by the Board of Management to look into noise in the corridors.", "in"],
+  ["The purpose of this report is to suggest ways to cut food waste.", "in"],
+  ["Terms of reference: to examine how students use the school library.", "in"],
+  ["Of the 150 students surveyed, 90 said they never use the library.", "fi"],
+  ["Most students (68%) said the queue at the canteen is too long.", "fi"],
+  ["Half of the first years had never heard of the homework club.", "fi"],
+  ["Only 12 out of 40 bikes were locked properly.", "fi"],
+  ["I found that the bins in the yard are full by eleven o'clock.", "fi"],
+  ["I recommend that the library opens at lunchtime.", "re"],
+  ["It is recommended that more bins are placed near the basketball courts.", "re"],
+  ["We recommend a one-way system on the main stairs.", "re"],
+  ["A second queue should be opened at the canteen.", "re"],
+  ["The school should run a walk-to-school week every term.", "re"],
+  ["Signed: Aoife Byrne, Student Council Secretary", "si"],
+  ["Report prepared by Cian Doyle, Class Captain, 3rd Year", "si"],
+  ["Submitted by the Green-Schools Committee, 12 May 2026", "si"],
+  ["Signed: Niall O'Brien, Transition Year", "si"],
+  ["Report prepared by the Student Council, March 2026", "si"]
+ ],
+ "rev": [
+  ["Storm Island is directed by Orla Healy and runs for 98 minutes.", "de"],
+  ["The Silver Hurley, written by Pádraig Lynch, has 240 pages.", "de"],
+  ["Bog Racer 3 is available on all games consoles and costs €30.", "de"],
+  ["Rated 12A, the film was released in cinemas last Friday.", "de"],
+  ["Starring Aoife Kearney as the detective, the series has six episodes.", "de"],
+  ["The album was released in June and has eleven songs.", "de"],
+  ["The acting is superb, especially from the girl who plays Nell.", "pr"],
+  ["I loved the way the story jumps between the past and the present.", "pr"],
+  ["The jokes are hilarious, and the whole cinema was laughing.", "pr"],
+  ["The race tracks look stunning, from the bogs of Offaly to the Cliffs of Moher.", "pr"],
+  ["The twist at the end is clever and took me completely by surprise.", "pr"],
+  ["Her singing is the highlight of the whole album.", "pr"],
+  ["The middle section drags, and I nearly fell asleep.", "cr"],
+  ["Sadly, the ending is predictable.", "cr"],
+  ["The levels become repetitive after a while.", "cr"],
+  ["At nearly three hours, the film is far too long.", "cr"],
+  ["The villain is weak and never feels like a real threat.", "cr"],
+  ["The second half of the book is confusing, with too many characters.", "cr"],
+  ["Four stars out of five: a must for any mystery fan.", "ve"],
+  ["Overall, a film the whole family will enjoy.", "ve"],
+  ["My verdict: worth every cent.", "ve"],
+  ["I'd recommend it to anyone aged ten and up.", "ve"],
+  ["Give it a miss unless you're a huge fan of the first one.", "ve"],
+  ["Three out of five: fun, but not one to remember.", "ve"]
+ ]
+}/*END*/;
+  var TYPE={rep:"📊 Report",rev:"⭐ Review",art:"📰 Article",blo:"💻 Blog",spe:"🎤 Speech"};
+  var TWHY={rep:"Report: a title \u201cReport on…\u201d, terms of reference, findings (often with numbers), recommendations. Formal and factual.",
+    rev:"Review: details (director, author, price), praise and criticism, a verdict or star rating.",
+    art:"Article: a headline, a byline (By …), facts, quotes from people (\u201caccording to\u201d, residents, a spokesperson).",
+    blo:"Blog: chatty and personal, talks to readers (\u201cHi everyone\u201d), comments, followers, hashtags.",
+    spe:"Speech: spoken to a live audience: \u201cGood morning, everyone\u201d, \u201cFellow students\u201d, \u201cThank you for listening\u201d."};
+  var REP={ti:"📌 Title",in:"📋 Introduction",fi:"🔍 Findings",re:"💡 Recommendation",si:"✍️ Sign-off"};
+  var RWHY={ti:"Title: \u201cReport on …\u201d says exactly what the report is about.",
+    in:"Introduction (terms of reference): who asked for the report and what it sets out to do.",
+    fi:"Findings: what you found out, often with numbers (68%, 12 out of 40, most students).",
+    re:"Recommendation: what should be done (I recommend that…, should…).",
+    si:"Sign-off: who wrote it, their role and the date."};
+  var REV={de:"ℹ️ Details",pr:"👍 Praise",cr:"👎 Criticism",ve:"⭐ Verdict"};
+  var VWHY={de:"Details: the facts the reader needs (title, director or author, length, price, where to get it).",
+    pr:"Praise: what's good about it, with a reason (superb acting, a clever twist).",
+    cr:"Criticism: what's weak (it drags, predictable, repetitive).",
+    ve:"Verdict: your final judgement: stars, a score, \u201coverall\u201d, would you recommend it?"};
+  var FIXED=[].concat(Object.keys(TYPE).map(function(k){return TYPE[k];}),Object.keys(REP).map(function(k){return REP[k];}),Object.keys(REV).map(function(k){return REV[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls){return '<div class="fs-card'+(cls?" "+cls:"")+'"><p>'+esc(s)+'</p></div>';}
+
+  /* ================= FORMAT SORT: which text type? ================= */
+  function qType(){var it=rnd(D.type),k=it[1];
+    return C("🗂️ Which text type?",TYPE[k],others(TYPE,k),TWHY[k],card(it[0]),{t:"type",s:it[0],rv:it[0]},3);}
+  /* ================= HEADLINES: pick the best one ================= */
+  function qHead(){var i=Math.floor(Math.random()*D.heads.length),it=D.heads[i];
+    var pool=shuffle(D.heads.filter(function(x,j){return j!==i;}).map(function(x){return x[1];})).slice(0,2).concat([rnd(D.vague)]);
+    var q=C("📰 Best headline?",it[1],pool,"A good headline is short and names the main fact: who or what, and where. It must match the story.",
+      '<div class="fs-card news"><div class="fs-gap">? ? ?</div><p>'+esc(it[0])+'</p></div>',{t:"head",s:it[0],rv:it[0].slice(0,48)+"…"},3);
+    return q;}
+  /* ================= REPORT PARTS ================= */
+  function qRep(){var it=rnd(D.rep),k=it[1];
+    return C("📊 Which part of the report?",REP[k],others(REP,k),RWHY[k],card(it[0],"rep"),{t:"rep",s:it[0],rv:it[0]},3);}
+  /* ================= REVIEW PARTS ================= */
+  function qRev(){var it=rnd(D.rev),k=it[1];
+    return C("⭐ Which part of the review?",REV[k],others(REV,k),VWHY[k],card(it[0],"rev"),{t:"rev",s:it[0],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    sort:[qType],
+    head:[qHead],
+    rep:[qRep],
+    rev:[qRev],
+    mixed:[qType,qType,qHead,qRep,qRev]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="head"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sort"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sort"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You know your formats.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TYPE:TYPE,REP:REP,REV:REV}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

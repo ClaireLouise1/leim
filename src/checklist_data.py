@@ -100,7 +100,7 @@ ENGLISH = [
   ("2nd year","Spring","Oral Communication (CBA 1)","OL1, OL5, OL7, OL9, OL13, R3, W3, W5","CBA guide","",""),
   ("2nd year","Spring","Media 1: advertising","R9, R8, OL8, W3","Ad Breaker","ad-breaker.html","media-advertising"),
   ("2nd year","Spring","Drama 1: how plays work","R6, R7, R9, OL8","Stage It","stage-it.html","drama-how-plays-work"),
-  ("2nd year","Summer","Functional writing: reports, reviews, articles & blogs","W4, W3, R13","Format Sort","",""),
+  ("2nd year","Summer","Functional writing: reports, reviews, articles & blogs","W4, W3, R13","Format Sort","format-sort.html","functional-writing"),
   ("2nd year","Summer","Poetry 2: theme, tone & comparing poems","R7, R8, R9, R4, W8","Mood Match","",""),
   ("2nd year","Summer","Punctuation 2: dialogue, quotes, colons & semicolons","W11, W10","Speech Marks Sprint","",""),
   ("3rd year","Autumn","Collection of the Student's Texts (CBA 2)","OL1, R2, R6, R8, W1, W2, W3, W4, W6, W9, W11","CBA guide","",""),

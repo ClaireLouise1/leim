@@ -1,0 +1,147 @@
+<style>.fs-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px 6px;max-width:520px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.fs-card p{margin:0 0 6px;font-size:19px;line-height:1.4;font-weight:600}
+.fs-card.news{font-family:Georgia,serif;border-top:6px solid var(--ink)}.fs-card.news p{font-weight:500}
+.fs-card .fs-gap{background:#FFF1B8;border:2px dashed #E0B400;border-radius:8px;text-align:center;font-weight:800;font-size:20px;letter-spacing:.2em;padding:4px;margin-bottom:8px;font-family:Inter,sans-serif}
+.fs-card.rep{background:#EEF6F1}.fs-card.rep p:before{content:"📊 ";font-weight:400}
+.fs-card.rev{background:#FFF6E5}.fs-card.rev p:before{content:"📝 ";font-weight:400}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.sx{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}@media(max-width:700px){.sx{grid-template-columns:1fr}}
+.sx .note{margin:0}.sx .note b.h{display:block;font-size:16px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.lay{font-family:Georgia,serif;line-height:1.55;font-size:15px}.lay .t{font-weight:800;font-size:17px;font-family:Inter,sans-serif}.lay .lab{font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-top:6px}
+@media(max-width:420px){.fs-card p{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Format Sort</h1>
+        <p>Report, review, article, blog or speech? Spot the text type from one line, pick the best headline, and sort the parts of a report and a review. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="sort"><div><b>Format Sort</b><span>🗂️ Report, review, article, blog or speech?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="head"><div><b>Headlines</b><span>📰 Pick the best headline</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rep"><div><b>Report parts</b><span>📊 Title, findings or recommendation?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="rev"><div><b>Review it</b><span>⭐ Details, praise, criticism or verdict?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Format Sort, 5 in a row = 3 bonus seconds. Every story, film, book and game here is made up by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W4, W3, R13 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Functional writing: reports, reviews, articles &amp; blogs</h2>
+        <p>Functional writing does a job: it informs, reports, judges or persuades a real reader. Before you write, ask three questions: <b>What type of text is it? Who is reading it? What does it need to do?</b> The answers decide your layout, your opening and your tone.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>The same news, four ways: the school's new skate park opens on Friday.</p>
+        <div class="sx">
+          <div class="note"><b class="h">A</b>Of the 120 students surveyed, 85% said they would use a skate park. I recommend that it opens at lunchtime.</div>
+          <div class="note"><b class="h">B</b><b>Skate Park Opens at Last</b><br>By Ellen Daly: Students in Carrick will finally get to skate at school from Friday, according to the principal.</div>
+          <div class="note"><b class="h">C</b>Hi everyone! Guess what? Our skate park opens on Friday and I literally can't wait. Comment below if you're coming! #skatelife</div>
+          <div class="note"><b class="h">D</b>Good morning, everyone. Fellow students, on Friday our skate park opens, and it belongs to all of us. Thank you for listening.</div>
+        </div>
+        <p style="margin-top:8px">Which one is a report, an article, a blog and a speech? What gave each one away?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px"><b>A is a report</b>: findings with numbers (“surveyed”, 85%) and a recommendation. <b>B is an article</b>: a headline, a byline (“By Ellen Daly”) and a source (“according to the principal”). <b>C is a blog</b>: chatty, talks to its readers, asks for comments, uses a hashtag. <b>D is a speech</b>: it greets a live audience and thanks them at the end. Same facts; the <b>features</b> change with the text type.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Five text types and their features</h3>
+        <div class="wc">
+          <div class="note"><b class="h">📊 Report</b>“Report on …” title, terms of reference, findings (often numbers), recommendations, signed + dated. Formal, factual, often with headings.</div>
+          <div class="note"><b class="h">⭐ Review</b>details (title, director or author, price), a little plot (no spoilers!), praise, criticism, a verdict or star rating.</div>
+          <div class="note"><b class="h">📰 Article</b>headline, byline, an opening that answers who, what, where and when; facts and quotes; subheadings.</div>
+          <div class="note"><b class="h">💻 Blog</b>a catchy title and date, first person, chatty, talks to readers, asks for comments, links and hashtags.</div>
+          <div class="note"><b class="h">🎤 Speech</b>greets the audience, signposts, rhetorical questions, ends with “Thank you for listening.”</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a report is laid out</h3>
+        <div class="pass lay"><span class="t">Report on Lunchtime Litter at St Brigid's College</span>
+          <span class="lab">📋 Introduction (terms of reference)</span>This report was requested by the principal, Ms Byrne, to find out why the yard is so full of litter, and to suggest solutions.
+          <span class="lab">🔍 Findings</span>Of the 150 students surveyed, 90 said there are not enough bins. I found that the bins in the yard are full by eleven o'clock.
+          <span class="lab">💡 Recommendations</span>I recommend that four more bins are placed in the yard and emptied at lunchtime.
+          <span class="lab">✍️ Sign-off</span>Signed: Aoife Byrne, Student Council Secretary, 12 May 2026</div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">How a review works</h3>
+        <div class="wc">
+          <div class="note"><b class="h">ℹ️ Details</b>title, director / author, length, price, where to get it.</div>
+          <div class="note"><b class="h">👍 Praise</b>what's good, with a reason.</div>
+          <div class="note"><b class="h">👎 Criticism</b>what's weak, fairly.</div>
+          <div class="note"><b class="h">⭐ Verdict</b>stars or a score, and who would enjoy it.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Headlines</h3>
+        <p>A good headline is <b>short</b> (usually under eight words), names the <b>main fact</b> and grabs attention: <b>“Bees Close Bray Playground”</b>. Headlines drop little words (the, a, is) and use the present tense. “Big News Today” tells the reader nothing.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The writing questions on the paper often name a <b>text type</b> and a <b>reader</b>: write a report for the board of management, a review for the school magazine, an article for a local newspaper, a blog post, a speech. Marks go to writing that <b>does the job</b>: the right layout and features, the right tone for the reader, clear paragraphs and accurate English.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Show the format</b> from the first line: a report title, a headline + byline, a blog title and date, a greeting for a speech.</li>
+            <li><b>Match the tone to the reader</b>: formal for a board of management, chatty for a blog.</li>
+            <li><b>Use the features</b>: findings and recommendations in a report; a verdict in a review; quotes in an article.</li>
+            <li><b>Answer the task</b>: if it asks for two recommendations, give two.</li>
+            <li>Don't write a story when the task asks for a report or an article.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>Your student council has asked you to write a <b>report</b> on lunchtime in your school. Write the title, the terms of reference and two findings.
+              <details><summary>Show a model answer</summary><p><b>Report on Lunchtime at Scoil Mhuire, Carlow</b><br><i>Terms of reference:</i> This report was requested by the student council to find out how students spend lunchtime and what would improve it.<br><i>Findings:</i> Of the 120 students surveyed, 74 said the canteen queue takes more than ten minutes. Most first years said they have nowhere to go when it rains.<br><i>Where the marks would go:</i> a clear “Report on …” title; terms of reference saying who asked and why; findings that are factual, specific (numbers) and formal in tone.</p></details></li>
+            <li>Write a <b>headline</b> and the <b>opening paragraph</b> of a newspaper article about a local teenager who has raised €5,000 for the hospital by swimming in the sea every day in January.
+              <details><summary>Show a model answer</summary><p><b>Teen's Winter Swims Raise €5,000</b><br>By Niamh Kearney<br>A fourteen-year-old from Tramore has raised €5,000 for the children's ward at the local hospital by swimming in the sea every single day of January. Seán Power braved storms, hail and a water temperature of nine degrees. “Some mornings I nearly turned back,” he told our reporter.<br><i>Where the marks would go:</i> a short headline with the main fact; a byline; who, what, where and when in the first paragraph; a quote.</p></details></li>
+            <li>Write the <b>verdict</b> paragraph of a review of a film, book or game you know, for your school magazine.
+              <details><summary>Show a model answer</summary><p>Overall, this is a gripping, funny and surprisingly moving film. The middle drags a little, but the last half-hour more than makes up for it. I'd recommend it to anyone aged ten and up, especially if you like a good twist. Four stars out of five.<br><i>Where the marks would go:</i> a clear judgement; one strength and one weakness, fairly balanced; who would enjoy it; a rating; a lively tone for a school-magazine reader.</p></details></li>
+            <li>The skate-park news in “Spot the pattern” has to go on the school <b>blog</b>. Name three features you would change from the newspaper article, and why.
+              <details><summary>Show a model answer</summary><p>1. Swap the headline and byline for a catchy blog title and a date: “Our Skate Park Is Finally Here! (20 November)”. 2. Write in the first person and talk to the reader (“I can't wait, can you?”) instead of reporting facts from a distance. 3. End by inviting comments (“Tell us your best trick below!”) so readers join in.<br><i>Where the marks would go:</i> three clear changes; each linked to the blog's reader and purpose; an example of each.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/functional-writing-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

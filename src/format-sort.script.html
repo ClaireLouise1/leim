@@ -1,0 +1,248 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+    /* ---------- data (the PDFs and src/test_format_sort.py read this block: keep it valid JSON; one item per line) ----------
+     type: [extract, rep / rev / art / blo / spe] (report, review, article, blog, speech: ONE type's markers)
+     heads: [opening of a news story, its headline] (a headline shares words ONLY with its own story)
+     vague: headlines that say nothing
+     rep: [line from a report, ti / in / fi / re / si] (title, introduction, findings, recommendation, sign-off)
+     rev: [line from a review, de / pr / cr / ve] (details, praise, criticism, verdict) */
+  var D=/*DATA*/{
+ "type": [
+  ["This report looks at how students travel to school each morning.", "rep"],
+  ["Report on Litter in the School Yard, for the Board of Management.", "rep"],
+  ["Of the 200 students surveyed, 62% said the canteen queue is too slow.", "rep"],
+  ["I recommend that a second bike shed is built beside the sports hall.", "rep"],
+  ["Findings: most first years do not know where the library is.", "rep"],
+  ["The student council was asked to find out why the recycling bins are not used.", "rep"],
+  ["Recommendations: the computer room should open at lunchtime.", "rep"],
+  ["Terms of reference: to find out whether students would use a breakfast club.", "rep"],
+  ["Storm Island, directed by Orla Healy, is the scariest film I've seen this year.", "rev"],
+  ["The acting is superb, especially from the young girl who plays Nell.", "rev"],
+  ["Four stars out of five: a gripping read from start to finish.", "rev"],
+  ["The gameplay in Bog Racer 3 is fast, but the levels repeat too often.", "rev"],
+  ["My verdict: The Silver Hurley is worth every cent of the €12.", "rev"],
+  ["The plot drags in the middle, but the ending is brilliant.", "rev"],
+  ["I'd recommend this book to anyone who loves a good mystery.", "rev"],
+  ["The soundtrack, by a Galway band, is the best thing about the film.", "rev"],
+  ["By Ciara Walsh: Bantry is celebrating after the town won the Tidy Towns award.", "art"],
+  ["According to the county council, the new swimming pool will open in May.", "art"],
+  ["Locals in Dingle say the harbour has never been so busy.", "art"],
+  ["A spokesperson for the hospital said yesterday that parking will be free from Monday.", "art"],
+  ["Speaking to our reporter, the principal said the school would reopen on Thursday.", "art"],
+  ["By Darragh Nolan: A Kerry teenager has rowed across Lough Leane for charity.", "art"],
+  ["Residents say the road has flooded four times since September.", "art"],
+  ["According to the weather service, last night was the coldest of the year.", "art"],
+  ["Hi everyone, and welcome back to my blog!", "blo"],
+  ["Let me know in the comments what I should cook next.", "blo"],
+  ["Thanks to all my followers for 1,000 likes this week!", "blo"],
+  ["Hey guys, today I'm trying a vegan dinner for the first time.", "blo"],
+  ["Drop a comment below if you've ever been to Achill.", "blo"],
+  ["Don't forget to subscribe so you never miss a new post.", "blo"],
+  ["Today's bake was a total disaster #fail", "blo"],
+  ["In this week's post, I'm sharing my five favourite walks in Wicklow.", "blo"],
+  ["Good morning, everyone, and thank you for coming to assembly.", "spe"],
+  ["Ladies and gentlemen, tonight we celebrate fifty years of our club.", "spe"],
+  ["Fellow students, I want to talk to you about something that matters.", "spe"],
+  ["Thank you for listening, and please vote for me on Friday.", "spe"],
+  ["Principal, teachers and parents, I am proud to stand here today.", "spe"],
+  ["I stand before you today as your new head girl.", "spe"],
+  ["Good afternoon, everyone. My name is Aoife and I'm running for class captain.", "spe"],
+  ["Members of the council, I am here to ask you to save our youth club.", "spe"]
+ ],
+ "heads": [
+  ["A Clare teenager has rescued a seal pup that was trapped in fishing nets on Fanore beach.", "Teen Saves Seal Pup on Fanore Beach"],
+  ["Students at a Sligo school have built a robot that sorts plastic from paper in the recycling bins.", "Sligo Pupils Build Recycling Robot"],
+  ["The main street in Kilrush was under water on Tuesday after the river burst its banks.", "Kilrush Main Street Under Water"],
+  ["A Tipperary grandmother has finished her first marathon at the age of seventy-two.", "Tipperary Gran Completes Marathon at 72"],
+  ["A bakery in Westport is giving free bread to anyone who brings back an empty bag.", "Westport Bakery Rewards Bag Returns"],
+  ["Mayo's under-14 camogie team has won the All-Ireland final in front of a huge crowd.", "Mayo Camogie Girls Win All-Ireland"],
+  ["A family in Donegal found a gold coin from the 1700s while digging their vegetable garden.", "Donegal Family Digs Up Gold Coin"],
+  ["The library in Navan will stay open until nine o'clock every evening during exam time.", "Navan Library Opens Late for Exams"],
+  ["A swarm of bees closed the playground in Bray for most of Saturday.", "Bees Close Bray Playground"],
+  ["Wexford's new cycle path along the coast was used by five thousand people in its opening week.", "Wexford Coastal Cycle Path a Hit"],
+  ["Hundreds of starlings put on a stunning display over Lough Ennell at sunset last night.", "Starlings Dance Over Lough Ennell"],
+  ["A school in Athlone has banned phones at lunchtime to get students talking again.", "Athlone Bans Phones at Lunchtime"],
+  ["A lost dog walked forty kilometres home to his owners in Longford.", "Lost Dog Walks Home to Longford"],
+  ["Galway's oldest cinema is closing its doors after ninety years.", "Galway Cinema Closes After 90 Years"]
+ ],
+ "vague": ["Big News Today", "You Won't Believe This", "Something Happened", "Read All About It", "Things Are Changing"],
+ "rep": [
+  ["Report on Lunchtime Litter at St Brigid's College", "ti"],
+  ["Report on Healthy Eating in the School Canteen", "ti"],
+  ["Report on Student Use of the School Library", "ti"],
+  ["Report on Safety at the School Gate", "ti"],
+  ["Report on After-School Clubs", "ti"],
+  ["This report was requested by the principal, Ms Byrne.", "in"],
+  ["The aim of this report is to find out why fewer students walk to school.", "in"],
+  ["I was asked by the Board of Management to look into noise in the corridors.", "in"],
+  ["The purpose of this report is to suggest ways to cut food waste.", "in"],
+  ["Terms of reference: to examine how students use the school library.", "in"],
+  ["Of the 150 students surveyed, 90 said they never use the library.", "fi"],
+  ["Most students (68%) said the queue at the canteen is too long.", "fi"],
+  ["Half of the first years had never heard of the homework club.", "fi"],
+  ["Only 12 out of 40 bikes were locked properly.", "fi"],
+  ["I found that the bins in the yard are full by eleven o'clock.", "fi"],
+  ["I recommend that the library opens at lunchtime.", "re"],
+  ["It is recommended that more bins are placed near the basketball courts.", "re"],
+  ["We recommend a one-way system on the main stairs.", "re"],
+  ["A second queue should be opened at the canteen.", "re"],
+  ["The school should run a walk-to-school week every term.", "re"],
+  ["Signed: Aoife Byrne, Student Council Secretary", "si"],
+  ["Report prepared by Cian Doyle, Class Captain, 3rd Year", "si"],
+  ["Submitted by the Green-Schools Committee, 12 May 2026", "si"],
+  ["Signed: Niall O'Brien, Transition Year", "si"],
+  ["Report prepared by the Student Council, March 2026", "si"]
+ ],
+ "rev": [
+  ["Storm Island is directed by Orla Healy and runs for 98 minutes.", "de"],
+  ["The Silver Hurley, written by Pádraig Lynch, has 240 pages.", "de"],
+  ["Bog Racer 3 is available on all games consoles and costs €30.", "de"],
+  ["Rated 12A, the film was released in cinemas last Friday.", "de"],
+  ["Starring Aoife Kearney as the detective, the series has six episodes.", "de"],
+  ["The album was released in June and has eleven songs.", "de"],
+  ["The acting is superb, especially from the girl who plays Nell.", "pr"],
+  ["I loved the way the story jumps between the past and the present.", "pr"],
+  ["The jokes are hilarious, and the whole cinema was laughing.", "pr"],
+  ["The race tracks look stunning, from the bogs of Offaly to the Cliffs of Moher.", "pr"],
+  ["The twist at the end is clever and took me completely by surprise.", "pr"],
+  ["Her singing is the highlight of the whole album.", "pr"],
+  ["The middle section drags, and I nearly fell asleep.", "cr"],
+  ["Sadly, the ending is predictable.", "cr"],
+  ["The levels become repetitive after a while.", "cr"],
+  ["At nearly three hours, the film is far too long.", "cr"],
+  ["The villain is weak and never feels like a real threat.", "cr"],
+  ["The second half of the book is confusing, with too many characters.", "cr"],
+  ["Four stars out of five: a must for any mystery fan.", "ve"],
+  ["Overall, a film the whole family will enjoy.", "ve"],
+  ["My verdict: worth every cent.", "ve"],
+  ["I'd recommend it to anyone aged ten and up.", "ve"],
+  ["Give it a miss unless you're a huge fan of the first one.", "ve"],
+  ["Three out of five: fun, but not one to remember.", "ve"]
+ ]
+}/*END*/;
+  var TYPE={rep:"📊 Report",rev:"⭐ Review",art:"📰 Article",blo:"💻 Blog",spe:"🎤 Speech"};
+  var TWHY={rep:"Report: a title \u201cReport on…\u201d, terms of reference, findings (often with numbers), recommendations. Formal and factual.",
+    rev:"Review: details (director, author, price), praise and criticism, a verdict or star rating.",
+    art:"Article: a headline, a byline (By …), facts, quotes from people (\u201caccording to\u201d, residents, a spokesperson).",
+    blo:"Blog: chatty and personal, talks to readers (\u201cHi everyone\u201d), comments, followers, hashtags.",
+    spe:"Speech: spoken to a live audience: \u201cGood morning, everyone\u201d, \u201cFellow students\u201d, \u201cThank you for listening\u201d."};
+  var REP={ti:"📌 Title",in:"📋 Introduction",fi:"🔍 Findings",re:"💡 Recommendation",si:"✍️ Sign-off"};
+  var RWHY={ti:"Title: \u201cReport on …\u201d says exactly what the report is about.",
+    in:"Introduction (terms of reference): who asked for the report and what it sets out to do.",
+    fi:"Findings: what you found out, often with numbers (68%, 12 out of 40, most students).",
+    re:"Recommendation: what should be done (I recommend that…, should…).",
+    si:"Sign-off: who wrote it, their role and the date."};
+  var REV={de:"ℹ️ Details",pr:"👍 Praise",cr:"👎 Criticism",ve:"⭐ Verdict"};
+  var VWHY={de:"Details: the facts the reader needs (title, director or author, length, price, where to get it).",
+    pr:"Praise: what's good about it, with a reason (superb acting, a clever twist).",
+    cr:"Criticism: what's weak (it drags, predictable, repetitive).",
+    ve:"Verdict: your final judgement: stars, a score, \u201coverall\u201d, would you recommend it?"};
+  var FIXED=[].concat(Object.keys(TYPE).map(function(k){return TYPE[k];}),Object.keys(REP).map(function(k){return REP[k];}),Object.keys(REV).map(function(k){return REV[k];}));
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function others(L,k){return Object.keys(L).filter(function(x){return x!==k;}).map(function(x){return L[x];});}
+  function card(s,cls){return '<div class="fs-card'+(cls?" "+cls:"")+'"><p>'+esc(s)+'</p></div>';}
+
+  /* ================= FORMAT SORT: which text type? ================= */
+  function qType(){var it=rnd(D.type),k=it[1];
+    return C("🗂️ Which text type?",TYPE[k],others(TYPE,k),TWHY[k],card(it[0]),{t:"type",s:it[0],rv:it[0]},3);}
+  /* ================= HEADLINES: pick the best one ================= */
+  function qHead(){var i=Math.floor(Math.random()*D.heads.length),it=D.heads[i];
+    var pool=shuffle(D.heads.filter(function(x,j){return j!==i;}).map(function(x){return x[1];})).slice(0,2).concat([rnd(D.vague)]);
+    var q=C("📰 Best headline?",it[1],pool,"A good headline is short and names the main fact: who or what, and where. It must match the story.",
+      '<div class="fs-card news"><div class="fs-gap">? ? ?</div><p>'+esc(it[0])+'</p></div>',{t:"head",s:it[0],rv:it[0].slice(0,48)+"…"},3);
+    return q;}
+  /* ================= REPORT PARTS ================= */
+  function qRep(){var it=rnd(D.rep),k=it[1];
+    return C("📊 Which part of the report?",REP[k],others(REP,k),RWHY[k],card(it[0],"rep"),{t:"rep",s:it[0],rv:it[0]},3);}
+  /* ================= REVIEW PARTS ================= */
+  function qRev(){var it=rnd(D.rev),k=it[1];
+    return C("⭐ Which part of the review?",REV[k],others(REV,k),VWHY[k],card(it[0],"rev"),{t:"rev",s:it[0],rv:it[0]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    sort:[qType],
+    head:[qHead],
+    rep:[qRep],
+    rev:[qRev],
+    mixed:[qType,qType,qHead,qRep,qRev]
+  };
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=(m==="head"||m==="mixed")?90:60;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>18;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="sort"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="sort"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You know your formats.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){if(seen[m.review])return;seen[m.review]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,TYPE:TYPE,REP:REP,REV:REV}};
+})();
+</script>

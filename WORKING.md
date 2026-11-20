@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 20 Nov 04:35 · E3 English Order 22 Functional writing (Format Sort) · english-f22
