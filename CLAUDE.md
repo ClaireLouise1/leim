@@ -20,3 +20,6 @@ Before starting ANY job (a Maths topic, a Payhip change, a page edit), read **WO
 
 ## Subject display order (she asked 19 Nov 2026)
 Wherever subjects are listed on the site (cards, buttons, menus, page sections, titles), use the official Irish order: **Irish, English, Maths**, then other subjects (Spanish). Subjects not live yet (e.g. Irish "coming soon") still go in their place. This is the display order only; the build order (Spanish → Maths → English → Irish) is separate.
+
+## What Came Up (job 7, LIVE 20 Nov 2026)
+The 2022–2026 topic grids are on the Spanish and Maths Exam Centres and the JC English page (`#came-up`), and every Maths/English game page + all three checklists show a "Came up in" line. Data: **src/came_up_data.py** (facts only: topic + year + question number — never copy SEC questions, texts or marking-scheme wording; the SEC said 20 Nov that it doesn't allow reproduction, linking to examinations.ie is fine). **When a new English game goes live, re-run `python3 src/build_came_up.py`** after assembling it (it fills the page's `<p class="came">` line from the topic's order number), then `python3 src/build_english_page.py` and `python3 src/build_checklists.py english` as usual. Add the 2027 papers to came_up_data.py after June 2027.
