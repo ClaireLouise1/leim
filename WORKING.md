@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 20 Nov 16:40 · E3 English Order 27 Film (Shot Spotter) · english-f27
