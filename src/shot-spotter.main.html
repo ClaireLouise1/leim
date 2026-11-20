@@ -1,0 +1,153 @@
+<main id="main">
+<style>.sh-svg{display:block;width:100%;max-width:440px;height:auto;margin:6px auto;border-radius:12px;border:3px solid #1B2430;background:#fff}
+.sh-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;max-width:520px;margin:8px auto 4px;text-align:left;box-shadow:0 3px 0 var(--line);font-size:19px;line-height:1.4;font-weight:600}
+.wc{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.wc .note b.h{display:block;font-size:17px;margin-bottom:2px}
+.sx3{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}@media(max-width:700px){.sx3{grid-template-columns:1fr}}
+.sx3 .note{margin:0}.sx3 .note b.h{display:block;font-size:16px;margin-bottom:4px}.sx3 .sh-svg{border-width:2px}
+.sb{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}@media(max-width:560px){.sb{grid-template-columns:1fr}}
+.sb .note{margin:0;font-size:15px}.sb .note b.h{display:block;font-size:15px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+@media(max-width:420px){.sh-card{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Shot Spotter</h1>
+        <p>Read a film like a director. Name the camera shot and the angle, pick the shot that does the job, tell diegetic sound from the soundtrack, choose the music, and spot the editing trick. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="shot"><div><b>Shot Spotter</b><span>🎥 Which shot?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="angle"><div><b>Camera angle</b><span>📐 Where is the camera?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="why"><div><b>Why this shot?</b><span>🎬 Which shot does the job?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="sound"><div><b>Sound &amp; music</b><span>🔊 Can the characters hear it?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="edit"><div><b>Editing</b><span>✂️ Cuts, slow motion, flashbacks</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Shot Spotter, 5 in a row = 3 bonus seconds. Every frame and scene here is made up by Léim: no real films.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R9, R7, OL8, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">60s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Film: camera shots, sound &amp; key scenes</h2>
+        <p>A film is a story told in <b>pictures and sound</b>. Every shot is a choice the director made: how close the camera is, where it is, what we hear and how the shots are joined. In the exam you write about <b>what</b> the director chose and <b>why</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <p>The same girl, three frames.</p>
+        <div class="sx3" id="sp-frames"></div>
+        <p style="margin-top:8px">What changes from A to C? What can you see in C that you couldn't see in A? What can you see in A that you lose in C?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The camera moves <b>closer</b>. A is a <b>long shot</b>: the whole body, so we see what she is doing and where. B is a <b>medium shot</b>, waist up. C is a <b>close-up</b>: her face fills the screen, so we see her <b>feelings</b>, but we lose the place. The closer the camera, the more we feel; the further away, the more we see of the setting.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Shot sizes: how close is the camera?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🏔️ Extreme long shot</b>the person is tiny; the place fills the screen. Often the <b>establishing shot</b> that shows where we are.</div>
+          <div class="note"><b class="h">🧍 Long shot</b>the whole body, head to feet: what someone is doing.</div>
+          <div class="note"><b class="h">👕 Medium shot</b>waist up: two people talking.</div>
+          <div class="note"><b class="h">🙂 Close-up</b>face and shoulders: feelings.</div>
+          <div class="note"><b class="h">👁️ Extreme close-up</b>just the eyes, a hand, a key: a detail or a strong feeling.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Camera angles: where is the camera?</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⬆️ Low angle</b>looks <b>up</b>: the character seems big, powerful, frightening.</div>
+          <div class="note"><b class="h">⬇️ High angle</b>looks <b>down</b>: the character seems small, weak, alone.</div>
+          <div class="note"><b class="h">👀 Eye level</b>level with the eyes: normal, like meeting them.</div>
+          <div class="note"><b class="h">🦅 Bird's-eye view</b>right above, looking straight down.</div>
+          <div class="note"><b class="h">👁️ Point-of-view shot</b>we see through a character's eyes.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Sound and music</h3>
+        <div class="wc">
+          <div class="note"><b class="h">🎬 Diegetic sound</b>comes from <b>inside</b> the story: dialogue, footsteps, a radio. The characters can hear it.</div>
+          <div class="note"><b class="h">🎧 Non-diegetic sound</b>is <b>added</b> for us: the soundtrack music, a voice-over. The characters can't hear it.</div>
+          <div class="note"><b class="h">🎵 Music</b>tells us how to feel: low, fast drums = tension; slow piano = sadness; bright fiddle = joy.</div>
+          <div class="note"><b class="h">🤫 Silence</b>can be the loudest choice: it makes a moment stand out.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Editing: how the shots are joined</h3>
+        <div class="wc">
+          <div class="note"><b class="h">⚡ Quick cuts</b>many short shots: speed, panic, tension.</div>
+          <div class="note"><b class="h">🐢 Slow motion</b>a big moment lasts longer.</div>
+          <div class="note"><b class="h">⏪ Flashback</b>a jump back to the past.</div>
+          <div class="note"><b class="h">🌑 Fade to black</b>ends a scene, or shows time passing.</div>
+          <div class="note"><b class="h">🎞️ Montage</b>short clips that squeeze days or weeks into a minute.</div>
+        </div>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Writing about a key scene</h3>
+        <p>Pick <b>one</b> key scene (a turning point, the climax, the ending). Say what happens in a sentence, then name <b>two or three techniques</b> and explain each one: <b>Name it</b> (a low-angle shot), <b>describe it</b> (we look up at the coach on the touchline), <b>say what it does</b> (he seems powerful and frightening, so we fear for the team). Use the director's name and the film's title.</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>Every student studies a <b>film</b> (from the Department's list), and the paper can ask about it: a key scene, a character, how the director creates tension or mood, or a film compared with another text. You may also get an <b>unseen</b> still or a film poster to write about. Marks go to <b>named techniques</b>, <b>specific moments</b> from your film and an <b>explanation of the effect</b> on the audience, not to a retelling of the plot.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Name the technique</b> (close-up, low angle, diegetic sound), don't just say “the camera”.</li>
+            <li><b>Be specific</b>: which scene, which moment, which character.</li>
+            <li><b>Explain the effect</b>: what does it make us feel or think?</li>
+            <li>Don't retell the whole story. One sentence of plot is enough.</li>
+            <li>Learn the director's name and the year, and spell them right.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "The Crossing" is an imaginary film. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>A key scene from <i>The Crossing</i></b><br>Orla (14) must row her little brother Cian across to the island before the storm.<br><b>Shot 1:</b> an extreme long shot: a tiny boat on a grey sea, the island far away. Wind howls.<br><b>Shot 2:</b> a close-up of Orla's hands gripping the oars, her knuckles white.<br><b>Shot 3:</b> a low-angle shot of Cian standing in the bow, pointing at the island.<br><b>Shot 4:</b> a point-of-view shot: the harbour wall coming closer through the spray.<br><b>Sound:</b> low drums on the soundtrack get faster and faster; then silence as the boat bumps the pier, and a gull cries.</div>
+          <ol class="eq">
+            <li>Why do you think the director opens the scene with an extreme long shot?
+              <details><summary>Show a model answer</summary><p>The extreme long shot makes the boat look <b>tiny</b> against the huge grey sea, with the island “far away”. It shows us at once how dangerous the crossing is and how small and alone the children are, so we are worried for them before we even see their faces.<br><i>Where the marks would go:</i> the shot named; what we see; the effect on the audience (danger, worry).</p></details></li>
+            <li>What does Shot 2 tell us about Orla? Explain how.
+              <details><summary>Show a model answer</summary><p>The close-up of her hands “gripping the oars” with “knuckles white” shows she is <b>terrified but determined</b>. We don't need to see her face: the close-up on a small detail shows how hard she is fighting the sea and how much she wants to get Cian across.<br><i>Where the marks would go:</i> a quality or feeling; the detail quoted; how the close-up shows it.</p></details></li>
+            <li>Name one diegetic and one non-diegetic sound in the scene. Why is the silence at the end effective?
+              <details><summary>Show a model answer</summary><p>The howling wind and the gull are <b>diegetic</b> (Orla can hear them); the drums are <b>non-diegetic</b> (added on the soundtrack). The drums get faster to build tension, so when they suddenly stop as the boat bumps the pier, the <b>silence</b> feels like a held breath let out: the danger is over. The single gull cry tells us they are safe on land.<br><i>Where the marks would go:</i> one correct example of each; the build-up of the drums; the effect of the silence.</p></details></li>
+            <li>Choose a key scene from a film you have studied. Explain how the director uses camera shots <b>and</b> sound to create tension.
+              <details><summary>Show a model answer</summary><p><i>Plan for any film:</i> (1) Name the film, the director and the scene in one sentence. (2) A camera shot: name it, describe the moment, say what it makes us feel (“the low-angle shot of the coach makes him seem…”). (3) A second shot or angle, the same way. (4) Sound: music, diegetic sound or silence, and how it builds or breaks the tension. (5) One line on why this scene matters to the whole film.<br><i>Where the marks would go:</i> a specific scene; two or three techniques correctly named; clear explanation of the effect each time; good use of film words; no long plot summary.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> we'll link the past-paper questions that use this skill here soon.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/film-shots-sound-key-scenes-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
