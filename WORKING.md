@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 20 Nov 10:40 · E3 English Order 24 Punctuation 2 (Speech Marks Sprint) · english-q24
