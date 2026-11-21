@@ -116,10 +116,11 @@ def page(key):
             sheet = f' · <a href="{r["sheet"]}" target="_blank" rel="noopener">Revision sheet (PDF)</a>' if r["sheet"] else ""
             dis = "" if r["url"] else " disabled"
             came = f'<div class="came">Came up in: {e(r["came"])}</div>' if r["came"] else ""
+            TK = ("Read the guide", "Made my plan", "Finished it") if lab == "CBA guide" else ("Played the game", "Read the rules", "Did the revision sheet")
             out.append(f'''<div class="ck" data-id="{r["n"]}" data-y="y{yi}">
   <div><h3><span class="num">{r["n"]}</span>{title}</h3><div class="meta">LO {e(r["lo_short"])} · {game}{sheet}</div>{came}</div>
   <div class="rag" role="group" aria-label="How confident are you?"><span>Confident?</span><button type="button" class="r" data-v="r" aria-pressed="false">Red</button><button type="button" class="a" data-v="a" aria-pressed="false">Amber</button><button type="button" class="g" data-v="g" aria-pressed="false">Green</button></div>
-  <div class="ticks"><label><input type="checkbox" data-k="game"{dis}><span>Played the game</span></label><label><input type="checkbox" data-k="rules"{dis}><span>Read the rules</span></label><label><input type="checkbox" data-k="sheet"{dis}><span>Did the revision sheet</span></label></div>
+  <div class="ticks"><label><input type="checkbox" data-k="game"{dis}><span>{TK[0]}</span></label><label><input type="checkbox" data-k="rules"{dis}><span>{TK[1]}</span></label><label><input type="checkbox" data-k="sheet"{dis}><span>{TK[2]}</span></label></div>
 </div>
 ''')
     out.append(f'''<div class="actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px"><a class="btn" href="{s["page"]}">Back to Junior Cycle {name}</a><button class="btn ghost" type="button" id="ckReset" style="color:var(--ink);border-color:var(--line)">Clear all my ticks</button></div>
@@ -207,7 +208,10 @@ def pages_of(p):
 if __name__ == "__main__":
     # optional: python3 src/build_checklists.py english  (only rebuild the subjects named)
     for key in (sys.argv[1:] or SUBJ):
-        open(os.path.join(ROOT, f"junior-cycle-{key}-checklist.html"), "w", encoding="utf-8").write(page(key))
+        _pg = page(key)
+        if 'id="join"' not in _pg:   # the sign-up form is on the home page (menu tidy, 21 Nov 2026)
+            _pg = _pg.replace('href="#join"', 'href="index.html#join"')
+        open(os.path.join(ROOT, f"junior-cycle-{key}-checklist.html"), "w", encoding="utf-8").write(_pg)
         src = os.path.join(ROOT, "src", f"{key}-topic-checklist.html")
         open(src, "w", encoding="utf-8").write(pdf(key))
         out = os.path.join(ROOT, "printables", f"junior-cycle-{key}-topic-checklist.pdf")

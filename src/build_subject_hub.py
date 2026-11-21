@@ -26,7 +26,7 @@ SUBJECTS = {
    ]),
   'english': dict(
    title='English', guide='junior-cycle-english-guide.html',
-   chips=[('y','🎯 Exam Centre','exam-centre.html'),('','✅ Checklist','junior-cycle-english-checklist.html'),('','🔀 Exam Mix','english-exam-mix.html'),('','📖 Course guide','junior-cycle-english-guide.html')],
+   chips=[('y','🎯 Exam Centre','junior-cycle-english-exam-centre.html'),('','✅ Checklist','junior-cycle-english-checklist.html'),('','🔀 Exam Mix','english-exam-mix.html'),('','📖 Course guide','junior-cycle-english-guide.html')],
    mix=('english-exam-mix.html','English Exam Mix','Every topic, mixed like the real paper'),
    tests='english',   # bundle section per game comes from SECTIONS in build_english_exam_mix.py
    strands=[

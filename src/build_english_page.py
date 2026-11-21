@@ -50,7 +50,7 @@ DESC = {
 }
 cards = []
 # every live game + the next 2 "Coming soon" (CBA guide rows have no game)
-for r in [r for r in ENGLISH if r[5]] + [r for r in ENGLISH if not r[5] and r[4] != "CBA guide"][:2]:
+for r in [r for r in ENGLISH if r[5] and r[4] != "CBA guide"] + [r for r in ENGLISH if not r[5] and r[4] != "CBA guide"][:2]:   # CBA guides are linked from the CBA section
     if r[5]:   # live: a link card (like build_maths_page.py)
         cards.append(f'      <a class="card" href="{r[5]}" style="text-decoration:none;color:inherit"><span class="pill">Free game</span><h3>{e(r[4])}</h3><p style="font-size:14px;color:var(--muted);margin:0 0 6px">{e(r[2].split(":")[0])}</p><p>{e(DESC[r[4]][0].upper() + DESC[r[4]][1:])}</p><p style="margin-top:10px;color:var(--green);font-weight:700">Play {e(r[4])} →</p></a>')
         continue
@@ -134,7 +134,8 @@ main = f'''<main id="main">
       <div class="card"><span class="pill">CBA 1 · 2nd year</span><h3>Oral Communication</h3><p>You pick a topic and a format (on your own or in a group), research and prepare it, then present it to the class. You also write a short Student Reflection Note. Your teacher judges it against four descriptors.</p></div>
       <div class="card"><span class="pill">CBA 2 · 3rd year</span><h3>Collection of the Student's Texts</h3><p>Over 2nd and 3rd year you build a collection of your own writing in different genres, choose pieces and redraft them, and write a Student Reflection Note. Judged against four descriptors.</p></div>
     </div>
-    <p style="margin-top:18px;font-size:15px;color:var(--muted)">Students sitting Junior Cycle in 2027 and 2028 complete only one CBA per subject, so ask the teacher which one your class is doing. The written Assessment Task linked to CBA 2 has not been required in recent years. Free guides for both CBAs are on the way.</p>
+    <p style="margin-top:18px;font-size:15px;color:var(--muted)">Students sitting Junior Cycle in 2027 and 2028 do at least one CBA per subject (the school decides whether it's one or both), so ask the teacher which one your class is doing. The written Assessment Task linked to CBA 2 is not examined.</p>
+    <p style="margin-top:12px"><a class="btn" href="junior-cycle-english-oral-cba.html">Oral Communication guide →</a> <a class="btn" href="junior-cycle-english-texts-cba.html">Collection of Texts guide →</a></p>
     <p style="margin-top:12px"><a class="btn ghost" href="junior-cycle-cbas.html#english" style="color:var(--ink);border-color:var(--line)">CBAs explained for parents →</a></p>
   </div>
 </section>
