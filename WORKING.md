@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-21 05:50 · Free first: hide shop + buy buttons (preview branch, not live yet) · free-first
