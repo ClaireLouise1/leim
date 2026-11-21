@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 21 Nov 08:27 · Maths subject page → new topic-card layout (junior-cycle-maths.html, build_maths_page.py, new src/build_subject_hub.py) · homelayout

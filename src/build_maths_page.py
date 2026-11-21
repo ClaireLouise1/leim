@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds junior-cycle-maths.html from the Spanish page's header/sign-up/footer + checklist_data.MATHS.
+"""Builds junior-cycle-maths-guide.html (the long parents/teachers course guide; since 21 Nov 2026 the student page junior-cycle-maths.html is built by build_subject_hub.py — after running this, run build_subject_hub.py too) from the Spanish page's header/sign-up/footer + checklist_data.MATHS.
 Run from the repo root after changing checklist_data.py: python3 src/build_maths_page.py"""
 import os, re, sys, html
 sys.path.insert(0, os.path.dirname(__file__))
@@ -7,7 +7,7 @@ from checklist_data import MATHS
 e = html.escape
 T = open("junior-cycle-spanish.html", encoding="utf-8").read()
 head = T[:T.index('<main id="main">')]
-head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle Maths revision | Léim</title>", head)
+head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle Maths: course guide for parents &amp; teachers | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Free Junior Cycle Maths revision games mapped to the 2018 specification: integers, BIMDAS and more, with rules, free printable sheets, an exam corner for every topic and a topic checklist for 1st to 3rd year.">', head)
 head = head.replace(' aria-current="page"', "").replace('<a href="junior-cycle-maths.html">', '<a href="junior-cycle-maths.html" aria-current="page">')
 head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)  # new tab bar (15 Nov)
@@ -195,7 +195,7 @@ main = f'''<main id="main">
 </section>
 
 '''
-open("junior-cycle-maths.html", "w", encoding="utf-8").write(head + main + foot)
+open("junior-cycle-maths-guide.html", "w", encoding="utf-8").write(head + main + foot)
 print("ok")
 
 # Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py

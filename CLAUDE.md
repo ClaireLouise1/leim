@@ -29,3 +29,8 @@ The 2022–2026 topic grids are on the Spanish and Maths Exam Centres and the JC
 
 ## Home page (new layout, 21 Nov 2026 — she chose "option B")
 index.html is now Spraoi-style: sign-up box, "Choose your exam" (Junior Cycle / Leaving Cert coming soon), then subject cards in official order with game counts, in Léim navy & yellow (green game counts). **The game counts on the cards are typed in by hand: when a new game goes live, update that subject's count and the Junior Cycle total.** The old FAQ moved to about.html. Keep this layout for Léim, Spraoi and LTC.
+
+## Subject pages (new layout, 21 Nov 2026 — Maths done, English & Spanish next)
+Students' path: Home → Choose your exam → subject → topic cards (grouped by strand) → game → (later) practice test. Text-light.
+- **junior-cycle-maths.html is built by src/build_subject_hub.py** (topic list + strands in SUBJECTS, short names in SHORT, styles in src/subject_hub.css). New Maths topic: add its slug there and re-run.
+- The old long page (exam info, teacher packs, FAQ) is now **junior-cycle-maths-guide.html**, built by src/build_maths_page.py — linked as "📖 Course guide". After running build_maths_page.py, run build_subject_hub.py too.
