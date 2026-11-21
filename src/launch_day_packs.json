@@ -1,0 +1,14 @@
+{
+  "_note": "Free first (21 Nov 2026): English teacher packs uploaded to Payhip as INVISIBLE, not yet linked on the site. On launch day: make them Visible, swap <!--TEACHERPACK--> in each src/<slug>.main.html for the teacher-pack line, re-assemble, add the 'For teachers' cards in src/build_english_page.py (after sZUcO, in this order), tick the English tracker (S + link).",
+  "P7":  {"order": 20, "game": "ad-breaker",          "code": "alioA", "name": "Media: Advertising Teacher Pack – Junior Cycle English"},
+  "P8":  {"order": 21, "game": "stage-it",            "code": "k5UVR", "name": "Drama: How Plays Work Teacher Pack – Junior Cycle English"},
+  "P9":  {"order": 22, "game": "format-sort",         "code": "HeBOI", "name": "Functional Writing: Reports, Reviews, Articles & Blogs Teacher Pack – Junior Cycle English"},
+  "P10": {"order": 23, "game": "mood-match",          "code": "YPKVX", "name": "Poetry 2: Theme, Tone & Comparing Poems Teacher Pack – Junior Cycle English"},
+  "P11": {"order": 24, "game": "speech-marks-sprint", "code": "sGm52", "name": "Punctuation 2: Dialogue, Colons & Semicolons Teacher Pack – Junior Cycle English"},
+  "P12": {"order": 26, "game": "proofread-patrol",    "code": "jfrDl", "name": "Editing & Redrafting: Proofreading Teacher Pack – Junior Cycle English"},
+  "P13": {"order": 27, "game": "shot-spotter",        "code": "5h3m7", "name": "Film: Camera Shots, Sound & Key Scenes Teacher Pack – Junior Cycle English"},
+  "P14": {"order": 28, "game": "who-said-it",         "code": "cBNCv", "name": "Shakespeare (Higher Level) Teacher Pack – Junior Cycle English"},
+  "P15": {"order": 29, "game": "pqe-builder",         "code": "qb2rE", "name": "Answering on Texts: Point, Quote, Explain Teacher Pack – Junior Cycle English"},
+  "P16": {"order": 30, "game": "compare-cards",       "code": "K2zZJ", "name": "Comparing Texts & Characters Teacher Pack – Junior Cycle English"},
+  "P17": {"order": 31, "game": "fact-or-opinion",     "code": "VadUH", "name": "Non-literary & Visual Texts Teacher Pack – Junior Cycle English"}
+}
