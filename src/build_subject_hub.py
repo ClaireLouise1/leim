@@ -28,6 +28,7 @@ SUBJECTS = {
    title='English', guide='junior-cycle-english-guide.html',
    chips=[('y','🎯 Exam Centre','exam-centre.html'),('','✅ Checklist','junior-cycle-english-checklist.html'),('','🔀 Exam Mix','english-exam-mix.html'),('','📖 Course guide','junior-cycle-english-guide.html')],
    mix=('english-exam-mix.html','English Exam Mix','Every topic, mixed like the real paper'),
+   tests='english',   # bundle section per game comes from SECTIONS in build_english_exam_mix.py
    strands=[
     ('✏️','Grammar, spelling &amp; punctuation',['word-sort','sentence-surgeon','comma-catch','speech-marks-sprint','spell-strike','word-ladder','tense-trap','proofread-patrol']),
     ('📚','Novel, poetry, drama &amp; film',['character-clues','plot-line','twist-detector','technique-spotter','mood-match','stage-it','who-said-it','shot-spotter','ad-breaker']),
@@ -65,6 +66,7 @@ def build(key, cfg):
     head = re.sub(r'(<meta property="og:title" content=")[^"]*', r'\g<1>'+t, head)
     hdr = idx.split('<body>')[1].split('<main id="main">')[0]
     foot = '</main>' + idx.split('</main>')[1]
+    hdr, foot = (x.replace('href="#join"', 'href="index.html#join"') for x in (hdr, foot))   # the sign-up form is on the home page
     out, n = [], 0
     for i,(icon,name,slugs) in enumerate(cfg['strands']):
         rows = []
@@ -77,8 +79,9 @@ def build(key, cfg):
             y = len(set(re.findall(r'\b(20\d\d) \(', m.group(1)))) if m else 0
             came = f' · 📅 {y}/5' if y else ''
             if cfg.get('tests'):
-                TESTS[s] = {'topic': html.unescape(topic), 'game': html.unescape(g), 'bundle': cfg['tests'][i]}
-                rows.append(f'<div class="topic hasT"><a class="tl" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div></a><a class="tb" href="practice-test.html?t={s}" data-pt="{s}" aria-label="Practice test: {topic}">📝<span>Test</span></a></div>')
+                bundle = EN_SECTION[s] if cfg['tests'] == 'english' else cfg['tests'][i]
+                TESTS.setdefault(key, {})[s] = {'topic': html.unescape(topic), 'game': html.unescape(g), 'bundle': bundle}
+                rows.append(f'<div class="topic hasT"><a class="tl" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div></a><a class="tb" href="{PT_PAGE[key]}?t={s}" data-pt="{s}" aria-label="Practice test: {topic}">📝<span>Test</span></a></div>')
             else:
                 rows.append(f'<a class="topic" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div><span class="go">›</span></a>')
         sid = ' id="games"' if i == 0 else ''
@@ -107,7 +110,12 @@ def build(key, cfg):
     print('built', key, n, 'topics')
 
 TESTS = {}
+PT_PAGE = {'maths': 'practice-test.html', 'english': 'english-practice-test.html'}
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_english_exam_mix import SECTIONS as _SEC
+EN_SECTION = {g: sec for sec, gs in _SEC.items() for g in gs}
 for k,c in SUBJECTS.items(): build(k,c)
 import importlib.util as _u
-_spec=_u.spec_from_file_location('bpt', os.path.join(os.path.dirname(os.path.abspath(__file__)),'build_practice_test.py')); _m=_u.module_from_spec(_spec); _spec.loader.exec_module(_m); _m.build(TESTS)
+_spec=_u.spec_from_file_location('bpt', os.path.join(os.path.dirname(os.path.abspath(__file__)),'build_practice_test.py')); _m=_u.module_from_spec(_spec); _spec.loader.exec_module(_m); 
+for _k,_t in TESTS.items(): _m.build(_t, _k)
 subprocess.run(['python3', os.path.join(os.path.dirname(__file__),'free_first.py')], check=False, stdout=subprocess.DEVNULL)

@@ -1,6 +1,6 @@
 """Game first, text out of the way (her request, 21 Nov 2026: "straight to games, text somewhere else").
 For every game page: replaces the big intro (pill, title, paragraph, buttons) with a compact bar
-(‹ Subject · game name · 📖 Rules · 📝 Practice test for Maths), so the game is the first thing on the page,
+(‹ Subject · game name · 📖 Rules · 📝 Practice test for Maths and English), so the game is the first thing on the page,
 and folds the rules / exam corner / printable section into a closed "📖 Rules, exam tips & printable" box
 (it opens automatically from any "Revise the rules" link).
 Idempotent: pages already done carry <!--slim-->. Run after any game page is (re)assembled:
@@ -31,16 +31,26 @@ JS = ('<script>(function(){var d=document.getElementById("more");if(!d)return;'
       'function o(){d.open=true;}if(location.hash==="#revise")o();'
       'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest(\'a[href="#revise"]\');if(a)o();});})();</script>')
 
+PT_PAGE = {'maths': 'practice-test.html', 'english': 'english-practice-test.html'}   # same as build_subject_hub.py
+
 def slim(slug, subj_key, subj_title, test):
     p = os.path.join(ROOT, slug + '.html')
     if not os.path.exists(p): return 'missing'
     h = open(p, encoding='utf-8').read()
-    if '<!--slim-->' in h: return 'already'
+    pt = PT_PAGE.get(subj_key, 'practice-test.html')
+    if '<!--slim-->' in h:
+        # pages slimmed before their subject had tests: add the 📝 chip to the bar
+        rules = '<a class="chip" href="#revise">📖 Rules</a>'
+        if test and f'{pt}?t={slug}"' not in h and h.count(rules) == 1:
+            h = h.replace(rules, rules + f'<a class="chip y" href="{pt}?t={slug}">📝 Practice test</a>')
+            open(p, 'w', encoding='utf-8').write(h)
+            return 'ok'
+        return 'already'
     m = re.search(r'<div class="sec-head" style="text-align:center">.*?<h1[^>]*>(.*?)</h1>.*?(?=<div class="panel" id="start")', h, re.S)
     if not m: return 'no sec-head'
     name = m.group(1)
     chips = '<a class="chip" href="#revise">📖 Rules</a>'
-    if test: chips += f'<a class="chip y" href="practice-test.html?t={slug}">📝 Practice test</a>'
+    if test: chips += f'<a class="chip y" href="{pt}?t={slug}">📝 Practice test</a>'
     top = (f'<!--slim-->{CSS}<div class="gtop"><a class="gback" href="junior-cycle-{subj_key}.html">‹ {subj_title}</a>'
            f'<h1>{name}</h1><div class="gchips">{chips}</div></div>\n\n      ')
     h = h[:m.start()] + top + h[m.end():]

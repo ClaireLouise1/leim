@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Junior Cycle English practice test | Léim</title>
+<meta name="description" content="Short, exam-focused online revision for Irish secondary students, mapped to the official Junior Cycle and Leaving Cert specifications. Starting with Junior Cycle Spanish.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Léim">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="canonical" href="https://leim.ie/english-practice-test.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Léim">
+<meta property="og:title" content="Léim | Junior Cycle &amp; Leaving Cert revision online">
+<meta property="og:description" content="Short, exam-focused online revision for Irish secondary students, mapped to the official Junior Cycle and Leaving Cert specifications. Free games, rules and printable sheets for every topic.">
+<meta property="og:url" content="https://leim.ie/english-practice-test.html">
+<meta property="og:locale" content="en_IE">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://leim.ie/#org",
+      "name": "Léim",
+      "url": "https://leim.ie/",
+      "logo": "https://leim.ie/favicon.svg",
+      "email": "hello@leim.ie",
+      "description": "Online revision for Irish secondary students, mapped to the official Junior Cycle and Leaving Cert specifications. Free games, rules and printable practice sheets for every topic, starting with Junior Cycle Spanish and Maths.",
+      "areaServed": "IE",
+      "sameAs": ["https://payhip.com/Leim"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://leim.ie/#website",
+      "name": "Léim",
+      "alternateName": "Léim revision",
+      "url": "https://leim.ie/",
+      "inLanguage": "en-IE",
+      "publisher": {"@id": "https://leim.ie/#org"}
+    }
+  ]
+}
+</script>
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style><style>.facts{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 16px;text-align:left;font-size:19px;font-weight:700;line-height:1.35}.facts p{margin:4px 0}
+.en .src{display:block;width:max-content;max-width:100%;margin:0 auto 6px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--mist);border-radius:999px;padding:3px 10px}
+.xm-q{max-width:560px;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-size:20px;line-height:1.45;font-weight:600;box-shadow:0 3px 0 var(--line);text-align:left}
+.xm-q mark.hl{background:#FFF1B8;padding:0 3px;border-radius:4px}
+.xm-task{background:#F4F8FC;border-style:dashed}
+.xm-k{display:block;font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-bottom:4px}
+.choice .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+#choices .choice{white-space:normal}
+.sort2{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:700px){.sort2{grid-template-columns:1fr}}
+.sort2 .note{margin:0;font-size:15px}.sort2 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+.tbl-x{width:100%;min-width:0;border-collapse:collapse;font-size:15px}.tbl-x th,.tbl-x td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}.tbl-x th{color:var(--ink);text-transform:none}
+@media(max-width:420px){.xm-q{font-size:17px}.facts{font-size:17px}#choices .choice{font-size:15px}}</style><style>.gtop{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}.gtop .gback{font-weight:700;color:var(--muted);text-decoration:none}.gtop h1{font-size:clamp(24px,6vw,32px);margin:0;flex:1 1 auto;line-height:1.1}.gtop .gchips{display:flex;gap:8px;flex-wrap:wrap}.gtop .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:700;color:var(--ink);text-decoration:none;font-size:14px}.gtop .chip.y{background:var(--sun);border-color:var(--sun)}details.more{margin-top:24px;border:2px solid var(--line);border-radius:16px;background:#fff}details.more>summary{cursor:pointer;padding:14px 18px;font-weight:800;font-size:17px;list-style:none}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:" ▾";color:var(--muted)}details.more[open]>summary::after{content:" ▴"}details.more>.panel{margin-top:0!important;border:0;box-shadow:none}</style><style>
+.pt{max-width:640px;margin:0 auto;padding:18px 16px 40px}
+.pt .crumbs{font-size:.9rem;color:var(--muted);margin:0 0 6px}.pt .crumbs a{color:var(--muted)}
+.pt h1{font-size:1.7rem;line-height:1.15;margin:0 0 4px}
+.pt h1 .acc{background:linear-gradient(transparent 55%,var(--sun) 55%)}
+.pt .sub{color:var(--muted);font-weight:600;margin:0 0 14px}
+.pbar{display:flex;gap:5px;margin:0 0 16px}.pbar i{flex:1;height:8px;border-radius:99px;background:var(--mist)}
+.pbar i.ok{background:var(--green)}.pbar i.no{background:#D9534F}.pbar i.now{background:var(--sun)}
+.qcard{border:3px solid var(--ink);border-radius:22px;padding:18px;background:#fff}
+.qn{font-weight:800;color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.why{margin-top:14px;background:var(--green-soft);border-radius:14px;padding:12px 14px;font-weight:600;line-height:1.45}
+.why.bad{background:#FBE9E8}
+.why b{display:block;margin-bottom:4px}
+.nextb{margin-top:14px;width:100%}
+.res{text-align:center}
+.res .big{font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.res .msg{font-weight:700;font-size:1.1rem;margin:8px 0 2px}
+.mlist{text-align:left;margin-top:18px}
+.mlist li{margin:10px 0;line-height:1.45}
+.mlist .w{color:var(--green-dark);font-weight:600}
+.acts{display:grid;gap:10px;margin-top:20px}
+.acts .btn{width:100%;text-align:center}
+.btn.ghost2{background:#fff;border:2px solid var(--ink);color:var(--ink)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="index.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="exam-centre.html">Exam Centre</a>
+      <!--ff:PGEgY2xhc3M9InNob3AiIGhyZWY9Imh0dHBzOi8vcGF5aGlwLmNvbS9MZWltIj5TaG9wPC9hPg==--><!--/ff-->
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="pt">
+<p class="crumbs"><a href="index.html">Home</a> › <a href="junior-cycle-english.html">English</a> › Practice test</p>
+<h1>📝 <span class="acc" id="tname">Practice test</span></h1>
+<p class="sub" id="tsub">10 questions · no timer · see the working after each one</p>
+<div class="pbar" id="pbar"></div>
+<div id="quiz" class="qcard">
+  <div class="qn" id="qn">Loading…</div>
+  <div class="prompt"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+  <div class="choices" id="choices"></div>
+  <div id="why"></div>
+</div>
+<div id="done" class="qcard res" hidden>
+  <div class="big" id="score">0/10</div>
+  <p class="msg" id="msg"></p>
+  <p class="sub" id="bestline" style="margin:0"></p>
+  <div class="mlist" id="mlist"></div>
+  <div class="acts">
+    <button class="btn" id="again" type="button">🔁 New practice test</button>
+    <a class="btn ghost2" id="gamelink" href="#">🎮 Play the game</a>
+    <a class="btn ghost2" href="junior-cycle-english.html">← All English topics</a>
+  </div>
+</div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script>
+(function(){
+var T={"word-sort": {"topic": "Parts of speech", "game": "Word Sort", "bundle": "language"}, "sentence-surgeon": {"topic": "Sentences", "game": "Sentence Surgeon", "bundle": "language"}, "comma-catch": {"topic": "Capitals, commas & full stops", "game": "Comma Catch", "bundle": "language"}, "speech-marks-sprint": {"topic": "Speech marks, colons & semicolons", "game": "Speech Marks Sprint", "bundle": "language"}, "spell-strike": {"topic": "Spelling", "game": "Spell Strike", "bundle": "language"}, "word-ladder": {"topic": "Vocabulary", "game": "Word Ladder", "bundle": "language"}, "tense-trap": {"topic": "Tenses & agreement", "game": "Tense Trap", "bundle": "language"}, "proofread-patrol": {"topic": "Editing & redrafting", "game": "Proofread Patrol", "bundle": "language"}, "character-clues": {"topic": "The novel: characters", "game": "Character Clues", "bundle": "texts"}, "plot-line": {"topic": "The novel: plot", "game": "Plot Line", "bundle": "texts"}, "twist-detector": {"topic": "Short stories", "game": "Twist Detector", "bundle": "texts"}, "technique-spotter": {"topic": "Poetry: imagery & sound", "game": "Technique Spotter", "bundle": "texts"}, "mood-match": {"topic": "Poetry: theme & mood", "game": "Mood Match", "bundle": "texts"}, "stage-it": {"topic": "Drama", "game": "Stage It", "bundle": "texts"}, "who-said-it": {"topic": "Shakespeare (Higher Level)", "game": "Who Said It?", "bundle": "texts"}, "shot-spotter": {"topic": "Film", "game": "Shot Spotter", "bundle": "texts"}, "ad-breaker": {"topic": "Advertising", "game": "Ad Breaker", "bundle": "reading"}, "paragraph-builder": {"topic": "Paragraphs", "game": "Paragraph Builder", "bundle": "writing"}, "show-dont-tell": {"topic": "Personal & descriptive writing", "game": "Show, Don't Tell", "bundle": "writing"}, "story-spine": {"topic": "Narrative writing", "game": "Story Spine", "bundle": "writing"}, "format-fixer": {"topic": "Letters & emails", "game": "Format Fixer", "bundle": "writing"}, "format-sort": {"topic": "Functional writing", "game": "Format Sort", "bundle": "writing"}, "register-switch": {"topic": "Register & tone", "game": "Register Switch", "bundle": "writing"}, "persuasion-power": {"topic": "Persuasive writing", "game": "Persuasion Power", "bundle": "writing"}, "clue-hunt": {"topic": "Reading for meaning", "game": "Clue Hunt", "bundle": "reading"}, "fact-or-opinion": {"topic": "Non-literary & visual texts", "game": "Fact or Opinion", "bundle": "reading"}, "pqe-builder": {"topic": "Answering on texts", "game": "PQE Builder", "bundle": "reading"}, "compare-cards": {"topic": "Comparing texts & characters", "game": "Compare Cards", "bundle": "texts"}, "talk-tips": {"topic": "Speaking & listening", "game": "Talk Tips", "bundle": "writing"}},EN=true,HUB="junior-cycle-english.html",PRE="english-exam-mix-";
+var N=10,$=function(i){return document.getElementById(i);};
+var slug=(new URLSearchParams(location.search).get("t")||"").toLowerCase();
+var info=T[slug];
+if(!info){$("qn").textContent="Pick a topic from the topics page.";$("en").innerHTML='<a class="btn" href="'+HUB+'">Go to the topics</a>';return;}
+document.title=info.topic+" practice test | Léim";
+$("tname").textContent=info.topic;
+$("gamelink").href=slug+".html";$("gamelink").textContent="🎮 Play "+info.game;
+function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+var qs,i,score,miss,locked;
+function bar(){var h="";for(var k=0;k<N;k++){var c=k<qs.length&&qs[k].res?qs[k].res:(k===i?"now":"");h+='<i class="'+c+'"></i>';}$("pbar").innerHTML=h;}
+function G(){return EN?window.LEIM_EN[slug]:{M:window.LEIM_MAKERS[slug],orders:[],pu:null};}
+function make(){var M=G().M,list=(M.mixed&&M.mixed.length)?M.mixed:[],seen={},out=[],tries=0;
+  while(out.length<N&&tries<200){tries++;var q;try{q=rnd(list)();}catch(e){continue;}
+    if(!q||q.answer==null||!q.wrong||q.wrong.length<(q.nw||3))continue;var key=q.review||q.en+q.frame;if(seen[key])continue;seen[key]=1;out.push(q);}
+  return out;}
+function start(){qs=make();i=0;score=0;miss=[];$("done").hidden=true;$("quiz").hidden=false;show();}
+function show(){locked=false;var q=qs[i];bar();
+  $("qn").textContent="Question "+(i+1)+" of "+N;
+  $("en").innerHTML=esc(q.en);
+  $("frame").innerHTML=(q.html||"")+esc(q.frame||"");
+  $("frame").className="frame"+(EN?"":" gx-"+slug)+(q.frame&&q.frame.length>24?" long":"");
+  if(EN)$("quiz").className="qcard gx-"+slug;   /* English games' styles are scoped to .gx-<slug> on the card */
+  $("why").innerHTML="";
+  var box=$("choices");box.innerHTML="";
+  box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return String(x).length>16;})?" one":"");
+  var g=G(),opts=shuffle([String(q.answer)].concat(q.wrong.slice(0,q.nw||3).map(String))),ORDS=q.fixed?[q.fixed]:(g.orders||[]);
+  for(var k=0;k<ORDS.length;k++){var O=ORDS[k];if(opts.every(function(o){return O.indexOf(o)>=0;})){opts.sort(function(a,b){return O.indexOf(a)-O.indexOf(b);});break;}}   /* label buttons keep the game's order */
+  opts.forEach(function(t,n){
+    var b=document.createElement("button");b.className="choice";b.type="button";b.setAttribute("data-v",t);
+    if(g.pu)b.innerHTML=g.pu(t);else b.textContent=t;
+    b.setAttribute("aria-label","Option "+(n+1)+": "+t);
+    b.onclick=function(){pick(b,t);};box.appendChild(b);});
+  $("quiz").scrollIntoView({behavior:"smooth",block:"start"});}
+function pick(btn,t){if(locked)return;locked=true;var q=qs[i],ok=String(t)===String(q.answer);
+  [].forEach.call($("choices").children,function(c){c.disabled=true;if(c.getAttribute("data-v")===String(q.answer))c.classList.add("right");});
+  if(ok){score++;q.res="ok";}else{btn.classList.add("wrong");q.res="no";miss.push(q);}
+  bar();
+  var w=q.why?esc(q.why):"The answer is "+esc(q.answer)+".";
+  $("why").innerHTML='<div class="why'+(ok?"":" bad")+'"><b>'+(ok?"✅ Right!":"❌ Not this time. Answer: "+esc(q.answer))+'</b>'+w+'</div>'+
+    '<button class="btn nextb" type="button" id="nx">'+(i<N-1?"Next question →":"See my score")+'</button>';
+  $("nx").onclick=function(){i++;if(i<N)show();else end();};$("nx").focus({preventScroll:true});}
+function end(){$("quiz").hidden=true;$("done").hidden=false;bar();
+  $("score").textContent=score+"/"+N;
+  $("msg").textContent=score>=9?"🏆 Exam ready!":score>=7?"💪 Strong. Fix the ones below.":score>=5?"👍 Getting there. Read the working below, then try again.":"🌱 Play the game first, then try again.";
+  var best=0;try{best=+localStorage.getItem("leim-pt-"+slug)||0;if(score>best){localStorage.setItem("leim-pt-"+slug,score);best=score;}}catch(e){}
+  $("bestline").textContent=best?"Your best: "+best+"/"+N:"";
+  $("mlist").innerHTML=miss.length?"<b>Go back over these:</b><ul>"+miss.map(function(q){return EN?"<li><b>"+esc(q.review||(q.en+" → "+q.answer))+"</b>"+(q.why?'<br><span class="w">'+esc(q.why)+"</span>":"")+"</li>":"<li>"+esc(q.why||(q.en+" Answer: "+q.answer))+"</li>";}).join("")+"</ul>":"";
+  $("done").scrollIntoView({behavior:"smooth",block:"start"});}
+$("again").onclick=start;
+var sc=document.createElement("script");sc.src=PRE+info.bundle+".js?v=1";
+sc.onload=function(){var R=EN?window.LEIM_EN:window.LEIM_MAKERS;if(!R||!R[slug]){$("qn").textContent="Sorry, this test isn't ready yet.";return;}start();};
+sc.onerror=function(){$("qn").textContent="Couldn't load the questions. Check your connection and try again.";};
+document.body.appendChild(sc);
+})();
+</script>
+</body>
+</html>
