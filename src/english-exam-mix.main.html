@@ -1,0 +1,143 @@
+<main id="main">
+<style>.facts{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 16px;text-align:left;font-size:19px;font-weight:700;line-height:1.35}.facts p{margin:4px 0}
+.en .src{display:block;width:max-content;max-width:100%;margin:0 auto 6px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--mist);border-radius:999px;padding:3px 10px}
+.xm-q{max-width:560px;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-size:20px;line-height:1.45;font-weight:600;box-shadow:0 3px 0 var(--line);text-align:left}
+.xm-q mark.hl{background:#FFF1B8;padding:0 3px;border-radius:4px}
+.xm-task{background:#F4F8FC;border-style:dashed}
+.xm-k{display:block;font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-bottom:4px}
+.choice .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+#choices .choice{white-space:normal}
+.sort2{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:700px){.sort2{grid-template-columns:1fr}}
+.sort2 .note{margin:0;font-size:15px}.sort2 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+.tbl-x{width:100%;min-width:0;border-collapse:collapse;font-size:15px}.tbl-x th,.tbl-x td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}.tbl-x th{color:var(--ink);text-transform:none}
+@media(max-width:420px){.xm-q{font-size:17px}.facts{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">English Exam Mix</h1>
+        <p>Exam technique plus questions from every Léim English game, mixed like the real paper: reading, writing, studied texts and language. Tips below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Exam technique tips</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tech"><div><b>Exam technique</b><span>⏱️ Time it 🎯 Read the question</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="reading"><div><b>Reading mix</b><span>📖 Unseen texts, ads, charts · 4 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="writing"><div><b>Writing mix</b><span>✍️ Paragraphs, letters, speeches · 8 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="texts"><div><b>Studied texts mix</b><span>🎭 Novel, poetry, drama, film · 9 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="language"><div><b>Language mix</b><span>🔤 Grammar, spelling, punctuation · 8 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Full paper mix</b><span>Everything</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–5 work too. In Exam technique, 5 in a row = 3 bonus seconds. Every text is made up by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R3, R7, W1, W3, W4, W11 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Exam technique tips</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Exam technique</h2>
+        <p>The Junior Cycle English exam is <b>one paper, 2 hours, 180 marks</b>, at Higher and at Ordinary level. Every question links to the paper's <b>theme</b>, and the sections and their marks change from year to year. So you can't learn the paper off. What you can learn is <b>how to read a question</b> and <b>how to use your time</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>A:</b> <u>Identify</u> two facts about the festival.</span><span class="sp"><b>B:</b> <u>Explain</u> how the writer builds tension.</span><span class="sp"><b>C:</b> <u>Compare</u> the openings of the two stories.</span></div>
+        <p style="margin-top:8px">All three are about a text. What is different about the answer each one wants? Which one needs the shortest answer?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The first word, the <b>command word</b>, tells you the job. <b>A</b> wants two short, exact details: no explaining. <b>B</b> wants <i>how</i>: name the method, quote it, say what it does. <b>C</b> wants both texts in every point: how they are alike <i>and</i> how they differ. A is the shortest. Answering B like A (just listing) loses most of the marks.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Command words</h3>
+        <table class="tbl-x"><thead><tr><th>The question says…</th><th>So you…</th></tr></thead><tbody>
+          <tr><td>Identify, name, list, write down, pick out, find</td><td>🔎 find it in the text: short and exact</td></tr>
+          <tr><td>Describe</td><td>📝 say what it is like, with details</td></tr>
+          <tr><td>Explain, why, how</td><td>💡 say why or how, and back it up</td></tr>
+          <tr><td>Compare, contrast</td><td>⚖️ alike AND different, both texts every time</td></tr>
+          <tr><td>Do you agree, do you think, in your opinion</td><td>🙋 give your view clearly, then reasons</td></tr>
+          <tr><td>Summarise, sum up</td><td>✂️ main points only, short, your own words</td></tr>
+        </tbody></table>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Time it by the marks</h3>
+        <div class="sort2">
+          <div class="note"><b class="h">⏱️ 40 seconds a mark</b>120 minutes ÷ 180 marks = ⅔ of a minute a mark. A 30-mark question gets about 20 minutes, a 60-mark question about 40.</div>
+          <div class="note"><b class="h">🛑 Move on</b>When the time for a question is up, finish your sentence and go on. Marks for an answer you never started are easier to win than the last few marks of a long one.</div>
+        </div>
+        <p style="margin-top:10px">Keep the last few minutes to <b>read your answers back</b>: missing words, spelling, full stops and capitals. In the exam itself, use the marks printed on <i>your</i> paper: they change from year to year.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Read the question twice</h3>
+        <ul>
+          <li><b>Underline the command word</b> (explain, describe, compare…).</li>
+          <li><b>Circle how many</b>: two reasons, three details, one quote.</li>
+          <li><b>Box the focus</b>: which character, which paragraph, which feeling.</li>
+          <li>"With reference to the text" = <b>quote or point to it</b>: point, quote, explain.</li>
+          <li>For writing tasks: <b>form</b> (letter, speech, article…), <b>reader</b> (who is it for?) and <b>purpose</b> (to persuade, inform, entertain).</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">How the paper works</h3>
+          <p>One paper, 2 hours, 180 marks. The paper has a <b>theme</b> (for example, recent Higher Level papers used "Interesting Interactions", "Perception" and "Critical Reflection"), and every text and task links to it. There is usually an <b>unseen text</b> to read and answer on, questions on the <b>texts you studied</b> (novel, drama, poetry, film, and Shakespeare at Higher Level), and <b>writing tasks</b> such as a story, a speech, a letter or an article. The sections and marks change, so read the whole paper first and plan your time.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question that was asked</b>, not the one you hoped for. Use the question's words in your first sentence.</li>
+            <li><b>Back up every point</b> with a short quote or a clear reference.</li>
+            <li><b>Spend time in line with the marks.</b> A long answer to a small question costs you marks somewhere else.</li>
+            <li><b>Leave nothing blank.</b> A short answer with one good point beats an empty space.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>A section of a paper has three questions worth 15, 15 and 30 marks. How long should you spend on each? Why?
+              <details><summary>Show a model answer</summary><p>About <b>10, 10 and 20 minutes</b>. The paper is 120 minutes for 180 marks, so each mark gets ⅔ of a minute (40 seconds): 15 × ⅔ = 10 and 30 × ⅔ = 20. The 30-mark question is worth as much as the other two together, so it gets as much time as both.<br><i>Where the marks would go:</i> the three times; the reason (time follows the marks).</p></details></li>
+            <li>Read this question: "<i>Explain two ways the writer makes the opening of the story exciting. Support your answer with reference to the text.</i>" What exactly does it ask you to do?
+              <details><summary>Show a model answer</summary><p><b>Command word:</b> explain, so say <i>how</i>, not just what happens. <b>How many:</b> two ways, so two paragraphs. <b>Focus:</b> the opening only, and "exciting" (not sad, not funny). <b>Reference:</b> a short quote for each way. A plan: (1) short sentences build tension: quote + what it does; (2) a mystery the reader wants solved: quote + what it does.<br><i>Where the marks would go:</i> two clear ways; a quote for each; an explanation of why each is exciting.</p></details></li>
+              <li>A student answered "How does Seán feel at the end of the extract?" with: "<i>Seán goes home and talks to his mam. Then he goes to bed.</i>" Why would this lose marks? Rewrite it.
+              <details><summary>Show a model answer</summary><p>It retells what happens; it never names a feeling or uses the text. <b>Better:</b> "At the end, Seán feels relieved. He 'let out a long breath' when his mam hugged him, which shows the worry he had carried all day is finally gone."<br><i>Where the marks would go:</i> a feeling named (point); a quote (evidence); what the quote shows (explain).</p></details></li>
+            <li>Writing task: "<i>Write the text of a talk for your class about a place that means a lot to you.</i>" Name the form, the reader and the purpose, and make a five-line plan.
+              <details><summary>Show a model answer</summary><p><b>Form:</b> a talk, so speak to the audience ("Have you ever…?", "Thank you for listening"). <b>Reader:</b> your class: friendly, but no slang. <b>Purpose:</b> to describe and to share why it matters. <b>Plan:</b> 1. Hook: a question about a favourite place. 2. Where it is and what you see, hear and smell. 3. A memory there. 4. Why it matters now. 5. Ending: invite them to find their own place; thank them.<br><i>Where the marks would go:</i> a clear talk shape (opening, paragraphs, ending); writing that suits the class; details and a personal voice.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> every paper, 2022–2026: one 2-hour paper, 180 marks, built around a theme. See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/exam-technique-exam-mix-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the tips + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: tips, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

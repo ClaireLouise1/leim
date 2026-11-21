@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-21 07:40 · E3 English Order 32 Exam Mix (english-exam-mix.html) · english-x32

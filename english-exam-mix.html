@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Exam Mix: Junior Cycle English Exam Technique Game | Léim</title>
+<meta name="description" content="Free Junior Cycle English exam technique game: time each question by its marks, read the command word, spot the form and reader of a writing task, then mix questions from every Léim English game like the real paper.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.game{max-width:640px;margin:0 auto}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(27,36,48,.06)}
+.modes{display:grid;gap:12px;margin:20px 0}
+.mode{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;background:var(--mist);border:2px solid transparent;border-radius:12px;padding:16px 18px;font:inherit;cursor:pointer;color:var(--ink)}
+.mode:hover{border-color:var(--green)}
+.mode[disabled]{opacity:.55;cursor:not-allowed}
+.mode[disabled]:hover{border-color:transparent}
+.mode b{display:block;font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .go{font-size:22px;color:var(--green)}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-weight:700}
+.timer{height:8px;background:var(--mist);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.timer i{display:block;height:100%;background:var(--green);width:100%;transition:width .25s linear}
+.timer i.low{background:#D9534F}
+.prompt{text-align:center;margin-bottom:22px}
+.prompt .en{font-size:17px;color:var(--muted);font-weight:600}
+.prompt .frame{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.3}
+.prompt svg{display:block;margin:6px auto 0}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--sun);color:var(--muted)}
+.say{font:inherit;font-size:15px;font-weight:700;background:var(--mist);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-top:10px;cursor:pointer;color:var(--ink)}
+.say:hover{border-color:var(--green)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{font:inherit;font-size:18px;font-weight:700;padding:18px 10px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink);min-height:64px}
+.choice:hover{border-color:var(--green)}
+.choice.right{background:var(--green-soft);border-color:var(--green)}
+.choice.wrong{background:#FBE9E8;border-color:#D9534F}
+.streak{color:var(--green)}
+.big{font-size:56px;font-weight:800;text-align:center;letter-spacing:-.03em}
+.review{margin-top:18px}
+.review li{margin:6px 0}
+.review .fix{color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.lo{display:inline-block;font-size:13px;font-weight:600;background:var(--cream);border:1px solid var(--cream-line);border-radius:99px;padding:4px 10px;margin-top:10px}
+@media (max-width:420px){.choice{font-size:16px;padding:16px 8px}}
+.choices.one{grid-template-columns:1fr}
+.prompt .frame.long{font-size:clamp(18px,4.2vw,24px)}
+.hint{min-height:22px;text-align:center;color:var(--green-dark);font-weight:600;font-size:15px;margin-top:14px}
+.exam{margin-top:30px;border:2px solid var(--night);border-radius:14px;padding:22px}
+.eq li{margin:14px 0;font-size:16px}
+.eq details{margin-top:8px;background:var(--green-soft);border-radius:8px;padding:8px 12px;border:0}
+.eq details summary{font-size:15px;color:var(--green-dark)}
+.eq details summary::after{content:""}
+.eq details p{color:var(--ink);margin-top:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Léim home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#2E7D57"/><path d="M12 22 L22 12 M15 12 H22 V19" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Léim</span>
+    </a>
+    <a class="btn hdr-cta" href="junior-cycle-spanish.html#join">Free guide</a>
+    <nav class="nav tabs" aria-label="Main">
+      <a href="subjects.html">Subjects</a>
+      <a href="index.html#games" aria-current="page">Games</a>
+      <a href="exam-centre.html">Exam Centre</a>
+      <!--ff:PGEgY2xhc3M9InNob3AiIGhyZWY9Imh0dHBzOi8vcGF5aGlwLmNvbS9MZWltIj5TaG9wPC9hPg==--><!--/ff-->
+      <a href="parents.html">Parents</a>
+      <a href="teachers.html">Teachers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<style>.facts{display:table;margin:8px auto 2px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 16px;text-align:left;font-size:19px;font-weight:700;line-height:1.35}.facts p{margin:4px 0}
+.en .src{display:block;width:max-content;max-width:100%;margin:0 auto 6px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--mist);border-radius:999px;padding:3px 10px}
+.xm-q{max-width:560px;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-size:20px;line-height:1.45;font-weight:600;box-shadow:0 3px 0 var(--line);text-align:left}
+.xm-q mark.hl{background:#FFF1B8;padding:0 3px;border-radius:4px}
+.xm-task{background:#F4F8FC;border-style:dashed}
+.xm-k{display:block;font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-bottom:4px}
+.choice .pu{color:#C0392B;font-size:1.2em;font-weight:900;line-height:1;letter-spacing:0}
+#choices .choice{white-space:normal}
+.sort2{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:700px){.sort2{grid-template-columns:1fr}}
+.sort2 .note{margin:0;font-size:15px}.sort2 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+.tbl-x{width:100%;min-width:0;border-collapse:collapse;font-size:15px}.tbl-x th,.tbl-x td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}.tbl-x th{color:var(--ink);text-transform:none}
+@media(max-width:420px){.xm-q{font-size:17px}.facts{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">English Exam Mix</h1>
+        <p>Exam technique plus questions from every Léim English game, mixed like the real paper: reading, writing, studied texts and language. Tips below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Exam technique tips</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="tech"><div><b>Exam technique</b><span>⏱️ Time it 🎯 Read the question</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="reading"><div><b>Reading mix</b><span>📖 Unseen texts, ads, charts · 4 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="writing"><div><b>Writing mix</b><span>✍️ Paragraphs, letters, speeches · 8 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="texts"><div><b>Studied texts mix</b><span>🎭 Novel, poetry, drama, film · 9 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="language"><div><b>Language mix</b><span>🔤 Grammar, spelling, punctuation · 8 games</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Full paper mix</b><span>Everything</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–5 work too. In Exam technique, 5 in a row = 3 bonus seconds. Every text is made up by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R3, R7, W1, W3, W4, W11 (2015 specification)</span>
+      </div>
+
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Exam technique tips</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Exam technique</h2>
+        <p>The Junior Cycle English exam is <b>one paper, 2 hours, 180 marks</b>, at Higher and at Ordinary level. Every question links to the paper's <b>theme</b>, and the sections and their marks change from year to year. So you can't learn the paper off. What you can learn is <b>how to read a question</b> and <b>how to use your time</b>.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>A:</b> <u>Identify</u> two facts about the festival.</span><span class="sp"><b>B:</b> <u>Explain</u> how the writer builds tension.</span><span class="sp"><b>C:</b> <u>Compare</u> the openings of the two stories.</span></div>
+        <p style="margin-top:8px">All three are about a text. What is different about the answer each one wants? Which one needs the shortest answer?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">The first word, the <b>command word</b>, tells you the job. <b>A</b> wants two short, exact details: no explaining. <b>B</b> wants <i>how</i>: name the method, quote it, say what it does. <b>C</b> wants both texts in every point: how they are alike <i>and</i> how they differ. A is the shortest. Answering B like A (just listing) loses most of the marks.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Command words</h3>
+        <table class="tbl-x"><thead><tr><th>The question says…</th><th>So you…</th></tr></thead><tbody>
+          <tr><td>Identify, name, list, write down, pick out, find</td><td>🔎 find it in the text: short and exact</td></tr>
+          <tr><td>Describe</td><td>📝 say what it is like, with details</td></tr>
+          <tr><td>Explain, why, how</td><td>💡 say why or how, and back it up</td></tr>
+          <tr><td>Compare, contrast</td><td>⚖️ alike AND different, both texts every time</td></tr>
+          <tr><td>Do you agree, do you think, in your opinion</td><td>🙋 give your view clearly, then reasons</td></tr>
+          <tr><td>Summarise, sum up</td><td>✂️ main points only, short, your own words</td></tr>
+        </tbody></table>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Time it by the marks</h3>
+        <div class="sort2">
+          <div class="note"><b class="h">⏱️ 40 seconds a mark</b>120 minutes ÷ 180 marks = ⅔ of a minute a mark. A 30-mark question gets about 20 minutes, a 60-mark question about 40.</div>
+          <div class="note"><b class="h">🛑 Move on</b>When the time for a question is up, finish your sentence and go on. Marks for an answer you never started are easier to win than the last few marks of a long one.</div>
+        </div>
+        <p style="margin-top:10px">Keep the last few minutes to <b>read your answers back</b>: missing words, spelling, full stops and capitals. In the exam itself, use the marks printed on <i>your</i> paper: they change from year to year.</p>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Read the question twice</h3>
+        <ul>
+          <li><b>Underline the command word</b> (explain, describe, compare…).</li>
+          <li><b>Circle how many</b>: two reasons, three details, one quote.</li>
+          <li><b>Box the focus</b>: which character, which paragraph, which feeling.</li>
+          <li>"With reference to the text" = <b>quote or point to it</b>: point, quote, explain.</li>
+          <li>For writing tasks: <b>form</b> (letter, speech, article…), <b>reader</b> (who is it for?) and <b>purpose</b> (to persuade, inform, entertain).</li>
+        </ul>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">How the paper works</h3>
+          <p>One paper, 2 hours, 180 marks. The paper has a <b>theme</b> (for example, recent Higher Level papers used "Interesting Interactions", "Perception" and "Critical Reflection"), and every text and task links to it. There is usually an <b>unseen text</b> to read and answer on, questions on the <b>texts you studied</b> (novel, drama, poetry, film, and Shakespeare at Higher Level), and <b>writing tasks</b> such as a story, a speech, a letter or an article. The sections and marks change, so read the whole paper first and plan your time.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Answer the question that was asked</b>, not the one you hoped for. Use the question's words in your first sentence.</li>
+            <li><b>Back up every point</b> with a short quote or a clear reference.</li>
+            <li><b>Spend time in line with the marks.</b> A long answer to a small question costs you marks somewhere else.</li>
+            <li><b>Leave nothing blank.</b> A short answer with one good point beats an empty space.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <ol class="eq">
+            <li>A section of a paper has three questions worth 15, 15 and 30 marks. How long should you spend on each? Why?
+              <details><summary>Show a model answer</summary><p>About <b>10, 10 and 20 minutes</b>. The paper is 120 minutes for 180 marks, so each mark gets ⅔ of a minute (40 seconds): 15 × ⅔ = 10 and 30 × ⅔ = 20. The 30-mark question is worth as much as the other two together, so it gets as much time as both.<br><i>Where the marks would go:</i> the three times; the reason (time follows the marks).</p></details></li>
+            <li>Read this question: "<i>Explain two ways the writer makes the opening of the story exciting. Support your answer with reference to the text.</i>" What exactly does it ask you to do?
+              <details><summary>Show a model answer</summary><p><b>Command word:</b> explain, so say <i>how</i>, not just what happens. <b>How many:</b> two ways, so two paragraphs. <b>Focus:</b> the opening only, and "exciting" (not sad, not funny). <b>Reference:</b> a short quote for each way. A plan: (1) short sentences build tension: quote + what it does; (2) a mystery the reader wants solved: quote + what it does.<br><i>Where the marks would go:</i> two clear ways; a quote for each; an explanation of why each is exciting.</p></details></li>
+              <li>A student answered "How does Seán feel at the end of the extract?" with: "<i>Seán goes home and talks to his mam. Then he goes to bed.</i>" Why would this lose marks? Rewrite it.
+              <details><summary>Show a model answer</summary><p>It retells what happens; it never names a feeling or uses the text. <b>Better:</b> "At the end, Seán feels relieved. He 'let out a long breath' when his mam hugged him, which shows the worry he had carried all day is finally gone."<br><i>Where the marks would go:</i> a feeling named (point); a quote (evidence); what the quote shows (explain).</p></details></li>
+            <li>Writing task: "<i>Write the text of a talk for your class about a place that means a lot to you.</i>" Name the form, the reader and the purpose, and make a five-line plan.
+              <details><summary>Show a model answer</summary><p><b>Form:</b> a talk, so speak to the audience ("Have you ever…?", "Thank you for listening"). <b>Reader:</b> your class: friendly, but no slang. <b>Purpose:</b> to describe and to share why it matters. <b>Plan:</b> 1. Hook: a question about a favourite place. 2. Where it is and what you see, hear and smell. 3. A memory there. 4. Why it matters now. 5. Ending: invite them to find their own place; thank them.<br><i>Where the marks would go:</i> a clear talk shape (opening, paragraphs, ending); writing that suits the class; details and a personal voice.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> every paper, 2022–2026: one 2-hour paper, 180 marks, built around a theme. See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/exam-technique-exam-mix-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the tips + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: tips, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span class="yr">2026</span> Léim · leim.ie · Not affiliated with the State Examinations Commission or the NCCA.</span>
+    <nav aria-label="Footer"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="mailto:hello@leim.ie">hello@leim.ie</a><!-- sister site (Spraoi): remove if the sites are ever separated --><a href="https://spraoilearning.ie" target="_blank" rel="noopener">Primary school? Spraoi ↗</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* choice question: wrong options are unique, never the answer; nw = how many wrong options it needs */
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];ans=String(ans);seen[ans]=1;nw=nw||3;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(/NaN|undefined|Infinity|^-|^0 /.test(x))return;if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,html:html||"",answer:ans,wrong:w,nw:nw,why:why,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* ---------- data (src/test_english_exam_mix.py and the PDFs read this block: keep it valid JSON; one item per line) ----------
+     paper: the facts every timing question uses (one 2-hour paper, 180 marks at each level)
+     cmd: [exam-style question that STARTS with its command word(s), key] — keys in CMD below; no other command word anywhere in it
+     task: [writing task, form key, reader as written in the task (or null)] — exactly one form word in the task
+     src/test_english_exam_mix.py works out every answer itself from the question text (command words, form words, the numbers on the card). */
+  var D=/*DATA*/{
+ "paper": {"min": 120, "marks": 180},
+ "cmd": [
+  ["Identify two facts about the festival from the leaflet.", "find"],
+  ["Name the technique used in the first line of the poem.", "find"],
+  ["List three things the narrator sees on the beach.", "find"],
+  ["Write down the phrase that shows the boy is nervous.", "find"],
+  ["Pick out one word that suggests the house is old.", "find"],
+  ["Find two details that tell us the match is nearly over.", "find"],
+  ["Describe the setting at the start of the story.", "desc"],
+  ["Describe the main character's reaction to the news.", "desc"],
+  ["Describe the mood of the final scene.", "desc"],
+  ["Describe the layout of the poster.", "desc"],
+  ["Describe Gran as she appears in the first paragraph.", "desc"],
+  ["Explain why the girl hides the letter.", "expl"],
+  ["Explain how the writer builds tension in the second paragraph.", "expl"],
+  ["Explain what the poet means by the phrase \"a grey blanket of sky\".", "expl"],
+  ["Explain why the advert uses a famous footballer.", "expl"],
+  ["Explain how the photograph adds to the article.", "expl"],
+  ["Compare the two main characters in a novel you have studied.", "comp"],
+  ["Compare the openings of the two stories.", "comp"],
+  ["Compare the way the two poems present winter.", "comp"],
+  ["Contrast the mood at the start of the play with the mood at the end.", "comp"],
+  ["Compare a key scene in your film with a key scene in your novel.", "comp"],
+  ["Do you agree that the ending is a happy one? Give reasons.", "opin"],
+  ["Would you like to visit the island in the text? Give reasons.", "opin"],
+  ["Which of the two adverts do you think works better? Give reasons.", "opin"],
+  ["In your opinion, is the main character a good friend?", "opin"],
+  ["Do you think the headline is a good one? Give reasons.", "opin"],
+  ["Summarise the main points of the article in your own words.", "sum"],
+  ["Summarise what happens in the first scene.", "sum"],
+  ["Sum up the writer's argument in three sentences.", "sum"],
+  ["Summarise the advice the leaflet gives to parents.", "sum"],
+  ["Sum up the plot of the story in five sentences.", "sum"]
+ ],
+ "task": [
+  ["Write an article for your local newspaper about a place young people in your town love.", "article", "your local newspaper"],
+  ["Write the text of a speech for your school assembly on why phones should stay in lockers at lunch.", "speech", "your school assembly"],
+  ["Write a letter to the county council asking for a new skate park.", "letter", "the county council"],
+  ["Write an email to your principal asking for a school garden.", "email", "your principal"],
+  ["Write a diary entry about your first day at a new school.", "diary", null],
+  ["Write a short story that begins with a knock at the door.", "story", null],
+  ["Write a review of a film you have seen recently for a website for teenagers.", "review", "a website for teenagers"],
+  ["Write a report for your Student Council on the state of the school yard.", "report", "your Student Council"],
+  ["Write a talk for your classmates about a hobby you love.", "speech", "your classmates"],
+  ["Write a letter to your cousin in Australia telling her all your news.", "letter", "your cousin in Australia"],
+  ["Write an email to a local radio station about a charity walk your class is running.", "email", "a local radio station"],
+  ["Write a review of a book you enjoyed for your school library's newsletter.", "review", "your school library's newsletter"],
+  ["Write a report for the Parents' Association on how pupils travel to school.", "report", "the Parents' Association"],
+  ["Write a story called \"The Last Train\".", "story", null],
+  ["Write a diary entry about the day your team won a final.", "diary", null],
+  ["Write an article for a teen magazine giving advice on getting ready for exams.", "article", "a teen magazine"],
+  ["Write the text of a speech for first years on how to settle in at secondary school.", "speech", "first years"],
+  ["Write a letter to the editor of a newspaper about litter in your town.", "letter", "the editor of a newspaper"],
+  ["Write an email to your coach explaining why you missed training.", "email", "your coach"],
+  ["Write a report for your Transition Year coordinator on a school trip.", "report", "your Transition Year coordinator"]
+ ]
+}/*END*/;
+  var CMD={find:"🔎 Find it in the text",desc:"📝 Say what it is like",expl:"💡 Say why or how",comp:"⚖️ Alike and different",opin:"🙋 Your view + reasons",sum:"✂️ Main points, short"};
+  var FORM={article:"📰 Article",speech:"🎤 Speech or talk",letter:"✉️ Letter",email:"📧 Email",diary:"📔 Diary entry",story:"📖 Story",review:"⭐ Review",report:"📋 Report"};
+  var CMDK=Object.keys(CMD),FORMK=Object.keys(FORM);
+  var FIXED=CMDK.map(function(k){return CMD[k];}).concat(FORMK.map(function(k){return FORM[k];}));
+  var CMDW={find:"Find it in the text: a short answer with the exact detail or words. No long explaining.",
+    desc:"Describe: say what it is like, with details from the text.",
+    expl:"Explain: say why or how. Use \"because\" and back it up with the text.",
+    comp:"Compare: show how the two are alike AND how they are different. Mention both every time.",
+    opin:"Your view: say what you think clearly, then give reasons from the text.",
+    sum:"Summarise: the main points only, short, in your own words."};
+  var CMDRX=/^(Identify|Name|List|Write down|Pick out|Find|Describe|Explain|Compare|Contrast|Do you agree|Do you think|Would you|Which|In your opinion|Summarise|Sum up)/;
+  function qCard(s){var m=s.match(CMDRX),h=esc(s);if(m)h='<mark class="hl">'+esc(m[0])+'</mark>'+esc(s.slice(m[0].length));return '<div class="xm-q">'+h+'</div>';}
+  function taskCard(s){return '<div class="xm-q xm-task"><span class="xm-k">✍️ WRITING TASK</span>'+esc(s)+'</div>';}
+  function facts(lines){return '<div class="facts">'+lines.map(function(l){return "<p>"+l+"</p>";}).join("")+"</div>";}
+
+  /* ================= EXAM TECHNIQUE ================= */
+  /* 1 minutes from marks: 120 minutes ÷ 180 marks = ⅔ minute (40 seconds) a mark */
+  function qTime(){var P=D.paper,M=rnd([6,9,12,15,18,21,24,27,30,36,45,60]),ans=M*P.min/P.marks;
+    if(ans!==Math.round(ans))return qTime();
+    var pool=[M,M/2,M*2,M/3,ans+5,ans-5,ans+10].filter(function(x){return x>0&&x===Math.round(x);}).map(function(x){return x+" min";});
+    return C("⏱️ Minutes for this question?",ans+" min",pool,
+      P.min+" minutes ÷ "+P.marks+" marks = ⅔ of a minute (40 seconds) a mark. "+M+" marks × ⅔ = "+ans+" minutes.",
+      facts(["⏱️ Paper: 2 hours · "+P.marks+" marks","📝 This question: "+M+" marks"]),{t:"time",marks:M,rv:M+" marks: minutes?"});}
+  /* 2 marks from minutes (the same rule backwards) */
+  function qMarks(){var P=D.paper,T=rnd([4,6,8,10,12,14,16,20,24,30,40]),ans=T*P.marks/P.min;
+    if(ans!==Math.round(ans))return qMarks();
+    var pool=[T,T*2,Math.round(T/2),Math.round(T*2/3),ans+5,ans-5,ans+10,T*3].filter(function(x){return x>0&&x===Math.round(x);}).map(function(x){return x+" marks";});
+    return C("📝 About how many marks is it worth?",ans+" marks",pool,
+      P.marks+" marks ÷ "+P.min+" minutes = 1½ marks a minute. "+T+" minutes × 1½ = "+ans+" marks. If it's worth less, move on!",
+      facts(["⏱️ Paper: 2 hours · "+P.marks+" marks","⌛ You've spent "+T+" minutes on one question"]),{t:"marks",mins:T,rv:T+" minutes: marks?"});}
+  /* 3 command words */
+  function qCmd(){var it=rnd(D.cmd),k=it[1],ans=CMD[k];
+    return C("🎯 What does this question want?",ans,CMDK.filter(function(x){return x!==k;}).map(function(x){return CMD[x];}),CMDW[k],qCard(it[0]),{t:"cmd",q:it[0],rv:it[0]});}
+  /* 4 the form a writing task asks for */
+  function qForm(){var it=rnd(D.task),k=it[1],ans=FORM[k];
+    return C("✍️ What must you write?",ans,FORMK.filter(function(x){return x!==k;}).map(function(x){return FORM[x];}),
+      "The task names the form: "+ans.replace(/^\S+ /,"").toLowerCase()+". Use its layout (a letter needs a greeting and a sign-off; a speech talks to an audience).",
+      taskCard(it[0]),{t:"form",q:it[0],rv:it[0]});}
+  /* 5 who the reader is */
+  function qReader(){var ts=D.task.filter(function(x){return x[2];}),it=rnd(ts),ans=it[2];
+    var pool=ts.map(function(x){return x[2];}).filter(function(r){return it[0].indexOf(r)<0;});
+    return C("👥 Who is it for?",ans,pool,"The reader is in the task: \""+ans+"\". Write the way that reader expects (formal for a principal or a council, chatty for a cousin).",
+      taskCard(it[0]),{t:"reader",q:it[0],rv:it[0]});}
+  var TECH=[qTime,qMarks,qCmd,qForm,qReader];
+
+  /* ---------- question bundles from the other English games (loaded when needed) ---------- */
+  var loading={},SECLOAD={};
+  function need(list,cb){var left=list.filter(function(s){return !SECLOAD[s];});
+    if(!left.length)return cb();var n=left.length,failed=false;
+    function done(err){if(err)failed=true;if(--n===0)cb(failed);}
+    left.forEach(function(s){if(loading[s]){loading[s].push(done);return;}loading[s]=[done];
+      var sc=document.createElement("script");sc.src="english-exam-mix-"+s+".js?v=1";
+      sc.onload=function(){SECLOAD[s]=1;var q=loading[s];loading[s]=null;q.forEach(function(f){f();});};
+      sc.onerror=function(){var q=loading[s];loading[s]=null;q.forEach(function(f){f(true);});};
+      document.body.appendChild(sc);});}
+  var SLUGS={reading:["clue-hunt","fact-or-opinion","ad-breaker","pqe-builder"],
+    writing:["paragraph-builder","show-dont-tell","story-spine","format-fixer","register-switch","persuasion-power","format-sort","talk-tips"],
+    texts:["character-clues","technique-spotter","twist-detector","plot-line","stage-it","mood-match","shot-spotter","who-said-it","compare-cards"],
+    language:["word-sort","sentence-surgeon","comma-catch","spell-strike","word-ladder","tense-trap","speech-marks-sprint","proofread-patrol"]};
+  /* one maker per game: picks one of that game's Exam mix questions and tags it with the game */
+  function fromGame(slug){var f=function(){var G=window.LEIM_EN[slug],q=rnd(G.M.mixed)();q.src=slug;return q;};f.realName="g_"+slug;return f;}
+  function techTag(f){var g=function(){var q=f();q.src="tech";return q;};g.realName=f.name;return g;}
+  var MAKERS={tech:TECH.map(techTag),reading:[],writing:[],texts:[],language:[],mixed:[]};
+  Object.keys(SLUGS).forEach(function(k){SLUGS[k].forEach(function(s){MAKERS[k].push(fromGame(s));});});
+  /* full paper mix: a section first, then a game */
+  var MIXW=[["tech",2],["reading",3],["writing",3],["texts",3],["language",2]];
+  MAKERS.mixed=[function mixPick(){var tot=0,i;MIXW.forEach(function(w){tot+=w[1];});var r=Math.random()*tot;
+    for(i=0;i<MIXW.length;i++){r-=MIXW[i][1];if(r<0)break;}return rnd(MAKERS[MIXW[Math.min(i,MIXW.length-1)][0]])();}];
+  var NEEDS={tech:[],reading:["reading"],writing:["writing"],texts:["texts"],language:["language"],mixed:["reading","writing","texts","language"]};
+
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function game(src){return src&&src!=="tech"&&window.LEIM_EN?LEIM_EN[src]:null;}
+  function start(m){
+    mode=m;$("en").textContent="Loading…";$("frame").innerHTML="";$("choices").innerHTML="";
+    show("play");$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    need(NEEDS[m],function(err){
+      if(err){$("en").textContent="Couldn't load the questions. Check your connection and try again.";return;}
+      DUR=m==="tech"?60:90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+      $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+      $("bar").style.width="100%";$("bar").className="";
+      next();
+      clearInterval(timer);
+      timer=setInterval(function(){
+        left--;$("time").textContent=left+"s";
+        $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+        $("bar").className=left<=10?"low":"";
+        if(left<=0)finish();
+      },1000);
+    });
+  }
+  function name(src){return src==="tech"?"Exam technique":(window.LEIM_EN_GAMES&&LEIM_EN_GAMES[src])||"";}
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").innerHTML='<span class="src">'+esc(name(q.src))+'</span>'+esc(q.en);
+    $("frame").innerHTML=q.html||"";$("frame").className="frame";
+    $("play").className="panel gx-"+q.src;   /* the game's own styles (scoped to .gx-<slug>) apply to its card and buttons */
+    var G=game(q.src),box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORDS=q.fixed?[q.fixed]:(G?G.orders:[FIXED]);
+    for(var i=0;i<ORDS.length;i++){var O=ORDS[i];if(opts.every(function(o){return O.indexOf(o)>=0;})){opts.sort(function(a,b){return O.indexOf(a)-O.indexOf(b);});break;}}   /* label buttons stay in the game's order */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";
+      if(G&&G.pu)b.innerHTML=G.pu(t);else b.textContent=t;
+      b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="tech"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||"",src:current.src});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="tech"&&streak%5===0?700:450):3600);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=18?"Brilliant! That's exam-ready.":score>=10?"Great work!":score>=5?"Good! Keep going.":"Good start. Try again!";
+    $("summary").textContent=msg+" Best streak: "+best+". ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>",games={};
+      mistakes.forEach(function(m){var key=m.review+"|"+m.said;if(seen[key])return;seen[key]=1;if(m.src&&m.src!=="tech")games[m.src]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      html+="</ul>";
+      var g=Object.keys(games);
+      if(g.length)html+="<p style='font-size:15px'><b>Practise:</b> "+g.map(function(s){return "<a href='"+s+".html'>"+esc(name(s))+"</a>";}).join(" · ")+"</p>";
+      r.innerHTML=html;
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=5){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,TECH:TECH,load:need,NEEDS:NEEDS,kit:{D:D,CMD:CMD,FORM:FORM}};
+})();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
