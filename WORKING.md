@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-21 06:50 · Payhip: upload P7–P17 English teacher packs as INVISIBLE (free first) · free-first-p7
