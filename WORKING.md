@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 21 Nov 13:40 · Spanish Exam corner row 2 (meet-and-greet) · spanish-ec2
