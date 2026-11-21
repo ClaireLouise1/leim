@@ -1,0 +1,244 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_fact_or_opinion.py read this block: keep it valid JSON; one item per line) ----------
+     fo: {f: facts, o: opinions} · spot: [{k, title, lines: 4 — exactly one line is the odd one out (the only fact or the only opinion), op: the opinion lines (1–4)}]
+     charts: [{title, y: axis name, bars: [[label, value]] — values 5–50, all different}] · posters: [{head, img (emoji), cap, when, con}]
+     src/test_fact_or_opinion.py sorts every line with its own judgement-word list, MEASURES every bar in the drawn chart
+     and names every poster part from its content and position — it never trusts the game's answers. */
+  var D=/*DATA*/{
+ "fo": {
+  "f": [
+   "The Dingle Food Fair runs from 2 to 4 October.",
+   "Tickets for the Ennis Youth Theatre show cost €8.",
+   "The new skate park in Tullamore opened in May.",
+   "Our survey asked 120 students about lunch.",
+   "The leisure centre pool is 25 metres long.",
+   "The Greenway is 42 kilometres long.",
+   "Bus 220 leaves the square every 30 minutes.",
+   "The library is closed on Mondays.",
+   "Three out of four students walk to school.",
+   "The Fastnet lighthouse is about 54 metres tall.",
+   "The concert starts at 7.30 p.m. in the town hall.",
+   "The phone has a battery that lasts 18 hours.",
+   "The museum has free entry on Wednesdays.",
+   "The charity raised €2,400 for the hospice in March.",
+   "The film is 95 minutes long.",
+   "Children under five travel free.",
+   "The café opened on Main Street in 2019.",
+   "The walk to the summit takes about two hours.",
+   "The camp runs for five days in July.",
+   "The match was played in front of 6,000 fans.",
+   "Half of the students in our survey own a dog.",
+   "The new bridge has two cycle lanes.",
+   "The shop is open from 9 a.m. to 6 p.m.",
+   "The guided tour costs €5 per person."
+  ],
+  "o": [
+   "This is the best food fair in Kerry.",
+   "The show is a brilliant night out for all the family.",
+   "The skate park is far too small for a town this size.",
+   "School lunches are boring.",
+   "Swimming is the most fun way to keep fit.",
+   "The Greenway is the most beautiful cycle in Ireland.",
+   "The buses are always late and dirty.",
+   "Our library is the friendliest place in town.",
+   "Walking to school is better than getting a lift.",
+   "The view from the lighthouse is stunning.",
+   "The concert will be an amazing evening.",
+   "This phone is a waste of money.",
+   "Everyone will love the new museum.",
+   "I think the hospice deserves more support.",
+   "The film's ending is terrible.",
+   "Train travel is easier than driving.",
+   "The café makes the tastiest scones in Ireland.",
+   "The summit walk is too hard for beginners.",
+   "Summer camp is the perfect way to spend July.",
+   "The atmosphere at the match was fantastic.",
+   "Dogs make wonderful pets.",
+   "The new bridge is ugly.",
+   "You should shop local this Christmas.",
+   "The guided tour is unmissable."
+  ]
+ },
+ "spot": [
+  {"k": "🪧 Poster", "title": "Kilbrook Bake Sale", "lines": ["Our cupcakes are the tastiest in the county.", "The bake sale is on Friday at 11 a.m.", "Every cake costs €2.", "All money goes to the school garden."], "op": [1]},
+  {"k": "⭐ Review", "title": "Pizza Planet, Mullingar", "lines": ["I think this is the best pizza in the Midlands.", "A large pizza costs €14.", "The garlic bread is delicious.", "The staff were lovely and the room was warm."], "op": [1, 3, 4]},
+  {"k": "📰 Leaflet", "title": "Lough Ree Kayak Club", "lines": ["The club meets every Saturday at 10 a.m.", "Lessons cost €15 for juniors.", "Kayaking is the most exciting sport on the lake.", "All helmets and life jackets are supplied."], "op": [3]},
+  {"k": "⭐ Review", "title": "The Starlight Cinema", "lines": ["The seats are the comfiest I have ever sat in.", "The popcorn is far too salty.", "The screens are huge and the sound is amazing.", "Tickets are €9 on Tuesdays."], "op": [1, 2, 3]},
+  {"k": "📊 Report", "title": "Our Lunch Survey", "lines": ["Packed lunches are much better for you.", "We asked 80 students in second year.", "Half of them bring a packed lunch.", "Twelve students buy lunch in the canteen."], "op": [1]},
+  {"k": "📰 Leaflet", "title": "Clonmel Animal Rescue", "lines": ["Last year we found homes for 210 dogs.", "A rescue dog is the best friend you will ever have.", "Every dog is checked by a vet.", "We are open from noon to 4 p.m. at weekends."], "op": [2]},
+  {"k": "⭐ Review", "title": "Night Runner (a video game)", "lines": ["The music is fantastic.", "The story is boring after the first level.", "The game costs €20.", "The graphics are beautiful."], "op": [1, 2, 4]},
+  {"k": "🪧 Poster", "title": "Clean Up the Beach", "lines": ["Join us at Inchydoney beach on Sunday 12 May.", "Gloves and bags are provided.", "Last year 40 volunteers filled 90 bags.", "It is the most rewarding morning you will spend all year."], "op": [4]},
+  {"k": "⭐ Review", "title": "Hill Farm Park", "lines": ["Entry costs €7 for adults.", "The goats are hilarious.", "The playground is wonderful for small children.", "The café is far too expensive."], "op": [2, 3, 4]},
+  {"k": "📰 Leaflet", "title": "Youth Coding Club", "lines": ["The club meets on Thursdays from 4 p.m. to 6 p.m.", "Coding is the most useful skill you can learn.", "There are 20 laptops in the room.", "The club is free for students aged 12 to 16."], "op": [2]},
+  {"k": "⭐ Review", "title": "The Lighthouse Café, Howth", "lines": ["The chowder is the nicest I have tasted.", "The view of the harbour is gorgeous.", "The café opens at 8 a.m.", "The staff are brilliant with children."], "op": [1, 2, 4]},
+  {"k": "📊 Report", "title": "Cycling to School", "lines": ["In September, 35 students cycled to school.", "By May, the number had grown to 60.", "The school added 30 new bike racks in January.", "Cycling is the best way to start the day."], "op": [4]}
+ ],
+ "charts": [
+  {"title": "Favourite sport in 2nd year", "y": "Students", "bars": [["Soccer", 35], ["GAA", 45], ["Swimming", 15], ["Basketball", 20]]},
+  {"title": "How we get to school", "y": "Students", "bars": [["Walk", 40], ["Bus", 25], ["Car", 30], ["Bike", 10]]},
+  {"title": "Books borrowed each month", "y": "Books", "bars": [["Sept", 20], ["Oct", 35], ["Nov", 50], ["Dec", 15]]},
+  {"title": "Favourite pet", "y": "Votes", "bars": [["Dog", 45], ["Cat", 30], ["Rabbit", 10], ["Fish", 5], ["Horse", 20]]},
+  {"title": "Bake sale: cakes sold", "y": "Cakes", "bars": [["Brownies", 25], ["Scones", 15], ["Cupcakes", 40], ["Flapjacks", 30]]},
+  {"title": "Hours of screen time a week", "y": "Students", "bars": [["0–5", 10], ["6–10", 25], ["11–15", 35], ["16+", 20]]},
+  {"title": "Rubbish found on the beach", "y": "Pieces", "bars": [["Plastic", 50], ["Cans", 20], ["Glass", 5], ["Paper", 15]]},
+  {"title": "Favourite school subject", "y": "Students", "bars": [["Art", 30], ["Maths", 20], ["PE", 45], ["Music", 25], ["Science", 35]]},
+  {"title": "Visitors to the museum", "y": "Visitors", "bars": [["Mon", 15], ["Tue", 20], ["Wed", 35], ["Thu", 25], ["Fri", 40]]},
+  {"title": "Trees planted by each class", "y": "Trees", "bars": [["1A", 25], ["1B", 40], ["1C", 15], ["1D", 30]]}
+ ],
+ "posters": [
+  {"head": "Spooky Night Walk", "img": "🎃🔦", "cap": "Families on last year's walk in the woods", "when": "Saturday 31 October, 7 p.m., Doneraile Park", "con": "Book on 087 555 0142"},
+  {"head": "Summer Surf Camp", "img": "🏄🌊", "cap": "Learners catching their first wave", "when": "1–5 July, 10 a.m. daily, Lahinch beach", "con": "www.lahinchsurfcamp.ie"},
+  {"head": "Big Book Swap", "img": "📚🔄", "cap": "Our shelves after the spring swap", "when": "Friday 14 March, 3 p.m., school library", "con": "Email library@kilbrook.ie"},
+  {"head": "Talent Show Auditions", "img": "🎤🎸", "cap": "Last year's winners on stage", "when": "Tuesday 9 December, 4 p.m., main hall", "con": "Call Ms Ryan on 086 555 0177"},
+  {"head": "Tidy Towns Clean-Up", "img": "🧤🗑️", "cap": "Volunteers on the river path", "when": "Sunday 20 April, 10 a.m., the Square", "con": "www.ballinoratidytowns.ie"},
+  {"head": "Christmas Craft Fair", "img": "🎄🧶", "cap": "Hand-made decorations from last year", "when": "Saturday 6 December, 11 a.m., the parish hall", "con": "Text 085 555 0109 for a stall"},
+  {"head": "Free Bike Repair Day", "img": "🚲🔧", "cap": "A mechanic fixing a puncture", "when": "Wednesday 2 April, 2 p.m., the Greenway car park", "con": "Email fixit@pedalpower.ie"},
+  {"head": "Dog Show", "img": "🐕🏆", "cap": "Rex, winner of the waggiest tail", "when": "Sunday 17 August, noon, the GAA grounds", "con": "Enter at www.kilmoredogshow.ie"},
+  {"head": "Science Week Open Night", "img": "🔬🧪", "cap": "Students testing their rockets", "when": "Thursday 13 November, 6 p.m., the science labs", "con": "Call the office on 021 555 0133"},
+  {"head": "Coastal Bird Watch", "img": "🐦🔭", "cap": "Puffins on the cliffs at dawn", "when": "Saturday 10 May, 6 a.m., Kilmore Quay", "con": "Book at www.wexfordbirds.ie"},
+  {"head": "Junior Chess Tournament", "img": "♟️🏅", "cap": "Players in last year's final round", "when": "Saturday 22 February, 9 a.m., the community centre", "con": "Email chess@ennisclub.ie"},
+  {"head": "Fun Run for the Hospice", "img": "🏃🎽", "cap": "Runners crossing the finish line", "when": "Sunday 5 October, 11 a.m., the town park", "con": "Sign up on 087 555 0190"}
+ ]
+}/*END*/;
+  var FO=["🧾 Fact","💭 Opinion"];
+  var LINES=["Line 1","Line 2","Line 3","Line 4"];
+  var PARTS=["📢 Headline","🖼️ Picture","📝 Caption","📅 When & where","📞 Contact details"];
+  var FIXED=FO.concat(LINES,PARTS);
+  var FOWHY={"🧾 Fact":"Fact: it can be checked (a number, a date, a time, a place).","💭 Opinion":"Opinion: a judgement word (best, too, boring, should, amazing…). Someone could disagree."};
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  /* fact/opinion keys: fo lines carry their list; spot texts list their opinion lines in "op" (1–4) */
+  function kindAt(T,i){return T.op.indexOf(i+1)>=0?FO[1]:FO[0];}
+  /* ================= FACT OR OPINION? ================= */
+  function qFo(){var isF=Math.random()<.5,s=rnd(isF?D.fo.f:D.fo.o),ans=isF?FO[0]:FO[1];
+    return C("Fact or opinion?",ans,FO.filter(function(x){return x!==ans;}),FOWHY[ans],'<p class="fo-s">'+esc(s)+'</p>',{t:"fo",s:s,rv:s},1);}
+
+  /* ================= FIND THE ODD LINE in a leaflet / review / poster ================= */
+  var keep=null,keepN=0;
+  function text(){if(keep!==null&&keepN<2){keepN++;return D.spot[keep];}keep=Math.floor(Math.random()*D.spot.length);keepN=1;return D.spot[keep];}
+  function card(T,hl){return '<div class="fo-card"><span class="fo-k">'+esc(T.k)+' · '+esc(T.title)+'</span>'+T.lines.map(function(l,i){return '<p'+(i===hl?' class="hl"':'')+'><b>'+(i+1)+'</b> '+esc(l)+'</p>';}).join("")+'</div>';}
+  function qSpot(){var T=text(),ks=T.lines.map(function(l,i){return kindAt(T,i);}),nf=ks.filter(function(k){return k===FO[0];}).length;
+    var want=nf===1?FO[0]:FO[1],i=ks.indexOf(want);
+    if(keepN===2){var j=rnd([0,1,2,3].filter(function(x){return x!==i;})),a=ks[j];
+      return C("Line "+(j+1)+": fact or opinion?",a,FO.filter(function(x){return x!==a;}),FOWHY[a],card(T,j),{t:"line",title:T.title,ln:j+1,rv:T.title+", line "+(j+1)},1);}
+    return C(want===FO[0]?"🔍 Which line is the only fact?":"🔍 Which line is the only opinion?","Line "+(i+1),LINES.filter(function(x){return x!=="Line "+(i+1);}),
+      "Line "+(i+1)+": "+T.lines[i],card(T,-1),{t:"spot",title:T.title,want:want,rv:T.title},3);}
+
+  /* ================= READ THE CHART ================= */
+  var X0=56,X1=390,Y0=214,TOP=24,MAXV=50,S=(Y0-TOP)/MAXV;
+  function chart(G){var n=G.bars.length,w=(X1-X0)/n,s='<svg class="fo-chart" viewBox="0 0 400 264" role="img" aria-label="Bar chart: '+esc(G.title)+'">';
+    s+='<text x="200" y="14" text-anchor="middle" font-size="17" font-weight="700" fill="#1B2A3A">'+esc(G.title)+'</text>';
+    for(var v=0;v<=MAXV;v+=10){var y=Y0-v*S;s+='<g class="tick"><line x1="'+X0+'" x2="'+X1+'" y1="'+y+'" y2="'+y+'" stroke="#D9DEE4"'+(v?' stroke-dasharray="3 3"':'')+'/><text x="'+(X0-6)+'" y="'+(y+5)+'" text-anchor="end" font-size="16" fill="#55606C">'+v+'</text></g>';
+      if(v<MAXV){var y5=Y0-(v+5)*S;s+='<line x1="'+X0+'" x2="'+X1+'" y1="'+y5+'" y2="'+y5+'" stroke="#EEF1F4"/>';}}
+    G.bars.forEach(function(b,i){var h=b[1]*S,x=X0+i*w+w*.18,bw=w*.64;
+      s+='<rect class="bar" x="'+x.toFixed(1)+'" y="'+(Y0-h).toFixed(2)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(2)+'" rx="3" fill="#4C8BC9"/>';
+      s+='<text class="bl" x="'+(x+bw/2).toFixed(1)+'" y="'+(Y0+20)+'" text-anchor="middle" font-size="15" fill="#1B2A3A">'+esc(b[0])+'</text>';});
+    s+='<text x="14" y="'+((Y0+TOP)/2)+'" font-size="15" fill="#55606C" transform="rotate(-90 14 '+((Y0+TOP)/2)+')" text-anchor="middle">'+esc(G.y)+'</text>';
+    return s+'</svg>';}
+  function near(v,others){return [v-5,v+5,v-10,v+10].concat(others).filter(function(x){return x>0&&x!==v;});}
+  function qChart(){var G=rnd(D.charts),B=G.bars,vals=B.map(function(b){return b[1];}),labs=B.map(function(b){return b[0];}),k=Math.floor(Math.random()*4),h=chart(G);
+    var hi=vals.indexOf(Math.max.apply(null,vals)),lo=vals.indexOf(Math.min.apply(null,vals));
+    if(k===0)return C("📊 Which is the highest?",labs[hi],labs.filter(function(x,i){return i!==hi;}),labs[hi]+": "+vals[hi]+".",h,{t:"most",title:G.title,rv:G.title+": highest"},3);
+    if(k===1)return C("📊 Which is the lowest?",labs[lo],labs.filter(function(x,i){return i!==lo;}),labs[lo]+": "+vals[lo]+".",h,{t:"least",title:G.title,rv:G.title+": lowest"},3);
+    var i=Math.floor(Math.random()*B.length);
+    if(k===2)return C("📊 How many: "+labs[i]+"?",String(vals[i]),shuffle(near(vals[i],vals)).map(String),"Read across from the top of the "+labs[i]+" bar: "+vals[i]+".",h,{t:"value",title:G.title,lab:labs[i],rv:G.title+": "+labs[i]},3);
+    var j;do{j=Math.floor(Math.random()*B.length);}while(j===i||vals[j]===vals[i]);
+    if(vals[j]>vals[i]){var t=i;i=j;j=t;}
+    var d=vals[i]-vals[j],pool=[vals[i]+vals[j],vals[i],vals[j],d+5,d-5,d+10,d+15].filter(function(x){return x>0&&x!==d;});
+    return C("📊 How many more: "+labs[i]+" than "+labs[j]+"?",String(d),pool.map(String),labs[i]+" "+vals[i]+" − "+labs[j]+" "+vals[j]+" = "+d+".",h,{t:"diff",title:G.title,a:labs[i],b:labs[j],rv:G.title+": "+labs[i]+" − "+labs[j]},3);}
+
+  /* ================= POSTER PARTS ================= */
+  var KEYS=["head","img","cap","when","con"];
+  function poster(P,order,hl){return '<div class="fo-poster">'+order.map(function(k){
+      return '<div class="pp pp-'+(k==="head"?"big":k==="img"?"pic":k==="cap"?"small":"info")+(k===hl?' hl':'')+'">'+esc(P[k])+'</div>';}).join("")+'</div>';}
+  function qPoster(){var P=rnd(D.posters),order=["head","img","cap"].concat(shuffle(["when","con"])),k=rnd(KEYS),ans=PARTS[KEYS.indexOf(k)];
+    var WHY={head:"Headline: the big words at the top that grab your attention.",img:"Picture: it shows the event and catches the eye.",cap:"Caption: the line under a picture that explains it.",when:"When & where: the day, the time and the place.",con:"Contact details: a phone number, a website or an email."};
+    return C("🖼️ What is the highlighted part?",ans,PARTS.filter(function(x){return x!==ans;}),WHY[k],poster(P,order,k),{t:"poster",head:P.head,rv:P.head+": "+P[k]},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    fo:[qFo],
+    spot:[qSpot],
+    chart:[qChart],
+    poster:[qPoster],
+    mixed:[qFo,qSpot,qChart,qPoster]
+  };
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=m==="fo"?60:90;keep=null;keepN=0;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="fo"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="fo"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You read like an examiner.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){var key=m.review+"|"+m.said;if(seen[key])return;seen[key]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,chart:chart,poster:poster}};
+})();
+</script>
