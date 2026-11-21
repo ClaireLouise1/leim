@@ -55,7 +55,7 @@ def unprotect(html, keep):
 TEXT = {
     'junior-cycle-spanish-exam-pack-listening.html': [
         ("Don't have the Exam Pack yet? <a href=\"https://payhip.com/b/IAjDY\">Get it here (€10)</a>",
-         "The printable Exam Pack is coming soon: <a href=\"junior-cycle-spanish.html#join\">join the list to hear first</a>"),
+         "The printable Exam Pack is coming soon: <a href=\"index.html#join\">join the list to hear first</a>"),
     ],
     'teachers.html': [
         ('plus €5 printable teacher packs mapped to the specification.',

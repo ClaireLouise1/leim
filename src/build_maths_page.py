@@ -10,7 +10,7 @@ head = T[:T.index('<main id="main">')]
 head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle Maths: course guide for parents &amp; teachers | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Free Junior Cycle Maths revision games mapped to the 2018 specification: integers, BIMDAS and more, with rules, free printable sheets, an exam corner for every topic and a topic checklist for 1st to 3rd year.">', head)
 head = head.replace(' aria-current="page"', "").replace('<a href="junior-cycle-maths.html">', '<a href="junior-cycle-maths.html" aria-current="page">')
-head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)  # new tab bar (15 Nov)
+# (Subjects tab removed 21 Nov 2026)
 signup = T[T.index('<div class="signup" id="join">'):T.index('</section>', T.index('<div class="signup" id="join">'))]
 foot = T[T.index("</main>"):]
 

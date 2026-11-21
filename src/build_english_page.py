@@ -11,7 +11,7 @@ head = T[:T.index('<main id="main">')]
 head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle English: course guide for parents &amp; teachers | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Junior Cycle English revision mapped to the 2015 specification: how the 2-hour, 180-mark theme-based paper works, the two CBAs, the text-list rules and all 32 topics from 1st to 3rd year, with a free topic checklist and free games, starting with Word Sort (parts of speech).">', head)
 head = head.replace(' aria-current="page"', "")
-head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)
+# (Subjects tab removed 21 Nov 2026)
 signup = T[T.index('<div class="signup" id="join">'):T.index('</section>', T.index('<div class="signup" id="join">'))]
 foot = T[T.index("</main>"):]
 
