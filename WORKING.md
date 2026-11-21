@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-21 10:05 · P18 Exam Technique pack → Payhip (Invisible) · payhip-p18
