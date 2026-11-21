@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 21 Nov 08:56 · Slim game pages: game first, text folded away (all game pages + src/slim_game_pages.py) · homelayout

@@ -85,16 +85,10 @@
 <section class="block mist">
   <div class="wrap">
     <div class="game">
-      <div class="sec-head" style="text-align:center">
-        <span class="pill">Junior Cycle English · Free game</span>
-        <h1 style="margin-top:12px">Word Sort</h1>
-        <p>Noun, verb, adjective or adverb? Sort the words against the clock. Rules below the game.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
-      </div>
+      <!--slim--><style>.gtop{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}.gtop .gback{font-weight:700;color:var(--muted);text-decoration:none}.gtop h1{font-size:clamp(24px,6vw,32px);margin:0;flex:1 1 auto;line-height:1.1}.gtop .gchips{display:flex;gap:8px;flex-wrap:wrap}.gtop .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:700;color:var(--ink);text-decoration:none;font-size:14px}.gtop .chip.y{background:var(--sun);border-color:var(--sun)}details.more{margin-top:24px;border:2px solid var(--line);border-radius:16px;background:#fff}details.more>summary{cursor:pointer;padding:14px 18px;font-weight:800;font-size:17px;list-style:none}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:" ▾";color:var(--muted)}details.more[open]>summary::after{content:" ▴"}details.more>.panel{margin-top:0!important;border:0;box-shadow:none}</style><div class="gtop"><a class="gback" href="junior-cycle-english.html">‹ English</a><h1>Word Sort</h1><div class="gchips"><a class="chip" href="#revise">📖 Rules</a></div></div>
 
       <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
-        <span class="pill">Play</span>
-        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+                <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
         <div class="modes">
           <button class="mode" data-mode="sort"><div><b>Word Sort</b><span>📦 🏃 🎨 ⏱️</span></div><span class="go">→</span></button>
           <button class="mode" data-mode="find"><div><b>Find it</b><span>Tap the verb</span></div><span class="go">→</span></button>
@@ -103,8 +97,6 @@
           <button class="mode" data-mode="switch"><div><b>Word switch</b><span>a run · I run</span></div><span class="go">→</span></button>
           <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
         </div>
-        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Word Sort, 5 in a row = 3 bonus seconds.</p>
-        <span class="lo">Junior Cycle English learning outcomes: W10, W12, R11, OL12 (2015 specification)</span>
       </div>
 
       <div class="panel" id="play" hidden>
@@ -127,7 +119,9 @@
         </div>
       </div>
 
-      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+      <details class="more" id="more"><summary>📖 Rules, exam tips &amp; printable</summary><div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Word Sort, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle English learning outcomes: W10, W12, R11, OL12 (2015 specification)</span>
         <span class="pill">Need a refresher?</span>
         <h2 style="font-size:26px;margin:12px 0 10px">Parts of speech (word classes)</h2>
         <p>Every word in a sentence has a <b>job</b>. Knowing the jobs helps you write accurately and talk about a writer's language in the exam.</p>
@@ -202,6 +196,7 @@
         <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
       </div>
 
+      </details>
     </div>
   </div>
 </section>
@@ -744,5 +739,6 @@
 })();
 </script>
 <script src="site.js"></script>
+<script>(function(){var d=document.getElementById("more");if(!d)return;function o(){d.open=true;}if(location.hash==="#revise")o();document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href="#revise"]');if(a)o();});})();</script>
 </body>
 </html>

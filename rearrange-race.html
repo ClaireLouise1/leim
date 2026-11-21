@@ -82,16 +82,10 @@
 <section class="block mist">
   <div class="wrap">
     <div class="game">
-      <div class="sec-head" style="text-align:center">
-        <span class="pill">Junior Cycle Maths · Free game</span>
-        <h1 style="margin-top:12px">Rearrange Race</h1>
-        <p>Change the subject, add algebraic fractions, divide by a bracket. Fast. Rules below the game.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
-      </div>
+      <!--slim--><style>.gtop{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}.gtop .gback{font-weight:700;color:var(--muted);text-decoration:none}.gtop h1{font-size:clamp(24px,6vw,32px);margin:0;flex:1 1 auto;line-height:1.1}.gtop .gchips{display:flex;gap:8px;flex-wrap:wrap}.gtop .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:700;color:var(--ink);text-decoration:none;font-size:14px}.gtop .chip.y{background:var(--sun);border-color:var(--sun)}details.more{margin-top:24px;border:2px solid var(--line);border-radius:16px;background:#fff}details.more>summary{cursor:pointer;padding:14px 18px;font-weight:800;font-size:17px;list-style:none}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:" ▾";color:var(--muted)}details.more[open]>summary::after{content:" ▴"}details.more>.panel{margin-top:0!important;border:0;box-shadow:none}</style><div class="gtop"><a class="gback" href="junior-cycle-maths.html">‹ Maths</a><h1>Rearrange Race</h1><div class="gchips"><a class="chip" href="#revise">📖 Rules</a><a class="chip y" href="practice-test.html?t=rearrange-race">📝 Practice test</a></div></div>
 
       <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
-        <span class="pill">Play</span>
-        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+                <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
         <div class="modes">
           <button class="mode" data-mode="rearr"><div><b>Rearrange Race</b><span>Make t the subject of v = u + at</span></div><span class="go">→</span></button>
           <button class="mode" data-mode="frac"><div><b>Fractions</b><span>(x + 1)/2 + (x − 3)/5 as one fraction</span></div><span class="go">→</span></button>
@@ -100,8 +94,6 @@
           <button class="mode" data-mode="slip"><div><b>Spot the slip</b><span>Which line has the first mistake?</span></div><span class="go">→</span></button>
           <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
         </div>
-        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Rearrange Race, 5 in a row = 3 bonus seconds.</p>
-        <span class="lo">Junior Cycle Maths learning outcomes: AF.3a, AF.3c, AF.6 (2018 specification)</span>
       </div>
 
       <div class="panel" id="play" hidden>
@@ -124,7 +116,9 @@
         </div>
       </div>
 
-      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+      <details class="more" id="more"><summary>📖 Rules, exam tips &amp; printable</summary><div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <p class="small" style="color:var(--muted);font-size:14px">Tip: work it out on paper, then tap. Keys 1–4 work too. In Rearrange Race, 5 in a row = 3 bonus seconds.</p>
+        <span class="lo">Junior Cycle Maths learning outcomes: AF.3a, AF.3c, AF.6 (2018 specification)</span>
         <span class="pill">Need a refresher?</span>
         <h2 style="font-size:26px;margin:12px 0 10px">Algebraic fractions, long division &amp; changing the subject</h2>
 
@@ -222,6 +216,7 @@ x + 2 │ x² + 5x + 6
         <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-maths-checklist.html">Tick this topic off on your Maths checklist →</a></p>
       </div>
 
+      </details>
     </div>
   </div>
 </section>
@@ -532,5 +527,6 @@ x + 2 │ x² + 5x + 6
 })();
 </script>
 <script src="site.js"></script>
+<script>(function(){var d=document.getElementById("more");if(!d)return;function o(){d.open=true;}if(location.hash==="#revise")o();document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href="#revise"]');if(a)o();});})();</script>
 </body>
 </html>

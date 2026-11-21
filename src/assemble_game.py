@@ -23,3 +23,8 @@ if __name__ == "__main__":
     _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
     import free_first
     free_first.hide_all(quiet=False)
+
+# Game first (21 Nov 2026): compact top bar + rules folded away — see src/slim_game_pages.py
+if __name__ == "__main__":
+    import subprocess as _sp
+    _sp.run([sys.executable, os.path.join(ROOT, "src", "slim_game_pages.py"), slug], check=False)
