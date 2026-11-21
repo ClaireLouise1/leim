@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 21 Nov 08:25 · Draft Maths subject page, topic cards (maths-preview.html, new file only) · homelayout
