@@ -10,5 +10,6 @@
   "P14": {"order": 28, "game": "who-said-it",         "code": "cBNCv", "name": "Shakespeare (Higher Level) Teacher Pack – Junior Cycle English"},
   "P15": {"order": 29, "game": "pqe-builder",         "code": "qb2rE", "name": "Answering on Texts: Point, Quote, Explain Teacher Pack – Junior Cycle English"},
   "P16": {"order": 30, "game": "compare-cards",       "code": "K2zZJ", "name": "Comparing Texts & Characters Teacher Pack – Junior Cycle English"},
-  "P17": {"order": 31, "game": "fact-or-opinion",     "code": "VadUH", "name": "Non-literary & Visual Texts Teacher Pack – Junior Cycle English"}
+  "P17": {"order": 31, "game": "fact-or-opinion",     "code": "VadUH", "name": "Non-literary & Visual Texts Teacher Pack – Junior Cycle English"},
+  "P18": {"order": 32, "game": "english-exam-mix",    "code": "Karde", "name": "Exam Technique Teacher Pack – Junior Cycle English"}
 }
