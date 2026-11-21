@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 21 Nov 08:20 · New home page (option B) live: index.html + about.html · homelayout
