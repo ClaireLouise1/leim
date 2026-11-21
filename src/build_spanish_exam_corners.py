@@ -17,7 +17,7 @@ import came_up_data as D
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 # Spanish tracker row - 1 = the order number used in came_up_data.py
-ORDER = {'meet-and-greet': 1}   # add each new slug: its Spanish tracker row minus 1
+ORDER = {'meet-and-greet': 1, 'number-rush': 2}   # add each new slug: its Spanish tracker row minus 1
 
 
 def _player():

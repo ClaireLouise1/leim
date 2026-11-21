@@ -13,7 +13,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 
 OK_WORDS = {'aoife', 'brennan', 'galway', 'irlanda', 'javier', 'niamh', 'kilkenny', 'valencia', 'madrid', 'raúl', 'lucía', 'salamanca',
-            'seán', 'cork', 'ballincollig', 'ayudarle', 'preocupes', 'be', 'erre', 'ene', 'sevilla'}
+            'seán', 'cork', 'ballincollig', 'ayudarle', 'preocupes', 'be', 'erre', 'ene', 'sevilla',
+            'toledo', 'marta', 'ciara', 'málaga', 'pablo', 'clodagh', 'athlone'}
 VOID = {'br', 'img', 'hr', 'input', 'meta', 'link', 'source', 'wbr'}
 
 
