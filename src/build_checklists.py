@@ -215,3 +215,10 @@ if __name__ == "__main__":
                         f"--print-to-pdf={out}", os.path.basename(src)], cwd=os.path.join(ROOT, "src"),
                        check=True, capture_output=True)
         print(key, "pdf pages:", pages_of(out))
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)

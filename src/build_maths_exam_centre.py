@@ -295,3 +295,10 @@ open('junior-cycle-maths-exam-centre.html','w').write(h+main+foot)
 hub=open('exam-centre.html').read()
 hub=hub.replace('<p>The Higher paper (270 marks, 13 questions), marks for every question and part, how partial credit works, and what to do if you go wrong.</p>','<p>Higher and Ordinary papers (270 marks, 13 questions), marks for every question, how partial credit works, and what to do if you go wrong.</p>')
 open('exam-centre.html','w').write(hub)
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)

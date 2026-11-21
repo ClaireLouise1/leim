@@ -208,3 +208,10 @@ window.addEventListener("pagehide",stop);
 foot=foot.replace('<script src="site.js"></script>',script+'<script src="site.js"></script>')
 open(R+'junior-cycle-spanish-exam-pack-listening.html','w',encoding='utf-8').write(head+main+foot)
 print('ok',[ (c['id'],c['title'],len(c['parts'])) for c in cards])
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)

@@ -220,3 +220,10 @@ main = f'''<main id="main">
 '''
 open("junior-cycle-english.html", "w", encoding="utf-8").write(head + main + foot)
 print("ok")
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)

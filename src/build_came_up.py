@@ -102,3 +102,10 @@ def update_spanish_ec():
 if __name__ == "__main__":
     update_spanish_ec()
     print("game lines updated:", update_games())
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)

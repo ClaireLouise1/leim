@@ -16,3 +16,10 @@ script = open(os.path.join(ROOT, "src", f"{slug}.script.html"), encoding="utf-8"
 out = head + main + foot + script + '\n<script src="site.js"></script>\n</body>\n</html>\n'
 open(os.path.join(ROOT, f"{slug}.html"), "w", encoding="utf-8").write(out)
 print("wrote", slug + ".html", len(out))
+
+# Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
+if __name__ == "__main__":
+    import sys as _ffs, os as _ffo
+    _ffs.path.insert(0, _ffo.path.dirname(_ffo.path.abspath(__file__)))
+    import free_first
+    free_first.hide_all(quiet=False)
