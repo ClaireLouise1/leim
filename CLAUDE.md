@@ -26,3 +26,6 @@ Wherever subjects are listed on the site (cards, buttons, menus, page sections, 
 
 ## What Came Up (job 7, LIVE 20 Nov 2026)
 The 2022–2026 topic grids are on the Spanish and Maths Exam Centres and the JC English page (`#came-up`), and every Maths/English game page + all three checklists show a "Came up in" line. Data: **src/came_up_data.py** (facts only: topic + year + question number — never copy SEC questions, texts or marking-scheme wording; the SEC said 20 Nov that it doesn't allow reproduction, linking to examinations.ie is fine). **When a new English game goes live, re-run `python3 src/build_came_up.py`** after assembling it (it fills the page's `<p class="came">` line from the topic's order number), then `python3 src/build_english_page.py` and `python3 src/build_checklists.py english` as usual. Add the 2027 papers to came_up_data.py after June 2027.
+
+## Home page (new layout, 21 Nov 2026 — she chose "option B")
+index.html is now Spraoi-style: sign-up box, "Choose your exam" (Junior Cycle / Leaving Cert coming soon), then subject cards in official order with game counts, in Léim navy & yellow (green game counts). **The game counts on the cards are typed in by hand: when a new game goes live, update that subject's count and the Junior Cycle total.** The old FAQ moved to about.html. Keep this layout for Léim, Spraoi and LTC.
