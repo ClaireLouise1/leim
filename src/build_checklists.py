@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from checklist_data import SPANISH, MATHS, ENGLISH
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TPL = open(os.path.join(ROOT, "junior-cycle-spanish.html"), encoding="utf-8").read()
+TPL = open(os.path.join(ROOT, "junior-cycle-spanish-guide.html"), encoding="utf-8").read()
 HEAD = TPL[:TPL.index('<main id="main">')]
 FOOT = TPL[TPL.index("</main>"):]
 e = html.escape

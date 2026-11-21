@@ -5,7 +5,7 @@ import os, re, sys, html
 sys.path.insert(0, os.path.dirname(__file__))
 from checklist_data import MATHS
 e = html.escape
-T = open("junior-cycle-spanish.html", encoding="utf-8").read()
+T = open("junior-cycle-spanish-guide.html", encoding="utf-8").read()
 head = T[:T.index('<main id="main">')]
 head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle Maths: course guide for parents &amp; teachers | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Free Junior Cycle Maths revision games mapped to the 2018 specification: integers, BIMDAS and more, with rules, free printable sheets, an exam corner for every topic and a topic checklist for 1st to 3rd year.">', head)

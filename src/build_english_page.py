@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Builds junior-cycle-english.html from the Spanish page's header/sign-up/footer + checklist_data.ENGLISH (job E2, 18 Nov 2026).
+"""Builds junior-cycle-english-guide.html (long parents/teachers course guide; the student page junior-cycle-english.html is built by build_subject_hub.py since 21 Nov 2026 — run that after this) from the Spanish page's header/sign-up/footer + checklist_data.ENGLISH (job E2, 18 Nov 2026).
 Run from the repo root after changing checklist_data.py: python3 src/build_english_page.py
 Facts come from the English tracker's "Exam & CBAs" tab (checked 18 Nov 2026)."""
 import os, re, sys, html
 sys.path.insert(0, os.path.dirname(__file__))
 from checklist_data import ENGLISH
 e = html.escape
-T = open("junior-cycle-spanish.html", encoding="utf-8").read()
+T = open("junior-cycle-spanish-guide.html", encoding="utf-8").read()
 head = T[:T.index('<main id="main">')]
-head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle English revision | Léim</title>", head)
+head = re.sub(r"<title>.*?</title>", "<title>Junior Cycle English: course guide for parents &amp; teachers | Léim</title>", head)
 head = re.sub(r'<meta name="description" content=".*?">', '<meta name="description" content="Junior Cycle English revision mapped to the 2015 specification: how the 2-hour, 180-mark theme-based paper works, the two CBAs, the text-list rules and all 32 topics from 1st to 3rd year, with a free topic checklist and free games, starting with Word Sort (parts of speech).">', head)
 head = head.replace(' aria-current="page"', "")
 head = head.replace('<a href="subjects.html">Subjects</a>', '<a href="subjects.html" aria-current="page">Subjects</a>', 1)
@@ -218,7 +218,7 @@ main = f'''<main id="main">
 </section>
 
 '''
-open("junior-cycle-english.html", "w", encoding="utf-8").write(head + main + foot)
+open("junior-cycle-english-guide.html", "w", encoding="utf-8").write(head + main + foot)
 print("ok")
 
 # Free first (21 Nov 2026): keep every buy link hidden until launch — see src/free_first.py
