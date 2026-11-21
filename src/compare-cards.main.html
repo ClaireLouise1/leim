@@ -1,0 +1,136 @@
+<main id="main">
+<style>.cc-two{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:760px;margin:8px auto 4px}@media(max-width:640px){.cc-two{grid-template-columns:1fr}}
+.cc-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 14px;text-align:left;box-shadow:0 3px 0 var(--line)}
+.cc-card.a{border-color:#9BC4E8}.cc-card.b{border-color:#E8B79B}
+.cc-card p{margin:4px 0;font-size:17px;line-height:1.4;font-weight:500}
+.cc-k{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.cc-st{max-width:420px;margin:10px auto 4px;background:#FFF6D6;border:2px dashed #E7C04B;border-radius:12px;padding:8px 14px;font-size:20px;font-weight:700}
+.cc-link{max-width:560px;margin:8px auto 4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;font-size:19px;line-height:1.5;font-weight:500;text-align:left}
+.cc-link mark.gap{background:#DFF5E6;border:2px dashed #3FA36B;border-radius:8px;padding:0 14px;font-weight:800}
+.cmp2{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:700px){.cmp2{grid-template-columns:1fr}}
+.cmp2 .note{margin:0;font-size:15px}.cmp2 .note b.h{display:block;font-size:17px;margin-bottom:4px}
+#choices .choice{white-space:nowrap}#choices.one .choice{white-space:normal}
+.pass{background:#fff;border-left:4px solid var(--night);padding:10px 14px;border-radius:8px;margin:8px 0}
+.pass .sp{display:block;margin:4px 0}
+@media(max-width:420px){.cc-card p{font-size:15px}.cc-link{font-size:17px}#choices .choice{font-size:15px}}</style>
+<section class="block mist">
+  <div class="wrap">
+    <div class="game">
+      <div class="sec-head" style="text-align:center">
+        <span class="pill">Junior Cycle English · Free game</span>
+        <h1 style="margin-top:12px">Compare Cards</h1>
+        <p>Comparing texts and characters: two short texts side by side. Spot what they share, where they differ, and the words that link a comparison. Works for comparing any two poems, stories, plays or films. Rules below the game.</p>
+        <div class="hero-actions" style="justify-content:center;margin-top:16px"><a class="btn" href="#game">Play now</a><a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a></div>
+      </div>
+
+      <div class="panel" id="start" style="scroll-margin-top:90px"><span id="game" style="position:relative;top:-100px"></span>
+        <span class="pill">Play</span>
+        <h2 style="font-size:22px;margin-top:12px">Choose your round</h2>
+        <div class="modes">
+          <button class="mode" data-mode="both"><div><b>Compare Cards</b><span>🤝 What do both texts share?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="venn"><div><b>Only A, only B or both?</b><span>🅰️ 🅱️ 🤝 Sort it</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="link"><div><b>Link it</b><span>🔗 Similarly or however?</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="best"><div><b>Best comparison</b><span>⚖️ Pick the sentence that compares</span></div><span class="go">→</span></button>
+          <button class="mode" data-mode="mixed"><div><b>Exam mix</b><span>Everything together</span></div><span class="go">→</span></button>
+        </div>
+        <p class="small" style="color:var(--muted);font-size:14px">Keys 1–4 work too. In Compare Cards, 5 in a row = 3 bonus seconds. All the texts are written by Léim.</p>
+        <span class="lo">Junior Cycle English learning outcomes: R6, R7, R9, W8 (2015 specification)</span>
+      </div>
+      <div class="panel" id="play" hidden>
+        <div class="hud"><span>Score: <span id="score">0</span></span><span class="streak">Streak: <span id="streak">0</span></span><span id="time">90s</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="prompt" aria-live="polite"><div class="en" id="en"></div><div class="frame" id="frame"></div></div>
+        <div class="choices" id="choices"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+      </div>
+
+      <div class="panel" id="end" hidden>
+        <p style="text-align:center;font-weight:700;color:var(--muted)">Your score</p>
+        <div class="big" id="final">0</div>
+        <p style="text-align:center" id="summary"></p>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn" id="again">Play again</button>
+          <button class="btn ghost" id="menu" style="color:var(--ink);border-color:var(--line)">Choose another round</button>
+          <a class="btn ghost" href="#revise" style="color:var(--ink);border-color:var(--line)">Revise the rules</a>
+        </div>
+      </div>
+
+      <div class="panel" id="revise" style="margin-top:28px;scroll-margin-top:90px">
+        <span class="pill">Need a refresher?</span>
+        <h2 style="font-size:26px;margin:12px 0 10px">Comparing texts and characters</h2>
+        <p>A comparing question gives you two texts (two poems, two extracts, or two texts you studied) and asks how they are <b>alike</b> and how they are <b>different</b>. The trick is to write about <b>both texts together</b>, point by point, instead of one essay on each.</p>
+
+        <h3 style="font-size:19px;margin:18px 0 8px">Spot the pattern</h3>
+        <div class="pass"><span class="sp"><b>Answer 1:</b> “The Calf” is about Ruth in a barn at night. She gives her coat to a calf and she grins at the end. “Inis Oírr” is about Nuala on a ferry. She gives her seat to an old man and she laughs.</span><span class="sp"><b>Answer 2:</b> Both main characters are kind: Ruth “shared her coat” and Nuala “offered her seat”. However, “The Calf” is set on a farm at night, whereas “Inis Oírr” is set by the sea in bright sunshine.</span></div>
+        <p style="margin-top:8px">Both answers use the same two texts. Which one is really comparing? What does it do that the other doesn't?</p>
+        <details class="note" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Show me</summary>
+          <p style="margin-top:8px">Answer 2. Answer 1 <b>retells</b> one text, then the other, and leaves the reader to find the links. Answer 2 names a <b>similarity</b> (both kind, with a short quote from each), then a <b>difference</b> (setting), and the linking words (<b>Both</b>, <b>However</b>, <b>whereas</b>) do the comparing out loud.</p>
+        </details>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">What to compare</h3>
+        <ul>
+          <li><b>Narrator:</b> first person (“I”) or third person (he / she)?</li>
+          <li><b>Setting:</b> where and when? (by the sea, on a farm, at night, in sunshine)</li>
+          <li><b>Main character</b> (the game calls them the hero): what are they like? (kind, brave, determined, honest) Back it up with a quote from each text.</li>
+          <li><b>Mood and ending:</b> does it end happily or sadly? Does the mood change?</li>
+          <li><b>Theme:</b> what is each text about underneath (friendship, loss, courage)? Two texts with the same theme can still feel very different.</li>
+        </ul>
+
+        <h3 style="font-size:19px;margin:22px 0 8px">Linking words</h3>
+        <div class="cmp2">
+          <div class="note"><b class="h">🤝 Alike</b>Both … · Similarly, … · Likewise, … · In the same way, … · also · too</div>
+          <div class="note"><b class="h">↔️ Different</b>However, … · In contrast, … · On the other hand, … · whereas · while · unlike</div>
+        </div>
+        <p style="margin-top:10px">A useful frame: <b>Both texts …</b> (similarity + a quote from each) → <b>However, …</b> or <b>…, whereas …</b> (difference + a quote from each) → <b>Overall, I prefer … because …</b> (only if the question asks).</p>
+
+        <div class="exam" id="exam" style="scroll-margin-top:90px">
+          <span class="pill" style="background:var(--night);color:#fff">Exam corner</span>
+          <h3 style="font-size:21px;margin:12px 0 8px">Where this shows up in the exam</h3>
+          <p>The paper often puts two texts on the same theme side by side (two poems, a poem and an extract, two short pieces) and asks you to <b>compare</b> them. On Higher Level especially, questions on your studied texts can also ask you to compare two of them (for example a novel and a film, or two poems you studied). Marks go to <b>points that link both texts</b>, <b>evidence from each</b> and <b>clear linking words</b>, not to two separate summaries.</p>
+          <h3 style="font-size:19px;margin:18px 0 8px">How marks are won and lost</h3>
+          <ul>
+            <li><b>Write about both texts in every paragraph</b>: point → text A → text B.</li>
+            <li><b>Quote from both</b>: one short quote each is better than three from one text.</li>
+            <li><b>Use linking words</b> (both, however, whereas) so the comparison is clear.</li>
+            <li>Similarities <b>and</b> differences, unless the question asks for only one.</li>
+            <li>Don't retell either text, and don't spend all your time on the one you like better.</li>
+          </ul>
+          <h3 style="font-size:19px;margin:18px 0 8px">Try these exam-style questions</h3>
+          <p style="color:var(--muted);font-size:15px">Written by Léim in the style of the exam (not taken from past papers). Both extracts are original. "Where the marks would go" is our guide, not an official marking scheme.</p>
+          <div class="pass"><b>Text A: The Last Match</b>
+            <span class="sp">I laced my boots in the empty dressing room in Ballina. It was my last game for the under-16s, and the evening light was already fading. When the whistle went, I ran until my lungs burned. We lost by two points. Walking off, I looked back at the pitch for a long time.</span></div>
+          <div class="pass"><b>Text B: First Swim</b>
+            <span class="sp">Every summer morning, Gran swam at the Forty Foot. This year, for the first time, Kate went with her. The water was so cold that Kate gasped and grabbed the steps. Gran just laughed and held out her hand. By the end of the week, Kate was diving in first.</span></div>
+          <ol class="eq">
+            <li>Name one way the two texts are similar. Support your answer with a short quote from each text.
+              <details><summary>Show a model answer</summary><p><b>Both</b> main characters push themselves physically. In Text A the narrator “ran until my lungs burned”, and in Text B Kate keeps going into the freezing water until she is “diving in first”. In both texts, effort shows what the character is like.<br><i>Where the marks would go:</i> a clear similarity; a short quote from <b>each</b> text; a sentence linking them.</p></details></li>
+            <li>Name two ways the texts are different.
+              <details><summary>Show a model answer</summary><p>(1) <b>Narrator:</b> Text A is told in the <b>first person</b> (“I laced my boots”), whereas Text B is told in the <b>third person</b> (“Kate went with her”). (2) <b>Ending:</b> Text A ends sadly, with a loss and a long look back at the pitch, while Text B ends happily, with Kate “diving in first”. (Also fair: an ending vs a beginning; alone vs with Gran; evening vs morning.)<br><i>Where the marks would go:</i> two different points; evidence for each text; a contrast word (whereas, while, however).</p></details></li>
+            <li>Both texts are about a moment that matters. Which text shows the character's feelings more clearly, in your opinion? Refer to both texts.
+              <details><summary>Show a model answer</summary><p><i>Sample:</i> Text A, for me. The narrator never says “I was sad”, but “I looked back at the pitch for a long time” shows how hard it is to let go. Text B tells us Kate “gasped and grabbed the steps”, which shows her shock, but we see her more from the outside, through her actions with Gran. However, Text B shows a bigger change in its character.<br><i>Where the marks would go:</i> a clear opinion; a quote from each text; a reason that compares them (not just praise for one).</p></details></li>
+            <li>Compare two texts you studied (for example two poems, or your novel and your film) on one theme. Plan your answer.
+              <details><summary>Show a model answer</summary><p><i>Plan for any two texts:</i> (1) Opening line naming both texts and the theme. (2) Similarity: how both texts show the theme, with a short quote or key moment from each. (3) Difference: narrator, setting, mood, ending or the way the main character changes, with evidence from each, using “whereas” or “However”. (4) A second difference or similarity. (5) A closing sentence: which text shows the theme more powerfully, and why.<br><i>Where the marks would go:</i> both texts in every paragraph; evidence from each; clear linking words; a personal response if asked.</p></details></li>
+          </ol>
+          <p class="came" style="font-size:14px;color:var(--muted);margin-top:10px"><b>Came up in:</b> 2026 (H8, O9) · 2025 (H3, O6) · 2024 (H8, O11) · 2023 (H5, O4) · 2022 (H5–6, O13) (H = Higher level question, O = Ordinary level question). See the <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">past papers ↗</a>.</p>
+        </div>
+
+        <div class="actions"><a class="btn" href="#game">Back to the game ↑</a><a class="btn ghost" href="printables/comparing-texts-characters-rules-and-practice.pdf" target="_blank" rel="noopener" style="color:var(--ink);border-color:var(--line)">Print the rules + practice sheet (PDF)</a></div>
+        <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:10px">3 pages: rules, practice questions, answers. Free to print for home or class.</p>
+        <!--TEACHERPACK-->
+        <p style="text-align:center;font-size:14px;margin-top:6px"><a href="junior-cycle-english-checklist.html">Tick this topic off on your English checklist →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="night cta">
+  <div class="wrap">
+    <div>
+      <h2>Parents: get the free guide</h2>
+      <p><em>How to Get Your Child into College</em>: CAO points, entry requirements and every other route in, in plain English.</p>
+    </div>
+    <a class="btn" href="junior-cycle-english.html#join">Get the free guide</a>
+  </div>
+</section>
+</main>

@@ -1,0 +1,169 @@
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  /* ---------- data (the PDFs and src/test_compare_cards.py read this block: keep it valid JSON; one item per line) ----------
+     texts: {k, title, lines: 3, f: {p: narrator 1/3, t: night/day, pl: sea/farm/town/school/mountain/home, e: ending (last line) happy/sad, tr: main character kind/brave/determined/honest}}
+     src/test_compare_cards.py works every feature out again from the words of the lines (it never trusts f). */
+  var D=/*DATA*/{
+ "texts": [
+  {"k": "📖 Story", "title": "The Rescue", "lines": ["At midnight the waves crashed against the pier at Dunmore.", "Orla climbed down the ladder and pulled the boy from the water.", "His mother hugged her and would not let go."], "f": {"p": "3", "t": "night", "pl": "sea", "e": "happy", "tr": "brave"}},
+  {"k": "📔 Diary", "title": "The Lost Lamb", "lines": ["On Sunday morning our best lamb went missing from the top field.", "I searched every ditch, then tried again after lunch.", "When I carried her home, Dad laughed out loud."], "f": {"p": "1", "t": "day", "pl": "farm", "e": "happy", "tr": "determined"}},
+  {"k": "📖 Story", "title": "The Window", "lines": ["In the classroom the afternoon sun was warm on the desks.", "When the teacher asked who broke the window, Seán owned up.", "He sat on the bench outside the office, close to tears."], "f": {"p": "3", "t": "day", "pl": "school", "e": "sad", "tr": "honest"}},
+  {"k": "📔 Diary", "title": "Night Shift", "lines": ["The street was dark when I finished at the chipper.", "I gave my last chips to a man sitting in a doorway.", "Walking home, I wondered where he would sleep, and I sighed."], "f": {"p": "1", "t": "night", "pl": "town", "e": "sad", "tr": "kind"}},
+  {"k": "📖 Story", "title": "The Summit", "lines": ["The morning fog sat on the slopes of Mweelrea.", "Twice Fiachra slipped, but he kept going.", "At the summit he cheered and waved at the clouds."], "f": {"p": "3", "t": "day", "pl": "mountain", "e": "happy", "tr": "determined"}},
+  {"k": "📔 Diary", "title": "Nana", "lines": ["Every Saturday afternoon I make tea in Nana's kitchen.", "I helped her with the crossword, though she forgot most of the words.", "When I left, she called me by Mam's name, and I cried all the way home."], "f": {"p": "1", "t": "day", "pl": "home", "e": "sad", "tr": "kind"}},
+  {"k": "📖 Story", "title": "The Calf", "lines": ["Under the stars, the barn was warm and smelled of hay.", "Ruth shared her coat with the shivering calf.", "When the vet came, Ruth grinned."], "f": {"p": "3", "t": "night", "pl": "farm", "e": "happy", "tr": "kind"}},
+  {"k": "📔 Diary", "title": "The Concert", "lines": ["The school hall was packed for the concert that night.", "My knees shook, but I stepped forward to the microphone.", "At the end, the whole hall cheered."], "f": {"p": "1", "t": "night", "pl": "school", "e": "happy", "tr": "brave"}},
+  {"k": "📔 Diary", "title": "The Gate", "lines": ["That night the wind rattled my bedroom window.", "I told Mam the truth: I had left the gate open and the dog was gone.", "We searched till late, but there was no sign of him, and Mam wept."], "f": {"p": "1", "t": "night", "pl": "home", "e": "sad", "tr": "honest"}},
+  {"k": "📖 Story", "title": "Market Day", "lines": ["In the square at noon, the market was packed.", "Tomás found a purse by the fruit stall and handed it back.", "The woman smiled and bought him an ice cream."], "f": {"p": "3", "t": "day", "pl": "town", "e": "happy", "tr": "honest"}},
+  {"k": "📔 Diary", "title": "Lahinch", "lines": ["The beach at Lahinch was busy in the morning sunshine.", "When a swimmer shouted for help, I dived in.", "We got her out, but she never said thanks, and I sat alone on the sand."], "f": {"p": "1", "t": "day", "pl": "sea", "e": "sad", "tr": "brave"}},
+  {"k": "📖 Story", "title": "First Day", "lines": ["On her first morning, Precious got lost in the corridor.", "She tried again and found Room 12 by herself.", "But the class had already started, and she sat alone at the back."], "f": {"p": "3", "t": "day", "pl": "school", "e": "sad", "tr": "determined"}},
+  {"k": "📔 Diary", "title": "The Tractor", "lines": ["The tractor stalled in the lane after dark.", "I climbed down into the ditch to free the wheel.", "It didn't move, and Grandad sighed."], "f": {"p": "1", "t": "night", "pl": "farm", "e": "sad", "tr": "brave"}},
+  {"k": "📖 Story", "title": "The Cake", "lines": ["All afternoon Jamal baked in the kitchen.", "The first cake sank, so he tried again.", "When his sister tasted it, she laughed with joy."], "f": {"p": "3", "t": "day", "pl": "home", "e": "happy", "tr": "determined"}},
+  {"k": "📔 Diary", "title": "The Football", "lines": ["Late that night I kicked a ball through the window of the shop on our street.", "I knocked on Mr Byrne's door and admitted it.", "He said nothing, and I cried all the way home."], "f": {"p": "1", "t": "night", "pl": "town", "e": "sad", "tr": "honest"}},
+  {"k": "📖 Story", "title": "Inis Oírr", "lines": ["The ferry left the harbour in bright sunshine.", "Nuala offered her seat to an old man with a stick.", "He told her stories all the way to Inis Oírr, and she laughed."], "f": {"p": "3", "t": "day", "pl": "sea", "e": "happy", "tr": "kind"}}
+ ]
+}/*END*/;
+  var CATS=["p","t","pl","e","tr"];
+  var VALS={p:["1","3"],t:["night","day"],pl:["sea","farm","town","school","mountain","home"],e:["happy","sad"],tr:["kind","brave","determined","honest"]};
+  var LABEL={p:{"1":"🙋 First person","3":"👀 Third person"},t:{night:"🌙 Set at night",day:"☀️ Set by day"},
+    pl:{sea:"🌊 By the sea",farm:"🐄 On a farm",town:"🏙️ In a town",school:"🏫 At school",mountain:"⛰️ On a mountain",home:"🏠 At home"},
+    e:{happy:"😊 Happy ending",sad:"😢 Sad ending"},tr:{kind:"🤝 Kind hero",brave:"🦁 Brave hero",determined:"💪 Determined hero",honest:"💯 Honest hero"}};
+  var PH={p:{"1":"is told in the first person","3":"is told in the third person"},t:{night:"is set at night",day:"is set during the day"},
+    pl:{sea:"is set by the sea",farm:"is set on a farm",town:"is set in a town",school:"is set in a school",mountain:"is set on a mountain",home:"is set at home"},
+    e:{happy:"ends happily",sad:"ends sadly"},tr:{kind:"has a kind main character",brave:"has a brave main character",determined:"has a determined main character",honest:"has an honest main character"}};
+  function both(ph){return ph.replace(/^is /,"are both ").replace(/^ends /,"both end ").replace(/^has /,"both have ");}
+  var SIM=["Similarly,","Likewise,","In the same way,"],CON=["However,","In contrast,","On the other hand,"];
+  var VENN=["🅰️ Only A","🅱️ Only B","🤝 Both"];
+  var FIXED=VENN;
+  function C(en,ans,pool,why,html,data,nw){var seen={},w=[];nw=nw||3;seen[ans]=1;
+    shuffle(pool.slice()).forEach(function(x){if(x==null)return;x=String(x);if(!seen[x]&&w.length<nw){seen[x]=1;w.push(x);}});
+    return {en:en,frame:"",html:html||"",answer:String(ans),wrong:w,why:why,nw:nw,review:(data&&data.rv?data.rv:en)+" → "+ans,data:data||{}};}
+  function tq(T){return "“"+T.title+"”";}
+  function card(T,ab){return '<div class="cc-card '+ab+'"><span class="cc-k">'+(ab==="a"?"🅰️":"🅱️")+' '+esc(T.k)+' · “'+esc(T.title)+'”</span>'+T.lines.map(function(l){return '<p>'+esc(l)+'</p>';}).join("")+'</div>';}
+  function cards(A,B){return '<div class="cc-two">'+card(A,"a")+card(B,"b")+'</div>';}
+  function has(T,c,v){return T.f[c]===v;}
+  function sameCats(A,B){return CATS.filter(function(c){return A.f[c]===B.f[c];});}
+  function diffCats(A,B){return CATS.filter(function(c){return A.f[c]!==B.f[c];});}
+  /* one pair of texts stays for 2 questions, so players read them once */
+  var keep=null,keepN=0;
+  function pair(need){var tries=0,p;
+    if(keep&&keepN<2&&need(D.texts[keep[0]],D.texts[keep[1]])){keepN++;return [D.texts[keep[0]],D.texts[keep[1]]];}
+    do{var i=Math.floor(Math.random()*D.texts.length),j=Math.floor(Math.random()*D.texts.length);p=[i,j];tries++;}
+    while((i===j||!need(D.texts[i],D.texts[j]))&&tries<200);
+    keep=p;keepN=1;return [D.texts[p[0]],D.texts[p[1]]];}
+  function lab(c,v){return LABEL[c][v];}
+
+  /* ================= COMPARE CARDS: what do both share? ================= */
+  function qBoth(){var P=pair(function(A,B){return sameCats(A,B).length>0;}),A=P[0],B=P[1];
+    var c=rnd(sameCats(A,B)),ans=lab(c,A.f[c]),one=[],none=[];
+    CATS.forEach(function(k){VALS[k].forEach(function(v){var ha=has(A,k,v),hb=has(B,k,v);if(ha&&hb)return;(ha||hb?one:none).push(lab(k,v));});});
+    var pool=shuffle(one).concat(shuffle(none));var w=[];pool.forEach(function(x){if(w.length<3)w.push(x);});
+    return C("🤝 What do both share?",ans,w,"Both texts: "+ans+".",cards(A,B),{t:"both",a:A.title,b:B.title,rv:A.title+" + "+B.title},3);}
+  /* ================= ONLY A, ONLY B OR BOTH? ================= */
+  function qVenn(){var P=pair(function(){return true;}),A=P[0],B=P[1],opts=[];
+    CATS.forEach(function(k){VALS[k].forEach(function(v){var ha=has(A,k,v),hb=has(B,k,v);if(ha||hb)opts.push([k,v,ha&&hb?2:ha?0:1]);});});
+    var o=rnd(opts),L=lab(o[0],o[1]),ans=VENN[o[2]];
+    return C("Only A, only B or both?",ans,VENN.filter(function(x){return x!==ans;}),"🅰️ "+lab(o[0],A.f[o[0]])+" · 🅱️ "+lab(o[0],B.f[o[0]]),
+      cards(A,B)+'<div class="cc-st">'+esc(L)+'</div>',{t:"venn",a:A.title,b:B.title,rv:A.title+" + "+B.title+": "+L},2);}
+  /* ================= LINK IT: similarity or contrast word? ================= */
+  function qLink(){var same=Math.random()<.5,P=pair(function(A,B){return (same?sameCats(A,B):diffCats(A,B)).length>0;}),A=P[0],B=P[1];
+    var c=rnd(same?sameCats(A,B):diffCats(A,B)),ans=rnd(same?SIM:CON);
+    var s1=tq(A)+" "+PH[c][A.f[c]]+".",s2=tq(B)+" "+PH[c][B.f[c]]+".";
+    return C("🔗 Which word links them?",ans,shuffle((same?CON:SIM).slice()).slice(0,2),
+      same?"Same idea in both texts → a similarity word ("+SIM.join(" ")+")":"The texts differ → a contrast word ("+CON.join(" ")+")",
+      '<div class="cc-link">'+esc(s1)+' <mark class="gap">?</mark> '+esc(s2)+'</div>',{t:"link",rv:s1+" … "+s2},2);}
+  /* ================= BEST COMPARISON ================= */
+  function qBest(){var P=pair(function(A,B){return sameCats(A,B).length>0&&diffCats(A,B).length>0;}),A=P[0],B=P[1],good,bad;
+    if(Math.random()<.5){var c=rnd(sameCats(A,B)),v=A.f[c],w=rnd(VALS[c].filter(function(x){return x!==v;}));
+      good=tq(A)+" and "+tq(B)+" "+both(PH[c][v])+".";bad=tq(A)+" and "+tq(B)+" "+both(PH[c][w])+".";}
+    else{var c=rnd(diffCats(A,B));
+      good=tq(A)+" "+PH[c][A.f[c]]+", whereas "+tq(B)+" "+PH[c][B.f[c]]+".";bad=tq(A)+" "+PH[c][B.f[c]]+", whereas "+tq(B)+" "+PH[c][A.f[c]]+".";}
+    var k=rnd(CATS),one=rnd([A,B]),only=tq(one)+" "+PH[k][one.f[k]]+".";
+    var R=rnd([A,B]),retell="In "+tq(R)+", "+R.lines[0].charAt(0).toLowerCase()+R.lines[0].slice(1);
+    return C("⚖️ Best comparison?",good,[bad,only,retell],"A good comparison names both texts, links them (both / whereas) and is true of each.",cards(A,B),{t:"best",a:A.title,b:B.title,rv:A.title+" + "+B.title},3);}
+
+  /* ---------- makers by mode ---------- */
+  var MAKERS={
+    both:[qBoth],
+    venn:[qVenn],
+    link:[qLink],
+    best:[qBest],
+    mixed:[qBoth,qVenn,qLink,qBest]
+  };
+  /* ---------- Game loop ---------- */
+  var $=function(id){return document.getElementById(id);};
+  var mode,score,streak,best,left,timer,current,locked,mistakes,asked_,last="",DUR=90;
+  function show(id){["start","play","end"].forEach(function(x){$(x).hidden=(x!==id);});}
+  function start(m){
+    mode=m;DUR=90;score=0;streak=0;best=0;left=DUR;mistakes=[];asked_=0;
+    $("score").textContent=0;$("streak").textContent=0;$("time").textContent=DUR+"s";
+    $("bar").style.width="100%";$("bar").className="";
+    show("play");next();$("play").scrollIntoView({behavior:"smooth",block:"start"});
+    clearInterval(timer);
+    timer=setInterval(function(){
+      left--;$("time").textContent=left+"s";
+      $("bar").style.width=Math.min(100,left/DUR*100)+"%";
+      $("bar").className=left<=10?"low":"";
+      if(left<=0)finish();
+    },1000);
+  }
+  function next(){
+    locked=false;var q,tries=0;
+    do{q=rnd(MAKERS[mode])();tries++;}while((q.review===last||q.wrong.length<(q.nw||3))&&tries<20);
+    last=q.review;current=q;$("hint").textContent="";
+    $("en").textContent=q.en;
+    $("frame").innerHTML=q.html||"";
+    $("frame").className="frame";
+    var box=$("choices");box.innerHTML="";
+    box.className="choices"+([q.answer].concat(q.wrong).some(function(x){return x.length>16;})?" one":"");
+    var opts=shuffle([q.answer].concat(q.wrong)),ORD=q.fixed||FIXED;
+    if(opts.every(function(o){return ORD.indexOf(o)>=0;}))opts.sort(function(a,b){return ORD.indexOf(a)-ORD.indexOf(b);}); /* label buttons stay in the same place */
+    opts.forEach(function(t,i){
+      var b=document.createElement("button");b.className="choice";b.textContent=t;b.setAttribute("aria-label","Option "+(i+1)+": "+t);
+      b.onclick=function(){choose(b,t);};box.appendChild(b);
+    });
+  }
+  function choose(btn,t){
+    if(locked||left<=0)return;locked=true;asked_++;
+    var ok=t===current.answer;
+    if(ok){score++;streak++;if(streak>best)best=streak;btn.classList.add("right");
+      if(mode==="both"&&streak%5===0){left+=3;$("time").textContent=left+"s";$("hint").textContent="+3 seconds! "+streak+" in a row.";}}
+    else{
+      streak=0;btn.classList.add("wrong");
+      [].forEach.call($("choices").children,function(c){if(c.textContent===current.answer)c.classList.add("right");});
+      mistakes.push({review:current.review,said:t,why:current.why||""});
+      if(current.why)$("hint").textContent=current.why;
+    }
+    $("score").textContent=score;$("streak").textContent=streak;
+    setTimeout(function(){if(left>0)next();},ok?(mode==="both"&&streak%5===0?800:500):3200);
+  }
+  function finish(){
+    clearInterval(timer);locked=true;
+    $("final").textContent=score;
+    var msg=score>=20?"Brilliant! You compare like an examiner.":score>=12?"Great work!":score>=5?"Good! Keep going and you'll get faster.":"Good start. Try again and beat your score!";
+    $("summary").textContent=msg+" Best streak: "+best+" in a row. ("+asked_+" answered)";
+    var r=$("review");
+    if(mistakes.length){
+      var seen={},html="<h3 style='font-size:18px'>Go back over these</h3><ul>";
+      mistakes.forEach(function(m){var key=m.review+"|"+m.said;if(seen[key])return;seen[key]=1;
+        html+="<li><span class='fix'>"+esc(m.review)+"</span> <span style='color:var(--muted)'>(not "+esc(m.said)+")</span>"+(m.why?"<br><span style='font-size:14px;color:var(--muted)'>"+esc(m.why)+"</span>":"")+"</li>";});
+      r.innerHTML=html+"</ul>";
+    } else r.innerHTML=asked_?"<p style='text-align:center'>No mistakes at all. Perfect!</p>":"";
+    show("end");
+  }
+  [].forEach.call(document.querySelectorAll(".mode"),function(b){b.onclick=function(){start(b.dataset.mode);};});
+  $("again").onclick=function(){start(mode);};
+  $("menu").onclick=function(){show("start");};
+  document.addEventListener("keydown",function(e){
+    if($("play").hidden)return;
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=4){var b=$("choices").children[n-1];if(b)b.click();}
+  });
+  window.__leimFinish=finish;
+  window.__leimTest={MAKERS:MAKERS,kit:{D:D,LABEL:LABEL,PH:PH}};
+})();
+</script>

@@ -12,4 +12,3 @@ Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
 
-- 21 Nov 01:35 · E3 English Order 30 Comparing texts (Compare Cards) · english-c30
