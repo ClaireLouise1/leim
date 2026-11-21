@@ -11,3 +11,4 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
+- 2026-11-21 09:52 · E5 English Exam Centre + CBA guides (Orders 19, 25) · english-e5
