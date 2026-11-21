@@ -52,6 +52,27 @@ def build(topics, subject='maths'):
 .acts{display:grid;gap:10px;margin-top:20px}
 .acts .btn{width:100%;text-align:center}
 .btn.ghost2{background:#fff;border:2px solid var(--ink);color:var(--ink)}
+.extra{display:grid;gap:12px;margin-top:18px}
+.xbox{border:2px solid var(--line);border-radius:18px;padding:14px 16px;background:#fff}
+.xbox h2{font-size:1.05rem;margin:0 0 6px}
+.xbox ul{margin:6px 0 8px;padding-left:20px}.xbox li{margin:3px 0;font-weight:600}
+.xbox .how{font-size:.88rem;color:var(--muted);margin:6px 0 0}
+.xbox .btn{width:100%;text-align:center}
+#printout{display:none}
+@media print{
+ body>*:not(main),main>*:not(.pt),.pt>*:not(#printout),header,footer,nav{display:none!important}
+ #printout{display:block!important;color:#000;font-size:12.5pt}
+ #printout h1{font-size:18pt;margin:0 0 2px}
+ #printout .meta{display:flex;justify-content:space-between;margin:6px 0 14px;font-weight:600}
+ #printout .pq{break-inside:avoid;border-bottom:1px solid #bbb;padding:8px 0 10px}
+ #printout .pq .en{font-weight:700;margin-bottom:4px}
+ #printout .pq .frame{margin:4px 0;text-align:left}
+ #printout .opts{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;margin-top:6px}
+ #printout .opts.one{grid-template-columns:1fr}
+ #printout .key{break-before:page}
+ #printout .key li{margin:6px 0}
+ #printout .foot{font-size:9pt;color:#555;margin-top:14px}
+}
 </style>'''
     main = ('''<main id="main">
 <div class="pt">
@@ -76,11 +97,18 @@ def build(topics, subject='maths'):
     <a class="btn ghost2" href="HUB">← All TITLE topics</a>
   </div>
 </div>
+<div class="extra">
+  <div class="xbox" id="realx"></div>
+  <div class="xbox"><h2>🖨️ Sample test to print</h2>
+    <p class="how" style="margin:0 0 10px">10 new questions on paper, with the answers on the last page. Each print is different.</p>
+    <button class="btn ghost2" id="printb" type="button">🖨️ Print a sample test</button></div>
+</div>
+<div id="printout"></div>
 </div>
 ''').replace('HUB', S['hub']).replace('TITLE', S['title'])
     js = '''<script>
 (function(){
-var T=%s,EN=%s,HUB=%s,PRE=%s;
+var T=%s,EN=%s,HUB=%s,PRE=%s,SUBJ=%s;
 var N=10,$=function(i){return document.getElementById(i);};
 var slug=(new URLSearchParams(location.search).get("t")||"").toLowerCase();
 var info=T[slug];
@@ -132,13 +160,33 @@ function end(){$("quiz").hidden=true;$("done").hidden=false;bar();
   $("mlist").innerHTML=miss.length?"<b>Go back over these:</b><ul>"+miss.map(function(q){return EN?"<li><b>"+esc(q.review||(q.en+" → "+q.answer))+"</b>"+(q.why?'<br><span class="w">'+esc(q.why)+"</span>":"")+"</li>":"<li>"+esc(q.why||(q.en+" Answer: "+q.answer))+"</li>";}).join("")+"</ul>":"";
   $("done").scrollIntoView({behavior:"smooth",block:"start"});}
 $("again").onclick=start;
+/* In the real exam: years + question numbers from src/came_up_data.py (facts only), link to the SEC archive */
+(function(){var c=info.came||[],L={H:"Higher",O:"Ordinary"},h='<h2>📄 In the real exam</h2>';
+  if(c.length){h+='<ul>'+c.map(function(y){var by={};y[1].split(/,\\s*/).forEach(function(r){var k=r.charAt(0);(by[k]=by[k]||[]).push("Q"+r.slice(1));});
+      return "<li>"+y[0]+": "+Object.keys(by).map(function(k){return (L[k]||k)+" "+by[k].join(", ");}).join(" · ")+"</li>";}).join("")+"</ul>";}
+  else h+='<p class="how" style="margin:0 0 8px">Not a question of its own in 2022–2026, but it can help in other questions.</p>';
+  h+='<a class="btn ghost2" href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">Open the real past papers ↗</a>'+
+    '<p class="how">On the State Examinations Commission site: tick the box to accept their terms, choose <b>Exam Papers</b>, the year, <b>Junior Cycle</b> and <b>'+SUBJ+'</b>, then open the Higher or Ordinary paper. The <b>Marking Scheme</b> for the same year shows the answers.</p>';
+  $("realx").innerHTML=h;})();
+/* Sample test to print: 10 fresh questions (A–D) + an answer page */
+function printTest(){var ps=make(),g=G(),A="ABCDEF",key=[],h='<h1>'+esc(info.topic)+': sample test</h1>'+
+    '<div class="meta"><span>Name: ______________________</span><span>Score: ____ / '+ps.length+'</span></div>';
+  ps.forEach(function(q,n){var opts=shuffle([String(q.answer)].concat(q.wrong.slice(0,q.nw||3).map(String))),ORDS=q.fixed?[q.fixed]:(g.orders||[]);
+    for(var k=0;k<ORDS.length;k++){var O=ORDS[k];if(opts.every(function(o){return O.indexOf(o)>=0;})){opts.sort(function(a,b){return O.indexOf(a)-O.indexOf(b);});break;}}
+    var one=opts.some(function(x){return x.length>16;});
+    h+='<div class="pq'+(EN?" gx-"+slug:"")+'"><div class="en">'+(n+1)+'. '+esc(q.en)+'</div><div class="frame'+(EN?"":" gx-"+slug)+'">'+(q.html||"")+esc(q.frame||"")+'</div><div class="opts'+(one?" one":"")+'">'+
+      opts.map(function(t,j){return "<div>☐ "+A[j]+") "+(g.pu?g.pu(t):esc(t))+"</div>";}).join("")+'</div></div>';
+    key.push("<li><b>"+A[opts.indexOf(String(q.answer))]+") "+esc(q.answer)+"</b>"+(q.why?" · "+esc(q.why):"")+"</li>");});
+  h+='<div class="key"><h1>Answers</h1><ol>'+key.join("")+'</ol></div><p class="foot">Léim · leim.ie · Junior Cycle '+SUBJ+' · '+esc(info.topic)+'. Original practice questions, not taken from State Examinations Commission papers.</p>';
+  $("printout").innerHTML=h;window.print();}
+$("printb").onclick=function(){if(!(EN?window.LEIM_EN:window.LEIM_MAKERS)){return;}printTest();};
 var sc=document.createElement("script");sc.src=PRE+info.bundle+".js?v=1";
 sc.onload=function(){var R=EN?window.LEIM_EN:window.LEIM_MAKERS;if(!R||!R[slug]){$("qn").textContent="Sorry, this test isn't ready yet.";return;}start();};
 sc.onerror=function(){$("qn").textContent="Couldn't load the questions. Check your connection and try again.";};
 document.body.appendChild(sc);
 })();
 </script>
-''' % (json.dumps(topics, ensure_ascii=False), 'true' if S['en'] else 'false', json.dumps(S['hub']), json.dumps(S['prefix']))
+''' % (json.dumps(topics, ensure_ascii=False), 'true' if S['en'] else 'false', json.dumps(S['hub']), json.dumps(S['prefix']), json.dumps(S['title']))
     page = head + styles + css + '\n</head>\n<body>' + hdr + main + foot.replace('</body>', js + '</body>')
     open(S['page'], 'w', encoding='utf-8').write(page)
     print('built', S['page'], 'for', len(topics), 'topics')

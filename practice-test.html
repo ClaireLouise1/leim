@@ -114,6 +114,27 @@
 .acts{display:grid;gap:10px;margin-top:20px}
 .acts .btn{width:100%;text-align:center}
 .btn.ghost2{background:#fff;border:2px solid var(--ink);color:var(--ink)}
+.extra{display:grid;gap:12px;margin-top:18px}
+.xbox{border:2px solid var(--line);border-radius:18px;padding:14px 16px;background:#fff}
+.xbox h2{font-size:1.05rem;margin:0 0 6px}
+.xbox ul{margin:6px 0 8px;padding-left:20px}.xbox li{margin:3px 0;font-weight:600}
+.xbox .how{font-size:.88rem;color:var(--muted);margin:6px 0 0}
+.xbox .btn{width:100%;text-align:center}
+#printout{display:none}
+@media print{
+ body>*:not(main),main>*:not(.pt),.pt>*:not(#printout),header,footer,nav{display:none!important}
+ #printout{display:block!important;color:#000;font-size:12.5pt}
+ #printout h1{font-size:18pt;margin:0 0 2px}
+ #printout .meta{display:flex;justify-content:space-between;margin:6px 0 14px;font-weight:600}
+ #printout .pq{break-inside:avoid;border-bottom:1px solid #bbb;padding:8px 0 10px}
+ #printout .pq .en{font-weight:700;margin-bottom:4px}
+ #printout .pq .frame{margin:4px 0;text-align:left}
+ #printout .opts{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;margin-top:6px}
+ #printout .opts.one{grid-template-columns:1fr}
+ #printout .key{break-before:page}
+ #printout .key li{margin:6px 0}
+ #printout .foot{font-size:9pt;color:#555;margin-top:14px}
+}
 </style>
 </head>
 <body>
@@ -158,6 +179,13 @@
     <a class="btn ghost2" href="junior-cycle-maths.html">← All Maths topics</a>
   </div>
 </div>
+<div class="extra">
+  <div class="xbox" id="realx"></div>
+  <div class="xbox"><h2>🖨️ Sample test to print</h2>
+    <p class="how" style="margin:0 0 10px">10 new questions on paper, with the answers on the last page. Each print is different.</p>
+    <button class="btn ghost2" id="printb" type="button">🖨️ Print a sample test</button></div>
+</div>
+<div id="printout"></div>
 </div>
 </main>
 
@@ -170,7 +198,7 @@
 <script src="site.js"></script>
 <script>
 (function(){
-var T={"integer-rush": {"topic": "Integers & BIMDAS", "game": "Integer Rush", "bundle": "number"}, "prime-smash": {"topic": "Factors, multiples & primes", "game": "Prime Smash", "bundle": "number"}, "fraction-match": {"topic": "Fractions", "game": "Fraction Match", "bundle": "number"}, "round-it": {"topic": "Decimals & rounding", "game": "Round It", "bundle": "number"}, "venn-sorter": {"topic": "Sets & Venn diagrams", "game": "Venn Sorter", "bundle": "number"}, "percent-pop": {"topic": "Percentages", "game": "Percent Pop", "bundle": "number"}, "share-it-out": {"topic": "Ratio & proportion", "game": "Share It Out", "bundle": "number"}, "power-up": {"topic": "Indices & standard form", "game": "Power Up", "bundle": "number"}, "surd-simplify": {"topic": "Surds", "game": "Surd Simplify", "bundle": "number"}, "clock-dash": {"topic": "Units, time & timetables", "game": "Clock Dash", "bundle": "number"}, "shop-keeper": {"topic": "Bills, VAT & profit", "game": "Shop Keeper", "bundle": "number"}, "payslip-puzzle": {"topic": "Tax, pay & interest", "game": "Payslip Puzzle", "bundle": "number"}, "road-trip": {"topic": "Speed & currency", "game": "Road Trip", "bundle": "number"}, "like-term-sweep": {"topic": "Expressions", "game": "Like-Term Sweep", "bundle": "algebra"}, "bracket-blaster": {"topic": "Expanding brackets", "game": "Bracket Blaster", "bundle": "algebra"}, "factor-match": {"topic": "Factorising", "game": "Factor Match", "bundle": "algebra"}, "balance-it": {"topic": "Linear equations", "game": "Balance It", "bundle": "algebra"}, "two-line-crossing": {"topic": "Simultaneous equations", "game": "Two-Line Crossing", "bundle": "algebra"}, "root-rush": {"topic": "Quadratic equations", "game": "Root Rush", "bundle": "algebra"}, "number-line-shade": {"topic": "Inequalities", "game": "Number-Line Shade", "bundle": "algebra"}, "rearrange-race": {"topic": "Changing the subject", "game": "Rearrange Race", "bundle": "algebra"}, "pattern-builder": {"topic": "Linear patterns", "game": "Pattern Builder", "bundle": "algebra"}, "growth-spotter": {"topic": "Quadratic patterns", "game": "Growth Spotter", "bundle": "algebra"}, "graph-match": {"topic": "Functions & graphs", "game": "Graph Match", "bundle": "algebra"}, "angle-chase": {"topic": "Angles & triangles", "game": "Angle Chase", "bundle": "geometry"}, "construction-steps": {"topic": "Constructions", "game": "Construction Steps", "bundle": "geometry"}, "proof-builder": {"topic": "Theorems & proofs", "game": "Proof Builder", "bundle": "geometry"}, "mirror-move": {"topic": "Transformations", "game": "Mirror Move", "bundle": "geometry"}, "floor-planner": {"topic": "Area & perimeter", "game": "Floor Planner", "bundle": "geometry"}, "pack-it": {"topic": "Volume & surface area", "game": "Pack It", "bundle": "geometry"}, "ladder-lab": {"topic": "Pythagoras", "game": "Ladder Lab", "bundle": "geometry"}, "line-lab": {"topic": "The line", "game": "Line Lab", "bundle": "geometry"}, "clinometer-challenge": {"topic": "Trigonometry", "game": "Clinometer Challenge", "bundle": "geometry"}, "data-detective": {"topic": "Collecting data", "game": "Data Detective", "bundle": "stats"}, "average-ace": {"topic": "Graphs & averages", "game": "Average Ace", "bundle": "stats"}, "spin-and-predict": {"topic": "Chance", "game": "Spin & Predict", "bundle": "stats"}, "coin-dice-lab": {"topic": "Relative frequency", "game": "Coin & Dice Lab", "bundle": "stats"}},EN=false,HUB="junior-cycle-maths.html",PRE="exam-mix-";
+var T={"integer-rush": {"topic": "Integers & BIMDAS", "game": "Integer Rush", "bundle": "number", "came": [["2026", "O1"], ["2025", "O1"], ["2024", "O1"], ["2023", "H5, O1, O12"], ["2022", "O1"]]}, "prime-smash": {"topic": "Factors, multiples & primes", "game": "Prime Smash", "bundle": "number", "came": [["2026", "O1"], ["2025", "O8"], ["2024", "O1"], ["2023", "H5"]]}, "fraction-match": {"topic": "Fractions", "game": "Fraction Match", "bundle": "number", "came": [["2022", "H6, O10"]]}, "round-it": {"topic": "Decimals & rounding", "game": "Round It", "bundle": "number", "came": [["2023", "H1"], ["2022", "O1"]]}, "venn-sorter": {"topic": "Sets & Venn diagrams", "game": "Venn Sorter", "bundle": "number", "came": [["2026", "H7, O10"], ["2025", "H10, O5"], ["2024", "H5, O3"], ["2023", "H6, O3"], ["2022", "H6, O5"]]}, "percent-pop": {"topic": "Percentages", "game": "Percent Pop", "bundle": "number", "came": [["2026", "H3"], ["2022", "H6"]]}, "share-it-out": {"topic": "Ratio & proportion", "game": "Share It Out", "bundle": "number", "came": [["2026", "H5"], ["2025", "O2"], ["2024", "H4"]]}, "power-up": {"topic": "Indices & standard form", "game": "Power Up", "bundle": "number", "came": [["2026", "H5"], ["2023", "H9"], ["2022", "H7"]]}, "surd-simplify": {"topic": "Surds", "game": "Surd Simplify", "bundle": "number", "came": []}, "clock-dash": {"topic": "Units, time & timetables", "game": "Clock Dash", "bundle": "number", "came": [["2025", "O12"], ["2023", "H8"], ["2022", "O8"]]}, "shop-keeper": {"topic": "Bills, VAT & profit", "game": "Shop Keeper", "bundle": "number", "came": [["2026", "O2"], ["2025", "H3, O2"], ["2024", "H4, O2"], ["2023", "O1"], ["2022", "O2, O9"]]}, "payslip-puzzle": {"topic": "Tax, pay & interest", "game": "Payslip Puzzle", "bundle": "number", "came": [["2026", "H3, O9"], ["2025", "O9"], ["2024", "H3"], ["2023", "H10"], ["2022", "H1"]]}, "road-trip": {"topic": "Speed & currency", "game": "Road Trip", "bundle": "number", "came": [["2026", "H3, H5, O4"], ["2025", "O13"], ["2024", "O4"], ["2022", "H1, H10"]]}, "like-term-sweep": {"topic": "Expressions", "game": "Like-Term Sweep", "bundle": "algebra", "came": [["2026", "O12"], ["2025", "H11, O10"], ["2024", "H11, O12"], ["2023", "O12, O14"], ["2022", "H9, O13"]]}, "bracket-blaster": {"topic": "Expanding brackets", "game": "Bracket Blaster", "bundle": "algebra", "came": [["2026", "O5"], ["2025", "O10"], ["2024", "O12"], ["2023", "H9"]]}, "factor-match": {"topic": "Factorising", "game": "Factor Match", "bundle": "algebra", "came": [["2026", "O12"], ["2025", "O10"], ["2024", "H11, O12"], ["2023", "H9"], ["2022", "H9, O13"]]}, "balance-it": {"topic": "Linear equations", "game": "Balance It", "bundle": "algebra", "came": [["2025", "O7, O10"], ["2023", "O2"], ["2022", "O10"]]}, "two-line-crossing": {"topic": "Simultaneous equations", "game": "Two-Line Crossing", "bundle": "algebra", "came": [["2024", "O7"]]}, "root-rush": {"topic": "Quadratic equations", "game": "Root Rush", "bundle": "algebra", "came": [["2026", "H9"], ["2025", "H13"], ["2023", "H13"]]}, "number-line-shade": {"topic": "Inequalities", "game": "Number-Line Shade", "bundle": "algebra", "came": [["2024", "H11"]]}, "rearrange-race": {"topic": "Changing the subject", "game": "Rearrange Race", "bundle": "algebra", "came": [["2026", "H9"], ["2025", "H11"], ["2022", "H9"]]}, "pattern-builder": {"topic": "Linear patterns", "game": "Pattern Builder", "bundle": "algebra", "came": [["2026", "O6"], ["2025", "H2"], ["2024", "H12"]]}, "growth-spotter": {"topic": "Quadratic patterns", "game": "Growth Spotter", "bundle": "algebra", "came": [["2026", "H8"], ["2025", "H2"]]}, "graph-match": {"topic": "Functions & graphs", "game": "Graph Match", "bundle": "algebra", "came": [["2026", "H6, H8–9, O12"], ["2025", "H9, H12"], ["2024", "H8"], ["2023", "H2, H11, O7, O11"], ["2022", "O8"]]}, "angle-chase": {"topic": "Angles & triangles", "game": "Angle Chase", "bundle": "geometry", "came": [["2024", "O5"], ["2022", "O7"]]}, "construction-steps": {"topic": "Constructions", "game": "Construction Steps", "bundle": "geometry", "came": [["2025", "H6"], ["2024", "O6"], ["2023", "H12"], ["2022", "O11"]]}, "proof-builder": {"topic": "Theorems & proofs", "game": "Proof Builder", "bundle": "geometry", "came": [["2026", "H12"], ["2025", "H6"], ["2023", "H14"], ["2022", "H12"]]}, "mirror-move": {"topic": "Transformations", "game": "Mirror Move", "bundle": "geometry", "came": [["2026", "O8"], ["2024", "H9"], ["2023", "O13"]]}, "floor-planner": {"topic": "Area & perimeter", "game": "Floor Planner", "bundle": "geometry", "came": [["2026", "H10, O5"], ["2025", "H7, O4, O11"], ["2024", "O11"], ["2023", "H12, O4"], ["2022", "H4, O11–12"]]}, "pack-it": {"topic": "Volume & surface area", "game": "Pack It", "bundle": "geometry", "came": [["2026", "H13, O11"], ["2025", "O12"], ["2024", "H6–7, O9"], ["2023", "H3, O10"], ["2022", "H5, O3"]]}, "ladder-lab": {"topic": "Pythagoras", "game": "Ladder Lab", "bundle": "geometry", "came": [["2026", "H13, O13"], ["2024", "H13, O11"], ["2023", "O13"]]}, "line-lab": {"topic": "The line", "game": "Line Lab", "bundle": "geometry", "came": [["2026", "H4, O8"], ["2025", "H5, O14"], ["2024", "H9–10, O10"], ["2023", "H7, O9"], ["2022", "H3, H11"]]}, "clinometer-challenge": {"topic": "Trigonometry", "game": "Clinometer Challenge", "bundle": "geometry", "came": [["2026", "H11, O13"], ["2025", "H8"], ["2024", "H13"], ["2023", "H8, O8"], ["2022", "H8, H12"]]}, "data-detective": {"topic": "Collecting data", "game": "Data Detective", "bundle": "stats", "came": [["2026", "O3"], ["2025", "O1"], ["2024", "O8"], ["2023", "O5"], ["2022", "O4"]]}, "average-ace": {"topic": "Graphs & averages", "game": "Average Ace", "bundle": "stats", "came": [["2026", "H2, O7"], ["2025", "H4, O3"], ["2024", "H2, O8"], ["2023", "H4, O8"], ["2022", "O6"]]}, "spin-and-predict": {"topic": "Chance", "game": "Spin & Predict", "bundle": "stats", "came": [["2026", "H1"], ["2025", "O6"], ["2024", "H1"], ["2023", "O6"], ["2022", "H2"]]}, "coin-dice-lab": {"topic": "Relative frequency", "game": "Coin & Dice Lab", "bundle": "stats", "came": [["2025", "H1, O6"]]}},EN=false,HUB="junior-cycle-maths.html",PRE="exam-mix-",SUBJ="Maths";
 var N=10,$=function(i){return document.getElementById(i);};
 var slug=(new URLSearchParams(location.search).get("t")||"").toLowerCase();
 var info=T[slug];
@@ -222,6 +250,26 @@ function end(){$("quiz").hidden=true;$("done").hidden=false;bar();
   $("mlist").innerHTML=miss.length?"<b>Go back over these:</b><ul>"+miss.map(function(q){return EN?"<li><b>"+esc(q.review||(q.en+" → "+q.answer))+"</b>"+(q.why?'<br><span class="w">'+esc(q.why)+"</span>":"")+"</li>":"<li>"+esc(q.why||(q.en+" Answer: "+q.answer))+"</li>";}).join("")+"</ul>":"";
   $("done").scrollIntoView({behavior:"smooth",block:"start"});}
 $("again").onclick=start;
+/* In the real exam: years + question numbers from src/came_up_data.py (facts only), link to the SEC archive */
+(function(){var c=info.came||[],L={H:"Higher",O:"Ordinary"},h='<h2>📄 In the real exam</h2>';
+  if(c.length){h+='<ul>'+c.map(function(y){var by={};y[1].split(/,\s*/).forEach(function(r){var k=r.charAt(0);(by[k]=by[k]||[]).push("Q"+r.slice(1));});
+      return "<li>"+y[0]+": "+Object.keys(by).map(function(k){return (L[k]||k)+" "+by[k].join(", ");}).join(" · ")+"</li>";}).join("")+"</ul>";}
+  else h+='<p class="how" style="margin:0 0 8px">Not a question of its own in 2022–2026, but it can help in other questions.</p>';
+  h+='<a class="btn ghost2" href="https://www.examinations.ie/exammaterialarchive/" target="_blank" rel="noopener">Open the real past papers ↗</a>'+
+    '<p class="how">On the State Examinations Commission site: tick the box to accept their terms, choose <b>Exam Papers</b>, the year, <b>Junior Cycle</b> and <b>'+SUBJ+'</b>, then open the Higher or Ordinary paper. The <b>Marking Scheme</b> for the same year shows the answers.</p>';
+  $("realx").innerHTML=h;})();
+/* Sample test to print: 10 fresh questions (A–D) + an answer page */
+function printTest(){var ps=make(),g=G(),A="ABCDEF",key=[],h='<h1>'+esc(info.topic)+': sample test</h1>'+
+    '<div class="meta"><span>Name: ______________________</span><span>Score: ____ / '+ps.length+'</span></div>';
+  ps.forEach(function(q,n){var opts=shuffle([String(q.answer)].concat(q.wrong.slice(0,q.nw||3).map(String))),ORDS=q.fixed?[q.fixed]:(g.orders||[]);
+    for(var k=0;k<ORDS.length;k++){var O=ORDS[k];if(opts.every(function(o){return O.indexOf(o)>=0;})){opts.sort(function(a,b){return O.indexOf(a)-O.indexOf(b);});break;}}
+    var one=opts.some(function(x){return x.length>16;});
+    h+='<div class="pq'+(EN?" gx-"+slug:"")+'"><div class="en">'+(n+1)+'. '+esc(q.en)+'</div><div class="frame'+(EN?"":" gx-"+slug)+'">'+(q.html||"")+esc(q.frame||"")+'</div><div class="opts'+(one?" one":"")+'">'+
+      opts.map(function(t,j){return "<div>☐ "+A[j]+") "+(g.pu?g.pu(t):esc(t))+"</div>";}).join("")+'</div></div>';
+    key.push("<li><b>"+A[opts.indexOf(String(q.answer))]+") "+esc(q.answer)+"</b>"+(q.why?" · "+esc(q.why):"")+"</li>");});
+  h+='<div class="key"><h1>Answers</h1><ol>'+key.join("")+'</ol></div><p class="foot">Léim · leim.ie · Junior Cycle '+SUBJ+' · '+esc(info.topic)+'. Original practice questions, not taken from State Examinations Commission papers.</p>';
+  $("printout").innerHTML=h;window.print();}
+$("printb").onclick=function(){if(!(EN?window.LEIM_EN:window.LEIM_MAKERS)){return;}printTest();};
 var sc=document.createElement("script");sc.src=PRE+info.bundle+".js?v=1";
 sc.onload=function(){var R=EN?window.LEIM_EN:window.LEIM_MAKERS;if(!R||!R[slug]){$("qn").textContent="Sorry, this test isn't ready yet.";return;}start();};
 sc.onerror=function(){$("qn").textContent="Couldn't load the questions. Check your connection and try again.";};

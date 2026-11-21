@@ -80,7 +80,9 @@ def build(key, cfg):
             came = f' · 📅 {y}/5' if y else ''
             if cfg.get('tests'):
                 bundle = EN_SECTION[s] if cfg['tests'] == 'english' else cfg['tests'][i]
-                TESTS.setdefault(key, {})[s] = {'topic': html.unescape(topic), 'game': html.unescape(g), 'bundle': bundle}
+                # past-paper refs for the test page's "In the real exam" box: [[year, "H5, O3"], ...]
+                came_l = re.findall(r'\b(20\d\d) \(([^)]*)\)', m.group(1)) if m else []
+                TESTS.setdefault(key, {})[s] = {'topic': html.unescape(topic), 'game': html.unescape(g), 'bundle': bundle, 'came': [list(x) for x in came_l]}
                 rows.append(f'<div class="topic hasT"><a class="tl" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div></a><a class="tb" href="{PT_PAGE[key]}?t={s}" data-pt="{s}" aria-label="Practice test: {topic}">📝<span>Test</span></a></div>')
             else:
                 rows.append(f'<a class="topic" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div><span class="go">›</span></a>')

@@ -11,4 +11,3 @@ Rules:
 Format: `- <date time> · <job> · <one-word chat label, e.g. "maths-a">`
 
 ## Working now
-- 2026-11-21 09:40 · Practice tests: past-paper links + printable sample tests (Maths, English) · pt-papers
