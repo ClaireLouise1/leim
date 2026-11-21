@@ -17,6 +17,7 @@ SUBJECTS = {
    title='Maths', guide='junior-cycle-maths-guide.html',
    chips=[('y','🎯 Exam Centre','junior-cycle-maths-exam-centre.html'),('','✅ Checklist','junior-cycle-maths-checklist.html'),('','🔀 Exam Mix','exam-mix.html'),('','📖 Course guide','junior-cycle-maths-guide.html')],
    mix=('exam-mix.html','Exam Mix','Every topic, mixed like the real paper'),
+   tests=['number','algebra','geometry','stats'],
    strands=[
     ('🔢','Number',['integer-rush','prime-smash','fraction-match','round-it','venn-sorter','percent-pop','share-it-out','power-up','surd-simplify','clock-dash','shop-keeper','payslip-puzzle','road-trip']),
     ('🧮','Algebra &amp; Functions',['like-term-sweep','bracket-blaster','factor-match','balance-it','two-line-crossing','root-rush','number-line-shade','rearrange-race','pattern-builder','growth-spotter','graph-match']),
@@ -75,7 +76,11 @@ def build(key, cfg):
             m = re.search(r'class="came"[^>]*><b>Came up in:</b>(.*?)</p>', open(s+'.html', encoding='utf-8').read(), re.S)
             y = len(set(re.findall(r'\b(20\d\d) \(', m.group(1)))) if m else 0
             came = f' · 📅 {y}/5' if y else ''
-            rows.append(f'<a class="topic" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div><span class="go">›</span></a>')
+            if cfg.get('tests'):
+                TESTS[s] = {'topic': html.unescape(topic), 'game': html.unescape(g), 'bundle': cfg['tests'][i]}
+                rows.append(f'<div class="topic hasT"><a class="tl" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div></a><a class="tb" href="practice-test.html?t={s}" data-pt="{s}" aria-label="Practice test: {topic}">📝<span>Test</span></a></div>')
+            else:
+                rows.append(f'<a class="topic" href="{s}.html"><span class="n">{n}</span><div><div class="t">{topic}</div><div class="m"><span class="g">🎮 {g}</span>{came}</div></div><span class="go">›</span></a>')
         sid = ' id="games"' if i == 0 else ''
         out.append(f'<section class="strand"{sid}><h2>{icon} {name} <small>{len(slugs)} topics</small></h2><div class="tlist">{"".join(rows)}</div></section>')
     chips = ''.join(f'<a class="chip {c}" href="{h}">{l}</a>' for c,l,h in cfg['chips'])
@@ -93,11 +98,16 @@ def build(key, cfg):
 <div class="btnrow">{chips}</div>
 {''.join(out)}
 {mixhtml}
-<p style="margin-top:20px;font-size:.9rem;color:var(--muted)">📝 Practice tests for each topic: coming soon. Parents and teachers: see the <a href="{cfg["guide"]}">course guide</a>.</p>
+<p style="margin-top:20px;font-size:.9rem;color:var(--muted)">{'📝 Tap <b>Test</b> on any topic for a 10-question practice test.' if cfg.get('tests') else '📝 Practice tests for each topic: coming soon.'} Parents and teachers: see the <a href="{cfg["guide"]}">course guide</a>.</p>
 </div>
 '''
+    if cfg.get('tests'):
+        foot = foot.replace('</body>', '<script>try{document.querySelectorAll("[data-pt]").forEach(function(a){var b=+localStorage.getItem("leim-pt-"+a.getAttribute("data-pt"));if(b){a.querySelector("span").textContent=b+"/10";a.classList.add("done");}});}catch(e){}</script>\n</body>')
     open(f'junior-cycle-{key}.html','w',encoding='utf-8').write(head+'<style>'+STYLES+'</style>\n</head>\n<body>'+hdr+main+foot)
     print('built', key, n, 'topics')
 
+TESTS = {}
 for k,c in SUBJECTS.items(): build(k,c)
+import importlib.util as _u
+_spec=_u.spec_from_file_location('bpt', os.path.join(os.path.dirname(os.path.abspath(__file__)),'build_practice_test.py')); _m=_u.module_from_spec(_spec); _spec.loader.exec_module(_m); _m.build(TESTS)
 subprocess.run(['python3', os.path.join(os.path.dirname(__file__),'free_first.py')], check=False, stdout=subprocess.DEVNULL)

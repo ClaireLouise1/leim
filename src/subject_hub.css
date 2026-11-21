@@ -49,3 +49,10 @@
 .mix{margin-top:26px;background:var(--ink);color:#fff;border-radius:20px;padding:18px;display:flex;align-items:center;gap:14px;text-decoration:none}
 .mix .n{flex:0 0 52px;height:52px;border-radius:14px;background:var(--sun);color:var(--ink);display:grid;place-items:center;font-size:1.5rem}
 .mix b{font-size:1.15rem}
+
+.topic.hasT{padding:0;gap:0;overflow:hidden}
+.topic .tl{display:flex;align-items:center;gap:12px;padding:12px 14px;flex:1;color:var(--ink);text-decoration:none;min-width:0}
+.topic .tb{flex:0 0 64px;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--mist);border-left:2.5px solid var(--ink);color:var(--ink);text-decoration:none;font-size:1.2rem}
+.topic .tb span{font-size:.75rem;font-weight:800}
+.topic .tb.done{background:var(--green-soft)}
+.topic .tb.done span{color:var(--green-dark)}
